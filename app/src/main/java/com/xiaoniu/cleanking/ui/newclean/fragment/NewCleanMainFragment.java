@@ -6,11 +6,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.animation.ValueAnimator;
+import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,9 +24,12 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -54,7 +61,8 @@ import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.NewsItemInfo;
+import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
@@ -62,6 +70,7 @@ import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.FilePermissionGuideDialogFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.JurisdictionGuideDialogFragment;
 import com.xiaoniu.cleanking.ui.main.receiver.InstallUninstallBroadcastReceiver;
+import com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
@@ -69,8 +78,13 @@ import com.xiaoniu.cleanking.ui.newclean.activity.JurisdictionGuideActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
-import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
+//import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
+import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
+import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
+import com.xiaoniu.cleanking.ui.news.fragment.NewsListFragment;
+import com.xiaoniu.cleanking.ui.news.listener.OnClickNewsItemListener;
+import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
@@ -86,9 +100,16 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.AccessibilityServiceUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.utils.ScreenUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.MeasureViewPager;
+import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
+import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
+import com.xiaoniu.cleanking.widget.magicIndicator.ViewPagerHelper;
+import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.CommonNavigator;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -111,9 +132,22 @@ import static android.view.View.VISIBLE;
 /**
  * 1.2.1 新版本清理主页
  */
-public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener {
+public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener, NestedScrollView.OnScrollChangeListener {
+
+    private static final String TAG = "NewCleanMainFragment";
 
     private long firstTime;
+    /*< XD added for feed begin */
+    @BindView(R.id.layout_root)
+    MyRelativeLayout layoutRoot;
+    @BindView(R.id.v_home_top)
+    RelativeLayout vHomeTop;
+    @BindView(R.id.v_home_top_normal)
+    RelativeLayout vTopTitleNormal;    // normal
+    @BindView(R.id.ll_top_xiding)
+    LinearLayout vTopTitleXiding;
+    /* XD added for feed End >*/
+
     @BindView(R.id.tv_clean_type)
     TextView mTvCleanType;
     @BindView(R.id.tv_clean_type01)
@@ -160,7 +194,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
     @BindView(R.id.layout_scroll)
-    NestedScrollView mNestedScrollView;
+    OperatorNestedScrollView mNestedScrollView;   //  XD modify
     @BindView(R.id.v_no_net)
     View mNoNetView;
 
@@ -172,6 +206,37 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private String[] seniorPermissions = new String[]{
 
     };
+    /*< XD added for feed begin */
+//    @BindView(R.id.close_feed_empty_view)
+//    View close_feed_empty_view;
+    @BindView(R.id.home_feeds)
+    LinearLayout homeFeeds;    // 信息流
+
+    @BindView(R.id.fl_top_nav)
+    LinearLayout mFLTopNav;
+    @BindView(R.id.iv_back)
+    ImageView mIvBack;
+    @BindView(R.id.tv_top_xiding_back)
+    TextView tvTopXidingBack;
+
+    @BindView(R.id.feed_indicator)
+    MagicIndicator feedIndicator;
+    @BindView(R.id.feed_view_pager)
+    MeasureViewPager feedViewPager;   // feed pager
+
+    private String mTitleType = "white";
+    private static final String KEY_TYPE = "TYPE";
+    private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
+    private NewsTypeNavigatorAdapter mNewsTypeNaviAdapter;
+    private ComFragmentAdapter mNewsListFragmentAdapter;
+    private List<com.xiaoniu.common.base.BaseFragment> mNewsListFragments;  // NewsListFragments
+    private boolean canXiding = true;
+    private boolean hasXiding = false;
+    public LayoutInflater mInflater;
+    private int mStatusBarHeight;
+    private int mStickyHeight;
+    private int mRootHeight;
+    /* XD added for feed End >*/
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -202,13 +267,41 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+
+    /*< XD added for feed begin */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initVariable(savedInstanceState);
+    }
+
+    protected void initVariable(Bundle arguments) {
+        mNewTypes = NewsUtils.sNewTypes;
+        mNewsListFragments = new ArrayList<>();
+        if (arguments != null) {
+            mTitleType = arguments.getString(KEY_TYPE);
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mInflater = inflater;
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+    /* XD added for feed End >*/
+
     @Override
     protected void initView() {
         registResceiver();
+        mStatusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
+        mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
         initRecyclerView();
+        initFeedView();  // XD added 20200509
+
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
@@ -355,6 +448,78 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         });
     }
+
+    /*< XD added for feed 20200215 begin */
+
+    /**
+     * @author xd.he
+     */
+    private void initFeedView() {
+        tvTopXidingBack.setText(R.string.xiding_back_to_clean);
+        mNestedScrollView.setOnScrollChangeListener(this);
+        feedViewPager.setOffscreenPageLimit(6);
+        requestFeedHeight();
+        feedViewPager.setNeedScroll(false);
+        feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                clickCauseXiding(true);
+                StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+        initMagicIndicator();
+    }
+
+    private void requestFeedHeight() {
+        homeFeeds.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (NewsUtils.isShowHomeFeed()) {
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
+                        params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
+                        homeFeeds.setLayoutParams(params);
+                        mRootHeight = layoutRoot.getHeight();
+                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        mNestedScrollView.requestLayout();
+                    } else {
+                        homeFeeds.setVisibility(View.GONE);
+//                        close_feed_empty_view.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void initMagicIndicator() {
+        CommonNavigator commonNavigator = new CommonNavigator(getContext());
+        commonNavigator.setSkimOver(true);
+        mNewsTypeNaviAdapter = new NewsTypeNavigatorAdapter(mNewTypes, true);
+        mNewsTypeNaviAdapter.setOnClickListener(new NewsTypeNavigatorAdapter.OnClickListener() {
+            @Override
+            public void onClickTitleView(int index) {
+                feedViewPager.setCurrentItem(index);
+                feedViewPager.setClickTab(true);
+            }
+        });
+        commonNavigator.setAdapter(mNewsTypeNaviAdapter);
+        feedIndicator.setBackgroundColor(getResources().getColor(R.color.transparent));
+        feedIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(feedIndicator, feedViewPager);
+    }
+    /* XD added for feed 20200215 End >*/
+
 
     private void initRecyclerView() {
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -696,16 +861,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(NowCleanActivity.class);
         } else {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_ALL, PositionId.DRAW_THREE_CODE);
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -744,16 +900,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU, PositionId.DRAW_THREE_CODE);
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -786,17 +933,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CQSD, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
@@ -874,17 +1011,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
         } else {
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
@@ -910,17 +1037,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_NOTIFY, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
@@ -947,16 +1064,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
@@ -997,11 +1105,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         super.onHiddenChanged(hidden);
         if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), true);
-            } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), false);
-            }
+            StatusBarCompat.setStatusBarColorPrimary(getActivity());
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -1215,15 +1319,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (PreferenceUtil.getGameTime()) {
                     SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
                 } else {
-                    boolean isOpen = false;
-                    if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                            && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                            if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                                isOpen = switchInfoList.isOpen();
-                            }
-                        }
-                    }
+                    boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_GAME, PositionId.DRAW_THREE_CODE);
                     if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
                         Bundle bundle = new Bundle();
                         bundle.putString("title", getString(R.string.game_quicken));
@@ -1251,4 +1347,170 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(intent);
         }
     }
+
+
+    /*< XD added for feed begin */
+    @Override
+    protected void loadData() {
+        loadFeedData();
+    }
+
+    private void showFeedView() {
+        homeFeeds.setVisibility(View.VISIBLE);   // 显示信息流
+        feedViewPager.setVisibility(View.VISIBLE);
+    }
+
+    protected void loadFeedData() {
+        showFeedView();
+        for (int i = 0; i < mNewTypes.length; i++) {
+            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
+            final int index = i;
+            listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
+                @Override
+                public void onClickItem(int position, NewsItemInfo itemInfo) {
+                    clickCauseXiding(false);
+                }
+            });
+            mNewsListFragments.add(listFragment);
+        }
+        mNewsListFragmentAdapter = new ComFragmentAdapter(getChildFragmentManager(), mNewsListFragments);
+        feedViewPager.setAdapter(mNewsListFragmentAdapter);
+    }
+
+
+    /**
+     * click Cause Xiding
+     */
+    private void clickCauseXiding(boolean isAnimation) {
+        feedViewPager.setNeedScroll(false);
+        Rect rect = new Rect();
+        homeFeeds.getGlobalVisibleRect(rect);
+        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+        if (dy != 0) {
+            doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, isAnimation);
+        }
+    }
+
+    @Override
+    public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
+        if (NewsUtils.isShowHomeFeed() && canXiding) {
+            //处理吸顶操作
+            cheekRootHeight();
+            Rect rect = new Rect();
+            homeFeeds.getGlobalVisibleRect(rect);
+            int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            if (dy == 0) {
+                hasXiding = true;
+            }
+            int changeY = y - lasty;
+            if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
+                if (changeY < 20) {
+                    doXiDingStickyAnim(y + dy, true, 300);
+                } else {
+                    doXiDingStickyAnim(y + dy, false);
+                }
+            }
+        }
+    }
+
+    private void cheekRootHeight() {
+        int rootHeight = layoutRoot.getHeight();
+        if (mRootHeight != rootHeight) {
+            requestFeedHeight();
+        }
+    }
+
+    private void doXiDingStickyAnim(int scrolltoY, boolean isAnimation) {
+        doXiDingStickyAnim(scrolltoY, isAnimation, 400);
+    }
+
+    private void doXiDingStickyAnim(int scrolltoY, boolean isAnimation, int duration) {
+        mNestedScrollView.setNeedScroll(false);
+        canXiding = false;
+        if (isAnimation) {
+            scrollAnima(mNestedScrollView.getScrollY(), scrolltoY, duration);
+        } else {
+            mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), scrolltoY);
+            canXiding = true;
+        }
+        updateTitle(true);
+    }
+
+    @OnClick(R.id.fl_xiding_top_back)
+    public void onClickGoBackToClean() {
+        goBackToClean(true);
+    }
+
+    public void onClickCleanTab() {
+        if (hasXiding && NewsUtils.isShowHomeFeed()) {
+            goBackToClean(true);
+        }
+    }
+
+    /**
+     * @param isAnimation
+     */
+    private void goBackToClean(boolean isAnimation) {
+        canXiding = false;
+        if (mNewsListFragmentAdapter != null) {
+            mNewsListFragmentAdapter.resetScrollToTop();
+        }
+        mNestedScrollView.setNeedScroll(true);
+        if (isAnimation) {
+            scrollAnima(mNestedScrollView.getScrollY(), 0, 400);
+        } else {
+            mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+            canXiding = true;
+        }
+        updateTitle(false);
+    }
+
+
+    private void updateTitle(boolean xiding) {
+        if (xiding) {
+            vTopTitleNormal.setVisibility(View.GONE);
+            vTopTitleXiding.setVisibility(View.VISIBLE);
+        } else {
+            vTopTitleNormal.setVisibility(View.VISIBLE);
+            vTopTitleXiding.setVisibility(View.GONE);
+        }
+        hasXiding = xiding;
+    }
+
+    private void scrollAnima(int start, int end, int duration) {
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(start, end);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                //获取动画过程中的渐变值
+                int animatedValue = (int) animation.getAnimatedValue();
+                if (mNestedScrollView != null) {
+                    mNestedScrollView.scrollTo(0, animatedValue);
+                }
+            }
+        });
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+
+            @Override
+            public void onAnimationStart(Animator animator) {
+                canXiding = false;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                canXiding = true;
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+            }
+        });
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+    /* XD added for feed End >*/
 }

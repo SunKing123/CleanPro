@@ -215,7 +215,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             boolean checked = !info.isAllchecked();
             info.setAllchecked(checked);
             resetChildSelectButton(mJunkGroups.get(groupPosition),groupPosition,childPosition,checked);
-
         });
 
         return convertView;
@@ -267,10 +266,10 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         if(childCheckCount ==0){
             group.isChecked = false;
             group.isCheckPart = false;
-        }else if(childCheckCount>=0 && childCheckCount < group.getmChildren().size()){
+        }else if(childCheckCount>=0 && childCheckCount < group.mChildren.size()){
             group.isChecked = true;
             group.isCheckPart = true;
-        }else if(childCheckCount == group.getmChildren().size()){
+        }else if(childCheckCount == group.mChildren.size()){
             group.isChecked= true;
             group.isCheckPart = false;
         }

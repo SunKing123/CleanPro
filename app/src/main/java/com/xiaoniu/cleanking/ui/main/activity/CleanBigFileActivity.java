@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -26,11 +25,8 @@ import com.xiaoniu.cleanking.ui.main.adapter.CleanExpandAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
@@ -132,17 +128,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanAnimView.setListener(() -> finish());
         mCleanAnimView.setAnimationEnd(() -> {
 
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_ALL,PositionId.DRAW_THREE_CODE);
 
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_phone_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();

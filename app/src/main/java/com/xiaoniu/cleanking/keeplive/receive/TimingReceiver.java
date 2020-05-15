@@ -234,17 +234,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
 
                     @Override
-                    public void reduceSize(long p0) {
-
-                    }
-
-                    @Override
                     public void scanFile(String p0) {
-
-                    }
-
-                    @Override
-                    public void totalSize(int p0) {
 
                     }
                 });

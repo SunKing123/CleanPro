@@ -82,17 +82,7 @@ public class GamePresenter extends RxPresenter<GameActivity, MainModel> {
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

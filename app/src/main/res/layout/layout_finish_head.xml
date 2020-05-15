@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_app_bar_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -66,7 +67,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_finish" />
 
-    <com.qq.e.ads.nativ.widget.NativeAdContainer
+    <LinearLayout
         android:id="@+id/native_ad_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,86 +78,16 @@
         android:paddingLeft="@dimen/dimen_20dp"
         android:paddingTop="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_20dp"
-        android:paddingBottom="@dimen/dimen_16dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="@dimen/dimen_16dp">
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/v_advert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true">
 
-            <ImageView
-                android:id="@+id/iv_advert_logo"
-                android:layout_width="@dimen/dimen_35dp"
-                android:layout_height="@dimen/dimen_35dp"
-                android:layout_marginTop="@dimen/dimen_8dp"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:id="@+id/tv_advert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_toRightOf="@+id/iv_advert_logo"
-                android:textColor="@color/color_404040"
-                android:textSize="@dimen/dimen_17sp" />
-
-            <TextView
-                android:id="@+id/tv_advert_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_advert"
-                android:layout_marginLeft="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_3dp"
-                android:layout_toRightOf="@+id/iv_advert_logo"
-                android:alpha="0.4"
-                android:textColor="@color/color_404040"
-                android:textSize="@dimen/dimen_14sp" />
-
-            <RelativeLayout
-                android:id="@+id/v_video"
-                android:layout_width="match_parent"
-                android:layout_height="188dp"
-                android:layout_below="@+id/tv_advert_content"
-                android:layout_marginTop="@dimen/dimen_8dp">
-
-                <!-- 穿山甲视频组件 -->
-                <FrameLayout
-                    android:id="@+id/v_video_chuanshanjia"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
-                    android:layout_marginRight="@dimen/dimen_4dp"
-                    android:scaleType="centerCrop" />
-
-                <!-- 原生广告的视频组件 -->
-                <com.qq.e.ads.nativ.MediaView
-                    android:id="@+id/gdt_media_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
-                    android:layout_marginRight="@dimen/dimen_4dp" />
-
-                <ImageView
-                    android:id="@+id/iv_advert"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
-                    android:layout_marginRight="@dimen/dimen_4dp"
-                    android:scaleType="fitXY" />
-            </RelativeLayout>
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottie_ad"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_60dp"
-                android:layout_below="@+id/v_video"
-                android:layout_marginTop="@dimen/dimen_8dp" />
-        </RelativeLayout>
-    </com.qq.e.ads.nativ.widget.NativeAdContainer>
+        </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

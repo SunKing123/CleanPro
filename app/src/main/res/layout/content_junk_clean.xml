@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <RelativeLayout
         android:id="@+id/layout_show_list"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
         <ExpandableListView
             android:id="@+id/junk_list"
-            android:overScrollMode="never"
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="68dp"
-            >
-        </ExpandableListView>
+            android:background="@color/white"
+            android:overScrollMode="never" />
+
         <FrameLayout
             android:id="@+id/layout_junk_clean"
             android:layout_width="match_parent"
@@ -38,11 +37,9 @@
                 android:gravity="center"
                 android:text="@string/text_clean"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/dimen_16sp"/>
+                android:textSize="@dimen/dimen_16sp" />
 
         </FrameLayout>
-
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -56,15 +53,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="恭喜你！清理完成"/>
+            android:text="恭喜你！清理完成" />
 
         <TextView
             android:id="@+id/text_clean_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/text_clean_finish_title"
             android:layout_centerHorizontal="true"
-            android:text="清理了 100Mb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:text="清理了 100Mb" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -187,22 +187,13 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         fetchSplashADTime = System.currentTimeMillis();
 
         //后台控制是否显示开关
-        if (AppHolder.getInstance() == null || AppHolder.getInstance().getSwitchInfoList() == null || AppHolder.getInstance().getSwitchInfoList().getData() == null) {
-            jumpActivity();
+        if (AppHolder.getInstance().isOpen(PositionId.SPLASH_ID, PositionId.HOT_CODE)) {
+            splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
+            splashAD.fetchAndShowIn(adContainer);
         } else {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    if (switchInfoList.isOpen()) {
-                        splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
-                        splashAD.fetchAndShowIn(adContainer);
-                        return;
-                    } else {
-                        jumpActivity();
-                        return;
-                    }
-                }
-            }
+            jumpActivity();
         }
+
     }
 
     @Override

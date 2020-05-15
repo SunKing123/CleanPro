@@ -1,36 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/toolBar"
+    <RelativeLayout
+        android:id="@+id/v_clean_finish_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@drawable/bg_gradient_clean_finish_tobar">
 
-        <ImageView
-            android:id="@+id/btnLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="@dimen/dimen_17dp"
-            android:src="@drawable/common_icon_back_arrow_white" />
+        <include layout="@layout/layout_clean_finish_title_normal" />
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
+        <include layout="@layout/layout_title_xiding" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/recyclerView"
+    <com.xiaoniu.cleanking.widget.OperatorNestedScrollView
+        android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_background" />
+        android:fadingEdgeLength="@dimen/dimen_0dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <com.jcodecraeer.xrecyclerview.XRecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_background" />
+
+            <!--关闭信息流的时候站位，吸顶+底部tab高度56+60 -->
+            <View
+                android:id="@+id/close_feed_empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:visibility="gone" />
+
+            <include layout="@layout/layout_feed" />
+
+        </LinearLayout>
+    </com.xiaoniu.cleanking.widget.OperatorNestedScrollView>
 </LinearLayout>

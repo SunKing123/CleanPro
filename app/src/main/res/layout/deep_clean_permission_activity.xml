@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_toolkit">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_230dp"
+                android:background="@color/color_FF5454">
+
+                <TextView
+                    android:id="@+id/tv_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_12dp"
+                    android:layout_marginTop="@dimen/dimen_40dp"
+                    android:drawableLeft="@drawable/common_icon_back_arrow_white"
+                    android:drawablePadding="@dimen/dimen_10dp"
+                    android:paddingTop="@dimen/dimen_5dp"
+                    android:paddingRight="@dimen/dimen_10dp"
+                    android:paddingBottom="@dimen/dimen_5dp"
+                    android:text="@string/back"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_20sp" />
+
+                <ImageView
+                    android:id="@+id/iv_deep_clean_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_back"
+                    android:layout_marginLeft="@dimen/dimen_36dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:src="@drawable/ic_deep_clean_permission" />
+
+                <TextView
+                    android:id="@+id/tv_deep_clean_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_118dp"
+                    android:layout_toRightOf="@+id/iv_deep_clean_icon"
+                    android:singleLine="true"
+                    android:text="全方面深度清理手机垃圾"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_deep_clean_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_deep_clean_title"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:layout_toRightOf="@+id/iv_deep_clean_icon"
+                    android:singleLine="true"
+                    android:text="需授权开启以下功能"
+                    android:textColor="@android:color/white" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_content_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:itemCount="3"
+                tools:listitem="@layout/deep_clean_permission_item" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/bottom_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_above="@+id/rl_toolkit"
+        android:layout_gravity="bottom"
+        android:background="@mipmap/wl"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/rl_toolkit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_68dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_open_deep_clean"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_46dp"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@drawable/sp_scan_result_btn_bg"
+            android:gravity="center"
+            android:text="@string/to_open_deep_clean"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimen_16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

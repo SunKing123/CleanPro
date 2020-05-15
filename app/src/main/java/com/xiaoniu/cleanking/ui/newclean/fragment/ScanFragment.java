@@ -1,375 +1,207 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
-import android.animation.Animator;
-import android.app.Activity;
+import android.Manifest;
+import android.animation.ValueAnimator;
+import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
+import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.widget.AppCompatTextView;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.mvp.BaseFragment;
+import com.xiaoniu.cleanking.mvp.InjectPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
-import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
+import com.xiaoniu.cleanking.ui.newclean.adapter.ScanningJunkAdapter;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.contact.ScanningContact;
+import com.xiaoniu.cleanking.ui.newclean.presenter.ScanningPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.widget.ArgbEvaluator;
+import com.xiaoniu.cleanking.widget.FuturaRoundTextView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
+import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
- * 扫描
+ * 扫描垃圾
  */
-public class ScanFragment extends BaseFragment<NewScanPresenter> {
+public class ScanFragment extends BaseFragment implements ScanningContact.View {
+
+    @BindView(R.id.iv_scanning_background)
+    ImageView iv_scanning_background;
+    @BindView(R.id.lottie_animation_view)
+    LottieAnimationView lottie_animation_view;
+    @BindView(R.id.tv_junk_total)
+    FuturaRoundTextView tv_junk_total;
+    @BindView(R.id.tv_junk_unit)
+    FuturaRoundTextView tv_junk_unit;
+    @BindView(R.id.tv_scanning_progress_file)
+    TextView tv_scanning_progress_file;
+    @BindView(R.id.rv_content_list)
+    RecyclerView rv_content_list;
+    @BindView(R.id.tv_stop_clean)
+    TextView tv_stop_clean;
+    @BindView(R.id.tv_back)
+    TextView tv_back;
+
+    @InjectPresenter
+    ScanningPresenter scanningPresenter;
+
+    private ScanningJunkAdapter scanningJunkAdapter;
+    private boolean isGotoSetting = false;
+    private RxPermissions rxPermissions;
+    private AlertDialog dlg;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public static ScanFragment newInstance() {
         return new ScanFragment();
     }
 
-    @BindView(R.id.view_lottie_home)
-    LottieAnimationView mLottieHomeView;
-    @BindView(R.id.view_lottie_ripple)
-    LottieAnimationView lottieRipple;
- /*   @BindView(R.id.icon_outer)
-    ImageView mIconOuter;*/
-   /* @BindView(R.id.circle_outer)
-    View mCircleOuter;*/
-/*    @BindView(R.id.circle_outer2)
-    View mCircleOuter2;*/
-
-    @BindView(R.id.layout_count)
-    RelativeLayout mLayoutCount;
-    @BindView(R.id.text_count)
-    AppCompatTextView mTextCount;
-    @BindView(R.id.text_unit)
-    TextView mTextUnit;
-    @BindView(R.id.layout_scan)
-    LinearLayout mLayoutScan;
-    @BindView(R.id.text_scan_trace)
-    TextView mTextScanTrace;
-    @BindView(R.id.view_arrow)
-    ImageView mArrowRight;
-    @BindView(R.id.layout_clean_top)
-    FrameLayout mLayoutCleanTop;
-    @BindView(R.id.iv_scan_bg03)
-    ImageView ivScanBg03;
-    @BindView(R.id.iv_scan_bg02)
-    ImageView ivScanBg02;
-    @BindView(R.id.iv_scan_bg01)
-    ImageView ivScanBg01;
-    @BindView(R.id.btn_left_scan)
-    ImageView btnLeftScan;
-    @BindView(R.id.tv_scan_left_title)
-    TextView tvScanLeftTitle;
-    ImageView[] ivs;
-
-
-    /*    */
-    /**
-     * 清理的分类列表
-     *//*
-    public static HashMap<Integer, JunkGroup> mJunkGroups;*/
-    private CountEntity mCountEntity = new CountEntity();
-
-    /**
-     * 首页是否显示
-     */
-    private boolean isShow = true;
-
-    /**
-     * 当前的首页的状态
-     */
-    private int type = 0;
-
-    /**
-     * 扫描完成
-     */
-    private static final int TYPE_SCAN_FINISH = 1;
-    /**
-     * 清理完成
-     */
-    public static final int TYPE_CLEAN_FINISH = 2;
-    /**
-     * 扫描中
-     */
-    public static final int TYPE_SCANING = 3;
-    /**
-     * 扫描时颜色变化是否完成
-     */
-    private boolean mChangeFinish;
-
-    private MyHandler mHandler = new MyHandler(getActivity());
-
-    class MyHandler extends Handler {
-        WeakReference<Activity> mActivity;
-
-        public MyHandler(Activity con) {
-            this.mActivity = new WeakReference<>(con);
-        }
-
-        public void handleMessage(android.os.Message msg) {
-            if (msg.what == 1) {
-                if (mLottieHomeView != null)
-                    mLottieHomeView.playAnimation();
-            }
-            if (msg.what == 2) {
-                try {
-                    ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
-                    ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
-                    mPresenter.startScan(ivs);
-                    mPresenter.startCleanScanAnimation01(lottieRipple);
-                    type = TYPE_SCANING;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-
     @Override
-    protected void inject(FragmentComponent fragmentComponent) {
-        fragmentComponent.inject(this);
-    }
-
-    @Override
-    public void netError() {
-    }
-
-    @Override
-    protected int getLayoutId() {
+    protected int setLayout() {
         return R.layout.fragment_scan;
     }
 
     @Override
-    protected void initView() {
-        tvScanLeftTitle.setText(getString(R.string.scaning));
-        ivs = new ImageView[]{ivScanBg01, ivScanBg02, ivScanBg03};
+    protected void initViews(@Nullable Bundle savedInstanceState) {
+        ButterKnife.bind(this, getView());
+        lottie_animation_view.useHardwareAcceleration();
+        rxPermissions = new RxPermissions(requireActivity());
 
-        lottieRipple.setVisibility(View.VISIBLE);
-        lottieRipple.useHardwareAcceleration();
-        lottieRipple.setAnimation("leida.json");
-        lottieRipple.setImageAssetsFolder("ripple");
-        lottieRipple.setRepeatCount(5);
-        try {
-            mPresenter.checkPermission();
-            mTextCount.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
-            mTextUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
+        scanningJunkAdapter = new ScanningJunkAdapter();
+        rv_content_list.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rv_content_list.addItemDecoration(new HorizontalDividerItemDecoration.Builder(requireContext())
+                .sizeResId(R.dimen.dimen_0_5dp)
+                .colorResId(R.color.color_EDEDED)
+                .marginResId(R.dimen.dimen_16dp, R.dimen.dimen_16dp)
+                .build());
+        rv_content_list.setAdapter(scanningJunkAdapter);
 
-    }
-
-
-    @OnClick({R.id.btn_left_scan})
-    public void viewClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_left_scan:
-                ((NowCleanActivity) getActivity()).backClick(true);
-                break;
-        }
-    }
-
-    public void startScan() {
-        mPresenter.setIsFinish(false);
-        mHandler.sendEmptyMessageDelayed(2, 50);
-    }
-
-    /**
-     * 扫描完成
-     *
-     * @param junkGroups
-     */
-    public void scanFinish(HashMap<Integer, JunkGroup> junkGroups) {
-        type = TYPE_SCAN_FINISH;
-        if (mTextScanTrace == null)
-            return;
-        if (mCountEntity != null) {
-            if (mCountEntity.getNumber() > 0) {
-                mCountEntity = CleanUtil.formatShortFileSize(CleanUtil.getTotalSize(junkGroups));
-                ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
-                ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
-                ((NowCleanActivity) getActivity()).scanFinish();
-                mArrowRight.setVisibility(VISIBLE);
-            } else {
-                //没有扫描到垃圾
-                cleanFinishSign();
-            }
-        }
-
-        //重置扫描状态
-        mPresenter.setIsFinish(false);
-        //重置颜色变化状态
-        mChangeFinish = false;
-
-        mPresenter.stopCleanScanAnimation();
+        tv_stop_clean.setOnClickListener(v -> ((NowCleanActivity) requireActivity()).backClick(true));
+        tv_back.setOnClickListener(v -> ((NowCleanActivity) requireActivity()).backClick(true));
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    protected void initData() {
+        //开始扫描之前准备工作
+        scanningPresenter.readyScanningJunk();
+        //检查存贮权限是否开启
+        checkStoragePermission();
     }
 
-
-    /**
-     * 统计总数
-     *
-     * @param total
-     */
-    public void showCountNumber(long total) {
-        if (getActivity() == null || total <= 0) {
-            return;
+    @Override
+    public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
         }
-        try {
-            mCountEntity = CleanUtil.formatShortFileSize(total);
-            getActivity().runOnUiThread(() -> {
-                if (mTextCount == null || mTextUnit == null)
-                    return;
-                if (mCountEntity != null) {
-                    mTextCount.setText(mCountEntity.getTotalSize());
-                    mTextUnit.setText(mCountEntity.getUnit());
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super.onDestroy();
     }
 
-    public FrameLayout getCleanTopLayout() {
-        return null;
+    @Override
+    public void setScanningJunkTotal(String totalResult, String unit) {
+        tv_junk_total.setText(totalResult);
+        tv_junk_unit.setText(unit);
     }
 
-    /**
-     * 清理很干净标识
-     */
-    public void cleanFinishSign() {
-        mLayoutCount.setVisibility(GONE);
-        mLayoutScan.setVisibility(GONE);
-        //清理完成标识
-        type = TYPE_CLEAN_FINISH;
-        setColorChange(false);
-
-//        mPresenter.showOuterViewRotation(mIconOuter);
+    @Override
+    public void setScanningFilePath(String filePath) {
+        tv_scanning_progress_file.setText(getString(R.string.scanning_file, filePath));
     }
 
-    public void showScanFile(String p0) {
-        if (getActivity() == null) {
-            return;
-        }
-        getActivity().runOnUiThread(() -> {
-            if (mTextScanTrace != null) {
-                mTextScanTrace.setText("扫描:  " + p0);
-            }
-        });
-
-    }
-
-
-    /**
-     * 终止扫描
-     */
-    public void stopScan() {
-        mPresenter.setIsFinish(true);
-    /*    if (mPresenter.getCleanScanAnimator() != null)
-            mPresenter.getCleanScanAnimator().cancel();*/
-
-    /*    mCircleOuter2.setVisibility(GONE);
-        mCircleOuter.setVisibility(GONE);*/
-        lottieRipple.pauseAnimation();
-        showHomeLottieView(true);
-    }
-
-    /**
-     * 扫描动画结束
-     */
-    public void endScanAnimation() {
-        if (lottieRipple != null) {
-            lottieRipple.pauseAnimation();
-//            lottieRipple.setVisibility(GONE);
-        }
-        showHomeLottieView(true);
-    }
-
-    /**
-     * 状态栏颜色变化
-     *
-     * @param animatedValue
-     */
-    public void showBarColor(int animatedValue) {
-        if (getActivity() == null)
-            return;
-        ((NowCleanActivity) getActivity()).getToolBar().setBackgroundColor(animatedValue);
-        mLayoutCleanTop.setBackgroundColor(animatedValue);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, true);
+    @Override
+    public void setScanningBackgroundColor(int oldColor, int newColor) {
+        if (oldColor == newColor) {
+            iv_scanning_background.setBackgroundColor(oldColor);
         } else {
-            StatusBarCompat.setStatusBarColor(getActivity(), animatedValue, false);
+            ValueAnimator anim = new ValueAnimator();
+            anim.setIntValues(oldColor, newColor);
+            anim.setEvaluator(ArgbEvaluator.getInstance());
+            anim.setDuration(200);
+            anim.addUpdateListener(animation ->
+                    iv_scanning_background.setBackgroundColor((Integer) animation.getAnimatedValue()));
+            anim.start();
         }
+    }
+
+    @Override
+    public void setInitScanningModel(List<JunkGroup> scanningModelList) {
+        scanningJunkAdapter.submitList(scanningModelList);
+    }
+
+    @Override
+    public void setScanningFinish(LinkedHashMap<ScanningResultType, JunkGroup> junkGroups) {
+        final List<JunkGroup> scanningModelList = new ArrayList<>(junkGroups.values());
+        CountEntity mCountEntity = CleanUtil.formatShortFileSize(CleanUtil.getTotalSize(scanningModelList));
+        ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
+        ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
+        ((NowCleanActivity) getActivity()).scanFinish();
+
+        //重置颜色变化状态
+        lottie_animation_view.pauseAnimation();
+    }
+
+    /**
+     * 检查文件存贮权限
+     */
+    private void checkStoragePermission() {
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Disposable disposable = rxPermissions.request(permissions)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        scanningPresenter.scanningJunk();
+                    } else {
+                        if (hasPermissionDeniedForever()) {
+                            showPermissionDialog();
+                        } else {
+                            checkStoragePermission();
+                        }
+                    }
+                });
+        compositeDisposable.add(disposable);
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         int color = R.color.color_4690FD;
-        if (type == TYPE_SCAN_FINISH || mChangeFinish) {
-            //扫描完成
-            color = R.color.color_FD6F46;
-        }
 
         if (!hidden) {
-            isShow = true;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), true);
+                StatusBarCompat.setStatusBarColor(requireActivity(), ContextCompat.getColor(requireContext(), color), true);
             } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(color), false);
+                StatusBarCompat.setStatusBarColor(requireActivity(), getResources().getColor(color), false);
             }
-        } else {
-            isShow = false;
         }
-
-    }
-
-    /**
-     * 获取当前Fragment是否显示
-     *
-     * @return
-     */
-    public boolean getViewShow() {
-        return isShow;
-    }
-
-    /**
-     * 是否颜色变化完成
-     *
-     * @param b
-     */
-    public void setColorChange(boolean b) {
-        mChangeFinish = b;
     }
 
     @Override
@@ -377,12 +209,10 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
         super.onResume();
         NiuDataAPI.onPageStart("clean_up_scan_page_view_page", "用户在清理扫描页浏览");
         if (isGotoSetting) {
-            mPresenter.checkPermission();
+            checkStoragePermission();
             isGotoSetting = false;
         }
     }
-
-    boolean isGotoSetting = false;
 
     public void setIsGotoSetting(boolean isGotoSetting) {
         this.isGotoSetting = isGotoSetting;
@@ -392,73 +222,64 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
     public void onPause() {
         super.onPause();
         NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getSourcePageId(), "clean_up_scan_page", "clean_up_scan_page_view_page", "用户在清理扫描页浏览");
-        if (mLottieHomeView != null)
-            mLottieHomeView.cancelAnimation();
+        lottie_animation_view.cancelAnimation();
     }
 
     /**
-     * 静止时动画
-     *
-     * @param isMove true转动 false 停止
+     * 是否有权限被永久拒绝
      */
-    private void showHomeLottieView(boolean isMove) {
-        Animation rotate = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_anim);
-     /*   if (rotate == null) {
-            mIconOuter.setAnimation(rotate);
-        }*/
-        if (mLottieHomeView == null)
-            return;
-        mLottieHomeView.useHardwareAcceleration();
-        mLottieHomeView.setAnimation("data_home.json");
-        mLottieHomeView.setImageAssetsFolder("images");
-        if (isMove) {
-//            mIconOuter.startAnimation(rotate);
-            mLottieHomeView.playAnimation();
-            mLottieHomeView.setVisibility(VISIBLE);
-        } else {
-            mHandler.removeCallbacksAndMessages(null);
-//            mIconOuter.clearAnimation();
-            mLottieHomeView.cancelAnimation();
-            mLottieHomeView.setVisibility(GONE);
+    private boolean hasPermissionDeniedForever() {
+        boolean hasDeniedForever = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                hasDeniedForever = true;
+            }
         }
-        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+        return hasDeniedForever;
+    }
 
-            }
+    private void showPermissionDialog() {
+        dlg = new AlertDialog.Builder(requireContext()).create();
+        if (requireActivity().isFinishing()) {
+            return;
+        }
+        dlg.show();
+        Window window = dlg.getWindow();
+        if (window != null) {
+            window.setContentView(R.layout.alite_redp_send_dialog);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            //这里设置居中
+            lp.gravity = Gravity.CENTER;
+            window.setAttributes(lp);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView btnOk = window.findViewById(R.id.btnOk);
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mHandler.sendEmptyMessageDelayed(1, 1500);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
+            TextView btnCancle = window.findViewById(R.id.btnCancle);
+            TextView tipTxt = window.findViewById(R.id.tipTxt);
+            TextView content = window.findViewById(R.id.content);
+            btnCancle.setText("退出");
+            btnOk.setText("去设置");
+            tipTxt.setText("提示!");
+            content.setText("清理功能无法使用，请先开启文件读写权限。");
+            btnOk.setOnClickListener(v -> {
+                dlg.dismiss();
+                goSetting();
+            });
+            btnCancle.setOnClickListener(v -> {
+                dlg.dismiss();
+                requireActivity().finish();
+            });
+        }
     }
 
 
     public void goSetting() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:" + mActivity.getPackageName()));
+        intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (intent.resolveActivity(mActivity.getPackageManager()) != null) {
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
             setIsGotoSetting(true);
-            mActivity.startActivity(intent);
+            requireActivity().startActivity(intent);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mPresenter != null)
-            mPresenter.stopCleanScanAnimation();
-        super.onDestroy();
     }
 }

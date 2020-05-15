@@ -220,16 +220,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
                 PreferenceUtil.saveCleanWechatUsed(true);
-                boolean isOpen = false;
-                //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT,PositionId.DRAW_THREE_CODE);
                 AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {

@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.annotation.SuppressLint;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -37,60 +38,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     /**
-     * 冷启动、热启动、完成页广告开关
-     */
-    public void getSwitchInfoList() {
-        mModel.getSwitchInfoList(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                mView.getSwitchInfoListSuccess(switchInfoList);
-                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getSwitchInfoListFail();
-            }
-        });
-    }
-    /**
-     * 插屏广告开关
-     */
-    public void getScreentSwitch() {
-        mModel.getScreentSwitch(new Common4Subscriber<SwitchInfoList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(SwitchInfoList switchInfoList) {
-                mView.getScreentSwitchSuccess(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getSwitchInfoListFail();
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getSwitchInfoListFail();
-            }
-        });
-    }
-
-    /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
      */
     @SuppressLint("CheckResult")
@@ -112,17 +59,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

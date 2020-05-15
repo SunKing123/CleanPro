@@ -4,7 +4,7 @@
     <string name="life">生活</string>
     <string name="clean">清理</string>
     <string name="up_quota">提额</string>
-    <string name="tool">加速</string>
+    <string name="tool">工具箱</string>
     <string name="top">发现</string>
     <string name="mine">我的</string>
     <string name="shopping_mall">商城</string>
@@ -21,6 +21,8 @@
     <string name="system_cache">系统缓存</string>
     <string name="select_already">已勾选:</string>
 
+    <string name="xiding_back_to_clean">返回清理</string>
+    <string name="xiding_back_to_wx_clean">返回微信专清</string>
 
     <string name="byte_short">B</string>
     <!-- Suffix added to a number to signify size in kilobytes. -->
@@ -137,7 +139,7 @@
     <string name="open">开启</string>
     <string name="net_error">网络连接失败</string>
     <string name="game_list_hint">温馨提醒：添加游戏平均可被提速38%</string>
-<!--<![CDATA[<font color="#FFFD6F46">%1$dMB</font>垃圾严重影响使用]]>-->
+    <!--<![CDATA[<font color="#FFFD6F46">%1$dMB</font>垃圾严重影响使用]]>-->
     <string name="push_content_scan_all">%1$dMB 垃圾严重影响使用></string>
     <string name="push_content_access">内存占比%d%%,加速避免卡顿</string>
     <string name="push_content_power">电量不足%d%%,一键省电</string>
@@ -149,10 +151,22 @@
     <string name="push_power_btn">省电</string>
     <string name="push_cool_btn">降温</string>
     <string name="scaning">扫描中</string>
+    <string name="stop_scan">停止清理</string>
+    <string name="deep_scaning">深度清理</string>
+    <string name="clean_junk">垃圾清理</string>
+    <string name="to_clean">立即使用</string>
+    <string name="to_open_deep_clean">立即开启</string>
     <string name="clean_all_hint">已检测到大量残留垃圾</string>
     <string name="clean_game_hint">一键加速畅玩游戏</string>
+    <string name="scanning_file">扫描: %1$s</string>
+    <string name="scan_result_check">已选: %1$s</string>
+    <string name="scan_result_check_total">已勾选: %1$s</string>
+    <string name="back">返回</string>
 
-
-
-
+    <string name="memory_clean_title">手机加速</string>
+    <string name="memory_clean_content">深度清理内存垃圾，提高手机运行速度</string>
+    <string name="notification_clean_title">通知栏清理</string>
+    <string name="notification_clean_content">拦截骚扰消息</string>
+    <string name="power_clean_title">超强省电</string>
+    <string name="power_clean_content">清理异常耗电应用，延长待机时长</string>
 </resources>

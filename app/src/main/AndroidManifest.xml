@@ -66,6 +66,9 @@
             android:name=".ui.main.activity.NavigationActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.newclean.activity.DeepCleanPermissionActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.main.activity.FileManagerHomeActivity"
             android:screenOrientation="portrait" />
         <activity

@@ -1,8 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.widget;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -34,8 +32,8 @@ public class BottomBarTab extends FrameLayout {
     private Context mContext;
     private int mTabPosition = -1;
 
-    private int[] iconsSelect = {R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
-    private int[] icons = {R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
+    private int[] iconsSelect = {R.drawable.ic_tab_clean_select, R.drawable.ic_tab_tool_select, R.drawable.ic_tab_msg_select, R.drawable.ic_tab_me_select};
+    private int[] icons = {R.drawable.ic_tab_clean_normal, R.drawable.ic_tab_tool_normal, R.drawable.ic_tab_msg_normal, R.drawable.ic_tab_me_normal};
 
 
     private TextView mTvUnreadCount;
@@ -60,11 +58,11 @@ public class BottomBarTab extends FrameLayout {
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(getContext(), AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
-            icons = new int[]{R.drawable.clean_normal, R.drawable.me_normal};
-            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.me_select};
+            icons = new int[]{R.drawable.ic_tab_clean_normal, R.drawable.ic_tab_me_normal};
+            iconsSelect = new int[]{R.drawable.ic_tab_clean_select, R.drawable.ic_tab_me_select};
         } else {
-            icons = new int[]{R.drawable.clean_normal,R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
-            iconsSelect = new int[]{R.drawable.clean_select, R.drawable.tool_select,R.drawable.msg_select, R.drawable.me_select};
+            icons = new int[]{R.drawable.ic_tab_clean_normal, R.drawable.ic_tab_tool_normal, R.drawable.ic_tab_msg_normal, R.drawable.ic_tab_me_normal};
+            iconsSelect = new int[]{R.drawable.ic_tab_clean_select, R.drawable.ic_tab_tool_select, R.drawable.ic_tab_msg_select, R.drawable.ic_tab_me_select};
         }
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
@@ -142,7 +140,7 @@ public class BottomBarTab extends FrameLayout {
 //                showAnimation(mIcon,animations[mTabPosition]);
             mIcon.setImageResource(iconsSelect[mTabPosition]);
 //                mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_29D69F));
-            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_29D69F));
+            mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_2ACBBB));
 //            }
         } else {
 //            mIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.color_999999));
@@ -215,7 +213,7 @@ public class BottomBarTab extends FrameLayout {
         mBadgeView.setVisibility(GONE);
     }
 
-    public boolean isBadgeViewShow(){
+    public boolean isBadgeViewShow() {
         return mBadgeView.getVisibility() == VISIBLE;
     }
 }

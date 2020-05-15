@@ -3,11 +3,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--  android:background="@drawable/icon_news_top_bg" -->
     <LinearLayout
         android:id="@+id/fl_top_nav"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@drawable/icon_news_top_bg"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <ImageView
@@ -16,10 +17,11 @@
             android:visibility="gone"
             android:layout_height="match_parent" />
 
-        <com.xiaoniu.common.widget.viewpagerindicator.ViewPagerIndicator
+        <com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator
             android:id="@+id/newsTabIndicator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingLeft="12dp"
             android:paddingTop="12dp"
             android:paddingRight="12dp"
             android:paddingBottom="12dp"/>

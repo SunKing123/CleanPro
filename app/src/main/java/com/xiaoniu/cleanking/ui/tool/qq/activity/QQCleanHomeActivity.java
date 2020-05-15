@@ -209,17 +209,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             long totalSize = 0;
             totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
             if (totalSize == 0) {
-
-                boolean isOpen = false;
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
-
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_QQ,PositionId.DRAW_THREE_CODE);
                 int mNotifySize = 0; //通知条数
                 int mPowerSize = 0; //耗电应用数
                 int mRamScale = 0; //使用内存占总RAM的比例

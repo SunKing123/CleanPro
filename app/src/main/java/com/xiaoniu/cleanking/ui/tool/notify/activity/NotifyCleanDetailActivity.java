@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
@@ -299,16 +297,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             PreferenceUtil.saveNotificationCleanTime();
         }
         PreferenceUtil.saveCleanNotifyUsed(true);
-        boolean isOpen = false;
-        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_NOTIFY,PositionId.DRAW_THREE_CODE);
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
@@ -350,17 +339,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

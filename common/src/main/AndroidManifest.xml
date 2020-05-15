@@ -123,8 +123,10 @@
             android:exported="false" />
 
         <activity
+            android:theme="@style/AppTheme.Slide"
             android:name=".base.SimpleWebActivity"
             android:screenOrientation="portrait" />
+
         <activity android:name=".base.BaseActivity" />
 
         <!-- 穿山甲 begin -->

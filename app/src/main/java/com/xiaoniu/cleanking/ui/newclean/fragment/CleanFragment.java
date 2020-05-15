@@ -10,13 +10,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
@@ -28,9 +29,7 @@ import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -40,7 +39,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -64,12 +62,11 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 清理操作页面
  */
+@Deprecated
 public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @BindView(R.id.junk_list)
     ExpandableListView mExpandableListView;
-/*    @BindView(R.id.view_clean_anim)
-    NewCleanAnimView mCleanAnimView;*/
     @BindView(R.id.do_junk_clean)
     TextView doJunkClean;
 
@@ -144,7 +141,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         tvUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
 
         tvCheckedSize = mHeadView.findViewById(R.id.tv_checked_size);
-        mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
+//        mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
 
         totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
         checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
@@ -164,7 +161,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mExpandableListView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
             JunkGroup junkGroup = mJunkGroups.get(groupPosition);
             if (junkGroup != null) {
-                junkGroup.isExpand = !junkGroup.isExpand();
+                junkGroup.isExpand = !junkGroup.isExpand;
                 mAdapter.notifyDataSetChanged();
             }
             return false;
@@ -199,10 +196,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 }
             }
         });
-    /*    mAdapter.setOnItemSe lectListener(() -> {
-            long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-            totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
-        });*/
 
         mExpandableListView.setAdapter(mAdapter);
 
@@ -213,47 +206,22 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 mExpandableListView.expandGroup(i);
             }
         }
-        /*
-        mCleanAnimView.setStateListener(new AnimationStateListener() {
-            @Override
-            public void onAnimationStart() {
-                //清理完成动画开始
-                NiuDataAPI.onPageStart("clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
-            }
-
-            @Override
-            public void onAnimationEnd() {
-                NiuDataAPIUtil.onPageEnd("scanning_result_page", "clean_finish_annimation_page", "clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
-                cleanFinish();
-            }
-        });
-
-        mCleanAnimView.setOnColorChangeListener(animation -> showBarColor(animation));
-
-        mCleanAnimView.setCleanOverListener(() -> {
-            if (getActivity() != null) {
-                ((NowCleanActivity) getActivity()).setClean(false);
-            }
-        });*/
     }
 
-
-
-    @OnClick({R.id.layout_junk_clean,R.id.btn_left_scan})
+    @OnClick({R.id.layout_junk_clean, R.id.btn_left_scan})
     public void viewClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.layout_junk_clean:
                 starClean();
                 break;
             case R.id.btn_left_scan:
-                ((NowCleanActivity)getActivity()).backClick(true);
+                ((NowCleanActivity) getActivity()).backClick(true);
                 break;
         }
 
     }
 
-
-    public void starClean(){
+    public void starClean() {
         //扫描中弹框_确认按钮
         StatisticsUtils.trackClick("cleaning_button_click", "用户在扫描结果页点击【清理】按钮", "clean_up_scan_page", "scanning_result_page");
         startClean();
@@ -275,16 +243,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         EventBus.getDefault().post(event);
 
         PreferenceUtil.saveCleanAllUsed(true);
-        boolean isOpen = false;
-        //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_ALL, PositionId.DRAW_THREE_CODE);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
@@ -303,18 +262,12 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     }
 
     private void startClean() {
-/*        mCleanAnimView.setStopClean(false);
-        mCleanAnimView.setVisibility(View.VISIBLE);
-        mCleanAnimView.setData(checkCountEntity);
-        //清理动画
-        mCleanAnimView.startCleanAnim(false);*/
-//        layoutShowList.setVisibility(View.GONE);
         cleanToolbar.setVisibility(View.GONE);
         relCleanContent.setVisibility(View.VISIBLE);
         ivCleanBg01.setVisibility(View.VISIBLE);
         ivCleanBg02.setVisibility(View.VISIBLE);
         ivCleanBg03.setVisibility(View.VISIBLE);
-        ivs = new TextView[]{ivCleanBg01,ivCleanBg02,ivCleanBg03};
+        ivs = new TextView[]{ivCleanBg01, ivCleanBg02, ivCleanBg03};
         viewLottieBottom.useHardwareAcceleration();
         viewLottieBottom.setAnimation("cleanbottom.json");
         viewLottieBottom.setImageAssetsFolder("cleanbottom");
@@ -327,10 +280,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         tvCleanUnit.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
 
 
-        if(!viewLottieBottom.isAnimating()){
+        if (!viewLottieBottom.isAnimating()) {
             viewLottieBottom.playAnimation();
         }
-        if(!viewLottieTop.isAnimating()){
+        if (!viewLottieTop.isAnimating()) {
             viewLottieTop.playAnimation();
         }
         tvCleanCount.setText(checkCountEntity.getTotalSize());
@@ -354,15 +307,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
             @Override
             public void onAnimationCancel(Animator animation) {
-
             }
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
             }
-
-
         });
         viewLottieBottom.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -372,10 +321,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                     float currentValue = Float.valueOf(checkCountEntity.getTotalSize()) * (0.74f - animatedValue);
                     tvCleanCount.setText(String.format("%s", Math.round(currentValue)));
                     tvCleanUnit.setText(checkCountEntity.getUnit());
-                }else if(animatedValue > 0.76f && animatedValue < 0.76f){
+                } else if (animatedValue > 0.76f && animatedValue < 0.76f) {
                     tvCleanCount.setText("0");
                     tvCleanUnit.setText(checkCountEntity.getUnit());
-                }else{
+                } else {
                     tvCleanCount.setVisibility(View.GONE);
                     tvCleanUnit.setVisibility(View.GONE);
 
@@ -385,15 +334,15 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
 
         shouIndex = 2;
-        showColorChange(ivs,shouIndex);
+        showColorChange(ivs, shouIndex);
         clearAll();
     }
 
-   public void  reStartClean(){
-        if(viewLottieBottom!=null){
+    public void reStartClean() {
+        if (viewLottieBottom != null) {
             viewLottieBottom.playAnimation();
         }
-   }
+    }
 
     boolean isCacheCheckAll = true;  //运行内存是否全选
     boolean isCheckAll = true;  //运行内存是否全选
@@ -424,6 +373,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         for (FirstJunkInfo info : value.mChildren) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
+                                break;
                             }
                         }
                         long l = CleanUtil.freeJunkInfos(value.mChildren);
@@ -432,6 +382,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         for (FirstJunkInfo info : value.mChildren) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
+                                break;
                             }
                         }
                         long l1 = CleanUtil.freeJunkInfos(value.mChildren);
@@ -440,13 +391,14 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         for (FirstJunkInfo info : value.mChildren) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
+                                break;
                             }
                         }
                         long leavedCache = CleanUtil.freeJunkInfos(value.mChildren);
                         total += leavedCache;
                     }
                 } else if (entry.getKey() == 4 && value.otherChildren.size() > 0) {//其他垃圾处理
-                    if (!value.isChecked()) {
+                    if (!value.isChecked) {
                         isCheckAll = false;
                     }
 
@@ -468,25 +420,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     }
 
-/*    private long getTotalSize() {
-        long size = 0L;
-        for (JunkGroup group : mJunkGroups.values()) {
-            for (FirstJunkInfo firstJunkInfo : group.mChildren) {
-                if (firstJunkInfo.isAllchecked()) {
-                    size += firstJunkInfo.getTotalSize();
-                }
-            }
-        }
-        return size;
-    }*/
-
-
     /**
      * 停止清理
      */
     public void stopClean() {
         viewLottieBottom.pauseAnimation();
-//        mCleanAnimView.stopClean();
     }
 
 
@@ -509,12 +447,10 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
     }
 
-
     public void showColorChange(TextView[] ivs, int index) {
         if (ivs.length == 3 && index <= 2 && index > 0) {
             Drawable drawable = ivs[index].getBackground();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                if (drawable.getAlpha() == 255) {
                 ObjectAnimator animatorHide = ObjectAnimator.ofPropertyValuesHolder(drawable, PropertyValuesHolder.ofInt("alpha", 0));
                 animatorHide.setTarget(drawable);
                 animatorHide.setDuration(1000);
@@ -529,16 +465,6 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                       /* if(index==1){
-
-                  *//*          Log.v("onAnimationEnd", "onAnimationEnd ");
-                            mView.setColorChange(true);
-                           *//*
-                            if (animatorHide != null)
-                                animatorHide.cancel();
-                        }else{
-
-                        }*/
                         showColorChange(ivs, (index - 1));
                     }
 
@@ -552,9 +478,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
 
                     }
                 });
-//                }
             }
         }
-
     }
 }

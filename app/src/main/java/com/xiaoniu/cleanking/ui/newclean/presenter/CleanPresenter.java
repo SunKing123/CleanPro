@@ -18,6 +18,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+@Deprecated
 public class CleanPresenter extends RxPresenter<CleanFragment, NewScanModel> {
 
     @Inject
@@ -49,17 +50,7 @@ public class CleanPresenter extends RxPresenter<CleanFragment, NewScanModel> {
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

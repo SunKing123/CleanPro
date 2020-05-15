@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_top_xiding"
+    android:visibility="gone"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- common_activity_base.xml -->
+    <FrameLayout
+        android:id="@+id/fl_xiding_top_back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left">
+
+        <ImageView
+            android:id="@+id/btnXidingLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="17dp"
+            android:src="@drawable/common_icon_back_arrow_white" />
+
+        <TextView
+            android:id="@+id/tv_top_xiding_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="52dp"
+            android:gravity="center"
+            android:text="@string/xiding_back_to_clean"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </FrameLayout>
+
+</LinearLayout>

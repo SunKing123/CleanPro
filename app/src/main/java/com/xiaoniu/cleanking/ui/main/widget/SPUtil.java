@@ -352,17 +352,16 @@ public class SPUtil {
         guideSp.edit().putBoolean(key, value).commit();
     }
 
-    //当前是否为审核状态，审核状态则隐藏相关页面
+
+    /**
+     * 当前是否为审核状态，审核状态则隐藏相关页面
+     *
+     * @return
+     */
     public static boolean isInAudit() {
-        boolean isInAudit = false;
-        //        状态（0=隐藏，1=显示）
+        //  状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(AppApplication.getInstance(), AppApplication.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "1")) {
-            isInAudit = false;
-        } else {
-            isInAudit = true;
-        }
-        return isInAudit;
+        return TextUtils.equals(auditSwitch, "0");
     }
 
     /**

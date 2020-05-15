@@ -11,11 +11,13 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.OtherJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.common.utils.ContextUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by mazhuang on 16/1/14.
@@ -245,5 +247,27 @@ public class CleanUtil {
         return size;
     }
 
-
+    //计算当前一级总数
+    public static long getTotalSize(List<JunkGroup> mJunkGroups) {
+        long size = 0L;
+        if (CollectionUtils.isEmpty(mJunkGroups)) {
+            return size;
+        }
+        try {
+            for (JunkGroup group : mJunkGroups) {
+                if (group.mChildren.size() > 0) {
+                    for (FirstJunkInfo firstJunkInfo : group.mChildren) {
+                        if (firstJunkInfo.isAllchecked()) {
+                            size += firstJunkInfo.getTotalSize();
+                        }
+                    }
+                } else if (ScanningResultType.MEMORY_JUNK.getTitle().equals(group.mName) && group.isChecked) {//其他垃圾类目单独处理
+                    size += group.mSize;
+                }
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return size;
+    }
 }

@@ -1,0 +1,188 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "b769f9051f5c6bebe664fd5d658556b9",
+    "entities": [
+      {
+        "tableName": "HomeRecommend",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `sort` TEXT, `positionCode` TEXT, `name` TEXT, `content` TEXT, `iconUrl` TEXT, `buttonName` TEXT, `linkType` TEXT, `linkUrl` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sort",
+            "columnName": "sort",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "positionCode",
+            "columnName": "positionCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "content",
+            "columnName": "content",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconUrl",
+            "columnName": "iconUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buttonName",
+            "columnName": "buttonName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "linkType",
+            "columnName": "linkType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "linkUrl",
+            "columnName": "linkUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "GameSelect",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER NOT NULL, `appName` TEXT, PRIMARY KEY(`position`))",
+        "fields": [
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appName",
+            "columnName": "appName",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "position"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "AdInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`isOpen` INTEGER NOT NULL, `configKey` TEXT NOT NULL, `switcherName` TEXT, `advertPosition` TEXT NOT NULL, `versions` TEXT, `advertId` TEXT, `secondAdvertId` TEXT, `advertSource` TEXT, `secondAdvertSource` TEXT, `appName` TEXT, `showRate` INTEGER NOT NULL, PRIMARY KEY(`configKey`, `advertPosition`))",
+        "fields": [
+          {
+            "fieldPath": "isOpen",
+            "columnName": "isOpen",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "configKey",
+            "columnName": "configKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "switcherName",
+            "columnName": "switcherName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "advertPosition",
+            "columnName": "advertPosition",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "versions",
+            "columnName": "versions",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "advertId",
+            "columnName": "advertId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "secondAdvertId",
+            "columnName": "secondAdvertId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "advertSource",
+            "columnName": "advertSource",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "secondAdvertSource",
+            "columnName": "secondAdvertSource",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "appName",
+            "columnName": "appName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "showRate",
+            "columnName": "showRate",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "configKey",
+            "advertPosition"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b769f9051f5c6bebe664fd5d658556b9\")"
+    ]
+  }
+}

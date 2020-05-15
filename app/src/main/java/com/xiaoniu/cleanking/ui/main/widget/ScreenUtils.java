@@ -39,6 +39,19 @@ public class ScreenUtils {
         return dm.widthPixels;
     }
 
+
+    /**
+     * 获取屏幕宽度dp
+     */
+    public static float getScreenWidthDp(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;         // 屏幕宽度（像素）
+        float density = dm.density;         // 屏幕密度（0.75 / 1.0 / 1.5）
+        return width / density;
+    }
+
     /**
      * 获取屏幕高度
      */

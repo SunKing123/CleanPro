@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,7 +20,6 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
@@ -40,7 +38,6 @@ import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.FileUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -196,15 +193,8 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(WechatCleanHomeActivity.class);
             } else {
 
-                boolean isOpen = false;
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT,PositionId.DRAW_THREE_CODE);
+
                 if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
@@ -236,16 +226,8 @@ public class ToolFragment extends SimpleFragment {
             //保存本次清理完成时间 保证每次清理时间间隔为3分钟
             if (!PreferenceUtil.getCleanTime()) {
 
-                boolean isOpen = false;
-                //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-                if (AppHolder.getInstance().getSwitchInfoList() != null && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU,PositionId.DRAW_THREE_CODE);
+
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
@@ -273,15 +255,8 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             } else {
 
-                boolean isOpen = false;
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                            isOpen = switchInfoList.isOpen();
-                        }
-                    }
-                }
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL,PositionId.DRAW_THREE_CODE);
+
                 if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
@@ -361,17 +336,7 @@ public class ToolFragment extends SimpleFragment {
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

@@ -34,20 +34,15 @@ public class AppLifecycleObserver implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void onEnterForeground() {
         if (isBack && PreferenceUtil.getHomeBackTime()) {
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
-                        if (null == mContext) return;
-                        Intent intent = new Intent();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.setClass(mContext, SplashADHotActivity.class);
-                        mContext.startActivity(intent);
-                        isBack = false;
-                    }
-                }
+            if (AppHolder.getInstance().isOpen(PositionId.SPLASH_ID, PositionId.HOT_CODE) && mContext != null) {
+                Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setClass(mContext, SplashADHotActivity.class);
+                mContext.startActivity(intent);
+                isBack = false;
             }
         }
+
         EventBus.getDefault().post(new LifecycEvent(true));
     }
 

@@ -2,7 +2,9 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
 import android.arch.lifecycle.ProcessLifecycleOwner;
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Room;
+import android.arch.persistence.room.migration.Migration;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -103,11 +105,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     private void initRoom(Application application) {
-        mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "wukong_cleanking.db")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
+        mAppDatabase = RoomDataBaseUtils.init(application);
     }
+
 
     public static AppDataBase getAppDatabase() {
         return mAppDatabase;

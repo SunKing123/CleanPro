@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -98,6 +99,13 @@ public class BottomBar extends LinearLayout {
     }
 
     public void setCurrentItem(final int position) {
+        if (mTabs == null) {
+            return;
+        }
+        if (position >= mTabs.size()) {
+            Log.e("BottomBar", "!--->setCurrentItem--error--position:"+position+"; mTabs size:"+mTabs.size());
+            return;
+        }
         mTabLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -114,7 +122,7 @@ public class BottomBar extends LinearLayout {
      * 获取 Tab
      */
     public BottomBarTab getItem(int index) {
-        if (mTabs.size() < index) return null;
+        if (mTabs.size() < index) return null; // <= ?
         return mTabs.get(index);
     }
 

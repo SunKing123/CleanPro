@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import com.xiaoniu.cleanking.R;
@@ -14,13 +13,13 @@ import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -121,14 +120,14 @@ public class WechatCleanResultActivity extends SimpleActivity {
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             boolean isOpen = false;
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    } else if (PositionId.KEY_QQ.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
+            if(!CollectionUtils.isEmpty(AppHolder.getInstance().getSwitchInfoMap())){
+                SwitchInfoList.DataBean wechar= AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_WECHAT+PositionId.DRAW_THREE_CODE);
+                SwitchInfoList.DataBean qq= AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_QQ+PositionId.DRAW_THREE_CODE);
+                AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_QQ+PositionId.DRAW_THREE_CODE);
+                if(wechar!=null){
+                    isOpen = wechar.isOpen();
+                }else if(qq!=null){
+                    isOpen = qq.isOpen();
                 }
             }
             AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
@@ -183,17 +182,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
                 }
 
                 @Override
-                public void reduceSize(long p0) {
-
-                }
-
-                @Override
                 public void scanFile(String p0) {
-
-                }
-
-                @Override
-                public void totalSize(int p0) {
 
                 }
             });

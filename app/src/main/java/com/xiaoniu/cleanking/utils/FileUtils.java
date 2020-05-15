@@ -26,7 +26,6 @@ public class FileUtils {
         try {
             packageInfo = AppApplication.getInstance().getPackageManager().getPackageInfo(str, 0);
         } catch (PackageManager.NameNotFoundException e) {
-            // e.printStackTrace();
         }
         if (packageInfo != null) {
             return true;
@@ -37,6 +36,7 @@ public class FileUtils {
 
     /**
      * 是否系统应用
+     *
      * @param str
      * @return
      */
@@ -106,6 +106,7 @@ public class FileUtils {
                 return;
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
         for (int length = listFiles.length, i = 0; i < length; ++i) {
             file = listFiles[i];
@@ -116,7 +117,6 @@ public class FileUtils {
                     secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
                     secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
                 }
-
             }
         }
     }
@@ -174,7 +174,6 @@ public class FileUtils {
         }
         return hashMap;
     }
-
 
 
 }

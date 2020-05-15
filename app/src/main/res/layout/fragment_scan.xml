@@ -1,192 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_clean_top"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_4690FD">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
-        <ImageView
-            android:id="@+id/iv_scan_bg01"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="1"
-            android:background="@drawable/icon_scaning_bg04"></ImageView>
-        <ImageView
-            android:id="@+id/iv_scan_bg02"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="1"
-            android:background="@drawable/icon_scaning_bg03"></ImageView>
-        <ImageView
-            android:id="@+id/iv_scan_bg03"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="1"
-            android:background="@drawable/icon_scaning_bg02"></ImageView>
-
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/view_lottie_ripple"
-            android:layout_width="match_parent"
-            android:scaleType="centerCrop"
-            android:layout_height="match_parent"/>
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/view_lottie_home"
-            android:layout_width="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_height="390dp"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center" >
-
-
-<!--
-        <ImageView
-            android:id="@+id/icon_outer"
-            android:layout_width="@dimen/dimen_230dp"
-            android:layout_height="230dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="85dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/icon_circle" />-->
-
-       <!-- <View
-            android:id="@+id/circle_outer"
-            android:layout_width="@dimen/dimen_230dp"
-            android:layout_height="@dimen/dimen_230dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="85dp"
-            android:background="@drawable/icon_bg_circle"
-            android:visibility="visible" />
-
-        <View
-            android:id="@+id/circle_outer2"
-            android:layout_width="@dimen/dimen_230dp"
-            android:layout_height="@dimen/dimen_230dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="85dp"
-            android:background="@drawable/icon_bg_circle"
-            android:visibility="visible" />-->
-
-  <!--      <ImageView
-            android:id="@+id/icon_inner"
-            android:layout_width="164dp"
-            android:layout_height="164dp"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="120dp"
-            android:src="@mipmap/icon_inner"
-            android:visibility="gone" />-->
-
-        <RelativeLayout
-            android:id="@+id/layout_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_centerInParent="true">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:lines="1"
-                android:text="0.0"
-                android:textColor="@color/white"
-                android:textSize="90sp" />
-
-            <TextView
-                android:id="@+id/text_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_count"
-                android:layout_marginTop="-10dp"
-                android:text="MB"
-                android:layout_centerHorizontal="true"
-                android:textSize="32sp"
-                android:textColor="@color/white" />
-        </RelativeLayout>
+        android:layout_above="@+id/bottom_shadow">
 
         <LinearLayout
-            android:id="@+id/layout_scan"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/layout_count"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimen_20dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_310dp">
 
-            <TextView
-                android:id="@+id/text_scan_trace"
+                <ImageView
+                    android:id="@+id/iv_scanning_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_animation_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:lottie_autoPlay="true"
+                    app:lottie_fileName="scanning_junk/data.json"
+                    app:lottie_imageAssetsFolder="scanning_junk/images/"
+                    app:lottie_loop="true" />
+
+                <com.xiaoniu.cleanking.widget.FuturaRoundTextView
+                    android:id="@+id/tv_junk_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tv_junk_unit"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="-14dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_90sp"
+                    tools:text="102" />
+
+                <com.xiaoniu.cleanking.widget.FuturaRoundTextView
+                    android:id="@+id/tv_junk_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tv_scanning_progress_file"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/dimen_24dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_32sp"
+                    tools:text="MB" />
+
+                <TextView
+                    android:id="@+id/tv_scanning_progress_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/dimen_24dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_16sp"
+                    tools:text="扫描: com.huawei.android.airsharing" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_content_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:gravity="left"
-                android:maxWidth="300dp"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                tools:itemCount="5"
+                tools:listitem="@layout/scaning_item" />
 
-            <ImageView
-                android:id="@+id/view_arrow"
-                android:layout_width="@dimen/dimen_12dp"
-                android:layout_height="@dimen/dimen_12dp"
-                android:layout_marginLeft="@dimen/dimen_4dp"
-                android:src="@mipmap/arrow_right_white"
-                android:visibility="gone" />
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
+    <TextView
+        android:id="@+id/tv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_42dp"
+        android:drawableLeft="@drawable/common_icon_back_arrow_white"
+        android:drawablePadding="@dimen/dimen_10dp"
+        android:padding="@dimen/dimen_12dp"
+        android:text="@string/scaning"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/dimen_20sp" />
 
-    </RelativeLayout>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolBar"
+    <ImageView
+        android:id="@+id/bottom_shadow"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="24dp"
-        android:padding="0dp"
-        app:contentInsetStart="0dp"
+        android:layout_height="8dp"
+        android:layout_above="@+id/rl_toolkit"
+        android:layout_gravity="bottom"
+        android:background="@mipmap/wl"
+        android:visibility="visible" />
 
-        app:contentInsetStartWithNavigation="0dp"
-        android:visibility="gone">
+    <LinearLayout
+        android:id="@+id/rl_toolkit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_68dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left">
-
-            <ImageView
-                android:id="@+id/btn_left_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="17dp"
-                android:src="@drawable/common_icon_back_arrow_white" />
-
-            <TextView
-                android:id="@+id/tv_scan_left_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="52dp"
-                android:gravity="center"
-                android:text=""
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
-
-        </FrameLayout>
-
-
-    </android.support.v7.widget.Toolbar>
-</FrameLayout>
+        <TextView
+            android:id="@+id/tv_stop_clean"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_46dp"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@drawable/sp_scaning_btn_bg"
+            android:gravity="center"
+            android:text="@string/stop_scan"
+            android:textColor="@color/color_666666"
+            android:textSize="@dimen/dimen_16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</RelativeLayout>
