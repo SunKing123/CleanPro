@@ -66,6 +66,7 @@ public class NotifyCleanGuideActivity extends BaseActivity {
     @Override
     protected void initVariable(Intent intent) {
         setLeftTitle("通知栏清理");
+        mToolBar.setBackgroundColor(getResources().getColor(R.color.color_06C581));
     }
 
     @Override

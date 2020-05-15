@@ -44,9 +44,9 @@
                     android:layout_above="@+id/tv_junk_unit"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="-14dp"
+                    android:text="0.00"
                     android:textColor="@android:color/white"
-                    android:textSize="@dimen/dimen_90sp"
-                    tools:text="102" />
+                    android:textSize="@dimen/dimen_90sp" />
 
                 <com.xiaoniu.cleanking.widget.FuturaRoundTextView
                     android:id="@+id/tv_junk_unit"

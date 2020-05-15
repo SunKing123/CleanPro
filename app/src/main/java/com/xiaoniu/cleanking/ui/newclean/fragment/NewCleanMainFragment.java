@@ -72,7 +72,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.JurisdictionGuideActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
-//import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
@@ -92,8 +91,8 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
@@ -121,6 +120,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
+
+//import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 
 /**
  * 1.2.1 新版本清理主页
@@ -1172,6 +1173,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mTvCleanType.setVisibility(VISIBLE);
         mTvCleanType01.setText(msp01);
         mTvCleanType01.setVisibility(VISIBLE);
+
     }
 
     /**

@@ -10,7 +10,6 @@ import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.JunkWrapper;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningLevel;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
@@ -169,10 +168,8 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
         JunkGroup junkGroup = mJunkGroups.get(ScanningResultType.AD_JUNK);
         if (junkGroup != null) {
             for (FirstJunkInfo info : firstJunkList) {
-                if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
-                    junkGroup.mChildren.add(info);
-                    junkGroup.mSize += info.getTotalSize();
-                }
+                junkGroup.mChildren.add(info);
+                junkGroup.mSize += info.getTotalSize();
             }
             junkGroup.isScanningOver = true;
         }
@@ -187,10 +184,8 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
         JunkGroup junkGroup = mJunkGroups.get(ScanningResultType.CACHE_JUNK);
         if (junkGroup != null) {
             for (FirstJunkInfo info : firstJunkList) {
-                if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
-                    junkGroup.mChildren.add(info);
-                    junkGroup.mSize += info.getTotalSize();
-                }
+                junkGroup.mChildren.add(info);
+                junkGroup.mSize += info.getTotalSize();
             }
             junkGroup.isScanningOver = true;
         }
@@ -205,10 +200,8 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
         JunkGroup junkGroup = mJunkGroups.get(ScanningResultType.UNINSTALL_JUNK);
         if (junkGroup != null) {
             for (FirstJunkInfo info : firstJunkList) {
-                if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
-                    junkGroup.mChildren.add(info);
-                    junkGroup.mSize += info.getTotalSize();
-                }
+                junkGroup.mChildren.add(info);
+                junkGroup.mSize += info.getTotalSize();
             }
             junkGroup.isScanningOver = true;
         }
@@ -239,10 +232,8 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
         JunkGroup junkGroup = mJunkGroups.get(ScanningResultType.MEMORY_JUNK);
         if (junkGroup != null) {
             for (FirstJunkInfo info : firstJunkList) {
-                if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
-                    junkGroup.mChildren.add(info);
-                    junkGroup.mSize += info.getTotalSize();
-                }
+                junkGroup.mChildren.add(info);
+                junkGroup.mSize += info.getTotalSize();
             }
             junkGroup.isScanningOver = true;
         }

@@ -32,7 +32,6 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -45,6 +44,7 @@ import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningLevel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -305,13 +305,13 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     /**
      * 第一阶段  红色
      */
-    private static final int FirstLevel = 0xff06C581;
+    private static final int FirstLevel = ScanningLevel.Little.getColor();
 
-    private static final int SecondLevel = 0xffF1D53B;
+    private static final int SecondLevel = ScanningLevel.Middle.getColor();
     /**
      * 第三阶段 绿色
      */
-    private static final int ThirdLevel = 0xffFD6F46;
+    private static final int ThirdLevel = ScanningLevel.Large.getColor();
 
     public void setBgChanged(View viewt, View view_top) {
 

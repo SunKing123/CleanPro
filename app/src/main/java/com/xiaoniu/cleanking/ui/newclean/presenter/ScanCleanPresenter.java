@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanCleanContact;
 import com.xiaoniu.cleanking.ui.newclean.model.ScanCleanModel;
@@ -13,6 +14,8 @@ import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -90,7 +93,7 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                         }
                         long l = CleanUtil.freeJunkInfos(entry.getValue());
                         total += l;
-                    } else if (ScanningResultType.AD_JUNK.equals(entry.getKey())) { //apk文件
+                    } else if (ScanningResultType.AD_JUNK.equals(entry.getKey())) { //ad文件
                         for (FirstJunkInfo info : entry.getValue()) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
@@ -100,6 +103,15 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                         long l1 = CleanUtil.freeJunkInfos(entry.getValue());
                         total += l1;
                     } else if (ScanningResultType.UNINSTALL_JUNK.equals(entry.getKey())) {//残留垃圾
+                        for (FirstJunkInfo info : entry.getValue()) {
+                            if (!info.isAllchecked()) {
+                                isCheckAll = false;
+                                break;
+                            }
+                        }
+                        long leavedCache = CleanUtil.freeJunkInfos(entry.getValue());
+                        total += leavedCache;
+                    } else if (ScanningResultType.APK_JUNK.equals(entry.getKey())) { //apk垃圾
                         for (FirstJunkInfo info : entry.getValue()) {
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
@@ -119,6 +131,9 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
             double memoryShow = NoClearSPHelper.getMemoryShow();
             if (memoryShow == 1) {
                 //清理完成，存储时间点
+                CleanEvent cleanEvent = new CleanEvent();
+                cleanEvent.setCleanAminOver(true);
+                EventBus.getDefault().post(cleanEvent);
                 mSPHelper.saveCleanTime(System.currentTimeMillis());
             }
         });
