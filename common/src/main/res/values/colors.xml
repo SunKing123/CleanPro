@@ -3,7 +3,20 @@
     <color name="colorPrimary">#06C581</color>  <!--app: #16C9C5 -->
     <color name="colorPrimaryDark">#06C581</color>
     <color name="colorAccent">#FF4081</color>
+
     <color name="colorPrimary_app">#16C9C5</color>
+
+    <!-- text -->
+    <color name="text_white">#FFFFFF</color>        <!-- white title -->
+    <color name="text_title_black">#333333</color>  <!-- dialog title -->
+    <color name="text_primary">#404040</color>
+    <color name="text_secondary">#666666</color>
+    <color name="text_tertiary">#999999</color>
+    <!-- status text -->
+    <color name="text_red_pink">#FF4545</color>
+    <color name="text_yellow">#FFAC01</color>
+
+
     <color name="black">#000000</color>
     <color name="EAEDEF">#EAEDEF</color>
     <color name="color_323232">#323232</color>

@@ -28,11 +28,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_20dp"
-                    android:text="工具箱"
+                    android:layout_marginLeft="@dimen/dimen_12dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:text="@string/tool"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/text_title_main" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
