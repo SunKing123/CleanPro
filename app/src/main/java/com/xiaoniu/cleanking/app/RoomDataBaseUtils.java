@@ -42,9 +42,9 @@ public class RoomDataBaseUtils {
             @Override
             public void migrate(SupportSQLiteDatabase database) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `AdInfo` (`isOpen` INTEGER NOT NULL, `configKey` TEXT NOT NULL," +
-                        " `switcherName` TEXT, `advertPosition` TEXT NOT NULL," +
-                        " `versions` TEXT, `advertId` TEXT, `secondAdvertId` TEXT," +
-                        " `showRate` INTEGER NOT NULL, PRIMARY KEY(`configKey`, `advertPosition`))");
+                        " `switcherName` TEXT, `advertPosition` TEXT NOT NULL, " +
+                        "`versions` TEXT, `advertId` TEXT, `secondAdvertId` TEXT, " +
+                        "`advertSource` TEXT, `secondAdvertSource` TEXT, `appName` TEXT, `showRate` INTEGER NOT NULL, PRIMARY KEY(`configKey`, `advertPosition`))");
             }
         };
     }

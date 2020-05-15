@@ -2,12 +2,20 @@ package com.xiaoniu.cleanking.ad.mvp.contract;
 
 
 import com.bytedance.sdk.openadsdk.TTAdNative;
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
+import com.bytedance.sdk.openadsdk.TTSplashAd;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.xiaoniu.cleanking.ad.bean.AdRequestBean;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
+import com.xiaoniu.cleanking.ad.bean.AdYLHEmitterBean;
 import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.base.BaseView;
+
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 
 
 /**
@@ -30,12 +38,12 @@ public interface AdContract {
 
 
     interface Model {
-        void getYLHTemplateAd(AdRequestParamentersBean adRequestParamentersBean,AdRequestBean adRequestBean, NativeExpressAD.NativeExpressADListener adShowCallBack);
+        Observable<AdYLHEmitterBean> getYLHTemplateAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean);
 
-        void getCSJTemplateAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean, TTAdNative.NativeExpressAdListener adShowCallBack);
+        Observable<List<TTNativeExpressAd>> getCSJTemplateAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean);
 
-        void getYLHSplashAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean, SplashADListener adShowCallBack);
+        Observable<AdYLHEmitterBean> getYLHSplashAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean);
 
-        void getCSJSplashAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean, TTAdNative.SplashAdListener adShowCallBack);
+        Observable<TTSplashAd> getCSJSplashAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean);
     }
 }

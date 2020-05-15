@@ -384,6 +384,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements S
     }
 
     @Override
+    public void onADLoaded(long l) {
+
+    }
+
+    @Override
     public void onADDismissed() {
         Log.i("AD_DEMO", "SplashADDismissed");
         next();
