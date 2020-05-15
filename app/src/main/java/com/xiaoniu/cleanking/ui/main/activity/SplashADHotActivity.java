@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -30,6 +32,10 @@ import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
+import com.xiaoniu.cleanking.ad.enums.AdType;
+import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
+import com.xiaoniu.cleanking.ad.mvp.presenter.AdPresenter;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -51,39 +57,23 @@ import io.reactivex.disposables.Disposable;
 /**
  * 热启动开屏广告
  */
-public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implements SplashADListener, WeakHandler.IHandler {
-    private static final String SKIP_TEXT = "跳过 %d";
+public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     public boolean canJump = false;
-    private SplashAD splashAD;
     private ViewGroup container;
     private RoundProgressBar skipView;
     private ImageView mBigLogo, mCleanLogo;
     private boolean needStartDemoList = true;
 
-    /**
-     * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
-     * 给出的延时逻辑是从拉取广告开始算开屏最少持续多久，仅供参考，开发者可自定义延时逻辑，如果开发者采用demo
-     * 中给出的延时逻辑，也建议开发者考虑自定义minSplashTimeWhenNoAD的值（单位ms）
-     **/
-    private int minSplashTimeWhenNoAD = 2000;
+    private LinearLayout skipLayout;
+    private final int DEFAULT_TIME=5000;
     /**
      * 记录拉取广告的时间
      */
     private long fetchSplashADTime = 0;
     private Handler handler = new Handler(Looper.getMainLooper());
     private Disposable mSubscription;
-    private String mAdvertId = ""; //热启动广告id
-    private String mSecondAdvertId = ""; //热启动广告备用id
 
-    //穿山甲相关 begin
-    private TTAdNative mTTAdNative;
-    //开屏广告加载发生超时但是SDK没有及时回调结果的时候，做的一层保护。
-    private final WeakHandler mHandler = new WeakHandler(this);
-    //开屏广告加载超时时间,建议大于3000,这里为了冷启动第一次加载到广告并且展示,示例设置了3000ms
-    private static final int AD_TIME_OUT = 3000;
     private static final int MSG_GO_MAIN = 1;
-    //开屏广告是否已经加载
-    private boolean mHasLoaded;
     private final String TAG = "ChuanShanJia";
     //穿山甲相关 end
 
@@ -92,16 +82,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         return R.layout.activity_splash_ad_hot;
     }
 
-    /**
-     * 延迟跳转
-     */
-    public void skip() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            checkAndRequestPermission();
-        } else {
-            loadSplashAd();
-        }
-    }
 
     public void jumpActivity() {
         finish();
@@ -140,7 +120,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
 
         // 如果需要的权限都已经有了，那么直接调用SDK
         if (lackedPermission.size() == 0) {
-            loadSplashAd();
+            loadAd();
         } else {
             // 否则，建议请求所缺少的权限，在onRequestPermissionsResult中再看是否获得权限
             String[] requestPermissions = new String[lackedPermission.size()];
@@ -162,7 +142,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
-            loadSplashAd();
+            loadAd();
         } else {
             Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -172,115 +152,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         }
     }
 
-    /**
-     * 拉取开屏广告，开屏广告的构造方法有3种，详细说明请参考开发者文档。
-     *
-     * @param activity      展示广告的activity
-     * @param adContainer   展示广告的大容器
-     * @param skipContainer 自定义的跳过按钮：传入该view给SDK后，SDK会自动给它绑定点击跳过事件。SkipView的样式可以由开发者自由定制，其尺寸限制请参考activity_splash.xml或者接入文档中的说明。
-     * @param appId         应用ID
-     * @param posId         广告位ID
-     * @param adListener    广告状态监听器
-     * @param fetchDelay    拉取广告的超时时长：取值范围[3000, 5000]，设为0表示使用广点通SDK默认的超时时长。
-     */
-    private void fetchSplashAD(Activity activity, ViewGroup adContainer, View skipContainer, String appId, String posId, SplashADListener adListener, int fetchDelay) {
-        fetchSplashADTime = System.currentTimeMillis();
-
-        //后台控制是否显示开关
-        if (AppHolder.getInstance().isOpen(PositionId.SPLASH_ID, PositionId.HOT_CODE)) {
-            splashAD = new SplashAD(activity, skipContainer, appId, posId, adListener, fetchDelay);
-            splashAD.fetchAndShowIn(adContainer);
-        } else {
-            jumpActivity();
-        }
-
-    }
-
-    @Override
-    public void onADPresent() {
-        Log.i("AD_DEMO", "SplashADPresent");
-    }
-
-    @Override
-    public void onADClicked() {
-        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mSecondAdvertId, "优量汇", "hot_splash_page", "hot_splash_page", "");
-        Log.i("AD_DEMO", "SplashADClicked clickUrl: " + (splashAD.getExt() != null ? splashAD.getExt().get("clickUrl") : ""));
-    }
-
-    /**
-     * 倒计时回调，返回广告还将被展示的剩余时间。
-     * 通过这个接口，开发者可以自行决定是否显示倒计时提示，或者还剩几秒的时候显示倒计时
-     *
-     * @param millisUntilFinished 剩余毫秒数
-     */
-    @Override
-    public void onADTick(long millisUntilFinished) {
-        if (Math.round(millisUntilFinished / 1000f) > 4) {
-            skipView.startAnimation(millisUntilFinished, new LinearInterpolator(), new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
-
-            Log.i("AD_DEMO", "SplashADTick " + millisUntilFinished + "ms");
-            skipView.setVisibility(View.VISIBLE);
-        }
-//        skipView.setText(String.format(SKIP_TEXT, Math.round(millisUntilFinished / 1000f)));
-    }
-
-    @Override
-    public void onADExposure() {
-        Log.i("AD_DEMO", "SplashADExposure");
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "success", "hot_splash_page", "hot_splash_page");
-        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mSecondAdvertId, "优量汇", "hot_splash_page", "hot_splash_page", "");
-    }
-
-    @Override
-    public void onADLoaded(long l) {
-
-    }
-
-    @Override
-    public void onADDismissed() {
-        Log.i("AD_DEMO", "SplashADDismissed");
-        next();
-    }
-
-    @Override
-    public void onNoAD(AdError error) {
-        mBigLogo.setVisibility(View.VISIBLE);
-        mCleanLogo.setVisibility(View.VISIBLE);
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mSecondAdvertId, "优量汇", "fail", "hot_splash_page", "hot_splash_page");
-        Log.i("AD_DEMO", String.format("LoadSplashADFail, eCode=%d, errorMsg=%s", error.getErrorCode(), error.getErrorMsg()));
-        /**
-         * 为防止无广告时造成视觉上类似于"闪退"的情况，设定无广告时页面跳转根据需要延迟一定时间，demo
-         * 给出的延时逻辑是从拉取广告开始算开屏最少持续多久，仅供参考，开发者可自定义延时逻辑，如果开发者采用demo
-         * 中给出的延时逻辑，也建议开发者考虑自定义minSplashTimeWhenNoAD的值
-         **/
-        long alreadyDelayMills = System.currentTimeMillis() - fetchSplashADTime;//从拉广告开始到onNoAD已经消耗了多少时间
-        long shouldDelayMills = alreadyDelayMills > minSplashTimeWhenNoAD ? 0 : minSplashTimeWhenNoAD - alreadyDelayMills;//为防止加载广告失败后立刻跳离开屏可能造成的视觉上类似于"闪退"的情况，根据设置的minSplashTimeWhenNoAD
-        // 计算出还需要延时多久
-        handler.postDelayed(() -> {
-            if (needStartDemoList) {
-                jumpActivity();
-            }
-            finish();
-        }, shouldDelayMills);
-    }
 
     /**
      * 设置一个变量来控制当前开屏页面是否可以跳转，当开屏广告为普链类广告时，点击会打开一个广告落地页，此时开发者还不能打开自己的App主页。当从广告落地页返回以后，
@@ -288,9 +159,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
      */
     private void next() {
         if (canJump) {
-            if (needStartDemoList) {
-                jumpActivity();
-            }
+            jumpActivity();
             this.finish();
         } else {
             canJump = true;
@@ -305,50 +174,86 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
 
     @Override
     protected void initView() {
-        mPresenter.getSwitchInfoList();
         mBigLogo = this.findViewById(R.id.iv_biglogo);
         mCleanLogo = this.findViewById(R.id.iv_splash);
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
+        skipLayout=findViewById(R.id.skip_layout);
+
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
         needStartDemoList = getIntent().getBooleanExtra("need_start_demo_list", true);
         if (!needLogo) {
             findViewById(R.id.app_logo).setVisibility(View.GONE);
         }
-        initChuanShanJia();
         skipView.setOnClickListener(v -> {
             skipView.clearAnimation();
-            JSONObject extension = new JSONObject();
-            try {
-                extension.put("ad_id", mSecondAdvertId);
-                extension.put("ad_agency", "优量汇");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "hot_splash_page", "hot_splash_page");
             jumpActivity();
         });
 
-
+        loadAd();
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("hot_splash_page_custom", "热启动页创建时", "hot_splash_page", "hot_splash_page");
     }
 
+
     /**
-     * 拉取广告开关成功
-     *
-     * @return
+     * 请求广告
      */
-    public void getSwitchInfoListSuccess(SwitchInfoList list) {
-        if (null != list && null != list.getData() && list.getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
-                if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    mAdvertId = switchInfoList.getAdvertId();
-                    mSecondAdvertId = switchInfoList.getSecondAdvertId();
+    private void loadAd() {
+        fetchSplashADTime = System.currentTimeMillis();
+        AdRequestParamentersBean adRequestParamentersBean=new AdRequestParamentersBean(
+                this,
+                container,
+                skipLayout,
+                PositionId.SPLASH_ID,
+                PositionId.COLD_CODE,
+                AdType.Splash,
+                3000);
+        new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
+
+            @Override
+            public void onAdShowCallBack(View view) {
+                long alreadyDelayMills = System.currentTimeMillis() - fetchSplashADTime;
+                long shouldDelayMills = alreadyDelayMills > DEFAULT_TIME ? 0 : (DEFAULT_TIME-alreadyDelayMills);
+                if(skipView!=null){
+                    showProgressBar(DEFAULT_TIME);
                 }
             }
+
+            @Override
+            public void onFailure(String message) {
+                jumpActivity();
+            }
+        });
+    }
+
+    /**
+     * 跳过进度条
+     * @param animTime
+     */
+    private void showProgressBar(int animTime) {
+        skipView.setVisibility(View.VISIBLE);
+        if(animTime==0){
+            jumpActivity();
+            return;
         }
-        skip();
+        ValueAnimator mValueAnimator = ValueAnimator.ofInt(1, animTime);
+        mValueAnimator.setDuration(animTime);
+        mValueAnimator.setInterpolator(new LinearInterpolator());
+        mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                if(skipView!=null){
+                    int progress=((int)valueAnimator.getAnimatedValue()*100)/animTime;
+                    skipView.setProgress(progress);
+                    if(progress==100){
+                        next();
+                    }
+                }
+
+            }
+        });
+        mValueAnimator.start();
     }
 
     @Override
@@ -375,18 +280,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         super.onDestroy();
     }
 
-    /**
-     * 初始化穿山甲
-     */
-    private void initChuanShanJia() {
-        //step2:创建TTAdNative对象
-        mTTAdNative = TTAdManagerHolder.get().createAdNative(this);
-        //在合适的时机申请权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题
-        //在开屏时候申请不太合适，因为该页面倒计时结束或者请求超时会跳转，在该页面申请权限，体验不好
-        // TTAdManagerHolder.getInstance(this).requestPermissionIfNecessary(this);
-        //定时，AD_TIME_OUT时间到时执行，如果开屏广告没有加载则跳转到主页面
-        mHandler.sendEmptyMessageDelayed(MSG_GO_MAIN, AD_TIME_OUT);
-    }
 
     /**
      * 开屏页一定要禁止用户对返回按钮的控制，否则将可能导致用户手动退出了App而广告无法正常曝光和计费
@@ -399,172 +292,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> implem
         return super.onKeyDown(keyCode, event);
     }
 
-    /**
-     * 加载穿山甲开屏广告
-     */
-    private void loadSplashAd() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "success", "hot_splash_page", "hot_splash_page");
-        //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
-        AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId(mAdvertId)
-                .setSupportDeepLink(true)
-                .setImageAcceptedSize(1080, 1920)
-                .build();
-        //step4:请求广告，调用开屏广告异步请求接口，对请求回调的广告作渲染处理
-        mTTAdNative.loadSplashAd(adSlot, new TTAdNative.SplashAdListener() {
-            @Override
-            @MainThread
-            public void onError(int code, String message) {
-                Log.d(TAG, "穿山甲加载失败=" + message);
-                mHasLoaded = true;
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "hot_splash_page", "hot_splash_page");
-                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
-            }
-
-            @Override
-            @MainThread
-            public void onTimeout() {
-                mHasLoaded = true;
-                Log.d(TAG, "穿山甲----开屏广告加载超时");
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "hot_splash_page", "hot_splash_page");
-                // 如果是Android6.0以下的机器，建议在manifest中配置相关权限，这里可以直接调用SDK
-                fetchSplashAD(SplashADHotActivity.this, container, skipView, PositionId.APPID, mSecondAdvertId, SplashADHotActivity.this, 0);
-            }
-
-            @Override
-            @MainThread
-            public void onSplashAdLoad(TTSplashAd ad) {
-                Log.d(TAG, "穿山甲----开屏广告请求成功");
-                mHasLoaded = true;
-                mHandler.removeCallbacksAndMessages(null);
-                if (ad == null) {
-                    return;
-                }
-                showProgressBar();
-                //获取SplashView
-                View view = ad.getSplashView();
-                if (view != null) {
-                    container.removeAllViews();
-                    //把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕宽
-                    container.addView(view);
-                    //设置不开启开屏广告倒计时功能以及不显示跳过按钮,如果这么设置，您需要自定义倒计时逻辑
-                    ad.setNotAllowSdkCountdown();
-                } else {
-                    jumpActivity();
-                }
-
-                //设置SplashView的交互监听器
-                ad.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
-                    @Override
-                    public void onAdClicked(View view, int type) {
-                        Log.d(TAG, "穿山甲----onAdClicked");
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", mAdvertId, "穿山甲", "hot_splash_page", "hot_splash_page", "");
-                    }
-
-                    @Override
-                    public void onAdShow(View view, int type) {
-                        Log.d(TAG, "穿山甲----onAdShow");
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", mAdvertId, "穿山甲", "hot_splash_page", "hot_splash_page", "");
-                    }
-
-                    @Override
-                    public void onAdSkip() {
-                        Log.d(TAG, "穿山甲----onAdSkip");
-                        JSONObject extension = new JSONObject();
-                        try {
-                            extension.put("ad_id", mAdvertId);
-                            extension.put("ad_agency", "穿山甲");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "hot_splash_page", "hot_splash_page");
-                        jumpActivity();
-                    }
-
-                    @Override
-                    public void onAdTimeOver() {
-                        Log.d(TAG, "穿山甲----onAdTimeOver");
-                        jumpActivity();
-                    }
-                });
-                if (ad.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
-                    ad.setDownloadListener(new TTAppDownloadListener() {
-                        boolean hasShow = false;
-
-                        @Override
-                        public void onIdle() {
-
-                        }
-
-                        @Override
-                        public void onDownloadActive(long totalBytes, long currBytes, String fileName, String appName) {
-                            if (!hasShow) {
-                                Log.d(TAG, "穿山甲下载中...");
-                                hasShow = true;
-                            }
-                        }
-
-                        @Override
-                        public void onDownloadPaused(long totalBytes, long currBytes, String fileName, String appName) {
-                            Log.d(TAG, "穿山甲下载暂停...");
-                        }
-
-                        @Override
-                        public void onDownloadFailed(long totalBytes, long currBytes, String fileName, String appName) {
-                            Log.d(TAG, "穿山甲下载失败...");
-                        }
-
-                        @Override
-                        public void onDownloadFinished(long totalBytes, String fileName, String appName) {
-
-                        }
-
-                        @Override
-                        public void onInstalled(String fileName, String appName) {
-
-                        }
-                    });
-                }
-            }
-        }, AD_TIME_OUT);
-
-    }
-
-    @Override
-    public void handleMsg(Message msg) {
-        if (msg.what == MSG_GO_MAIN) {
-            if (!mHasLoaded) {
-                Log.d(TAG, "穿山甲广告已超时，跳到主页面");
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", mAdvertId, "穿山甲", "fail", "hot_splash_page", "hot_splash_page");
-                jumpActivity();
-            }
-        }
-    }
-
-    private void showProgressBar() {
-        skipView.setVisibility(View.VISIBLE);
-        skipView.startAnimation(3000, new LinearInterpolator(), new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                jumpActivity();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-    }
 
     @Override
     public void netError() {

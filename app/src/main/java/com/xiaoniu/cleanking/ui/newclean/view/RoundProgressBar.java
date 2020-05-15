@@ -104,7 +104,7 @@ public class RoundProgressBar extends View {
         this.textTitleColor = textTitleColor;
     }
 
-    private void setProgress(float progress) {
+    public void setProgress(float progress) {
         this.progress = progress;
         postInvalidate();
     }

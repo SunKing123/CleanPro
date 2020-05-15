@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.model.AdModel;
 
 import java.util.Deque;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -39,37 +40,17 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
         adModel.getYLHSplashAd(adRequestParamentersBean, adRequestBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-//                .timeout(3, TimeUnit.SECONDS)
+                .timeout(10, TimeUnit.SECONDS)
                 .subscribe(new Consumer<AdYLHEmitterBean>() {
                     @Override
                     public void accept(AdYLHEmitterBean adYLHEmitterBean) throws Exception {
                         if (adYLHEmitterBean == null || adShowCallBack == null) {
                             return;
                         }
-                        switch (adYLHEmitterBean.type) {
-                            case 2:
-                                adShowCallBack.onAdShowCallBack(null);
-                                break;
-                            case 4:
-                                adShowCallBack.onAdClickCallback();
-                                break;
-                            case 6:
-                                adShowCallBack.onAdTickCallback(adYLHEmitterBean.time);
-                                break;
-                            case 7:
-                                adShowCallBack.onAdSkipCallback();
-                                break;
-                            case 3:
-                                if (adShowCallBack != null) {
-                                    if (adYLHEmitterBean.index == 0) {
-                                        adShowCallBack.onCloseCallback();
-                                    } else {
-                                        adShowCallBack.onCloseCallback(adYLHEmitterBean.index);
-                                    }
-                                    adYLHEmitterBean.nativeExpressADView.destroy();
-                                }
-                                break;
-                        }
+                        Log.d(TAG, "优量会 开屏----onAdShowCallBack");
+
+                        adShowCallBack.onAdShowCallBack(adYLHEmitterBean.nativeExpressADView);
+//                        adYLHEmitterBean.nativeExpressADView.destroy();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

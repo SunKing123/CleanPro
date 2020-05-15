@@ -37,7 +37,6 @@ public class SplashHotPresenter extends RxPresenter<SplashADHotActivity, MainMod
 
             @Override
             public void getData(SwitchInfoList switchInfoList) {
-                mView.getSwitchInfoListSuccess(switchInfoList);
                 if(null != switchInfoList)
                     AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
             }
