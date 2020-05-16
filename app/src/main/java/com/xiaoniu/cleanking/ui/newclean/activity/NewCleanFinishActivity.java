@@ -499,7 +499,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
             //微信专情
             configkey = PositionId.KEY_WECHAT;
-        } else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
+        }  else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
+            //qq专情
+            configkey = PositionId.KEY_QQ;
+        }else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
             //通知栏清理
             configkey = PositionId.KEY_NOTIFY;
         } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
@@ -1220,7 +1223,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 PositionId.DRAW_ONE_CODE,
                 this,
                 AdType.Template,
-                (int) ScreenUtils.getScreenWidthDp(this)-56,
+                (int) ScreenUtils.getScreenWidthDp(this)-16,
                 0);
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
@@ -1259,7 +1262,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 PositionId.DRAW_TWO_CODE,
                 this,
                 AdType.Template,
-                (int) ScreenUtils.getScreenWidthDp(this)-56,
+                (int) ScreenUtils.getScreenWidthDp(this)-16,
                 0);
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override

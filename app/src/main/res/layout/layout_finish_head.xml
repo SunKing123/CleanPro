@@ -75,17 +75,17 @@
         android:layout_marginTop="-60dp"
         android:layout_marginRight="@dimen/dimen_8dp"
         android:background="@drawable/bg_finish_rem"
-        android:paddingLeft="@dimen/dimen_20dp"
-        android:paddingTop="@dimen/dimen_16dp"
-        android:paddingRight="@dimen/dimen_20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:visibility="gone"
-        android:paddingBottom="@dimen/dimen_16dp">
+        android:orientation="vertical"
+        >
 
         <FrameLayout
             android:id="@+id/v_advert"
+            android:background="@color/color_FF4545"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
+            android:layout_height="wrap_content">
 
         </FrameLayout>
     </LinearLayout>
