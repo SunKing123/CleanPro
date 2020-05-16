@@ -87,26 +87,27 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                             @Override
                             public void onADLoaded(List<NativeExpressADView> list) {
-                                Log.d(TAG, "优量会模板 onADLoaded ");
+                                Log.d(TAG, "优量会模板 onADLoaded   当前位置index是： "+adRequestParamentersBean.index);
                                 if (CollectionUtils.isEmpty(list)) {
                                     emitter.onError(new Throwable("优量会模板 onADLoaded,但是没有广告"));
                                     emitter.onComplete();
                                 }
                                 NativeExpressADView nativeExpressADView = list.get(0);
                                 emitter.onNext(new AdYLHEmitterBean(nativeExpressADView,adRequestParamentersBean.index,1));
+                                nativeExpressADView.render();
 //                                emitter.onComplete();
                             }
 
                             @Override
                             public void onRenderFail(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onRenderFail ");
+                                Log.d(TAG, "优量会模板 onRenderFail 当前位置index是： "+adRequestParamentersBean.index +" 广告位 adposition"+adRequestParamentersBean.advertPosition);
                                 emitter.onError(new Throwable("优量会模板 onRenderFail"));
                                 emitter.onComplete();
                             }
 
                             @Override
                             public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onRenderSuccess ");
+                                Log.d(TAG, "优量会模板 onRenderSuccess   当前位置index是： "+adRequestParamentersBean.index);
                                 Log.d("----------------","优量会模板 onRenderSuccess index:"+adRequestParamentersBean.index);
 
                                 emitter.onNext(new AdYLHEmitterBean(nativeExpressADView,adRequestParamentersBean.index,2));
@@ -254,7 +255,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
                 mTTAdNative.loadNativeExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
                     @Override
                     public void onError(int i, String s) {
-                        Log.d(TAG, "穿山甲模板广告失败 message:" + s + " code:" + i);
+                        Log.d(TAG, "穿山甲模板广告失败 message:" + s + " code:" + i +"当前位置index是： "+adRequestParamentersBean.index +" 广告位 adposition"+adRequestParamentersBean.advertPosition);
                         emitter.onError(new Throwable("code "+i+" message:"+s));
                         emitter.onComplete();
                     }
@@ -262,6 +263,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
                     @Override
                     public void onNativeExpressAdLoad(List<TTNativeExpressAd> list) {
                         Log.d(TAG, "穿山甲模板广告成功！");
+                        Log.d(TAG, "穿山甲模板广告成功 当前位置index是： "+adRequestParamentersBean.index +" 广告位 adposition"+adRequestParamentersBean.advertPosition);
                         emitter.onNext(list);
                         emitter.onComplete();
                     }

@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -41,6 +40,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
     //广告结果缓存
     private LinkedHashMap<Integer, View> adCache = new LinkedHashMap<>();
+
 //    LinkedHashMap<Integer, WeakReference<View>> adCache = new LinkedHashMap<>();
 
 
@@ -117,7 +117,6 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
             @Override
             public void onCloseCallback(int index) {
-                Log.d("----------------",index+"__");
                 try {
                     if (adCache.get(index) == null) {
                         return;
@@ -140,13 +139,19 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             ((NativeExpressADView) adCache.get(position)).destroy();
         }
 
+        LinkedHashMap<Integer, View> tempAdCache = new LinkedHashMap<>();
         adCache.remove(position);
         for(Map.Entry<Integer, View> entry : adCache.entrySet()){
             int mapKey = entry.getKey();
             View mapValue = entry.getValue();
-            adCache.remove(mapKey);
-            adCache.put(mapKey,mapValue);
+            if(mapKey>=position){
+                tempAdCache.put(mapKey-1,mapValue);
+            }else {
+                tempAdCache.put(mapKey,mapValue);
+            }
         }
+        adCache.clear();
+        adCache.putAll(tempAdCache);
 
         mDatas.remove(position);
         notifyItemRemoved(position);
