@@ -261,6 +261,12 @@ public class OppoPermissionExecute extends OppoPermissionBase {
                     break;
                 case BACKSTAGEPOPUP://无
                     break;
+
+                case PACKAGEUSAGESTATS:
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {   // 如果大于等于5.0 有此权限
+                        getlist.add(permission);
+                    }
+                    break;
 //                case REPLACEACLLPAGE:
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                        getlist.add(permission);

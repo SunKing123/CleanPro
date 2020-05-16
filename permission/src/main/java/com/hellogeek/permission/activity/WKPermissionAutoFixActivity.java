@@ -239,10 +239,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     risksNumber--;
                 }
                 tvRiskNum.setText(risksNumber + "");
-                if (risksNumber == 0) {
-                    // 全部开启
-
-                }
 
                 if (isOneRepair || item.isAllow) {
                     allowIcon.setVisibility(View.VISIBLE);
@@ -292,7 +288,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 base.add(asBase);
             }
             if (base != null) {
-                risksNumber = 4;
+                risksNumber = base.size();
                 mAdapter.setNewData(base);
             }
         }
@@ -584,36 +580,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         }
         if (isAllDone) {
 
-//            tvHintTitle.setText("权限已全部开启成功");
-//            tvFix.setVisibility(View.GONE);
-//            tvAddQQ.setVisibility(View.VISIBLE);
-//            cot_default.setVisibility(View.GONE);
-//            clHintIcon.setVisibility(View.GONE);
-//            imTop.setVisibility(View.VISIBLE);
-//            imTop.setImageDrawable(getResources().getDrawable(R.mipmap.permission_sucess));
-//            tvHintFail.setVisibility(View.VISIBLE);
-//            tvHintFail.setText(getString(R.string.sucess_toast));
         } else if (!isFirst) {
-//            tvHintTitle.setText("很抱歉！一键修复失败啦！");
-//            tvFix.setVisibility(View.VISIBLE);
-//            tvAddQQ.setVisibility(View.VISIBLE);
-//            cot_default.setVisibility(View.GONE);
-//            clHintIcon.setVisibility(View.VISIBLE);
-//            imTop.setVisibility(View.GONE);
-//            tvHintFail.setVisibility(View.VISIBLE);
-//            tvHintFail.setText(getString(R.string.fail_toast));
         } else {
-//            SpannableStringBuilder style = new SpannableStringBuilder(successNum + " 项权限待开启");
-//            style.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.color_FF3B84)), 0, 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE); //设置指定位置文字的颜色 textView.setText(style);
-//            tvHintTitle.setText(style);
-//            tvFix.setVisibility(View.VISIBLE);
-//            tvAddQQ.setVisibility(View.VISIBLE);
-//            cot_default.setVisibility(View.GONE);
-//            clHintIcon.setVisibility(View.GONE);
-//            imTop.setVisibility(View.VISIBLE);
-//            imTop.setImageDrawable(getResources().getDrawable(R.mipmap.permission_ing));
-//            tvHintFail.setVisibility(View.VISIBLE);
-//            tvHintFail.setText(getString(R.string.first_fail_toast));
         }
         for (ASBase asBase : base) {
             asBase.executeNumber = 0;
@@ -636,7 +604,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     UsageRecordHelper.recordItemData(new UsageBuider().setUsageType(UsageRecordType.TYPE_CUSTOM.getValue()).setPage(PAGE), event.getIsAuto(), asBase);
                 }
             }
-            risksNumber = 4;
+            risksNumber = base.size();
             mAdapter.notifyDataSetChanged();
         }
         if (event.getIsBack()) {
@@ -761,7 +729,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             }
 
         }
-        risksNumber = 4;
+        risksNumber = mAdapter.getItemCount();
         mAdapter.notifyDataSetChanged();
         if (!isOpen && requestCode != ACCESSIBILITY_SETTINGS) {
             return;

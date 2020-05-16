@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -108,6 +109,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -120,8 +122,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
-
-//import com.xiaoniu.cleanking.ui.newclean.presenter.NewScanPresenter;
 
 /**
  * 1.2.1 新版本清理主页
@@ -197,9 +197,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
-    private String[] seniorPermissions = new String[]{
 
-    };
     /*< XD added for feed begin */
 //    @BindView(R.id.close_feed_empty_view)
 //    View close_feed_empty_view;
@@ -217,6 +215,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     MagicIndicator feedIndicator;
     @BindView(R.id.feed_view_pager)
     MeasureViewPager feedViewPager;   // feed pager
+
+    private boolean isAllopen = false;
 
     private String mTitleType = "white";
     private static final String KEY_TYPE = "TYPE";
@@ -267,6 +267,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initVariable(savedInstanceState);
+        // 记录打开时间
     }
 
     protected void initVariable(Bundle arguments) {
@@ -283,10 +284,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mInflater = inflater;
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-    /* XD added for feed End >*/
 
+    private final String TIME_STAMP = "timeStamp";
+
+    /* XD added for feed End >*/
     @Override
     protected void initView() {
+
+
         registResceiver();
         mStatusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
         mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
@@ -486,7 +491,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             return;
         if (switchInfoList.getData().get(0).isOpen()) {
             mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
-            Glide.with(this).load(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl()).into(mInteractionIv);
+            setOperateIcon(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl(), null);
         }
     }
 
@@ -495,6 +500,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.iv_interaction)
     public void interactionClick() {
+        if (!isAllopen) {  // 权限修复
+            PermissionIntegrate.getPermission().startWK(getActivity());
+            return;
+        }
         if (mInteractionPoistion > 2) {
             mInteractionPoistion = 0;
         }
@@ -518,6 +527,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onResume() {
         super.onResume();
+
+
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mPresenter.getSwitchInfoList();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -537,14 +548,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mInteractionPoistion = 0;
             }
             if (mInteractionList.size() == 1) {
-                GlideUtils.loadGif(getActivity(), mInteractionList.get(0).getImgUrl(), mInteractionIv, 10000);
+
+                setOperateIcon(mInteractionList.get(0).getImgUrl(), 10000);
             } else {
                 if (mInteractionList.size() - 1 >= mInteractionPoistion) {
-                    GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
+                    setOperateIcon(mInteractionList.get(mInteractionPoistion).getImgUrl(), 10000);
                 }
-
             }
         }
+
         lineShd.setEnabled(true);
         textWjgl.setEnabled(true);
         viewPhoneThin.setEnabled(true);
@@ -552,6 +564,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewGame.setEnabled(true);
 
     }
+
 
     @Override
     public void onPause() {
@@ -922,6 +935,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.line_wx)
     public void mClickWx() {
+        if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
+            // 跳转到权限引导页面
+            startActivity(new Intent(getActivity(), JurisdictionGuideActivity.class));
+            return;
+        }
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
@@ -1438,17 +1456,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         valueAnimator.start();
     }
 
+
     private void permissionRepair() {
+        mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
         // 检测是否包含文件读写权限
         if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
             // 权限是否全部开启
-            boolean isAllopen = false;
             if (PermissionIntegrate.getPermission().getIsNecessary()) {
                 isAllopen = ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
             } else {
                 isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
             }
-
             if (isAllopen) {
                 return;
             }
@@ -1459,7 +1477,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 PermissionIntegrate.getPermission().startWK(getActivity());
                 return;
             }   // getDefectPermissionNum
-            showPermissionDialog();
+
+            long currentTime = System.currentTimeMillis();
+            long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
+
+            if (preTime == currentTime || currentTime - currentTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次
+                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
+                showPermissionDialog();
+            }
             return;
         }
         showFilePermissionGuideDialog();
@@ -1520,4 +1545,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         });
     }
     /* XD added for feed End >*/
+
+    public boolean isAllopen() {
+        // 权限是否全部开启
+        if (PermissionIntegrate.getPermission().getIsNecessary()) {
+            isAllopen = ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
+        } else {
+            isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
+        }
+        return isAllopen;
+    }
+
+    public void setOperateIcon(String url, Integer count) {
+        if (isAllopen() && null != count) {
+            GlideUtils.loadGif(getActivity(), url, mInteractionIv, count);
+        } else if (isAllopen) {
+            Glide.with(this).load(url).into(mInteractionIv);
+        } else {
+            mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
+        }
+    }
+
 }

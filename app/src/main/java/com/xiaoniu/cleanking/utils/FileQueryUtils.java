@@ -55,6 +55,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import static android.content.Context.USAGE_STATS_SERVICE;
+import static com.hellogeek.permission.util.Constant.WHITE_LIST;
 import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
 
 public class FileQueryUtils {
@@ -836,9 +837,12 @@ public class FileQueryUtils {
                     }
                 }
             }
+
             for (Object obj : hashMap.keySet()) {
                 FirstJunkInfo onelevelGarbageInfo4 = (FirstJunkInfo) hashMap.get(obj);
                 if (onelevelGarbageInfo4.getTotalSize() != 0) {
+                    // 在白名单内的，不进行扫描
+                    // TODO: WHITE_LIST
                     if (!"com.xiaoniu.cleanking".equals(onelevelGarbageInfo4.getAppPackageName()))
                         arrayList.add(onelevelGarbageInfo4);
                 }

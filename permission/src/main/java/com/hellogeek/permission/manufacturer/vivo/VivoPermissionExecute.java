@@ -351,7 +351,9 @@ public class VivoPermissionExecute extends VivoPermissionBase {
                     }
                     break;
                 case PACKAGEUSAGESTATS:
-                    getlist.add(permission);
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {   // 如果大于等于5.0 有此权限
+                        getlist.add(permission);
+                    }
                     break;
 //                case REPLACEACLLPAGE:
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -51,6 +51,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+import static com.hellogeek.permission.util.Constant.WHITE_LIST;
+
 /**
  * 扫描垃圾
  */
@@ -134,6 +136,11 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
 
     @Override
     public void setScanningFilePath(String filePath) {
+        for (String packageName : WHITE_LIST) {
+            if (filePath.indexOf(packageName) != -1) {   // 如果存在于白名单
+                return;
+            }
+        }
         tv_scanning_progress_file.setText(getString(R.string.scanning_file, filePath));
     }
 
