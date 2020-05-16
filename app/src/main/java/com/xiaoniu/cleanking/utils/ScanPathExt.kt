@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.utils
 
+import android.util.Log
+
 object ScanPathExt {
 
     /**
@@ -8,16 +10,16 @@ object ScanPathExt {
     @JvmStatic
     fun getScanExtPath(packageName: String): MutableList<String>? {
         //首先初始化路径配置
-        val initScanPath = init()
-        //匹配已经安装应用
-        return initScanPath[packageName]
+        return initScanExtPath().let {
+            it[packageName]
+        }
     }
 
 
     /**
      * 初始化文件路径
      */
-    private fun init(): LinkedHashMap<String, MutableList<String>> {
+    private fun initScanExtPath(): LinkedHashMap<String, MutableList<String>> {
         val scanPathMap = LinkedHashMap<String, MutableList<String>>()
         // Wps
         scanPathMap["cn.wps.moffice_eng"] = arrayListOf("KingsoftOffice/.history")
