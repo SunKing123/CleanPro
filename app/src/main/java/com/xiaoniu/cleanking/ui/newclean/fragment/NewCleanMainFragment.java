@@ -1288,7 +1288,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     protected void loadFeedData() {
         showFeedView();
         for (int i = 0; i < mNewTypes.length; i++) {
-            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
+            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i],PositionId.KEY_HOME_NEWS);
             final int index = i;
             listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
                 @Override
