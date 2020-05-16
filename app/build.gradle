@@ -58,7 +58,7 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             commonConfigFiledMap.each { buildConfigField("String", it.key, it.value) }
-            testConfigFiledMap.each {
+            prodConfigFiledMap.each {
                 buildConfigField("String", it.key, it.value)
             }
         }
