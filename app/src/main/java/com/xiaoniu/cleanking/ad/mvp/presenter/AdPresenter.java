@@ -206,13 +206,13 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
                     try {
                         AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
                         SwitchInfoList.DataBean adinfo=getAdInfo(AppHolder.getInstance().getSwitchInfoMap(),adRequestParamentersBean);
-                        if(adinfo==null || adShowCallBack==null){
+                        AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
+                        if(adinfo==null || adShowCallBack==null || !adinfo.isOpen()){
                             Log.d("ad_status", "广告没有获取到广告数据！");
                             adShowCallBack.onFailure("广告没有获取到广告数据");
                         }else {
                             dispatcherUnion(requestData(adinfo),adRequestParamentersBean);
                         }
-                        AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
