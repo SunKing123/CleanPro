@@ -72,8 +72,12 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
     private void arrangementData(AdRequestParamentersBean adRequestParamentersBean) throws Exception {
         Map<String, SwitchInfoList.DataBean> adMap = AppHolder.getInstance().getSwitchInfoMap();
         SwitchInfoList.DataBean adinfoBean = getAdInfo(adMap, adRequestParamentersBean);
-        if (adinfoBean != null && adinfoBean.isOpen()) {
-            dispatcherUnion(requestData(adinfoBean), adRequestParamentersBean);
+        if (adinfoBean != null) {
+            if (adinfoBean.isOpen()) {
+                dispatcherUnion(requestData(adinfoBean), adRequestParamentersBean);
+            } else {
+                adShowCallBack.onFailure("广告位关闭");
+            }
         } else {
             //本地没有，走网络
             getNetAdInfo(adRequestParamentersBean);
@@ -183,7 +187,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
                 }
             }
         } else {
-            adinfoBean = adMap.get(adRequestParamentersBean.configKey+adRequestParamentersBean.advertPosition);
+            adinfoBean = adMap.get(adRequestParamentersBean.configKey + adRequestParamentersBean.advertPosition);
         }
         return adinfoBean;
     }
@@ -202,16 +206,16 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
 
             @Override
             public void getData(SwitchInfoList switchInfoList) {
-                if (null != switchInfoList && null!=switchInfoList.getData()) {
+                if (null != switchInfoList && null != switchInfoList.getData()) {
                     try {
                         AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
-                        SwitchInfoList.DataBean adinfo=getAdInfo(AppHolder.getInstance().getSwitchInfoMap(),adRequestParamentersBean);
+                        SwitchInfoList.DataBean adinfo = getAdInfo(AppHolder.getInstance().getSwitchInfoMap(), adRequestParamentersBean);
                         AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
-                        if(adinfo==null || adShowCallBack==null || !adinfo.isOpen()){
+                        if (adinfo == null || adShowCallBack == null || !adinfo.isOpen()) {
                             Log.d("ad_status", "广告没有获取到广告数据！");
                             adShowCallBack.onFailure("广告没有获取到广告数据");
-                        }else {
-                            dispatcherUnion(requestData(adinfo),adRequestParamentersBean);
+                        } else {
+                            dispatcherUnion(requestData(adinfo), adRequestParamentersBean);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
