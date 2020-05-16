@@ -220,6 +220,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         fileQueryUtils = new FileQueryUtils();
         processNum = fileQueryUtils.getRunningProcess().size();
         mTitle = getIntent().getStringExtra("title");
+        if (TextUtils.isEmpty(mTitle)) {
+            mTitle = getString(R.string.app_name);
+        }
         if (getString(R.string.tool_one_key_speed).contains(mTitle)
                 || getString(R.string.tool_notification_clean).contains(mTitle)
                 || getString(R.string.tool_super_power_saving).contains(mTitle)) {
@@ -297,7 +300,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      */
     private void initFeedView() {
         vTopTitleXiding.setBackgroundResource(R.drawable.bg_gradient_clean_finish_tobar);
-        tvTopXidingBack.setText(R.string.xiding_back_to_wx_clean);
+        tvTopXidingBack.setText(getResources().getString(R.string.xiding_back_to_xxx, mTitle));
         mNestedScrollView.setOnScrollChangeListener(this);
         feedViewPager.setOffscreenPageLimit(10);
         requestFeedHeight();
@@ -515,8 +518,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             String num = intent.getStringExtra("num");
             String unit = intent.getStringExtra("unit");
             mTvGb.setText(unit);
-            if (TextUtils.isEmpty(mTitle))
+            if (TextUtils.isEmpty(mTitle)) {
                 mTitle = getString(R.string.app_name);
+            }
             if (getString(R.string.app_name).contains(mTitle)) {
                 //悟空清理
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {

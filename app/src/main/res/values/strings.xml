@@ -22,7 +22,7 @@
     <string name="select_already">已勾选:</string>
 
     <string name="xiding_back_to_clean">返回清理</string>
-    <string name="xiding_back_to_wx_clean">返回微信专清</string>
+    <string name="xiding_back_to_xxx">返回%1$s</string>
 
     <string name="byte_short">B</string>
     <!-- Suffix added to a number to signify size in kilobytes. -->
