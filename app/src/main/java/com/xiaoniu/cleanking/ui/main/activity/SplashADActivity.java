@@ -271,7 +271,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                     }
                 });
             }
-        } else {
+        }
+        if (startsNumber != SECONDARY_STARTUP || !PermissionUtils.checkPermission(this, permissions)) {
             if (NetworkUtils.isNetConnected()) {
                 mPresenter.getAuditSwitch();
             } else {

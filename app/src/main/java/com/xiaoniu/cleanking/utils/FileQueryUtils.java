@@ -55,8 +55,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import static android.content.Context.USAGE_STATS_SERVICE;
-import static com.hellogeek.permission.util.Constant.WHITE_LIST;
 import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
+import static com.xiaoniu.cleanking.utils.Constant.WHITE_LIST;
 
 public class FileQueryUtils {
 
@@ -445,7 +445,9 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         cacheJunkInfo.addSecondJunk(listFiles2);
                         cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+
+
+                        if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                             Log.e("info", "--------2----------------->" + listFiles2.getGarbageSize());
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
@@ -461,7 +463,7 @@ public class FileQueryUtils {
 
                             cacheJunkInfo.addSecondJunk(secondJunkInfo);
                             cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                            if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                                 Log.e("info", "------3------------------->" + secondJunkInfo.getGarbageSize());
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
@@ -496,7 +498,7 @@ public class FileQueryUtils {
                             cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
                         }
 
-                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                        if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                             Log.e("info", "---------4---------------->" + listFiles2.getGarbageSize());
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
@@ -510,7 +512,7 @@ public class FileQueryUtils {
                             secondJunkInfo.setGarbagetype("TYPE_CACHE");
                             cacheJunkInfo.addSecondJunk(secondJunkInfo);
                             cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                            if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                                 Log.e("info", "-------5------------------>" + secondJunkInfo.getGarbageSize());
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
@@ -546,7 +548,7 @@ public class FileQueryUtils {
                                 cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
                             }
 
-                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                            if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                                 mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                             }
                         } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -559,7 +561,7 @@ public class FileQueryUtils {
                                 secondJunkInfo.setGarbagetype("TYPE_CACHE");
                                 cacheJunkInfo.addSecondJunk(secondJunkInfo);
                                 cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                                if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+                                if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                                     mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                                 }
                             }
@@ -572,9 +574,9 @@ public class FileQueryUtils {
                 continue;
             }
             //排除当前应用
-            if (!"com.xiaoniu.cleanking".equals(cacheJunkInfo.getAppPackageName())) {
+            if (!WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                 cacheJunkListInfo.add(cacheJunkInfo);
-            } else if (!"com.xiaoniu.cleanking".equals(adJunkInfo.getAppPackageName())) {
+            } else if (!WHITE_LIST.contains(adJunkInfo.getAppPackageName())) {
                 adJunkListInfo.add(adJunkInfo);
             }
         }
@@ -664,7 +666,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                        if (mScanFileListener != null && !WHITE_LIST.contains(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -679,7 +681,7 @@ public class FileQueryUtils {
 
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                            if (mScanFileListener != null && !WHITE_LIST.contains(firstJunkInfo.getAppPackageName())) {
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
@@ -704,7 +706,7 @@ public class FileQueryUtils {
                         listFiles2.setGarbagetype("TYPE_CACHE");
                         firstJunkInfo.addSecondJunk(listFiles2);
                         firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                        if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                        if (mScanFileListener != null && !WHITE_LIST.contains(firstJunkInfo.getAppPackageName())) {
                             mScanFileListener.increaseSize(listFiles2.getGarbageSize());
                         }
                     } else if (new File(entry.getKey()).isFile()) { //文件路径
@@ -717,7 +719,7 @@ public class FileQueryUtils {
                             secondJunkInfo.setGarbagetype("TYPE_CACHE");
                             firstJunkInfo.addSecondJunk(secondJunkInfo);
                             firstJunkInfo.setTotalSize(firstJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                            if (mScanFileListener != null && !"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName())) {
+                            if (mScanFileListener != null && !WHITE_LIST.contains(firstJunkInfo.getAppPackageName())) {
                                 mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
@@ -730,7 +732,7 @@ public class FileQueryUtils {
                 continue;
             }
             //排除当前应用
-            if (!"com.xiaoniu.cleanking".equals(firstJunkInfo.getAppPackageName()))
+            if (!WHITE_LIST.contains(firstJunkInfo.getAppPackageName()))
                 list.add(firstJunkInfo);
             /**
              * 遍历文件3/4以上 && 未扫描出apk文件 && 遍历私有路径下包含垃圾
@@ -842,8 +844,7 @@ public class FileQueryUtils {
                 FirstJunkInfo onelevelGarbageInfo4 = (FirstJunkInfo) hashMap.get(obj);
                 if (onelevelGarbageInfo4.getTotalSize() != 0) {
                     // 在白名单内的，不进行扫描
-                    // TODO: WHITE_LIST
-                    if (!"com.xiaoniu.cleanking".equals(onelevelGarbageInfo4.getAppPackageName()))
+                    if (!WHITE_LIST.contains(onelevelGarbageInfo4.getAppPackageName()))
                         arrayList.add(onelevelGarbageInfo4);
                 }
             }
@@ -1251,7 +1252,7 @@ public class FileQueryUtils {
                                         onelevelGarbageInfo.setApkInstalled(false);
                                         onelevelGarbageInfo.setAllchecked(false);
                                     }
-                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)) {
+                                    if (!WHITE_LIST.contains(packageArchiveInfo.packageName)) {
                                         arrayList.add(onelevelGarbageInfo);
                                         if (mScanFileListener != null) {
                                             mScanFileListener.increaseSize(j);

@@ -94,7 +94,6 @@ public class Constant {
     // 应用使用情况
     public static final String PACKAGE_USAGE_STATS = "permission_packageusagestats";
 
-
     /**
      * 白名单
      */
@@ -103,6 +102,9 @@ public class Constant {
             "com.xujin.weather",
             "com.yitong.weather",
             "com.geek.jk.calendar.app",
-            "com.geek.luck.calendar.app");
+            "com.geek.luck.calendar.app",
+            "com.xiaoniu",
+            "com.xiaoniu.cleanking"
+    );
 
 }
