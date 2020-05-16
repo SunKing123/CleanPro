@@ -161,9 +161,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public View line_quicken, line_power, line_notification, line_wechat, line_file, line_clean_all, line_game;
     private View  mRecommendV;
     private FrameLayout adUpView;
-    private LinearLayout adUpContainer;
     private FrameLayout adDownView;
-    private LinearLayout adDownContainer;
     private TextView tv_quicken, tv_power, tv_notification;
     private ImageView iv_quicken, iv_power, iv_notification;
 
@@ -255,7 +253,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
         adUpView= header.findViewById(R.id.v_advert);
-        adUpContainer = header.findViewById(R.id.native_ad_container);
 
         mRecommendV = headerTool.findViewById(R.id.v_recommend);
 
@@ -283,7 +280,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
         adDownView= headerTool.findViewById(R.id.v_advert);
-        adDownContainer = headerTool.findViewById(R.id.native_ad_container);
         mTitleTv.setText(mTitle);
 
         initFeedView();  // XD added 20200509
@@ -1223,15 +1219,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 PositionId.DRAW_ONE_CODE,
                 this,
                 AdType.Template,
-                (int) ScreenUtils.getScreenWidthDp(this)-16,
+                (int) ScreenUtils.getScreenWidthDp(this)-32,
                 0);
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
-                Log.d("ad_status", " scan onAdShowCallBack"+((view==null)?"null":"not null"));
-
-                if(adUpView!=null && adUpContainer!=null){
-                    adUpContainer.setVisibility(View.VISIBLE);
+                if(adUpView!=null ){
+                    adUpView.setVisibility(View.VISIBLE);
                     adUpView.removeAllViews();
                     adUpView.addView(view);
                 }
@@ -1239,15 +1233,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void onCloseCallback() {
-                if(adUpContainer!=null){
-                    adUpContainer.setVisibility(View.GONE);
+                if(adUpView!=null){
+                    adUpView.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(String message) {
-                if(adUpContainer!=null){
-                    adUpContainer.setVisibility(View.GONE);
+                if(adUpView!=null){
+                    adUpView.setVisibility(View.GONE);
                 }
             }
         });
@@ -1262,16 +1256,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 PositionId.DRAW_TWO_CODE,
                 this,
                 AdType.Template,
-                (int) ScreenUtils.getScreenWidthDp(this)-16,
+                (int) ScreenUtils.getScreenWidthDp(this)-32,
                 0);
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
-                Log.d("ad_status", " scan onAdShowCallBack"+((view==null)?"null":"not null"));
-
-                if(adDownView!=null && adDownContainer!=null){
-                    adDownContainer.setVisibility(View.VISIBLE);
-
+                if(adDownView!=null ){
+                    adDownView.setVisibility(View.VISIBLE);
                     adDownView.removeAllViews();
                     adDownView.addView(view);
                 }
@@ -1279,15 +1270,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void onCloseCallback() {
-                if(adDownContainer!=null){
-                    adDownContainer.setVisibility(View.GONE);
+                if(adDownView!=null){
+                    adDownView.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(String message) {
-                if(adDownContainer!=null){
-                    adDownContainer.setVisibility(View.GONE);
+                if(adDownView!=null){
+                    adDownView.setVisibility(View.GONE);
                 }
             }
         });
