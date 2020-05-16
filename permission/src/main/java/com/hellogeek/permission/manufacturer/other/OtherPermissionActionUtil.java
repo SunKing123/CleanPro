@@ -8,6 +8,8 @@ import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.manufacturer.other.permissionlist.NoticeOfTakeoverPermission;
 import com.hellogeek.permission.manufacturer.other.permissionlist.SuspendedToastPermission;
 import com.hellogeek.permission.manufacturer.other.permissionlist.SystemSettingPermission;
+import com.hellogeek.permission.manufacturer.vivo.VivoPermissionBase;
+import com.hellogeek.permission.manufacturer.vivo.permissionlist.PakageUsageStatsPermission;
 
 import static com.hellogeek.permission.manufacturer.miui.MIUIPermissionBase.isRedMi4ASDK23;
 import static com.hellogeek.permission.manufacturer.miui.MIUIPermissionBase.isRedMiNote4SDK23;
@@ -19,6 +21,7 @@ public class OtherPermissionActionUtil {
     private SuspendedToastPermission suspendedToastPermission;
     private SystemSettingPermission systemSettingPermission;
     private NoticeOfTakeoverPermission noticeOfTakeoverPermission;
+    private PakageUsageStatsPermission pakageUsageStatsPermission;
 
 
     public OtherPermissionActionUtil(Context mContext) {
@@ -26,6 +29,7 @@ public class OtherPermissionActionUtil {
         suspendedToastPermission = new SuspendedToastPermission(mContext);
         systemSettingPermission = new SystemSettingPermission(mContext);
         noticeOfTakeoverPermission = new NoticeOfTakeoverPermission(mContext);
+        pakageUsageStatsPermission = new PakageUsageStatsPermission(mContext);
     }
 
     /**
@@ -55,7 +59,7 @@ public class OtherPermissionActionUtil {
      * 系统设置
      */
     public void actionSystemSetting(AccessibilityNodeInfo info, AccessibilityService service) {
-            systemSettingPermission.openSystemSetting(mContext, info, service);
+        systemSettingPermission.openSystemSetting(mContext, info, service);
     }
 
     /**
@@ -72,6 +76,10 @@ public class OtherPermissionActionUtil {
         noticeOfTakeoverPermission.openNoticeOfTakeover(mContext, info, service);
     }
 
+    public void actionPakageUsageStats(AccessibilityNodeInfo info, AccessibilityService service, VivoPermissionBase.VERSION version, String vivoOs) {
+        pakageUsageStatsPermission.openPakageUsageStats(mContext, info, service);
+    }
+
 
     /**
      * 自启动权限
@@ -79,6 +87,7 @@ public class OtherPermissionActionUtil {
     public void actionSelfStaring(AccessibilityNodeInfo info, AccessibilityService service) {
 
     }
+
     public void clearList(Permission permission) {
         switch (permission) {
             case SUSPENDEDTOAST:

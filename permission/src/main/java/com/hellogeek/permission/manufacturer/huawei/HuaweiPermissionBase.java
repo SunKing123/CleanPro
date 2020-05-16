@@ -95,6 +95,12 @@ public class HuaweiPermissionBase extends AutoFixAction {
     }
 
     @Override
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        setEventType(Permission.PACKAGEUSAGESTATS);
+    }
+
+    @Override
     protected void actionSystemSetting() {
         super.actionSystemSetting();
         setEventType(Permission.SYSTEMSETTING);
@@ -105,6 +111,7 @@ public class HuaweiPermissionBase extends AutoFixAction {
         super.actionNoticeOfTakeover();
         setEventType(Permission.NOTICEOFTAKEOVER);
     }
+
     @Override
     public void clearSNIGList(Permission permission) {
         super.clearSNIGList(permission);
@@ -168,8 +175,8 @@ public class HuaweiPermissionBase extends AutoFixAction {
 
     }
 
-    public void getIntentFail(Context mContext,String status,Permission permission,Exception e){
-        PermissionProvider.save(mContext,status, true);
+    public void getIntentFail(Context mContext, String status, Permission permission, Exception e) {
+        PermissionProvider.save(mContext, status, true);
         EventBus.getDefault().post(new PathEvent(permission, true, true));
     }
 

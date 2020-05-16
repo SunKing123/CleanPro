@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.provider.Settings;
 import android.telecom.TelecomManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 
 import static com.hellogeek.permission.Integrate.Permission.NOTICEOFTAKEOVER;
+import static com.hellogeek.permission.Integrate.Permission.PACKAGEUSAGESTATS;
 import static com.hellogeek.permission.Integrate.Permission.REPLACEACLLPAGE;
 import static com.hellogeek.permission.Integrate.Permission.SELFSTARTING;
 import static com.hellogeek.permission.Integrate.Permission.SUSPENDEDTOAST;
@@ -76,6 +78,9 @@ public class OppoPermissionExecute extends OppoPermissionBase {
                 oppoPermissionColorActionUtil.actionNotifiCationBar(nodeInfo, service);
                 break;
             case REPLACEACLLPAGE:
+                break;
+            case PACKAGEUSAGESTATS:
+                oppoPermissionColorActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
                 break;
         }
     }
@@ -172,6 +177,18 @@ public class OppoPermissionExecute extends OppoPermissionBase {
         } catch (Exception e) {
 
         }
+    }
+
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        try {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startTOSysTemActivity(intent, PACKAGEUSAGESTATS);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            getIntentFail(mContext, PACKAGE_USAGE_STATS, PACKAGEUSAGESTATS, e);
+        }
+
     }
 
     @Override

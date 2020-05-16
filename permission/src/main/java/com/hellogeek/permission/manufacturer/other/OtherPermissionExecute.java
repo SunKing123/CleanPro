@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import static com.hellogeek.permission.Integrate.Permission.BACKSTAGEPOPUP;
 import static com.hellogeek.permission.Integrate.Permission.LOCKDISPALY;
 import static com.hellogeek.permission.Integrate.Permission.NOTICEOFTAKEOVER;
+import static com.hellogeek.permission.Integrate.Permission.PACKAGEUSAGESTATS;
 import static com.hellogeek.permission.Integrate.Permission.REPLACEACLLPAGE;
 import static com.hellogeek.permission.Integrate.Permission.SELFSTARTING;
 import static com.hellogeek.permission.Integrate.Permission.SUSPENDEDTOAST;
+import static com.hellogeek.permission.util.Constant.PACKAGE_USAGE_STATS;
 import static com.hellogeek.permission.util.Constant.PROVIDER_BACKSTAGEPOPUP;
 import static com.hellogeek.permission.util.Constant.PROVIDER_LOCKDISPLAY;
 import static com.hellogeek.permission.util.Constant.PROVIDER_NOTICEOFTAKEOVER;
@@ -75,6 +77,9 @@ public class OtherPermissionExecute extends OtherPermissionBase {
             case SYSTEMSETTING:
                 otherPermissionActionUtil.actionSystemSetting(nodeInfo, service);
                 break;
+            case PACKAGEUSAGESTATS:
+                otherPermissionActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
+                break;
         }
     }
 
@@ -102,6 +107,18 @@ public class OtherPermissionExecute extends OtherPermissionBase {
     protected void actionSystemSetting() {
         super.actionSystemSetting();
         jumpSystemSetting(mContext);
+    }
+
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        try {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startTOSysTemActivity(intent, PACKAGEUSAGESTATS);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            getIntentFail(mContext, PACKAGE_USAGE_STATS, PACKAGEUSAGESTATS, e);
+        }
+
     }
 
 

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import static com.hellogeek.permission.Integrate.Permission.BACKSTAGEPOPUP;
 import static com.hellogeek.permission.Integrate.Permission.LOCKDISPALY;
 import static com.hellogeek.permission.Integrate.Permission.NOTICEOFTAKEOVER;
+import static com.hellogeek.permission.Integrate.Permission.PACKAGEUSAGESTATS;
 import static com.hellogeek.permission.Integrate.Permission.REPLACEACLLPAGE;
 import static com.hellogeek.permission.Integrate.Permission.SELFSTARTING;
 import static com.hellogeek.permission.Integrate.Permission.SUSPENDEDTOAST;
@@ -69,6 +70,9 @@ public class MiuiPermissionExecute extends MIUIPermissionBase {
                 break;
             case SYSTEMSETTING:
                 miuiPermissionActionUtil.actionSystemSetting(nodeInfo, service, isToSystem);
+                break;
+            case PACKAGEUSAGESTATS:
+                miuiPermissionActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
                 break;
         }
     }
@@ -200,6 +204,18 @@ public class MiuiPermissionExecute extends MIUIPermissionBase {
                 getIntentFail(mContext, PROVIDER_BACKSTAGEPOPUP, BACKSTAGEPOPUP, e1);
             }
         } catch (Exception e) {
+        }
+
+    }
+
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        try {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startTOSysTemActivity(intent, PACKAGEUSAGESTATS);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            getIntentFail(mContext, PACKAGE_USAGE_STATS, PACKAGEUSAGESTATS, e);
         }
 
     }

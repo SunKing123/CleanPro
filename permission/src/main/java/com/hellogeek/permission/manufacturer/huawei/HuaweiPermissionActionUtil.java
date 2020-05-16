@@ -11,6 +11,8 @@ import com.hellogeek.permission.manufacturer.huawei.permissionlist.RepLaceAcllPa
 import com.hellogeek.permission.manufacturer.huawei.permissionlist.SelfStartingPermission;
 import com.hellogeek.permission.manufacturer.huawei.permissionlist.SuspendedToastPermission;
 import com.hellogeek.permission.manufacturer.huawei.permissionlist.SystemSettingPermission;
+import com.hellogeek.permission.manufacturer.vivo.VivoPermissionBase;
+import com.hellogeek.permission.manufacturer.vivo.permissionlist.PakageUsageStatsPermission;
 
 import static com.hellogeek.permission.manufacturer.huawei.HuaweiPermissionBase.isHuaweiKIWAL10SDK23;
 import static com.hellogeek.permission.manufacturer.huawei.HuaweiPermissionBase.isHuaweiPLKAL10SDK23;
@@ -22,6 +24,7 @@ public class HuaweiPermissionActionUtil {
     private SystemSettingPermission systemSettingPermission;
     private RepLaceAcllPagePermission repLaceAcllPagePermission;
     private NoticeOfTakeoverPermission noticeOfTakeoverPermission;
+    private PakageUsageStatsPermission pakageUsageStatsPermission;
 
     public HuaweiPermissionActionUtil(Context mContext) {
         this.mContext = mContext;
@@ -30,6 +33,7 @@ public class HuaweiPermissionActionUtil {
         systemSettingPermission = new SystemSettingPermission(mContext);
         repLaceAcllPagePermission = new RepLaceAcllPagePermission(mContext);
         noticeOfTakeoverPermission = new NoticeOfTakeoverPermission(mContext);
+        pakageUsageStatsPermission = new PakageUsageStatsPermission(mContext);
     }
 
     /**
@@ -54,7 +58,7 @@ public class HuaweiPermissionActionUtil {
      * 锁屏权限--华为无此权限
      */
     public void actionRepLaceAcllPage(AccessibilityNodeInfo info, AccessibilityService service) {
-        if (isHuaweiKIWAL10SDK23() || isHuaweiPLKAL10SDK23() || Build.VERSION.SDK_INT == 23||Build.VERSION.SDK_INT == 24) {
+        if (isHuaweiKIWAL10SDK23() || isHuaweiPLKAL10SDK23() || Build.VERSION.SDK_INT == 23 || Build.VERSION.SDK_INT == 24) {
             repLaceAcllPagePermission.openRepLaceAcllPage(mContext, info, service);
         } else if (Build.VERSION.SDK_INT >= 29) {
             repLaceAcllPagePermission.openRepLaceAcllPage29(mContext, info, service);
@@ -97,6 +101,11 @@ public class HuaweiPermissionActionUtil {
         } else {
             selfStartingPermission.openSelfStarting(mContext, info, service);
         }
+    }
+
+
+    public void actionPakageUsageStats(AccessibilityNodeInfo info, AccessibilityService service, VivoPermissionBase.VERSION version, String vivoOs) {
+        pakageUsageStatsPermission.openPakageUsageStats(mContext, info, service);
     }
 
     public void clearList(Permission permission) {

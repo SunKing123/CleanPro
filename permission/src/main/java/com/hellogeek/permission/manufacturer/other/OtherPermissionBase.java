@@ -19,9 +19,9 @@ import com.hellogeek.permission.util.PhoneRomUtils;
 import org.greenrobot.eventbus.EventBus;
 
 public class OtherPermissionBase extends AutoFixAction {
-   protected OtherPermissionActionUtil otherPermissionActionUtil;
+    protected OtherPermissionActionUtil otherPermissionActionUtil;
     private static String mMiuiVersion;
-   public String extraPackname="extra_pkgname";
+    public String extraPackname = "extra_pkgname";
 
     public OtherPermissionBase(Context context) {
         otherPermissionActionUtil = new OtherPermissionActionUtil(context);
@@ -34,20 +34,29 @@ public class OtherPermissionBase extends AutoFixAction {
         super.actionSuspendedToast();
         setEventType(Permission.SUSPENDEDTOAST);
     }
+
     @Override
     protected void actionSelfStarting() {
         super.actionSelfStarting();
         setEventType(Permission.SELFSTARTING);
     }
+
     @Override
     protected void actionRepLaceAcllpage() {
         super.actionRepLaceAcllpage();
         setEventType(Permission.REPLACEACLLPAGE);
     }
+
     @Override
     protected void actionSystemSetting() {
         super.actionSystemSetting();
         setEventType(Permission.SYSTEMSETTING);
+    }
+
+    @Override
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        setEventType(Permission.PACKAGEUSAGESTATS);
     }
 
     @Override
@@ -85,17 +94,14 @@ public class OtherPermissionBase extends AutoFixAction {
 
 
     private Permission permission;
-    private void setEventType(Permission permission){
-        this.permission=permission;
+
+    private void setEventType(Permission permission) {
+        this.permission = permission;
     }
-    public Permission getEventType(){
+
+    public Permission getEventType() {
         return permission;
     }
-
-
-
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -116,11 +122,11 @@ public class OtherPermissionBase extends AutoFixAction {
         service.setServiceInfo(accessibilityServiceInfo);
 
     }
-    public void getIntentFail(Context mContext,String status,Permission permission,Exception e){
-        PermissionProvider.save(mContext,status, true);
+
+    public void getIntentFail(Context mContext, String status, Permission permission, Exception e) {
+        PermissionProvider.save(mContext, status, true);
         EventBus.getDefault().post(new PathEvent(permission, true, true));
     }
-
 
 
 }

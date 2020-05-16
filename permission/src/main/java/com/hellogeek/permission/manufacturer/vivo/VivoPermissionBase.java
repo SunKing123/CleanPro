@@ -160,7 +160,7 @@ public class VivoPermissionBase extends AutoFixAction {
 
     @Override
     protected void actionPackageUsageStats() {
-        super.actionNotifiCationBar();
+        super.actionPackageUsageStats();
         setEventType(Permission.PACKAGEUSAGESTATS);
     }
 

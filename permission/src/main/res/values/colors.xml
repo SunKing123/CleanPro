@@ -93,6 +93,9 @@
     <color name="transparent_background">#20000000</color>
     <color name="transparent_background2">#b2000000</color>
     <color name="color_80FFFFFF">#80FFFFFF</color>
+
+    <color name="color_16C9C5">#16C9C5</color>
+
     <color name="color_FF3B84">#FF3B84</color>
     <color name="color_FF5DA9">#FF5DA9</color>
 

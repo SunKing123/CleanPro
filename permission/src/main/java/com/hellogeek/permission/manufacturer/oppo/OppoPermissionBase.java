@@ -84,7 +84,7 @@ public class OppoPermissionBase extends AutoFixAction {
                     if ((displayVersion.equals("A.25") || displayVersion.equals("A.09")) && version == 302268) {
                         return VERSION.V8;
                     }
-                    if ((displayVersion.contains("A")||displayVersion.contains("C")) && version == 302268) {
+                    if ((displayVersion.contains("A") || displayVersion.contains("C")) && version == 302268) {
                         return VERSION.V7_1;
                     }
                     //如果displayVersion包含字母要放在这个之前，要不会catch
@@ -187,6 +187,12 @@ public class OppoPermissionBase extends AutoFixAction {
     }
 
     @Override
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        setEventType(Permission.PACKAGEUSAGESTATS);
+    }
+
+    @Override
     protected void actionNoticeOfTakeover() {
         super.actionNoticeOfTakeover();
         setEventType(Permission.NOTICEOFTAKEOVER);
@@ -256,8 +262,8 @@ public class OppoPermissionBase extends AutoFixAction {
         service.setServiceInfo(accessibilityServiceInfo);
     }
 
-    public void getIntentFail(Context mContext,String status,Permission permission,Exception e){
-        PermissionProvider.save(mContext,status, true);
+    public void getIntentFail(Context mContext, String status, Permission permission, Exception e) {
+        PermissionProvider.save(mContext, status, true);
         EventBus.getDefault().post(new PathEvent(permission, true, true));
     }
 

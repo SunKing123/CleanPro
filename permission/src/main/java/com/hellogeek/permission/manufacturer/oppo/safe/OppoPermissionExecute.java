@@ -77,6 +77,9 @@ public class OppoPermissionExecute extends OppoPermissionBase {
                 break;
             case REPLACEACLLPAGE:
                 break;
+            case PACKAGEUSAGESTATS:
+                oppoPermissionColorActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
+                break;
         }
     }
 
@@ -200,6 +203,18 @@ public class OppoPermissionExecute extends OppoPermissionBase {
             getIntentFail(mContext, PROVIDER_NOTICEOFTAKEOVER, NOTICEOFTAKEOVER, e);
         } catch (Exception e1) {
         }
+    }
+
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        try {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startTOSysTemActivity(intent, PACKAGEUSAGESTATS);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            getIntentFail(mContext, PACKAGE_USAGE_STATS, PACKAGEUSAGESTATS, e);
+        }
+
     }
 
     @Override

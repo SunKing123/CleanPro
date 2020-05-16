@@ -290,8 +290,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /* XD added for feed End >*/
     @Override
     protected void initView() {
-
-
         registResceiver();
         mStatusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
         mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
@@ -1306,7 +1304,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     protected void loadFeedData() {
         showFeedView();
         for (int i = 0; i < mNewTypes.length; i++) {
-            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i],PositionId.KEY_HOME_NEWS);
+            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i], PositionId.KEY_HOME_NEWS);
             final int index = i;
             listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
                 @Override
@@ -1471,17 +1469,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 return;
             }
             // isAllopen == false 显示权限ICON三角形
-
+ 
             boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
             if (isRepair) {
                 PermissionIntegrate.getPermission().startWK(getActivity());
                 return;
-            }   // getDefectPermissionNum
+            }
 
             long currentTime = System.currentTimeMillis();
             long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
-
-            if (preTime == currentTime || currentTime - currentTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次
+            if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
                 SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
                 showPermissionDialog();
             }

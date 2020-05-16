@@ -111,6 +111,12 @@ public class MIUIPermissionBase extends AutoFixAction {
     }
 
     @Override
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        setEventType(Permission.PACKAGEUSAGESTATS);
+    }
+
+    @Override
     protected void actionLockDisplay() {
         super.actionLockDisplay();
         setEventType(Permission.LOCKDISPALY);

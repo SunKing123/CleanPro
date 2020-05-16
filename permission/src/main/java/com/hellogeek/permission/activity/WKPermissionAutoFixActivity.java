@@ -77,6 +77,7 @@ import static com.hellogeek.permission.util.Constant.PROVIDER_SELFSTARTING;
 import static com.hellogeek.permission.util.Constant.PROVIDER_SUSPENDEDTOAST;
 import static com.hellogeek.permission.util.Constant.PROVIDER_SYSTEMSETTING;
 
+
 /**
  * @ProjectName: clean
  * @Package: com.hellogeek.permission.activity
@@ -91,7 +92,6 @@ import static com.hellogeek.permission.util.Constant.PROVIDER_SYSTEMSETTING;
  */
 public class WKPermissionAutoFixActivity extends BaseActivity implements IAccessibilityServiceMonitor {
     public static final String TAG = PermissionAutoFixActivity.class.getSimpleName();
-
 
     @BindView(R2.id.rl_normal)
     RelativeLayout rlNormal;
@@ -108,52 +108,22 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     @BindView(R2.id.iv_loading)
     ImageView ivLoading;
 
+    @BindView(R2.id.tvFix)
+    TextView tvFix;
+
     private final int ACCESSIBILITY_SETTINGS = 1000;
-
     private Boolean isOneRepair = true;
-
-    //    @BindView(R2.id.ivHintIcon)
-//    ImageView ivHintIcon;
-//    @BindView(R2.id.imTop)
-//    ImageView imTop;
-//    @BindView(R2.id.clHintIcon)
-//    ConstraintLayout clHintIcon;
-//    @BindView(R2.id.tvHintTitle)
-//    TextView tvHintTitle;
     @BindView(R2.id.listFixHint)
     RecyclerView listFixHint;
-    //    @BindView(R2.id.ivClose)
-//    ImageView ivClose;
-//    @BindView(R2.id.tvFix)
-//    TextView tvFix;
+
     BaseQuickAdapter mAdapter;
-    //    boolean fixing = false;
-//    @BindView(R2.id.iv_pb_bg)
-//    ImageView ivPbBg;
-//    @BindView(R2.id.iv_pb)
-//    ImageView ivPb;
     @BindView(R2.id.tv_pb_text)
     TextView tvPbText;
 
     @BindView(R2.id.tv_risk_num)
     TextView tvRiskNum;
     Integer risksNumber = 4;
-    //    @BindView(R2.id.tvClick)
-//    TextView tvClick;
-//    @BindView(R2.id.tvOneKeyFix)
-//    TextView tvOneKeyFix;
-//    @BindView(R2.id.tvHintWait)
-//    TextView tvHintWait;
-//    @BindView(R2.id.cl_title)
-//    ConstraintLayout clTitle;
-//    @BindView(R2.id.line)
-//    View line;
-//    @BindView(R2.id.tv_add_qq)
-//    TextView tvAddQQ;
-//    @BindView(R2.id.tvHintFail)
-//    TextView tvHintFail;
-//    @BindView(R2.id.cot_default)
-//    ConstraintLayout cot_default;
+
     private static final int mStartAFMGuide = 1000;
     private AutoFixAction autoFixAction;
     private AccessibilityServiceMonitor mService;
@@ -183,13 +153,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     }
 
     private boolean isBack = false;
-
-    //    private void addNotifiList(){
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction(Intent.ACTION_PACKAGE_ADDED);//应用加入
-//        filter.addDataScheme("package");
-//        this.registerReceiver(mPackageReceiver, filter);
-//    }
 
 
     @Override
@@ -256,6 +219,13 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                         }
                     });
                 }
+
+                if (risksNumber == 0) {
+                    rlLoading.setVisibility(View.GONE);
+                    rlSuccess.setVisibility(View.VISIBLE);
+                    tvFix.setText(getString(R.string.use_now));
+                }
+
             }
         });
 
@@ -336,6 +306,9 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     @OnClick({R2.id.tvFix})  // , R2.id.ivClose, R2.id.tv_add_qq
     public void onclickView(View view) {
         int id = view.getId();
+        if (isAllOpen) {
+            finish();
+        }
         if (id == R.id.tvFix) {
             if (autoFixAction == null) {
                 return;
@@ -543,7 +516,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
 
             rlLoading.setVisibility(View.GONE);
             rlSuccess.setVisibility(View.VISIBLE);
-            finish();
+            tvFix.setText(getString(R.string.use_now));
+
         } else {
             boolean isExecute = false;
             for (ASBase asBase : base) {
@@ -580,8 +554,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         }
         if (isAllDone) {
 
-        } else if (!isFirst) {
-        } else {
         }
         for (ASBase asBase : base) {
             asBase.executeNumber = 0;
@@ -628,26 +600,17 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         rlNormal.setVisibility(View.GONE);
         rlLoading.setVisibility(View.VISIBLE);
 
-//        ivPbBg.setVisibility(View.VISIBLE);
-//        tvHintTitle.setText("最后一步了");
-//        cot_default.setVisibility(View.VISIBLE);
-//        tvHintWait.setVisibility(View.VISIBLE);
-//        tvPbText.setVisibility(View.VISIBLE);
-//        tvHintFail.setVisibility(View.GONE);
         Animation animation = new RotateAnimation(360f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(3000);
         animation.setRepeatCount(Animation.INFINITE);
         animation.setInterpolator(new LinearInterpolator());
         ivGear.startAnimation(animation);
-//        ivPbBg.setImageResource(R.mipmap.img_progressbar_bg);
-//
+
         Animation animation2 = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation2.setDuration(2000);
         animation2.setRepeatCount(Animation.INFINITE);
         animation2.setInterpolator(new LinearInterpolator());
         ivLoading.startAnimation(animation2);
-        // ivPb.setVisibility(View.VISIBLE);
-//        tvPbText.setVisibility(View.VISIBLE);
 
     }
 

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import static com.hellogeek.permission.Integrate.Permission.NOTICEOFTAKEOVER;
 import static com.hellogeek.permission.Integrate.Permission.NOTIFICATIONBAR;
+import static com.hellogeek.permission.Integrate.Permission.PACKAGEUSAGESTATS;
 import static com.hellogeek.permission.Integrate.Permission.SELFSTARTING;
 import static com.hellogeek.permission.Integrate.Permission.SUSPENDEDTOAST;
 import static com.hellogeek.permission.util.Constant.PROVIDER_NOTICEOFTAKEOVER;
@@ -72,6 +73,9 @@ public class HuaweiPermissionExecute extends HuaweiPermissionBase {
                 break;
             case SYSTEMSETTING:
                 huaweiPermissionActionUtil.actionSystemSetting(nodeInfo, service);
+                break;
+            case PACKAGEUSAGESTATS:
+                huaweiPermissionActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
                 break;
         }
     }
@@ -238,6 +242,18 @@ public class HuaweiPermissionExecute extends HuaweiPermissionBase {
             getIntentFail(mContext, PROVIDER_SUSPENDEDTOAST, SUSPENDEDTOAST, e);
         } catch (Exception e) {
         }
+    }
+
+    protected void actionPackageUsageStats() {
+        super.actionPackageUsageStats();
+        try {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            startTOSysTemActivity(intent, PACKAGEUSAGESTATS);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            getIntentFail(mContext, PACKAGE_USAGE_STATS, PACKAGEUSAGESTATS, e);
+        }
+
     }
 
     @Override

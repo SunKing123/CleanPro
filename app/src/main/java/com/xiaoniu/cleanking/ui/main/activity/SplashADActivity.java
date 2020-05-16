@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -242,11 +244,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         });
 
         final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
-        if (isFirst) {
+        boolean consentAgreement = SPUtil.getBoolean(this, "consentAgreement", false);
+        if (!consentAgreement) {
             showConfirmDialog();
         }
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
-
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
             if (PermissionIntegrate.getPermission().getIsNecessary()) {
@@ -255,7 +257,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
             }
             if (PermissionUtils.checkPermission(this, permissions) && isAllopen) {
-                // 已获取读写文件权限
+                //  已获取读写文件权限
                 //  新用户二次冷启动app，先判断是否授予读取存储文件权限，若已授予，
                 //  开屏页显示权限引导页（不展示开屏广告），
                 //  右上角显示5s倒计时，5s结束后，右上角显示【跳过】按钮，
@@ -342,17 +344,36 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     private void showConfirmDialog() {
 
+
+        String s1 = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，";
+        s1 += "特此向您说明。作为互联网安全公司，";
+        s1 += "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。";
+        s1 += "在使用悟空清理前，请务必仔细阅读并了解";
+
+        s1 += "<font color='#06C581'>设置红色</font><br>";
+        s1 += "<a href=\"https://www.baidu.com\" color='#06C581'><font color='#06C581'>百度链接</font></a>";
+
+
+        String html = "<html>欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
+                "特此向您说明。作为互联网安全公司，" +
+                "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。" +
+                "在使用悟空清理前，请务必仔细阅读并了解<font color='#06C581'><a href=\"https://www.baidu.com\">《隐私政策》</a></font>和" +
+                "<font color='#06C581'><a href=\"https://www.baidu.com\">《用户协议》</a></font>" +
+                "全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。</html>";
+
+
         confirmDialogFragment = ConfirmDialogFragment.newInstance();
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.reminder));
-        bundle.putString("content", "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
-                "特此向您说明。作为互联网安全公司，我们在为用户提供隐私保护的同时，" +
-                "对自身的安全产品提出了更高级别的标准。在使用悟空清理前，请务必仔细阅读并了解");
+//        bundle.putString("content", getString(R.string.html));
+        bundle.putString("content", html);
         confirmDialogFragment.setArguments(bundle);
         confirmDialogFragment.show(getFragmentManager(), "");
+
         confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
             @Override
             public void onConfirm() {
+                SPUtil.setBoolean(SplashADActivity.this, "consentAgreement", true);
                 PreferenceUtil.saveFirstOpenApp();
                 jumpActivity();
             }

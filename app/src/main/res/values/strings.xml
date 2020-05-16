@@ -173,4 +173,10 @@
     <string name="power_clean_title">超强省电</string>
     <string name="power_clean_content">清理异常耗电应用，延长待机时长</string>
     <string name="reminder">温馨提示</string>
+
+    <string name="html">
+        <strong><font coolo="#EE6363">强调一下</font></strong>
+        <p><a href="https://www.baidu.com">百度一下, 啥也不知道</a></p>
+    </string>
+
 </resources>

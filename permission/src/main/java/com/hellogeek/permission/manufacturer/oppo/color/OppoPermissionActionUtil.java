@@ -7,6 +7,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.manufacturer.oppo.OppoPermissionBase;
 import com.hellogeek.permission.manufacturer.oppo.color.permissionlist.*;
+import com.hellogeek.permission.manufacturer.vivo.VivoPermissionBase;
+import com.hellogeek.permission.manufacturer.vivo.permissionlist.PakageUsageStatsPermission;
 
 
 public class OppoPermissionActionUtil {
@@ -16,6 +18,7 @@ public class OppoPermissionActionUtil {
     private SystemSettingPermission systemSettingPermission;
     private NoticeOfTakeoverPermission noticeOfTakeoverPermission;
     private NotifiCationBarPermission notifiCationBarPermission;
+    private PakageUsageStatsPermission pakageUsageStatsPermission;
 
     public OppoPermissionActionUtil(Context mContext) {
         this.mContext = mContext;
@@ -24,6 +27,7 @@ public class OppoPermissionActionUtil {
         systemSettingPermission = new SystemSettingPermission(mContext);
         noticeOfTakeoverPermission = new NoticeOfTakeoverPermission(mContext);
         notifiCationBarPermission = new NotifiCationBarPermission(mContext);
+        pakageUsageStatsPermission = new PakageUsageStatsPermission(mContext);
     }
 
     /**
@@ -63,7 +67,7 @@ public class OppoPermissionActionUtil {
      * 接管通知
      */
     public void actionNoticeOfTakeover(AccessibilityNodeInfo info, AccessibilityService service, OppoPermissionBase.VERSION mVersion) {
-            noticeOfTakeoverPermission.openNoticeOfTakeover(mContext, info, service);
+        noticeOfTakeoverPermission.openNoticeOfTakeover(mContext, info, service);
     }
 
     /**
@@ -78,7 +82,19 @@ public class OppoPermissionActionUtil {
      * 自启动权限
      */
     public void actionSelfStaring(AccessibilityNodeInfo info, AccessibilityService service, OppoPermissionBase.VERSION mVersion) {
-            selfStartingPermission.openSelfStarting(mContext, info, service);
+        selfStartingPermission.openSelfStarting(mContext, info, service);
+    }
+
+    /**
+     * 查看应用使用情况
+     *
+     * @param info
+     * @param service
+     * @param version
+     * @param vivoOs
+     */
+    public void actionPakageUsageStats(AccessibilityNodeInfo info, AccessibilityService service, VivoPermissionBase.VERSION version, String vivoOs) {
+        pakageUsageStatsPermission.openPakageUsageStats(mContext, info, service);
     }
 
     public void clearList(Permission permission) {

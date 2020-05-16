@@ -3,9 +3,12 @@ package com.xiaoniu.cleanking.ui.main.fragment.dialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +70,16 @@ public class ConfirmDialogFragment extends DialogFragment {
             }
             if (!TextUtils.isEmpty(content)) {
                 TextView txtTitle = view.findViewById(R.id.txt_content);
-                txtTitle.setText(content);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    // flags
+                    // FROM_HTML_MODE_COMPACT：html块元素之间使用一个换行符分隔
+                    // FROM_HTML_MODE_LEGACY：html块元素之间使用两个换行符分隔
+                    txtTitle.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_COMPACT));
+                } else {
+                    txtTitle.setText(Html.fromHtml(content));
+                }
+                txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
         Button confirmBtn = view.findViewById(R.id.btn_confirm);
