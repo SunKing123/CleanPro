@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -40,12 +41,14 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
     //广告结果缓存
     private LinkedHashMap<Integer, View> adCache = new LinkedHashMap<>();
+    private String pagePosition;
 
 //    LinkedHashMap<Integer, WeakReference<View>> adCache = new LinkedHashMap<>();
 
 
-    public NewsListAdapter(Context context) {
+    public NewsListAdapter(Context context,String pagePosition) {
         super(context, new NewsItemTypeSupport());
+        this.pagePosition=pagePosition;
         presenter = new AdPresenter();
     }
 
@@ -92,7 +95,11 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
      */
     private void getAd(int postion) {
 
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_HOME_NEWS,
+        String configKey=PositionId.KEY_HOME_NEWS;
+        if (!TextUtils.isEmpty(pagePosition)){
+            configKey=pagePosition;
+        }
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(configKey,
                 PositionId.DRAW_ONE_CODE,
                 mContext,
                 AdType.Template,

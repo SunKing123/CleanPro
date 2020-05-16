@@ -28,18 +28,21 @@ public class NewsListFragment extends BaseFragment {
     private static final String TAG = "NewsListFragment";
 
     private static final String KEY_TYPE = "TYPE";
+    private static final String PAGE_POSITION = "PAGE_POSITION";
     private XRecyclerView mRecyclerView;
     private NewsListAdapter mNewsAdapter;
     private LinearLayout mLlNoNet;
     private NewsType mType;
+    private String pagePosition;
 
     private boolean mIsRefresh = true;
 
     private OnClickNewsItemListener mOnClickItemListener;  // XD added 20200514
 
-    public static NewsListFragment getInstance(NewsType type) {
+    public static NewsListFragment getInstance(NewsType type,String pagePosition) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(KEY_TYPE, type);
+        bundle.putString(PAGE_POSITION,pagePosition);
         NewsListFragment newsListFragment = new NewsListFragment();
         newsListFragment.setArguments(bundle);
         return newsListFragment;
@@ -52,14 +55,18 @@ public class NewsListFragment extends BaseFragment {
 
     @Override
     protected void initVariable(Bundle arguments) {
-        mNewsAdapter = new NewsListAdapter(getContext());
+
+
+        if (arguments != null) {
+            mType = (NewsType) arguments.getSerializable(KEY_TYPE);
+            pagePosition=arguments.getString(PAGE_POSITION);
+        }
+
+        mNewsAdapter = new NewsListAdapter(getContext(),pagePosition);
         if (mOnClickItemListener != null) {
             mNewsAdapter.setOnClickItemListener(mOnClickItemListener);
         }
 
-        if (arguments != null) {
-            mType = (NewsType) arguments.getSerializable(KEY_TYPE);
-        }
         setSupportLazy(true);
     }
 

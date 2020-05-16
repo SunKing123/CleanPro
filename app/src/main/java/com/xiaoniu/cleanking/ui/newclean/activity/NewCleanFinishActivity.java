@@ -236,7 +236,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
 
-        mNewsAdapter = new NewsListAdapter(this);
+        mNewsAdapter = new NewsListAdapter(this,PositionId.KEY_CLEAN_FINISH_NEWS);
 
         View header = LayoutInflater.from(this).inflate(R.layout.layout_finish_head, findViewById(android.R.id.content), false);
         View headerTool = LayoutInflater.from(this).inflate(R.layout.layout_finish_head_tool, findViewById(android.R.id.content), false);
@@ -1294,7 +1294,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void loadFeedData() {
         showFeedView();
         for (int i = 0; i < mNewTypes.length; i++) {
-            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
+            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i],PositionId.KEY_CLEAN_FINISH_NEWS);
             final int index = i;
             listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
                 @Override
