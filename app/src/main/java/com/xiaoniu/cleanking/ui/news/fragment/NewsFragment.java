@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.NewsType;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsTypeNavigatorAdapter;
 import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
 import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
@@ -143,7 +144,7 @@ public class NewsFragment extends BaseFragment {
     @Override
     protected void loadData() {
         for (int i = 0; i < mNewTypes.length; i++) {
-            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i]);
+            NewsListFragment listFragment = NewsListFragment.getInstance(mNewTypes[i], PositionId.KEY_MAIN_TAB_NEWS);
             mFragments.add(listFragment);
         }
 

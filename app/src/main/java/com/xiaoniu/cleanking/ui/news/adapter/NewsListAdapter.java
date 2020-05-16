@@ -2,12 +2,13 @@ package com.xiaoniu.cleanking.ui.news.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.qq.e.ads.nativ.NativeExpressADView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
 import com.xiaoniu.cleanking.ad.enums.AdType;
@@ -26,6 +27,7 @@ import com.xiaoniu.common.widget.xrecyclerview.CommonViewHolder;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 头条资讯适配器
@@ -39,18 +41,21 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
     //广告结果缓存
     private LinkedHashMap<Integer, View> adCache = new LinkedHashMap<>();
+    private String pagePosition;
+
 //    LinkedHashMap<Integer, WeakReference<View>> adCache = new LinkedHashMap<>();
 
 
-    public NewsListAdapter(Context context) {
+    public NewsListAdapter(Context context,String pagePosition) {
         super(context, new NewsItemTypeSupport());
+        this.pagePosition=pagePosition;
         presenter = new AdPresenter();
     }
 
     public void setData(ArrayList<NewsItemInfo> datas) {
         if (datas != null && datas.size() > 0) {
             mDatas.clear();
-//            adCache.clear();
+            adCache.clear();
             mDatas.addAll(setAdList(datas));
             notifyDataSetChanged();
         }
@@ -90,7 +95,11 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
      */
     private void getAd(int postion) {
 
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_HOME_NEWS,
+        String configKey=PositionId.KEY_HOME_NEWS;
+        if (!TextUtils.isEmpty(pagePosition)){
+            configKey=pagePosition;
+        }
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(configKey,
                 PositionId.DRAW_ONE_CODE,
                 mContext,
                 AdType.Template,
@@ -101,21 +110,25 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
 
             @Override
             public void onAdListShowCallBack(int index, View view) {
-                adCache.put(index, view);
-                notifyItemChanged(index + 1);
+                //ylh
+                if (view instanceof NativeExpressADView) {
+                    adCache.put(index, (NativeExpressADView) view);
+                    notifyItemChanged(index + 1);
+                }
+                //csj
+                else {
+                    adCache.put(index, view);
+                    notifyItemChanged(index + 1);
+                }
             }
 
             @Override
             public void onCloseCallback(int index) {
-                Log.d("----------------", index + "__");
                 try {
                     if (adCache.get(index) == null) {
                         return;
                     }
-                    adCache.remove(index);
-                    mDatas.remove(index);
-//                    notifyItemRemoved(index);
-                    notifyItemRangeChanged(index, mDatas.size());
+                    updataAdList(index);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -123,9 +136,37 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         });
     }
 
+    /**
+     * 删除广告数据
+     * @param position
+     */
+    private void updataAdList(int position){
+
+        if(adCache.get(position) instanceof NativeExpressADView){
+            ((NativeExpressADView) adCache.get(position)).destroy();
+        }
+
+        LinkedHashMap<Integer, View> tempAdCache = new LinkedHashMap<>();
+        adCache.remove(position);
+        for(Map.Entry<Integer, View> entry : adCache.entrySet()){
+            int mapKey = entry.getKey();
+            View mapValue = entry.getValue();
+            if(mapKey>=position){
+                tempAdCache.put(mapKey-1,mapValue);
+            }else {
+                tempAdCache.put(mapKey,mapValue);
+            }
+        }
+        adCache.clear();
+        adCache.putAll(tempAdCache);
+
+        mDatas.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position-1,mDatas.size()-1);
+    }
+
     @Override
     public void convert(RecyclerView.ViewHolder holder, Object itemData, int position) {
-        Log.d("----------------", "__convert");
 
         CommonViewHolder commonHolder = (CommonViewHolder) holder;
         int viewType = getItemViewType(position);
@@ -148,13 +189,15 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 ImageUtil.display(itemInfo.miniimg.get(2).src, (commonHolder.getView(R.id.ivPic3)));
             } else if (viewType == 4) {
                 FrameLayout adLayout = commonHolder.getView(R.id.ad_layout);
-
-                if (adCache.get(position) != null && adLayout != null) {
+                if (adLayout!=null) {
                     adLayout.removeAllViews();
+                }
+                if (adCache.get(position) != null && adLayout != null) {
                     View adView = adCache.get(position);
                     if (adView.getParent() != null) {
                         ((ViewGroup) adView.getParent()).removeAllViews();
                     }
+                    adLayout.setVisibility(View.VISIBLE);
                     adLayout.addView(adView);
                 }
             }

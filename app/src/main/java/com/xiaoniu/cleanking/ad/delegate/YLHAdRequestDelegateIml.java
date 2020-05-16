@@ -69,7 +69,6 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
         adModel.getYLHTemplateAd(adRequestParamentersBean, adRequestBean)
 //                .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
-
                 .observeOn(AndroidSchedulers.mainThread())
 //                .timeout(3, TimeUnit.SECONDS)
                 .subscribe(new Consumer<AdYLHEmitterBean>() {
@@ -78,8 +77,6 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
                         if (adYLHEmitterBean == null) {
                             return;
                         }
-                        Log.d("----------------","onCloseCallback"+adYLHEmitterBean.index+" type:"+adYLHEmitterBean.type);
-
                         switch (adYLHEmitterBean.type) {
                             case 1:
                                 adYLHEmitterBean.nativeExpressADView.render();

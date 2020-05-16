@@ -51,14 +51,14 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             debuggable false
-            shrinkResources true
-            zipAlignEnabled true
+            shrinkResources false
+            zipAlignEnabled false
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             commonConfigFiledMap.each { buildConfigField("String", it.key, it.value) }
-            prodConfigFiledMap.each {
+            testConfigFiledMap.each {
                 buildConfigField("String", it.key, it.value)
             }
         }
