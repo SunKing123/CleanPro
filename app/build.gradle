@@ -104,6 +104,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "clean_${variant.versionName}-${getSimpleDate()}-${variant.buildType.name}.apk"
+        }
+    }
+}
+
+static def getSimpleDate() {
+    return new Date().format("yyyyMMdd_HHmm", TimeZone.getDefault())
 }
 
 repositories {

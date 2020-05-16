@@ -67,27 +67,18 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_finish" />
 
-    <LinearLayout
-        android:id="@+id/native_ad_container"
+    <FrameLayout
+        android:id="@+id/v_advert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_8dp"
         android:layout_marginTop="-60dp"
         android:layout_marginRight="@dimen/dimen_8dp"
         android:background="@drawable/bg_finish_rem"
-        android:paddingLeft="@dimen/dimen_20dp"
-        android:paddingTop="@dimen/dimen_16dp"
-        android:paddingRight="@dimen/dimen_20dp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:visibility="gone"
-        android:paddingBottom="@dimen/dimen_16dp">
-
-        <FrameLayout
-            android:id="@+id/v_advert"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true">
-
-        </FrameLayout>
-    </LinearLayout>
+        >
+    </FrameLayout>
 
 </LinearLayout>
