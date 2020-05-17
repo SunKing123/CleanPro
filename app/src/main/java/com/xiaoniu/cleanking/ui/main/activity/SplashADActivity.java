@@ -426,7 +426,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                     }, 2000); // 延时1秒
                     return;
                 }
-                skipTv.setText(String.format(SKIP_TEXT, mStart));
+                skipTv.setText(mStart);
                 handler.postDelayed(this, 1000);
             }
         };

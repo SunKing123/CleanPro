@@ -51,7 +51,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-import static com.hellogeek.permission.util.Constant.WHITE_LIST;
+import static com.xiaoniu.cleanking.app.Constant.WHITE_LIST;
 
 /**
  * 扫描垃圾

@@ -56,7 +56,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import static android.content.Context.USAGE_STATS_SERVICE;
 import static com.jaredrummler.android.processes.AndroidProcesses.getRunningAppProcesses;
-import static com.xiaoniu.cleanking.utils.Constant.WHITE_LIST;
+import static com.xiaoniu.cleanking.app.Constant.WHITE_LIST;
 
 public class FileQueryUtils {
 
@@ -790,7 +790,7 @@ public class FileQueryUtils {
                             str = packNameByProName;
                         }
                         CharSequence loadLabel = this.mPackageManager.getPackageInfo(str, 0).applicationInfo.loadLabel(this.mPackageManager);
-                        if (runningAppProcessInfo.importance >= 200 && !str.equals(this.mContext.getPackageName()) && !str.contains("com.xiaoniu")) {
+                        if (runningAppProcessInfo.importance >= 200 && !str.equals(this.mContext.getPackageName()) && !ArrayUtil.arrayContainsStr(WHITE_LIST, str)) {
                             if (mScanFileListener != null) {
                                 mScanFileListener.scanFile(str);
                             }
@@ -882,7 +882,7 @@ public class FileQueryUtils {
                 if (mScanFileListener != null) {
                     mScanFileListener.scanFile(usageStats.getPackageName());
                 }
-                if (!(usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.xiaoniu"))) {
+                if (!(usageStats.getPackageName() == null || ArrayUtil.arrayContainsStr(WHITE_LIST, usageStats.getPackageName()))) {
                     String packageName = usageStats.getPackageName();
                     if (!isSystemAppliation(packageName)) {
                         if (installedList == null)
@@ -946,7 +946,7 @@ public class FileQueryUtils {
                 if (mScanFileListener != null) {
                     mScanFileListener.scanFile(rootPath + packageInfo.packageName);
                 }
-                if (!(packageInfo.packageName == null || packageInfo.packageName.contains("com.xiaoniu"))) {
+                if (!(packageInfo.packageName == null || ArrayUtil.arrayContainsStr(WHITE_LIST, packageInfo.packageName))) {
                     String packageName = packageInfo.packageName;
                     if (!isSystemAppliation(packageName)) {
                         FirstJunkInfo junkInfo = new FirstJunkInfo();
@@ -1030,7 +1030,7 @@ public class FileQueryUtils {
                 if (mScanFileListener != null) {
                     mScanFileListener.scanFile(appMemoryInfo2.getName());
                 }
-                if (applicationInfo != null && !appMemoryInfo2.getName().contains("com.xiaoniu")) {
+                if (applicationInfo != null && !ArrayUtil.arrayContainsStr(WHITE_LIST, appMemoryInfo2.getName())) {
                     long totalPss = ((long) mActivityManager.getProcessMemoryInfo(new int[]{appMemoryInfo2.getId()})[0].getTotalPss()) * 1024;
                     if (totalPss != 0) {
                         FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
@@ -1129,7 +1129,7 @@ public class FileQueryUtils {
                 if (mScanFileListener != null) {
                     mScanFileListener.scanFile(name);
                 }
-                if (name != null && !name.contains("com.xiaoniu")) {
+                if (name != null && !ArrayUtil.arrayContainsStr(WHITE_LIST, name)) {
                     long totalPss = ((long) activityManager.getProcessMemoryInfo(new int[]{appMemoryInfo2.getId()})[0].getTotalPss()) * 1024;
                     if (totalPss != 0) {
                         onelevelGarbageInfo.setAllchecked(true);

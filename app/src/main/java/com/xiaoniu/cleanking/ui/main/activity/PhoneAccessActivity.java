@@ -76,6 +76,9 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.xiaoniu.cleanking.app.Constant.WHITE_LIST;
+import static com.xiaoniu.cleanking.ui.main.config.SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME;
+
 /**
  * 手机加速--一键清理内存页面
  */
@@ -373,7 +376,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             PreferenceUtil.saveCleanTime();
         }
         PreferenceUtil.saveCleanJiaSuUsed(true);
-        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU,PositionId.DRAW_THREE_CODE);
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU, PositionId.DRAW_THREE_CODE);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
@@ -673,14 +676,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     public boolean isCacheWhite(String packageName) {
         SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
 //        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
-        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        Set<String> sets = sp.getStringSet(WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
         if (null != sets && sets.size() > 0) {
             Iterator<String> it = sets.iterator();
             while (it.hasNext()) {
                 String str = it.next();
             }
         }
-        return sets.contains(packageName);
+        return WHITE_LIST.contains(packageName);
     }
 
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {

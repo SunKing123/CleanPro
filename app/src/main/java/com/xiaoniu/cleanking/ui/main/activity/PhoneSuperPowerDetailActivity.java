@@ -51,6 +51,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import static com.xiaoniu.cleanking.app.Constant.WHITE_LIST;
+
 /**
  * 超强省电 正在分析中...
  */
@@ -316,6 +318,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
             runningProcess = mFileQueryUtils.getRunningProcess();
         }
         HashSet<String> whitelist = getDefaultHoldApp();
+        whitelist.addAll(new HashSet(WHITE_LIST));
+
         PowerGroupInfo killGroupInfo = new PowerGroupInfo();
         killGroupInfo.type = 0;
         killGroupInfo.title = "耗电应用";
@@ -336,7 +340,7 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
                 } else {
                     childInfo.selected = 1;
                     mSelectedCount++;
-                    if (!childInfo.packageName.equals("com.xiaoniu.cleanking"))
+                    if (!whitelist.contains(childInfo.packageName))
                         killGroupInfo.addItemInfo(childInfo);
                 }
             }

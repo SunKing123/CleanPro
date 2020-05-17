@@ -1,5 +1,8 @@
 package com.xiaoniu.cleanking.app;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * 常用常量
  * Created by tie on 2017/2/18.
@@ -183,7 +186,7 @@ public class Constant {
     public static final String SCENE_INSTALLMENT = "1";
 
     /**
-     *  费率路由 - 保费
+     * 费率路由 - 保费
      */
     public static final String PREMIUM = "1";
     /**
@@ -191,27 +194,35 @@ public class Constant {
      */
     public static final String ASSET_MANAGEMENT = "2";
 
-    /**运营商开关打开*/
+    /**
+     * 运营商开关打开
+     */
     public static final String OPERATOR_SWITCH_ON = "1";
-    /**运营商开关关闭*/
+    /**
+     * 运营商开关关闭
+     */
     public static final String OPERATOR_SWITCH_OFF = "0";
 
 
     /**
      * QQ专清图片集合
      */
-    public static final String PARAMS_QQ_IMG_LIST="params_qq_img_list";
+    public static final String PARAMS_QQ_IMG_LIST = "params_qq_img_list";
 
     /**
      * QQ专清视频集合
      */
-    public static final String PARAMS_QQ_VIDEO_LIST="params_qq_video_list";
+    public static final String PARAMS_QQ_VIDEO_LIST = "params_qq_video_list";
 
-    /** 微信图片清理key*/
-    public static final String WX_CACHE_SIZE_IMG="wx_cache_size_img";
+    /**
+     * 微信图片清理key
+     */
+    public static final String WX_CACHE_SIZE_IMG = "wx_cache_size_img";
 
-    /** 微信视频清理key*/
-    public static final String WX_CACHE_SIZE_VIDEO="wx_cache_size_video";
+    /**
+     * 微信视频清理key
+     */
+    public static final String WX_CACHE_SIZE_VIDEO = "wx_cache_size_video";
 
     /**
      * 各厂商ROM 版本KEY
@@ -241,6 +252,20 @@ public class Constant {
 
     //定时任务间隔检测时间（分钟）
     public static final int SCAN_SPACE_LONG = 1;
+
+    /**
+     * 白名单
+     */
+    public static final List<String> WHITE_LIST = Arrays.asList(
+            "com.geek.jk.weather",  // 即刻天气
+            "com.xujin.weather",    // 知心天气
+            "com.yitong.weather",   // 诸葛天气
+            "com.geek.jk.calendar.app",  // 即刻万年历
+            "com.geek.luck.calendar.app", // 诸葛万年历
+            "com.xiaoniu.cleanking", // 悟空清理
+            "com.xiaoniu",
+            "com.geek.jk.weather.fission" // 知心天气
+    );
 
 }
 

@@ -1468,8 +1468,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (isAllopen) {
                 return;
             }
-            // isAllopen == false 显示权限ICON三角形
- 
             boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
             if (isRepair) {
                 PermissionIntegrate.getPermission().startWK(getActivity());
@@ -1478,6 +1476,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             long currentTime = System.currentTimeMillis();
             long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
+            if (currentTime == preTime) {  // 第一次进来，初始化
+                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
+            }
             if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
                 SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
                 showPermissionDialog();
