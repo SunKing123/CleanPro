@@ -180,8 +180,11 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             View mapValue = entry.getValue();
             if(mapKey>=position){
                 tempAdCache.put(mapKey-1,mapValue);
+                getAd(mapKey-1);
+
             }else {
                 tempAdCache.put(mapKey,mapValue);
+                getAd(mapKey);
             }
         }
         adCache.clear();
@@ -216,8 +219,12 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 ImageUtil.display(itemInfo.miniimg.get(2).src, (commonHolder.getView(R.id.ivPic3)));
             } else if (viewType == 4) {
                 FrameLayout adLayout = commonHolder.getView(R.id.ad_layout);
+                View adLine = commonHolder.getView(R.id.ad_line);
                 if (adLayout!=null) {
                     adLayout.removeAllViews();
+                }
+                if(adLine!=null){
+                    adLine.setVisibility(View.GONE);
                 }
                 if (adCache.get(position) != null && adLayout != null) {
                     View adView = adCache.get(position);
@@ -225,6 +232,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                         ((ViewGroup) adView.getParent()).removeAllViews();
                     }
                     adLayout.setVisibility(View.VISIBLE);
+                    adLine.setVisibility(View.VISIBLE);
                     adLayout.addView(adView);
                 }
             }

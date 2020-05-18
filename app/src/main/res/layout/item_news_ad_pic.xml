@@ -14,4 +14,13 @@
         android:visibility="gone"
         android:paddingLeft="@dimen/dimen_5dp"
         android:paddingRight="@dimen/dimen_5dp" />
+
+    <View
+        android:id="@+id/ad_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:background="#FFEDEDED"
+        android:visibility="gone"
+        />
 </LinearLayout>
