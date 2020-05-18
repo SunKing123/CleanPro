@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -517,62 +519,68 @@ public class FileQueryUtils {
             //开始扫描已安装app上的硬盘文件夹
             List<String> appExtDir = ScanPathExt.getScanExtPath(applicationInfo.packageName);
             if (appExtDir != null && appExtDir.size() > 0) {
+                Map<String, String> filePathMap = new HashMap<>();
                 for (String dirPath : appExtDir) {
                     File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + dirPath);
-                    Map<String, String> filePathMap = this.checkOutAllGarbageFolder(scanExtFile, applicationInfo.packageName);
-                    for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
-                        if (new File(entry.getKey()).isDirectory()) {    //文件夹路径
-                            final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
-                            if (listFiles2.getFilesCount() <= 0 || listFiles2.getGarbageSize() <= 0L) {
-                                continue;
-                            }
-                            listFiles2.setGarbageName(entry.getValue());
-                            listFiles2.setFilecatalog(entry.getKey());
-                            listFiles2.setChecked(true);
-                            listFiles2.setPackageName(applicationInfo.packageName);
+                    Map<String, String> innerFilePathMap = this.checkOutAllGarbageFolder(scanExtFile, applicationInfo.packageName);
+                    for (Map.Entry<String, String> entry : innerFilePathMap.entrySet()) {
+                        filePathMap.put(entry.getKey(), entry.getValue());
+                    }
+                }
+                for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
+                    if (new File(entry.getKey()).isDirectory()) {    //文件夹路径
+                        final SecondJunkInfo listFiles2 = listFiles(new File(entry.getKey()));
+                        if (listFiles2.getFilesCount() <= 0 || listFiles2.getGarbageSize() <= 0L) {
+                            continue;
+                        }
+                        listFiles2.setGarbageName(entry.getValue());
+                        listFiles2.setFilecatalog(entry.getKey());
+                        listFiles2.setChecked(true);
+                        listFiles2.setPackageName(applicationInfo.packageName);
 
-                            //根据文件夹类型名称判断区分广告垃圾还是缓存垃圾
-                            if ("ad广告文件夹".equals(entry.getValue()) || "splash媒体文件夹".equals(entry.getValue())) {
-                                listFiles2.setGarbagetype("TYPE_AD");
-                                adJunkInfo.addSecondJunk(listFiles2);
-                                adJunkInfo.setTotalSize(adJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                            } else {
-                                listFiles2.setGarbagetype("TYPE_CACHE");
-                                cacheJunkInfo.addSecondJunk(listFiles2);
-                                cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
-                            }
+                        //根据文件夹类型名称判断区分广告垃圾还是缓存垃圾
+                        if ("ad广告文件夹".equals(entry.getValue()) || "splash媒体文件夹".equals(entry.getValue())) {
+                            listFiles2.setGarbagetype("TYPE_AD");
+                            adJunkInfo.addSecondJunk(listFiles2);
+                            adJunkInfo.setTotalSize(adJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
+                        } else {
+                            listFiles2.setGarbagetype("TYPE_CACHE");
+                            cacheJunkInfo.addSecondJunk(listFiles2);
+                            cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + listFiles2.getGarbageSize());
+                        }
 
+                        if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
+                            mScanFileListener.increaseSize(listFiles2.getGarbageSize());
+                        }
+                    } else if (new File(entry.getKey()).isFile()) { //文件路径
+                        File cachefile = new File(entry.getKey());
+                        SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
+                        if (cachefile.exists()) {
+                            secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
+                            secondJunkInfo.setChecked(true);
+                            secondJunkInfo.setPackageName(applicationInfo.packageName);
+                            secondJunkInfo.setGarbagetype("TYPE_CACHE");
+                            cacheJunkInfo.addSecondJunk(secondJunkInfo);
+                            cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
                             if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
-                                mScanFileListener.increaseSize(listFiles2.getGarbageSize());
-                            }
-                        } else if (new File(entry.getKey()).isFile()) { //文件路径
-                            File cachefile = new File(entry.getKey());
-                            SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
-                            if (cachefile.exists()) {
-                                secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
-                                secondJunkInfo.setChecked(true);
-                                secondJunkInfo.setPackageName(applicationInfo.packageName);
-                                secondJunkInfo.setGarbagetype("TYPE_CACHE");
-                                cacheJunkInfo.addSecondJunk(secondJunkInfo);
-                                cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                                if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
-                                    mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
-                                }
+                                mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                             }
                         }
                     }
                 }
             }
 
-            if (cacheJunkInfo.getSubGarbages() == null || cacheJunkInfo.getSubGarbages().size() <= 0) {
-                continue;
-            }
-
             //排除当前应用
             if (!WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
-                cacheJunkListInfo.add(cacheJunkInfo);
-            } else if (!WHITE_LIST.contains(adJunkInfo.getAppPackageName())) {
-                adJunkListInfo.add(adJunkInfo);
+                if (cacheJunkInfo.getTotalSize() > 0) {
+                    cacheJunkListInfo.add(cacheJunkInfo);
+                }
+            }
+
+            if (!WHITE_LIST.contains(adJunkInfo.getAppPackageName())) {
+                if (adJunkInfo.getTotalSize() > 0) {
+                    adJunkListInfo.add(adJunkInfo);
+                }
             }
         }
 
@@ -855,121 +863,125 @@ public class FileQueryUtils {
         if (usageStatsManager == null) {
             return new ArrayList<>();
         }
-
         if (isFinish) {
             return new ArrayList<>();
         }
-
         ArrayList<FirstJunkInfo> junkList = new ArrayList<>();
         List<UsageStats> lists = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,
                 System.currentTimeMillis() - 86400000, System.currentTimeMillis());
         if (!(lists == null || lists.size() == 0)) {
-
-            if (lists.size() > 30) {
-                lists = lists.subList(0, 30);
-            }
-            int indexP = 0;
-            double size = lists.size() * NoClearSPHelper.getMemoryShow();
-            for (UsageStats usageStats : lists) {
-                if (indexP >= size) {
-                    return junkList;
-                }
-                indexP++;
-                if (isFinish) {
-                    //停止扫描
-                    return junkList;
-                }
-                if (mScanFileListener != null) {
-                    mScanFileListener.scanFile(usageStats.getPackageName());
-                }
-                if (!(usageStats.getPackageName() == null || ArrayUtil.arrayContainsStr(WHITE_LIST, usageStats.getPackageName()))) {
-                    String packageName = usageStats.getPackageName();
-                    if (!isSystemAppliation(packageName)) {
-                        if (installedList == null)
-                            installedList = getInstalledList();
-                        for (PackageInfo packageInfo : installedList) {
-                            if (TextUtils.equals(packageName.trim(), packageInfo.packageName)) {
-                                FirstJunkInfo junkInfo = new FirstJunkInfo();
-                                junkInfo.setAllchecked(true);
-                                junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
-                                junkInfo.setAppPackageName(packageName);
-                                if (!isService)
-                                    junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
-                                long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
-                                if (mScanFileListener != null) {
-                                    mScanFileListener.increaseSize(totalSize);
-                                }
-                                junkInfo.setTotalSize(totalSize);
-                                junkInfo.setGarbageType("TYPE_PROCESS");
-                                junkList.add(junkInfo);
-                            }
-                        }
-                    }
-                }
-            }
-        } else { //没有读取记录权限，造随机内存
-            //外部存储私有存储父文件
-            String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
-            //已经安装的应用信息
-            if (installedList == null)
-                installedList = getInstalledList();
-            int packageSize = installedList.size();
-            if (packageSize == 0)
-                return junkList;
-
-
-            int packNum = 30;
-            int sizeNum = 50;
-            if (!PreferenceUtil.getNowCleanTime()) {//三分钟以内
-                if (PreferenceUtil.getCacheIsCheckedAll()) {//上次全选
-                    Float packNumf = Float.valueOf(packNum) * PreferenceUtil.getMulCacheNum() * 0.6f;
-                    Float sizeNumF = Float.valueOf(sizeNum) * PreferenceUtil.getMulCacheNum() * 0.6f;
-                    packNum = packNumf < 2f ? 2 : packNumf.intValue();
-                    sizeNum = sizeNum < 1f ? 1 : sizeNumF.intValue();
-                } else {//上次非全选
-                    Float packNumf = Float.valueOf(packNum) * PreferenceUtil.getMulCacheNum();
-                    Float sizeNumF = Float.valueOf(sizeNum) * PreferenceUtil.getMulCacheNum();
-                    packNum = packNumf < 2f ? 2 : packNumf.intValue();
-                    sizeNum = sizeNum < 1f ? 1 : sizeNumF.intValue();
-                }
-            } else {
-                PreferenceUtil.saveMulCacheNum(1f);
-            }
-
-            int[] randomPosition = CountUtil.randomNumber(0, packageSize - 1, packageSize / 7 < packNum ? packNum : packageSize / 7);
-            for (int random : randomPosition) {
-                PackageInfo packageInfo = installedList.get(random);
-                if (isFinish) {
-                    //停止扫描
-                    return junkList;
-                }
-                if (mScanFileListener != null) {
-                    mScanFileListener.scanFile(rootPath + packageInfo.packageName);
-                }
-                if (!(packageInfo.packageName == null || ArrayUtil.arrayContainsStr(WHITE_LIST, packageInfo.packageName))) {
-                    String packageName = packageInfo.packageName;
-                    if (!isSystemAppliation(packageName)) {
-                        FirstJunkInfo junkInfo = new FirstJunkInfo();
-                        junkInfo.setAllchecked(true);
-                        junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
-                        junkInfo.setAppPackageName(packageName);
-                        if (!isService)
-                            junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
-                        long totalSize = (long) ((Math.random() * 1024 * 1024 * sizeNum) + 1024 * 1024 * sizeNum);
-                        if (mScanFileListener != null) {
-                            mScanFileListener.increaseSize(totalSize);
-                        }
-                        junkInfo.setTotalSize(totalSize);
-                        junkInfo.setGarbageType("TYPE_PROCESS");
-                        junkList.add(junkInfo);
-                    }
-
-                }
-            }
-
+            return getTaskInfos26(junkList, lists);  //授权过
+        } else {
+            return getTaskInfos26UnGrant(junkList);   //没有读取记录权限，造随机内存
         }
-        return junkList;
+    }
 
+    private ArrayList<FirstJunkInfo> getTaskInfos26UnGrant(ArrayList<FirstJunkInfo> junkList) {
+        //外部存储私有存储父文件
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
+        //已经安装的应用信息
+        if (installedList == null)
+            installedList = getInstalledList();
+        int packageSize = installedList.size();
+        if (packageSize == 0)
+            return junkList;
+        int sizeNum = 50;
+        float sizeNumF = (float) sizeNum * PreferenceUtil.getMulCacheNum();
+        sizeNum = (int) sizeNumF;
+
+        List<PackageInfo> customAppList = new ArrayList<>();
+        for (PackageInfo p : installedList) {
+            if (!isSystemAppliation(p.packageName) && !ArrayUtil.arrayContainsStr(WHITE_LIST, p.packageName)) {
+                customAppList.add(p);
+            }
+        }
+
+        List<PackageInfo> junkAppList = new ArrayList<>();
+
+        if (customAppList.size() <= 15) {
+            junkAppList.addAll(customAppList);
+        } else {
+            int[] randomPosition = CountUtil.randomNumber(0, customAppList.size(), (int) (Math.random() * 15 + 15));
+            for (int random : randomPosition) {
+                PackageInfo packageInfo = customAppList.get(random);
+                junkAppList.add(packageInfo);
+            }
+        }
+
+        for (PackageInfo p : junkAppList) {
+            if (isFinish) {
+                //停止扫描
+                return junkList;
+            }
+            if (mScanFileListener != null) {
+                mScanFileListener.scanFile(rootPath + p.packageName);
+            }
+            String packageName = p.packageName;
+            FirstJunkInfo junkInfo = new FirstJunkInfo();
+            junkInfo.setAllchecked(true);
+            junkInfo.setAppName(getAppName(p.applicationInfo));
+            junkInfo.setAppPackageName(packageName);
+            if (!isService)
+                junkInfo.setGarbageIcon(getAppIcon(p.applicationInfo));
+            long totalSize = (long) ((Math.random() * 1024 * 1024 * sizeNum) + 1024 * 1024 * sizeNum);
+            if (mScanFileListener != null) {
+                mScanFileListener.increaseSize(totalSize);
+            }
+            junkInfo.setTotalSize(totalSize);
+            junkInfo.setGarbageType("TYPE_PROCESS");
+            junkList.add(junkInfo);
+        }
+
+        return junkList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private ArrayList<FirstJunkInfo> getTaskInfos26(ArrayList<FirstJunkInfo> junkList, List<UsageStats> lists) {
+        Collections.sort(lists, (o1, o2) -> Long.compare(o1.getLastTimeUsed(), o2.getLastTimeStamp()));
+        if (installedList == null)
+            installedList = getInstalledList();
+
+        HashMap<String, PackageInfo> installedCustomApp = new HashMap<>();
+        for (PackageInfo packageInfo : installedList) {
+            if (!isSystemAppliation(packageInfo.packageName) && !ArrayUtil.arrayContainsStr(WHITE_LIST, packageInfo.packageName)) {
+                installedCustomApp.put(packageInfo.packageName, packageInfo);
+            }
+        }
+
+        for (UsageStats usageStats : lists) {
+            if (isFinish) {
+                //停止扫描
+                return junkList;
+            }
+            if (mScanFileListener != null) {
+                mScanFileListener.scanFile(usageStats.getPackageName());
+            }
+            if (usageStats.getPackageName() != null) {
+                String packageName = usageStats.getPackageName();
+                PackageInfo packageInfo = installedCustomApp.get(packageName);
+                FirstJunkInfo junkInfo = new FirstJunkInfo();
+                junkInfo.setAllchecked(true);
+                junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
+                junkInfo.setAppPackageName(packageName);
+                if (!isService)
+                    junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
+                long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
+                if (mScanFileListener != null) {
+                    mScanFileListener.increaseSize(totalSize);
+                }
+                junkInfo.setTotalSize(totalSize);
+                junkInfo.setGarbageType("TYPE_PROCESS");
+                junkList.add(junkInfo);
+            }
+        }
+
+        ArrayList<FirstJunkInfo> result = new ArrayList<>();
+        if (junkList.size() > 30) {
+            result.addAll(junkList.subList(0, 30));
+        } else {
+            result.addAll(junkList);
+        }
+        return result;
     }
 
 

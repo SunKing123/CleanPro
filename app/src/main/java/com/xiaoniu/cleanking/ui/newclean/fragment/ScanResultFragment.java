@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hellogeek.permission.strategy.ExternalInterface;
@@ -53,8 +54,8 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     RecyclerView rv_content_list;
     @BindView(R.id.fl_ad_container)
     FrameLayout adContainer;
-    @BindView(R.id.tv_deep_clean)
-    TextView tv_deep_clean;
+    @BindView(R.id.ll_deep_clean)
+    LinearLayout ll_deep_clean;
     @BindView(R.id.tv_clean_junk)
     TextView tv_clean_junk;
     @BindView(R.id.tv_junk_total)
@@ -88,12 +89,12 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
         rv_content_list.setAdapter(mScanResultAdapter = new ScanResultAdapter(this));
 
         if (ExternalInterface.getInstance(requireActivity()).isOpenAllPermission(requireActivity())) {
-            tv_deep_clean.setVisibility(View.GONE);
+            ll_deep_clean.setVisibility(View.GONE);
         } else {
-            tv_deep_clean.setVisibility(View.VISIBLE);
+            ll_deep_clean.setVisibility(View.VISIBLE);
         }
 
-        tv_deep_clean.setOnClickListener(v -> {
+        ll_deep_clean.setOnClickListener(v -> {
             //判断如果没有授权的话，则进入授权界面
             StatisticsUtils.trackClick("deep_cleaning_click", "深度清理点击",
                     "clean_scan_page", "clean_scan_result_page");
@@ -186,7 +187,6 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
                 "clean_scan_page", "clean_scan_result_page", extParam);
         tv_junk_total.setText(totalSize);
         tv_junk_unit.setText(unit);
-        tv_clean_junk.setText(getString(R.string.clean_btn, totalSize + unit));
 
         HashMap<String, Object> numParam = new HashMap<>();
         numParam.put("number_of_documents", ((NowCleanActivity) requireActivity()).getScanningFileCount());
@@ -197,6 +197,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     @Override
     public void setCheckedJunkResult(String resultSize) {
         tv_checked_total.setText(getString(R.string.scan_result_check_total, resultSize));
+        tv_clean_junk.setText(getString(R.string.clean_btn, resultSize));
     }
 
     @Override

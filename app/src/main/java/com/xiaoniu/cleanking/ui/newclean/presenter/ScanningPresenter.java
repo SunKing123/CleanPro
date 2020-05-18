@@ -57,13 +57,13 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                     if (getView() != null) {
                         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalJunk);
                         getView().setScanningJunkTotal(countEntity.getTotalSize(), countEntity.getUnit());
-                        if (Float.parseFloat(countEntity.getTotalSize()) < 50F) {
+                        if (countEntity.getNumber() < 1024 * 1024 * 50) {
                             if (currentLevel == ScanningLevel.Little) {
                                 return;
                             }
                             currentLevel = ScanningLevel.Little;
                             getView().setScanningBackgroundColor(ScanningLevel.Little.getColor(), ScanningLevel.Little.getColor());
-                        } else if (Float.parseFloat(countEntity.getTotalSize()) >= 50F && Float.parseFloat(countEntity.getTotalSize()) < 100F) {
+                        } else if (countEntity.getNumber() >= 1024 * 1024 * 50 && countEntity.getNumber() < 1024 * 1024 * 10) {
                             if (currentLevel == ScanningLevel.Middle) {
                                 return;
                             }
