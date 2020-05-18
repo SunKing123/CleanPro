@@ -125,7 +125,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
                             @Override
                             public void onADExposure(NativeExpressADView nativeExpressADView) {
                                 Log.d(TAG, "优量会模板 onADExposure ");
-                                StatisticsUtils.customAD("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
+                                StatisticsUtils.customADRequest("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override

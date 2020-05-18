@@ -297,14 +297,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         skipView.setOnClickListener(v ->
         {
             skipView.clearAnimation();
-            JSONObject extension = new JSONObject();
-            try {
-                extension.put("ad_id", mSecondAdvertId);
-                extension.put("ad_agency", "优量汇");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page");
             jumpActivity();
         });
         //页面创建事件埋点

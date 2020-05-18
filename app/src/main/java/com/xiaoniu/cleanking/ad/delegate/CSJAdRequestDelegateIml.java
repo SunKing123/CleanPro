@@ -149,6 +149,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                             @Override
                             public void onAdClicked(View view, int type) {
                                 Log.d(TAG, "穿山甲模板 onAdClicked");
+                                StatisticsUtils.clickAD("ad_click", "广告点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
 
@@ -187,7 +188,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                                         adShowCallBack.onCloseCallback(adRequestParamentersBean.index);
                                     }
                                     ttNativeExpressAd.destroy();
-                                    StatisticsUtils.clickAD("ad_close_click", "关闭点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
+                                    StatisticsUtils.clickAD("ad_close_click", "关闭点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                                 }
                             }
 
