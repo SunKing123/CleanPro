@@ -37,30 +37,39 @@ public class AdRequestParamentersBean {
     //期待高度
     public int viewHeight;
 
+    //信息流下标
     public int index;
 
+    //埋点 上一级界面id 产品定义
+    public String sourcePageId;
+    //埋点 界面id 产品定义
+    public String currentPageId;
 
 
     /**
-     *普通单个广告使用
+     * 普通单个广告使用
+     *
      * @param configKey
      * @param advertPosition
      * @param context
      * @param adType
-     * @param viewWidth  宽度  单位dp
-     * @param viewHeight  如果高度需要自定义，请给0
+     * @param viewWidth      宽度  单位dp
+     * @param viewHeight     如果高度需要自定义，请给0
      */
-    public AdRequestParamentersBean(String configKey, String advertPosition, Context context, AdType adType,  int viewWidth, int viewHeight) {
+    public AdRequestParamentersBean(String configKey, String advertPosition, Context context, AdType adType, int viewWidth, int viewHeight,String sourcePageId, String currentPageId) {
         this.configKey = configKey;
         this.advertPosition = advertPosition;
         this.context = context;
         this.adType = adType;
         this.viewWidth = viewWidth;
         this.viewHeight = viewHeight;
+        this.sourcePageId = sourcePageId;
+        this.currentPageId = currentPageId;
     }
 
     /**
      * 开屏 使用
+     *
      * @param context
      * @param adContainer
      * @param skipContainer
@@ -69,7 +78,7 @@ public class AdRequestParamentersBean {
      * @param adType
      * @param fetchDelay
      */
-    public AdRequestParamentersBean( Context context,ViewGroup adContainer, LinearLayout skipContainer,String configKey, String advertPosition, AdType adType, int fetchDelay) {
+    public AdRequestParamentersBean(Context context, ViewGroup adContainer, LinearLayout skipContainer, String configKey, String advertPosition, AdType adType, int fetchDelay,String sourcePageId, String currentPageId) {
         this.configKey = configKey;
         this.advertPosition = advertPosition;
         this.context = context;
@@ -77,10 +86,13 @@ public class AdRequestParamentersBean {
         this.fetchDelay = fetchDelay;
         this.adContainer = adContainer;
         this.skipContainer = skipContainer;
+        this.sourcePageId = sourcePageId;
+        this.currentPageId = currentPageId;
     }
 
     /**
-     *信息流使用
+     * 信息流使用
+     *
      * @param configKey
      * @param advertPosition
      * @param context
@@ -88,13 +100,15 @@ public class AdRequestParamentersBean {
      * @param viewWidth
      * @param viewHeight
      */
-    public AdRequestParamentersBean(String configKey, String advertPosition, Context context, AdType adType,  int viewWidth, int viewHeight,int index) {
+    public AdRequestParamentersBean(String configKey, String advertPosition, Context context, AdType adType, int viewWidth, int viewHeight, int index, String sourcePageId, String currentPageId) {
         this.configKey = configKey;
         this.advertPosition = advertPosition;
         this.context = context;
         this.adType = adType;
         this.viewWidth = viewWidth;
         this.viewHeight = viewHeight;
-        this.index=index;
+        this.index = index;
+        this.sourcePageId = sourcePageId;
+        this.currentPageId = currentPageId;
     }
 }

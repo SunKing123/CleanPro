@@ -220,7 +220,9 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
                 this,
                 AdType.Template,
                 (int) ScreenUtils.getScreenWidthDp(this)-32,
-                0);
+                0,
+                source_page,
+                currentPage);
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {

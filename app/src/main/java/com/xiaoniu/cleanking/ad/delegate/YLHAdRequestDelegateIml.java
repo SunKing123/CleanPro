@@ -40,7 +40,7 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
         adModel.getYLHSplashAd(adRequestParamentersBean, adRequestBean)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(3, TimeUnit.SECONDS)
                 .subscribe(new Consumer<AdYLHEmitterBean>() {
                     @Override
                     public void accept(AdYLHEmitterBean adYLHEmitterBean) throws Exception {
@@ -48,7 +48,6 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
                             return;
                         }
                         Log.d(TAG, "优量会 开屏----onAdShowCallBack");
-
                         adShowCallBack.onAdShowCallBack(adYLHEmitterBean.nativeExpressADView);
 //                        adYLHEmitterBean.nativeExpressADView.destroy();
                     }

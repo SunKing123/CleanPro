@@ -56,7 +56,7 @@ import okhttp3.RequestBody;
 
 public class AdModel extends BaseModel implements AdContract.Model {
 
-    private final String TAG="ad_status";
+    private final String TAG = "ad_status";
 
     /**
      * 优量会模板
@@ -72,67 +72,76 @@ public class AdModel extends BaseModel implements AdContract.Model {
             @Override
             public void subscribe(ObservableEmitter<AdYLHEmitterBean> emitter) throws Exception {
                 ADSize adSize = new ADSize(adRequestParamentersBean.viewWidth, ADSize.AUTO_HEIGHT);
-                AdYLHEmitterBean adYLHEmitterBean=new AdYLHEmitterBean();
+                AdYLHEmitterBean adYLHEmitterBean = new AdYLHEmitterBean();
+                String advertPosition = "1";
+                switch (adRequestParamentersBean.advertPosition) {
+                    case PositionId.DRAW_ONE_CODE:
+                        advertPosition = "1";
+                        break;
+                }
                 NativeExpressAD nativeExpressAD = new NativeExpressAD(adRequestParamentersBean.context,
                         adSize,
                         PositionId.APPID,
                         adRequestBean.getAdvertId(),
-                        new NativeExpressAD.NativeExpressADListener(){
+                        new NativeExpressAD.NativeExpressADListener() {
                             @Override
                             public void onNoAD(AdError adError) {
                                 Log.d(TAG, "优量会模板 onNoAD message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode());
                                 emitter.onError(new Throwable("优量会模板 onNoAD message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode()));
                                 emitter.onComplete();
+                                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADLoaded(List<NativeExpressADView> list) {
-                                Log.d(TAG, "优量会模板 onADLoaded   当前位置index是： "+adRequestParamentersBean.index);
+                                Log.d(TAG, "优量会模板 onADLoaded   当前位置index是： " + adRequestParamentersBean.index);
                                 if (CollectionUtils.isEmpty(list)) {
                                     emitter.onError(new Throwable("优量会模板 onADLoaded,但是没有广告"));
                                     emitter.onComplete();
                                 }
                                 NativeExpressADView nativeExpressADView = list.get(0);
-                                emitter.onNext(new AdYLHEmitterBean(nativeExpressADView,adRequestParamentersBean.index,1));
+                                emitter.onNext(new AdYLHEmitterBean(nativeExpressADView, adRequestParamentersBean.index, 1));
                                 nativeExpressADView.render();
 //                                emitter.onComplete();
                             }
 
                             @Override
                             public void onRenderFail(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onRenderFail 当前位置index是： "+adRequestParamentersBean.index +" 广告位 adposition"+adRequestParamentersBean.advertPosition);
+                                Log.d(TAG, "优量会模板 onRenderFail 当前位置index是： " + adRequestParamentersBean.index + " 广告位 adposition" + adRequestParamentersBean.advertPosition);
                                 emitter.onError(new Throwable("优量会模板 onRenderFail"));
                                 emitter.onComplete();
                             }
 
                             @Override
                             public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onRenderSuccess   当前位置index是： "+adRequestParamentersBean.index);
-                                Log.d("----------------","优量会模板 onRenderSuccess index:"+adRequestParamentersBean.index);
+                                Log.d(TAG, "优量会模板 onRenderSuccess   当前位置index是： " + adRequestParamentersBean.index);
+                                Log.d("----------------", "优量会模板 onRenderSuccess index:" + adRequestParamentersBean.index);
 
-                                emitter.onNext(new AdYLHEmitterBean(nativeExpressADView,adRequestParamentersBean.index,2));
+                                emitter.onNext(new AdYLHEmitterBean(nativeExpressADView, adRequestParamentersBean.index, 2));
 //                                emitter.onComplete();
+                                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADExposure(NativeExpressADView nativeExpressADView) {
                                 Log.d(TAG, "优量会模板 onADExposure ");
-
+                                StatisticsUtils.customAD("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADClicked(NativeExpressADView nativeExpressADView) {
                                 Log.d(TAG, "优量会模板 onADClicked ");
+                                StatisticsUtils.clickAD("ad_click", "广告点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADClosed(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onADClosed index:"+adRequestParamentersBean.index);
-                                emitter.onNext(new AdYLHEmitterBean(nativeExpressADView,adRequestParamentersBean.index,3));
+                                Log.d(TAG, "优量会模板 onADClosed index:" + adRequestParamentersBean.index);
+                                emitter.onNext(new AdYLHEmitterBean(nativeExpressADView, adRequestParamentersBean.index, 3));
                                 emitter.onComplete();
-                                Log.d("----------------","优量会模板 onADClosed index:"+adRequestParamentersBean.index);
-
+                                Log.d("----------------", "优量会模板 onADClosed index:" + adRequestParamentersBean.index);
                                 nativeExpressADView.destroy();
+                                StatisticsUtils.clickAD("ad_close_click", "关闭点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
@@ -191,34 +200,37 @@ public class AdModel extends BaseModel implements AdContract.Model {
                             public void onNoAD(AdError adError) {
                                 Log.d(TAG, "优量会 开屏----onNoAD  获取广告失败  message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode());
                                 emitter.onError(new Throwable("优量会 开屏----onNoAD  获取广告失败  message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode()));
+                                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADPresent() {
                                 Log.d(TAG, "优量会 开屏----onADPresent");
-                                emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index,0,2));
+                                emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index, 0, 2));
                                 emitter.onComplete();
+                                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADClicked() {
                                 Log.d(TAG, "优量会 开屏----onADClicked");
-                                StatisticsUtils.clickAD("ad_click", "广告点击", "1", adRequestBean.getAdvertId(), "优量汇", "clod_splash_page", "clod_splash_page", "");
+                                StatisticsUtils.clickAD("ad_click", "广告点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADTick(long millisUntilFinished) {
-                                Log.d(TAG, "优量会 开屏----onADTick");
+                                Log.d(TAG, "优量会 开屏----onADTick"+millisUntilFinished);
                             }
 
                             @Override
                             public void onADExposure() {
                                 Log.d(TAG, "优量会 开屏----onADExposure");
-                                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", adRequestBean.getAdvertId(), "优量汇", "clod_splash_page", "clod_splash_page", "");
+                                StatisticsUtils.customAD("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADLoaded(long l) {
+                                Log.d(TAG, "优量会 开屏----onADLoaded"+l);
 
                             }
 
@@ -255,17 +267,18 @@ public class AdModel extends BaseModel implements AdContract.Model {
                 mTTAdNative.loadNativeExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
                     @Override
                     public void onError(int i, String s) {
-                        Log.d(TAG, "穿山甲模板广告失败 message:" + s + " code:" + i +"当前位置index是： "+adRequestParamentersBean.index +" 广告位 adposition"+adRequestParamentersBean.advertPosition);
-                        emitter.onError(new Throwable("code "+i+" message:"+s));
+                        Log.d(TAG, "穿山甲模板广告失败 message:" + s + " code:" + i + "当前位置index是： " + adRequestParamentersBean.index + " 广告位 adposition" + adRequestParamentersBean.advertPosition);
+                        emitter.onError(new Throwable("code " + i + " message:" + s));
                         emitter.onComplete();
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                     }
 
                     @Override
                     public void onNativeExpressAdLoad(List<TTNativeExpressAd> list) {
-                        Log.d(TAG, "穿山甲模板广告成功！");
-                        Log.d(TAG, "穿山甲模板广告成功 当前位置index是： "+adRequestParamentersBean.index +" 广告位 adposition"+adRequestParamentersBean.advertPosition);
+                        Log.d(TAG, "穿山甲模板广告成功 当前位置index是： " + adRequestParamentersBean.index + " 广告位 adposition" + adRequestParamentersBean.advertPosition);
                         emitter.onNext(list);
                         emitter.onComplete();
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                     }
                 });
             }
@@ -280,7 +293,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
      */
     @Override
     public Observable<TTSplashAd> getCSJSplashAd(AdRequestParamentersBean adRequestParamentersBean, AdRequestBean adRequestBean) {
-       return Observable.create(new ObservableOnSubscribe<TTSplashAd>() {
+        return Observable.create(new ObservableOnSubscribe<TTSplashAd>() {
             @Override
             public void subscribe(ObservableEmitter<TTSplashAd> emitter) throws Exception {
                 Log.d(TAG, "穿山甲开屏开始 id:" + adRequestBean.getAdvertId());
@@ -295,11 +308,13 @@ public class AdModel extends BaseModel implements AdContract.Model {
                     public void onError(int i, String s) {
                         Log.d(TAG, "穿山甲开屏广告失败 message:" + s + " code:" + i);
                         emitter.onError(new Throwable(s));
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                     }
 
                     @Override
                     public void onTimeout() {
                         emitter.onError(new TimeoutException("穿山甲广告商请求超时"));
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                     }
 
                     @Override
@@ -307,7 +322,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
                         Log.d(TAG, "穿山甲开屏广告成功！");
                         emitter.onNext(ttSplashAd);
                         emitter.onComplete();
-
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                     }
                 }, adRequestParamentersBean.fetchDelay);
             }
@@ -332,7 +347,27 @@ public class AdModel extends BaseModel implements AdContract.Model {
                 .subscribeWith(commonSubscriber);
     }
 
-
+    /**
+     * 埋点获取AdvertPositio
+     *
+     * @param adRequestParamentersBean
+     * @return
+     */
+    private String getAdvertPosition(AdRequestParamentersBean adRequestParamentersBean) {
+        String advertPosition = "1";
+        switch (adRequestParamentersBean.advertPosition) {
+            case PositionId.DRAW_ONE_CODE:
+                advertPosition = "1";
+                break;
+            case PositionId.DRAW_TWO_CODE:
+                advertPosition = "2";
+                break;
+            case PositionId.DRAW_THREE_CODE:
+                advertPosition = "3";
+                break;
+        }
+        return advertPosition;
+    }
 }
 
 

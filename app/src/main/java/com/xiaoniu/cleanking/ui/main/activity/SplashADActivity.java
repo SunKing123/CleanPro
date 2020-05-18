@@ -487,7 +487,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 PositionId.SPLASH_ID,
                 PositionId.COLD_CODE,
                 AdType.Splash,
-                3000);
+                3000,
+                "clod_splash_page",
+                "clod_splash_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
 
             @Override

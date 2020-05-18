@@ -369,6 +369,30 @@ public class StatisticsUtils {
     }
 
     /**
+     * 广告曝光
+     * @param event_code
+     * @param event_name
+     * @param ad_position_id
+     * @param ad_id
+     * @param ad_agency
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void customAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("ad_position_id", ad_position_id);
+            extension.put("ad_id", ad_id);
+            extension.put("ad_agency", ad_agency);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackEvent(event_code, event_name, extension);
+    }
+
+    /**
      * 广告请求_自定义 类型
      *
      * @param event_code
@@ -416,6 +440,30 @@ public class StatisticsUtils {
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
             extension.put("ad_title", title);
+            extension.put("ad_agency", ad_agency);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackClick(event_code, event_name, extension);
+    }
+
+    /**
+     * 广告点击
+     * @param event_code
+     * @param event_name
+     * @param ad_position_id
+     * @param ad_id
+     * @param ad_agency
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void clickAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("ad_position_id", ad_position_id);
+            extension.put("ad_id", ad_id);
             extension.put("ad_agency", ad_agency);
         } catch (Exception e) {
             e.printStackTrace();

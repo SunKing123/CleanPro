@@ -124,7 +124,9 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
                 requireContext(),
                 AdType.Template,
                 (int) ScreenUtils.getScreenWidthDp(requireContext()),
-                0);
+                0,
+                "clean_scan_page",
+                "home_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {

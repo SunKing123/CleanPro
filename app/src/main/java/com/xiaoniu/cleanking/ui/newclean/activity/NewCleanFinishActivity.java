@@ -956,8 +956,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
         String configKey=getConfigkey();
         if(!TextUtils.isEmpty(configKey)){
-            loadAdUp(configKey);
-            loadAdDown(configKey);
+            loadAdUp();
+            loadAdDown();
         }
 //        startLoadData();  // XD delete 20200512
         loadFeedData();  // XD add for feed
@@ -1212,15 +1212,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     /**
      * 加载上广告
-     * @param configKey
      */
-    private void loadAdUp(String configKey){
+    private void loadAdUp(){
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_ONE_CODE,
                 this,
                 AdType.Template,
                 (int) ScreenUtils.getScreenWidthDp(this)-32,
-                0);
+                0,
+                source_page,
+                currentPage);
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
@@ -1249,15 +1250,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     /**
      * 加载下广告
-     * @param configKey
      */
-    private void loadAdDown(String configKey){
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(configKey,
+    private void loadAdDown(){
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_TWO_CODE,
                 this,
                 AdType.Template,
                 (int) ScreenUtils.getScreenWidthDp(this)-32,
-                0);
+                0,
+                source_page,
+                currentPage);
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
