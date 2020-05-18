@@ -44,6 +44,15 @@ public interface ScanningContact {
          */
         void setScanningFinish(LinkedHashMap<ScanningResultType, JunkGroup> scanningModelList);
 
+        /**
+         * 总共的扫描时间
+         */
+        void setScanningCountTime(long scanningCountTime);
+
+        /**
+         * 文件总数
+         */
+        void setScanningFileCount(int fileCount);
     }
 
     interface IPresenter extends IBasePresenter {

@@ -2,9 +2,6 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
 import android.arch.lifecycle.ProcessLifecycleOwner;
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.migration.Migration;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -132,15 +129,22 @@ public class ApplicationDelegate implements IApplicationDelegate {
     //埋点初始化
     private void initNiuData(Application application) {
         //测试环境
-        NiuDataAPI.init(application, new Configuration()
+        Configuration configuration = new Configuration()
                 //切换到sdk默认的测试环境地址
                 .serverUrl(BuildConfig.STATISTICS_URL)
                 .setHeartbeatUrl(BuildConfig.STATISTICS_URL)
-                //打开sdk日志信息
-                .logOpen()
                 .setHeartbeatInterval(5000)
-                .channel(ChannelUtil.getChannel())
-        );
+                .channel(ChannelUtil.getChannel());
+        //事件上报策略（批量 或 单条）（默认是批量，可不设置）
+        if (BuildConfig.DEBUG) {
+            configuration.setTimelyReport(true);
+            //log
+            configuration.logOpen();
+        } else {
+            configuration.logClose();
+        }
+        //测试环境
+        NiuDataAPI.init(application, configuration);
 
         NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
             @Override

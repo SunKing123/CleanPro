@@ -135,6 +135,10 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                 cleanEvent.setCleanAminOver(true);
                 EventBus.getDefault().post(cleanEvent);
                 mSPHelper.saveCleanTime(System.currentTimeMillis());
+
+                if(getView() != null){
+                    getView().setCleanJunkOver();
+                }
             }
         });
     }

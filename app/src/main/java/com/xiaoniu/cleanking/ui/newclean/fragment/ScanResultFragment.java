@@ -31,9 +31,11 @@ import com.xiaoniu.cleanking.ui.newclean.contact.ScanResultContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanResultPresenter;
 import com.xiaoniu.cleanking.utils.LayoutAnimationHelper;
 import com.xiaoniu.cleanking.utils.OnItemClickListener;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -93,6 +95,8 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
         tv_deep_clean.setOnClickListener(v -> {
             //判断如果没有授权的话，则进入授权界面
+            StatisticsUtils.trackClick("deep_cleaning_click", "深度清理点击",
+                    "clean_scan_page", "clean_scan_result_page");
             DeepCleanPermissionActivity.start(requireActivity());
         });
 
@@ -173,10 +177,19 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     }
 
     @Override
-    public void setJunkTotalResultSize(String totalSize, String unit) {
+    public void setJunkTotalResultSize(String totalSize, String unit, long number) {
+        HashMap<String, Object> extParam = new HashMap<>();
+        extParam.put("garbage_file_size", number);
+        StatisticsUtils.customTrackEvent("garbage_file_size", "垃圾清理_扫描结果_垃圾体积",
+                "clean_scan_page", "clean_scan_result_page", extParam);
         tv_junk_total.setText(totalSize);
         tv_junk_unit.setText(unit);
         tv_clean_junk.setText(getString(R.string.clean_btn, totalSize + unit));
+
+        HashMap<String, Object> numParam = new HashMap<>();
+        numParam.put("number_of_documents", ((NowCleanActivity) requireActivity()).getScanningFileCount());
+        StatisticsUtils.customTrackEvent("number_of_documents", "垃圾清理_扫描结果_文件数量",
+                "clean_scan_page", "clean_scan_result_page", numParam);
     }
 
     @Override

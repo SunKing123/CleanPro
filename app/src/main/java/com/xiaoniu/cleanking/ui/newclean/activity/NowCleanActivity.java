@@ -33,6 +33,7 @@ public class NowCleanActivity extends BaseActivity {
     private boolean isScan = false;
     private boolean isClean = true;
     private boolean isBackClick = false;
+    private int scanningFileCount = 0;
 
     private LinkedHashMap<ScanningResultType, JunkGroup> junkTitleMap;
     private LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap;
@@ -217,5 +218,13 @@ public class NowCleanActivity extends BaseActivity {
 
     public LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> getJunkContentMap() {
         return junkContentMap;
+    }
+
+    public void setScanningFileCount(int fileCount) {
+        scanningFileCount = fileCount;
+    }
+
+    public int getScanningFileCount() {
+        return scanningFileCount;
     }
 }

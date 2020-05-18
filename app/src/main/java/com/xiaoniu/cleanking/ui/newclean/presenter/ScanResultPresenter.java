@@ -52,7 +52,7 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
         CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalSize);
         //展示扫描到的垃圾总量
         if (getView() != null) {
-            getView().setJunkTotalResultSize(mCountEntity.getTotalSize(), mCountEntity.getUnit());
+            getView().setJunkTotalResultSize(mCountEntity.getTotalSize(), mCountEntity.getUnit(), mCountEntity.getNumber());
         }
     }
 
