@@ -81,7 +81,6 @@ public class AdModel extends BaseModel implements AdContract.Model {
                 }
                 NativeExpressAD nativeExpressAD = new NativeExpressAD(adRequestParamentersBean.context,
                         adSize,
-                        PositionId.APPID,
                         adRequestBean.getAdvertId(),
                         new NativeExpressAD.NativeExpressADListener() {
                             @Override
@@ -188,7 +187,6 @@ public class AdModel extends BaseModel implements AdContract.Model {
             public void subscribe(ObservableEmitter<AdYLHEmitterBean> emitter) throws Exception {
                 SplashAD splashAD = new SplashAD((Activity) adRequestParamentersBean.context,
                         adRequestParamentersBean.skipContainer,
-                        PositionId.APPID,
                         adRequestBean.getAdvertId(),
                         new SplashADListener() {
                             @Override
