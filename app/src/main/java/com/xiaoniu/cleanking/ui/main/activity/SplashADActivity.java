@@ -354,12 +354,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         s1 += "<a href=\"https://www.baidu.com\" color='#06C581'><font color='#06C581'>百度链接</font></a>";
 
 
-        String html = "<html>欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
+        String html = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
                 "特此向您说明。作为互联网安全公司，" +
                 "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。" +
                 "在使用悟空清理前，请务必仔细阅读并了解<font color='#06C581'><a href=\"https://www.baidu.com\">《隐私政策》</a></font>和" +
                 "<font color='#06C581'><a href=\"https://www.baidu.com\">《用户协议》</a></font>" +
-                "全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。</html>";
+                "全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。";
 
 
         confirmDialogFragment = ConfirmDialogFragment.newInstance();
@@ -426,7 +426,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                     }, 2000); // 延时1秒
                     return;
                 }
-                skipTv.setText(mStart);
+                skipTv.setText(mStart + "");
                 handler.postDelayed(this, 1000);
             }
         };

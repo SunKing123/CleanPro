@@ -39,7 +39,7 @@
             android:clickable="false"
             android:gravity="center"
             android:padding="@dimen/dimen_5dp"
-            android:text="跳过 5 "
+            android:text="5"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_14sp" />
 

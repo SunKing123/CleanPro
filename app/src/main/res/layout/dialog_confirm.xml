@@ -5,7 +5,10 @@
     android:layout_marginLeft="@dimen/dimen_12dp"
     android:layout_marginRight="@dimen/dimen_12dp"
     android:background="@drawable/bg_confixm_dialog"
-    android:padding="@dimen/dimen_24dp">
+    android:paddingLeft="@dimen/dimen_24dp"
+    android:paddingTop="@dimen/dimen_24dp"
+    android:paddingRight="@dimen/dimen_24dp"
+    android:paddingBottom="@dimen/dimen_18dp">
 
     <TextView
         android:id="@+id/txt_title"
@@ -22,20 +25,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_title"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:layout_marginRight="@dimen/dimen_24dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginRight="@dimen/dimen_10dp"
+        android:lineSpacingExtra="@dimen/dimen_5dp"
         android:text="欢迎使用悟空清理！我们依据最新的法律要求，
         更新了隐私政策，特此向您说明。作为互联网安全公司，
         我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。
         在使用悟空清理前，请务必仔细阅读并了解"
         android:textColor="@color/color_666666"
-        android:textSize="@dimen/dimen_16sp" />
+        android:textSize="@dimen/dimen_14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_content"
-        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginTop="@dimen/dimen_18dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

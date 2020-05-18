@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.app;
 
+import android.Manifest;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -266,6 +268,11 @@ public class Constant {
             "com.xiaoniu",
             "com.geek.jk.weather.fission" // 知心天气
     );
+
+    public static String[] BASIC_PERMISSIONS = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
 }
 

@@ -356,7 +356,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         if (((Activity) context).isFinishing()) {
             return dlg;
         }
-        dlg.setCancelable(true);
+        dlg.setCancelable(false);
         dlg.show();
         Window window = dlg.getWindow();
         window.setContentView(R.layout.alite_permission_dialog);

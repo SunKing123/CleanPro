@@ -2,12 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dimen_32dp"
+    android:layout_marginLeft="@dimen/dimen_12dp"
+    android:layout_marginRight="@dimen/dimen_12dp"
     android:background="@drawable/bg_confixm_dialog"
-    android:padding="@dimen/dimen_20dp">
+    android:paddingBottom="@dimen/dimen_32dp">
 
     <ImageView
         android:id="@+id/iv_content"
-        android:layout_width="274dp"
+        android:layout_width="match_parent"
         android:layout_height="142dp"
         android:layout_centerHorizontal="true"
         android:background="@mipmap/wk_file_permission_dialog_bg" />
@@ -17,10 +20,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_content"
-        android:layout_marginTop="@dimen/dimen_12dp"
+        android:layout_marginTop="@dimen/dimen_28dp"
         android:gravity="center"
         android:text="检测到手机存在大量垃圾"
-        android:textColor="@color/color_ABF3D9"
+        android:textColor="@color/color_06C581"
         android:textSize="@dimen/dimen_16sp"
         android:textStyle="bold" />
 
@@ -68,12 +71,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_permission"
         android:layout_marginTop="@dimen/dimen_20dp"
-        android:layout_marginBottom="@dimen/dimen_12dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_confirm"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_38dp"
             android:layout_marginLeft="@dimen/dimen_42dp"

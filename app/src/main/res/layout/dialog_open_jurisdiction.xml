@@ -55,6 +55,7 @@
 
         <Button
             android:id="@+id/btn_confirm"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_38dp"
             android:layout_marginLeft="@dimen/dimen_42dp"

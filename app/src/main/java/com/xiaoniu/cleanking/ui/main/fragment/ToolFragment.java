@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.JurisdictionGuideActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
@@ -33,6 +34,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -52,6 +54,8 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.xiaoniu.cleanking.app.Constant.BASIC_PERMISSIONS;
 
 public class ToolFragment extends SimpleFragment {
 
@@ -109,7 +113,6 @@ public class ToolFragment extends SimpleFragment {
         });
         getAccessListBelow();
     }
-
 
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
@@ -184,6 +187,12 @@ public class ToolFragment extends SimpleFragment {
                 ToastUtils.showShort(R.string.tool_no_install_chat);
                 return;
             }
+            if (!PermissionUtils.checkPermission(getContext(), BASIC_PERMISSIONS)) {
+                // 跳转到权限引导页面
+                startActivity(new Intent(getActivity(), JurisdictionGuideActivity.class));
+                return;
+            }
+
             StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
@@ -193,9 +202,9 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(WechatCleanHomeActivity.class);
             } else {
 
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT,PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT, PositionId.DRAW_THREE_CODE);
 
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_chat_clear));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -226,10 +235,10 @@ public class ToolFragment extends SimpleFragment {
             //保存本次清理完成时间 保证每次清理时间间隔为3分钟
             if (!PreferenceUtil.getCleanTime()) {
 
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU,PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU, PositionId.DRAW_THREE_CODE);
 
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_one_key_speed));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -255,9 +264,9 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             } else {
 
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL,PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL, PositionId.DRAW_THREE_CODE);
 
-                if (isOpen && PreferenceUtil.getShowCount(getActivity(),getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
                     bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                     startActivity(CleanFinishAdvertisementActivity.class, bundle);
