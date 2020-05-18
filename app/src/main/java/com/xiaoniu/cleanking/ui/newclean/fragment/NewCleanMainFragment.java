@@ -1026,6 +1026,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     public void onKeyBack() {
+        if (hasXiding && NewsUtils.isShowHomeFeed()) {
+            goBackToClean(true);
+            return;
+        }
 //        long currentTimeMillis = System.currentTimeMillis();
 //        if (currentTimeMillis - firstTime > 1500) {
 //            Toast.makeText(getActivity(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
