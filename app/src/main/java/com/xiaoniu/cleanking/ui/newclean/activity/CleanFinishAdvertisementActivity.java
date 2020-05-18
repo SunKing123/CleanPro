@@ -215,7 +215,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     }
 
     private void loadAd(){
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(getConfigkey(),
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_THREE_CODE,
                 this,
                 AdType.Template,

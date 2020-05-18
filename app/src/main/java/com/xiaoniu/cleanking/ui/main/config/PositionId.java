@@ -37,6 +37,7 @@ public class PositionId {
     public static final String KEY_PHONE = "page_phone_clear_complete";
     public static final String KEY_GAME_JILI = "page_speed_game_encourag";
     public static final String KEY_GAME = "page_speed_game_complete";
+    public static final String KEY_CLEAN_FINSH="page_clean_up_complete";
     //垃圾清理
     public static final String KEY_SCAN_RESULT = "page_scan_result_complete";
     // XD added 20200514

@@ -1215,7 +1215,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * @param configKey
      */
     private void loadAdUp(String configKey){
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(configKey,
+        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_ONE_CODE,
                 this,
                 AdType.Template,
