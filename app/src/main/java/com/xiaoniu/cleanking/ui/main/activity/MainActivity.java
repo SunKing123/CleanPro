@@ -70,6 +70,7 @@ import butterknife.BindView;
 
 import static com.hellogeek.permission.Integrate.Permission.PACKAGEUSAGESTATS;
 import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
+import static com.xiaoniu.cleanking.keeplive.config.RunMode.POWER_SAVING;
 
 /**
  * main主页面
@@ -526,7 +527,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 // 启动保活服务
                 KeepAliveManager.toKeepAlive(
                         getApplication()
-                        , HIGH_POWER_CONSUMPTION,
+                        , POWER_SAVING,  //不使用播放无声音乐方式保活，节省电量
                         mContext.getString(R.string.push_content_default_title),
                         mContext.getString(R.string.push_content_default_content),
                         R.mipmap.applogo,
