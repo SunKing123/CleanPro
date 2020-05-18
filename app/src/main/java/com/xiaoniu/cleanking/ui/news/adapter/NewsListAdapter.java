@@ -70,6 +70,14 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     }
 
     /**
+     * @return
+     * @author xd.he
+     */
+    public boolean isDataEmpty() {
+        return mDatas == null || mDatas.size() == 0;
+    }
+
+    /**
      * 拼装广告数据
      *
      * @param datas

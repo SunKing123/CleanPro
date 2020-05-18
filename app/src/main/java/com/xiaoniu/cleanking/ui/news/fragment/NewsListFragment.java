@@ -101,9 +101,10 @@ public class NewsListFragment extends BaseFragment {
         });
 
         mLlNoNet.setOnClickListener(v -> {
-            if (!NetworkUtils.isNetConnected())
+            if (!NetworkUtils.isNetConnected()) {
                 ToastUtils.showShort(getString(R.string.tool_no_net_hint));
-
+                return;  // xd added 20200518
+            }
             mIsRefresh = true;
             startLoadData();
         });
@@ -114,10 +115,27 @@ public class NewsListFragment extends BaseFragment {
         mRecyclerView.refresh();
     }
 
+    /**
+     *
+     * @return
+     * @author xd.he
+     */
+    private boolean isDataEmpty() {
+        return mNewsAdapter == null || mNewsAdapter.isDataEmpty();
+    }
+
     public void startLoadData() {
         if (!NetworkUtils.isNetConnected()) {
-            if (mLlNoNet != null)
-                mLlNoNet.setVisibility(View.VISIBLE);
+            // XD modify 20200518
+            if (isDataEmpty()) {
+                setIsLoaded(false);
+                if (mLlNoNet != null) {
+                    mLlNoNet.setVisibility(View.VISIBLE);
+                }
+            } else {
+                ToastUtils.showShort(getString(R.string.tool_no_net_hint));
+            }
+            onRefreshComplete();
             return;
         }
 
@@ -154,13 +172,17 @@ public class NewsListFragment extends BaseFragment {
 
             @Override
             public void onComplete() {
-                if (mIsRefresh) {
-                    mRecyclerView.refreshComplete();
-                } else {
-                    mRecyclerView.loadMoreComplete();
-                }
+                onRefreshComplete();
             }
         });
+    }
+
+    private void onRefreshComplete() {
+        if (mIsRefresh) {
+            mRecyclerView.refreshComplete();
+        } else {
+            mRecyclerView.loadMoreComplete();
+        }
     }
 
     public void setIsRefresh(boolean isRefresh) {

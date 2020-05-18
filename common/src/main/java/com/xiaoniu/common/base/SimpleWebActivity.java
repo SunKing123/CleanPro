@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -18,10 +17,13 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.xiaoniu.common.R;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
 /**
@@ -30,6 +32,8 @@ import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
 public class SimpleWebActivity extends BaseActivity {
     public WebView mWebView;
+    private LinearLayout ll_no_network;
+
     public ProgressBar mProgressBar;
     public static final String KEY_URL = "url";//网页url
     public static final String KEY_TITLE = "title";//标题内容
@@ -86,6 +90,7 @@ public class SimpleWebActivity extends BaseActivity {
     protected void initViews(Bundle savedInstanceState) {
         StatisticsUtils.trackClick("information_page_view_page", "信息页面浏览", "selected_page", "information_page");
         mWebView = (WebView) findViewById(R.id.webView);
+        initNoNetworkView();
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         setLeftTitle(title);
         setLeftButton(R.drawable.common_icon_back_arrow_white, new View.OnClickListener() {
@@ -96,12 +101,56 @@ public class SimpleWebActivity extends BaseActivity {
         });
     }
 
+    /**
+     * @author xd.he
+     */
+    private void initNoNetworkView() {
+        ll_no_network = findViewById(R.id.ll_no_network);
+        ll_no_network.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickErrorView();
+            }
+        });
+    }
+
     @Override
     protected void loadData() {
         setWebSettings();
         setWebViewClient();
         setWebChromeClient();
-        loadUrl(url);
+        // XD modify
+        if (NetworkUtils.isNetConnected()) {
+            showNoNetView(false);
+            loadUrl(url);
+        } else {
+            showNoNetView(true);
+        }
+    }
+
+    /**
+     * @author xd.he
+     */
+    protected void showNoNetView(boolean isShow) {
+        if (isShow) {
+            ll_no_network.setVisibility(View.VISIBLE);
+            mWebView.setVisibility(View.GONE);
+        } else  {
+            ll_no_network.setVisibility(View.GONE);
+            mWebView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * @author xd.he
+     */
+    protected void onClickErrorView() {
+        if (NetworkUtils.isNetConnected()) {
+            showNoNetView(false);
+            loadUrl(url);
+        } else {
+            ToastUtils.showShort(getString(R.string.common_toast_no_network));
+        }
     }
 
     private void setWebSettings() {

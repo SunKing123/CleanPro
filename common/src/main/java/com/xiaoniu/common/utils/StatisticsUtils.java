@@ -23,6 +23,7 @@ public class StatisticsUtils {
      * @param currentPage 当前页面
      */
     public static void trackClick(String eventCode, String eventName, String sourcePage, String currentPage) {
+        // Log.d("StatisticsUtils", "!--->trackClick---eventCode:"+eventCode+"; eventName:"+eventName+"; sourcePage:"+sourcePage+"; currentPage:"+currentPage);
         trackClick(eventCode, eventName, sourcePage, currentPage, null);
     }
 
