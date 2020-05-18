@@ -70,6 +70,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     @InjectPresenter
     ScanResultPresenter presenter;
 
+    private String checkedResultSize;
     private ScanResultAdapter mScanResultAdapter;
 
     public static ScanResultFragment createFragment() {
@@ -196,6 +197,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
     @Override
     public void setCheckedJunkResult(String resultSize) {
+        checkedResultSize = resultSize;
         tv_checked_total.setText(getString(R.string.scan_result_check_total, resultSize));
         tv_clean_junk.setText(getString(R.string.clean_btn, resultSize));
     }

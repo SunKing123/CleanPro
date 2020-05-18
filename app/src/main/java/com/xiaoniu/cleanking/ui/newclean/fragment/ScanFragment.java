@@ -194,7 +194,7 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
 
     @Override
     public void setScanningFileCount(int fileCount) {
-        ((NowCleanActivity)requireActivity()).setScanningFileCount(fileCount);
+        ((NowCleanActivity) requireActivity()).setScanningFileCount(fileCount);
     }
 
     /**
