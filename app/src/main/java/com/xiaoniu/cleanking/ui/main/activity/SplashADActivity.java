@@ -68,6 +68,9 @@ import io.reactivex.disposables.Disposable;
  * 在调用SDK之前，如果您的App的targetSDKVersion >= 23，那么建议动态申请相关权限。
  */
 public class SplashADActivity extends BaseActivity<SplashPresenter> {
+
+    private static final String TAG = "SplashADActivity";
+
     private static final String SKIP_TEXT = "跳过 %d";
     public boolean canJump = false;
     @Inject
@@ -126,6 +129,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     public void jumpActivity() {
         final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
+        Log.d(TAG, "!--->jumpActivity------isFirst:"+isFirst);
         if (isFirst) {
             startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
         } else {
@@ -227,6 +231,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * 才可以跳转到开发者自己的App主页；当开屏广告是App类广告时只会下载App。
      */
     private void next() {
+        Log.d(TAG, "!--->next-----canJump:" + canJump);
         if (canJump) {
             jumpActivity();
             this.finish();
@@ -238,6 +243,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "!--->onPause-----canJump:" + canJump);
         canJump = false;
         if (findViewById(R.id.rl_open_new).getVisibility() == View.VISIBLE) {
             StatisticsUtils.onPageEnd("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
@@ -246,7 +252,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     @Override
     protected void initView() {
-
+        Log.d(TAG, "!--->initView------");
         PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
@@ -296,8 +302,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
         if (startsNumber != SECONDARY_STARTUP || !PermissionUtils.checkPermission(this, permissions)) {
             if (NetworkUtils.isNetConnected()) {
+                Log.d(TAG, "!--->initView---getAuditSwitch-------");
                 mPresenter.getAuditSwitch();
             } else {
+                Log.d(TAG, "!--->initView---getAuditSwitchFail---");
                 getAuditSwitchFail();
             }
         }
@@ -332,7 +340,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * @param auditSwitch
      */
     public void getAuditSwitch(AuditSwitch auditSwitch) {
-        Log.d("===============", " getAuditSwitch");
+        Log.d(TAG, "!--->----getAuditSwitch-----");
 
         if (auditSwitch == null) {
             //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
@@ -341,13 +349,16 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
         if (!PreferenceUtil.isNoFirstOpenApp()) {
+            Log.d(TAG, "!--->----getAuditSwitch---111--is FirstOpen App--");
             // PreferenceUtil.saveFirstOpenApp();
             // jumpActivity();
         } else if (auditSwitch.getData().equals("0")) {
+            Log.d(TAG, "!--->----getAuditSwitch---222--auditSwitch = 0 --");
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
+            Log.d(TAG, "!--->----getAuditSwitch---333--auditSwitch = 1 --");
             loadAd();
         }
     }
@@ -486,6 +497,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * 请求广告
      */
     private void loadAd() {
+        Log.d(TAG, "!--->-----------------loadAd-------------");
         fetchSplashADTime = System.currentTimeMillis();
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(
                 this,
@@ -497,10 +509,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 6000,
                 "clod_splash_page",
                 "clod_splash_page");
-        new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
+        new AdPresenter().requestAd(true, adRequestParamentersBean, new AdShowCallBack() {
 
             @Override
             public void onAdShowCallBack(View view) {
+                Log.d(TAG, "!--->-----------------onAdShowCallBack-------------");
                 long alreadyDelayMills = System.currentTimeMillis() - fetchSplashADTime;
                 long shouldDelayMills = alreadyDelayMills > DEFAULT_TIME ? 0 : (DEFAULT_TIME - alreadyDelayMills);
                 if (skipView != null) {
@@ -536,6 +549,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                     int progress = ((int) valueAnimator.getAnimatedValue() * 100) / animTime;
                     skipView.setProgress(progress);
                     if (progress == 100) {
+                        Log.d(TAG, "!--->-----onAnimationUpdate----skipView progress == 100 ! next...");
                         next();
                     }
                 }
