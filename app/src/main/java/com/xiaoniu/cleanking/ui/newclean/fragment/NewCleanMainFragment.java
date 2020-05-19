@@ -507,6 +507,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!isAllopen) {  // 权限修复
             isRiskTips = false;
             PermissionIntegrate.getPermission().startWK(getActivity());
+            StatisticsUtils.trackClick("permission_icon_click","首页权限图标点击","clod_splash_page","home_page");
             return;
         }
         if (mInteractionPoistion > 2) {

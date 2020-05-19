@@ -53,7 +53,9 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -84,6 +86,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * 记录拉取广告的时间
      */
     private long fetchSplashADTime = 0;
+    private long loadTime = 0;
+
     private Handler handler = new Handler(Looper.getMainLooper());
     private Disposable mSubscription;
 
@@ -119,6 +123,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         } else {
             startActivity(new Intent(SplashADActivity.this, MainActivity.class));
         }
+        Map<String, Object> extParam = new HashMap<>();
+        extParam.put("cold_start_on_time",  (System.currentTimeMillis()-loadTime)/1000);
+        StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "clod_splash_page", "cold_splash_page",extParam);
         finish();
     }
 
@@ -224,6 +231,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     protected void onPause() {
         super.onPause();
         canJump = false;
+        if( findViewById(R.id.rl_open_new).getVisibility()==View.VISIBLE){
+            StatisticsUtils.onPageEnd("open_screen_permission_guide_page_view_page","开屏权限引导页浏览","open_screen_permission_guide_page","open_screen_permission_guide_page");
+        }
     }
 
     @Override
@@ -269,6 +279,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                         // 立即修复
                         SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
                         jumpActivity();
+                        StatisticsUtils.trackClick("repair_now_button_click","立即修复按钮点击","open_screen_permission_guide_page","open_screen_permission_guide_page");
                     }
                 });
             }
@@ -306,6 +317,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         if (startsNumber < 2 * SECONDARY_STARTUP) {
             SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", ++startsNumber);
         }
+        loadTime = System.currentTimeMillis();
     }
 
     /**
@@ -359,12 +371,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 SPUtil.setBoolean(SplashADActivity.this, "consentAgreement", true);
                 PreferenceUtil.saveFirstOpenApp();
                 jumpActivity();
+                StatisticsUtils.trackClick("reminder_agree_click","温馨提示同意点击","clod_splash_page","clod_splash_page");
             }
 
             @Override
             public void onCancel() {
                 confirmDialogFragment.dismiss();
                 showMessageDialog();
+                StatisticsUtils.trackClick("reminder_no_agree_click","温馨提示不同意点击","clod_splash_page","clod_splash_page");
             }
         });
     }
@@ -425,6 +439,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             next();
         }
         canJump = true;
+        if( findViewById(R.id.rl_open_new).getVisibility()==View.VISIBLE){
+            StatisticsUtils.onPageStart("open_screen_permission_guide_page_view_page","开屏权限引导页浏览");
+        }
     }
 
     @Override
@@ -470,7 +487,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 PositionId.SPLASH_ID,
                 PositionId.COLD_CODE,
                 AdType.Splash,
-                3000,
+                6000,
                 "clod_splash_page",
                 "clod_splash_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {

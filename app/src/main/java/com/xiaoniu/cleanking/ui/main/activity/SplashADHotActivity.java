@@ -209,7 +209,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 PositionId.SPLASH_ID,
                 PositionId.COLD_CODE,
                 AdType.Splash,
-                3000,
+                6000,
                 "hot_splash_page",
                 "hot_splash_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {

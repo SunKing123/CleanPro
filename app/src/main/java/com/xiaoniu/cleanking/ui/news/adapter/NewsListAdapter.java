@@ -181,10 +181,8 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             if(mapKey>=position){
                 tempAdCache.put(mapKey-1,mapValue);
                 getAd(mapKey-1);
-
             }else {
                 tempAdCache.put(mapKey,mapValue);
-                getAd(mapKey);
             }
         }
         adCache.clear();

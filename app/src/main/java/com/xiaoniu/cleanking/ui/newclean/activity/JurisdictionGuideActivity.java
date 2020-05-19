@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import io.reactivex.functions.Consumer;
 
@@ -38,6 +39,18 @@ public class JurisdictionGuideActivity extends BaseActivity {
         return R.layout.activity_jurisdiction_guide;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        StatisticsUtils.onPageStart("system_permission_guide_page_view_page","系统权限引导页浏览页");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        StatisticsUtils.onPageEnd("system_permission_guide_page_view_page","系统权限引导页浏览页","home_page","system_permission_guide_page");
+    }
+
 
     @Override
     protected void initView() {
@@ -51,6 +64,7 @@ public class JurisdictionGuideActivity extends BaseActivity {
                         if (aBoolean) {
                             // 权限获取成功
                             finish();
+                            StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click","系统读取文件权限弹窗同意点击","home_page","system_permission_guide_page");
                         } else {
 //                            if (NewScanPresenter.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 //                                //永久拒绝权限
@@ -59,10 +73,11 @@ public class JurisdictionGuideActivity extends BaseActivity {
 //                                //拒绝权限
 //                                checkPermission();
 //                            }
+                            StatisticsUtils.trackClick("system_read_file_permission_popup_no_agree_click","系统读取文件权限弹窗不同意点击","home_page","system_permission_guide_page");
                         }
                     }
                 });
-
+                StatisticsUtils.trackClick("system_permission_guide_page_open_click","系统权限引导页开启点击","home_page","system_permission_guide_page");
             }
         });
     }

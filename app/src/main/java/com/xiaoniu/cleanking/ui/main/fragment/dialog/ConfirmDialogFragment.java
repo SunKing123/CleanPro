@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * @ProjectName: clean
@@ -51,6 +52,18 @@ public class ConfirmDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         resizeDialogFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        StatisticsUtils.onPageStart("reminder_view_page","温馨提示弹窗浏览");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        StatisticsUtils.onPageEnd("reminder_view_page","温馨提示弹窗浏览","launch_page","launch_page");
     }
 
     @Nullable

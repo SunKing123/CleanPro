@@ -13,10 +13,12 @@ import com.xiaoniu.cleanking.ad.interfaces.AdAgainRequestCallBack;
 import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.contract.AdContract;
 import com.xiaoniu.cleanking.ad.mvp.model.AdModel;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -55,6 +57,12 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
         if (adRequestParamentersBean == null || adShowCallBack == null || !NetworkUtils.isNetConnected()) {
             Log.d("ad_status", "广告没有获取到广告数据！");
             adShowCallBack.onFailure("没有获取到广告数据");
+            return;
+        }
+        String auditSwitch=SPUtil.getString(adRequestParamentersBean.context, AppApplication.AuditSwitch, "1");
+        if (auditSwitch.equals("0")) {
+            Log.d("ad_status", "过审开关关闭！");
+            adShowCallBack.onFailure("过审开关关闭");
             return;
         }
         try {

@@ -16,6 +16,7 @@ import com.hellogeek.permission.server.interfaces.IAccessibilityServiceMonitor;
 import com.hellogeek.permission.strategy.ServiceEvent;
 import com.hellogeek.permission.util.Constant;
 import com.hellogeek.permission.util.PhoneRomUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -116,6 +117,7 @@ public class AccessibilityServiceMonitor extends AccessibilityService {
                         }
                         Log.i("permissionService1", "GLOBAL_ACTION_BACK");
                     }
+                    StatisticsUtils.customTrackEvent("accessibility_open_success", "无障碍权限开启成功", "clod_splash_page", "system_settings_page");
                     break;
                 case 2:
                     ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
