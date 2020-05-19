@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/iv_content"
-        android:layout_width="131dp"
-        android:layout_height="@dimen/dimen_58dp"
+        android:layout_width="197dp"
+        android:layout_height="87dp"
         android:layout_centerHorizontal="true"
         android:background="@mipmap/warning_icon" />
 
@@ -40,6 +40,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dimen_12dp"
         android:gravity="center"
+        android:lineSpacingExtra="@dimen/dimen_5dp"
         android:text="否则手机将出现使用卡顿、空间不足、发烫等问题。"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_14sp" />

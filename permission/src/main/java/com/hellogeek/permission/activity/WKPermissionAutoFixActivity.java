@@ -12,9 +12,6 @@ import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -129,6 +126,12 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     private AccessibilityServiceMonitor mService;
     public static final String PAGE = "authority_repair_page";
     private String sourcePage;
+    private Boolean onecLiRepair = false;
+    private boolean isBack = false;
+    private List<ASBase> base;
+    private boolean isAllOpen = true;
+    private int successNum = 0;
+    private Permission permission;
 
     @Override
     protected void initParams(Bundle savedInstanceState) {
@@ -151,8 +154,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         super.onPause();
         isBack = false;
     }
-
-    private boolean isBack = false;
 
 
     @Override
@@ -206,7 +207,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 if (isOneRepair || item.isAllow) {
                     allowIcon.setVisibility(View.VISIBLE);
                     openBtn.setVisibility(View.GONE);
-                    allowIcon.setImageResource(item.isAllow ? R.mipmap.permission_icon : R.mipmap.not_permission_icon);
+                    allowIcon.setImageResource(item.isAllow ? R.mipmap.wk_permission_icon : R.mipmap.wk_fix_permission);
                 } else {
                     allowIcon.setVisibility(View.GONE);
                     openBtn.setVisibility(View.VISIBLE);
@@ -214,8 +215,9 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                         @Override
                         public void onClick(View view) {
                             // 请求指定权限
-                            Toast.makeText(WKPermissionAutoFixActivity.this, "请开启，" + item.permission.getName() + "权限！", Toast.LENGTH_LONG).show();
+                            onecLiRepair = false;
                             request(item.permission);
+                            startActivity(PhonePremisActivity.class);
                         }
                     });
                 }
@@ -238,9 +240,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
 
     }
 
-    private List<ASBase> base;
-    private boolean isAllOpen = true;
-    private int successNum = 0;
 
     private void setPermissionList() {
         base = new ArrayList<>();
@@ -306,48 +305,19 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     @OnClick({R2.id.tvFix})  // , R2.id.ivClose, R2.id.tv_add_qq
     public void onclickView(View view) {
         int id = view.getId();
-        if (isAllOpen) {
-            finish();
-        }
         if (id == R.id.tvFix) {
+            if (isAllOpen) {
+                finish();
+            }
             if (autoFixAction == null) {
                 return;
             }
+            onecLiRepair = true;
             boolean isAllopen = false;
-            if (PermissionIntegrate.getPermission().getIsNecessary()) {
-                isAllopen = !ExternalInterface.getInstance(this).isOpenNecessaryPermission(this);
-            } else {
-                isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
-            }
-
-
-            if (isAllopen) {
-                if (!AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName())) {
-                    handler.sendEmptyMessage(1);
-                    AccessibilitUtil.showSettingsUIV2(this, ACCESSIBILITY_SETTINGS);
-                    isFixing = true;
-                } else {
-                    if (AccessibilityServiceMonitor.getInstance() != null) {
-                        startAnimation();
-                        if (mService == null) {
-                            mService = AccessibilityServiceMonitor.getInstance();
-                            mService.setAccessibilityEvent(this);
-                        }
-
-                        if (autoFixAction == null) {
-                            autoFixAction = IGetManfactureExample.getManfactureExample(this);
-                        }
-                        if (autoFixAction != null) {
-                            autoFixAction.configAccessbility(mService);
-                            request(null);
-                            isFixing = true;
-                        }
-                    } else {
-                        AccessibilitUtil.showSettingsUIV2(this, ACCESSIBILITY_SETTINGS);
-                        handler.sendEmptyMessage(1);
-                        isFixing = true;
-                    }
-                }
+            isAllopen = ExternalInterface.getInstance(this).isOpenAllPermission(this);
+            if (!isAllopen) {
+                request(null);
+                startActivity(PhonePremisActivity.class);
             }
             new UsageBuider().setUsageType(UsageRecordType.TYPE_CLICK.getValue())
                     .setPage(PAGE)
@@ -367,18 +337,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                         .send();
             }
             finish();
-        } else if (id == R.id.tv_add_qq) {
-            Log.i(TAG, "click add QQ");
-            isFixing = false;
-            if (PermissionIntegrate.getPermission().getPermissionAddQQCallback() != null) {
-                new UsageBuider().setUsageType(UsageRecordType.TYPE_CLICK.getValue())
-                        .setPage(PAGE)
-                        .setSourcePage(sourcePage)
-                        .setEventCode("qq_feedback_click")
-                        .setEventName("加QQ群点击")
-                        .send();
-                PermissionIntegrate.getPermission().getPermissionAddQQCallback().addQQCallback();
-            }
         }
     }
 
@@ -435,7 +393,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     protected void onResume() {
         super.onResume();
         isBack = true;
-//        EventBus.getDefault().post(new RemoveEvent());
         if (mService != null && isFixing && autoFixAction != null) {
             if (CustomSharedPreferences.getBooleanValue(this, CustomSharedPreferences.isManual) && !AccessibilitUtil.isOpenPermission(this, permission)) {
                 DialogUtil.showChangeCallToolsDialog(this, PermissionConvertUtils.getTitleStr(permission), new DialogUtil.CallToolsDialogDismissListener() {
@@ -478,13 +435,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         if (base == null) {
             return;
         }
-        if (tvPbText != null) {
-            if (getAllowCount() == base.size()) {
-                tvPbText.setText(100 + "");
-            } else {
-                tvPbText.setText((getAllowCount() * (100 / base.size())) + "");
-            }
-        }
+
         boolean isAllDone = true;
 
         if (PermissionIntegrate.getPermission().getIsNecessary()) {
@@ -525,6 +476,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     if (!asBase.isAllow && requestPermission.getName().equals(asBase.permission.getName())) {
                         permission = asBase.permission;
                         isExecute = true;
+                        Toast.makeText(this, "请开启，" + asBase.permission.getName() + "权限！", Toast.LENGTH_LONG).show();
                         autoFixAction.permissionAction(asBase.permission);
                         break;
                     }
@@ -534,6 +486,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     permission = asBase.permission;
                     asBase.executeNumber++;
                     isExecute = true;
+                    Toast.makeText(this, "请开启，" + asBase.permission.getName() + "权限！", Toast.LENGTH_LONG).show();
                     autoFixAction.permissionAction(asBase.permission);
                     break;
                 }
@@ -546,15 +499,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
 
     // 一键修复完成
     private void openSuccessExhibition(boolean isAllDone, boolean isFirst) {
-        if (ivGear.getAnimation() != null) {
-            ivGear.clearAnimation();
-        }
-        if (ivLoading.getAnimation() != null) {
-            ivLoading.clearAnimation();
-        }
-        if (isAllDone) {
-
-        }
         for (ASBase asBase : base) {
             asBase.executeNumber = 0;
         }
@@ -564,7 +508,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     public void setService(ServiceEvent event) {
         mService = event.getAccessibilityServiceMonitor();
         mService.setAccessibilityEvent(this);
-        startAnimation();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -593,8 +536,6 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         }
         return allowCount;
     }
-
-    private Permission permission;
 
     private void startAnimation() {
         rlNormal.setVisibility(View.GONE);
@@ -650,8 +591,10 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         super.onActivityResult(requestCode, resultCode, data);
         boolean isOpen = false;
         Permission requestPermission = null;
+        Boolean isAllopen = false;
+        isAllopen = ExternalInterface.getInstance(this).isOpenAllPermission(this);
         // 判断是否有无障碍权限
-        if (AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName())) {
+        if (AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName()) || isAllopen) {
             return;
         }
         if (requestCode == ACCESSIBILITY_SETTINGS) {
@@ -690,19 +633,27 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 PermissionProvider.save(this, PACKAGE_USAGE_STATS, true);
                 EventBus.getDefault().post(new PathEvent(Permission.PACKAGEUSAGESTATS, true, 1));
             }
-
+        }
+        if (!isOpen && onecLiRepair) {
+            isOneRepair = false;
         }
         risksNumber = mAdapter.getItemCount();
         mAdapter.notifyDataSetChanged();
-        if (!isOpen && requestCode != ACCESSIBILITY_SETTINGS) {
+
+
+        if (!isOpen || !onecLiRepair || requestPermission == null) {
             return;
         }
         // 修改权限执行次数
 //        permission = asBase.permission;
 //        asBase.executeNumber++;
-
-        Toast.makeText(this, "请开启，" + requestPermission.getName() + "权限！", Toast.LENGTH_LONG).show();
-        request(requestPermission);
+        if (!AccessibilitUtil.isOpenPermission(this, requestPermission)) {
+            request(requestPermission);
+            startActivity(PhonePremisActivity.class);
+        } else {
+            request(null);
+            startActivity(PhonePremisActivity.class);
+        }
     }
 
 }

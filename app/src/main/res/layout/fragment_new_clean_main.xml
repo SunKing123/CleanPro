@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:visibility="visible">
 
+
     <LinearLayout
         android:id="@+id/viewt"
         android:layout_width="match_parent"
@@ -134,7 +135,7 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="20"/>
+                        android:layout_weight="20" />
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/view_lottie_home"
@@ -156,12 +157,12 @@
                     android:layout_marginTop="3dp"
                     android:layout_marginBottom="14dp"
                     android:alpha="0"
-                    tools:alpha="1"
-                    tools:visibility="visible"
                     android:gravity="center"
                     android:text="@string/tool_home_hint"
                     android:textColor="@color/white"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    tools:alpha="1"
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tv_clean_type01"
@@ -171,31 +172,31 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="15sp"
+                    android:visibility="gone"
                     tools:text="手机存在大量垃圾"
-                    tools:visibility="visible"
-                    android:visibility="gone" />
+                    tools:visibility="visible" />
 
-<!--                <RelativeLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:minHeight="120dp"-->
-<!--                    android:gravity="center">-->
+                <!--                <RelativeLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:minHeight="120dp"-->
+                <!--                    android:gravity="center">-->
 
-                    <com.xiaoniu.cleanking.widget.BreathTextView
-                        android:id="@+id/tv_now_clean"
-                        android:layout_width="146dp"
-                        android:layout_height="@dimen/dimen_40dp"
-                        android:gravity="center"
-                        android:layout_marginTop="@dimen/dimen_10dp"
-                        android:layout_marginBottom="120dp"
-                        android:background="@drawable/bg_btn_home_clean"
-                        android:textColor="@color/colorPrimary"
-                        android:text="@string/clean_junk"
-                        android:textStyle="bold"
-                        tools:visibility="visible"
-                        android:textSize="@dimen/text_secondary"
-                        android:visibility="invisible" />
-<!--                </RelativeLayout>-->
+                <com.xiaoniu.cleanking.widget.BreathTextView
+                    android:id="@+id/tv_now_clean"
+                    android:layout_width="146dp"
+                    android:layout_height="@dimen/dimen_40dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:layout_marginBottom="120dp"
+                    android:background="@drawable/bg_btn_home_clean"
+                    android:gravity="center"
+                    android:text="@string/clean_junk"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_secondary"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    tools:visibility="visible" />
+                <!--                </RelativeLayout>-->
 
             </LinearLayout>
 
@@ -696,4 +697,25 @@
 
         </LinearLayout>
     </com.xiaoniu.cleanking.widget.OperatorNestedScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rl_risk_tips_toast"
+        android:layout_width="165dp"
+        android:layout_height="@dimen/dimen_41dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dimen_40dp"
+        android:layout_marginRight="@dimen/dimen_15dp"
+        android:background="@mipmap/risk_tips_toast">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="手机存在风险，及时修复"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

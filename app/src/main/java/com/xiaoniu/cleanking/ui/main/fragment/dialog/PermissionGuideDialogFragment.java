@@ -5,9 +5,12 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +76,13 @@ public class PermissionGuideDialogFragment extends DialogFragment {
             if (!TextUtils.isEmpty(content)) {
                 TextView txtTitle = view.findViewById(R.id.txt_content);
                 txtTitle.setText(content);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    txtTitle.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_COMPACT));
+                } else {
+                    txtTitle.setText(Html.fromHtml(content));
+                }
+                txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
+
             }
         }
         view.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {

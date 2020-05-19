@@ -67,7 +67,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/dimen_38dp"
             android:background="@drawable/bg_text"
-            android:padding="@dimen/dimen_5dp"
+            android:paddingLeft="@dimen/dimen_12dp"
+            android:paddingTop="@dimen/dimen_3dp"
+            android:paddingRight="@dimen/dimen_12dp"
+            android:paddingBottom="@dimen/dimen_3dp"
             android:text="否则手机将出现使用卡顿、空间不足、发烫等问题"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_13dp" />
@@ -171,13 +174,14 @@
 
     <TextView
         android:id="@+id/tvFix"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_46dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:layout_marginBottom="@dimen/dimen_11dp"
-        android:background="@mipmap/btn_bg"
+        android:background="@drawable/btn_fix"
         android:gravity="center"
         android:text="一键修复"
         android:textColor="@color/white"

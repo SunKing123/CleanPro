@@ -64,6 +64,11 @@
         <!--        </receiver>-->
 
 
+        <activity
+            android:name="com.hellogeek.permission.activity.PhonePremisActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+
     </application>
 
 </manifest>

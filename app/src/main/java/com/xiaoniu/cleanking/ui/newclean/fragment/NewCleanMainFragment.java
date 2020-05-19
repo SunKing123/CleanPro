@@ -215,6 +215,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     MagicIndicator feedIndicator;
     @BindView(R.id.feed_view_pager)
     MeasureViewPager feedViewPager;   // feed pager
+    @BindView(R.id.rl_risk_tips_toast)
+    RelativeLayout rlRiskTipsToast;
+
+    private Boolean isRiskTips = true;
 
     private boolean isAllopen = false;
 
@@ -237,6 +241,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private int mRamScale; //使用内存占总RAM的比例
     private int mInteractionPoistion; //互动式广告position、
     private int mShowCount;
+
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
     private HomeRecommendAdapter mRecommendAdapter;
@@ -291,6 +296,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     protected void initView() {
         registResceiver();
+
         mStatusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
         mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
         tvNowClean.setVisibility(View.VISIBLE);
@@ -499,6 +505,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.iv_interaction)
     public void interactionClick() {
         if (!isAllopen) {  // 权限修复
+            isRiskTips = false;
             PermissionIntegrate.getPermission().startWK(getActivity());
             return;
         }
@@ -560,6 +567,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
+
 
     }
 
@@ -1460,16 +1468,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         // 检测是否包含文件读写权限
         if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
             // 权限是否全部开启
-            if (PermissionIntegrate.getPermission().getIsNecessary()) {
-                isAllopen = ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
-            } else {
-                isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
-            }
+            isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
             if (isAllopen) {
                 return;
             }
             boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
             if (isRepair) {
+                SPUtil.setRepair(getActivity(), "isRepair", false);
                 PermissionIntegrate.getPermission().startWK(getActivity());
                 return;
             }
@@ -1478,8 +1483,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
             if (currentTime == preTime) {  // 第一次进来，初始化
                 SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
-            }
-            if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
+            } else if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
                 SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
                 showPermissionDialog();
             }
@@ -1561,6 +1565,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             Glide.with(this).load(url).into(mInteractionIv);
         } else {
             mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
+            rlRiskTipsToast.setVisibility(isRiskTips ? View.VISIBLE : View.GONE);
         }
     }
 

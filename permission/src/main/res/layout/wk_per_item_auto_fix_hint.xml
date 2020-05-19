@@ -53,6 +53,7 @@
 
     <Button
         android:id="@+id/btn_open"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="@dimen/dimen_52dp"
         android:layout_height="@dimen/dimen_27dp"
         android:layout_gravity="center_vertical"

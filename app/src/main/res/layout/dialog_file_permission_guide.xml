@@ -2,15 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dimen_32dp"
-    android:layout_marginLeft="@dimen/dimen_12dp"
-    android:layout_marginRight="@dimen/dimen_12dp"
+    android:layout_marginLeft="@dimen/dimen_5dp"
+    android:layout_marginRight="@dimen/dimen_5dp"
     android:background="@drawable/bg_confixm_dialog"
     android:paddingBottom="@dimen/dimen_32dp">
 
     <ImageView
         android:id="@+id/iv_content"
-        android:layout_width="match_parent"
+        android:layout_width="274dp"
         android:layout_height="142dp"
         android:layout_centerHorizontal="true"
         android:background="@mipmap/wk_file_permission_dialog_bg" />
@@ -51,7 +50,7 @@
             android:layout_width="@dimen/dimen_18dp"
             android:layout_height="@dimen/dimen_18dp"
             android:layout_centerVertical="true"
-            android:background="@mipmap/permission_icon" />
+            android:background="@mipmap/wk_permission_icon" />
 
         <TextView
             android:id="@+id/tv_permission_desc"

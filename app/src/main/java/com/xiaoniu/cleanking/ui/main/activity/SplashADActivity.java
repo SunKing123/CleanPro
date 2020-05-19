@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -235,15 +236,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         PreferenceUtil.saveCleanWechatUsed(false);
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
-        skipTv = findViewById(R.id.tv_skip);
-        skipTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                jumpActivity();
-            }
-        });
 
-        final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
         boolean consentAgreement = SPUtil.getBoolean(this, "consentAgreement", false);
         if (!consentAgreement) {
             showConfirmDialog();
@@ -251,11 +244,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
-            if (PermissionIntegrate.getPermission().getIsNecessary()) {
-                isAllopen = !ExternalInterface.getInstance(this).isOpenNecessaryPermission(this);
-            } else {
-                isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
-            }
+            isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
             if (PermissionUtils.checkPermission(this, permissions) && isAllopen) {
                 //  已获取读写文件权限
                 //  新用户二次冷启动app，先判断是否授予读取存储文件权限，若已授予，
@@ -263,17 +252,28 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 //  右上角显示5s倒计时，5s结束后，右上角显示【跳过】按钮，
                 //  点击跳过进入首页。
                 // 显示立即修复
-                findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
+                View openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
+                skipTv = openNewVs.findViewById(R.id.tv_skip);
+                skipTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        jumpActivity();
+                    }
+                });
+
+                openNewVs.findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
                 startCountDown(5);
-                findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
+                openNewVs.findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // 立即修复
                         SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
+                        jumpActivity();
                     }
                 });
             }
         }
+
         if (startsNumber != SECONDARY_STARTUP || !PermissionUtils.checkPermission(this, permissions)) {
             if (NetworkUtils.isNetConnected()) {
                 mPresenter.getAuditSwitch();

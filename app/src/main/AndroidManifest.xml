@@ -273,10 +273,6 @@
             android:name=".ui.main.activity.PhoneSuperPowerDetailActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".ui.main.activity.PhonePremisActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/transparent_activity" />
 
         <activity
             android:name=".ui.newclean.activity.NowCleanActivity"
@@ -425,7 +421,6 @@
             </intent-filter>
         </service>
 
-
         <service
             android:name=".keeplive.service.LocalService"
             android:exported="true"
@@ -451,7 +446,6 @@
         <service
             android:name=".keeplive.service.JobHandlerService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
 
         <provider
             android:name=".keeplive.pro_sp.SharedPreferenceProvider"

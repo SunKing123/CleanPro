@@ -20,68 +20,11 @@
         android:contentDescription="@string/app_name" />
 
 
-    <RelativeLayout
-        android:id="@+id/rl_open_new"
+    <ViewStub
+        android:id="@+id/vs_open_new"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@mipmap/permission_mask"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_skip"
-            android:layout_width="@dimen/dimen_60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/dimen_10dp"
-            android:layout_marginRight="@dimen/dimen_10dp"
-            android:background="@drawable/skip_bg"
-            android:clickable="false"
-            android:gravity="center"
-            android:padding="@dimen/dimen_5dp"
-            android:text="5"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_14sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/tv_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/dimen_12dp"
-            android:text="手机存在发烫卡顿问题"
-            android:textColor="@color/color_333333"
-            android:textSize="@dimen/dimen_21sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/btn_repair_now"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/dimen_41dp"
-            android:text="一健修复，手机运行更流畅"
-            android:textColor="@color/color_666666"
-            android:textSize="@dimen/dimen_14sp"
-            android:visibility="gone" />
-
-
-        <Button
-            android:id="@+id/btn_repair_now"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_45dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/dimen_45dp"
-            android:layout_marginRight="@dimen/dimen_45dp"
-            android:layout_marginBottom="@dimen/dimen_31dp"
-            android:background="@drawable/bg_btn_open_now"
-            android:text="立即修复"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout="@layout/activity_open_new" />
 
 
     <!-- 2.预设开屏图片区域： -->
