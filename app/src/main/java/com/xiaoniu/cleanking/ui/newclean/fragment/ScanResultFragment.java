@@ -142,7 +142,9 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
             @Override
             public void onCloseCallback(int index) {
-
+                if (adContainer != null) {
+                    adContainer.setVisibility(View.GONE);
+                }
             }
 
             @Override
