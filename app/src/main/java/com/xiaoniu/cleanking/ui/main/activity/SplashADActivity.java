@@ -11,20 +11,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
-import android.text.Html;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
@@ -49,8 +49,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,6 +105,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -127,8 +132,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             startActivity(new Intent(SplashADActivity.this, MainActivity.class));
         }
         Map<String, Object> extParam = new HashMap<>();
-        extParam.put("cold_start_on_time",  (System.currentTimeMillis()-loadTime)/1000);
-        StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "clod_splash_page", "cold_splash_page",extParam);
+        extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime) / 1000);
+        StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "clod_splash_page", "cold_splash_page", extParam);
         finish();
     }
 
@@ -234,8 +239,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     protected void onPause() {
         super.onPause();
         canJump = false;
-        if( findViewById(R.id.rl_open_new).getVisibility()==View.VISIBLE){
-            StatisticsUtils.onPageEnd("open_screen_permission_guide_page_view_page","开屏权限引导页浏览","open_screen_permission_guide_page","open_screen_permission_guide_page");
+        if (findViewById(R.id.rl_open_new).getVisibility() == View.VISIBLE) {
+            StatisticsUtils.onPageEnd("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
         }
     }
 
@@ -256,7 +261,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
         openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
-        openNewVsLayout=openNewVs.findViewById(R.id.rl_open_new);
+        openNewVsLayout = openNewVs.findViewById(R.id.rl_open_new);
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
             isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
@@ -283,7 +288,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                         // 立即修复
                         SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
                         jumpActivity();
-                        StatisticsUtils.trackClick("repair_now_button_click","立即修复按钮点击","open_screen_permission_guide_page","open_screen_permission_guide_page");
+                        StatisticsUtils.trackClick("repair_now_button_click", "立即修复按钮点击", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
                     }
                 });
             }
@@ -304,9 +309,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
         needStartDemoList = getIntent().getBooleanExtra("need_start_demo_list", true);
-        if (!needLogo) {
-            findViewById(R.id.app_logo).setVisibility(View.GONE);
-        }
         initNiuData();
         initFileRelation();
         skipView.setOnClickListener(v ->
@@ -375,14 +377,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 SPUtil.setBoolean(SplashADActivity.this, "consentAgreement", true);
                 PreferenceUtil.saveFirstOpenApp();
                 jumpActivity();
-                StatisticsUtils.trackClick("reminder_agree_click","温馨提示同意点击","clod_splash_page","clod_splash_page");
+                StatisticsUtils.trackClick("reminder_agree_click", "温馨提示同意点击", "clod_splash_page", "clod_splash_page");
             }
 
             @Override
             public void onCancel() {
                 confirmDialogFragment.dismiss();
                 showMessageDialog();
-                StatisticsUtils.trackClick("reminder_no_agree_click","温馨提示不同意点击","clod_splash_page","clod_splash_page");
+                StatisticsUtils.trackClick("reminder_no_agree_click", "温馨提示不同意点击", "clod_splash_page", "clod_splash_page");
             }
         });
     }
@@ -444,8 +446,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
         canJump = true;
 
-        if(openNewVsLayout!=null &&  openNewVsLayout.getVisibility()==View.VISIBLE){
-            StatisticsUtils.onPageStart("open_screen_permission_guide_page_view_page","开屏权限引导页浏览");
+        if (openNewVsLayout != null && openNewVsLayout.getVisibility() == View.VISIBLE) {
+            StatisticsUtils.onPageStart("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览");
         }
     }
 

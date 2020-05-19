@@ -61,7 +61,7 @@ public class SuperPowerCleanAdapter extends GroupRecyclerAdapter {
                         mOnCheckListener.onCheck(itemData);
                     return;
                 }
-                AlertDialogUtil.alertBanLiveDialog(mContext, "休眠 " + itemInfo.appName + " 减少耗电","该应用可能正在后天工作" ,"是","否", new ClickListener() {
+                AlertDialogUtil.alertBanLiveDialog(mContext, "休眠 " + itemInfo.appName + " 减少耗电", "该应用可能正在后台工作", "是", "否", new ClickListener() {
                     @Override
                     public void clickOKBtn() {
                         setChildSelected(itemInfo);
