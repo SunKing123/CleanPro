@@ -38,10 +38,12 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.widget.ArgbEvaluator;
 import com.xiaoniu.cleanking.widget.FuturaRoundTextView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -108,8 +110,14 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
                 .build());
         rv_content_list.setAdapter(scanningJunkAdapter);
 
-        tv_stop_clean.setOnClickListener(v -> ((NowCleanActivity) requireActivity()).backClick(true));
-        tv_back.setOnClickListener(v -> ((NowCleanActivity) requireActivity()).backClick(true));
+        tv_stop_clean.setOnClickListener(v -> {
+            StatisticsUtils.trackClick("stop_it_button_click", "停止按钮点击", "home_page", "clean_scan_page");
+            ((NowCleanActivity) requireActivity()).backClick(true);
+        });
+        tv_back.setOnClickListener(v -> {
+            StatisticsUtils.trackClick("return_click", "返回点击", "home_page", "clean_scan_page");
+            ((NowCleanActivity) requireActivity()).backClick(true);
+        });
     }
 
     @Override
@@ -174,6 +182,19 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
 
         //重置颜色变化状态
         lottie_animation_view.pauseAnimation();
+    }
+
+    @Override
+    public void setScanningCountTime(long scanningCountTime) {
+        HashMap<String, Object> extParams = new HashMap<>();
+        extParams.put("scanning_time", scanningCountTime);
+        StatisticsUtils.customTrackEvent("scanning_time", "垃圾清理_扫描结果_扫描时长",
+                "clean_scan_page", "clean_scan_result_page", extParams);
+    }
+
+    @Override
+    public void setScanningFileCount(int fileCount) {
+        ((NowCleanActivity) requireActivity()).setScanningFileCount(fileCount);
     }
 
     /**

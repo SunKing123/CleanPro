@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.newclean.bean.JunkWrapper;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningLevel;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
@@ -36,6 +37,8 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private long totalJunk = 0;
     private ScanningLevel currentLevel;
+    private long scanningStartTime;
+    private int fileCount = 0;
 
     /**
      * 监听扫描状态
@@ -54,13 +57,13 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                     if (getView() != null) {
                         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalJunk);
                         getView().setScanningJunkTotal(countEntity.getTotalSize(), countEntity.getUnit());
-                        if (Float.parseFloat(countEntity.getTotalSize()) < 50F) {
+                        if (countEntity.getNumber() < 1024 * 1024 * 50) {
                             if (currentLevel == ScanningLevel.Little) {
                                 return;
                             }
                             currentLevel = ScanningLevel.Little;
                             getView().setScanningBackgroundColor(ScanningLevel.Little.getColor(), ScanningLevel.Little.getColor());
-                        } else if (Float.parseFloat(countEntity.getTotalSize()) >= 50F && Float.parseFloat(countEntity.getTotalSize()) < 100F) {
+                        } else if (countEntity.getNumber() >= 1024 * 1024 * 50 && countEntity.getNumber() < 1024 * 1024 * 10) {
                             if (currentLevel == ScanningLevel.Middle) {
                                 return;
                             }
@@ -102,6 +105,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
     @SuppressLint("CheckResult")
     @Override
     public void scanningJunk() {
+        scanningStartTime = System.currentTimeMillis();
         Observable.create(e -> {
             //扫描进程占用内存情况
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
@@ -136,6 +140,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
      * 分发扫描结果
      */
     private void dispatchScanningJunkResult(Object scanningResult) {
+
         if (scanningResult instanceof JunkWrapper) {
             JunkWrapper wrapper = (JunkWrapper) scanningResult;
             if (wrapper.type == ScanningResultType.UNINSTALL_JUNK) {
@@ -156,6 +161,13 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                 final List<JunkGroup> scanningModelList = new ArrayList<>(mJunkGroups.values());
                 getView().setInitScanningModel(scanningModelList);
                 getView().setScanningFinish(mJunkGroups);
+
+                //计算总的扫描时间，并回传记录
+                long scanningCountTime = System.currentTimeMillis() - scanningStartTime;
+                getView().setScanningCountTime(scanningCountTime);
+
+                //计算扫描文件总数
+                getView().setScanningFileCount(fileCount);
             }
         }
     }
@@ -170,6 +182,11 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             for (FirstJunkInfo info : firstJunkList) {
                 junkGroup.mChildren.add(info);
                 junkGroup.mSize += info.getTotalSize();
+                if (info.getSubGarbages() != null && info.getSubGarbages().size() > 0) {
+                    for (SecondJunkInfo secondJunk : info.getSubGarbages()) {
+                        fileCount += secondJunk.getFilesCount();
+                    }
+                }
             }
             junkGroup.isScanningOver = true;
         }
@@ -186,6 +203,12 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             for (FirstJunkInfo info : firstJunkList) {
                 junkGroup.mChildren.add(info);
                 junkGroup.mSize += info.getTotalSize();
+
+                if (info.getSubGarbages() != null && info.getSubGarbages().size() > 0) {
+                    for (SecondJunkInfo secondJunk : info.getSubGarbages()) {
+                        fileCount += secondJunk.getFilesCount();
+                    }
+                }
             }
             junkGroup.isScanningOver = true;
         }
@@ -202,6 +225,12 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             for (FirstJunkInfo info : firstJunkList) {
                 junkGroup.mChildren.add(info);
                 junkGroup.mSize += info.getTotalSize();
+
+                if (info.getSubGarbages() != null && info.getSubGarbages().size() > 0) {
+                    for (SecondJunkInfo secondJunk : info.getSubGarbages()) {
+                        fileCount += secondJunk.getFilesCount();
+                    }
+                }
             }
             junkGroup.isScanningOver = true;
         }
@@ -219,6 +248,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                 junkGroup.mChildren.add(info);
                 junkGroup.mSize += info.getTotalSize();
             }
+            fileCount += mJunkGroups.size();
             junkGroup.isScanningOver = true;
         }
         updateScanningModelState();

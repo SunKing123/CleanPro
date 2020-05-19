@@ -36,7 +36,7 @@ class ScanningJunkAdapter : RecyclerView.Adapter<ScanningJunkAdapter.ScanningJun
                         iv_scaning_state.imageResource = R.drawable.scanning_complete
                         //展示总共扫描到多少垃圾
                         val countEntity = CleanUtil.formatShortFileSize(it.mSize)
-                        tv_scaning_junk_total.text = "已选" + countEntity.resultSize
+                        tv_scaning_junk_total.text = "已扫描" + countEntity.resultSize
                     } else {
                         //展示扫描中状态
                         iv_scaning_state.imageResource = R.drawable.scanning_loading

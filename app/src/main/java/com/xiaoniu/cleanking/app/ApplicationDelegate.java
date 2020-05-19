@@ -2,9 +2,6 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Application;
 import android.arch.lifecycle.ProcessLifecycleOwner;
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.migration.Migration;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -13,6 +10,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bun.miitmdid.core.JLibrary;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
+import com.qq.e.comm.managers.GDTADManager;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -25,6 +23,7 @@ import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.room.AppDataBase;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
@@ -66,8 +65,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             ARouter.openDebug();   // Turn on debugging mode (If you are running in InstantRun mode, you must turn on debug mode! Online version needs to be closed, otherwise there is a security risk)
         }
         ARouter.init(application);
-        UMConfigure.init(application, "", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
-//        UMConfigure.init(application, "5d230f2f4ca357bdb700106d", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
+        UMConfigure.init(application, "5d230f2f4ca357bdb700106d", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
 
@@ -78,6 +76,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
+        // 通过调用此方法初始化 SDK。如果需要在多个进程拉取广告，每个进程都需要初始化 SDK。
+        GDTADManager.getInstance().initWith(application, PositionId.APPID);
     }
 
 
@@ -132,15 +132,22 @@ public class ApplicationDelegate implements IApplicationDelegate {
     //埋点初始化
     private void initNiuData(Application application) {
         //测试环境
-        NiuDataAPI.init(application, new Configuration()
+        Configuration configuration = new Configuration()
                 //切换到sdk默认的测试环境地址
                 .serverUrl(BuildConfig.STATISTICS_URL)
                 .setHeartbeatUrl(BuildConfig.STATISTICS_URL)
-                //打开sdk日志信息
-                .logOpen()
                 .setHeartbeatInterval(5000)
-                .channel(ChannelUtil.getChannel())
-        );
+                .channel(ChannelUtil.getChannel());
+        //事件上报策略（批量 或 单条）（默认是批量，可不设置）
+        if (BuildConfig.DEBUG) {
+            configuration.setTimelyReport(true);
+            //log
+            configuration.logOpen();
+        } else {
+            configuration.logClose();
+        }
+        //测试环境
+        NiuDataAPI.init(application, configuration);
 
         NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
             @Override

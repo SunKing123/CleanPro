@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
 import com.xiaoniu.cleanking.ad.interfaces.AdAgainRequestCallBack;
 import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.model.AdModel;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -57,18 +58,15 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 //                .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .timeout(10, TimeUnit.SECONDS)
+                .timeout(3, TimeUnit.SECONDS)
                 .subscribe(new Consumer<TTSplashAd>() {
                     @Override
                     public void accept(TTSplashAd ttSplashAd) throws Exception {
                         //获取SplashView
                         View view = ttSplashAd.getSplashView();
                         if (view != null) {
-                            Log.d(TAG, "穿山甲 开屏----accept");
-
                             addAdView(adRequestParamentersBean, view, adShowCallBack);
                             ttSplashAd.setNotAllowSdkCountdown();
-                            adShowCallBack.onAdTickCallback(3000);
                             //设置SplashView的交互监听器
                             ttSplashAd.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
                                 @Override
@@ -76,13 +74,13 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                                     Log.d(TAG, "穿山甲 开屏----onAdClicked");
                                     if (null != adShowCallBack)
                                         adShowCallBack.onAdClickCallback();
-                                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", adRequestBean.getAdvertId(), "穿山甲", "clod_splash_page", "clod_splash_page", "");
+                                    StatisticsUtils.clickAD("ad_click", "广告点击", "2", adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                                 }
 
                                 @Override
                                 public void onAdShow(View view, int type) {
                                     Log.d(TAG, "穿山甲 开屏----onAdShow");
-                                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", adRequestBean.getAdvertId(), "穿山甲", "clod_splash_page", "clod_splash_page", "");
+                                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                                 }
 
                                 @Override
@@ -97,7 +95,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
-                                    StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
+//                                    StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
                                 }
 
                                 @Override
@@ -151,13 +149,14 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                             @Override
                             public void onAdClicked(View view, int type) {
                                 Log.d(TAG, "穿山甲模板 onAdClicked");
+                                StatisticsUtils.clickAD("ad_click", "广告点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
 
                             @Override
                             public void onAdShow(View view, int type) {
                                 Log.d(TAG, "穿山甲模板 onAdShow" + adRequestParamentersBean.index);
-
+                                StatisticsUtils.customAD("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
@@ -189,6 +188,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                                         adShowCallBack.onCloseCallback(adRequestParamentersBean.index);
                                     }
                                     ttNativeExpressAd.destroy();
+                                    StatisticsUtils.clickAD("ad_close_click", "关闭点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                                 }
                             }
 
@@ -231,6 +231,29 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                         adError(adRequest, adRequestParamentersBean, adShowCallBack);
                     }
                 });
+    }
+
+
+    /**
+     * 埋点获取AdvertPositio
+     *
+     * @param adRequestParamentersBean
+     * @return
+     */
+    private String getAdvertPosition(AdRequestParamentersBean adRequestParamentersBean) {
+        String advertPosition = "1";
+        switch (adRequestParamentersBean.advertPosition) {
+            case PositionId.DRAW_ONE_CODE:
+                advertPosition = "1";
+                break;
+            case PositionId.DRAW_TWO_CODE:
+                advertPosition = "2";
+                break;
+            case PositionId.DRAW_THREE_CODE:
+                advertPosition = "3";
+                break;
+        }
+        return advertPosition;
     }
 
 }

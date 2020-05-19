@@ -28,11 +28,11 @@ public interface ScanResultContact {
 
         /**
          * 设置扫描到的垃圾总大小
-         *
-         * @param totalSize 垃圾总量
+         *  @param totalSize 垃圾总量
          * @param unit      垃圾总量单位
+         * @param number
          */
-        void setJunkTotalResultSize(String totalSize, String unit);
+        void setJunkTotalResultSize(String totalSize, String unit, long number);
 
         /**
          * 选中状态的垃圾总量

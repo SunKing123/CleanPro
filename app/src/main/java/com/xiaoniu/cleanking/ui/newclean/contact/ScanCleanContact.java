@@ -32,6 +32,11 @@ public interface ScanCleanContact {
          * 清空数据完成
          */
         void setCleanFinish();
+
+        /**
+         * 清理垃圾完成
+         */
+        void setCleanJunkOver();
     }
 
     interface Model extends IBaseModel {

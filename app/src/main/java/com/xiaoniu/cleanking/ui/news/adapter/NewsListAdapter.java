@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.news.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -69,6 +70,14 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
     }
 
     /**
+     * @return
+     * @author xd.he
+     */
+    public boolean isDataEmpty() {
+        return mDatas == null || mDatas.size() == 0;
+    }
+
+    /**
      * 拼装广告数据
      *
      * @param datas
@@ -105,7 +114,9 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 AdType.Template,
                 (int) ScreenUtils.getScreenWidthDp(mContext) - 10,
                 0,
-                postion);
+                postion,
+                getSourseId(configKey).first,
+                getSourseId(configKey).second);
         presenter.requestAd(adRequestParamentersBean, new AdShowCallBack() {
 
             @Override
@@ -136,6 +147,22 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         });
     }
 
+    private Pair<String,String> getSourseId(String configKey){
+        Pair<String,String> pageId=new Pair<>("","");
+        switch (configKey){
+            case PositionId.KEY_HOME_NEWS:
+                pageId=new Pair<>("home_page","home_page_information_page");
+                break;
+            case PositionId.KEY_MAIN_TAB_NEWS:
+                pageId=new Pair<>("home_page","discovery_page_information_page");
+                break;
+            case PositionId.KEY_CLEAN_FINISH_NEWS:
+                pageId=new Pair<>("home_page","success_page_information_page");
+                break;
+        }
+        return pageId;
+    }
+
     /**
      * 删除广告数据
      * @param position
@@ -153,8 +180,11 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             View mapValue = entry.getValue();
             if(mapKey>=position){
                 tempAdCache.put(mapKey-1,mapValue);
+                getAd(mapKey-1);
+
             }else {
                 tempAdCache.put(mapKey,mapValue);
+                getAd(mapKey);
             }
         }
         adCache.clear();
@@ -189,8 +219,12 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 ImageUtil.display(itemInfo.miniimg.get(2).src, (commonHolder.getView(R.id.ivPic3)));
             } else if (viewType == 4) {
                 FrameLayout adLayout = commonHolder.getView(R.id.ad_layout);
+                View adLine = commonHolder.getView(R.id.ad_line);
                 if (adLayout!=null) {
                     adLayout.removeAllViews();
+                }
+                if(adLine!=null){
+                    adLine.setVisibility(View.GONE);
                 }
                 if (adCache.get(position) != null && adLayout != null) {
                     View adView = adCache.get(position);
@@ -198,6 +232,7 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                         ((ViewGroup) adView.getParent()).removeAllViews();
                     }
                     adLayout.setVisibility(View.VISIBLE);
+                    adLine.setVisibility(View.VISIBLE);
                     adLayout.addView(adView);
                 }
             }

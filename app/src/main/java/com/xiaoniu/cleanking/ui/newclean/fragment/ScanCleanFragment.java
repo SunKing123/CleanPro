@@ -33,11 +33,14 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.SimpleAnimatorListener;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.FuturaRoundTextView;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +77,7 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
+    private long startCleanTime;
 
     public static ScanCleanFragment createFragment() {
         return new ScanCleanFragment();
@@ -108,7 +112,8 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
             public void onAnimationEnd(Animator animation) {
                 tv_clean_count.setVisibility(View.GONE);
                 tv_clean_unit.setVisibility(View.GONE);
-                NiuDataAPIUtil.onPageEnd("scanning_result_page", "clean_finish_annimation_page", "clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
+                NiuDataAPIUtil.onPageEnd("scanning_result_page", "clean_finish_annimation_page",
+                        "clean_finish_annimation_page_view_page", "清理完成动画展示页浏览");
 
                 //清理完成，跳转清理完成界面
                 cleanComplete();
@@ -159,6 +164,7 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         presenter.startClean(((NowCleanActivity) requireActivity()).getJunkContentMap());
+        startCleanTime = System.currentTimeMillis();
     }
 
     @Override
@@ -238,5 +244,14 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
     @Override
     public void setCleanFinish() {
         cleanComplete();
+    }
+
+    @Override
+    public void setCleanJunkOver() {
+        long cleanCountTime = System.currentTimeMillis() - startCleanTime;
+        Map<String, Object> extParam = new HashMap<>();
+        extParam.put("cleaning_time", cleanCountTime);
+        StatisticsUtils.customTrackEvent("cleaning_time", "垃圾清理_清理时长",
+                "clean_scan_result_page", "clean_animation_page", extParam);
     }
 }

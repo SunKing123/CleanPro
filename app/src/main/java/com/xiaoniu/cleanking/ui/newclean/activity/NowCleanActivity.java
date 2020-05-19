@@ -33,6 +33,7 @@ public class NowCleanActivity extends BaseActivity {
     private boolean isScan = false;
     private boolean isClean = true;
     private boolean isBackClick = false;
+    private int scanningFileCount = 0;
 
     private LinkedHashMap<ScanningResultType, JunkGroup> junkTitleMap;
     private LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap;
@@ -170,7 +171,8 @@ public class NowCleanActivity extends BaseActivity {
             if (isClean) {
                 //清理页面—btn返回或者系统返回（点击事件）
                 StatisticsUtils.trackClick(isLeftBtn ? "return_back_click" : "system_return_back_click", "用户点击【建议清理】返回", "clean_up_scan_page", "scanning_result_page");
-                AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "正在清理，退出将中断", "继续清理", "确认退出", new ClickListener() {
+                String resultSize = mCountEntity.getResultSize() == null ? "" : mCountEntity.getResultSize();
+                AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", resultSize + "垃圾未清理，垃圾过多会造成手机卡顿！", "继续清理", "确认退出", new ClickListener() {
                     @Override
                     public void clickOKBtn() {
                         //扫描中弹框_继续扫描按钮
@@ -217,5 +219,13 @@ public class NowCleanActivity extends BaseActivity {
 
     public LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> getJunkContentMap() {
         return junkContentMap;
+    }
+
+    public void setScanningFileCount(int fileCount) {
+        scanningFileCount = fileCount;
+    }
+
+    public int getScanningFileCount() {
+        return scanningFileCount;
     }
 }

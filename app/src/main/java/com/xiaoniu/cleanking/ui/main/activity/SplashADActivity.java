@@ -297,14 +297,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         skipView.setOnClickListener(v ->
         {
             skipView.clearAnimation();
-            JSONObject extension = new JSONObject();
-            try {
-                extension.put("ad_id", mSecondAdvertId);
-                extension.put("ad_agency", "优量汇");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page", extension);
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page");
             jumpActivity();
         });
         //页面创建事件埋点
@@ -343,16 +336,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
 
     private void showConfirmDialog() {
-
-
-        String s1 = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，";
-        s1 += "特此向您说明。作为互联网安全公司，";
-        s1 += "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。";
-        s1 += "在使用悟空清理前，请务必仔细阅读并了解";
-
-        s1 += "<font color='#06C581'>设置红色</font><br>";
-        s1 += "<a href=\"https://www.baidu.com\" color='#06C581'><font color='#06C581'>百度链接</font></a>";
-
 
         String html = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
                 "特此向您说明。作为互联网安全公司，" +
@@ -487,7 +470,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 PositionId.SPLASH_ID,
                 PositionId.COLD_CODE,
                 AdType.Splash,
-                3000);
+                3000,
+                "clod_splash_page",
+                "clod_splash_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
 
             @Override

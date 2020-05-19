@@ -173,6 +173,15 @@ public abstract class BaseFragment extends RxFragment {
         mSupportLazy = supportLazy;
     }
 
+    /**
+     * called when load failed, such as network error
+     *
+     * @param isLoaded
+     * @author xd.he
+     */
+    protected void setIsLoaded(boolean isLoaded) {
+        this.mIsLoaded = isLoaded;
+    }
 
     protected abstract int getLayoutResId();
 

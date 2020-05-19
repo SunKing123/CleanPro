@@ -5,6 +5,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 /**
  * 埋点统计工具类
  * Created by fengpeihao on 2018/1/24.
@@ -21,6 +23,7 @@ public class StatisticsUtils {
      * @param currentPage 当前页面
      */
     public static void trackClick(String eventCode, String eventName, String sourcePage, String currentPage) {
+        // Log.d("StatisticsUtils", "!--->trackClick---eventCode:"+eventCode+"; eventName:"+eventName+"; sourcePage:"+sourcePage+"; currentPage:"+currentPage);
         trackClick(eventCode, eventName, sourcePage, currentPage, null);
     }
 
@@ -170,30 +173,30 @@ public class StatisticsUtils {
      * @param sourcePage
      * @param currentPage
      */
-    public static void trackClickJShow(String eventCode, String eventName, String sourcePage, String currentPage, String url,int id,String title) {
+    public static void trackClickJShow(String eventCode, String eventName, String sourcePage, String currentPage, String url, int id, String title) {
         String push_type = "";
-        if ("cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
+        if ("cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)) {
             //立即清理页面
             push_type = "clean_up_immediately";
-        }else if (url.contains("main.activity.PhoneAccessActivity")){
+        } else if (url.contains("main.activity.PhoneAccessActivity")) {
             //  一键加速页面
             push_type = "mobile_phone_boost";
-        }else if (url.contains("main.activity.CleanBigFileActivity")){
+        } else if (url.contains("main.activity.CleanBigFileActivity")) {
             //  手机清理页面
             push_type = "mobile_phone _cleaning";
-        }else if (url.contains("main.activity.FileManagerHomeActivity")){
+        } else if (url.contains("main.activity.FileManagerHomeActivity")) {
             //  文件清理页面
             push_type = "file_cleanup";
-        }else if (url.contains("tool.wechat.activity.WechatCleanHomeActivity")){
+        } else if (url.contains("tool.wechat.activity.WechatCleanHomeActivity")) {
             //  微信专清页面
             push_type = "wechat_cleaning";
-        }else if (url.contains("tool.qq.activity.QQCleanHomeActivity")){
+        } else if (url.contains("tool.qq.activity.QQCleanHomeActivity")) {
             //  QQ专清页面
             push_type = "QQ_cleaning";
-        }else if (url.contains("main.activity.PhoneCoolingActivity")){
+        } else if (url.contains("main.activity.PhoneCoolingActivity")) {
             // 手机降温页面
             push_type = "cooling";
-        }else if (url.contains("main.activity.PhoneSuperPowerActivity")){
+        } else if (url.contains("main.activity.PhoneSuperPowerActivity")) {
             // 超强省电页面
             push_type = "power_saving";
         }
@@ -213,6 +216,7 @@ public class StatisticsUtils {
 
     /**
      * 资讯埋点
+     *
      * @param eventCode
      * @param eventName
      * @param sourcePage
@@ -221,22 +225,22 @@ public class StatisticsUtils {
      */
     public static void trackClickNewsTab(String eventCode, String eventName, String sourcePage, String currentPage, int id) {
         String push_type = "";
-        if (id == 0){
+        if (id == 0) {
             //头条
             push_type = "headlines";
-        }else  if (id == 1){
+        } else if (id == 1) {
             //视频
             push_type = "video";
-        }else  if (id == 2){
+        } else if (id == 2) {
             //  社会
             push_type = "society";
-        }else  if (id == 3){
+        } else if (id == 3) {
             //  国内
             push_type = "domestic";
-        }else  if (id == 4){
+        } else if (id == 4) {
             //  国际
             push_type = "lnternational";
-        }else  if (id == 5){
+        } else if (id == 5) {
             //  娱乐
             push_type = "entertainment";
         }
@@ -251,7 +255,8 @@ public class StatisticsUtils {
     }
 
     /**
-     *  资讯内 item 埋点
+     * 资讯内 item 埋点
+     *
      * @param eventCode
      * @param eventName
      * @param sourcePage
@@ -260,7 +265,7 @@ public class StatisticsUtils {
      * @param newsId
      * @param position
      */
-    public static void trackClickNewsItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName,String newsId, int position) {
+    public static void trackClickNewsItem(String eventCode, String eventName, String sourcePage, String currentPage, String newsName, String newsId, int position) {
         JSONObject extension = new JSONObject();
         try {
             extension.put("content_id", newsId);
@@ -274,16 +279,16 @@ public class StatisticsUtils {
 
 
     /**
-     *  推荐 功能 埋点
+     * 推荐 功能 埋点
+     *
      * @param eventCode
      * @param eventName
      * @param sourcePage
      * @param currentPage
      * @param newsName
-     * @param newsId
      * @param position
      */
-    public static void trackFunctionClickItem(String eventCode, String eventName, String sourcePage, String currentPage,String newsName, String position) {
+    public static void trackFunctionClickItem(String eventCode, String eventName, String sourcePage, String currentPage, String newsName, String position) {
         JSONObject extension = new JSONObject();
         try {
             extension.put("position_title", newsName);
@@ -295,19 +300,69 @@ public class StatisticsUtils {
     }
 
 
-
     /**
      * 添加source_page_id、current_page_id的自定义事件
+     *
      * @param event_code
      * @param event_name
      * @param source_page_id
      * @param current_page_id
      */
-    public static void customTrackEvent(String event_code,String event_name, String source_page_id, String current_page_id) {
+    public static void customTrackEvent(String event_code, String event_name, String source_page_id, String current_page_id) {
         JSONObject extension = new JSONObject();
         try {
             extension.put("source_page_id", source_page_id);
             extension.put("current_page_id", current_page_id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackEvent(event_code, event_name, extension);
+    }
+
+    /**
+     * 添加source_page_id、current_page_id的自定义事件
+     *
+     * @param event_code
+     * @param event_name
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void customTrackEvent(String event_code, String event_name, String source_page_id, String current_page_id, Map<String, Object> extParam) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            if (extParam != null && extParam.size() > 0) {
+                for (Map.Entry<String, Object> param : extParam.entrySet()) {
+                    extension.put(param.getKey(), param.getValue());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackEvent(event_code, event_name, extension);
+    }
+
+    /**
+     * 广告曝光
+     *
+     * @param event_code
+     * @param event_name
+     * @param ad_position_id
+     * @param ad_id
+     * @param ad_agency
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void customAD(String event_code, String event_name, String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id, String title) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("ad_position_id", ad_position_id);
+            extension.put("ad_id", ad_id);
+            extension.put("ad_title", title);
+            extension.put("ad_agency", ad_agency);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -324,14 +379,13 @@ public class StatisticsUtils {
      * @param source_page_id
      * @param current_page_id
      */
-    public static void customAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id,String title) {
+    public static void customAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id) {
         JSONObject extension = new JSONObject();
         try {
             extension.put("source_page_id", source_page_id);
             extension.put("current_page_id", current_page_id);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
-            extension.put("ad_title",title);
             extension.put("ad_agency", ad_agency);
         } catch (Exception e) {
             e.printStackTrace();
@@ -341,6 +395,7 @@ public class StatisticsUtils {
 
     /**
      * 广告请求_自定义 类型
+     *
      * @param event_code
      * @param event_name
      * @param ad_position_id
@@ -350,7 +405,7 @@ public class StatisticsUtils {
      * @param source_page_id
      * @param current_page_id
      */
-    public static void customADRequest(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency,String ad_request_status, String source_page_id, String current_page_id) {
+    public static void customADRequest(String event_code, String event_name, String ad_position_id, String ad_id, String ad_agency, String ad_request_status, String source_page_id, String current_page_id) {
         JSONObject extension = new JSONObject();
         try {
             extension.put("source_page_id", source_page_id);
@@ -369,6 +424,7 @@ public class StatisticsUtils {
 
     /**
      * 广告点击
+     *
      * @param event_code
      * @param event_name
      * @param ad_position_id
@@ -377,14 +433,38 @@ public class StatisticsUtils {
      * @param source_page_id
      * @param current_page_id
      */
-    public static void clickAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id,String title) {
+    public static void clickAD(String event_code, String event_name, String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id, String title) {
         JSONObject extension = new JSONObject();
         try {
             extension.put("source_page_id", source_page_id);
             extension.put("current_page_id", current_page_id);
             extension.put("ad_position_id", ad_position_id);
             extension.put("ad_id", ad_id);
-            extension.put("ad_title",title);
+            extension.put("ad_title", title);
+            extension.put("ad_agency", ad_agency);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackClick(event_code, event_name, extension);
+    }
+
+    /**
+     * 广告点击
+     * @param event_code
+     * @param event_name
+     * @param ad_position_id
+     * @param ad_id
+     * @param ad_agency
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void clickAD(String event_code,String event_name,String ad_position_id, String ad_id, String ad_agency, String source_page_id, String current_page_id) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("ad_position_id", ad_position_id);
+            extension.put("ad_id", ad_id);
             extension.put("ad_agency", ad_agency);
         } catch (Exception e) {
             e.printStackTrace();

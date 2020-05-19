@@ -188,6 +188,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         skipView.setOnClickListener(v -> {
             skipView.clearAnimation();
             jumpActivity();
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page");
         });
 
         loadAd();
@@ -208,7 +209,9 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 PositionId.SPLASH_ID,
                 PositionId.COLD_CODE,
                 AdType.Splash,
-                3000);
+                3000,
+                "hot_splash_page",
+                "hot_splash_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
 
             @Override

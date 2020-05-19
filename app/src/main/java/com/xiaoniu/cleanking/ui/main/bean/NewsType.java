@@ -9,7 +9,7 @@ public enum NewsType {
     YULE("娱乐", "yule"),        //
     YUN_SHI("运势", "xingzuo"), // "星座" -> "运势"
     JIAN_KANG("健康","jiankang"),
-    REN_WEN("人文", "lishi");;
+    REN_WEN("人文", "renwen");;
 
     private String name;
     private String value;
