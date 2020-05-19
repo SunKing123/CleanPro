@@ -98,7 +98,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private static final int MSG_GO_MAIN = 1;
     //穿山甲相关 end
     private TextView skipTv;
-
+    //修复界面
+    private View openNewVs;
+    //修复界面
+    private View openNewVsLayout;
     private String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -252,6 +255,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             showConfirmDialog();
         }
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
+        openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
+        openNewVsLayout=openNewVs.findViewById(R.id.rl_open_new);
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
             isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
@@ -262,7 +267,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 //  右上角显示5s倒计时，5s结束后，右上角显示【跳过】按钮，
                 //  点击跳过进入首页。
                 // 显示立即修复
-                View openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
                 skipTv = openNewVs.findViewById(R.id.tv_skip);
                 skipTv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -271,7 +275,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                     }
                 });
 
-                openNewVs.findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
+                openNewVsLayout.setVisibility(View.VISIBLE);
                 startCountDown(5);
                 openNewVs.findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -439,7 +443,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             next();
         }
         canJump = true;
-        if( findViewById(R.id.rl_open_new).getVisibility()==View.VISIBLE){
+
+        if(openNewVsLayout!=null &&  openNewVsLayout.getVisibility()==View.VISIBLE){
             StatisticsUtils.onPageStart("open_screen_permission_guide_page_view_page","开屏权限引导页浏览");
         }
     }
