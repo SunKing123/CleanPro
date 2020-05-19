@@ -140,8 +140,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private ComFragmentAdapter mNewsListFragmentAdapter;
     private List<com.xiaoniu.common.base.BaseFragment> mNewsListFragments;  // NewsListFragments
     private boolean canXiding = true;
+    private boolean hasXiding = false;
     public LayoutInflater mInflater;
-    private int mStatusBarHeight;
     private int mStickyHeight;
     private int mRootHeight;
     /* XD added for feed End >*/
@@ -211,7 +211,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     protected void initView() {
         mInflater = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        mStatusBarHeight = ScreenUtil.getStatusBarHeight(this);
         mStickyHeight = ScreenUtil.dp2px(this, 80);
 
         EventBus.getDefault().register(this);
@@ -299,7 +298,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         tvTopXidingBack.setText(getResources().getString(R.string.xiding_back_to_xxx, mTitle));
         mNestedScrollView.setOnScrollChangeListener(this);
         feedViewPager.setOffscreenPageLimit(10);
-        requestFeedHeight();
+        requestFeedHeight(true);
         feedViewPager.setNeedScroll(false);
         feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -308,7 +307,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             @Override
             public void onPageSelected(int i) {
-                clickCauseXiding(true);
+                checkClickCauseXiding(true);
                 StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
             }
 
@@ -320,7 +319,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         initMagicIndicator();
     }
 
-    private void requestFeedHeight() {
+    private void requestFeedHeight(boolean isInit) {
         homeFeeds.post(new Runnable() {
             @Override
             public void run() {
@@ -328,9 +327,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     if (NewsUtils.isShowCleanFinishFeed()) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
                         mRootHeight = layoutRoot.getHeight();
-                        params.height = mRootHeight - mFLTopNav.getHeight();  //  mStatusBarHeight
+                        params.height = mRootHeight - mFLTopNav.getHeight();
                         homeFeeds.setLayoutParams(params);
-                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        if (isInit) {
+                            mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        }
                         mNestedScrollView.requestLayout();
                     } else {
                         homeFeeds.setVisibility(View.GONE);
@@ -1299,7 +1300,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
                 @Override
                 public void onClickItem(int position, NewsItemInfo itemInfo) {
-                    clickCauseXiding(false);
+                    checkClickCauseXiding(false);
                 }
             });
             mNewsListFragments.add(listFragment);
@@ -1312,11 +1313,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     /**
      * click Cause Xiding
      */
-    private void clickCauseXiding(boolean isAnimation) {
+    private void checkClickCauseXiding(boolean isAnimation) {
+        cheekRootHeight();  // xd added 20200518
         feedViewPager.setNeedScroll(false);
         Rect rect = new Rect();
         homeFeeds.getGlobalVisibleRect(rect);
-        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
+        int statusBarHeight =  ScreenUtil.getStatusBarHeight(this);
+        int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;
         if (dy != 0) {
             doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, isAnimation);
         }
@@ -1329,9 +1332,17 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
-            int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            int statusBarHeight =  ScreenUtil.getStatusBarHeight(this);
+            int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;  // flow top - titleTop Height  - statusBarHeight
             int changeY = y - lasty;
-            if (dy> 0 && dy <= mStickyHeight && changeY > 0) {
+            if (dy == 0) {
+                if (hasXiding && changeY == -statusBarHeight) {
+                    Log.w(TAG, "!--->onScrollChange  doXiDingStickyAnim lasty!");
+                    doXiDingStickyAnim(lasty, true);
+                }
+                hasXiding = true;
+            }
+            if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
                     doXiDingStickyAnim(y + dy, true, 300);
                 } else {
@@ -1344,7 +1355,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private void cheekRootHeight() {
         int rootHeight = layoutRoot.getHeight();
         if (mRootHeight != rootHeight) {
-            requestFeedHeight();
+            requestFeedHeight(false);
         }
     }
 
@@ -1393,6 +1404,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             vTopTitleNormal.setVisibility(View.VISIBLE);
             vTopTitleXiding.setVisibility(View.GONE);
         }
+        hasXiding = xiding;
     }
 
     private void scrollAnima(int start, int end, int duration) {

@@ -229,7 +229,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private boolean canXiding = true;
     private boolean hasXiding = false;
     public LayoutInflater mInflater;
-    private int mStatusBarHeight;
     private int mStickyHeight;
     private int mRootHeight;
     /* XD added for feed End >*/
@@ -239,7 +238,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private int mRamScale; //使用内存占总RAM的比例
     private int mInteractionPoistion; //互动式广告position、
     private int mShowCount;
-
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
     private HomeRecommendAdapter mRecommendAdapter;
@@ -294,8 +292,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     protected void initView() {
         registResceiver();
-
-        mStatusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
         mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
@@ -389,7 +385,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         tvTopXidingBack.setText(R.string.xiding_back_to_clean);
         mNestedScrollView.setOnScrollChangeListener(this);
         feedViewPager.setOffscreenPageLimit(6);
-        requestFeedHeight();
+        requestFeedHeight(true);
         feedViewPager.setNeedScroll(false);
         feedViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -398,7 +394,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             @Override
             public void onPageSelected(int i) {
-                Log.d(TAG, "!--->onPageSelected----i:" + i + "; clickCauseXiding-----");
                 checkClickCauseXiding(true);
                 StatisticsUtils.trackClickNewsTab("content_cate_click", "“分类”点击", "selected_page", "information_page", i);
             }
@@ -411,18 +406,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         initMagicIndicator();
     }
 
-    private void requestFeedHeight() {
+    private void requestFeedHeight(boolean isInit) {
         homeFeeds.post(new Runnable() {
             @Override
             public void run() {
                 try {
                     if (NewsUtils.isShowHomeFeed()) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
-                        params.height = layoutRoot.getHeight() - mFLTopNav.getHeight();  //  mStatusBarHeight
-                        homeFeeds.setLayoutParams(params);
                         mRootHeight = layoutRoot.getHeight();
-                        Log.d(TAG, "!--->--requestFeedHeight-----mRootHeight:" + mRootHeight);
-                        mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        Log.d(TAG, "!--->--requestFeedHeight---set mRootHeight:"+mRootHeight+"; isInit:"+isInit);
+                        params.height = mRootHeight - mFLTopNav.getHeight();
+                        homeFeeds.setLayoutParams(params);
+                        if (isInit) {
+                            mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
+                        }
                         mNestedScrollView.requestLayout();
                     } else {
                         homeFeeds.setVisibility(View.GONE);
@@ -533,7 +530,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "!--->onResume---getSwitchInfoList----hasXiding:" + hasXiding);
 
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mPresenter.getSwitchInfoList();
@@ -568,6 +564,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
+
         onUIChangeCheckXiding();  // XD added 20200518
     }
 
@@ -575,7 +572,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * @author xd.he
      */
     private void onUIChangeCheckXiding() {
-        Log.d(TAG, "!--->onUIChangeCheckXiding----hasXiding:" + hasXiding + "; isShowHomeFeed:" + NewsUtils.isShowHomeFeed());
         if (hasXiding && NewsUtils.isShowHomeFeed()) {
             checkClickCauseXiding(false);
         }
@@ -1219,18 +1215,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * @param entity
      */
     public void getRecommendListSuccess(HomeRecommendEntity entity) {
-        if (null == mRecommendAdapter || null == entity || null == entity.getData() || entity.getData().size() <= 0)
+        if (null == mRecommendAdapter || null == entity || null == entity.getData() || entity.getData().size() <= 0) {
             return;
-        Log.w(TAG, "!--->getRecommendListSuccess-----size:" + entity.getData().size());
+        }
+        Log.d(TAG, "!--->getRecommendListSuccess-----size:" + entity.getData().size());
         PreferenceUtil.saveFirstHomeRecommend(false);
         mRecyclerView.setVisibility(VISIBLE);
         mNoNetView.setVisibility(View.GONE);
         mRecommendAdapter.setData(entity.getData());
 
+        onUIChangeCheckXiding();  // XD added 20200519
+
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
+                Log.d(TAG, "subscribe:" + Thread.currentThread().getName());
                 if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao())
                     return;
                 ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
@@ -1256,17 +1255,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         Observable<List<HomeRecommendListEntity>> observable = Observable.create(new ObservableOnSubscribe<List<HomeRecommendListEntity>>() {
             @Override
             public void subscribe(ObservableEmitter<List<HomeRecommendListEntity>> emitter) throws Exception {
-                Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
+                Log.d(TAG, "!--->getRecommendListFail---subscribe :" + Thread.currentThread().getName());
                 emitter.onNext(ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll());
             }
         });
         Consumer<List<HomeRecommendListEntity>> consumer = new Consumer<List<HomeRecommendListEntity>>() {
             @Override
             public void accept(List<HomeRecommendListEntity> list) throws Exception {
-                Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
+                Log.d(TAG, "!--->getRecommendListFail---accept data-size:" + list.size() + ":" + Thread.currentThread().getName());
                 if (null == mRecommendAdapter) return;
-                Log.d(TAG, "!--->getRecommendListFail---load local data---size:" + list.size());
                 mRecommendAdapter.setData(list);
+                onUIChangeCheckXiding();  // XD added 20200519
             }
         };
         observable.subscribeOn(Schedulers.newThread())
@@ -1317,7 +1316,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /*< XD added for feed begin */
     @Override
     protected void loadData() {
-        Log.d(TAG, "!--->loadData-----");
         loadFeedData();
     }
 
@@ -1349,13 +1347,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * check click Cause Xiding
      */
     private void checkClickCauseXiding(boolean isAnimation) {
-        Log.d(TAG, "!--->xiding--checkClickCauseXiding---isAnimation:" + isAnimation);
         cheekRootHeight();  // xd added 20200518
         feedViewPager.setNeedScroll(false);
         Rect rect = new Rect();
         homeFeeds.getGlobalVisibleRect(rect);
-        int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;
-        Log.d(TAG, "!--->xiding--checkClickCauseXiding------dy:" + dy + "; mStickyHeight:" + mStickyHeight + "; canXiding:" + canXiding);
+        int statusBarHeight =  ScreenUtil.getStatusBarHeight(requireContext());
+        int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;
         if (dy != 0) {
             doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, isAnimation);
         }
@@ -1368,14 +1365,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
-            int dy = rect.top - vHomeTop.getHeight() - mStatusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            int statusBarHeight =  ScreenUtil.getStatusBarHeight(requireContext());
+            int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            int changeY = y - lasty;
             if (dy == 0) {
-                Log.w(TAG, "!--->onScrollChange-- dy == 0 ---hasXiding:" + hasXiding);
+                if (hasXiding && changeY == -statusBarHeight) {
+                    Log.w(TAG, "!--->onScrollChange  doXiDingStickyAnim lasty!");
+                    doXiDingStickyAnim(lasty, true);    // when status bar gone caused ScrollChange on Xiding status, just reset it!!!
+                }
                 hasXiding = true;
             }
-            int changeY = y - lasty;
             if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
-                Log.d(TAG, "!--->onScrollChange---1---dy:" + dy + "; changeY:" + changeY + "; mStickyHeight:" + mStickyHeight);
                 if (changeY < 20) {
                     doXiDingStickyAnim(y + dy, true, 300);
                 } else {
@@ -1387,9 +1387,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void cheekRootHeight() {
         int rootHeight = layoutRoot.getHeight();
-        if (mRootHeight != rootHeight) {
-            Log.w(TAG, "!--->cheekRootHeight-----currentRootHeight:" + rootHeight + "; mRootHeight" + mRootHeight);
-            requestFeedHeight();
+        if (mRootHeight != rootHeight ) {
+            requestFeedHeight(false);
         }
     }
 

@@ -178,6 +178,9 @@ public class NewsListFragment extends BaseFragment {
     }
 
     private void onRefreshComplete() {
+        if (mRecyclerView == null) {
+            return;
+        }
         if (mIsRefresh) {
             mRecyclerView.refreshComplete();
         } else {
