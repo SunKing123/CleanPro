@@ -424,7 +424,7 @@ public class FileQueryUtils {
                     cacheJunkInfo.addSecondJunk(secondJunkInfo);
                     cacheJunkInfo.setTotalSize(cacheJunkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
                 }
-                if (mScanFileListener != null) {
+                if (mScanFileListener != null && !WHITE_LIST.contains(cacheJunkInfo.getAppPackageName())) {
                     mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                 }
             }
