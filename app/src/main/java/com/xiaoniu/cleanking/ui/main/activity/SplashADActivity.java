@@ -128,7 +128,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     public void jumpActivity() {
         final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
-        Log.d(TAG, "!--->jumpActivity------isFirst:"+isFirst);
+        Log.d(TAG, "!--->jumpActivity------isFirst:" + isFirst);
         if (isFirst) {
             startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
         } else {
@@ -263,8 +263,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
 
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
-        openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
-        openNewVsLayout = openNewVs.findViewById(R.id.rl_open_new);
+
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
             isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
@@ -275,8 +274,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 //  右上角显示5s倒计时，5s结束后，右上角显示【跳过】按钮，
                 //  点击跳过进入首页。
                 //  显示立即修复
-                View openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
-                openNewVs.findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
+                openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
+                openNewVsLayout = openNewVs.findViewById(R.id.rl_open_new);
                 // 显示立即修复
                 skipTv = openNewVs.findViewById(R.id.tv_skip);
                 skipTv.setOnClickListener(new View.OnClickListener() {
