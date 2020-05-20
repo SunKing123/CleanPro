@@ -107,6 +107,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     };
     private int[] grantResults;
     private int requestCode;
+    private boolean isFirst = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,7 +128,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     }
 
     public void jumpActivity() {
-        final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
+
         Log.d(TAG, "!--->jumpActivity------isFirst:" + isFirst);
         if (isFirst) {
             startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
@@ -250,6 +251,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
     }
 
+
     @Override
     protected void initView() {
         Log.d(TAG, "!--->initView------");
@@ -260,6 +262,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         PreferenceUtil.saveCleanWechatUsed(false);
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
+        isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
 
 
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
@@ -299,10 +302,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 });
             }
         }
-        // 请求设备信息权限
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-        }
+
         if (startsNumber != SECONDARY_STARTUP || !PermissionUtils.checkPermission(this, permissions)) {
             if (NetworkUtils.isNetConnected()) {
                 Log.d(TAG, "!--->initView---getAuditSwitch-------");
@@ -415,6 +415,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
         if (openNewVsLayout != null && openNewVsLayout.getVisibility() == View.VISIBLE) {
             StatisticsUtils.onPageStart("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览");
+        }
+
+        // 请求设备信息权限
+        if (isFirst && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
         }
     }
 
