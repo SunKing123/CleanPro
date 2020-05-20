@@ -2,6 +2,9 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.animation.ValueAnimator;
@@ -10,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -22,13 +26,18 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -92,6 +101,7 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.PermissionsUtils;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -122,6 +132,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.VISIBLE;
+import static com.xiaoniu.cleanking.utils.PermissionsUtils.showSystemSetting;
 
 /**
  * 1.2.1 新版本清理主页
@@ -416,7 +427,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     if (NewsUtils.isShowHomeFeed()) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
                         mRootHeight = layoutRoot.getHeight();
-                        Log.d(TAG, "!--->--requestFeedHeight---set mRootHeight:"+mRootHeight+"; isInit:"+isInit);
+                        Log.d(TAG, "!--->--requestFeedHeight---set mRootHeight:" + mRootHeight + "; isInit:" + isInit);
                         params.height = mRootHeight - mFLTopNav.getHeight();
                         homeFeeds.setLayoutParams(params);
                         if (isInit) {
@@ -506,7 +517,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!isAllopen) {  // 权限修复
             isRiskTips = false;
             PermissionIntegrate.getPermission().startWK(getActivity());
-            StatisticsUtils.trackClick("permission_icon_click","首页权限图标点击","clod_splash_page","home_page");
+            StatisticsUtils.trackClick("permission_icon_click", "首页权限图标点击", "clod_splash_page", "home_page");
             return;
         }
         if (mInteractionPoistion > 2) {
@@ -1353,7 +1364,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         feedViewPager.setNeedScroll(false);
         Rect rect = new Rect();
         homeFeeds.getGlobalVisibleRect(rect);
-        int statusBarHeight =  ScreenUtil.getStatusBarHeight(requireContext());
+        int statusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
         int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;
         if (dy != 0) {
             doXiDingStickyAnim(mNestedScrollView.getScrollY() + dy, isAnimation);
@@ -1367,7 +1378,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
-            int statusBarHeight =  ScreenUtil.getStatusBarHeight(requireContext());
+            int statusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
             int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;  // flow top - titleTop Height  - statusBarHeight
             int changeY = y - lasty;
             if (dy == 0) {
@@ -1389,7 +1400,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void cheekRootHeight() {
         int rootHeight = layoutRoot.getHeight();
-        if (mRootHeight != rootHeight ) {
+        if (mRootHeight != rootHeight) {
             requestFeedHeight(false);
         }
     }
@@ -1519,6 +1530,101 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         // }
     }
 
+    private void getpermission(final String... permissions) {
+        showSystemSetting = true;//是否支持显示系统设置权限设置窗口跳转
+        PermissionsUtils.getInstance().chekPermissions(getActivity(), permissions, permissionsResult);
+    }
+
+    //创建监听权限的接口对象
+    PermissionsUtils.IPermissionsResult permissionsResult = new PermissionsUtils.IPermissionsResult() {
+        @Override
+        public void passPermissons() {
+            //权限通过执行的方法
+            //权限通过验证
+        }
+
+        @Override
+        public void forbitPermissons() {
+//这是没有通过权限的时候提示的内容，自定义即可
+            Toast.makeText(mContext, "您没有允许部分权限，可能会导致部分功能不能正常使用，如需正常使用  请允许权限", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        //就多一个参数this
+        PermissionsUtils.getInstance().onRequestPermissionsResult(getActivity(), requestCode, permissions, grantResults);
+        boolean hasPermissionDismiss = false;
+        //有权限没有通过
+        if (PermissionsUtils.requestCode == requestCode) {
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == -1) {
+                    hasPermissionDismiss = true;
+                }
+            }
+            //如果有权限没有被允许
+            if (hasPermissionDismiss) {
+                if (showSystemSetting) {
+                    showSystemPermissionsSettingDialog(getActivity()); // 跳转到系统设置权限页面，或者直接关闭页面，不让他继续访问
+                } else {
+                    permissionsResult.forbitPermissons();
+                }
+            } else {
+                //全部权限通过，可以进行下一步操作。。。
+                permissionsResult.passPermissons();
+            }
+        }
+    }
+
+    /**
+     * 不再提示权限时的展示对话框
+     */
+    AlertDialog mPermissionDialog;
+
+    private void showSystemPermissionsSettingDialog(final Activity context) {
+        final String mPackName = context.getPackageName();
+        if (mPermissionDialog == null) {
+            mPermissionDialog = new AlertDialog.Builder(context).setMessage("已禁用权限，请手动授予").setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancelPermissionDialog();
+                    Uri packageURI = Uri.parse("package:" + mPackName);
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+                    context.startActivity(intent);
+                    context.finish();
+                }
+            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //关闭页面或者做其他操作
+                    cancelPermissionDialog();
+                    //mContext.finish();
+                    permissionsResult.forbitPermissons();
+                }
+            }).create();
+        }
+        mPermissionDialog.show();
+        //放在show()之后，不然有些属性是没有效果的，比如height和width
+        //以下代码设置解决弹窗不居中问题，一侧有边距，一侧没有
+        Window dialogWindow = mPermissionDialog.getWindow();
+        WindowManager m = context.getWindowManager();
+        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高
+        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        // 设置宽度
+        p.width = (int) (d.getWidth() * 0.95); // 宽度设置为屏幕的0.95
+        p.gravity = Gravity.CENTER;//设置位置
+        //p.alpha = 0.8f;//设置透明度
+        dialogWindow.setAttributes(p);
+    }
+
+    //关闭对话框
+    private void cancelPermissionDialog() {
+        if (mPermissionDialog != null) {
+            mPermissionDialog.cancel();
+            mPermissionDialog = null;
+        }
+    }
+
 
     private void showFilePermissionGuideDialog() {
         FilePermissionGuideDialogFragment filePermissionGuideDialogFragment = FilePermissionGuideDialogFragment.newInstance();
@@ -1527,25 +1633,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void onConfirm() {
                 filePermissionGuideDialogFragment.dismiss();
-                // 请求存储权限
-                new RxPermissions(getActivity()).request(basicPermissions).subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        if (aBoolean) {
-                            // 权限获取成功
-                        } else {
-                            if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                                //永久拒绝权限
-//                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
-//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(intent);
-                            } else {
-                                //拒绝权限
-                            }
-                        }
-                    }
-                });
+                getpermission(basicPermissions);
             }
 
             @Override
