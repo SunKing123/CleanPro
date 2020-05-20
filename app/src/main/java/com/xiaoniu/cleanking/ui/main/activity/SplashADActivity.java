@@ -245,7 +245,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         super.onPause();
         Log.d(TAG, "!--->onPause-----canJump:" + canJump);
         canJump = false;
-        if (findViewById(R.id.rl_open_new).getVisibility() == View.VISIBLE) {
+        if (openNewVsLayout != null && openNewVsLayout.getVisibility() == View.VISIBLE) {
             StatisticsUtils.onPageEnd("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
         }
     }
