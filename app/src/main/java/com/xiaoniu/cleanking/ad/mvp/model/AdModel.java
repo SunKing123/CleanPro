@@ -71,21 +71,15 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
             @Override
             public void subscribe(ObservableEmitter<AdYLHEmitterBean> emitter) throws Exception {
+                Log.d(TAG, "优量会模板准备请求 id:"+ adRequestBean.getAdvertId());
                 ADSize adSize = new ADSize(adRequestParamentersBean.viewWidth, ADSize.AUTO_HEIGHT);
-                AdYLHEmitterBean adYLHEmitterBean = new AdYLHEmitterBean();
-                String advertPosition = "1";
-                switch (adRequestParamentersBean.advertPosition) {
-                    case PositionId.DRAW_ONE_CODE:
-                        advertPosition = "1";
-                        break;
-                }
                 NativeExpressAD nativeExpressAD = new NativeExpressAD(adRequestParamentersBean.context,
                         adSize,
                         adRequestBean.getAdvertId(),
                         new NativeExpressAD.NativeExpressADListener() {
                             @Override
                             public void onNoAD(AdError adError) {
-                                Log.d(TAG, "优量会模板 onNoAD message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode());
+                                Log.d(TAG, "优量会模板请求失败  id:"+ adRequestBean.getAdvertId()+"  message: " + adError.getErrorMsg() + " code: " + adError.getErrorCode());
                                 emitter.onError(new RuntimeException("优量会模板 onNoAD message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode()));
                                 emitter.onComplete();
                                 StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
@@ -93,7 +87,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                             @Override
                             public void onADLoaded(List<NativeExpressADView> list) {
-                                Log.d(TAG, "优量会模板 onADLoaded   当前位置index是： " + adRequestParamentersBean.index);
+                                Log.d(TAG, "优量会模板 拿到广告准备渲染 " + adRequestBean.getAdvertId());
                                 if (CollectionUtils.isEmpty(list)) {
                                     emitter.onError(new RuntimeException("优量会模板 onADLoaded,但是没有广告"));
                                     emitter.onComplete();
@@ -106,16 +100,14 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                             @Override
                             public void onRenderFail(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onRenderFail 当前位置index是： " + adRequestParamentersBean.index + " 广告位 adposition" + adRequestParamentersBean.advertPosition);
+                                Log.d(TAG, "优量会模板渲染失败 广告位 id: " + adRequestBean.getAdvertId() +"  当前位置index是： " + adRequestParamentersBean.index  );
                                 emitter.onError(new RuntimeException("优量会模板 onRenderFail"));
                                 emitter.onComplete();
                             }
 
                             @Override
                             public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onRenderSuccess   当前位置index是： " + adRequestParamentersBean.index);
-                                Log.d("----------------", "优量会模板 onRenderSuccess index:" + adRequestParamentersBean.index);
-
+                                Log.d(TAG, "优量会模板渲染成功 广告位 id: " + adRequestBean.getAdvertId()+   "  当前位置index是： " + adRequestParamentersBean.index);
                                 emitter.onNext(new AdYLHEmitterBean(nativeExpressADView, adRequestParamentersBean.index, 2));
 //                                emitter.onComplete();
                                 StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
@@ -123,22 +115,21 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                             @Override
                             public void onADExposure(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onADExposure ");
+                                Log.d(TAG, "优量会模板曝光 id:"+adRequestBean.getAdvertId());
                                 StatisticsUtils.customADRequest("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADClicked(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onADClicked ");
+                                Log.d(TAG, "优量会模板点击 id:"+adRequestBean.getAdvertId());
                                 StatisticsUtils.clickAD("ad_click", "广告点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADClosed(NativeExpressADView nativeExpressADView) {
-                                Log.d(TAG, "优量会模板 onADClosed index:" + adRequestParamentersBean.index);
+                                Log.d(TAG, "优量会模板关闭 id:"+adRequestBean.getAdvertId() +"  index"+ adRequestParamentersBean.index);
                                 emitter.onNext(new AdYLHEmitterBean(nativeExpressADView, adRequestParamentersBean.index, 3));
                                 emitter.onComplete();
-                                Log.d("----------------", "优量会模板 onADClosed index:" + adRequestParamentersBean.index);
                                 nativeExpressADView.destroy();
                                 StatisticsUtils.clickAD("ad_close_click", "关闭点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
@@ -185,6 +176,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
             @Override
             public void subscribe(ObservableEmitter<AdYLHEmitterBean> emitter) throws Exception {
+                Log.d(TAG, "优量会开屏准备开始"+adRequestBean.getAdvertId());
                 SplashAD splashAD = new SplashAD((Activity) adRequestParamentersBean.context,
                         adRequestParamentersBean.skipContainer,
                         adRequestBean.getAdvertId(),
@@ -196,14 +188,14 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                             @Override
                             public void onNoAD(AdError adError) {
-                                Log.d(TAG, "优量会 开屏----onNoAD  获取广告失败  message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode());
+                                Log.d(TAG, "优量会开屏请求失败  id:"+ adRequestBean.getAdvertId()+"  message: " + adError.getErrorMsg() + " code: " + adError.getErrorCode());
                                 emitter.onError(new RuntimeException("优量会 开屏----onNoAD  获取广告失败  message:" + adError.getErrorMsg() + " code:" + adError.getErrorCode()));
                                 StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onADPresent() {
-                                Log.d(TAG, "优量会 开屏----onADPresent");
+                                Log.d(TAG, "优量会开屏请求成功 广告位 id: " + adRequestBean.getAdvertId());
                                 emitter.onNext(new AdYLHEmitterBean(adRequestParamentersBean.index, 0, 2));
                                 emitter.onComplete();
                                 StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
@@ -211,7 +203,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                             @Override
                             public void onADClicked() {
-                                Log.d(TAG, "优量会 开屏----onADClicked");
+                                Log.d(TAG, "优量会开屏点击 广告位 id: " + adRequestBean.getAdvertId());
                                 StatisticsUtils.clickAD("ad_click", "广告点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
@@ -222,7 +214,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                             @Override
                             public void onADExposure() {
-                                Log.d(TAG, "优量会 开屏----onADExposure");
+                                Log.d(TAG, "优量会开屏曝光 广告位 id: " + adRequestBean.getAdvertId());
                                 StatisticsUtils.customAD("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
@@ -252,7 +244,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
         return Observable.create(new ObservableOnSubscribe<List<TTNativeExpressAd>>() {
             @Override
             public void subscribe(ObservableEmitter<List<TTNativeExpressAd>> emitter) throws Exception {
-                Log.d(TAG, "穿山甲模板开始 id:" + adRequestBean.getAdvertId());
+                Log.d(TAG, "穿山甲模板准备开始 id:" + adRequestBean.getAdvertId());
                 TTAdNative mTTAdNative = TTAdManagerHolder.get().createAdNative(adRequestParamentersBean.context);
                 //设置广告参数
                 AdSlot adSlot = new AdSlot.Builder()
@@ -265,7 +257,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
                 mTTAdNative.loadNativeExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
                     @Override
                     public void onError(int i, String s) {
-                        Log.d(TAG, "穿山甲模板广告失败 message:" + s + " code:" + i + "当前位置index是： " + adRequestParamentersBean.index + " 广告位 adposition" + adRequestParamentersBean.advertPosition);
+                        Log.d(TAG, "穿山甲模板广告失败 message:" + s + " code:" + i +" 广告位id:" + adRequestBean.getAdvertId()+ "  当前位置index是： " + adRequestParamentersBean.index );
                         emitter.onError(new RuntimeException("code " + i + " message:" + s));
                         emitter.onComplete();
                         StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
@@ -273,7 +265,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
 
                     @Override
                     public void onNativeExpressAdLoad(List<TTNativeExpressAd> list) {
-                        Log.d(TAG, "穿山甲模板广告成功 当前位置index是： " + adRequestParamentersBean.index + " 广告位 adposition" + adRequestParamentersBean.advertPosition);
+                        Log.d(TAG, "穿山甲模板广告成功 广告位id" + adRequestParamentersBean.advertPosition+"  当前位置index是： " + adRequestParamentersBean.index);
                         emitter.onNext(list);
                         emitter.onComplete();
                         StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
@@ -304,20 +296,21 @@ public class AdModel extends BaseModel implements AdContract.Model {
                 mTTAdNative.loadSplashAd(adSlot, new TTAdNative.SplashAdListener() {
                     @Override
                     public void onError(int i, String s) {
-                        Log.d(TAG, "穿山甲开屏广告失败 message:" + s + " code:" + i);
+                        Log.d(TAG, "穿山甲开屏广告失败 message:" + s + " code:" + i +" 广告位id:" + adRequestBean.getAdvertId());
                         emitter.onError(new RuntimeException(s));
                         StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                     }
 
                     @Override
                     public void onTimeout() {
+                        Log.d(TAG, "穿山甲开屏广告超时 广告位id:"+adRequestBean.getAdvertId());
                         emitter.onError(new TimeoutException("穿山甲广告商请求超时"));
                         StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "fail", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                     }
 
                     @Override
                     public void onSplashAdLoad(TTSplashAd ttSplashAd) {
-                        Log.d(TAG, "穿山甲开屏广告成功！");
+                        Log.d(TAG, "穿山甲开屏广告成功 广告位id:"+adRequestBean.getAdvertId());
                         emitter.onNext(ttSplashAd);
                         emitter.onComplete();
                         StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "success", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);

@@ -47,13 +47,13 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
                         if (adYLHEmitterBean == null || adShowCallBack == null) {
                             return;
                         }
-                        Log.d(TAG, "优量会 开屏----onAdShowCallBack");
                         adShowCallBack.onAdShowCallBack(adYLHEmitterBean.nativeExpressADView);
 //                        adYLHEmitterBean.nativeExpressADView.destroy();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        Log.d(TAG, "优量会开屏广告失败  message:"+throwable.getMessage());
                         adError(adRequest, adRequestParamentersBean, adShowCallBack);
                     }
                 });
@@ -103,6 +103,7 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        Log.d(TAG, "优量会模板广告失败  message:"+throwable.getMessage());
                         adError(adRequest, adRequestParamentersBean, adShowCallBack);
                     }
                 });
