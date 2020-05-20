@@ -1376,7 +1376,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             int changeY = y - lasty;
             if (dy == 0) {
                 if (hasXiding && changeY == -statusBarHeight) {
-                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty );
+                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
                     doXiDingStickyAnim(lasty, true);    // when status bar gone caused ScrollChange on Xiding status, just reset it!!!
                 }
                 hasXiding = true;
@@ -1587,7 +1587,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             });
             btnCancle.setOnClickListener(v -> {
                 dlg.dismiss();
-                requireActivity().finish();
             });
         }
     }
