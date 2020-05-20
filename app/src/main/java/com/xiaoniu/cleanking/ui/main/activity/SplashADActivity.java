@@ -115,6 +115,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
     }
 
     @Override
