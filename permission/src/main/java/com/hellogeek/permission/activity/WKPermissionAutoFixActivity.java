@@ -50,6 +50,7 @@ import com.hellogeek.permission.util.Constant;
 import com.hellogeek.permission.util.DialogUtil;
 import com.hellogeek.permission.util.PermissionConvertUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -153,6 +154,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     protected void onPause() {
         super.onPause();
         isBack = false;
+        StatisticsUtils.onPageEnd("permission_guide_list_page_view_page","权限引导列表页浏览","home_page","permission_guide_list_page");
     }
 
 
@@ -338,6 +340,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             }
             finish();
         }
+
+        StatisticsUtils.trackClick("repair_now_button_click","一键修复按钮点击","home_page","permission_guide_list_page");
     }
 
 
@@ -355,6 +359,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                         .send();
             }
         }
+        StatisticsUtils.trackClick("return_click","返回点击","home_page","permission_guide_list_page");
     }
 
     private boolean isFixing;
@@ -418,6 +423,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 }, 1000);
             }
         }
+        StatisticsUtils.onPageStart("permission_guide_list_page_view_page","权限引导列表页浏览");
+
     }
 
     Random rand = new Random();
@@ -607,6 +614,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             if (isOpen) {
                 PermissionProvider.save(this, PROVIDER_SUSPENDEDTOAST, true);
                 EventBus.getDefault().post(new PathEvent(Permission.SUSPENDEDTOAST, true, 1));
+                StatisticsUtils.customTrackEvent("suspended_window_success", "悬浮窗开启成功", "clod_splash_page", "system_settings_page");
             }
             requestPermission = Permission.SELFSTARTING;
         } else if (requestCode == Permission.SELFSTARTING.getRequestCode()) {
@@ -615,6 +623,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             if (isOpen) {
                 PermissionProvider.save(this, PROVIDER_SELFSTARTING, true);
                 EventBus.getDefault().post(new PathEvent(Permission.SELFSTARTING, true, 1));
+                StatisticsUtils.customTrackEvent("self_startup_permission_open_success", "自启动权限开启成功", "clod_splash_page", "system_settings_page");
             }
             requestPermission = Permission.NOTIFICATIONBAR;
         } else if (requestCode == Permission.NOTIFICATIONBAR.getRequestCode()) {
@@ -623,6 +632,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             if (isOpen) {
                 PermissionProvider.save(this, PROVIDER_NOTIFICATIONBAR, true);
                 EventBus.getDefault().post(new PathEvent(Permission.NOTIFICATIONBAR, true, 1));
+                StatisticsUtils.customTrackEvent("notification_read_success", "通知读取开启成功", "clod_splash_page", "system_settings_page");
             }
 
             requestPermission = Permission.PACKAGEUSAGESTATS;
@@ -632,6 +642,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             if (isOpen) {
                 PermissionProvider.save(this, PACKAGE_USAGE_STATS, true);
                 EventBus.getDefault().post(new PathEvent(Permission.PACKAGEUSAGESTATS, true, 1));
+                StatisticsUtils.customTrackEvent("access_to_apps_open_success", "有权查看应用开启成功", "clod_splash_page", "system_settings_page");
             }
         }
         if (!isOpen && onecLiRepair) {

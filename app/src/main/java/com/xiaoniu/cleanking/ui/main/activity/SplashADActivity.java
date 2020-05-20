@@ -5,29 +5,25 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
@@ -53,10 +49,10 @@ import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -71,6 +67,9 @@ import io.reactivex.disposables.Disposable;
  * 在调用SDK之前，如果您的App的targetSDKVersion >= 23，那么建议动态申请相关权限。
  */
 public class SplashADActivity extends BaseActivity<SplashPresenter> {
+
+    private static final String TAG = "SplashADActivity";
+
     private static final String SKIP_TEXT = "跳过 %d";
     public boolean canJump = false;
     @Inject
@@ -86,6 +85,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * 记录拉取广告的时间
      */
     private long fetchSplashADTime = 0;
+    private long loadTime = 0;
+
     private Handler handler = new Handler(Looper.getMainLooper());
     private Disposable mSubscription;
 
@@ -96,7 +97,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private static final int MSG_GO_MAIN = 1;
     //穿山甲相关 end
     private TextView skipTv;
-
+    //修复界面
+    private View openNewVs;
+    //修复界面
+    private View openNewVsLayout;
     private String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -104,6 +108,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private int[] grantResults;
     private int requestCode;
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -117,11 +128,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     public void jumpActivity() {
         final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
+        Log.d(TAG, "!--->jumpActivity------isFirst:"+isFirst);
         if (isFirst) {
             startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
         } else {
             startActivity(new Intent(SplashADActivity.this, MainActivity.class));
         }
+        Map<String, Object> extParam = new HashMap<>();
+        extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime) / 1000);
+        StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "clod_splash_page", "cold_splash_page", extParam);
         finish();
     }
 
@@ -216,6 +231,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * 才可以跳转到开发者自己的App主页；当开屏广告是App类广告时只会下载App。
      */
     private void next() {
+        Log.d(TAG, "!--->next-----canJump:" + canJump);
         if (canJump) {
             jumpActivity();
             this.finish();
@@ -227,12 +243,16 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "!--->onPause-----canJump:" + canJump);
         canJump = false;
+        if (findViewById(R.id.rl_open_new).getVisibility() == View.VISIBLE) {
+            StatisticsUtils.onPageEnd("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
+        }
     }
 
     @Override
     protected void initView() {
-
+        Log.d(TAG, "!--->initView------");
         PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
@@ -243,6 +263,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
 
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
+        openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
+        openNewVsLayout = openNewVs.findViewById(R.id.rl_open_new);
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
             isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
@@ -255,6 +277,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 //  显示立即修复
                 View openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
                 openNewVs.findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
+                // 显示立即修复
                 skipTv = openNewVs.findViewById(R.id.tv_skip);
                 skipTv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -262,6 +285,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                         jumpActivity();
                     }
                 });
+
+                openNewVsLayout.setVisibility(View.VISIBLE);
                 startCountDown(5);
                 openNewVs.findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -270,6 +295,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                         // 立即修复
                         SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
                         jumpActivity();
+                        StatisticsUtils.trackClick("repair_now_button_click", "立即修复按钮点击", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
                     }
                 });
             }
@@ -280,8 +306,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
         if (startsNumber != SECONDARY_STARTUP || !PermissionUtils.checkPermission(this, permissions)) {
             if (NetworkUtils.isNetConnected()) {
+                Log.d(TAG, "!--->initView---getAuditSwitch-------");
                 mPresenter.getAuditSwitch();
             } else {
+                Log.d(TAG, "!--->initView---getAuditSwitchFail---");
                 getAuditSwitchFail();
             }
         }
@@ -293,9 +321,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
         boolean needLogo = getIntent().getBooleanExtra("need_logo", true);
         needStartDemoList = getIntent().getBooleanExtra("need_start_demo_list", true);
-        if (!needLogo) {
-            findViewById(R.id.app_logo).setVisibility(View.GONE);
-        }
         initNiuData();
         initFileRelation();
         skipView.setOnClickListener(v ->
@@ -310,6 +335,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         if (startsNumber < 2 * SECONDARY_STARTUP) {
             SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", ++startsNumber);
         }
+        loadTime = System.currentTimeMillis();
     }
 
     @Override
@@ -324,7 +350,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * @param auditSwitch
      */
     public void getAuditSwitch(AuditSwitch auditSwitch) {
-        Log.d("===============", " getAuditSwitch");
+        Log.d(TAG, "!--->----getAuditSwitch-----");
 
         if (auditSwitch == null) {
             //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
@@ -333,17 +359,19 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
         if (!PreferenceUtil.isNoFirstOpenApp()) {
+            Log.d(TAG, "!--->----getAuditSwitch---111--is FirstOpen App--");
             // PreferenceUtil.saveFirstOpenApp();
             // jumpActivity();
         } else if (auditSwitch.getData().equals("0")) {
+            Log.d(TAG, "!--->----getAuditSwitch---222--auditSwitch = 0 --");
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
                 jumpActivity();
             });
         } else if (auditSwitch.getData().equals("1")) {
+            Log.d(TAG, "!--->----getAuditSwitch---333--auditSwitch = 1 --");
             loadAd();
         }
     }
-
 
     /**
      * 倒计时
@@ -385,6 +413,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             next();
         }
         canJump = true;
+
+        if (openNewVsLayout != null && openNewVsLayout.getVisibility() == View.VISIBLE) {
+            StatisticsUtils.onPageStart("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览");
+        }
     }
 
     @Override
@@ -422,6 +454,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
      * 请求广告
      */
     private void loadAd() {
+        Log.d(TAG, "!--->-----------------loadAd-------------");
         fetchSplashADTime = System.currentTimeMillis();
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(
                 this,
@@ -430,13 +463,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 PositionId.SPLASH_ID,
                 PositionId.COLD_CODE,
                 AdType.Splash,
-                3000,
+                6000,
                 "clod_splash_page",
                 "clod_splash_page");
-        new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
+        new AdPresenter().requestAd(true, adRequestParamentersBean, new AdShowCallBack() {
 
             @Override
             public void onAdShowCallBack(View view) {
+                Log.d(TAG, "!--->-----------------onAdShowCallBack-------------");
                 long alreadyDelayMills = System.currentTimeMillis() - fetchSplashADTime;
                 long shouldDelayMills = alreadyDelayMills > DEFAULT_TIME ? 0 : (DEFAULT_TIME - alreadyDelayMills);
                 if (skipView != null) {
@@ -472,6 +506,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                     int progress = ((int) valueAnimator.getAnimatedValue() * 100) / animTime;
                     skipView.setProgress(progress);
                     if (progress == 100) {
+                        Log.d(TAG, "!--->-----onAnimationUpdate----skipView progress == 100 ! next...");
                         next();
                     }
                 }

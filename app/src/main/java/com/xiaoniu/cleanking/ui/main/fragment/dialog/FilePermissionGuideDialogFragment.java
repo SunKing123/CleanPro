@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * @ProjectName: clean
@@ -55,6 +56,18 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
         resizeDialogFragment();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        StatisticsUtils.onPageStart("read_file_permission_popup_view_page","读取文件权限弹窗浏览");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        StatisticsUtils.onPageEnd("read_file_permission_popup_view_page","读取文件权限弹窗浏览","launch_page","home_page");
+    }
+
 
     private void initView(View view) {
         if (null != getArguments()) {
@@ -83,6 +96,7 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
             switch (view.getId()) {
                 case R.id.btn_confirm:
                     mOnClickListener.onConfirm();
+                    StatisticsUtils.trackClick("read_file_permission_popup_click","读取文件权限弹窗点击","launch_page","home_page");
                     break;
             }
         }

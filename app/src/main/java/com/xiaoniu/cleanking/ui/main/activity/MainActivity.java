@@ -535,6 +535,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                                 //定义前台服务的通知点击事件
                                 (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
                 );
+                StatisticsUtils.customTrackEvent("app_start_creation", "应用冷启动创建时", "app_page", "app_page");
             }
         } catch (RuntimeException e) {
             e.printStackTrace();

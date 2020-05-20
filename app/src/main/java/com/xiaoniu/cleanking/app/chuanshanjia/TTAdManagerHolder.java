@@ -47,7 +47,7 @@ public class TTAdManagerHolder {
                 .allowShowPageWhenScreenLock(true) //是否在锁屏场景支持展示广告落地页
                 .debug(true) //测试阶段打开，可以通过日志排查问题，上线时去除该调用
                 .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G) //允许直接下载的网络状态集合
-                .supportMultiProcess(false)//是否支持多进程
+                .supportMultiProcess(true)//是否支持多进程
                 //.httpStack(new MyOkStack3())//自定义网络库，demo中给出了okhttp3版本的样例，其余请自行开发或者咨询工作人员。
                 .build();
     }

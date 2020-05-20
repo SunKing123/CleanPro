@@ -58,7 +58,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 //                .subscribeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .timeout(3, TimeUnit.SECONDS)
+                .timeout(6, TimeUnit.SECONDS)
                 .subscribe(new Consumer<TTSplashAd>() {
                     @Override
                     public void accept(TTSplashAd ttSplashAd) throws Exception {

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -7,6 +7,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textCursorDrawable">@drawable/color_white_cursor</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
     <!--主页面-->
     <style name="Main.Theme" parent="@style/AppTheme">
@@ -28,9 +37,20 @@
     </style>
 
     <!--启动页主题-->
-    <style name="Theme.AppLauncher" parent="@style/Theme.FullScreen">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
+    <style name="Theme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item> <!--无ActionBar-->
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/splash_layer_list</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item> <!--是否有遮盖-->
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">@color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/ActivityInOutAnimation</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">false</item>
+    </style>
+
+    <style name="ActivityInOutAnimation" parent="android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_enter_anim</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_exit_anim</item>
     </style>
 
     <style name="BaseDialogTheme" parent="Theme.AppCompat.Dialog">

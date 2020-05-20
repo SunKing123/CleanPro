@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.utils.KeepAliveUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * 定时器
@@ -85,6 +86,9 @@ public final class JobHandlerService extends JobService {
         try {
             ++EXECUTE_COUNT;
             Log.d("JOB-->", " Job 执行 " + EXECUTE_COUNT);
+            if(EXECUTE_COUNT!=0 && EXECUTE_COUNT%300==0){
+                StatisticsUtils.customTrackEvent("process_survival_report", "进程存活上报（应用进程存活时每隔5分钟上报一次）", "app_page", "app_page");
+            }
             //7.0以上轮询
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 startJob(this);
