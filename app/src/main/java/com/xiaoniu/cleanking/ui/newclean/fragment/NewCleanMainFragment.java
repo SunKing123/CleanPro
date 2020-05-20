@@ -206,31 +206,25 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    @BindView(R.id.rl_risk_tips_toast)
+    RelativeLayout rlRiskTipsToast;
+    private Boolean isRiskTips = true;
+    private boolean isAllopen = false;
+    private final String TIME_STAMP = "timeStamp";
 
     /*< XD added for feed begin */
     @BindView(R.id.home_feeds)
     LinearLayout homeFeeds;    // 信息流
-
     @BindView(R.id.fl_top_nav)
     LinearLayout mFLTopNav;
     @BindView(R.id.iv_back)
     ImageView mIvBack;
     @BindView(R.id.tv_top_xiding_back)
     TextView tvTopXidingBack;
-
     @BindView(R.id.feed_indicator)
     MagicIndicator feedIndicator;
     @BindView(R.id.feed_view_pager)
     MeasureViewPager feedViewPager;   // feed pager
-    @BindView(R.id.rl_risk_tips_toast)
-    RelativeLayout rlRiskTipsToast;
-
-    private Boolean isRiskTips = true;
-
-    private boolean isAllopen = false;
-
-    private String mTitleType = "white";
-    private static final String KEY_TYPE = "TYPE";
     private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
     private NewsTypeNavigatorAdapter mNewsTypeNaviAdapter;
     private ComFragmentAdapter mNewsListFragmentAdapter;
@@ -283,9 +277,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     protected void initVariable(Bundle arguments) {
         mNewTypes = NewsUtils.sNewTypes;
         mNewsListFragments = new ArrayList<>();
-        if (arguments != null) {
-            mTitleType = arguments.getString(KEY_TYPE);
-        }
     }
 
     @Nullable
@@ -294,10 +285,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mInflater = inflater;
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-
-    private final String TIME_STAMP = "timeStamp";
-
     /* XD added for feed End >*/
+
     @Override
     protected void initView() {
         registResceiver();
@@ -1454,6 +1443,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             vTopTitleXiding.setVisibility(View.GONE);
         }
         hasXiding = xiding;
+        showTopRiskTips(xiding);
     }
 
     private void scrollAnima(int start, int end, int duration) {
@@ -1640,6 +1630,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             Glide.with(this).load(url).into(mInteractionIv);
         } else {
             mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
+            showTopRiskTips(hasXiding);
+        }
+    }
+
+    private void showTopRiskTips(boolean hasXiding) {
+        if (rlRiskTipsToast == null) {
+            return;
+        }
+        if (hasXiding) {
+            rlRiskTipsToast.setVisibility(View.GONE);
+        } else {
             rlRiskTipsToast.setVisibility(isRiskTips ? View.VISIBLE : View.GONE);
         }
     }
