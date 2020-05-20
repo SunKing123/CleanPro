@@ -111,10 +111,8 @@ public class FileUtils {
             if (file.isDirectory()) {
                 cacheInnerListFiles(secondJunkInfo, file);
             } else {   //单个文件
-                if (checkFile(file, 3)) { //改文件操作超过三天
-                    secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
-                    secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
-                }
+                secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
+                secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
             }
         }
     }

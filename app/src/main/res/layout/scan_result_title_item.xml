@@ -24,7 +24,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/dimen_8dp"
         android:layout_toLeftOf="@+id/iv_check_junk_state"
-        android:text="已选123MB"
+        android:text="123MB"
         android:textColor="@color/color_404040"
         android:textSize="@dimen/dimen_13sp" />
 

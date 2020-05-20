@@ -42,10 +42,10 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -174,8 +174,13 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
 
     @Override
     public void setScanningFinish(LinkedHashMap<ScanningResultType, JunkGroup> junkGroups) {
-        final List<JunkGroup> scanningModelList = new ArrayList<>(junkGroups.values());
-        CountEntity mCountEntity = CleanUtil.formatShortFileSize(CleanUtil.getTotalSize(scanningModelList));
+        long totalJunkSize = 0;
+        for (Map.Entry<ScanningResultType, JunkGroup> map : junkGroups.entrySet()) {
+            if (!ScanningResultType.MEMORY_JUNK.equals(map.getKey())) {
+                totalJunkSize += map.getValue().mSize;
+            }
+        }
+        CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalJunkSize);
         ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
         ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
         ((NowCleanActivity) getActivity()).scanFinish();

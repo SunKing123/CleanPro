@@ -9,6 +9,7 @@ import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType
 import com.xiaoniu.cleanking.utils.CleanUtil
 import com.xiaoniu.cleanking.utils.inflater
 import kotlinx.android.extensions.LayoutContainer
@@ -28,6 +29,13 @@ class ScanningJunkAdapter : RecyclerView.Adapter<ScanningJunkAdapter.ScanningJun
 
                     //设置扫描类型名称
                     tv_scan_cate_title.text = it.mName
+                    iv_scan_logo.imageResource = when (it.junkType) {
+                        ScanningResultType.UNINSTALL_JUNK.type -> R.drawable.ic_junk_uninstall
+                        ScanningResultType.MEMORY_JUNK.type -> R.drawable.ic_junk_memory
+                        ScanningResultType.CACHE_JUNK.type -> R.drawable.ic_junk_cache
+                        ScanningResultType.APK_JUNK.type -> R.drawable.ic_junk_apk
+                        else -> R.drawable.ic_junk_ad
+                    }
 
                     if (it.isScanningOver) {
                         //如果加载完成之后，则清除渲染状态

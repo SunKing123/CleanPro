@@ -755,12 +755,17 @@ public class FileQueryUtils {
         return list;
     }
 
+    public ArrayList<FirstJunkInfo> getRunningProcess() {
+        return getRunningProcess(true);
+    }
+
     /**
      * 获取进程
      *
+     * @param isShowSize 是否展示扫描文件大小
      * @return
      */
-    public ArrayList<FirstJunkInfo> getRunningProcess() {
+    public ArrayList<FirstJunkInfo> getRunningProcess(boolean isShowSize) {
         if (isFinish) {
             return new ArrayList<>();
         }
@@ -771,15 +776,15 @@ public class FileQueryUtils {
             HashMap hashMap = new HashMap();
             //8.0以上
             if (Build.VERSION.SDK_INT >= 26) {  //特殊处理
-                return getTaskInfo26();
+                return getTaskInfo26(isShowSize);
             }
             //7.0以上
             if (Build.VERSION.SDK_INT >= 24) {
-                return getTaskInfos24(mContext);
+                return getTaskInfos24(mContext, isShowSize);
             }
             //4.4以上
             if (Build.VERSION.SDK_INT >= 20) {
-                return getTaskInfos(mContext);
+                return getTaskInfos(isShowSize);
             }
 
             for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : this.mActivityManager.getRunningAppProcesses()) {
@@ -833,7 +838,7 @@ public class FileQueryUtils {
                             onelevelGarbageInfo.setAppName(loadLabel.toString().trim());
                             if (!isService)
                                 onelevelGarbageInfo.setGarbageIcon(getAppIcon(mPackageManager.getPackageInfo(str, 0).applicationInfo));
-                            if (mScanFileListener != null) {
+                            if (mScanFileListener != null && isShowSize) {
                                 mScanFileListener.increaseSize(totalPss);
                             }
                         }
@@ -853,30 +858,28 @@ public class FileQueryUtils {
             }
             return arrayList;
         } catch (Exception e2) {
+            e2.printStackTrace();
             return arrayList;
         }
     }
 
     @TargetApi(22)
-    private ArrayList<FirstJunkInfo> getTaskInfo26() {
+    private ArrayList<FirstJunkInfo> getTaskInfo26(boolean isShowSize) {
         UsageStatsManager usageStatsManager = (UsageStatsManager) mContext.getSystemService(USAGE_STATS_SERVICE);
         if (usageStatsManager == null) {
-            return new ArrayList<>();
-        }
-        if (isFinish) {
             return new ArrayList<>();
         }
         ArrayList<FirstJunkInfo> junkList = new ArrayList<>();
         List<UsageStats> lists = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,
                 System.currentTimeMillis() - 86400000, System.currentTimeMillis());
         if (!(lists == null || lists.size() == 0)) {
-            return getTaskInfos26(junkList, lists);  //授权过
+            return getTaskInfos26(junkList, lists, isShowSize);  //授权过
         } else {
-            return getTaskInfos26UnGrant(junkList);   //没有读取记录权限，造随机内存
+            return getTaskInfos26UnGrant(junkList, isShowSize);   //没有读取记录权限，造随机内存
         }
     }
 
-    private ArrayList<FirstJunkInfo> getTaskInfos26UnGrant(ArrayList<FirstJunkInfo> junkList) {
+    private ArrayList<FirstJunkInfo> getTaskInfos26UnGrant(ArrayList<FirstJunkInfo> junkList, boolean isShowSize) {
         //外部存储私有存储父文件
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
         //已经安装的应用信息
@@ -888,31 +891,36 @@ public class FileQueryUtils {
         int sizeNum = 50;
         float sizeNumF = (float) sizeNum * PreferenceUtil.getMulCacheNum();
         sizeNum = (int) sizeNumF;
-
         List<PackageInfo> customAppList = new ArrayList<>();
         for (PackageInfo p : installedList) {
             if (!isSystemAppliation(p.packageName) && !ArrayUtil.arrayContainsStr(WHITE_LIST, p.packageName)) {
                 customAppList.add(p);
             }
         }
-
         List<PackageInfo> junkAppList = new ArrayList<>();
-
         if (customAppList.size() <= 15) {
             junkAppList.addAll(customAppList);
         } else {
-            int[] randomPosition = CountUtil.randomNumber(0, customAppList.size(), (int) (Math.random() * 15 + 15));
-            for (int random : randomPosition) {
+            List<Integer> randomNumList = new ArrayList<>();
+            for (int i = 0; i < customAppList.size(); i++) {
+                randomNumList.add(i);
+            }
+
+            List<Integer> resultNumList = new ArrayList<>();
+            while (resultNumList.size() < 15) {
+                int randomNum = randomNumList.remove((int) (Math.random() * randomNumList.size()));
+                if (!resultNumList.contains(randomNum)) {
+                    resultNumList.add(randomNum);
+                }
+            }
+
+            for (int random : resultNumList) {
                 PackageInfo packageInfo = customAppList.get(random);
                 junkAppList.add(packageInfo);
             }
         }
 
         for (PackageInfo p : junkAppList) {
-            if (isFinish) {
-                //停止扫描
-                return junkList;
-            }
             if (mScanFileListener != null) {
                 mScanFileListener.scanFile(rootPath + p.packageName);
             }
@@ -924,7 +932,7 @@ public class FileQueryUtils {
             if (!isService)
                 junkInfo.setGarbageIcon(getAppIcon(p.applicationInfo));
             long totalSize = (long) ((Math.random() * 1024 * 1024 * sizeNum) + 1024 * 1024 * sizeNum);
-            if (mScanFileListener != null) {
+            if (mScanFileListener != null && isShowSize) {
                 mScanFileListener.increaseSize(totalSize);
             }
             junkInfo.setTotalSize(totalSize);
@@ -936,45 +944,41 @@ public class FileQueryUtils {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private ArrayList<FirstJunkInfo> getTaskInfos26(ArrayList<FirstJunkInfo> junkList, List<UsageStats> lists) {
+    private ArrayList<FirstJunkInfo> getTaskInfos26(ArrayList<FirstJunkInfo> junkList, List<UsageStats> lists, boolean isShowSize) {
         Collections.sort(lists, (o1, o2) -> Long.compare(o1.getLastTimeUsed(), o2.getLastTimeStamp()));
         if (installedList == null)
             installedList = getInstalledList();
-
         HashMap<String, PackageInfo> installedCustomApp = new HashMap<>();
         for (PackageInfo packageInfo : installedList) {
             if (!isSystemAppliation(packageInfo.packageName) && !ArrayUtil.arrayContainsStr(WHITE_LIST, packageInfo.packageName)) {
                 installedCustomApp.put(packageInfo.packageName, packageInfo);
             }
         }
-
         for (UsageStats usageStats : lists) {
-            if (isFinish) {
-                //停止扫描
-                return junkList;
-            }
             if (mScanFileListener != null) {
                 mScanFileListener.scanFile(usageStats.getPackageName());
             }
             if (usageStats.getPackageName() != null) {
                 String packageName = usageStats.getPackageName();
                 PackageInfo packageInfo = installedCustomApp.get(packageName);
-                FirstJunkInfo junkInfo = new FirstJunkInfo();
-                junkInfo.setAllchecked(true);
-                junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
-                junkInfo.setAppPackageName(packageName);
-                if (!isService)
-                    junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
-                long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
-                if (mScanFileListener != null) {
-                    mScanFileListener.increaseSize(totalSize);
+                if (packageInfo != null) {
+                    FirstJunkInfo junkInfo = new FirstJunkInfo();
+                    junkInfo.setAllchecked(true);
+                    junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
+                    junkInfo.setAppPackageName(packageName);
+                    if (!isService) {
+                        junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
+                    }
+                    long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
+                    if (mScanFileListener != null && isShowSize) {
+                        mScanFileListener.increaseSize(totalSize);
+                    }
+                    junkInfo.setTotalSize(totalSize);
+                    junkInfo.setGarbageType("TYPE_PROCESS");
+                    junkList.add(junkInfo);
                 }
-                junkInfo.setTotalSize(totalSize);
-                junkInfo.setGarbageType("TYPE_PROCESS");
-                junkList.add(junkInfo);
             }
         }
-
         ArrayList<FirstJunkInfo> result = new ArrayList<>();
         if (junkList.size() > 30) {
             result.addAll(junkList.subList(0, 30));
@@ -985,7 +989,7 @@ public class FileQueryUtils {
     }
 
 
-    public ArrayList<FirstJunkInfo> getTaskInfos(Context context) {
+    public ArrayList<FirstJunkInfo> getTaskInfos(boolean isShowSize) {
         int i2;
         try {
             if (isFinish) {
@@ -1067,7 +1071,7 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
                         if (!isService)
                             onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
-                        if (mScanFileListener != null) {
+                        if (mScanFileListener != null && isShowSize) {
                             mScanFileListener.increaseSize(totalPss);
                         }
                         arrayList.add(onelevelGarbageInfo);
@@ -1081,7 +1085,7 @@ public class FileQueryUtils {
     }
 
     @TargetApi(19)
-    public ArrayList<FirstJunkInfo> getTaskInfos24(Context context) {
+    public ArrayList<FirstJunkInfo> getTaskInfos24(Context context, boolean isShowSize) {
         AndroidProcesses.setLoggingEnabled(true);
         if (isFinish) {
             return new ArrayList<>();
@@ -1167,7 +1171,7 @@ public class FileQueryUtils {
                         if (isIgore) {
                             continue;
                         }
-                        if (mScanFileListener != null) {
+                        if (mScanFileListener != null && isShowSize) {
                             mScanFileListener.increaseSize(totalPss);
                         }
                         arrayList2.add(onelevelGarbageInfo);

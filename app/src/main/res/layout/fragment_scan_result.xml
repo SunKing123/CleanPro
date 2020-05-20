@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/iv_down_arrow"
                     android:layout_centerHorizontal="true"
-                    android:background="@drawable/icon_checked_bg01"
+                    android:background="@drawable/scan_result_checked_bg"
                     android:gravity="center"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/dimen_13sp"
@@ -158,6 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:background="@drawable/scan_result_deep_scan_btn"
                 android:gravity="center_vertical">
 
