@@ -209,7 +209,7 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             long totalSize = 0;
             totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
             if (totalSize == 0) {
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_QQ,PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH,PositionId.DRAW_THREE_CODE);
                 int mNotifySize = 0; //通知条数
                 int mPowerSize = 0; //耗电应用数
                 int mRamScale = 0; //使用内存占总RAM的比例

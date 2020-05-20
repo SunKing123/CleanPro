@@ -113,7 +113,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private TTAdNative mTTAdNative;
     private TTRewardVideoAd mttRewardVideoAd;
     private boolean mHasShowDownloadActive = false;
-    private boolean mIsOpen;
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //所有应用所占内存大小
@@ -328,9 +327,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         for (SwitchInfoList.DataBean switchInfoList : list.getData()) {
             if (PositionId.KEY_GAME_JILI.equals(switchInfoList.getConfigKey())) {
                 initChuanShanJia(switchInfoList.getAdvertId());
-            }
-            if (PositionId.KEY_GAME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                mIsOpen = switchInfoList.isOpen();
             }
         }
     }
@@ -711,6 +707,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         }
         PreferenceUtil.saveGameQuikcenStart(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+        boolean mIsOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
         AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
         if (mIsOpen && PreferenceUtil.getShowCount(GameActivity.this, getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
             Bundle bundle = new Bundle();

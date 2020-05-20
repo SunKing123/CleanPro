@@ -774,7 +774,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
                 PreferenceUtil.saveCleanCoolUsed(true);
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL,PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH,PositionId.DRAW_THREE_CODE);
 
                 //恢复状态栏状态
                 NotificationEvent event = new NotificationEvent();

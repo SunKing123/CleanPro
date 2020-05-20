@@ -479,39 +479,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
-
-    private String getConfigkey() {
-        String configkey = "";
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            //一键加速
-            configkey = PositionId.KEY_JIASU;
-        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-            //1.2.1清理完成页面_建议清理
-            configkey = PositionId.KEY_CLEAN_ALL;
-
-        } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
-            //超强省电
-            configkey = PositionId.KEY_CQSD;
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
-            //微信专情
-            configkey = PositionId.KEY_WECHAT;
-        }  else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
-            //qq专情
-            configkey = PositionId.KEY_QQ;
-        }else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
-            //通知栏清理
-            configkey = PositionId.KEY_NOTIFY;
-        } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
-            //手机降温
-            configkey = PositionId.KEY_COOL;
-        } else if (getString(R.string.game_quicken).contains(mTitle)) {
-            //游戏加速
-            configkey = PositionId.KEY_GAME;
-        }
-        return configkey;
-    }
-
-
     private void changeUI(Intent intent) {
         if (intent != null) {
             String num = intent.getStringExtra("num");
@@ -954,11 +921,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void loadData() {
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
-        String configKey=getConfigkey();
-        if(!TextUtils.isEmpty(configKey)){
-            loadAdUp();
-            loadAdDown();
-        }
+        loadAdUp();
+        loadAdDown();
 //        startLoadData();  // XD delete 20200512
         loadFeedData();  // XD add for feed
     }

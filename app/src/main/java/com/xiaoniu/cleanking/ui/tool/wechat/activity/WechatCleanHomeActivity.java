@@ -220,7 +220,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
 
             if (WxQqUtil.e.getTotalSize() + WxQqUtil.d.getTotalSize() + WxQqUtil.g.getTotalSize() + WxQqUtil.f.getTotalSize() == 0) {
                 PreferenceUtil.saveCleanWechatUsed(true);
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT,PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH,PositionId.DRAW_THREE_CODE);
                 AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {

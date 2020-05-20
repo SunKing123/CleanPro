@@ -202,7 +202,7 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(WechatCleanHomeActivity.class);
             } else {
 
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT, PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
 
                 if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
@@ -235,7 +235,7 @@ public class ToolFragment extends SimpleFragment {
             //保存本次清理完成时间 保证每次清理时间间隔为3分钟
             if (!PreferenceUtil.getCleanTime()) {
 
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU, PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
 
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
@@ -264,7 +264,7 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             } else {
 
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL, PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
 
                 if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                     Bundle bundle = new Bundle();
