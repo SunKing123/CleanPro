@@ -208,8 +208,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
 
     /*< XD added for feed begin */
-//    @BindView(R.id.close_feed_empty_view)
-//    View close_feed_empty_view;
     @BindView(R.id.home_feeds)
     LinearLayout homeFeeds;    // 信息流
 
@@ -425,16 +423,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     if (NewsUtils.isShowHomeFeed()) {
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) homeFeeds.getLayoutParams();
                         mRootHeight = layoutRoot.getHeight();
-                        Log.d(TAG, "!--->--requestFeedHeight---set mRootHeight:" + mRootHeight + "; isInit:" + isInit);
                         params.height = mRootHeight - mFLTopNav.getHeight();
                         homeFeeds.setLayoutParams(params);
+                        homeFeeds.requestLayout();
                         if (isInit) {
                             mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
                         }
                         mNestedScrollView.requestLayout();
                     } else {
                         homeFeeds.setVisibility(View.GONE);
-//                        close_feed_empty_view.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -541,7 +538,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onResume() {
         super.onResume();
-
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mPresenter.getSwitchInfoList();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -1343,7 +1339,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             listFragment.setOnClickItemListener(new OnClickNewsItemListener() {
                 @Override
                 public void onClickItem(int position, NewsItemInfo itemInfo) {
-                    Log.d(TAG, "!--->onClickItem---position:" + position + "; type:" + itemInfo.type + "; url:" + itemInfo.url);
                     checkClickCauseXiding(false);
                 }
             });
@@ -1381,7 +1376,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             int changeY = y - lasty;
             if (dy == 0) {
                 if (hasXiding && changeY == -statusBarHeight) {
-                    Log.w(TAG, "!--->onScrollChange  doXiDingStickyAnim lasty!");
+                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty );
                     doXiDingStickyAnim(lasty, true);    // when status bar gone caused ScrollChange on Xiding status, just reset it!!!
                 }
                 hasXiding = true;

@@ -40,7 +40,7 @@ public class ApiModule {
     public ApiModule(Application application) {
         //原生Log日志拦截
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message ->
-                Log.e("print", "okhttp=>" + message));
+                Log.i("print", "okhttp=>" + message));
         if (BuildConfig.DEBUG) {
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         } else {

@@ -118,8 +118,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @BindView(R.id.layout_scroll)
     OperatorNestedScrollView mNestedScrollView;
 
-//    @BindView(R.id.close_feed_empty_view)
-//    View close_feed_empty_view;
     @BindView(R.id.home_feeds)
     LinearLayout homeFeeds;    // 信息流
     @BindView(R.id.feed_view_pager)
@@ -329,6 +327,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         mRootHeight = layoutRoot.getHeight();
                         params.height = mRootHeight - mFLTopNav.getHeight();
                         homeFeeds.setLayoutParams(params);
+                        homeFeeds.requestLayout();
                         if (isInit) {
                             mNestedScrollView.scrollTo(mNestedScrollView.getScrollX(), 0);
                         }
@@ -1337,7 +1336,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             int changeY = y - lasty;
             if (dy == 0) {
                 if (hasXiding && changeY == -statusBarHeight) {
-                    Log.w(TAG, "!--->onScrollChange  doXiDingStickyAnim lasty!");
+                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty );
                     doXiDingStickyAnim(lasty, true);
                 }
                 hasXiding = true;
