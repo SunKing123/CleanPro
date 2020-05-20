@@ -1,14 +1,18 @@
 package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.view.View;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import io.reactivex.functions.Consumer;
@@ -42,9 +46,11 @@ public class JurisdictionGuideActivity extends BaseActivity {
     @Override
     protected void initView() {
         showBarColor(R.color.color_ff000000);
+
         findViewById(R.id.btn_open_now).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 new RxPermissions(JurisdictionGuideActivity.this).request(permissions).subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {
@@ -52,13 +58,15 @@ public class JurisdictionGuideActivity extends BaseActivity {
                             // 权限获取成功
                             finish();
                         } else {
-//                            if (NewScanPresenter.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                                //永久拒绝权限
-//                                showPermissionDialog(mView.getContext());
-//                            } else {
-//                                //拒绝权限
-//                                checkPermission();
-//                            }
+                            if (UpdateAgent.hasPermissionDeniedForever(JurisdictionGuideActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                //永久拒绝权限
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.setData(Uri.parse("package:" + JurisdictionGuideActivity.this.getPackageName()));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            } else {
+                                //拒绝权限
+                            }
                         }
                     }
                 });

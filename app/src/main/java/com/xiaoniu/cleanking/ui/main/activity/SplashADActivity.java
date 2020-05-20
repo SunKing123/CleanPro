@@ -10,7 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -78,7 +81,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private boolean needStartDemoList = true;
     private final int DEFAULT_TIME = 5000;
     private final int SECONDARY_STARTUP = 2;
-    private ConfirmDialogFragment confirmDialogFragment;
 
     /**
      * 记录拉取广告的时间
@@ -99,6 +101,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private int[] grantResults;
+    private int requestCode;
 
 
     @Override
@@ -110,7 +114,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     void initFileRelation() {
         SPUtil.setString(mContext, "path_data", FileUtils.readJSONFromAsset(mContext, "sdstorage.json"));
     }
-
 
     public void jumpActivity() {
         final boolean isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
@@ -193,19 +196,20 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == 1024 && hasAllPermissionsGranted(grantResults)) {
+//
+//        } else {
+//            Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
+//            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//            intent.setData(Uri.parse("package:" + getPackageName()));
+//            startActivity(intent);
+//            finish();
+//        }
+//    }
 
-        } else {
-            Toast.makeText(this, "应用缺少必要的权限！请点击\"权限\"，打开所需要的权限。", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            intent.setData(Uri.parse("package:" + getPackageName()));
-            startActivity(intent);
-            finish();
-        }
-    }
 
     /**
      * 设置一个变量来控制当前开屏页面是否可以跳转，当开屏广告为普链类广告时，点击会打开一个广告落地页，此时开发者还不能打开自己的App主页。当从广告落地页返回以后，
@@ -237,10 +241,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
 
-        boolean consentAgreement = SPUtil.getBoolean(this, "consentAgreement", false);
-        if (!consentAgreement) {
-            showConfirmDialog();
-        }
+
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             boolean isAllopen = false;
@@ -251,8 +252,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 //  开屏页显示权限引导页（不展示开屏广告），
                 //  右上角显示5s倒计时，5s结束后，右上角显示【跳过】按钮，
                 //  点击跳过进入首页。
-                // 显示立即修复
+                //  显示立即修复
                 View openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
+                openNewVs.findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
                 skipTv = openNewVs.findViewById(R.id.tv_skip);
                 skipTv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -260,12 +262,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                         jumpActivity();
                     }
                 });
-
-                openNewVs.findViewById(R.id.rl_open_new).setVisibility(View.VISIBLE);
                 startCountDown(5);
                 openNewVs.findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        openNewVs.findViewById(R.id.btn_repair_now).setClickable(false);
                         // 立即修复
                         SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
                         jumpActivity();
@@ -273,7 +274,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 });
             }
         }
-
+        // 请求设备信息权限
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+        }
         if (startsNumber != SECONDARY_STARTUP || !PermissionUtils.checkPermission(this, permissions)) {
             if (NetworkUtils.isNetConnected()) {
                 mPresenter.getAuditSwitch();
@@ -308,6 +312,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        jumpActivity();
+    }
+
     /**
      * 获取过审开关成功
      *
@@ -334,56 +344,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
     }
 
-
-    private void showConfirmDialog() {
-
-        String html = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
-                "特此向您说明。作为互联网安全公司，" +
-                "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。" +
-                "在使用悟空清理前，请务必仔细阅读并了解<font color='#06C581'><a href=\"https://www.baidu.com\">《隐私政策》</a></font>和" +
-                "<font color='#06C581'><a href=\"https://www.baidu.com\">《用户协议》</a></font>" +
-                "全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。";
-
-
-        confirmDialogFragment = ConfirmDialogFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putString("title", getString(R.string.reminder));
-//        bundle.putString("content", getString(R.string.html));
-        bundle.putString("content", html);
-        confirmDialogFragment.setArguments(bundle);
-        confirmDialogFragment.show(getFragmentManager(), "");
-
-        confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
-            @Override
-            public void onConfirm() {
-                SPUtil.setBoolean(SplashADActivity.this, "consentAgreement", true);
-                PreferenceUtil.saveFirstOpenApp();
-                jumpActivity();
-            }
-
-            @Override
-            public void onCancel() {
-                confirmDialogFragment.dismiss();
-                showMessageDialog();
-            }
-        });
-    }
-
-    private void showMessageDialog() {
-        MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
-        messageDialogFragment.show(getFragmentManager(), "");
-        messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
-            @Override
-            public void onConfirm() {
-                confirmDialogFragment.show(getFragmentManager(), "");
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-    }
 
     /**
      * 倒计时
@@ -535,4 +495,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
 //        });
     }
+
+
 }

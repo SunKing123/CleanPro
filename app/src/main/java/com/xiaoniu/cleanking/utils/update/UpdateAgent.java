@@ -378,7 +378,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
 
         public DefaultDialogDownloadListener(Activity activity) {
             mActivity = activity;
-            LogUtils.e("DefaultDialogDownloadListener --下载开始----"+mActivity);
+            LogUtils.e("DefaultDialogDownloadListener --下载开始----" + mActivity);
         }
 
         /**
@@ -391,7 +391,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 mDialog = new UpgradingDialog(mActivity);
                 mDialog.setCancelable(false);
                 mDialog.show();
-            }else {
+            } else {
                 LogUtils.e("onStart --下载开始无弹窗----");
             }
         }
@@ -404,10 +404,10 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         @Override
         public void onProgress(int i) {
             if (mDialog != null) {
-                if (mDialog.getPgBar() != null){
+                if (mDialog.getPgBar() != null) {
                     mDialog.getPgBar().setProgress(i);
                 }
-                if (mDialog.getTvPg() != null){
+                if (mDialog.getTvPg() != null) {
                     mDialog.getTvPg().setText(i + "%");
                 }
             }
@@ -509,7 +509,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
      * @param permission 权限
      * @return
      */
-    private static boolean hasPermissionDeniedForever(Activity activity, String permission) {
+    public static boolean hasPermissionDeniedForever(Activity activity, String permission) {
         boolean hasDeniedForever = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!activity.shouldShowRequestPermissionRationale(permission)) {
@@ -518,4 +518,5 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         }
         return hasDeniedForever;
     }
+
 }

@@ -13,8 +13,11 @@ import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.SimpleActivity;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.ConfirmDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MessageDialogFragment;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -29,6 +32,7 @@ public class NavigationActivity extends SimpleActivity {
     ViewPager mViewPager;
     @BindView(R.id.navigation_main)
     FrameLayout mNavigationMain;
+    private ConfirmDialogFragment confirmDialogFragment;
 
     @Override
     public int getLayoutId() {
@@ -43,6 +47,8 @@ public class NavigationActivity extends SimpleActivity {
 
     @Override
     public void initView() {
+
+
         ArrayList<View> views = new ArrayList<View>();
         mViewPager.setBackgroundColor(0xff000000);
 
@@ -75,6 +81,59 @@ public class NavigationActivity extends SimpleActivity {
         });
 
     }
+
+    private void showConfirmDialog() {
+
+        String html = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
+                "特此向您说明。作为互联网安全公司，" +
+                "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。" +
+                "在使用悟空清理前，请务必仔细阅读并了解<font color='#06C581'><a href=\"https://www.baidu.com\">《隐私政策》</a></font>和" +
+                "<font color='#06C581'><a href=\"https://www.baidu.com\">《用户协议》</a></font>" +
+                "全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。";
+
+
+        confirmDialogFragment = ConfirmDialogFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.reminder));
+//        bundle.putString("content", getString(R.string.html));
+        bundle.putString("content", html);
+        confirmDialogFragment.setArguments(bundle);
+        confirmDialogFragment.show(getFragmentManager(), "");
+
+        confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                SPUtil.setBoolean(NavigationActivity.this, "consentAgreement", true);
+                PreferenceUtil.saveFirstOpenApp();
+                SPUtil.setFirstIn(NavigationActivity.this, "isfirst", false);
+                startActivity(MainActivity.class);
+                finish();
+            }
+
+            @Override
+            public void onCancel() {
+                confirmDialogFragment.dismiss();
+                showMessageDialog();
+            }
+        });
+    }
+
+    private void showMessageDialog() {
+        MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
+        messageDialogFragment.show(getFragmentManager(), "");
+        messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                confirmDialogFragment.show(getFragmentManager(), "");
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
 
     private class NavigationAdapter extends PagerAdapter {
         private ArrayList<View> views;
@@ -115,9 +174,10 @@ public class NavigationActivity extends SimpleActivity {
         });
         tv_delete.setOnClickListener(v -> {
             if (cb_checkall.isSelected()) {
-                SPUtil.setFirstIn(NavigationActivity.this, "isfirst", false);
-                startActivity(MainActivity.class);
-                finish();
+                boolean consentAgreement = SPUtil.getBoolean(this, "consentAgreement", false);
+                if (!consentAgreement) {
+                    showConfirmDialog();
+                }
             }
         });
     }

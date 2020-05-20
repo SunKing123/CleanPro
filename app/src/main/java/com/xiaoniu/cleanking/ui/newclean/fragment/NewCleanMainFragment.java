@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -93,6 +94,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
@@ -1486,7 +1488,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         valueAnimator.start();
     }
 
-
     private void permissionRepair() {
         mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
         // 检测是否包含文件读写权限
@@ -1513,7 +1514,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
             return;
         }
+        // if (!UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
         showFilePermissionGuideDialog();
+        // }
     }
 
 
@@ -1531,13 +1534,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         if (aBoolean) {
                             // 权限获取成功
                         } else {
-//                            if (NewScanPresenter.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                                //永久拒绝权限
-//                                showPermissionDialog(mView.getContext());
-//                            } else {
-//                                //拒绝权限
-//                                checkPermission();
-//                            }
+                            if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                //永久拒绝权限
+//                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                                intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                startActivity(intent);
+                            } else {
+                                //拒绝权限
+                            }
                         }
                     }
                 });
