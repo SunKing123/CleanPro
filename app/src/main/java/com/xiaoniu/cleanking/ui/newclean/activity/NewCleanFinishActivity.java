@@ -1185,7 +1185,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 (int) ScreenUtils.getScreenWidthDp(this)-32,
                 0,
                 source_page,
-                currentPage);
+                "success_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
@@ -1223,7 +1223,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 (int) ScreenUtils.getScreenWidthDp(this)-32,
                 0,
                 source_page,
-                currentPage);
+                "success_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
