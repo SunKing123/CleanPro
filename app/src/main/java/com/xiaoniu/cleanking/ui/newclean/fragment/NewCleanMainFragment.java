@@ -805,7 +805,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(NowCleanActivity.class);
         } else {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_ALL, PositionId.DRAW_THREE_CODE);
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -844,7 +844,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
-            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_JIASU, PositionId.DRAW_THREE_CODE);
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
@@ -877,7 +877,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CQSD, PositionId.DRAW_THREE_CODE);
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
@@ -960,7 +960,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
         } else {
-            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_WECHAT, PositionId.DRAW_THREE_CODE);
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
@@ -986,7 +986,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
-            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_NOTIFY, PositionId.DRAW_THREE_CODE);
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
@@ -1013,7 +1013,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
-            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_COOL, PositionId.DRAW_THREE_CODE);
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
@@ -1279,7 +1279,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (PreferenceUtil.getGameTime()) {
                     SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
                 } else {
-                    boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_GAME, PositionId.DRAW_THREE_CODE);
+                    boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
                     if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.game_quicken), mRamScale, mNotifySize, mPowerSize) < 3) {
                         Bundle bundle = new Bundle();
                         bundle.putString("title", getString(R.string.game_quicken));
@@ -1356,19 +1356,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
         if (NewsUtils.isShowHomeFeed() && canXiding) {
-            //处理吸顶操作
             cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
             int statusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
-            int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;
             int changeY = y - lasty;
             if (dy == 0) {
-                if (hasXiding && changeY == -statusBarHeight) {
-                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
-                    doXiDingStickyAnim(lasty, true);    // when status bar gone caused ScrollChange on Xiding status, just reset it!!!
+                if (hasXiding) {
+                    if (changeY == -statusBarHeight) {
+                        Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
+                        doXiDingStickyAnim(lasty, true);
+                    }
+                } else {
+                    if (changeY > mStickyHeight) {
+                        onFlyToXiDing();
+                    }
                 }
-                hasXiding = true;
             }
             if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
@@ -1378,6 +1382,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         }
+    }
+
+    private void onFlyToXiDing() {
+        mNestedScrollView.setNeedScroll(false);
+        canXiding = true;
+        updateTitle(true);
     }
 
     private void cheekRootHeight() {
@@ -1434,7 +1444,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
 
     private void updateTitle(boolean xiding) {
-        Log.d(TAG, "!--->updateTitle----xiding:" + xiding);
         if (xiding) {
             vTopTitleNormal.setVisibility(View.GONE);
             vTopTitleXiding.setVisibility(View.VISIBLE);

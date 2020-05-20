@@ -243,7 +243,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         EventBus.getDefault().post(event);
 
         PreferenceUtil.saveCleanAllUsed(true);
-        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_ALL, PositionId.DRAW_THREE_CODE);
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
             if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {

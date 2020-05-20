@@ -297,7 +297,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
             PreferenceUtil.saveNotificationCleanTime();
         }
         PreferenceUtil.saveCleanNotifyUsed(true);
-        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_NOTIFY,PositionId.DRAW_THREE_CODE);
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH,PositionId.DRAW_THREE_CODE);
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {

@@ -61,8 +61,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -192,6 +194,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         //开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
+        SPUtil.setInt(this,"createId",SPUtil.getInt(this,"createId",0)+1);
     }
 
     /**
@@ -535,7 +538,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                                 //定义前台服务的通知点击事件
                                 (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
                 );
-                StatisticsUtils.customTrackEvent("app_start_creation", "应用冷启动创建时", "app_page", "app_page");
+                Map<String, Object> extParam = new HashMap<>();
+                extParam.put("creation_id", "creation_0000"+SPUtil.getInt(this,"createId",1));
+                StatisticsUtils.customTrackEvent("app_start_creation", "应用冷启动创建时", "app_page", "app_page",extParam);
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
