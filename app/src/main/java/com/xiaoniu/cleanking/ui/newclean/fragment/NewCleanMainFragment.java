@@ -1356,19 +1356,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
         if (NewsUtils.isShowHomeFeed() && canXiding) {
-            //处理吸顶操作
             cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
             int statusBarHeight = ScreenUtil.getStatusBarHeight(requireContext());
-            int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;  // flow top - titleTop Height  - statusBarHeight
+            int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;
             int changeY = y - lasty;
             if (dy == 0) {
-                if (hasXiding && changeY == -statusBarHeight) {
-                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
-                    doXiDingStickyAnim(lasty, true);    // when status bar gone caused ScrollChange on Xiding status, just reset it!!!
+                if (hasXiding) {
+                    if (changeY == -statusBarHeight) {
+                        Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
+                        doXiDingStickyAnim(lasty, true);
+                    }
+                } else {
+                    if (changeY > mStickyHeight) {
+                        onFlyToXiDing();
+                    }
                 }
-                hasXiding = true;
             }
             if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
@@ -1378,6 +1382,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         }
+    }
+
+    private void onFlyToXiDing() {
+        mNestedScrollView.setNeedScroll(false);
+        canXiding = true;
+        updateTitle(true);
     }
 
     private void cheekRootHeight() {
@@ -1434,7 +1444,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
 
     private void updateTitle(boolean xiding) {
-        Log.d(TAG, "!--->updateTitle----xiding:" + xiding);
         if (xiding) {
             vTopTitleNormal.setVisibility(View.GONE);
             vTopTitleXiding.setVisibility(View.VISIBLE);

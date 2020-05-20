@@ -131,8 +131,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @BindView(R.id.tv_top_xiding_back)
     TextView tvTopXidingBack;
 
-    private String mTitleType = "white";
-    private static final String KEY_TYPE = "TYPE";
+//    private String mTitleType = "white";
+//    private static final String KEY_TYPE = "TYPE";
     private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
     private NewsTypeNavigatorAdapter mNewsTypeNaviAdapter;
     private ComFragmentAdapter mNewsListFragmentAdapter;
@@ -190,9 +190,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void initVariable(Bundle arguments) {
         mNewTypes = NewsUtils.sNewTypes;
         mNewsListFragments = new ArrayList<>();
-        if (arguments != null) {
-            mTitleType = arguments.getString(KEY_TYPE);
-        }
+//        if (arguments != null) {
+//            mTitleType = arguments.getString(KEY_TYPE);
+//        }
     }
     /* XD added for feed End >*/
 
@@ -1291,7 +1291,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
         if (NewsUtils.isShowCleanFinishFeed() && canXiding) {
-            //处理吸顶操作
             cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
@@ -1299,11 +1298,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;  // flow top - titleTop Height  - statusBarHeight
             int changeY = y - lasty;
             if (dy == 0) {
-                if (hasXiding && changeY == -statusBarHeight) {
-                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty );
-                    doXiDingStickyAnim(lasty, true);
+                if (hasXiding) {
+                    if (changeY == -statusBarHeight) {
+                        Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
+                        doXiDingStickyAnim(lasty, true);
+                    }
+                } else {
+                    if (changeY > mStickyHeight) {
+                        onFlyToXiDing();
+                    }
                 }
-                hasXiding = true;
             }
             if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
@@ -1313,6 +1317,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             }
         }
+    }
+
+    private void onFlyToXiDing() {
+        mNestedScrollView.setNeedScroll(false);
+        canXiding = true;
+        updateTitle(true);
     }
 
     private void cheekRootHeight() {
