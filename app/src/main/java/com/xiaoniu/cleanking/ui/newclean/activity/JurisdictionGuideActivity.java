@@ -32,11 +32,12 @@ import io.reactivex.functions.Consumer;
  */
 public class JurisdictionGuideActivity extends BaseActivity {
 
-
     private String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
+    boolean toSettings=false;
 
     @Override
     protected int getLayoutId() {
@@ -46,6 +47,7 @@ public class JurisdictionGuideActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
+        checkPermissionAndJump();
         StatisticsUtils.onPageStart("system_permission_guide_page_view_page", "系统权限引导页浏览页");
     }
 
@@ -71,6 +73,7 @@ public class JurisdictionGuideActivity extends BaseActivity {
                             // 权限获取成功
                             finish();
                             StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click", "系统读取文件权限弹窗同意点击", "home_page", "system_permission_guide_page");
+                            startActivity(NowCleanActivity.class);
                         } else {
                             if (UpdateAgent.hasPermissionDeniedForever(JurisdictionGuideActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                                 //永久拒绝权限
@@ -78,6 +81,7 @@ public class JurisdictionGuideActivity extends BaseActivity {
                                 intent.setData(Uri.parse("package:" + JurisdictionGuideActivity.this.getPackageName()));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
+                                toSettings=true;
                             } else {
                                 //拒绝权限
                             }
@@ -107,6 +111,21 @@ public class JurisdictionGuideActivity extends BaseActivity {
 
     }
 
+    public void checkPermissionAndJump(){
+        if(!toSettings){
+            return;
+        }
+        toSettings=false;
+        new RxPermissions(JurisdictionGuideActivity.this).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    finish();
+                    startActivity(NowCleanActivity.class);
+                }
+            }
+        });
+    }
     /**
      * 状态栏颜色变化
      *
