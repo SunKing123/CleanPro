@@ -40,13 +40,6 @@
                 android:layout_height="match_parent"
                 android:background="@color/color_background" />
 
-            <!--关闭信息流的时候站位，吸顶+底部tab高度56+60 -->
-            <View
-                android:id="@+id/close_feed_empty_view"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:visibility="gone" />
-
             <include layout="@layout/layout_feed" />
 
         </LinearLayout>
