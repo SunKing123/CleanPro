@@ -349,8 +349,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * 初始化穿山甲
      */
     private void initChuanShanJia(String id) {
-        NiuDataAPI.onPageStart("gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
-        NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_incentive_video_page", "gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
         //step1:初始化sdk
         TTAdManager ttAdManager = TTAdManagerHolder.get();
         //step2:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
@@ -358,6 +356,18 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         //step3:创建TTAdNative对象,用于调用广告请求接口
         mTTAdNative = ttAdManager.createAdNative(getApplicationContext());
         loadAd(id, TTAdConstant.VERTICAL);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NiuDataAPI.onPageStart("gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_incentive_video_page", "gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
     }
 
     @Override
@@ -456,7 +466,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
      * @param orientation
      */
     private void loadAd(String codeId, int orientation) {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", codeId, "穿山甲", "success", "gameboost_add_page", "gameboost_incentive_video_page");
         //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(codeId)
@@ -486,6 +495,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             @Override
             public void onRewardVideoAdLoad(TTRewardVideoAd ad) {
                 Log.d(TAG, "rewardVideoAd loaded");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", codeId, "穿山甲", "success", "gameboost_add_page", "gameboost_incentive_video_page");
                 mttRewardVideoAd = ad;
                 mttRewardVideoAd.setRewardAdInteractionListener(new TTRewardVideoAd.RewardAdInteractionListener() {
 
