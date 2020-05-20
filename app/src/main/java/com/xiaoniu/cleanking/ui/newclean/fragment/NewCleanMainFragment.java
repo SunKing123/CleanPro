@@ -1365,7 +1365,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (dy == 0) {
                 if (hasXiding) {
                     if (changeY == -statusBarHeight) {
-                        Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
                         doXiDingStickyAnim(lasty, true);
                     }
                 } else {
@@ -1373,17 +1372,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         onFlyToXiDing();
                     }
                 }
-            }
-            if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
+            } else if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
                     doXiDingStickyAnim(y + dy, true, 300);
                 } else {
                     doXiDingStickyAnim(y + dy, false);
                 }
+            } else if (hasXiding && dy > 0 && changeY < 0 ) {
+                doXiDingStickyAnim(lasty, false);
             }
         }
     }
 
+    /**
+     * call condition: if (NewsUtils.isShowCleanFinishFeed() && canXiding) {}
+     */
     private void onFlyToXiDing() {
         mNestedScrollView.setNeedScroll(false);
         canXiding = true;

@@ -1178,6 +1178,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载上广告
      */
     private void loadAdUp(){
+        Log.d(TAG, "!--->loadAdUp-------");
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_ONE_CODE,
                 this,
@@ -1190,9 +1191,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onAdShowCallBack(View view) {
                 if(adUpView!=null ){
+                    Log.d(TAG, "!--->loadAdUp----onAdShowCallBack---hasXiding:"+hasXiding);
                     adUpView.setVisibility(View.VISIBLE);
                     adUpView.removeAllViews();
                     adUpView.addView(view);
+                    cancelXiDing();    // XD added 20200520
                 }
             }
 
@@ -1216,6 +1219,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载下广告
      */
     private void loadAdDown(){
+        Log.d(TAG, "!--->loadAdUp-------");
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_TWO_CODE,
                 this,
@@ -1228,9 +1232,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onAdShowCallBack(View view) {
                 if(adDownView!=null ){
+                    Log.d(TAG, "!--->loadAdDown----onAdShowCallBack---hasXiding:"+hasXiding);
                     adDownView.setVisibility(View.VISIBLE);
                     adDownView.removeAllViews();
                     adDownView.addView(view);
+                    cancelXiDing();  // XD added 20200520
                 }
             }
 
@@ -1272,7 +1278,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         feedViewPager.setAdapter(mNewsListFragmentAdapter);
     }
 
-
     /**
      * click Cause Xiding
      */
@@ -1300,7 +1305,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (dy == 0) {
                 if (hasXiding) {
                     if (changeY == -statusBarHeight) {
-                        Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty);
                         doXiDingStickyAnim(lasty, true);
                     }
                 } else {
@@ -1308,21 +1312,37 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                         onFlyToXiDing();
                     }
                 }
-            }
-            if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
+            } else if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
                     doXiDingStickyAnim(y + dy, true, 300);
                 } else {
                     doXiDingStickyAnim(y + dy, false);
                 }
+            } else if (hasXiding && dy > 0 && changeY < 0 ) {
+                doXiDingStickyAnim(lasty, false);
             }
         }
     }
 
+    /**
+     * call condition: if (NewsUtils.isShowCleanFinishFeed() && canXiding) {}
+     */
     private void onFlyToXiDing() {
         mNestedScrollView.setNeedScroll(false);
         canXiding = true;
         updateTitle(true);
+    }
+
+
+    /**
+     * called when some view added to feeds top on XiDing status
+     */
+    private void cancelXiDing() {
+        if (NewsUtils.isShowCleanFinishFeed() && hasXiding) {
+            mNestedScrollView.setNeedScroll(true);
+            canXiding = true;
+            updateTitle(false);
+        }
     }
 
     private void cheekRootHeight() {
@@ -1337,6 +1357,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private void doXiDingStickyAnim(int scrolltoY, boolean isAnimation, int duration) {
+        Log.w(TAG, "!--->doXiDingStickyAnim---scrolltoY:" + scrolltoY + "; isAnimation:" + isAnimation + "; duration:" + duration);
         mNestedScrollView.setNeedScroll(false);
         canXiding = false;
         if (isAnimation) {
@@ -1414,10 +1435,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         });
         valueAnimator.setDuration(duration);
         valueAnimator.start();
-    }
-
-    private void startDetail() {
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
     /* XD added for feed End >*/
 
