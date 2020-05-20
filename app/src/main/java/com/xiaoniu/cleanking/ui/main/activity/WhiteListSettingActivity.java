@@ -45,10 +45,16 @@ public class WhiteListSettingActivity extends BaseActivity {
         mSbtnScreenTag.setOnCheckedChangeListener((view, isChecked) -> PreferenceUtil.saveScreenTag(isChecked));
 
         mSbtnNotificationTag.setOnCheckedChangeListener((view, isChecked) -> {
+            Intent intent= new Intent(this, NotificationService.class);
             if (isChecked) {
                 if (!NotificationsUtils.isNotificationEnabled(this)){
                     NotificationsUtils.showDialogGetNotificationPremission(WhiteListSettingActivity.this);
+                }else {
+                    startService(intent);
                 }
+            }else {
+               intent.putExtra(NotificationService.IS_CLOSE,true);
+               startService(intent);
             }
             PreferenceUtil.saveIsNotificationEnabled(isChecked);
         });

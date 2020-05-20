@@ -44,6 +44,7 @@ public class NotificationService extends Service {
     private RemoteViews contentView;
     private Notification notification;
     private Notification.Builder mBuilder = null;
+    public  static  final  String IS_CLOSE ="isCloseNotication";
 
     @Nullable
     @Override
@@ -171,6 +172,33 @@ public class NotificationService extends Service {
         NiuDataAPI.onPageEnd("toggle_page_view_page", "常驻通知栏成功创建");
 
 
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        cleanNotification(intent);
+        return START_STICKY;
+    }
+
+    /**
+     * 关闭通知栏
+     * @param intent
+     */
+    public void cleanNotification(Intent intent){
+       try {
+           if(intent==null){
+               return;
+           }
+           if(intent.getBooleanExtra(IS_CLOSE,false)){
+               if(notificationManager!=null){
+                   notificationManager.cancel(NOTIFICATION_ID);
+                   this.stopService(intent);
+               }
+           }
+
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
 
     /**
