@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -36,6 +37,9 @@ import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
 
 //import com.tencent.bugly.Bugly;
 
@@ -78,6 +82,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         TTAdManagerHolder.init(application);
         // 通过调用此方法初始化 SDK。如果需要在多个进程拉取广告，每个进程都需要初始化 SDK。
         GDTADManager.getInstance().initWith(application, PositionId.APPID);
+        setErrorHandler();
     }
 
 
@@ -198,4 +203,17 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         }
     }
+
+    /**
+     * 全局神值rxjava下游取消订阅后抛出异常统一处理
+     */
+    private void setErrorHandler() {
+        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                LogUtils.e("e: " + throwable.getMessage());
+            }
+        });
+    }
+
 }
