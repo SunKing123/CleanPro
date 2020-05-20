@@ -2,11 +2,10 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.animation.ValueAnimator;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
@@ -100,13 +98,13 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
-import com.xiaoniu.cleanking.utils.PermissionsUtils;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
+import com.xiaoniu.cleanking.widget.RxView;
 import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
 import com.xiaoniu.cleanking.widget.magicIndicator.ViewPagerHelper;
 import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.CommonNavigator;
@@ -372,6 +370,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             viewNews.setVisibility(VISIBLE);
         }
         permissionRepair();
+
+        RxView.clicks(tvNowClean, o -> nowClean());
     }
 
     /*< XD added for feed 20200215 begin */
@@ -791,8 +791,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /**
      * 立即清理
      */
-    @OnClick(R.id.tv_now_clean)
-    public void nowClean() {
+    private void nowClean() {
         if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
             // 跳转到权限引导页面
             startActivity(new Intent(getActivity(), JurisdictionGuideActivity.class));
@@ -801,25 +800,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
         ((MainActivity) getActivity()).commitJpushClickTime(1);
-        if (true) {
-            startActivity(NowCleanActivity.class);
-        } else {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
-            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putString("home", "");
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
-        }
+        startActivity(NowCleanActivity.class);
     }
 
     /**
