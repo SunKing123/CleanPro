@@ -258,6 +258,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             case REQUEST_STORAGE_PERMISSION:
                 if (permissions.length != 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
 //                    Toast.makeText(this, "打开相册失败，请允许存储权限后再试", Toast.LENGTH_SHORT).showShort();
+
                 } else {
                     //TODO 请求权限弹窗 允许后回调返回的成功回调 在此写业务逻辑
                 }

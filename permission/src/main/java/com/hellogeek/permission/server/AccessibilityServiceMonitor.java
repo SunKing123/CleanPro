@@ -117,7 +117,7 @@ public class AccessibilityServiceMonitor extends AccessibilityService {
                         }
                         Log.i("permissionService1", "GLOBAL_ACTION_BACK");
                     }
-                    StatisticsUtils.customTrackEvent("accessibility_open_success", "无障碍权限开启成功", "clod_splash_page", "system_settings_page");
+                    StatisticsUtils.customTrackEvent("accessibility_open_success", "无障碍权限开启成功", "cold_splash_page", "system_settings_page");
                     break;
                 case 2:
                     ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);

@@ -112,9 +112,11 @@ public class ConfirmDialogFragment extends DialogFragment {
             switch (view.getId()) {
                 case R.id.btn_confirm:
                     mOnClickListener.onConfirm();
+                    StatisticsUtils.trackClick("reminder_agree_click", "温馨提示同意点击", "launch_page","launch_page");
                     break;
                 case R.id.btn_cancel:
                     mOnClickListener.onCancel();
+                    StatisticsUtils.trackClick("reminder_no_agree_click", "温馨提示不同意点击", "launch_page","launch_page");
                     break;
             }
         }
