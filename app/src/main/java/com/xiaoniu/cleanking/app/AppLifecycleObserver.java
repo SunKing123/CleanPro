@@ -48,11 +48,11 @@ public class AppLifecycleObserver implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     void onEnterBackground() {
-        if (!isAppOnForeground()) {
+//        if (!isAppOnForeground()) {   在低版本有兼用型问题，导致不能热启动  JKWKQL-515 【悟空清理-v2.0】【vivo-X9s】APP冷启动后，置于后台，2分钟后，热启动广告不展示
             //app 进入后台
             isBack = true;
             PreferenceUtil.saveHomeBackTime();
-        }
+//        }
     }
 
     /**
