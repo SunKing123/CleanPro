@@ -23,6 +23,7 @@ import com.xiaoniu.common.utils.StatusBarUtil;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 1.2.1 版本更新 建议清理页面
@@ -130,12 +131,11 @@ public class NowCleanActivity extends BaseActivity {
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
         LinkedHashMap<ScanningResultType, JunkGroup> resultMap = getJunkGroups();
         if (resultMap != null && resultMap.size() > 0) {
-            JunkGroup apkJunk = resultMap.get(ScanningResultType.APK_JUNK);
-            JunkGroup uninstallJunk = resultMap.get(ScanningResultType.UNINSTALL_JUNK);
-            JunkGroup cacheJunk = resultMap.get(ScanningResultType.CACHE_JUNK);
-            JunkGroup adJunk = resultMap.get(ScanningResultType.AD_JUNK);
-            if ((apkJunk == null || apkJunk.mSize == 0) && (uninstallJunk == null || uninstallJunk.mSize == 0)
-                    && (cacheJunk == null || cacheJunk.mSize == 0) && (adJunk == null || adJunk.mSize == 0)) {
+            long totalSize = 0;
+            for (Map.Entry<ScanningResultType, JunkGroup> map : resultMap.entrySet()) {
+                totalSize += map.getValue().mSize;
+            }
+            if (totalSize == 0) {
                 showCleanResult();
             } else {
                 ScanResultFragment scanResultFragment = ScanResultFragment.createFragment();

@@ -38,6 +38,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -179,11 +180,11 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
     public void setStartCleanJunk(float junkTotal, String unit) {
         view_lottie_top.addAnimatorUpdateListener(animation -> {
             float animatedValue = animation.getAnimatedFraction();
-            if (animatedValue < 0.74F) {
-                float currentValue = junkTotal * (0.74F - animatedValue);
-                tv_clean_count.setText(String.format("%s", Math.round(currentValue)));
-                tv_clean_unit.setText(unit);
-            } else {
+            float currentValue = junkTotal * (1F - animatedValue * 1.5F);
+            BigDecimal bigDecimal = new BigDecimal(currentValue);
+            tv_clean_count.setText(String.format("%s", bigDecimal.setScale(2, BigDecimal.ROUND_FLOOR).floatValue()));
+            tv_clean_unit.setText(unit);
+            if (animatedValue * 1.5F > 0.99F) {
                 tv_clean_unit.setVisibility(View.GONE);
                 tv_clean_count.setVisibility(View.GONE);
             }

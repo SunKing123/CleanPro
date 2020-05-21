@@ -111,12 +111,6 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             });
 
-            if (wrapper.scanningResultType == ScanningResultType.MEMORY_JUNK) {
-                tv_checked_junk_total.setVisibility(View.GONE);
-            } else {
-                tv_checked_junk_total.setVisibility(View.VISIBLE);
-            }
-
             if (junkGroup.isCheckPart) {
                 iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_check);
             } else if (junkGroup.isChecked) {
@@ -164,12 +158,6 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_checked_total.setText(mCountEntity.getResultSize());
             tv_junk_title.setText(firstJunkInfo.getAppName());
             iv_junk_logo.setImageDrawable(firstJunkInfo.getGarbageIcon());
-
-            if (wrapper.scanningResultType == ScanningResultType.MEMORY_JUNK) {
-                tv_checked_total.setVisibility(View.GONE);
-            } else {
-                tv_checked_total.setVisibility(View.VISIBLE);
-            }
 
             if (firstJunkInfo.isAllchecked()) {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);

@@ -176,9 +176,7 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
     public void setScanningFinish(LinkedHashMap<ScanningResultType, JunkGroup> junkGroups) {
         long totalJunkSize = 0;
         for (Map.Entry<ScanningResultType, JunkGroup> map : junkGroups.entrySet()) {
-            if (!ScanningResultType.MEMORY_JUNK.equals(map.getKey())) {
-                totalJunkSize += map.getValue().mSize;
-            }
+            totalJunkSize += map.getValue().mSize;
         }
         CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalJunkSize);
         ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);

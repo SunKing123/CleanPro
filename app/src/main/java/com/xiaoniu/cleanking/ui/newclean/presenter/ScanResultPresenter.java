@@ -49,9 +49,7 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
     private void calJunkTotalSize() {
         long totalSize = 0;
         for (Map.Entry<ScanningResultType, JunkGroup> junkTitle : junkTitleMap.entrySet()) {
-            if (!ScanningResultType.MEMORY_JUNK.equals(junkTitle.getKey())) {
-                totalSize += junkTitle.getValue().mSize;
-            }
+            totalSize += junkTitle.getValue().mSize;
         }
         CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalSize);
         Log.e("info", "totalSize--->" + totalSize + " | " + mCountEntity.getTotalSize() + " | " + mCountEntity.getUnit());
@@ -226,7 +224,7 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
     private long setCheckedJunkResult() {
         long checkedTotalSize = 0;
         for (Map.Entry<ScanningResultType, ArrayList<FirstJunkInfo>> contentMap : junkContentMap.entrySet()) {
-            if (!CollectionUtils.isEmpty(contentMap.getValue()) && !ScanningResultType.MEMORY_JUNK.equals(contentMap.getKey())) {
+            if (!CollectionUtils.isEmpty(contentMap.getValue())) {
                 for (FirstJunkInfo firstJunkInfo : contentMap.getValue()) {
                     if (firstJunkInfo.isAllchecked()) {
                         checkedTotalSize += firstJunkInfo.getTotalSize();

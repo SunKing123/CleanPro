@@ -108,7 +108,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
         scanningStartTime = System.currentTimeMillis();
         Observable.create(e -> {
             //扫描进程占用内存情况
-            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess(false);
+            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
             //扫描apk安装包
