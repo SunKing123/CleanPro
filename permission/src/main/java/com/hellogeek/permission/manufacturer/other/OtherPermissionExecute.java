@@ -16,6 +16,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.manufacturer.PermissionSystemPath;
+import com.hellogeek.permission.util.NotifyUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
 
 import java.util.ArrayList;
@@ -81,6 +82,11 @@ public class OtherPermissionExecute extends OtherPermissionBase {
                 otherPermissionActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
                 break;
         }
+    }
+
+    protected void actionNotificationRead() {
+        super.actionNotificationRead();
+        NotifyUtils.openNotificationListenerSettings(mContext);
     }
 
     @Override
@@ -151,6 +157,11 @@ public class OtherPermissionExecute extends OtherPermissionBase {
                     break;
                 case PACKAGEUSAGESTATS:
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {   // 如果大于等于5.0 有此权限
+                        getlist.add(permission);
+                    }
+                    break;
+                case NOTIFICATIONREAD:
+                    if (Build.VERSION.SDK_INT >= 19) {
                         getlist.add(permission);
                     }
                     break;

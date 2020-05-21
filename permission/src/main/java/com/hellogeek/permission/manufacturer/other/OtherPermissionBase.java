@@ -14,6 +14,7 @@ import com.hellogeek.permission.provider.PermissionProvider;
 import com.hellogeek.permission.strategy.AutoFixAction;
 import com.hellogeek.permission.strategy.PathEvent;
 import com.hellogeek.permission.util.AppUtils;
+import com.hellogeek.permission.util.NotifyUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -26,6 +27,12 @@ public class OtherPermissionBase extends AutoFixAction {
     public OtherPermissionBase(Context context) {
         otherPermissionActionUtil = new OtherPermissionActionUtil(context);
 
+    }
+
+
+    protected void actionNotificationRead() {
+        super.actionNotificationRead();
+        setEventType(Permission.NOTIFICATIONREAD);
     }
 
 

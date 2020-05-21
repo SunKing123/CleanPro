@@ -21,6 +21,7 @@ import com.hellogeek.permission.manufacturer.oppo.OppoModel;
 import com.hellogeek.permission.manufacturer.oppo.OppoPermissionBase;
 import com.hellogeek.permission.provider.PermissionProvider;
 import com.hellogeek.permission.strategy.PathEvent;
+import com.hellogeek.permission.util.NotifyUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -81,6 +82,13 @@ public class OppoPermissionExecute extends OppoPermissionBase {
                 oppoPermissionColorActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
                 break;
         }
+    }
+
+
+
+    protected void actionNotificationRead() {
+        super.actionNotificationRead();
+        NotifyUtils.openNotificationListenerSettings(mContext);
     }
 
     @Override
@@ -250,6 +258,11 @@ public class OppoPermissionExecute extends OppoPermissionBase {
 //                        getlist.add(permission);
 //                    }
 //                    break;
+                case NOTIFICATIONREAD:
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        getlist.add(permission);
+                    }
+                    break;
             }
         }
         return getlist;

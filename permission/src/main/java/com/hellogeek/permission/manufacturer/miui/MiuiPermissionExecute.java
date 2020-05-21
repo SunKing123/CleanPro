@@ -16,6 +16,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.manufacturer.PermissionSystemPath;
+import com.hellogeek.permission.util.NotifyUtils;
 
 import java.util.ArrayList;
 
@@ -75,6 +76,11 @@ public class MiuiPermissionExecute extends MIUIPermissionBase {
                 miuiPermissionActionUtil.actionPakageUsageStats(nodeInfo, service, null, null);
                 break;
         }
+    }
+
+    protected void actionNotificationRead() {
+        super.actionNotificationRead();
+        NotifyUtils.openNotificationListenerSettings(mContext);
     }
 
     @Override
@@ -273,6 +279,11 @@ public class MiuiPermissionExecute extends MIUIPermissionBase {
 //                        getlist.add(permission);
 //                    }
 //                    break;
+                case NOTIFICATIONREAD:
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        getlist.add(permission);
+                    }
+                    break;
             }
         }
         return getlist;

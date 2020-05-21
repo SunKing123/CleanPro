@@ -2,11 +2,13 @@ package com.hellogeek.permission.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -48,6 +50,7 @@ import com.hellogeek.permission.usagerecord.UsageRecordType;
 import com.hellogeek.permission.util.AccessibilitUtil;
 import com.hellogeek.permission.util.Constant;
 import com.hellogeek.permission.util.DialogUtil;
+import com.hellogeek.permission.util.NotifyUtils;
 import com.hellogeek.permission.util.PermissionConvertUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -69,6 +72,7 @@ import static com.hellogeek.permission.util.Constant.PROVIDER_LOCKDISPLAY;
 import static com.hellogeek.permission.util.Constant.PROVIDER_NECESSARY_PERMISSIONALLOPEN;
 import static com.hellogeek.permission.util.Constant.PROVIDER_NOTICEOFTAKEOVER;
 import static com.hellogeek.permission.util.Constant.PROVIDER_NOTIFICATIONBAR;
+import static com.hellogeek.permission.util.Constant.PROVIDER_NOTIFICATIONREAD;
 import static com.hellogeek.permission.util.Constant.PROVIDER_PERMISSIONALLOPEN;
 import static com.hellogeek.permission.util.Constant.PROVIDER_REPLACEACLLPAGE;
 import static com.hellogeek.permission.util.Constant.PROVIDER_SELFSTARTING;
@@ -154,9 +158,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     protected void onPause() {
         super.onPause();
         isBack = false;
-        StatisticsUtils.onPageEnd("permission_guide_list_page_view_page","权限引导列表页浏览","home_page","permission_guide_list_page");
+        StatisticsUtils.onPageEnd("permission_guide_list_page_view_page", "权限引导列表页浏览", "home_page", "permission_guide_list_page");
     }
-
 
     @Override
     protected int getLayoutResID() {
@@ -341,7 +344,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             finish();
         }
 
-        StatisticsUtils.trackClick("repair_now_button_click","一键修复按钮点击","home_page","permission_guide_list_page");
+        StatisticsUtils.trackClick("repair_now_button_click", "一键修复按钮点击", "home_page", "permission_guide_list_page");
     }
 
 
@@ -359,7 +362,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                         .send();
             }
         }
-        StatisticsUtils.trackClick("return_click","返回点击","home_page","permission_guide_list_page");
+        StatisticsUtils.trackClick("return_click", "返回点击", "home_page", "permission_guide_list_page");
     }
 
     private boolean isFixing;
@@ -423,7 +426,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 }, 1000);
             }
         }
-        StatisticsUtils.onPageStart("permission_guide_list_page_view_page","权限引导列表页浏览");
+        StatisticsUtils.onPageStart("permission_guide_list_page_view_page", "权限引导列表页浏览");
 
     }
 
@@ -619,19 +622,19 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             requestPermission = Permission.SELFSTARTING;
         } else if (requestCode == Permission.SELFSTARTING.getRequestCode()) {
             // 判断是否具备自启动权限
-            isOpen = AccessibilitUtil.isOpenPermission(this, Permission.SELFSTARTING);
+            isOpen = true;
             if (isOpen) {
                 PermissionProvider.save(this, PROVIDER_SELFSTARTING, true);
                 EventBus.getDefault().post(new PathEvent(Permission.SELFSTARTING, true, 1));
                 StatisticsUtils.customTrackEvent("self_startup_permission_open_success", "自启动权限开启成功", "clod_splash_page", "system_settings_page");
             }
-            requestPermission = Permission.NOTIFICATIONBAR;
-        } else if (requestCode == Permission.NOTIFICATIONBAR.getRequestCode()) {
+            requestPermission = Permission.NOTIFICATIONREAD;
+        } else if (requestCode == Permission.NOTIFICATIONREAD.getRequestCode()) {
             // 判断是否具备通知管理权限
-            isOpen = AccessibilitUtil.isOpenPermission(this, Permission.NOTIFICATIONBAR);
+            isOpen = AccessibilitUtil.isOpenPermission(this, Permission.NOTIFICATIONREAD);
             if (isOpen) {
-                PermissionProvider.save(this, PROVIDER_NOTIFICATIONBAR, true);
-                EventBus.getDefault().post(new PathEvent(Permission.NOTIFICATIONBAR, true, 1));
+                PermissionProvider.save(this, PROVIDER_NOTIFICATIONREAD, true);
+                EventBus.getDefault().post(new PathEvent(Permission.NOTIFICATIONREAD, true, 1));
                 StatisticsUtils.customTrackEvent("notification_read_success", "通知读取开启成功", "clod_splash_page", "system_settings_page");
             }
 

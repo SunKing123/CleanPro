@@ -35,8 +35,6 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.ConfirmDialogFragment;
-import com.xiaoniu.cleanking.ui.main.fragment.dialog.MessageDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
@@ -264,6 +262,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         PreferenceUtil.saveCleanGameUsed(false);
         isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
 
+        // 请求设备信息权限
+        if (isFirst && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+        }
 
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
 
@@ -360,7 +362,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         if (!PreferenceUtil.isNoFirstOpenApp()) {
             Log.d(TAG, "!--->----getAuditSwitch---111--is FirstOpen App--");
             // PreferenceUtil.saveFirstOpenApp();
-            // jumpActivity();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    jumpActivity();
+                }
+            }, 3000);
         } else if (auditSwitch.getData().equals("0")) {
             Log.d(TAG, "!--->----getAuditSwitch---222--auditSwitch = 0 --");
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
@@ -417,10 +424,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             StatisticsUtils.onPageStart("open_screen_permission_guide_page_view_page", "开屏权限引导页浏览");
         }
 
-        // 请求设备信息权限
-        if (isFirst && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-        }
     }
 
     @Override

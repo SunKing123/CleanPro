@@ -76,6 +76,13 @@ public class HuaweiPermissionBase extends AutoFixAction {
         return version;
     }
 
+
+    protected void actionNotificationRead() {
+        super.actionSuspendedToast();
+        setEventType(Permission.NOTIFICATIONREAD);
+    }
+
+
     @Override
     protected void actionSuspendedToast() {
         super.actionSuspendedToast();

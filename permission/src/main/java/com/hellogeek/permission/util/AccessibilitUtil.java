@@ -138,7 +138,6 @@ public class AccessibilitUtil {
         return isNonNull(nodeInfo) && isNonNull(nodeInfo.getClassName());
     }
 
-
     public static boolean isOpenPermission(Context context, Permission permission) {
         if (permission == null) {
             return false;
@@ -227,6 +226,8 @@ public class AccessibilitUtil {
                     }
                 }
                 return true;
+            case NOTIFICATIONREAD:
+                return NotifyUtils.isNotificationListenerEnabled(context);
         }
         return false;
     }

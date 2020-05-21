@@ -15,6 +15,7 @@ import com.hellogeek.permission.strategy.AutoFixAction;
 import com.hellogeek.permission.strategy.PathEvent;
 import com.hellogeek.permission.util.AppUtils;
 import com.hellogeek.permission.util.NodeInfoUtil;
+import com.hellogeek.permission.util.NotifyUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -112,6 +113,12 @@ public class VivoPermissionBase extends AutoFixAction {
             }
         }
     }
+
+    protected void actionNotificationRead() {
+        super.actionNotificationRead();
+        setEventType(Permission.NOTIFICATIONREAD);
+    }
+
 
     @Override
     protected void actionSuspendedToast() {
