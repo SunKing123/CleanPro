@@ -3,22 +3,34 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.FileManagerHomePresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.CircleProgressView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -29,6 +41,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -115,8 +129,124 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             startActivity(intent);
             StatisticsUtils.trackClick("picture_cleaning_page_click", "图片清理", "home_page", "file_cleaning_page");
         });
+
+        FileQueryUtils.getInstalledList();
+
+        List<FirstJunkInfo> firstJunkInfos = queryAPkFile();
+        if (firstJunkInfos.size() > 0) {
+            long totalSize = 0;
+            for (FirstJunkInfo firstJunkInfo : firstJunkInfos) {
+                totalSize += firstJunkInfo.getTotalSize();
+            }
+            tvApkSize.setText(FileSizeUtils.formatFileSize(totalSize));
+        } else {
+            tvApkSize.setText("");
+        }
     }
 
+
+    private List<FirstJunkInfo> queryAPkFile() {
+        Cursor cursor;
+        String absolutePath;
+        try {
+            ArrayList arrayList = new ArrayList();
+            String[] strArr = {"_data", "_size"};
+            String str = "content://media/external/file";
+            String[] strArr2 = {MimeTypeMap.getSingleton().getMimeTypeFromExtension("apk")};
+            Cursor query = AppApplication.getInstance().getContentResolver().query(Uri.parse(str), strArr, "mime_type= ?", strArr2, null);
+            if (query != null) {
+                if (!query.moveToFirst()) {
+                    cursor = AppApplication.getInstance().getContentResolver().query(Uri.parse(str), strArr, "_data like ?", new String[]{"%.apk"}, null);
+                } else {
+                    cursor = query;
+                }
+                if (cursor.moveToFirst()) {
+                    while (true) {
+                        String string = cursor.getString(0);
+                        long j = cursor.getLong(1);
+                        if (new File(string).exists() && !FileUtils.isNotHiddenPath(new File(string)) && j != 0) {
+                            FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
+                            onelevelGarbageInfo.setAllchecked(true);
+                            onelevelGarbageInfo.setGarbageType("TYPE_APK");
+                            onelevelGarbageInfo.setTotalSize(j);
+                            onelevelGarbageInfo.setGarbageCatalog(string);
+                            if (com.xiaoniu.common.utils.FileUtils.isSDCardEnable()) {
+                                absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                            } else {
+                                absolutePath = AppApplication.getInstance().getFilesDir().getAbsolutePath();
+                            }
+                            if (string.contains(absolutePath) || string.contains("sdcard0") || string.contains("sdcard1")) {
+                                PackageInfo packageArchiveInfo = getPackageManager().getPackageArchiveInfo(string, PackageManager.GET_ACTIVITIES);
+                                if (packageArchiveInfo != null && !isSystemAppliation(packageArchiveInfo.packageName)) {
+                                    ApplicationInfo applicationInfo = packageArchiveInfo.applicationInfo;
+                                    applicationInfo.sourceDir = string;
+                                    applicationInfo.publicSourceDir = string;
+                                    onelevelGarbageInfo.setAppPackageName(packageArchiveInfo.packageName);
+                                    onelevelGarbageInfo.setVersionName(packageArchiveInfo.versionName);
+                                    onelevelGarbageInfo.setVersionCode(packageArchiveInfo.versionCode);
+                                    onelevelGarbageInfo.setAppGarbageName(getPackageManager().getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
+                                    onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
+                                    onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
+                                    if (FileUtils.isAppInstalled(packageArchiveInfo.packageName)) {
+                                        onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_install));
+                                        onelevelGarbageInfo.setApkInstalled(true);
+                                        onelevelGarbageInfo.setAllchecked(true);
+                                    } else {
+                                        onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_uninstall));
+                                        onelevelGarbageInfo.setApkInstalled(false);
+                                        onelevelGarbageInfo.setAllchecked(false);
+                                    }
+                                    if (!"com.xiaoniu.cleanking".equals(packageArchiveInfo.packageName)) {
+                                        arrayList.add(onelevelGarbageInfo);
+                                    }
+                                }
+                            }
+                        }
+                        if (!cursor.moveToNext()) {
+                            break;
+                        }
+                    }
+                }
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            return arrayList;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    private boolean isSystemAppliation(String packageName) {
+        try {
+            return (getPackageManager().getPackageInfo(packageName, 0).applicationInfo.flags & 1) != 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 获取App名称
+     *
+     * @param applicationInfo
+     * @return
+     */
+    public String getAppName(ApplicationInfo applicationInfo) {
+        PackageManager pm = AppApplication.getInstance().getPackageManager();
+        return pm.getApplicationLabel(applicationInfo).toString();
+    }
+
+    /**
+     * 获取App图标
+     *
+     * @param applicationInfo
+     * @return
+     */
+    private Drawable getAppIcon(ApplicationInfo applicationInfo) {
+        PackageManager pm = AppApplication.getInstance().getPackageManager();
+        return pm.getApplicationIcon(applicationInfo);
+    }
 
     @Override
     public void netError() {
@@ -175,8 +305,6 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
         mPresenter.getPhotos(FileManagerHomeActivity.this);
         long videoSize = mPresenter.getVideoTotalSize();
         long musicSize = mPresenter.getMusicTotalSize();
-        long apkSize = mPresenter.getAPKTotalSize();
-
 
         if (null != tvVideoSize && videoSize > 0) {
             tvVideoSize.setText(FileSizeUtils.formatFileSize(videoSize));
@@ -188,11 +316,6 @@ public class FileManagerHomeActivity extends BaseActivity<FileManagerHomePresent
             tvMusicSize.setText(FileSizeUtils.formatFileSize(musicSize));
         } else if (null != tvMusicSize) {
             tvMusicSize.setText("");
-        }
-        if (null != tvApkSize && apkSize > 0) {
-            tvApkSize.setText(FileSizeUtils.formatFileSize(apkSize));
-        } else if (null != tvApkSize) {
-            tvApkSize.setText("");
         }
 
         NiuDataAPI.onPageStart("file_clean_page_view_page", "文件清理");
