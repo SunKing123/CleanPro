@@ -13,7 +13,6 @@ import com.xiaoniu.cleanking.ui.newclean.model.ScanCleanModel;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
@@ -101,6 +100,13 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
                                 break;
+                            }
+                        }
+
+                        for (FirstJunkInfo info : entry.getValue()) {
+                            File rootPathFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + info.getAppPackageName());
+                            if (rootPathFile.exists()) {
+                                com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(rootPathFile);
                             }
                         }
                         long l1 = CleanUtil.freeJunkInfos(entry.getValue());
