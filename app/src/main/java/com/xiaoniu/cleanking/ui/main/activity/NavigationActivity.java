@@ -87,25 +87,30 @@ public class NavigationActivity extends SimpleActivity {
     }
 
 
-
     /**
      * @author xd.he
      */
     private void onClickStart() {
 //        boolean hasAgree = SPUtil.getBoolean(this, SPUtil.KEY_CONSENT_AGREEMENT, false);
 //        if (!consentAgreement) {
-            showConfirmDialog();
+        showConfirmDialog();
 //        }
     }
 
 
     private void showConfirmDialog() {
 
+        /**
+         * TODO:需要抽取出来
+         */
+        String privacyPolicy = "http://testwlqlapph5.xiaoniuhy.com/agreement/privacy.html";
+        String userAgreement = "http://testwlqlapph5.xiaoniuhy.com/agreement/user.html";
+
         String html = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
                 "特此向您说明。作为互联网安全公司，" +
                 "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。" +
-                "在使用悟空清理前，请务必仔细阅读并了解<font color='#06C581'><a href=\"https://www.baidu.com\">《隐私政策》</a></font>和" +
-                "<font color='#06C581'><a href=\"https://www.baidu.com\">《用户协议》</a></font>" +
+                "在使用悟空清理前，请务必仔细阅读并了解<font color='#06C581'><a href=\"" + privacyPolicy + "\">《隐私政策》</a></font>和" +
+                "<font color='#06C581'><a href=\"" + userAgreement + "\">《用户协议》</a></font>" +
                 "全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。";
 
 
@@ -121,7 +126,7 @@ public class NavigationActivity extends SimpleActivity {
         confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
             @Override
             public void onConfirm() {
-                    onClickConfirm();
+                onClickConfirm();
             }
 
             @Override
