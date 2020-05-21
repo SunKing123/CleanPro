@@ -4,7 +4,8 @@
     android:id="@+id/rl_open_new"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/permission_mask">
+    android:background="@mipmap/permission_mask"
+    android:paddingBottom="@dimen/dimen_35dp">
 
     <TextView
         android:id="@+id/tv_skip"
@@ -48,13 +49,13 @@
 
     <Button
         android:id="@+id/btn_repair_now"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_45dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/dimen_45dp"
         android:layout_marginRight="@dimen/dimen_45dp"
-        android:layout_marginBottom="@dimen/dimen_31dp"
         android:background="@drawable/bg_btn_open_now"
         android:text="立即修复"
         android:textColor="@color/white"
