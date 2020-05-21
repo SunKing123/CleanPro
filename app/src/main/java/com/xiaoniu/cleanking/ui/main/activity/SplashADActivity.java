@@ -108,6 +108,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private int[] grantResults;
     private int requestCode;
     private boolean isFirst = true;
+    private int startsNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -270,7 +271,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
         }
 
-        int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
+        startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
 
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
             // if (true) {
@@ -305,8 +306,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
                         PermissionIntegrate.getPermission().startWK(SplashADActivity.this);
                         StatisticsUtils.trackClick("repair_now_button_click", "立即修复按钮点击", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
-
-
+                        finish();
                     }
                 });
             }
@@ -341,7 +341,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
         // mPresenter.getAuditSwitch();
         if (startsNumber < 2 * SECONDARY_STARTUP) {
-            SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", ++startsNumber);
+            SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", startsNumber + 1);
         }
         loadTime = System.currentTimeMillis();
     }
@@ -366,7 +366,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         } else {
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
-        if (!PreferenceUtil.isNoFirstOpenApp()) {
+        if (!PreferenceUtil.isNoFirstOpenApp() && startsNumber == 1) {
             Log.d(TAG, "!--->----getAuditSwitch---111--is FirstOpen App--");
             // PreferenceUtil.saveFirstOpenApp();
             handler.postDelayed(new Runnable() {
@@ -374,7 +374,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 public void run() {
                     jumpActivity();
                 }
-            }, 5000);
+            }, 15000);
         } else if (auditSwitch.getData().equals("0")) {
             Log.d(TAG, "!--->----getAuditSwitch---222--auditSwitch = 0 --");
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
