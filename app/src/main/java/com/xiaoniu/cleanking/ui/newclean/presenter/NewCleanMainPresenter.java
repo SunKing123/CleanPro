@@ -70,8 +70,10 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
             @Override
             public void getData(SwitchInfoList switchInfoList) {
-                if(null != switchInfoList)
+                Log.d("NewCleanMainPresenter", "!--->getSwitchInfoList---getData---");
+                if(null != switchInfoList) {
                     AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
+                }
             }
 
             @Override

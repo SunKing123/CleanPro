@@ -263,7 +263,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         PreferenceUtil.saveCleanWechatUsed(false);
         PreferenceUtil.saveCleanCoolUsed(false);
         PreferenceUtil.saveCleanGameUsed(false);
-        isFirst = SPUtil.getFirstIn(SplashADActivity.this, "isfirst", true);
+        isFirst = SPUtil.getFirstIn(SplashADActivity.this, SPUtil.KEY_IS_First, true);
 
         // 请求设备信息权限
         if (isFirst && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {

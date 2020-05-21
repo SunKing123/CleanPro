@@ -46,7 +46,8 @@ public class SPUtil {
 
     public static String Guide = "";
 
-    public static String IS_First = "is_first";
+    public static final String KEY_CONSENT_AGREEMENT = "consentAgreement";
+    public static final String KEY_IS_First = "isfirst";
     public static String IS_CLEAR = "is_clear";
     public static String TOTLE_CLEAR_CATH = "totle_clear_cath";
     private static final String KEY_ENABLE_CLEAN_NOTIFICATION = "key_enable_clean_notification";
