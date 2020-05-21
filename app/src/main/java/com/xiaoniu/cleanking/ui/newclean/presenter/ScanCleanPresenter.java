@@ -128,17 +128,14 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
             PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum() * 0.3f);
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
-            double memoryShow = NoClearSPHelper.getMemoryShow();
-            if (memoryShow == 1) {
-                //清理完成，存储时间点
-                CleanEvent cleanEvent = new CleanEvent();
-                cleanEvent.setCleanAminOver(true);
-                EventBus.getDefault().post(cleanEvent);
-                mSPHelper.saveCleanTime(System.currentTimeMillis());
+            //清理完成，存储时间点
+            CleanEvent cleanEvent = new CleanEvent();
+            cleanEvent.setCleanAminOver(true);
+            EventBus.getDefault().post(cleanEvent);
+            mSPHelper.saveCleanTime(System.currentTimeMillis());
 
-                if(getView() != null){
-                    getView().setCleanJunkOver();
-                }
+            if (getView() != null) {
+                getView().setCleanJunkOver();
             }
         });
     }

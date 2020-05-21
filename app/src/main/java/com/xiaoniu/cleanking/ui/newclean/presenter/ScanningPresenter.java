@@ -63,7 +63,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                             }
                             currentLevel = ScanningLevel.Little;
                             getView().setScanningBackgroundColor(ScanningLevel.Little.getColor(), ScanningLevel.Little.getColor());
-                        } else if (countEntity.getNumber() >= 1024 * 1024 * 50 && countEntity.getNumber() < 1024 * 1024 * 10) {
+                        } else if (countEntity.getNumber() >= 1024 * 1024 * 50 && countEntity.getNumber() < 1024 * 1024 * 100) {
                             if (currentLevel == ScanningLevel.Middle) {
                                 return;
                             }
