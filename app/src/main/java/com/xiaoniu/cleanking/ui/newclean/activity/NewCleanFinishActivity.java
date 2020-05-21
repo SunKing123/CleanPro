@@ -1166,7 +1166,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || listInfo.size() <= 0) return;
+        if (listInfo == null) return;
         if (null == fileQueryUtils)
             fileQueryUtils = new FileQueryUtils();
         mRamScale = fileQueryUtils.computeTotalSize(listInfo);
