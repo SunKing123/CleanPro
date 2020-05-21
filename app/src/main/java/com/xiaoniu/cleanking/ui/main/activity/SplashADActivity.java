@@ -269,7 +269,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         // 请求设备信息权限
         if (isFirst && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-            StatisticsUtils.customTrackEvent("identify_device_information", "识别设备信息弹窗曝光","launch_page","launch_page");
+            StatisticsUtils.customTrackEvent("identify_device_information", "识别设备信息弹窗曝光", "launch_page", "launch_page");
         }
 
         startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
@@ -345,13 +345,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", startsNumber + 1);
         }
         loadTime = System.currentTimeMillis();
+
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1 && hasAllPermissionsGranted(grantResults)) {
             StatisticsUtils.trackClick("identify_device_information_prohibit_click", "识别设备信息权限允许点击", "cold_splash_page", "cold_splash_page");
-        }else {
+        } else {
             StatisticsUtils.trackClick("identify_device_information_allow_click", "识别设备信息权限禁止点击", "cold_splash_page", "cold_splash_page");
         }
         jumpActivity();
