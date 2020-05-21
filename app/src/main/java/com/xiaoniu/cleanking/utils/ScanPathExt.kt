@@ -2,6 +2,16 @@ package com.xiaoniu.cleanking.utils
 
 object ScanPathExt {
 
+    @JvmStatic
+    fun getAdExtPath(): Map<String, String> {
+        return mapOf(
+                "MIUI/debug_log" to "小米调试日志",
+                "netease/utils" to "网易临时文件",
+                "baidu/tempdata" to "百度临时文件",
+                "libs" to "无效的数据缓存"
+        )
+    }
+
     /**
      * 返回扫描扩展路径
      */

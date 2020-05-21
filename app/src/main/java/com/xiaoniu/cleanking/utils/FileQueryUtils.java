@@ -624,6 +624,26 @@ public class FileQueryUtils {
             }
         }
 
+        //扫描指定的广告文件夹
+        Map<String, String> adExtPathList = ScanPathExt.getAdExtPath();
+        for (Map.Entry<String, String> adExtPath : adExtPathList.entrySet()) {
+            File rootPathFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + adExtPath.getKey());
+            if (rootPathFile.exists()) {
+                FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                firstJunkInfo.setAppName(adExtPath.getValue());
+                firstJunkInfo.setAllchecked(true);
+                firstJunkInfo.setGarbageType("TYPE_AD");
+                firstJunkInfo.setAppPackageName(adExtPath.getKey());
+                SecondJunkInfo secondJunkInfo = FileUtils.listFiles(rootPathFile);
+                if (mScanFileListener != null) {
+                    mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                }
+                firstJunkInfo.setTotalSize(secondJunkInfo.getGarbageSize());
+                firstJunkInfo.addSecondJunk(secondJunkInfo);
+                adJunkListInfo.add(firstJunkInfo);
+            }
+        }
+
         HashMap<ScanningResultType, ArrayList<FirstJunkInfo>> listHashMap = new HashMap<>();
         listHashMap.put(ScanningResultType.CACHE_JUNK, cacheJunkListInfo);
         listHashMap.put(ScanningResultType.AD_JUNK, adJunkListInfo);
