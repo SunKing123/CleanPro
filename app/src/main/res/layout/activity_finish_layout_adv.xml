@@ -3,25 +3,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="70dp"
         android:background="@drawable/bg_gradient_clean_finish_tobar">
 
         <ImageView
             android:id="@+id/btnLeft"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="17dp"
+            android:layout_height="@dimen/dimen_45dp"
+            android:layout_marginTop="@dimen/dimen_25dp"
+            android:paddingLeft="@dimen/dimen_12dp"
             android:src="@drawable/common_icon_back_arrow_white" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dimen_25dp"
+            android:layout_height="@dimen/dimen_45dp"
             android:layout_marginLeft="5dp"
             android:gravity="center"
             android:text=""
@@ -95,12 +98,11 @@
                 android:id="@+id/ad_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="-35dp"
-                android:background="@drawable/bg_finish_rem"
                 android:layout_marginLeft="@dimen/dimen_8dp"
+                android:layout_marginTop="-35dp"
                 android:layout_marginRight="@dimen/dimen_8dp"
-                android:visibility="gone">
-            </FrameLayout>
+                android:background="@drawable/bg_finish_rem"
+                android:visibility="gone"></FrameLayout>
 
         </LinearLayout>
 

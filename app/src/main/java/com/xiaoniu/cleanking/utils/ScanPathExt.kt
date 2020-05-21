@@ -111,7 +111,8 @@ object ScanPathExt {
         //百度
         scanPathMap["com.baidu.searchbox"] = arrayListOf(
                 "baidu/flyflow/.video_cache",
-                "baidu/searchbox/preset"
+                "baidu/searchbox/preset",
+                "baidu/tempdata"
         )
         //百度地图
         scanPathMap["com.baidu.BaiduMap"] = arrayListOf(
@@ -167,6 +168,11 @@ object ScanPathExt {
         scanPathMap["com.taobao.taobao"] = arrayListOf(
                 "/taobao/wvache"
         )
+        //网易云音乐
+        scanPathMap["com.netease.cloudmusic"] = arrayListOf(
+                "netease/utils"
+        )
+        //小米手机调试日志
         return scanPathMap
     }
 }

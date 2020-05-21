@@ -126,10 +126,33 @@ public class NowCleanActivity extends BaseActivity {
      */
     public void scanFinish() {
         isScan = false;
-        setLeftTitle("建议清理");  // xx
+        setLeftTitle("建议清理");
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_up_scan_page");
-        ScanResultFragment scanResultFragment = ScanResultFragment.createFragment();
-        replaceFragment(R.id.fl_content, scanResultFragment, false);
+        LinkedHashMap<ScanningResultType, JunkGroup> resultMap = getJunkGroups();
+        if (resultMap != null && resultMap.size() > 0) {
+            JunkGroup apkJunk = resultMap.get(ScanningResultType.APK_JUNK);
+            JunkGroup uninstallJunk = resultMap.get(ScanningResultType.UNINSTALL_JUNK);
+            JunkGroup cacheJunk = resultMap.get(ScanningResultType.CACHE_JUNK);
+            JunkGroup adJunk = resultMap.get(ScanningResultType.AD_JUNK);
+            if ((apkJunk == null || apkJunk.mSize == 0) && (uninstallJunk == null || uninstallJunk.mSize == 0)
+                    && (cacheJunk == null || cacheJunk.mSize == 0) && (adJunk == null || adJunk.mSize == 0)) {
+                showCleanResult();
+            } else {
+                ScanResultFragment scanResultFragment = ScanResultFragment.createFragment();
+                replaceFragment(R.id.fl_content, scanResultFragment, false);
+            }
+        } else {
+            showCleanResult();
+        }
+    }
+
+    private void showCleanResult() {
+        finish();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.tool_suggest_clean));
+        Intent intent = new Intent(this, CleanFinishAdvertisementActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
