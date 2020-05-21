@@ -1484,12 +1484,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (isAllopen) {
                 return;
             }
-            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
-            if (isRepair) {
-                SPUtil.setRepair(getActivity(), "isRepair", false);
-                PermissionIntegrate.getPermission().startWK(getActivity());
-                return;
-            }
+//            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
+//            if (isRepair) {
+//                SPUtil.setRepair(getActivity(), "isRepair", false);
+//                PermissionIntegrate.getPermission().startWK(getActivity());
+//                return;
+//            }
 
             long currentTime = System.currentTimeMillis();
             long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);

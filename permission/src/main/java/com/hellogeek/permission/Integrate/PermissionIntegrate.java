@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.hellogeek.permission.Integrate.interfaces.PermissionAddQQCallback;
@@ -116,8 +117,10 @@ public class PermissionIntegrate implements IPermissionIntegrate {
     }
 
     public void startWK(Context context) {
-        context.startActivity(new Intent(context, WKPermissionAutoFixActivity.class));
+        Intent intent = new Intent(context, WKPermissionAutoFixActivity.class);
+        context.startActivity(intent);
     }
+
 
     @Override
     public void startForResult(Activity activity) {

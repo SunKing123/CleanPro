@@ -26,8 +26,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.hellogeek.permission.ARout.RouteConstants;
 import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.R;
@@ -59,8 +61,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -138,9 +143,9 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
     private int successNum = 0;
     private Permission permission;
 
+
     @Override
     protected void initParams(Bundle savedInstanceState) {
-
     }
 
     @Override
@@ -604,9 +609,13 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         Boolean isAllopen = false;
         isAllopen = ExternalInterface.getInstance(this).isOpenAllPermission(this);
         // 判断是否有无障碍权限
-        if (AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName()) || isAllopen) {
+//        if (AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName()) || isAllopen) {
+//            return;
+//        }
+        if (isAllopen && requestCode != Permission.PACKAGEUSAGESTATS.getRequestCode()) {
             return;
         }
+        
         if (requestCode == ACCESSIBILITY_SETTINGS) {
             // 显示单独权限开启按钮
             isOneRepair = false;
@@ -669,5 +678,13 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             startActivity(PhonePremisActivity.class);
         }
     }
+
+
+    @Override
+    public void finish() {
+        ARouter.getInstance().build("/main/MainActivity").navigation();
+        super.finish();
+    }
+
 
 }

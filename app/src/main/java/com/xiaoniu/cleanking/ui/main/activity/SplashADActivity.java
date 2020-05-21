@@ -24,6 +24,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.activity.WKPermissionAutoFixActivity;
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
@@ -271,6 +273,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         int startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
 
         if (startsNumber == SECONDARY_STARTUP) {   // 第二次冷启动
+            // if (true) {
             boolean isAllopen = false;
             isAllopen = !ExternalInterface.getInstance(this).isOpenAllPermission(this);
             if (PermissionUtils.checkPermission(this, permissions) && isAllopen) {
@@ -299,8 +302,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                         openNewVs.findViewById(R.id.btn_repair_now).setClickable(false);
                         // 立即修复
                         SPUtil.setRepair(SplashADActivity.this, "isRepair", true);
-                        jumpActivity();
+
+                        PermissionIntegrate.getPermission().startWK(SplashADActivity.this);
                         StatisticsUtils.trackClick("repair_now_button_click", "立即修复按钮点击", "open_screen_permission_guide_page", "open_screen_permission_guide_page");
+
+
                     }
                 });
             }
@@ -363,12 +369,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         if (!PreferenceUtil.isNoFirstOpenApp()) {
             Log.d(TAG, "!--->----getAuditSwitch---111--is FirstOpen App--");
             // PreferenceUtil.saveFirstOpenApp();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    jumpActivity();
-                }
-            }, 3000);
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    jumpActivity();
+//                }
+//            }, 3000);
         } else if (auditSwitch.getData().equals("0")) {
             Log.d(TAG, "!--->----getAuditSwitch---222--auditSwitch = 0 --");
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
