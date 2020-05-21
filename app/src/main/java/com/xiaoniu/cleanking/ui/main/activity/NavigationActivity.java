@@ -54,13 +54,17 @@ public class NavigationActivity extends SimpleActivity {
 
         View vlast = getLayoutInflater().inflate(R.layout.activity_navigation_item_viewlast, null);
         TextView cb_checkall = vlast.findViewById(R.id.cb_checkall);
-        TextView tv_delete = vlast.findViewById(R.id.tv_delete);
+        TextView tv_delete = vlast.findViewById(R.id.tv_delete);   // 马上开启
         TextView tv_qx = vlast.findViewById(R.id.tv_qx);
         tv_qx.setOnClickListener(v -> {
             jumpXieyiActivity(BuildConfig.H5_BASE_URL + "/agree.html");
             StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
         });
-        initLastClick(cb_checkall, tv_delete);
+//        initLastClick(cb_checkall, tv_delete);
+        tv_delete.setOnClickListener(v -> {
+            onClickStart();
+        });
+
         views.add(vlast);
 
         NavigationAdapter navigationAdapter = new NavigationAdapter(views);
@@ -82,6 +86,19 @@ public class NavigationActivity extends SimpleActivity {
 
     }
 
+
+
+    /**
+     * @author xd.he
+     */
+    private void onClickStart() {
+//        boolean hasAgree = SPUtil.getBoolean(this, SPUtil.KEY_CONSENT_AGREEMENT, false);
+//        if (!consentAgreement) {
+            showConfirmDialog();
+//        }
+    }
+
+
     private void showConfirmDialog() {
 
         String html = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
@@ -98,16 +115,13 @@ public class NavigationActivity extends SimpleActivity {
 //        bundle.putString("content", getString(R.string.html));
         bundle.putString("content", html);
         confirmDialogFragment.setArguments(bundle);
+        confirmDialogFragment.setCancelable(false);  // XD added
         confirmDialogFragment.show(getFragmentManager(), "");
 
         confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
             @Override
             public void onConfirm() {
-                SPUtil.setBoolean(NavigationActivity.this, "consentAgreement", true);
-                PreferenceUtil.saveFirstOpenApp();
-                SPUtil.setFirstIn(NavigationActivity.this, "isfirst", false);
-                startActivity(MainActivity.class);
-                finish();
+                    onClickConfirm();
             }
 
             @Override
@@ -118,8 +132,17 @@ public class NavigationActivity extends SimpleActivity {
         });
     }
 
+    private void onClickConfirm() {
+        SPUtil.setBoolean(NavigationActivity.this, SPUtil.KEY_CONSENT_AGREEMENT, true);
+        PreferenceUtil.saveFirstOpenApp();
+        SPUtil.setFirstIn(NavigationActivity.this, SPUtil.KEY_IS_First, false);
+        startActivity(MainActivity.class);
+        finish();
+    }
+
     private void showMessageDialog() {
         MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
+        messageDialogFragment.setCancelable(false);  // XD added
         messageDialogFragment.show(getFragmentManager(), "");
         messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
             @Override
@@ -164,23 +187,23 @@ public class NavigationActivity extends SimpleActivity {
         }
     }
 
-    public void initLastClick(TextView cb_checkall, TextView tv_delete) {
-        cb_checkall.setSelected(true);
-        cb_checkall.setOnClickListener(v -> {
-            cb_checkall.setSelected(!cb_checkall.isSelected());
-            cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
-            tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
-
-        });
-        tv_delete.setOnClickListener(v -> {
-            if (cb_checkall.isSelected()) {
-                boolean consentAgreement = SPUtil.getBoolean(this, "consentAgreement", false);
-                if (!consentAgreement) {
-                    showConfirmDialog();
-                }
-            }
-        });
-    }
+//    public void initLastClick(TextView cb_checkall, TextView tv_delete) {
+//        cb_checkall.setSelected(true);
+//        cb_checkall.setOnClickListener(v -> {
+//            cb_checkall.setSelected(!cb_checkall.isSelected());
+//            cb_checkall.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.icon_select : R.drawable.icon_unselect);
+//            tv_delete.setBackgroundResource(cb_checkall.isSelected() ? R.drawable.delete_select_bg : R.drawable.delete_unselect_bg);
+//
+//        });
+//        tv_delete.setOnClickListener(v -> {
+//            if (cb_checkall.isSelected()) {
+//                boolean consentAgreement = SPUtil.getBoolean(this, "consentAgreement", false);
+//                if (!consentAgreement) {
+//                    showConfirmDialog();
+//                }
+//            }
+//        });
+//    }
 
     public void jumpXieyiActivity(String url) {
         Bundle bundle = new Bundle();

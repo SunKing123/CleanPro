@@ -98,9 +98,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
     private void arrangementData(AdRequestParamentersBean adRequestParamentersBean) throws Exception {
         Map<String, SwitchInfoList.DataBean> adMap = AppHolder.getInstance().getSwitchInfoMap();
         SwitchInfoList.DataBean adinfoBean = getAdInfo(adMap, adRequestParamentersBean);
-        Log.d(TAG, "!--->arrangementData----adinfoBean:"+adinfoBean);
         if (adinfoBean != null) {
-            Log.d(TAG, "!--->arrangementData--本地有AD数据--adinfoBean.isOpen:"+adinfoBean.isOpen());
             if (adinfoBean.isOpen()) {
                 dispatcherUnion(requestData(adinfoBean), adRequestParamentersBean);
             } else {
@@ -109,7 +107,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
         } else {
             //本地没有，走网络
             getNetAdInfo(adRequestParamentersBean);
-            Log.d(TAG, "!--->arrangementData--本地没有数据，开始走网络！");
+            Log.d(TAG, "arrangementData--本地没有数据，开始走网络！");
         }
     }
 
@@ -216,7 +214,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
                 }
             }
         } else {
-            Log.d(TAG, "!--->getAdInfo--local--222-- adMap is not Empty");
+            Log.d(TAG, "getAdInfo--local--222-- adMap is not Empty");
             adinfoBean = adMap.get(adRequestParamentersBean.configKey + adRequestParamentersBean.advertPosition);
         }
         return adinfoBean;
@@ -228,7 +226,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
      * @param adRequestParamentersBean
      */
     private void getNetAdInfo(AdRequestParamentersBean adRequestParamentersBean) {
-        Log.d(TAG, "!--->getNetAdInfo----adRequestParamentersBean:"+adRequestParamentersBean);
+        // Log.d(TAG, "!--->getNetAdInfo----adRequestParamentersBean:"+adRequestParamentersBean);
         adModel.getSwitchInfoList(adRequestParamentersBean.context, new Common4Subscriber<SwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {
