@@ -44,6 +44,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -794,7 +795,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void nowClean() {
         if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
             // 跳转到权限引导页面
-            startActivity(new Intent(getActivity(), JurisdictionGuideActivity.class));
+            JurisdictionGuideActivity.goToPage(Constant.STORAGE_CLEAN_BTN,getActivity());
             return;
         }
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
@@ -923,20 +924,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.line_wx)
     public void mClickWx() {
-        if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
-            // 跳转到权限引导页面
-            startActivity(new Intent(getActivity(), JurisdictionGuideActivity.class));
-            return;
-        }
+
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
-
         ((MainActivity) getActivity()).commitJpushClickTime(5);
         StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
+
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
         }
+
+        if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
+            // 跳转到权限引导页面
+            JurisdictionGuideActivity.goToPage(Constant.WX_CLEAN_BTN,getActivity());
+            return;
+        }
+
         if (PreferenceUtil.getWeChatCleanTime()) {
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
