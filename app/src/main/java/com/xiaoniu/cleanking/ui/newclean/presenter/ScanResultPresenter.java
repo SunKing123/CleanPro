@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.presenter;
 
+import android.util.Log;
+
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -45,13 +47,14 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
      * 计算扫描到的垃圾总量
      */
     private void calJunkTotalSize() {
-        int totalSize = 0;
+        long totalSize = 0;
         for (Map.Entry<ScanningResultType, JunkGroup> junkTitle : junkTitleMap.entrySet()) {
             if (!ScanningResultType.MEMORY_JUNK.equals(junkTitle.getKey())) {
                 totalSize += junkTitle.getValue().mSize;
             }
         }
         CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalSize);
+        Log.e("info", "totalSize--->" + totalSize + " | " + mCountEntity.getTotalSize() + " | " + mCountEntity.getUnit());
         //展示扫描到的垃圾总量
         if (getView() != null) {
             getView().setJunkTotalResultSize(mCountEntity.getTotalSize(), mCountEntity.getUnit(), mCountEntity.getNumber());
