@@ -795,7 +795,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void nowClean() {
         if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
             // 跳转到权限引导页面
-            JurisdictionGuideActivity.goToPage(Constant.STORAGE_CLEAN_BTN,getActivity());
+            JurisdictionGuideActivity.goToPage(Constant.STORAGE_CLEAN_BTN, getActivity());
             return;
         }
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
@@ -937,7 +937,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         if (!PermissionUtils.checkPermission(getContext(), basicPermissions)) {
             // 跳转到权限引导页面
-            JurisdictionGuideActivity.goToPage(Constant.WX_CLEAN_BTN,getActivity());
+            JurisdictionGuideActivity.goToPage(Constant.WX_CLEAN_BTN, getActivity());
             return;
         }
 
@@ -1587,13 +1587,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void showPermissionDialog() {
 
         Integer setRiskTipsNum = ExternalInterface.getInstance(getActivity()).getDefectPermissionNum(getActivity());
-        PermissionGuideDialogFragment jurisdictionDialogFragment = PermissionGuideDialogFragment
+        PermissionGuideDialogFragment permissionGuideDialogFragment = PermissionGuideDialogFragment
                 .newInstance(String.format(getString(R.string.risk_tips), setRiskTipsNum + ""));
-        jurisdictionDialogFragment.show(getActivity().getFragmentManager(), "");
-        jurisdictionDialogFragment.setOnClickListener(new PermissionGuideDialogFragment.OnClickListener() {
+        permissionGuideDialogFragment.setCancelable(false); // 加上这句外部取消和back取消都无效
+        permissionGuideDialogFragment.show(getActivity().getFragmentManager(), "");
+        permissionGuideDialogFragment.setOnClickListener(new PermissionGuideDialogFragment.OnClickListener() {
             @Override
             public void onConfirm() {
-                jurisdictionDialogFragment.dismiss();
+                permissionGuideDialogFragment.dismiss();
                 // 跳转一件修复
                 PermissionIntegrate.getPermission().startWK(getActivity());
             }

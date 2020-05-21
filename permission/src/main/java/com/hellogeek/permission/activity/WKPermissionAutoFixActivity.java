@@ -606,16 +606,11 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         super.onActivityResult(requestCode, resultCode, data);
         boolean isOpen = false;
         Permission requestPermission = null;
-        Boolean isAllopen = false;
-        isAllopen = ExternalInterface.getInstance(this).isOpenAllPermission(this);
+        isAllOpen = ExternalInterface.getInstance(this).isOpenAllPermission(this);
         // 判断是否有无障碍权限
-//        if (AccessibilitUtil.isAccessibilitySettingsOn(this, AccessibilityServiceMonitor.class.getCanonicalName()) || isAllopen) {
-//            return;
-//        }
-        if (isAllopen && requestCode != Permission.PACKAGEUSAGESTATS.getRequestCode()) {
+        if (isAllOpen && requestCode != Permission.PACKAGEUSAGESTATS.getRequestCode()) {
             return;
         }
-        
         if (requestCode == ACCESSIBILITY_SETTINGS) {
             // 显示单独权限开启按钮
             isOneRepair = false;

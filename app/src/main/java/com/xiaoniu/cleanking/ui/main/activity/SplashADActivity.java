@@ -369,12 +369,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         if (!PreferenceUtil.isNoFirstOpenApp()) {
             Log.d(TAG, "!--->----getAuditSwitch---111--is FirstOpen App--");
             // PreferenceUtil.saveFirstOpenApp();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    jumpActivity();
-//                }
-//            }, 3000);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    jumpActivity();
+                }
+            }, 5000);
         } else if (auditSwitch.getData().equals("0")) {
             Log.d(TAG, "!--->----getAuditSwitch---222--auditSwitch = 0 --");
             this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
