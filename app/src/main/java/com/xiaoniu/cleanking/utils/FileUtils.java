@@ -228,4 +228,15 @@ public class FileUtils {
         return false;
 
     }
+
+    public static boolean isNotHiddenPath(File file) {
+        if (file.getParent() != null) {
+            File parentFile = new File(file.getParent());
+            if (parentFile.isHidden()) {
+                return true;
+            }
+            return isNotHiddenPath(parentFile);
+        }
+        return false;
+    }
 }

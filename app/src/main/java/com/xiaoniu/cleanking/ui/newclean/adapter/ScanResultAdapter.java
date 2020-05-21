@@ -164,6 +164,7 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             } else {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
             }
+
             iv_check_state.setOnClickListener(v -> {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());

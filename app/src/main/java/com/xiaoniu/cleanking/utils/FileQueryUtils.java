@@ -892,9 +892,11 @@ public class FileQueryUtils {
         float sizeNumF = (float) sizeNum * PreferenceUtil.getMulCacheNum();
         sizeNum = (int) sizeNumF;
         List<PackageInfo> customAppList = new ArrayList<>();
+        List<String> packageNameList = new ArrayList<>();
         for (PackageInfo p : installedList) {
-            if (!isSystemAppliation(p.packageName) && !ArrayUtil.arrayContainsStr(WHITE_LIST, p.packageName)) {
+            if (!isSystemAppliation(p.packageName) && !ArrayUtil.arrayContainsStr(WHITE_LIST, p.packageName) && !packageNameList.contains(p.packageName)) {
                 customAppList.add(p);
+                packageNameList.add(p.packageName);
             }
         }
         List<PackageInfo> junkAppList = new ArrayList<>();
@@ -945,7 +947,7 @@ public class FileQueryUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private ArrayList<FirstJunkInfo> getTaskInfos26(ArrayList<FirstJunkInfo> junkList, List<UsageStats> lists, boolean isShowSize) {
-        Collections.sort(lists, (o1, o2) -> Long.compare(o1.getLastTimeUsed(), o2.getLastTimeStamp()));
+        Collections.sort(lists, (o1, o2) -> Long.compare(o1.getLastTimeStamp(), o2.getLastTimeStamp()));
         if (installedList == null)
             installedList = getInstalledList();
         HashMap<String, PackageInfo> installedCustomApp = new HashMap<>();
@@ -954,6 +956,7 @@ public class FileQueryUtils {
                 installedCustomApp.put(packageInfo.packageName, packageInfo);
             }
         }
+        List<String> packageNameList = new ArrayList<>();
         for (UsageStats usageStats : lists) {
             if (mScanFileListener != null) {
                 mScanFileListener.scanFile(usageStats.getPackageName());
@@ -961,7 +964,7 @@ public class FileQueryUtils {
             if (usageStats.getPackageName() != null) {
                 String packageName = usageStats.getPackageName();
                 PackageInfo packageInfo = installedCustomApp.get(packageName);
-                if (packageInfo != null) {
+                if (packageInfo != null && !packageNameList.contains(packageName)) {
                     FirstJunkInfo junkInfo = new FirstJunkInfo();
                     junkInfo.setAllchecked(true);
                     junkInfo.setAppName(getAppName(packageInfo.applicationInfo));
@@ -976,6 +979,8 @@ public class FileQueryUtils {
                     junkInfo.setTotalSize(totalSize);
                     junkInfo.setGarbageType("TYPE_PROCESS");
                     junkList.add(junkInfo);
+
+                    packageNameList.add(packageName);
                 }
             }
         }
@@ -1230,7 +1235,7 @@ public class FileQueryUtils {
                         }
                         String string = cursor.getString(0);
                         long j = cursor.getLong(1);
-                        if (new File(string).exists() && j != 0) {
+                        if (new File(string).exists() && !FileUtils.isNotHiddenPath(new File(string)) && j != 0) {
                             FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
                             onelevelGarbageInfo.setAllchecked(true);
                             onelevelGarbageInfo.setGarbageType("TYPE_APK");
@@ -1243,7 +1248,7 @@ public class FileQueryUtils {
                             }
                             if (string.contains(absolutePath) || string.contains("sdcard0") || string.contains("sdcard1")) {
                                 PackageInfo packageArchiveInfo = mPackageManager.getPackageArchiveInfo(string, PackageManager.GET_ACTIVITIES);
-                                if (packageArchiveInfo != null) {
+                                if (packageArchiveInfo != null && !isSystemAppliation(packageArchiveInfo.packageName)) {
                                     ApplicationInfo applicationInfo = packageArchiveInfo.applicationInfo;
                                     applicationInfo.sourceDir = string;
                                     applicationInfo.publicSourceDir = string;
