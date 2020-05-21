@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
-import com.hellogeek.permission.activity.WKPermissionAutoFixActivity;
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
@@ -92,6 +91,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     private String mSecondAdvertId = ""; //冷启动广告备用id
     private static int mStart;
+    private boolean hasJump = false;
 
     //开屏广告加载超时时间,建议大于3000,这里为了冷启动第一次加载到广告并且展示,示例设置了3000ms
     private static final int MSG_GO_MAIN = 1;
@@ -129,9 +129,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         SPUtil.setString(mContext, "path_data", FileUtils.readJSONFromAsset(mContext, "sdstorage.json"));
     }
 
-    public void jumpActivity() {
-
-        Log.d(TAG, "!--->jumpActivity------isFirst:" + isFirst);
+    private void jumpActivity() {
+        Log.d(TAG, "!--->jumpActivity------isFirst:" + isFirst+"; hasJump:" + hasJump);
+        if (hasJump) {
+            return;
+        }
+        hasJump = true;
         if (isFirst) {
             startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
         } else {
@@ -256,7 +259,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     @Override
     protected void initView() {
-        Log.d(TAG, "!--->initView------");
         PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
@@ -269,7 +271,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         // 请求设备信息权限
         if (isFirst && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-            StatisticsUtils.customTrackEvent("identify_device_information", "识别设备信息弹窗曝光","launch_page","launch_page");
+            StatisticsUtils.customTrackEvent("identify_device_information", "识别设备信息弹窗曝光", "launch_page", "launch_page");
         }
 
         startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
@@ -288,14 +290,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
                 openNewVsLayout = openNewVs.findViewById(R.id.rl_open_new);
                 // 显示立即修复
-                skipTv = openNewVs.findViewById(R.id.tv_skip);
+                skipTv = openNewVs.findViewById(R.id.tv_skip); //
                 skipTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         jumpActivity();
                     }
                 });
-
+                skipTv.setClickable(false);  // XD added
                 openNewVsLayout.setVisibility(View.VISIBLE);
                 startCountDown(5);
                 openNewVs.findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {
@@ -345,13 +347,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", startsNumber + 1);
         }
         loadTime = System.currentTimeMillis();
+
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1 && hasAllPermissionsGranted(grantResults)) {
             StatisticsUtils.trackClick("identify_device_information_prohibit_click", "识别设备信息权限允许点击", "cold_splash_page", "cold_splash_page");
-        }else {
+        } else {
             StatisticsUtils.trackClick("identify_device_information_allow_click", "识别设备信息权限禁止点击", "cold_splash_page", "cold_splash_page");
         }
         jumpActivity();

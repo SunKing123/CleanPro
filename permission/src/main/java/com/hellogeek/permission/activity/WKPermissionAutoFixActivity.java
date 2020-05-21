@@ -483,6 +483,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             rlLoading.setVisibility(View.GONE);
             rlSuccess.setVisibility(View.VISIBLE);
             tvFix.setText(getString(R.string.use_now));
+            tvFix.setVisibility(View.VISIBLE);
 
         } else {
             boolean isExecute = false;
