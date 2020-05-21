@@ -257,6 +257,46 @@ public class FileQueryUtils {
                 junkInfoArrayList.add(junkInfo);
             }
         }
+
+        //判断是否存在已经卸载，但是还存在android/data目录下app的情况
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
+        File rootPathFile = new File(rootPath);
+        List<String> packageNameList = new ArrayList<>();
+        if (rootPathFile.exists()) {
+            for (File file : rootPathFile.listFiles()) {
+                if (!file.isHidden() && !"System".equals(file.getName())) {
+                    packageNameList.add(file.getName());
+                }
+            }
+        }
+        if (installedList != null && installedList.size() > 0) {
+            for (PackageInfo packageInfo : installedList) {
+                if (packageNameList.contains(packageInfo.packageName)) {
+                    packageNameList.remove(packageInfo.packageName);
+                }
+            }
+        }
+
+        if (packageNameList.size() > 0) {
+            for (String packageName : packageNameList) {
+                FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                firstJunkInfo.setAppName(packageName);
+                firstJunkInfo.setAllchecked(true);
+                firstJunkInfo.setGarbageType("TYPE_UNINSTALL");
+                firstJunkInfo.setAppPackageName(packageName);
+                File appPackage = new File(rootPath + packageName);
+                if (appPackage.exists()) {
+                    SecondJunkInfo secondJunkInfo = FileUtils.listFiles(appPackage);
+                    if (mScanFileListener != null) {
+                        mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                    }
+                    firstJunkInfo.setTotalSize(secondJunkInfo.getGarbageSize());
+                    firstJunkInfo.addSecondJunk(secondJunkInfo);
+                }
+                junkInfoArrayList.add(firstJunkInfo);
+            }
+        }
+
         return junkInfoArrayList;
 
     }

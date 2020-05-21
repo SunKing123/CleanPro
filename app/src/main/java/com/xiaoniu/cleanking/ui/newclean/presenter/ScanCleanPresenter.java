@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.annotation.SuppressLint;
+import android.os.Environment;
 
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -12,11 +13,13 @@ import com.xiaoniu.cleanking.ui.newclean.model.ScanCleanModel;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -107,6 +110,14 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
                                 break;
+                            }
+                        }
+
+                        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
+                        for (FirstJunkInfo info : entry.getValue()) {
+                            File rootPathFile = new File(rootPath + info.getAppPackageName());
+                            if (rootPathFile.exists()) {
+                                com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(rootPathFile);
                             }
                         }
                         long leavedCache = CleanUtil.freeJunkInfos(entry.getValue());
