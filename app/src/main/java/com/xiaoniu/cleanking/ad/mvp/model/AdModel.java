@@ -19,6 +19,7 @@ import com.qq.e.comm.util.AdError;
 import com.xiaoniu.cleanking.ad.bean.AdRequestBean;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
 import com.xiaoniu.cleanking.ad.bean.AdYLHEmitterBean;
+import com.xiaoniu.cleanking.ad.enums.AdType;
 import com.xiaoniu.cleanking.ad.mvp.contract.AdContract;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.chuanshanjia.TTAdManagerHolder;
@@ -34,6 +35,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
@@ -325,17 +327,26 @@ public class AdModel extends BaseModel implements AdContract.Model {
      *
      * @param commonSubscriber
      */
-    public void getSwitchInfoList(Context context, Common4Subscriber<SwitchInfoList> commonSubscriber) {
+    public void getSwitchInfoList(AdRequestParamentersBean adRequestParamentersBean, Common4Subscriber<SwitchInfoList> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("channel", ChannelUtil.getChannel());
-        map.put("appVersion", AppUtils.getVersionName(context, context.getPackageName()));
+        map.put("appVersion", AppUtils.getVersionName(adRequestParamentersBean.context, adRequestParamentersBean.context.getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        ApplicationDelegate.getAppComponent().getApiUserService().getSwitchInfoList(body)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(commonSubscriber);
+        if(adRequestParamentersBean.adType.equals(AdType.Splash)){
+            ApplicationDelegate.getAppComponent().getApiUserService().getSwitchInfoList(body)
+                    .subscribeOn(Schedulers.io())
+                    .timeout(6, TimeUnit.SECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(commonSubscriber);
+        }else {
+            ApplicationDelegate.getAppComponent().getApiUserService().getSwitchInfoList(body)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(commonSubscriber);
+        }
+
     }
 
     /**
