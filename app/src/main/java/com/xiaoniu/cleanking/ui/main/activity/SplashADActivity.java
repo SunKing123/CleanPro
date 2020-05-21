@@ -139,7 +139,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         }
         Map<String, Object> extParam = new HashMap<>();
         extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime));
-        StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "clod_splash_page", "cold_splash_page", extParam);
+        StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "cold_splash_page", "cold_splash_page", extParam);
         finish();
     }
 
@@ -269,6 +269,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         // 请求设备信息权限
         if (isFirst && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+            StatisticsUtils.customTrackEvent("identify_device_information", "识别设备信息弹窗曝光","launch_page","launch_page");
         }
 
         startsNumber = SPUtil.getStartsNumber(SplashADActivity.this, "startsNumber", 1);
@@ -334,11 +335,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         skipView.setOnClickListener(v ->
         {
             skipView.clearAnimation();
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page");
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "cold_splash_page", "cold_splash_page");
             jumpActivity();
         });
         //页面创建事件埋点
-        StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
+        StatisticsUtils.customTrackEvent("cold_splash_page_custom", "冷启动创建时", "cold_splash_page", "cold_splash_page");
         // mPresenter.getAuditSwitch();
         if (startsNumber < 2 * SECONDARY_STARTUP) {
             SPUtil.setStartsNumber(SplashADActivity.this, "startsNumber", startsNumber + 1);
@@ -348,7 +349,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
+        if (requestCode == 1 && hasAllPermissionsGranted(grantResults)) {
+            StatisticsUtils.trackClick("identify_device_information_prohibit_click", "识别设备信息权限允许点击", "cold_splash_page", "cold_splash_page");
+        }else {
+            StatisticsUtils.trackClick("identify_device_information_allow_click", "识别设备信息权限禁止点击", "cold_splash_page", "cold_splash_page");
+        }
         jumpActivity();
     }
 
@@ -478,8 +483,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 PositionId.COLD_CODE,
                 AdType.Splash,
                 6000,
-                "clod_splash_page",
-                "clod_splash_page");
+                "cold_splash_page",
+                "cold_splash_page");
         new AdPresenter().requestAd(true, adRequestParamentersBean, new AdShowCallBack() {
 
             @Override

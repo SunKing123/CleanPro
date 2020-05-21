@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.utils.KeepAliveUtils;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
@@ -85,8 +86,12 @@ public final class JobHandlerService extends JobService {
     public boolean onStartJob(JobParameters jobParameters) {
         try {
             ++EXECUTE_COUNT;
+            if(EXECUTE_COUNT==1){
+                SPUtil.setLong(this,"KeepStartTime",System.currentTimeMillis());
+            }
             Log.d("JOB-->", " Job 执行 " + EXECUTE_COUNT);
-            if(EXECUTE_COUNT!=0 && EXECUTE_COUNT%300==0){
+            if(SPUtil.getLong(this,"KeepStartTime",0)!=0 && (System.currentTimeMillis()-SPUtil.getLong(this,"KeepStartTime",0))>=300000){
+                SPUtil.setLong(this,"KeepStartTime",System.currentTimeMillis());
                 StatisticsUtils.customTrackEvent("process_survival_report", "进程存活上报（应用进程存活时每隔5分钟上报一次）", "app_page", "app_page");
             }
             //7.0以上轮询

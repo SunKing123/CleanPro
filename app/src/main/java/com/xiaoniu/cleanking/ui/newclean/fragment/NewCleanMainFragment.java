@@ -502,13 +502,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!isAllopen) {  // 权限修复
             isRiskTips = false;
             PermissionIntegrate.getPermission().startWK(getActivity());
-            StatisticsUtils.trackClick("permission_icon_click", "首页权限图标点击", "clod_splash_page", "home_page");
+            StatisticsUtils.trackClick("permission_icon_click", "首页权限图标点击", "cold_splash_page", "home_page");
             return;
         }
         if (mInteractionPoistion > 2) {
             mInteractionPoistion = 0;
         }
-        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "clod_splash_page", "home_page");
+        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "cold_splash_page", "home_page");
         if (null != mInteractionList && mInteractionList.size() > 0) {
 
             if (mInteractionList.size() == 1) {
@@ -1517,13 +1517,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void onConfirm() {
                 filePermissionGuideDialogFragment.dismiss();
-
+                StatisticsUtils.customTrackEvent("system_read_file_permission_popup_view_page", "系统读取文件权限弹窗浏览","system_read_file_permission_popup","system_read_file_permission_popup");
                 // 请求存储权限
                 new RxPermissions(getActivity()).request(basicPermissions).subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Exception {
                         if (aBoolean) {
+                            StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click", "系统读取文件权限弹窗同意点击", "home_page", "system_read_file_permission_popup");
                             return;
+                        }else {
+                            StatisticsUtils.trackClick("system_read_file_permission_popup_no_agree_click", "系统读取文件权限弹窗不同意点击", "home_page", "system_read_file_permission_popup");
                         }
                         if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             // 永久拒绝权限 文件读写权限已被禁止

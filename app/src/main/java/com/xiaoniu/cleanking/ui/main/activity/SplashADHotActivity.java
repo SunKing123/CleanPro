@@ -188,7 +188,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         skipView.setOnClickListener(v -> {
             skipView.clearAnimation();
             jumpActivity();
-            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "clod_splash_page", "clod_splash_page");
+            StatisticsUtils.trackClick("ad_pass_click", "跳过点击", "cold_splash_page", "cold_splash_page");
         });
 
         loadAd();
