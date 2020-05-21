@@ -129,7 +129,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         SPUtil.setString(mContext, "path_data", FileUtils.readJSONFromAsset(mContext, "sdstorage.json"));
     }
 
-    private void jumpActivity() {
+    public void jumpActivity() {
         Log.d(TAG, "!--->jumpActivity------isFirst:" + isFirst+"; hasJump:" + hasJump);
         if (hasJump) {
             return;
