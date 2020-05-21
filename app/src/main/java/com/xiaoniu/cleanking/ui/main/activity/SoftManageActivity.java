@@ -81,7 +81,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             checkAll(mIsCheckAll);
             totalSelectFiles();
         });
-        // registResceiver();
+         registResceiver();
         mPresenter.scanData();
     }
 
