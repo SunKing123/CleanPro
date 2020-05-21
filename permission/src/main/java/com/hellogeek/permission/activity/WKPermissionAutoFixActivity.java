@@ -214,7 +214,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 }
                 tvRiskNum.setText(risksNumber + "");
 
-                if (isOneRepair || item.isAllow) {
+                if (item.isAllow) {
                     allowIcon.setVisibility(View.VISIBLE);
                     openBtn.setVisibility(View.GONE);
                     allowIcon.setImageResource(item.isAllow ? R.mipmap.wk_permission_icon : R.mipmap.wk_fix_permission);
