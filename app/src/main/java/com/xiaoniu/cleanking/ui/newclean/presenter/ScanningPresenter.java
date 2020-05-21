@@ -108,7 +108,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
         scanningStartTime = System.currentTimeMillis();
         Observable.create(e -> {
             //扫描进程占用内存情况
-            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess(false);
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
             //扫描apk安装包
@@ -158,7 +158,12 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
 
         if (scanningResult instanceof String && "FINISH".equals(scanningResult)) {
             if (getView() != null) {
+                JunkGroup junkGroup = mJunkGroups.get(ScanningResultType.MEMORY_JUNK);
+                if (junkGroup != null) {
+                    junkGroup.isScanningOver = true;
+                }
                 final List<JunkGroup> scanningModelList = new ArrayList<>(mJunkGroups.values());
+
                 getView().setInitScanningModel(scanningModelList);
                 getView().setScanningFinish(mJunkGroups);
 
@@ -265,7 +270,6 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                 junkGroup.mChildren.add(info);
                 junkGroup.mSize += info.getTotalSize();
             }
-            junkGroup.isScanningOver = true;
         }
         updateScanningModelState();
     }

@@ -402,7 +402,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
             PreferenceUtil.savePowerCleanTime();
         }
         PreferenceUtil.saveCleanPowerUsed(true);
-        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CQSD,PositionId.DRAW_THREE_CODE);
+        boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH,PositionId.DRAW_THREE_CODE);
 
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_finish_annimation_page");

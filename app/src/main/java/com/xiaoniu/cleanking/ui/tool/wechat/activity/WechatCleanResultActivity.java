@@ -119,17 +119,7 @@ public class WechatCleanResultActivity extends SimpleActivity {
                 PreferenceUtil.saveCleanWechatUsed(true);
             }
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            boolean isOpen = false;
-            if(!CollectionUtils.isEmpty(AppHolder.getInstance().getSwitchInfoMap())){
-                SwitchInfoList.DataBean wechar= AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_WECHAT+PositionId.DRAW_THREE_CODE);
-                SwitchInfoList.DataBean qq= AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_QQ+PositionId.DRAW_THREE_CODE);
-                AppHolder.getInstance().getSwitchInfoMap().get(PositionId.KEY_QQ+PositionId.DRAW_THREE_CODE);
-                if(wechar!=null){
-                    isOpen = wechar.isOpen();
-                }else if(qq!=null){
-                    isOpen = qq.isOpen();
-                }
-            }
+            boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH,PositionId.DRAW_THREE_CODE);
             AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             if (isOpen && PreferenceUtil.getShowCount(this, getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {

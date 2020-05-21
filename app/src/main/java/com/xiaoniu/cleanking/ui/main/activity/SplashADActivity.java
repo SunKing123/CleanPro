@@ -113,6 +113,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
     }
 
     @Override
@@ -134,7 +135,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             startActivity(new Intent(SplashADActivity.this, MainActivity.class));
         }
         Map<String, Object> extParam = new HashMap<>();
-        extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime) / 1000);
+        extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime));
         StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "clod_splash_page", "cold_splash_page", extParam);
         finish();
     }

@@ -2,10 +2,12 @@ package com.xiaoniu.cleanking.ui.newclean.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -32,11 +34,12 @@ import io.reactivex.functions.Consumer;
  */
 public class JurisdictionGuideActivity extends BaseActivity {
 
-
     private String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
+    boolean goToSetting =false;
 
     @Override
     protected int getLayoutId() {
@@ -46,12 +49,15 @@ public class JurisdictionGuideActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
+        checkPermissionAndJump();
+        Log.e("activity_life","onResume()");
         StatisticsUtils.onPageStart("system_permission_guide_page_view_page", "系统权限引导页浏览页");
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Log.e("activity_life","onPause()");
         StatisticsUtils.onPageEnd("system_permission_guide_page_view_page", "系统权限引导页浏览页", "home_page", "system_permission_guide_page");
     }
 
@@ -71,13 +77,25 @@ public class JurisdictionGuideActivity extends BaseActivity {
                             // 权限获取成功
                             finish();
                             StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click", "系统读取文件权限弹窗同意点击", "home_page", "system_permission_guide_page");
+                            startActivity(NowCleanActivity.class);
                         } else {
-                            if (UpdateAgent.hasPermissionDeniedForever(JurisdictionGuideActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                            if (UpdateAgent.permissionDeniedForever(JurisdictionGuideActivity.this,false, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                                 //永久拒绝权限
+//                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                                intent.setData(Uri.fromParts("package", JurisdictionGuideActivity.this.getPackageName(), null));
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                startActivity(intent);
+
                                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                intent.setData(Uri.parse("package:" + JurisdictionGuideActivity.this.getPackageName()));
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                Uri uri = Uri.fromParts("package", mContext.getPackageName(), null);
+                                intent.setData(uri);
+                                try {
+                                    mContext.startActivity(intent);
+                                    sendDelayedUpdateGoToSettingTag();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                             } else {
                                 //拒绝权限
                             }
@@ -107,6 +125,34 @@ public class JurisdictionGuideActivity extends BaseActivity {
 
     }
 
+    public void sendDelayedUpdateGoToSettingTag(){
+        handler.sendEmptyMessageDelayed(1,1000);
+    }
+
+    DelayedUpdateGoToSettingMark handler=new DelayedUpdateGoToSettingMark();
+
+    final class DelayedUpdateGoToSettingMark extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            goToSetting =true;
+        }
+}
+
+    public void checkPermissionAndJump(){
+        if(!goToSetting){
+            return;
+        }
+        goToSetting=false;
+        new RxPermissions(JurisdictionGuideActivity.this).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    finish();
+                    startActivity(NowCleanActivity.class);
+                }
+            }
+        });
+    }
     /**
      * 状态栏颜色变化
      *

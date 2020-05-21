@@ -1,7 +1,5 @@
 package com.xiaoniu.cleanking.utils
 
-import android.util.Log
-
 object ScanPathExt {
 
     /**
@@ -144,7 +142,8 @@ object ScanPathExt {
                 "autonavi/splash",
                 "autonavi/tts",
                 "autonavi/mini_mapv3/vmap",
-                "autonavi/imagecache"
+                "autonavi/imagecache",
+                "amap/openamaplocationsdk"
         )
         //拼多多
         scanPathMap["com.xunmeng.pinduoduo"] = arrayListOf(

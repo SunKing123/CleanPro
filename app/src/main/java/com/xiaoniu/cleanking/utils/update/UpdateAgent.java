@@ -519,4 +519,22 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         return hasDeniedForever;
     }
 
+
+    /**
+     *
+     * @param activity
+     * @param allow       这个权限是否被允许了
+     * @param permission  权限id
+     * @return            true 被禁止了，false 没被禁止
+     */
+    public static boolean permissionDeniedForever(Activity activity, boolean allow,String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //1:允许了权限：false  2:拒绝了权限：true: 3:禁止了权限：false;
+            boolean shouldShow=activity.shouldShowRequestPermissionRationale(permission);
+            //没被允许&&不用提示
+           return !shouldShow&&!allow;
+        }
+        return false;
+    }
+
 }

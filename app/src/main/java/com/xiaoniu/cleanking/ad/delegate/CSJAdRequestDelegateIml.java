@@ -71,7 +71,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                             ttSplashAd.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
                                 @Override
                                 public void onAdClicked(View view, int type) {
-                                    Log.d(TAG, "穿山甲 开屏----onAdClicked");
+                                    Log.d(TAG, "穿山甲 点击 广告位id:"+adRequestBean.getAdvertId());
                                     if (null != adShowCallBack)
                                         adShowCallBack.onAdClickCallback();
                                     StatisticsUtils.clickAD("ad_click", "广告点击", "2", adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
@@ -79,7 +79,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 
                                 @Override
                                 public void onAdShow(View view, int type) {
-                                    Log.d(TAG, "穿山甲 开屏----onAdShow");
+                                    Log.d(TAG, "穿山甲 曝光 广告位id:"+adRequestBean.getAdvertId());
                                     StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                                 }
 
@@ -115,8 +115,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.d(TAG, "穿山甲 开屏----throwable"+throwable.getMessage());
-
+                        Log.d(TAG, "穿山甲 开屏广告异常  错误message："+throwable.getMessage());
                         if (throwable instanceof TimeoutException && adShowCallBack != null) {
                             adShowCallBack.onFailure("开屏超时后不在请求，直接结束");
                         } else {
@@ -134,7 +133,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
         }
 
         adModel.getCSJTemplateAd(adRequestParamentersBean, adRequestBean)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
 //                .timeout(3, TimeUnit.SECONDS)
                 .subscribe(new Consumer<List<TTNativeExpressAd>>() {
@@ -148,25 +147,25 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                         ttNativeExpressAd.setExpressInteractionListener(new TTNativeExpressAd.ExpressAdInteractionListener() {
                             @Override
                             public void onAdClicked(View view, int type) {
-                                Log.d(TAG, "穿山甲模板 onAdClicked");
+                                Log.d(TAG, "穿山甲模板广告点击  广告位id:"+adRequestBean.getAdvertId());
                                 StatisticsUtils.clickAD("ad_click", "广告点击", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
 
                             @Override
                             public void onAdShow(View view, int type) {
-                                Log.d(TAG, "穿山甲模板 onAdShow" + adRequestParamentersBean.index);
+                                Log.d(TAG, "穿山甲模板广告曝光  广告位id:"+adRequestBean.getAdvertId());
                                 StatisticsUtils.customAD("ad_show", "广告展示曝光", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                             }
 
                             @Override
                             public void onRenderFail(View view, String msg, int code) {
-                                Log.d(TAG, "穿山甲模板 render fail: " + msg + " code:" + code);
+                                Log.d(TAG, "穿山甲模板广告渲染失败  广告位id:"+adRequestBean.getAdvertId());
                             }
 
                             @Override
                             public void onRenderSuccess(View view, float width, float height) {
-                                Log.d(TAG, "穿山甲模板 onRenderSuccess" + adRequestParamentersBean.index);
+                                Log.d(TAG, "穿山甲模板广告渲染成功  广告位id:"+adRequestBean.getAdvertId());
 
                                 if (adRequestParamentersBean.index == 0) {
                                     adShowCallBack.onAdShowCallBack(view);
@@ -179,7 +178,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
 
                             @Override
                             public void onSelected(int i, String s) {
-                                Log.d(TAG, "穿山甲模板 onSelected" + adRequestParamentersBean.index);
+                                Log.d(TAG, "穿山甲模板广告关闭  广告位id:"+adRequestBean.getAdvertId());
                                 if (adShowCallBack != null) {
                                     adShowCallBack.onCloseCallback(adRequestParamentersBean.index);
                                     if (adRequestParamentersBean.index == 0) {
@@ -228,6 +227,7 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        Log.d(TAG, "穿山甲 模板广告异常  错误message："+throwable.getMessage());
                         adError(adRequest, adRequestParamentersBean, adShowCallBack);
                     }
                 });

@@ -47,7 +47,9 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
     private void calJunkTotalSize() {
         int totalSize = 0;
         for (Map.Entry<ScanningResultType, JunkGroup> junkTitle : junkTitleMap.entrySet()) {
-            totalSize += junkTitle.getValue().mSize;
+            if (!ScanningResultType.MEMORY_JUNK.equals(junkTitle.getKey())) {
+                totalSize += junkTitle.getValue().mSize;
+            }
         }
         CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalSize);
         //展示扫描到的垃圾总量
@@ -81,7 +83,7 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
             ArrayList<FirstJunkInfo> firstJunkList = junkContentMap.get(wrapper.scanningResultType);
             if (!CollectionUtils.isEmpty(firstJunkList)) {
                 for (FirstJunkInfo firstJunkInfo : firstJunkList) {
-                    firstJunkInfo.setAllchecked(!firstJunkInfo.isAllchecked());
+                    firstJunkInfo.setAllchecked(junkGroup.isChecked);
                 }
                 junkContentMap.put(wrapper.scanningResultType, firstJunkList);
                 refreshResultModel();
@@ -161,6 +163,25 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
      */
     private void initBuildJunkDataModel() {
         if (getView() != null) {
+            ArrayList<FirstJunkInfo> firstJunkList = junkContentMap.get(ScanningResultType.APK_JUNK);
+            if (!CollectionUtils.isEmpty(firstJunkList)) {
+                int checkedCount = 0;
+                for (FirstJunkInfo firstJunkInfo : firstJunkList) {
+                    if (firstJunkInfo.isAllchecked()) {
+                        checkedCount++;
+                    }
+                }
+                JunkGroup junkGroup = junkTitleMap.get(ScanningResultType.APK_JUNK);
+                if (junkGroup != null) {
+                    junkGroup.isCheckPart = checkedCount != 0 && checkedCount != firstJunkList.size();
+                    if (checkedCount == 0) {
+                        junkGroup.isChecked = false;
+                    } else {
+                        junkGroup.isChecked = checkedCount == firstJunkList.size();
+                    }
+                    junkTitleMap.put(ScanningResultType.APK_JUNK, junkGroup);
+                }
+            }
             getView().setInitSubmitResult(buildJunkDataModel());
         }
     }
@@ -202,7 +223,7 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
     private long setCheckedJunkResult() {
         long checkedTotalSize = 0;
         for (Map.Entry<ScanningResultType, ArrayList<FirstJunkInfo>> contentMap : junkContentMap.entrySet()) {
-            if (!CollectionUtils.isEmpty(contentMap.getValue())) {
+            if (!CollectionUtils.isEmpty(contentMap.getValue()) && !ScanningResultType.MEMORY_JUNK.equals(contentMap.getKey())) {
                 for (FirstJunkInfo firstJunkInfo : contentMap.getValue()) {
                     if (firstJunkInfo.isAllchecked()) {
                         checkedTotalSize += firstJunkInfo.getTotalSize();

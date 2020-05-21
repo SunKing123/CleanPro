@@ -131,8 +131,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @BindView(R.id.tv_top_xiding_back)
     TextView tvTopXidingBack;
 
-    private String mTitleType = "white";
-    private static final String KEY_TYPE = "TYPE";
+//    private String mTitleType = "white";
+//    private static final String KEY_TYPE = "TYPE";
     private NewsType[] mNewTypes = {NewsType.TOUTIAO, NewsType.SHEHUI, NewsType.GUOJI, NewsType.YUN_SHI, NewsType.JIAN_KANG, NewsType.REN_WEN};
     private NewsTypeNavigatorAdapter mNewsTypeNaviAdapter;
     private ComFragmentAdapter mNewsListFragmentAdapter;
@@ -190,9 +190,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void initVariable(Bundle arguments) {
         mNewTypes = NewsUtils.sNewTypes;
         mNewsListFragments = new ArrayList<>();
-        if (arguments != null) {
-            mTitleType = arguments.getString(KEY_TYPE);
-        }
+//        if (arguments != null) {
+//            mTitleType = arguments.getString(KEY_TYPE);
+//        }
     }
     /* XD added for feed End >*/
 
@@ -478,39 +478,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
         }
     }
-
-
-    private String getConfigkey() {
-        String configkey = "";
-        if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            //一键加速
-            configkey = PositionId.KEY_JIASU;
-        } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
-            //1.2.1清理完成页面_建议清理
-            configkey = PositionId.KEY_CLEAN_ALL;
-
-        } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
-            //超强省电
-            configkey = PositionId.KEY_CQSD;
-        } else if (getString(R.string.tool_chat_clear).contains(mTitle)) {
-            //微信专情
-            configkey = PositionId.KEY_WECHAT;
-        }  else if (getString(R.string.tool_qq_clear).contains(mTitle)) {
-            //qq专情
-            configkey = PositionId.KEY_QQ;
-        }else if (getString(R.string.tool_notification_clean).contains(mTitle)) {
-            //通知栏清理
-            configkey = PositionId.KEY_NOTIFY;
-        } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
-            //手机降温
-            configkey = PositionId.KEY_COOL;
-        } else if (getString(R.string.game_quicken).contains(mTitle)) {
-            //游戏加速
-            configkey = PositionId.KEY_GAME;
-        }
-        return configkey;
-    }
-
 
     private void changeUI(Intent intent) {
         if (intent != null) {
@@ -954,11 +921,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void loadData() {
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent(createEventCode, createEventName, sourcePage, currentPage);
-        String configKey=getConfigkey();
-        if(!TextUtils.isEmpty(configKey)){
-            loadAdUp();
-            loadAdDown();
-        }
+        loadAdUp();
+        loadAdDown();
 //        startLoadData();  // XD delete 20200512
         loadFeedData();  // XD add for feed
     }
@@ -1214,6 +1178,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载上广告
      */
     private void loadAdUp(){
+        Log.d(TAG, "!--->loadAdUp-------");
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_ONE_CODE,
                 this,
@@ -1221,14 +1186,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 (int) ScreenUtils.getScreenWidthDp(this)-32,
                 0,
                 source_page,
-                currentPage);
+                "success_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
                 if(adUpView!=null ){
+                    Log.d(TAG, "!--->loadAdUp----onAdShowCallBack---hasXiding:"+hasXiding);
                     adUpView.setVisibility(View.VISIBLE);
                     adUpView.removeAllViews();
                     adUpView.addView(view);
+                    cancelXiDing();    // XD added 20200520
                 }
             }
 
@@ -1252,6 +1219,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      * 加载下广告
      */
     private void loadAdDown(){
+        Log.d(TAG, "!--->loadAdUp-------");
         AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_CLEAN_FINSH,
                 PositionId.DRAW_TWO_CODE,
                 this,
@@ -1259,14 +1227,16 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 (int) ScreenUtils.getScreenWidthDp(this)-32,
                 0,
                 source_page,
-                currentPage);
+                "success_page");
         new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
             @Override
             public void onAdShowCallBack(View view) {
                 if(adDownView!=null ){
+                    Log.d(TAG, "!--->loadAdDown----onAdShowCallBack---hasXiding:"+hasXiding);
                     adDownView.setVisibility(View.VISIBLE);
                     adDownView.removeAllViews();
                     adDownView.addView(view);
+                    cancelXiDing();  // XD added 20200520
                 }
             }
 
@@ -1308,7 +1278,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         feedViewPager.setAdapter(mNewsListFragmentAdapter);
     }
 
-
     /**
      * click Cause Xiding
      */
@@ -1327,7 +1296,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int x, int y, int lastx, int lasty) {
         if (NewsUtils.isShowCleanFinishFeed() && canXiding) {
-            //处理吸顶操作
             cheekRootHeight();
             Rect rect = new Rect();
             homeFeeds.getGlobalVisibleRect(rect);
@@ -1335,19 +1303,45 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             int dy = rect.top - vHomeTop.getHeight() - statusBarHeight;  // flow top - titleTop Height  - statusBarHeight
             int changeY = y - lasty;
             if (dy == 0) {
-                if (hasXiding && changeY == -statusBarHeight) {
-                    Log.w(TAG, "!--->onScrollChange doXiDingStickyAnim lasty:" + lasty );
-                    doXiDingStickyAnim(lasty, true);
+                if (hasXiding) {
+                    if (changeY == -statusBarHeight) {
+                        doXiDingStickyAnim(lasty, true);
+                    }
+                } else {
+                    if (changeY > mStickyHeight) {
+                        onFlyToXiDing();
+                    }
                 }
-                hasXiding = true;
-            }
-            if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
+            } else if (dy > 0 && dy <= mStickyHeight && changeY > 0) {
                 if (changeY < 20) {
                     doXiDingStickyAnim(y + dy, true, 300);
                 } else {
                     doXiDingStickyAnim(y + dy, false);
                 }
+            } else if (hasXiding && dy > 0 && changeY < 0 ) {
+                doXiDingStickyAnim(lasty, false);
             }
+        }
+    }
+
+    /**
+     * call condition: if (NewsUtils.isShowCleanFinishFeed() && canXiding) {}
+     */
+    private void onFlyToXiDing() {
+        mNestedScrollView.setNeedScroll(false);
+        canXiding = true;
+        updateTitle(true);
+    }
+
+
+    /**
+     * called when some view added to feeds top on XiDing status
+     */
+    private void cancelXiDing() {
+        if (NewsUtils.isShowCleanFinishFeed() && hasXiding) {
+            mNestedScrollView.setNeedScroll(true);
+            canXiding = true;
+            updateTitle(false);
         }
     }
 
@@ -1363,6 +1357,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private void doXiDingStickyAnim(int scrolltoY, boolean isAnimation, int duration) {
+        Log.w(TAG, "!--->doXiDingStickyAnim---scrolltoY:" + scrolltoY + "; isAnimation:" + isAnimation + "; duration:" + duration);
         mNestedScrollView.setNeedScroll(false);
         canXiding = false;
         if (isAnimation) {
@@ -1440,10 +1435,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         });
         valueAnimator.setDuration(duration);
         valueAnimator.start();
-    }
-
-    private void startDetail() {
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
     /* XD added for feed End >*/
 
