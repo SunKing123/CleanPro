@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
@@ -23,13 +24,14 @@
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
-            android:layout_marginTop="@dimen/dimen_25dp"
             android:layout_height="@dimen/dimen_45dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="@dimen/dimen_25dp"
             android:gravity="center"
             android:text=""
             android:textColor="#ffffff"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="2222" />
 
     </LinearLayout>
 
@@ -66,7 +68,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="55sp"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    tools:text="2222" />
 
                 <LinearLayout
                     android:id="@+id/layout_right_content"
@@ -82,14 +85,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dimen_5dp"
                         android:textColor="@color/white"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:text="2222" />
 
                     <TextView
                         android:id="@+id/tv_ql"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        tools:text="2222" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -102,7 +107,7 @@
                 android:layout_marginTop="-35dp"
                 android:layout_marginRight="@dimen/dimen_8dp"
                 android:background="@drawable/bg_finish_rem"
-                android:visibility="gone"></FrameLayout>
+                android:visibility="gone" />
 
         </LinearLayout>
 
