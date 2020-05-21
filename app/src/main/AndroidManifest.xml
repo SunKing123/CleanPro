@@ -433,7 +433,9 @@
 
         <activity android:name=".keeplive.onepx.OnePixelActivity" />
 
-        <activity android:name=".ui.newclean.activity.JurisdictionGuideActivity" />
+        <activity android:name=".ui.newclean.activity.JurisdictionGuideActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".keeplive.service.JobHandlerService"

@@ -32,6 +32,7 @@ public class MessageDialogFragment extends DialogFragment {
 
     private Context mContext;
     private OnClickListener mOnClickListener;
+    private boolean isCancelable = true;  // XD added
 
     public static MessageDialogFragment newInstance() {
         MessageDialogFragment messageDialogFragment = new MessageDialogFragment();
@@ -100,6 +101,12 @@ public class MessageDialogFragment extends DialogFragment {
         resizeDialogFragment();
     }
 
+    /**
+     * @author xd.he
+     */
+    public void setCancelable(boolean isCancelable) {
+        this.isCancelable = isCancelable;
+    }
 
     private void resizeDialogFragment() {
         Dialog dialog = getDialog();
@@ -110,6 +117,9 @@ public class MessageDialogFragment extends DialogFragment {
             if (window != null) {
                 window.setLayout(lp.width, lp.height);
             }
+            // xd added
+            dialog.setCancelable(isCancelable);
+            dialog.setCanceledOnTouchOutside(isCancelable);
         }
     }
 

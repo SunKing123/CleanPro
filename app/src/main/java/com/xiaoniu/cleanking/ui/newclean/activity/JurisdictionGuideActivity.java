@@ -68,7 +68,7 @@ public class JurisdictionGuideActivity extends BaseActivity {
     protected void initView() {
         formBtnMark=getIntent().getStringExtra("formBtnMark");
 
-        showBarColor(R.color.color_ff000000);
+        StatusBarCompat.setStatusBarColorPrimary(this); // XD modify
 
         findViewById(R.id.btn_open_now).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,19 +151,6 @@ public class JurisdictionGuideActivity extends BaseActivity {
                 }
             }
         });
-    }
-    /**
-     * 状态栏颜色变化
-     *
-     * @param animatedValue
-     */
-    public void showBarColor(int animatedValue) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(this, animatedValue, true);
-        } else {
-            StatusBarCompat.setStatusBarColor(this, animatedValue, false);
-        }
     }
 
     public static void goToPage(String fromButton, Context context){

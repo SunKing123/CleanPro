@@ -36,11 +36,11 @@ import com.xiaoniu.common.utils.StatisticsUtils;
  */
 public class ConfirmDialogFragment extends DialogFragment {
 
-
     private Context mContext;
 
     private OnClickListener mOnClickListener;
 
+    private boolean isCancelable = true;  // XD added
 
     public static ConfirmDialogFragment newInstance() {
         ConfirmDialogFragment confirmDialogFragment = new ConfirmDialogFragment();
@@ -135,6 +135,12 @@ public class ConfirmDialogFragment extends DialogFragment {
         void onCancel();
     }
 
+    /**
+     * @author xd.he
+     */
+    public void setCancelable(boolean isCancelable) {
+        this.isCancelable = isCancelable;
+    }
 
     private void resizeDialogFragment() {
         Dialog dialog = getDialog();
@@ -146,6 +152,9 @@ public class ConfirmDialogFragment extends DialogFragment {
 //                window.setLayout(lp.width, lp.height);
 //            }
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            // xd added
+            dialog.setCancelable(isCancelable);
+            dialog.setCanceledOnTouchOutside(isCancelable);
         }
     }
 

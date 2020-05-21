@@ -39,10 +39,20 @@ public class StatusBarCompat {
      * @author xd.he
      */
     public static void setStatusBarColorPrimary(@NonNull Activity activity) {
+        setStatusBarColor(activity, activity.getResources().getColor(R.color.colorPrimary));
+    }
+
+    /**
+     *
+     * @param activity
+     * @param statusColor
+     * @author xd.he
+     */
+    private static void setStatusBarColor(@NonNull Activity activity, @ColorInt int statusColor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(activity, activity.getResources().getColor(R.color.colorPrimary), true);   // color_27D599
+            StatusBarCompat.setStatusBarColor(activity, statusColor, true);
         } else {
-            StatusBarCompat.setStatusBarColor(activity, activity.getResources().getColor(R.color.colorPrimary), false);  // color_27D599
+            StatusBarCompat.setStatusBarColor(activity, statusColor, false);
         }
     }
 
