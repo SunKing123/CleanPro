@@ -608,9 +608,9 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         Permission requestPermission = null;
         isAllOpen = ExternalInterface.getInstance(this).isOpenAllPermission(this);
         // 判断是否有无障碍权限
-        if (isAllOpen && requestCode != Permission.PACKAGEUSAGESTATS.getRequestCode()) {
-            return;
-        }
+//        if (isAllOpen && requestCode != Permission.PACKAGEUSAGESTATS.getRequestCode()) {
+//            return;
+//        }
         if (requestCode == ACCESSIBILITY_SETTINGS) {
             // 显示单独权限开启按钮
             isOneRepair = false;
@@ -659,7 +659,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         mAdapter.notifyDataSetChanged();
 
 
-        if (!isOpen || !onecLiRepair || requestPermission == null) {
+        if (!isOpen || !onecLiRepair || requestPermission == null || isAllOpen) {
             return;
         }
         // 修改权限执行次数
