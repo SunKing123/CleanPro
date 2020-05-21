@@ -227,7 +227,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
      */
     private void getNetAdInfo(AdRequestParamentersBean adRequestParamentersBean) {
         // Log.d(TAG, "!--->getNetAdInfo----adRequestParamentersBean:"+adRequestParamentersBean);
-        adModel.getSwitchInfoList(adRequestParamentersBean.context, new Common4Subscriber<SwitchInfoList>() {
+        adModel.getSwitchInfoList(adRequestParamentersBean, new Common4Subscriber<SwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {
 
