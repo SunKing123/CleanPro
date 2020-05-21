@@ -255,6 +255,10 @@ public class Constant {
     //定时任务间隔检测时间（分钟）
     public static final int SCAN_SPACE_LONG = 1;
 
+
+    public static final String WX_CLEAN_BTN="wx_clean_btn";
+    public static final String STORAGE_CLEAN_BTN="storage_clean_btn";
+
     /**
      * 白名单
      */

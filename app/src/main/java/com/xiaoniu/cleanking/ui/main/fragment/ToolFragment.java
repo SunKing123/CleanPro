@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
@@ -189,7 +190,7 @@ public class ToolFragment extends SimpleFragment {
             }
             if (!PermissionUtils.checkPermission(getContext(), BASIC_PERMISSIONS)) {
                 // 跳转到权限引导页面
-                startActivity(new Intent(getActivity(), JurisdictionGuideActivity.class));
+                JurisdictionGuideActivity.goToPage(Constant.WX_CLEAN_BTN,getActivity());
                 return;
             }
 
