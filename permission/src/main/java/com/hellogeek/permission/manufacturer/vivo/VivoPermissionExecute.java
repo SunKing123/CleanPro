@@ -19,6 +19,7 @@ import com.hellogeek.permission.manufacturer.PermissionSystemPath;
 import com.hellogeek.permission.provider.PermissionProvider;
 import com.hellogeek.permission.strategy.PathEvent;
 import com.hellogeek.permission.util.DialogUtil;
+import com.hellogeek.permission.util.NotifyUtils;
 import com.hellogeek.permission.util.PermissionConvertUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
 
@@ -91,6 +92,12 @@ public class VivoPermissionExecute extends VivoPermissionBase {
                 vivoPermissionActionUtil.actionPakageUsageStats(nodeInfo, service, vivoSystemVersion, vivoOs);
                 break;
         }
+    }
+
+
+    protected void actionNotificationRead() {
+        super.actionNotificationRead();
+        NotifyUtils.openNotificationListenerSettings(mContext);
     }
 
     @Override
@@ -360,6 +367,11 @@ public class VivoPermissionExecute extends VivoPermissionBase {
 //                        getlist.add(permission);
 //                    }
 //                    break;
+                case NOTIFICATIONREAD:
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        getlist.add(permission);
+                    }
+                    break;
             }
         }
         return getlist;

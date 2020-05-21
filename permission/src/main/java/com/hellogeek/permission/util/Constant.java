@@ -87,6 +87,7 @@ public class Constant {
     public static final String PROVIDER_BACKSTAGEPOPUP = "permission_backstagepopup";
     public static final String PROVIDER_LOCKDISPLAY = "permission_lockdisplay";
     public static final String PROVIDER_SUSPENDEDTOAST = "permission_suspendedtoast";
+    public static final String PROVIDER_NOTIFICATIONREAD = "permission_notificationread";
 
     public static final String PROVIDER_PERMISSIONALLOPEN = "permission_isallOpen";
     public static final String PROVIDER_NECESSARY_PERMISSIONALLOPEN = "permission_necessary_isallOpen";

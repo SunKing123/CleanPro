@@ -41,7 +41,7 @@ public class AppApplication extends BaseApplication {
 
         PermissionIntegrate.getInstance(this)
                 .setPermissionList(Permission.SUSPENDEDTOAST, Permission.SELFSTARTING,
-                        Permission.NOTIFICATIONBAR, Permission.PACKAGEUSAGESTATS)
+                        Permission.NOTIFICATIONREAD, Permission.PACKAGEUSAGESTATS)
                 .setPermissionRecordCallback(new PermissionRecordCallback() {
                     @Override
                     public void usagePermissionRecord(int usageType, String currentPage, String sourcePage, String eventCode, String eventName, Map<String, String> extraMap) {

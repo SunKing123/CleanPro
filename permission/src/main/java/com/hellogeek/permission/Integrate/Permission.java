@@ -10,7 +10,8 @@ public enum Permission {
     REPLACEACLLPAGE("替换来电页面"),
     NOTIFICATIONBAR("通知管理", "清理烦人通知，拦截骚扰消息", 1003),
     NOTICEOFTAKEOVER("接管来电通知"),
-    PACKAGEUSAGESTATS("查看应用使用情况", "释放更多空间，告别卡顿烦恼", 1004);
+    PACKAGEUSAGESTATS("查看应用使用情况", "释放更多空间，告别卡顿烦恼", 1004),
+    NOTIFICATIONREAD("通知读取权限", "清理烦人通知，拦截骚扰消息", 1003);
 
     private String permissionName;
 

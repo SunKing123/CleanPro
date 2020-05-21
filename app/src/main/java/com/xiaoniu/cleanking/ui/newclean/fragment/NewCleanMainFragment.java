@@ -1363,7 +1363,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 } else {
                     doXiDingStickyAnim(y + dy, false);
                 }
-            } else if (hasXiding && dy > 0 && changeY < 0 ) {
+            } else if (hasXiding && dy > 0 && changeY < 0) {
                 doXiDingStickyAnim(lasty, false);
             }
         }
@@ -1527,10 +1527,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         }
                         if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             // 永久拒绝权限 文件读写权限已被禁止
-//                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                            intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            startActivity(intent);
                             showPermissionDialog1();
                             return;
                         }

@@ -17,6 +17,7 @@ import com.hellogeek.permission.provider.PermissionProvider;
 import com.hellogeek.permission.strategy.AutoFixAction;
 import com.hellogeek.permission.strategy.PathEvent;
 import com.hellogeek.permission.util.NodeInfoUtil;
+import com.hellogeek.permission.util.NotifyUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -161,6 +162,12 @@ public class OppoPermissionBase extends AutoFixAction {
         }
         return VERSION.V1;
     }
+
+    protected void actionNotificationRead() {
+        super.actionNotificationRead();
+        setEventType(Permission.NOTIFICATIONREAD);
+    }
+
 
     @Override
     protected void actionSuspendedToast() {

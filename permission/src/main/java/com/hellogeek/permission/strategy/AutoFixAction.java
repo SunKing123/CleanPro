@@ -10,6 +10,7 @@ import android.view.accessibility.AccessibilityEvent;
 import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.manufacturer.PermissionSystemPath;
+import com.hellogeek.permission.util.NotifyUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
 
 import java.util.ArrayList;
@@ -65,9 +66,17 @@ public class AutoFixAction {
             case PACKAGEUSAGESTATS:
                 actionPackageUsageStats();
                 break;
+            case NOTIFICATIONREAD:
+                actionNotificationRead();
+                break;
 
         }
     }
+
+    protected void actionNotificationRead() { // 通知读取权限
+        clearSNIGList(Permission.NOTIFICATIONREAD);
+    }
+
 
     protected void actionSuspendedToast() {//悬浮框
         clearSNIGList(Permission.SUSPENDEDTOAST);

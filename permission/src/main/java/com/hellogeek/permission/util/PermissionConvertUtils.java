@@ -78,6 +78,13 @@ public class PermissionConvertUtils {
                     res = R.mipmap.wk_icon_fix_noticeoftakeover;
                 }
                 break;
+            case NOTIFICATIONREAD:
+                if (PermissionIntegrate.getPermission().getNoticeOfTakeoverRes() != 0) {
+                    res = PermissionIntegrate.getPermission().getNoticeOfTakeoverRes();
+                } else {
+                    res = R.mipmap.wk_icon_fix_noticeoftakeover;
+                }
+                break;
             default:
                 res = -1;
                 break;
@@ -150,6 +157,9 @@ public class PermissionConvertUtils {
                 } else {
                     title = permission.getPermissionDesc() != null ? permission.getPermissionDesc() : permission.getName();
                 }
+                break;
+            case NOTIFICATIONREAD:
+                title = permission.getPermissionDesc() != null ? permission.getPermissionDesc() : permission.getName();
                 break;
             default:
                 title = null;
