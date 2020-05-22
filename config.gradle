@@ -18,6 +18,8 @@ ext {
     devConfigFiledMap.put("API_APPSECRET", '"744743ba93f44aa79834ded6f7f90e83"')
     devConfigFiledMap.put("VIDEO_BASE_URL", '"http://clsystem-mclean-dev-default.fqt188.com/video/query"')
     devConfigFiledMap.put("PUSH_TAG", '"test"')
+    devConfigFiledMap.put("PRIVACY_POLICY", '"http://testwlqlapph5.xiaoniuhy.com/agreement/privacy.html"')
+    devConfigFiledMap.put("USER_AGREEMENT", '"http://testwlqlapph5.xiaoniuhy.com/agreement/user.html"')
 
     /**
      * 测试环境BuildConfig配置项
@@ -31,6 +33,8 @@ ext {
     testConfigFiledMap.put("API_APPSECRET", '"744743ba93f44aa79834ded6f7f90e83"')
     testConfigFiledMap.put("VIDEO_BASE_URL", '"http://clsystem-mclean-fat-default.fqt188.com/video/query"')
     testConfigFiledMap.put("PUSH_TAG", '"test"')
+    testConfigFiledMap.put("PRIVACY_POLICY", '"http://testwlqlapph5.xiaoniuhy.com/agreement/privacy.html"')
+    testConfigFiledMap.put("USER_AGREEMENT", '"http://testwlqlapph5.xiaoniuhy.com/agreement/user.html"')
 
     /**
      * 生产环境BuildConfig配置项
@@ -44,6 +48,8 @@ ext {
     prodConfigFiledMap.put("API_APPSECRET", '"f8e28aa6525f4bd79c9920e2540d531e"')
     prodConfigFiledMap.put("VIDEO_BASE_URL", '"https://clsystem.wukongclean.com/video/query"')
     prodConfigFiledMap.put("PUSH_TAG", '"product"')
+    prodConfigFiledMap.put("PRIVACY_POLICY", '""')
+    prodConfigFiledMap.put("USER_AGREEMENT", '""')
 
     /**
      * app公共依赖三方组件

@@ -82,7 +82,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.d("--------------","time out");
-                        mView.jumpActivity();
+                        mView.getAuditSwitchFailure();
                     }
                 });
     }

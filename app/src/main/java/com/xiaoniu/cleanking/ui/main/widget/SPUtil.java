@@ -55,6 +55,12 @@ public class SPUtil {
     private static final String KEY_NOTIFY_CLEAN_COUNT = "key_notify_clean_count";
     private static final String KEY_POWER_CLEAN_TIME = "key_power_clean_time";
 
+    //开屏界面
+    //是否同意用户协议
+    public static final String IS_AGREE_USER_AGREEMENT = "is_agree_user_agreement";
+    //是否是二次冷启动
+    public static final String IS_Secondary_Cold_BootStart = "secondary_cold_Boot_Start";
+
     public static void setMyToken(String mytokens) {
         mytoken = mytokens;
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dimen_12dp"
@@ -30,12 +31,11 @@
         android:layout_marginTop="@dimen/dimen_10dp"
         android:layout_marginRight="@dimen/dimen_10dp"
         android:lineSpacingExtra="@dimen/dimen_5dp"
-        android:text="欢迎使用悟空清理！我们依据最新的法律要求，
+        android:textSize="@dimen/dimen_14sp"
+        tools:text="欢迎使用悟空清理！我们依据最新的法律要求，
         更新了隐私政策，特此向您说明。作为互联网安全公司，
         我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。
-        在使用悟空清理前，请务必仔细阅读并了解"
-        android:textColor="@color/color_666666"
-        android:textSize="@dimen/dimen_14sp" />
+        在使用悟空清理前，请务必仔细阅读并了解" />
 
     <LinearLayout
         android:layout_width="match_parent"
