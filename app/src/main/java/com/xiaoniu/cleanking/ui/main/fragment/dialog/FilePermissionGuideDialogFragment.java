@@ -122,7 +122,7 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
         Dialog dialog = getDialog();
         if (null != dialog) {
             Window window = dialog.getWindow();
-            WindowManager.LayoutParams lp = getDialog().getWindow().getAttributes();
+//            WindowManager.LayoutParams lp = getDialog().getWindow().getAttributes();
 //            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
 //            if (window != null) {
 //                window.setLayout(lp.width, lp.height);

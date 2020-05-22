@@ -72,11 +72,13 @@ public class PermissionConvertUtils {
                 }
                 break;
             case PACKAGEUSAGESTATS:
-                if (PermissionIntegrate.getPermission().getNoticeOfTakeoverRes() != 0) {
-                    res = PermissionIntegrate.getPermission().getNoticeOfTakeoverRes();
-                } else {
-                    res = R.mipmap.wk_icon_fix_noticeoftakeover;
-                }
+
+                res = R.mipmap.icon_notification;
+//                if (PermissionIntegrate.getPermission().getNoticeOfTakeoverRes() != 0) {
+//                    res = PermissionIntegrate.getPermission().getNoticeOfTakeoverRes();
+//                } else {
+//                    res = R.mipmap.wk_icon_fix_noticeoftakeover;
+//                }
                 break;
             case NOTIFICATIONREAD:
                 if (PermissionIntegrate.getPermission().getNoticeOfTakeoverRes() != 0) {

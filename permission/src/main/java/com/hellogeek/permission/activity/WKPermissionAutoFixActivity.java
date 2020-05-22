@@ -236,6 +236,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     rlLoading.setVisibility(View.GONE);
                     rlSuccess.setVisibility(View.VISIBLE);
                     tvFix.setText(getString(R.string.use_now));
+                    tvFix.setVisibility(View.VISIBLE);
+                    isAllOpen = true;
                 }
 
             }
@@ -318,6 +320,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         if (id == R.id.tvFix) {
             if (isAllOpen) {
                 finish();
+                return;
             }
             if (autoFixAction == null) {
                 return;
@@ -628,6 +631,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         } else if (requestCode == Permission.SELFSTARTING.getRequestCode()) {
             // 判断是否具备自启动权限
             isOpen = true;
+            // item.isAllow
             if (isOpen) {
                 PermissionProvider.save(this, PROVIDER_SELFSTARTING, true);
                 EventBus.getDefault().post(new PathEvent(Permission.SELFSTARTING, true, 1));
@@ -659,10 +663,9 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         risksNumber = mAdapter.getItemCount();
         mAdapter.notifyDataSetChanged();
 
-
         if (!isOpen || !onecLiRepair || requestPermission == null || isAllOpen) {
             return;
-        }
+        }  // || isAllOpen
         // 修改权限执行次数
 //        permission = asBase.permission;
 //        asBase.executeNumber++;
