@@ -183,6 +183,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
             @Override
             public void onClick(View view) {
                 finish();
+                StatisticsUtils.trackClick("return_click", "返回点击", "home_page", "permission_guide_list_page");
             }
         });
 
