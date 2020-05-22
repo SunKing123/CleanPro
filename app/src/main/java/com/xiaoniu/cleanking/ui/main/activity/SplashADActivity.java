@@ -433,9 +433,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1 && hasAllPermissionsGranted(grantResults)) {
-            StatisticsUtils.trackClick("identify_device_information_prohibit_click", "识别设备信息权限允许点击", "cold_splash_page", "cold_splash_page");
+            StatisticsUtils.trackClick("identify_device_information_allow_click", "识别设备信息权限允许点击", "cold_splash_page", "cold_splash_page");
         } else {
-            StatisticsUtils.trackClick("identify_device_information_allow_click", "识别设备信息权限禁止点击", "cold_splash_page", "cold_splash_page");
+            StatisticsUtils.trackClick("identify_device_information_prohibit_click", "识别设备信息权限禁止点击", "cold_splash_page", "cold_splash_page");
         }
         jumpActivity();
     }
