@@ -575,6 +575,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 mTvSize.setText(num);
                 mTvGb.setText("%");
                 mTvQl.setText("已提速");
+            } else if(getString(R.string.tool_phone_clean).contains(mTitle)){
+                //手机清理
+                    mTvSize.setText("");
+                    mTvGb.setText("已清理");
+                    mTvGb.setTextSize(20);
+                    mTvQl.setText("快试试其他功能吧！");
             }
 
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
