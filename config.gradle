@@ -48,8 +48,8 @@ ext {
     prodConfigFiledMap.put("API_APPSECRET", '"f8e28aa6525f4bd79c9920e2540d531e"')
     prodConfigFiledMap.put("VIDEO_BASE_URL", '"https://clsystem.wukongclean.com/video/query"')
     prodConfigFiledMap.put("PUSH_TAG", '"product"')
-    prodConfigFiledMap.put("PRIVACY_POLICY", '""')
-    prodConfigFiledMap.put("USER_AGREEMENT", '""')
+    prodConfigFiledMap.put("PRIVACY_POLICY", '"http://wkqlapph5.wukongclean.com/agreement/privacy.html"')
+    prodConfigFiledMap.put("USER_AGREEMENT", '"http://wkqlapph5.wukongclean.com/agreement/user.html"')
 
     /**
      * app公共依赖三方组件

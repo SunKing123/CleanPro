@@ -283,7 +283,6 @@ public class FileQueryUtils {
                 firstJunkInfo.setGarbageType("TYPE_UNINSTALL");
                 firstJunkInfo.setAppPackageName(packageName);
                 File appPackage = new File(rootPath + packageName);
-                Log.e("info", "appPackage---->" + appPackage.getAbsolutePath());
                 if (appPackage.exists()) {
                     SecondJunkInfo secondJunkInfo = FileUtils.listFiles(appPackage);
                     if (secondJunkInfo.getGarbageSize() == 0) {
