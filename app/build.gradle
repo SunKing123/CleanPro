@@ -80,6 +80,7 @@ android {
         debug {
             versionNameSuffix "dev"
             minifyEnabled false
+            debuggable = false
             signingConfig signingConfigs.release
             commonConfigFiledMap.each { buildConfigField("String", it.key, it.value) }
             testConfigFiledMap.each {
