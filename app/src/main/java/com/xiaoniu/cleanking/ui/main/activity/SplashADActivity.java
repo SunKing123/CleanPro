@@ -193,6 +193,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
             @Override
             public void onConfirm() {
+                messageDialogFragment.dismiss();
                 confirmDialogFragment.show(getFragmentManager(), "");
             }
 

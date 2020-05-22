@@ -98,8 +98,12 @@ public class SpCacheConfig {
     public static final String SUPER_POWER_SAVING = "super_power_saving";
     public static final String BANNER = "banner";
     public static final String APP_ID = "com.xiaoniu.cleanking";
+
     //头条信息流
-    public static final String NEWS_BASEURL = "http://newswifiapi.dftoutiao.com/jsonnew/refresh?qid=qid11381";
+    public static final String NEWS_DFTT_URL_BASE = "http://newswifiapi.dftoutiao.com/jsonnew";
+    public static final String NEWS_DFTT_URL_REFRESH = NEWS_DFTT_URL_BASE + "/refresh?qid=qid11381";
+    public static final String NEWS_DFTT_URL_NEXT = NEWS_DFTT_URL_BASE + "/next?qid=qid11381";
+
     //瑞狮信息流地址
     public static final String RUISHI_BASEURL = "http://api.viaweb.cn/";
 

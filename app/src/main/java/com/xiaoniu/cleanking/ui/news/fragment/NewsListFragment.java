@@ -138,7 +138,6 @@ public class NewsListFragment extends BaseFragment {
             onRefreshComplete();
             return;
         }
-
         if (mType != null) {
             loadNewsData();
         }
@@ -146,11 +145,13 @@ public class NewsListFragment extends BaseFragment {
 
     private void loadNewsData() {
         String type = mType.getValue();
-        String lastId = SPUtil.getLastNewsID(mType.getName());
+        String url = "";
         if (mIsRefresh) {
-            lastId = "";
+            url = SpCacheConfig.NEWS_DFTT_URL_REFRESH + "&type=" + type + "&num=" + NewsUtils.NEWS_PAGE_SIZE;
+        } else {
+            String lastId = SPUtil.getLastNewsID(mType.getName());
+            url = SpCacheConfig.NEWS_DFTT_URL_NEXT + "&type=" + type + "&startkey=" + lastId + "&num=" + NewsUtils.NEWS_PAGE_SIZE;
         }
-        String url = SpCacheConfig.NEWS_BASEURL + "&type=" + type + "&startkey=" + lastId + "&num=" + NewsUtils.NEWS_PAGE_SIZE;
         EHttp.get(this, url, new ApiCallback<NewsListInfo>(null) {
             @Override
             public void onFailure(Throwable e) {
@@ -159,8 +160,9 @@ public class NewsListFragment extends BaseFragment {
             @Override
             public void onSuccess(NewsListInfo result) {
                 if (result != null && result.data != null && result.data.size() > 0) {
-                    if (mLlNoNet.getVisibility() == View.VISIBLE)
+                    if (mLlNoNet.getVisibility() == View.VISIBLE) {
                         mLlNoNet.setVisibility(View.GONE);
+                    }
                     SPUtil.setLastNewsID(mType.getName(), result.data.get(result.data.size() - 1).rowkey);
                     if (mIsRefresh) {
                         mNewsAdapter.setData(result.data);

@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="88dp"
         android:src="@mipmap/icon_storage_permission_tip" />
 
     <TextView
@@ -53,19 +53,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:text="否则将无法使用下列功能"
-            android:textColor="@color/white"
-            android:textSize="18sp"></TextView>
+            android:textColor="@color/color_CCFFFFFF"
+            android:textSize="14sp" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1px"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tv3"
             android:background="@mipmap/icon_storage_permission_left_line"></View>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1px"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv3"
             android:background="@mipmap/icon_storage_permission_right_line" />
@@ -89,7 +89,8 @@
             android:drawablePadding="5dp"
             android:text="垃圾清理"
             android:textAlignment="center"
-            android:textColor="@color/white">
+            android:textColor="@color/color_AAFFFFFF"
+            android:textSize="@dimen/dimen_12sp">
 
         </TextView>
 
@@ -101,7 +102,8 @@
             android:drawablePadding="5dp"
             android:text="微信清理"
             android:textAlignment="center"
-            android:textColor="@color/white">
+            android:textColor="@color/color_AAFFFFFF"
+            android:textSize="@dimen/dimen_12sp">
 
         </TextView>
 
@@ -113,7 +115,8 @@
             android:drawablePadding="5dp"
             android:text="抖音快手清理"
             android:textAlignment="center"
-            android:textColor="@color/white">
+            android:textColor="@color/color_AAFFFFFF"
+            android:textSize="@dimen/dimen_12sp">
 
         </TextView>
 
@@ -125,7 +128,8 @@
             android:drawablePadding="5dp"
             android:text="QQ清理"
             android:textAlignment="center"
-            android:textColor="@color/white">
+            android:textColor="@color/color_AAFFFFFF"
+            android:textSize="@dimen/dimen_12sp">
 
         </TextView>
 

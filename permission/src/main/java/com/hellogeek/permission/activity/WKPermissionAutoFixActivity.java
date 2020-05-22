@@ -196,6 +196,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 helper.setText(R.id.hintText, PermissionConvertUtils.getTitleStr(item.permission));
                 helper.setText(R.id.hintDesc, "需要开启" + item.permission.getName() + "权限");
 
+
                 helper.getView(R.id.hintIcon).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -216,11 +217,12 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 tvRiskNum.setText(risksNumber + "");
 
                 if (item.isAllow) {
-                    allowIcon.setVisibility(View.VISIBLE);
+                    // allowIcon.setVisibility(View.VISIBLE);
                     openBtn.setVisibility(View.GONE);
-                    allowIcon.setImageResource(item.isAllow ? R.mipmap.wk_permission_icon : R.mipmap.wk_fix_permission);
+                    //allowIcon.setImageResource(item.isAllow ? R.mipmap.wk_permission_icon : R.mipmap.wk_fix_permission);
+                    helper.getView(R.id.tv_opened).setVisibility(View.VISIBLE);
                 } else {
-                    allowIcon.setVisibility(View.GONE);
+                    helper.getView(R.id.tv_opened).setVisibility(View.GONE);
                     openBtn.setVisibility(View.VISIBLE);
                     openBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -237,6 +239,8 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                     rlLoading.setVisibility(View.GONE);
                     rlSuccess.setVisibility(View.VISIBLE);
                     tvFix.setText(getString(R.string.use_now));
+                    tvFix.setVisibility(View.VISIBLE);
+                    isAllOpen = true;
                 }
 
             }
@@ -319,6 +323,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         if (id == R.id.tvFix) {
             if (isAllOpen) {
                 finish();
+                return;
             }
             if (autoFixAction == null) {
                 return;
@@ -629,6 +634,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         } else if (requestCode == Permission.SELFSTARTING.getRequestCode()) {
             // 判断是否具备自启动权限
             isOpen = true;
+            // item.isAllow
             if (isOpen) {
                 PermissionProvider.save(this, PROVIDER_SELFSTARTING, true);
                 EventBus.getDefault().post(new PathEvent(Permission.SELFSTARTING, true, 1));
@@ -660,10 +666,9 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
         risksNumber = mAdapter.getItemCount();
         mAdapter.notifyDataSetChanged();
 
-
         if (!isOpen || !onecLiRepair || requestPermission == null || isAllOpen) {
             return;
-        }
+        }  // || isAllOpen
         // 修改权限执行次数
 //        permission = asBase.permission;
 //        asBase.executeNumber++;

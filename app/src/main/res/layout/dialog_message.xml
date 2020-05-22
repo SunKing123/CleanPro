@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_confixm_dialog"
     android:paddingLeft="@dimen/dimen_24dp"
-    android:paddingTop="@dimen/dimen_24dp">
+    android:paddingTop="@dimen/dimen_24dp"
+    android:paddingBottom="@dimen/dimen_18dp">
 
     <TextView
         android:id="@+id/txt_title"
@@ -24,6 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dimen_12dp"
         android:layout_marginRight="@dimen/dimen_24dp"
+        android:lineSpacingExtra="@dimen/dimen_5dp"
         android:text="使用悟空清理需要先同意我们的《隐私政策》和《用户协议》"
         android:textColor="@color/color_666666"
         android:textSize="@dimen/dimen_14sp" />
@@ -32,6 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_content"
+        android:layout_marginTop="@dimen/dimen_18dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

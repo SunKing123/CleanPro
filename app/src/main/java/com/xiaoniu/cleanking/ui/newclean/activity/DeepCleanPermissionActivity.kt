@@ -42,11 +42,11 @@ class DeepCleanPermissionActivity : BaseActivity() {
 
         adapter = DeepCleanPermissionAdapter()
         rv_content_list.layoutManager = LinearLayoutManager(this)
-        rv_content_list.addItemDecoration(HorizontalDividerItemDecoration.Builder(this)
-                .marginResId(R.dimen.dimen_16dp, R.dimen.dimen_16dp)
-                .sizeResId(R.dimen.dimen_0_5dp)
-                .colorResId(R.color.color_EDEDED)
-                .build())
+//        rv_content_list.addItemDecoration(HorizontalDividerItemDecoration.Builder(this)
+//                .marginResId(R.dimen.dimen_16dp, R.dimen.dimen_16dp)
+//                .sizeResId(R.dimen.dimen_0_5dp)
+//                .colorResId(R.color.color_EDEDED)
+//                .build())
         rv_content_list.adapter = adapter
 
         val permissionList = arrayListOf(

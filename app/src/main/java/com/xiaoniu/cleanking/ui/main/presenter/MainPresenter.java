@@ -251,6 +251,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> {
         }
     }
 
+    /**
+     * query All Music
+     */
     private void queryAllMusic() {
         Cursor cursor = mActivity.getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

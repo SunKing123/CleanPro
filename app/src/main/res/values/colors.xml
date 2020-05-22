@@ -16,6 +16,8 @@
     <color name="color_213200">#213200</color>
     <color name="color_BFBFBF">#BFBFBF</color>
     <color name="white">#FFFFFF</color>
+    <color name="color_CCFFFFFF">#CCFFFFFF</color>
+    <color name="color_AAFFFFFF">#AAFFFFFF</color>
     <color name="banner_title_color">#f0c534</color>
     <color name="banner_indicator_color">#33000000</color>
     <color name="color_7c7a7a">#7C7A7A</color><!--#242121 60%透明-->

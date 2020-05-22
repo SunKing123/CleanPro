@@ -1497,12 +1497,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             long currentTime = System.currentTimeMillis();
             long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
-            if (currentTime == preTime) {  // 第一次进来，初始化
-                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
-            } else if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
-                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
-                showPermissionDialog();
-            }
+            // TODO:test
+//            if (currentTime == preTime) {  // 第一次进来，初始化
+//                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
+//            } else if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
+            SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
+            showPermissionDialog();
+            //}
             return;
         }
         // if (!UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -1517,7 +1518,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void onConfirm() {
                 filePermissionGuideDialogFragment.dismiss();
-                StatisticsUtils.customTrackEvent("system_read_file_permission_popup_view_page", "系统读取文件权限弹窗浏览","system_read_file_permission_popup","system_read_file_permission_popup");
+                StatisticsUtils.customTrackEvent("system_read_file_permission_popup_view_page", "系统读取文件权限弹窗浏览", "system_read_file_permission_popup", "system_read_file_permission_popup");
                 // 请求存储权限
                 new RxPermissions(getActivity()).request(basicPermissions).subscribe(new Consumer<Boolean>() {
                     @Override
@@ -1525,7 +1526,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         if (aBoolean) {
                             StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click", "系统读取文件权限弹窗同意点击", "home_page", "system_read_file_permission_popup");
                             return;
-                        }else {
+                        } else {
                             StatisticsUtils.trackClick("system_read_file_permission_popup_no_agree_click", "系统读取文件权限弹窗不同意点击", "home_page", "system_read_file_permission_popup");
                         }
                         if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
