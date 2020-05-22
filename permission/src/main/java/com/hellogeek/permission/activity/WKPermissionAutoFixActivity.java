@@ -196,6 +196,7 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 helper.setText(R.id.hintText, PermissionConvertUtils.getTitleStr(item.permission));
                 helper.setText(R.id.hintDesc, "需要开启" + item.permission.getName() + "权限");
 
+
                 helper.getView(R.id.hintIcon).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -216,11 +217,12 @@ public class WKPermissionAutoFixActivity extends BaseActivity implements IAccess
                 tvRiskNum.setText(risksNumber + "");
 
                 if (item.isAllow) {
-                    allowIcon.setVisibility(View.VISIBLE);
+                    // allowIcon.setVisibility(View.VISIBLE);
                     openBtn.setVisibility(View.GONE);
-                    allowIcon.setImageResource(item.isAllow ? R.mipmap.wk_permission_icon : R.mipmap.wk_fix_permission);
+                    //allowIcon.setImageResource(item.isAllow ? R.mipmap.wk_permission_icon : R.mipmap.wk_fix_permission);
+                    helper.getView(R.id.tv_opened).setVisibility(View.VISIBLE);
                 } else {
-                    allowIcon.setVisibility(View.GONE);
+                    helper.getView(R.id.tv_opened).setVisibility(View.GONE);
                     openBtn.setVisibility(View.VISIBLE);
                     openBtn.setOnClickListener(new View.OnClickListener() {
                         @Override

@@ -297,6 +297,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.main.activity.WebActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.newclean.activity.InsertScreenFinishActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
@@ -433,7 +438,8 @@
 
         <activity android:name=".keeplive.onepx.OnePixelActivity" />
 
-        <activity android:name=".ui.newclean.activity.JurisdictionGuideActivity"
+        <activity
+            android:name=".ui.newclean.activity.JurisdictionGuideActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
 
