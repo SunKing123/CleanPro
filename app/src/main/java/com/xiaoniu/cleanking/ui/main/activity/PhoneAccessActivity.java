@@ -695,7 +695,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             return;
         ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
         for (FirstJunkInfo firstJunkInfo : listInfos) {
-            if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
+            if (!isCacheWhite(firstJunkInfo.getAppPackageName()) && firstJunkInfo.getGarbageIcon()!=null)
                 listInfoData.add(firstJunkInfo);
         }
         belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfoData);
