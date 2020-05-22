@@ -64,7 +64,7 @@ import io.reactivex.schedulers.Schedulers;
  * <p>
  * 在调用SDK之前，如果您的App的targetSDKVersion >= 23，那么建议动态申请相关权限。
  */
-public class SplashADActivity extends BaseActivity<SplashPresenter> {
+public class SplashADActivity extends BaseActivity<SplashPresenter> implements View.OnClickListener {
 
 
     @Inject
@@ -157,6 +157,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
         skip_layout = findViewById(R.id.skip_layout);
         //广告圆形进度条
         skip_view = findViewById(R.id.skip_view);
+        skip_view.setOnClickListener(this);
         //一键授权引导页根布局
         rl_open_new = findViewById(R.id.rl_open_new);
         //一键授权跳过计时器
@@ -500,5 +501,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             }
         });
         mValueAnimator.start();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.skip_view:
+                next();
+                break;
+        }
     }
 }

@@ -82,6 +82,7 @@ import static com.xiaoniu.cleanking.ui.main.config.SpCacheConfig.WHITE_LIST_SOFT
 
 /**
  * 手机加速--一键清理内存页面
+ * TODO: so terrible code! must refactor！
  */
 public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
@@ -512,11 +513,18 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
             computeTotalSize(listInfo);
             setAdapter(listInfo);
+        } else {
+            emptyGoFinish();  // XD added
         }
     }
 
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null || listInfo.size() == 0) {  // XD added
+            this.mTotalSizesCleaned = 0;
+            setCleanSize(0, false);
+            return;
+        }
         long totalSizes = 0;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             for (FirstJunkInfo firstJunkInfo : listInfo) {
@@ -525,11 +533,11 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         } else { //8.0以上内存[200M,2G]随机数
             long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
             long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
+            if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) { // 3 - 6min
                 long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 totalSizes = (long) (cacheSize * 0.3);
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
-            } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) {
+            } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) { // 6 - 10 min
                 long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 totalSizes = (long) (cacheSize * 0.6);
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
@@ -561,10 +569,29 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         this.mTotalSizesCleaned = totalSizes;
     }
 
+
+    /**
+     * @author xd.he
+     */
+    private void emptyGoFinish() {
+        mIsFinish = true;
+        showCleanFinishUI("0", "MB");
+    }
+
+    /**
+     *
+     * @param totalSizes
+     * @param canPlayAnim
+     */
     public void setCleanSize(long totalSizes, boolean canPlayAnim) {
-        if (acceview == null) return;
+        if (acceview == null) {
+            return;
+        }
         String str_totalSize = CleanAllFileScanUtil.getFileSize(totalSizes);
-        if (str_totalSize.endsWith("KB")) return;
+        if (str_totalSize.endsWith("KB") || "0".equals(str_totalSize)) {
+            emptyGoFinish();  // XD added
+            return;
+        }
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
@@ -691,12 +718,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
-        if (null == recycle_view)
+        if (null == recycle_view || null == listInfos) {
             return;
+        }
         ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
         for (FirstJunkInfo firstJunkInfo : listInfos) {
-            if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
+            if (!isCacheWhite(firstJunkInfo.getAppPackageName()) && firstJunkInfo.getGarbageIcon()!=null) {
                 listInfoData.add(firstJunkInfo);
+            }
         }
         belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfoData);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
