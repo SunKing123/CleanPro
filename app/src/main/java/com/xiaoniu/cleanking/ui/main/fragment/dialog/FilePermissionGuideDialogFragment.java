@@ -63,8 +63,8 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         StatisticsUtils.onPageEnd("read_file_permission_popup_view_page", "读取文件权限弹窗浏览", "launch_page", "home_page");
     }
 
