@@ -370,8 +370,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
-        permissionRepair();
-
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                permissionRepair();
+            }
+        }, 1000);
         RxView.clicks(tvNowClean, o -> nowClean());
     }
 
@@ -563,6 +567,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewGame.setEnabled(true);
 
         onUIChangeCheckXiding();  // XD added 20200518
+
+
     }
 
     /**
@@ -1498,12 +1504,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             long currentTime = System.currentTimeMillis();
             long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
             // TODO:test
-//            if (currentTime == preTime) {  // 第一次进来，初始化
-//                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
-//            } else if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
-            SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
-            showPermissionDialog();
-            //}
+            if (currentTime == preTime) {  // 第一次进来，初始化
+                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
+            } else if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
+                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
+                showPermissionDialog();
+            }
             return;
         }
         // if (!UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
