@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             getDeviceInfo();
         }
 
-        //开启定时扫面缓存
+        // 开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
         SPUtil.setInt(this,"createId",SPUtil.getInt(this,"createId",0)+1);
     }

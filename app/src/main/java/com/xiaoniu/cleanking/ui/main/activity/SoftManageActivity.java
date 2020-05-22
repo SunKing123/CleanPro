@@ -27,7 +27,8 @@ import butterknife.OnClick;
  * 软件管理
  * Created by lang.chen on 2019/7/9
  */
-public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implements InstallPackageManageAdapter.OnCheckListener {
+public class
+SoftManageActivity extends BaseActivity<SoftManagePresenter> implements InstallPackageManageAdapter.OnCheckListener {
 
     @BindView(R.id.recycler)
     RecyclerView mRecyclerView;
@@ -81,7 +82,7 @@ public class SoftManageActivity extends BaseActivity<SoftManagePresenter> implem
             checkAll(mIsCheckAll);
             totalSelectFiles();
         });
-        // registResceiver();
+        registResceiver();
         mPresenter.scanData();
     }
 

@@ -59,13 +59,13 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        StatisticsUtils.onPageStart("read_file_permission_popup_view_page","读取文件权限弹窗浏览");
+        StatisticsUtils.onPageStart("read_file_permission_popup_view_page", "读取文件权限弹窗浏览");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        StatisticsUtils.onPageEnd("read_file_permission_popup_view_page","读取文件权限弹窗浏览","launch_page","home_page");
+        StatisticsUtils.onPageEnd("read_file_permission_popup_view_page", "读取文件权限弹窗浏览", "launch_page", "home_page");
     }
 
 
@@ -96,7 +96,7 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
             switch (view.getId()) {
                 case R.id.btn_confirm:
                     mOnClickListener.onConfirm();
-                    StatisticsUtils.trackClick("read_file_permission_popup_click","读取文件权限弹窗点击","launch_page","home_page");
+                    StatisticsUtils.trackClick("read_file_permission_popup_click", "读取文件权限弹窗点击", "launch_page", "home_page");
                     break;
             }
         }
@@ -128,6 +128,8 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
 //                window.setLayout(lp.width, lp.height);
 //            }
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
         }
     }
 

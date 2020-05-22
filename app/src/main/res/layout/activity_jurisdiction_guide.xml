@@ -8,72 +8,67 @@
         android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_storage_permission_tip"
-        android:layout_marginTop="85dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginTop="85dp"
+        android:src="@mipmap/icon_storage_permission_tip" />
 
     <TextView
-        android:layout_marginTop="25dp"
         android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="请开启存储权限"
-        android:textStyle="bold"
-        android:textColor="@color/white"
         android:layout_below="@id/image"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="请开启存储权限"
+        android:textColor="@color/white"
         android:textSize="22sp"
-      />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv2"
-        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="才能检测到收集垃圾"
-        android:textStyle="bold"
-        android:textColor="@color/white"
         android:layout_below="@id/tv1"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="才能检测到收集垃圾"
+        android:textColor="@color/white"
         android:textSize="22sp"
-        />
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:id="@+id/relat1"
-        android:layout_below="@id/tv2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_below="@id/tv2"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        >
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="10dp">
+
         <TextView
             android:id="@+id/tv3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="否则将无法使用下列功能"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_centerHorizontal="true">
-        </TextView>
+            android:textSize="18sp"></TextView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tv3"
-            android:layout_centerVertical="true"
-            android:background="@mipmap/icon_storage_permission_left_line">
-        </View>
+            android:background="@mipmap/icon_storage_permission_left_line"></View>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_toRightOf="@id/tv3"
             android:layout_centerVertical="true"
-            android:background="@mipmap/icon_storage_permission_right_line"/>
+            android:layout_toRightOf="@id/tv3"
+            android:background="@mipmap/icon_storage_permission_right_line" />
 
     </RelativeLayout>
 
@@ -81,30 +76,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relat1"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableTop="@mipmap/icon_storage_permiss_bucket"
+            android:drawablePadding="5dp"
             android:text="垃圾清理"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:drawablePadding="5dp"
-            android:drawableTop="@mipmap/icon_storage_permiss_bucket">
+            android:textColor="@color/white">
 
         </TextView>
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableTop="@mipmap/icon_storage_permiss_wx"
+            android:drawablePadding="5dp"
             android:text="微信清理"
-            android:drawablePadding="5dp"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:drawableTop="@mipmap/icon_storage_permiss_wx">
+            android:textColor="@color/white">
 
         </TextView>
 
@@ -112,11 +109,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:drawableTop="@mipmap/icon_storage_permiss_video"
+            android:drawablePadding="5dp"
             android:text="抖音快手清理"
-            android:drawablePadding="5dp"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:drawableTop="@mipmap/icon_storage_permiss_video">
+            android:textColor="@color/white">
 
         </TextView>
 
@@ -124,11 +121,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="QQ清理"
+            android:drawableTop="@mipmap/icon_storage_permiss_qq"
             android:drawablePadding="5dp"
+            android:text="QQ清理"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:drawableTop="@mipmap/icon_storage_permiss_qq">
+            android:textColor="@color/white">
 
         </TextView>
 
@@ -137,6 +134,7 @@
 
     <Button
         android:id="@+id/btn_open_now"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_45dp"
         android:layout_alignParentBottom="true"

@@ -3,6 +3,8 @@ package com.xiaoniu.cleanking.ui.main.fragment.dialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -112,11 +114,12 @@ public class MessageDialogFragment extends DialogFragment {
         Dialog dialog = getDialog();
         if (null != dialog) {
             Window window = dialog.getWindow();
-            WindowManager.LayoutParams lp = getDialog().getWindow().getAttributes();
-            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            if (window != null) {
-                window.setLayout(lp.width, lp.height);
-            }
+            //  WindowManager.LayoutParams lp = getDialog().getWindow().getAttributes();
+//            lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//            if (window != null) {
+//                window.setLayout(lp.width, lp.height);
+//            }
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             // xd added
             dialog.setCancelable(isCancelable);
             dialog.setCanceledOnTouchOutside(isCancelable);

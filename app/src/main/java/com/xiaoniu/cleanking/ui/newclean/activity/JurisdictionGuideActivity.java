@@ -168,4 +168,10 @@ public class JurisdictionGuideActivity extends BaseActivity {
             startActivity(NowCleanActivity.class);
         }
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+
+    }
 }
