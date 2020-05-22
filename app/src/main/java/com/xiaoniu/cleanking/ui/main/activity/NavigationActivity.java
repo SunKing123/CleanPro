@@ -24,6 +24,10 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class NavigationActivity extends SimpleActivity {
@@ -138,9 +142,23 @@ public class NavigationActivity extends SimpleActivity {
     }
 
     private void onClickConfirm() {
-        SPUtil.setBoolean(NavigationActivity.this, SPUtil.KEY_CONSENT_AGREEMENT, true);
-        PreferenceUtil.saveFirstOpenApp();
-        SPUtil.setFirstIn(NavigationActivity.this, SPUtil.KEY_IS_First, false);
+        Observable.create(e -> {
+            SPUtil.setBoolean(NavigationActivity.this, SPUtil.KEY_CONSENT_AGREEMENT, true);
+            PreferenceUtil.saveFirstOpenApp();
+            SPUtil.setFirstIn(NavigationActivity.this, SPUtil.KEY_IS_First, false);
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                });
         startActivity(MainActivity.class);
         finish();
     }

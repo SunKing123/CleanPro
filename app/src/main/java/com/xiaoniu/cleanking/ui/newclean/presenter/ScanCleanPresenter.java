@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.annotation.SuppressLint;
+import android.os.Environment;
 
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -17,6 +18,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -100,6 +102,13 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                                 break;
                             }
                         }
+
+                        for (FirstJunkInfo info : entry.getValue()) {
+                            File rootPathFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + info.getAppPackageName());
+                            if (rootPathFile.exists()) {
+                                com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(rootPathFile);
+                            }
+                        }
                         long l1 = CleanUtil.freeJunkInfos(entry.getValue());
                         total += l1;
                     } else if (ScanningResultType.UNINSTALL_JUNK.equals(entry.getKey())) {//残留垃圾
@@ -107,6 +116,14 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
                             if (!info.isAllchecked()) {
                                 isCheckAll = false;
                                 break;
+                            }
+                        }
+
+                        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
+                        for (FirstJunkInfo info : entry.getValue()) {
+                            File rootPathFile = new File(rootPath + info.getAppPackageName());
+                            if (rootPathFile.exists()) {
+                                com.xiaoniu.common.utils.FileUtils.deleteFileAndFolder(rootPathFile);
                             }
                         }
                         long leavedCache = CleanUtil.freeJunkInfos(entry.getValue());

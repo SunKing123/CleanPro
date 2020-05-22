@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,13 +158,18 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             CountEntity mCountEntity = CleanUtil.formatShortFileSize(firstJunkInfo.getTotalSize());
             tv_checked_total.setText(mCountEntity.getResultSize());
             tv_junk_title.setText(firstJunkInfo.getAppName());
-            iv_junk_logo.setImageDrawable(firstJunkInfo.getGarbageIcon());
+            if (firstJunkInfo.getGarbageIcon() != null) {
+                iv_junk_logo.setImageDrawable(firstJunkInfo.getGarbageIcon());
+            } else {
+                iv_junk_logo.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.clean_icon_others));
+            }
 
             if (firstJunkInfo.isAllchecked()) {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
             } else {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
             }
+
             iv_check_state.setOnClickListener(v -> {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());

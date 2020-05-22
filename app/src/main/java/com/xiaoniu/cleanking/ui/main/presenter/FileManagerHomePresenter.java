@@ -72,7 +72,7 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
                     @Override
                     public void accept(String[] strings) throws Exception {
                         //String数组第一个是剩余存储量，第二个是总存储量
-                        textView.setText("已用：" + String.format("%.1f", (Double.valueOf(strings[1]) - Double.valueOf(strings[0])))+ "GB/" +  String.format("%.1f",  Double.valueOf(strings[1]))+ "GB");
+                        textView.setText("已用：" + String.format("%.1f", (Double.valueOf(strings[1]) - Double.valueOf(strings[0]))) + "GB/" + String.format("%.1f", Double.valueOf(strings[1])) + "GB");
                         int spaceProgress = (int) ((NumberUtils.getFloat(strings[1]) - NumberUtils.getFloat(strings[0])) * 100 / NumberUtils.getFloat(strings[1]));
                         circleProgressView.startAnimProgress(spaceProgress, 700);
                     }
@@ -115,13 +115,14 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
                         MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
                         new String[]{"image/jpeg", "image/png"},
                         MediaStore.Images.Media.DATE_MODIFIED + " desc");
-            } catch (Throwable t) {}
+            } catch (Throwable t) {
+            }
 
             if (mCursor != null) {
                 while (mCursor.moveToNext()) {
                     // 获取图片的路径
                     String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                    int size = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE)) ;
+                    int size = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE));
                     String displayName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
                     //用于展示相册初始化界面
                     mediaBeen.add(new FileEntity(size + "", path));
@@ -141,61 +142,63 @@ public class FileManagerHomePresenter extends RxPresenter<FileManagerHomeActivit
     }
 
 
-
     /**
      * 获取视频文件总大小
+     *
      * @return size
      */
-    public long getVideoTotalSize(){
-        long size=0L;
+    public long getVideoTotalSize() {
+        long size = 0L;
 
         SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_VIDEO, new HashSet<String>());
 
-        for(String path:strings){
-            File file=new File(path);
-            if(null!=file){
-                size+=file.length();
+        for (String path : strings) {
+            File file = new File(path);
+            if (null != file) {
+                size += file.length();
             }
         }
-        return  size;
+        return size;
     }
 
     /**
      * 获取音乐文件总大小
+     *
      * @return size
      */
-    public long getMusicTotalSize(){
-        long size=0L;
+    public long getMusicTotalSize() {
+        long size = 0L;
 
         SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_MUSCI, new HashSet<String>());
 
-        for(String path:strings){
-            File file=new File(path);
-            if(null!=file){
-                size+=file.length();
+        for (String path : strings) {
+            File file = new File(path);
+            if (null != file) {
+                size += file.length();
             }
         }
-        return  size;
+        return size;
     }
 
     /**
      * 获取APK文件总大小
+     *
      * @return size
      */
-    public long getAPKTotalSize(){
-        long size=0L;
+    public long getAPKTotalSize() {
+        long size = 0L;
 
         SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_APK, new HashSet<String>());
+        Set<String> strings = sharedPreferences.getStringSet(SpCacheConfig.CACHES_KEY_APK, new HashSet<>());
 
-        for(String path:strings){
-            File file=new File(path);
-            if(null!=file){
-                size+=file.length();
+        for (String path : strings) {
+            File file = new File(path);
+            if (null != file) {
+                size += file.length();
             }
         }
-        return  size;
+        return size;
     }
 }

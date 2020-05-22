@@ -676,13 +676,16 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
      */
     public boolean isCacheWhite(String packageName) {
         SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
-//        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
-        Set<String> sets = sp.getStringSet(WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
+//        Set<String> sets = sp.getStringSet(WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
         if (null != sets && sets.size() > 0) {
             Iterator<String> it = sets.iterator();
             while (it.hasNext()) {
                 String str = it.next();
             }
+        }
+        if(sets.contains(packageName)){
+            return true;
         }
         return WHITE_LIST.contains(packageName);
     }

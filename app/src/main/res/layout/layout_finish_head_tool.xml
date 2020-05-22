@@ -13,7 +13,9 @@
         android:background="@drawable/bg_finish_rem"
         android:orientation="vertical"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="visible"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
         <!--建议清理-->
         <RelativeLayout
             android:id="@+id/v_clean_all"

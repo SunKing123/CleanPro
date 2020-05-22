@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -333,7 +334,9 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         contentView.setOnClickListener(v -> {
             popupWindow.dismiss();
             mView.setFromProtect(true);
-            mView.startActivity(WhiteListSpeedManageActivity.class);
+            Intent intent=new Intent(mView.getApplicationContext(),WhiteListSpeedManageActivity.class);
+            intent.putExtra("type","white_list");
+            mView.startActivity(intent);
         });
         popupWindow.setTouchable(true);
         popupWindow.setTouchInterceptor((v, event) -> {

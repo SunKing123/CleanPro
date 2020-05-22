@@ -9,9 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
-import com.hellogeek.permission.activity.WKPermissionAutoFixActivity;
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
@@ -37,6 +36,8 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.ConfirmDialogFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.dialog.MessageDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
@@ -60,6 +61,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 这是demo工程的入口Activity，在这里会首次调用广点通的SDK。
@@ -92,6 +95,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     private String mSecondAdvertId = ""; //冷启动广告备用id
     private static int mStart;
+    private boolean hasJump = false;
 
     //开屏广告加载超时时间,建议大于3000,这里为了冷启动第一次加载到广告并且展示,示例设置了3000ms
     private static final int MSG_GO_MAIN = 1;
@@ -109,6 +113,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private int requestCode;
     private boolean isFirst = true;
     private int startsNumber;
+    private ConfirmDialogFragment confirmDialogFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,16 +135,93 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     }
 
     public void jumpActivity() {
-
-        Log.d(TAG, "!--->jumpActivity------isFirst:" + isFirst);
+        Log.d(TAG, "!--->jumpActivity------isFirst:" + isFirst + "; hasJump:" + hasJump);
+        if (hasJump) {
+            return;
+        }
+        hasJump = true;
         if (isFirst) {
-            startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
+            showUserAgreeDialog();
+//            startActivity(new Intent(SplashADActivity.this, NavigationActivity.class));
         } else {
             startActivity(new Intent(SplashADActivity.this, MainActivity.class));
+            Map<String, Object> extParam = new HashMap<>();
+            extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime));
+            StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "cold_splash_page", "cold_splash_page", extParam);
+            finish();
         }
-        Map<String, Object> extParam = new HashMap<>();
-        extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime));
-        StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长", "cold_splash_page", "cold_splash_page", extParam);
+    }
+
+    private void showUserAgreeDialog() {
+        String privacyPolicy = "http://testwlqlapph5.xiaoniuhy.com/agreement/privacy.html";
+        String userAgreement = "http://testwlqlapph5.xiaoniuhy.com/agreement/user.html";
+
+        String html = "欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，" +
+                "特此向您说明。作为互联网安全公司，" +
+                "我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。" +
+                "在使用悟空清理前，请务必仔细阅读并了解<font color='#06C581'><a href=\"" + privacyPolicy + "\">《隐私政策》</a></font>和" +
+                "<font color='#06C581'><a href=\"" + userAgreement + "\">《用户协议》</a></font>" +
+                "全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。";
+
+
+        confirmDialogFragment = ConfirmDialogFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("title", getString(R.string.reminder));
+        bundle.putString("content", html);
+        confirmDialogFragment.setArguments(bundle);
+        confirmDialogFragment.setCancelable(false);  // XD added
+        confirmDialogFragment.show(getFragmentManager(), "");
+
+        confirmDialogFragment.setOnClickListener(new ConfirmDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                onClickConfirm();
+            }
+
+            @Override
+            public void onCancel() {
+                confirmDialogFragment.dismiss();
+                showMessageDialog();
+            }
+        });
+    }
+
+    private void showMessageDialog() {
+        MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance();
+        messageDialogFragment.setCancelable(false);  // XD added
+        messageDialogFragment.show(getFragmentManager(), "");
+        messageDialogFragment.setOnClickListener(new MessageDialogFragment.OnClickListener() {
+            @Override
+            public void onConfirm() {
+                confirmDialogFragment.show(getFragmentManager(), "");
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    private void onClickConfirm() {
+        Observable.create(e -> {
+            SPUtil.setBoolean(SplashADActivity.this, SPUtil.KEY_CONSENT_AGREEMENT, true);
+            PreferenceUtil.saveFirstOpenApp();
+            SPUtil.setFirstIn(SplashADActivity.this, SPUtil.KEY_IS_First, false);
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                });
+        startActivity(MainActivity.class);
         finish();
     }
 
@@ -256,7 +338,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     @Override
     protected void initView() {
-        Log.d(TAG, "!--->initView------");
         PreferenceUtil.saveCleanAllUsed(false);
         PreferenceUtil.saveCleanJiaSuUsed(false);
         PreferenceUtil.saveCleanPowerUsed(false);
@@ -288,14 +369,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 openNewVs = ((ViewStub) findViewById(R.id.vs_open_new)).inflate();
                 openNewVsLayout = openNewVs.findViewById(R.id.rl_open_new);
                 // 显示立即修复
-                skipTv = openNewVs.findViewById(R.id.tv_skip);
+                skipTv = openNewVs.findViewById(R.id.tv_skip); //
                 skipTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         jumpActivity();
                     }
                 });
-
+                skipTv.setClickable(false);  // XD added
                 openNewVsLayout.setVisibility(View.VISIBLE);
                 startCountDown(5);
                 openNewVs.findViewById(R.id.btn_repair_now).setOnClickListener(new View.OnClickListener() {

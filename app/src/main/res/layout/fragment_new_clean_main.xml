@@ -700,6 +700,7 @@
         android:layout_marginTop="@dimen/dimen_40dp"
         android:layout_marginRight="@dimen/dimen_18dp"
         android:background="@mipmap/risk_tips_toast"
+        android:visibility="gone"
         android:paddingTop="@dimen/dimen_7dp">
 
         <TextView

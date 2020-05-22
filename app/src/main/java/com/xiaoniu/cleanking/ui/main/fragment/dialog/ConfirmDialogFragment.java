@@ -57,13 +57,13 @@ public class ConfirmDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        StatisticsUtils.onPageStart("reminder_view_page","温馨提示弹窗浏览");
+        StatisticsUtils.onPageStart("reminder_view_page", "温馨提示弹窗浏览");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        StatisticsUtils.onPageEnd("reminder_view_page","温馨提示弹窗浏览","launch_page","launch_page");
+        StatisticsUtils.onPageEnd("reminder_view_page", "温馨提示弹窗浏览", "launch_page", "launch_page");
     }
 
     @Nullable
@@ -111,12 +111,14 @@ public class ConfirmDialogFragment extends DialogFragment {
             }
             switch (view.getId()) {
                 case R.id.btn_confirm:
+                    dismiss();
                     mOnClickListener.onConfirm();
-                    StatisticsUtils.trackClick("reminder_agree_click", "温馨提示同意点击", "launch_page","launch_page");
+                    StatisticsUtils.trackClick("reminder_agree_click", "温馨提示同意点击", "launch_page", "launch_page");
                     break;
                 case R.id.btn_cancel:
+                    dismiss();
                     mOnClickListener.onCancel();
-                    StatisticsUtils.trackClick("reminder_no_agree_click", "温馨提示不同意点击", "launch_page","launch_page");
+                    StatisticsUtils.trackClick("reminder_no_agree_click", "温馨提示不同意点击", "launch_page", "launch_page");
                     break;
             }
         }

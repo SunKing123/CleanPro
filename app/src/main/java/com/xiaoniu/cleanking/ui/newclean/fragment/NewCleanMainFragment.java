@@ -1623,8 +1623,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void setOperateIcon(String url, Integer count) {
         if (isAllopen() && null != count) {
             GlideUtils.loadGif(getActivity(), url, mInteractionIv, count);
+            rlRiskTipsToast.setVisibility(View.GONE);
         } else if (isAllopen) {
             Glide.with(this).load(url).into(mInteractionIv);
+            rlRiskTipsToast.setVisibility(View.GONE);
         } else {
             mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
             showTopRiskTips(hasXiding);
