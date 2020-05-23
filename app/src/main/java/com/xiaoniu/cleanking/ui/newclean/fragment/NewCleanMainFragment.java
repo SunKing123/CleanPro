@@ -1653,8 +1653,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (hasXiding) {
             rlRiskTipsToast.setVisibility(View.GONE);
         } else {
-            boolean isShowRiskTips = !isAllopen || isRiskTips;
-            rlRiskTipsToast.setVisibility(isShowRiskTips ? View.VISIBLE : View.GONE);
+            if (isAllopen) {
+                rlRiskTipsToast.setVisibility(View.GONE);
+            } else {
+                rlRiskTipsToast.setVisibility(isRiskTips ? View.VISIBLE : View.GONE);
+            }
         }
     }
 
