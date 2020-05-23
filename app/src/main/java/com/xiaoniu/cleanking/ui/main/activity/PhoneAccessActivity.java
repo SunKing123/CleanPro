@@ -3,9 +3,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -19,7 +17,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -71,16 +68,10 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.xiaoniu.cleanking.app.Constant.WHITE_LIST;
-import static com.xiaoniu.cleanking.ui.main.config.SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME;
 
 /**
  * 手机加速--一键清理内存页面
@@ -638,7 +629,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         mInfo.setAppPackageName(info.processName);
                         mInfo.setAppName(info.processName);
                         aboveListInfo.add(mInfo);
-                        // Log.w("PAA", "!--->getAccessListAbove22-- size < 15 --aboveListInfo--add :"+info.processName);
                     }
                 }
             } else {
@@ -691,15 +681,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     private void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
         if (null == recycle_view || null == listInfos) {
-            // Log.d("PAA", "!--->setAdapter--recycle_view:"+recycle_view+"; listInfos: "+listInfos);
             return;
         }
-//        ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
-//        for (FirstJunkInfo firstJunkInfo : listInfos) {
-//            if (!PhoneAccessUtil.isCacheWhite(firstJunkInfo.getAppPackageName()) ) {  // && firstJunkInfo.getGarbageIcon()!=null
-//                listInfoData.add(firstJunkInfo);
-//            }
-//        }
         belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfos);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
         recycle_view.setAdapter(belowAdapter);

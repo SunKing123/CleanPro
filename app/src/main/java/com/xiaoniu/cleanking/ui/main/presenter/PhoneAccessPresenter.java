@@ -116,18 +116,20 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 });
     }
 
-    //当前sdk版本高于22时
+    //当前sdk版本高于22时  >=26
     @SuppressLint("CheckResult")
     public void getAccessAbove22() {
 //        mView.showLoadingDialog();
         Observable.create((ObservableOnSubscribe<List<ActivityManager.RunningAppProcessInfo>>) e -> {
             //获取到可以加速的应用名单
             List<ActivityManager.RunningAppProcessInfo> listApp = getProcessAbove();
-
+            List<String> pNameList = new ArrayList<>();  // xd added
             List<ActivityManager.RunningAppProcessInfo> listTemp = new ArrayList<>();
             for (int i = 0; i < listApp.size(); i++) {
-                if (!isSystemApp(mView, listApp.get(i).processName)) {
+                String processName = listApp.get(i).processName;
+                if (!isSystemApp(mView, processName) && !pNameList.contains(processName)) {
                     listTemp.add(listApp.get(i));
+                    pNameList.add(processName);
                 }
             }
             e.onNext(listTemp);
