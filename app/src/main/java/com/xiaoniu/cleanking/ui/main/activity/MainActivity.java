@@ -70,8 +70,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-import static com.hellogeek.permission.Integrate.Permission.PACKAGEUSAGESTATS;
-import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
 import static com.xiaoniu.cleanking.keeplive.config.RunMode.POWER_SAVING;
 
 /**
@@ -194,7 +192,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         // 开启定时扫面缓存
 //        AlarmTimer.setRepeatingAlarmTimer(this, System.currentTimeMillis(), SCAN_LOOP_TIME, GlobalValues.TIMER_ACTION_REPEATING, AlarmManager.RTC_WAKEUP);
-        SPUtil.setInt(this,"createId",SPUtil.getInt(this,"createId",0)+1);
+        SPUtil.setInt(this, "createId", SPUtil.getInt(this, "createId", 0) + 1);
     }
 
     /**
@@ -223,9 +221,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (hasFocus && isFirstCreate) {
             //检查是否有补丁
 //            mPresenter.queryPatch();
-            //检测版本更新
-            mPresenter.queryAppVersion(() -> {
-            });
             //获取WebUrl
             mPresenter.getWebUrl();
             isFirstCreate = false;
@@ -540,8 +535,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                                 (context, intent) -> Log.d("JOB-->", " foregroundNotificationClick"))
                 );
                 Map<String, Object> extParam = new HashMap<>();
-                extParam.put("creation_id", "creation_0000"+SPUtil.getInt(this,"createId",1));
-                StatisticsUtils.customTrackEvent("app_start_creation", "应用冷启动创建时", "app_page", "app_page",extParam);
+                extParam.put("creation_id", "creation_0000" + SPUtil.getInt(this, "createId", 1));
+                StatisticsUtils.customTrackEvent("app_start_creation", "应用冷启动创建时", "app_page", "app_page", extParam);
             }
         } catch (RuntimeException e) {
             e.printStackTrace();

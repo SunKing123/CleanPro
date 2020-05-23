@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.base.BaseModel;
+import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
@@ -35,10 +36,23 @@ public class NewScanModel extends BaseModel {
         mRxFragment = rxFragment;
     }
 
+    public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("os", "android");
+        map.put("platform", "1");
+        map.put("versionCode", AppUtils.getVersionCode(mRxFragment.getActivity(), mRxFragment.getActivity().getPackageName()));
+        map.put("appVersion", AppUtils.getVersionName(mRxFragment.getActivity(), mRxFragment.getActivity().getPackageName()));
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);
+    }
+
     /**
      * 首页广告查询
-     *
+     * <p>
      * position 1-首页广告位
+     *
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
@@ -84,10 +98,11 @@ public class NewScanModel extends BaseModel {
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.getInteractionSwitch(body).compose(RxUtil.rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);
     }
+
     /**
      * 推荐列表
      */
-    public void getRecommendList( Common4Subscriber<HomeRecommendEntity> commonSubscriber) {
+    public void getRecommendList(Common4Subscriber<HomeRecommendEntity> commonSubscriber) {
         mService.getRecommendList("opearte_page_main").compose(RxUtil.rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);
     }
 }
