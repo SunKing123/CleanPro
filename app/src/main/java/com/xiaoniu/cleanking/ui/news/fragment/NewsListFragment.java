@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.news.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -78,11 +79,24 @@ public class NewsListFragment extends BaseFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setLimitNumberToCallLoadMore(2);
+        closeDefaultAnimator();
         mRecyclerView.setAdapter(mNewsAdapter);
 
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallRotate);
     }
+
+    /**
+     * 关闭recyclerView 删除动画
+     */
+    public void closeDefaultAnimator() {
+        mRecyclerView.getItemAnimator().setAddDuration(0);
+        mRecyclerView.getItemAnimator().setChangeDuration(0);
+        mRecyclerView.getItemAnimator().setMoveDuration(0);
+        mRecyclerView.getItemAnimator().setRemoveDuration(0);
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+    }
+
 
     @Override
     protected void setListener() {
