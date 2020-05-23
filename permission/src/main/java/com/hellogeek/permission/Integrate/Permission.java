@@ -11,7 +11,10 @@ public enum Permission {
     NOTIFICATIONBAR("通知管理", "清理烦人通知，拦截骚扰消息", 1003),
     NOTICEOFTAKEOVER("接管来电通知"),
     PACKAGEUSAGESTATS("查看应用使用情况", "释放更多空间，告别卡顿烦恼", 1004),
-    NOTIFICATIONREAD("通知读取权限", "清理烦人通知，拦截骚扰消息", 1003);
+    NOTIFICATIONREAD("通知读取权限", "清理烦人通知，拦截骚扰消息", 1003),
+
+    LOCATION("定位", "本地资讯推送的必要权限", 1005),
+    BACKGROUNDALLOWED("后台运行", "垃圾实时监测的必要权限", 1006);
 
     private String permissionName;
 

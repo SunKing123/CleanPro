@@ -39,10 +39,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/dimen_12dp"
             android:paddingLeft="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
             android:paddingRight="@dimen/dimen_16dp"
-            android:paddingTop="@dimen/dimen_12dp">
+            android:paddingBottom="@dimen/dimen_12dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -55,6 +55,7 @@
                     android:text="后台运行"
                     android:textColor="#333333"
                     android:textSize="@dimen/dimen_15sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,13 +72,14 @@
 
 
             <TextView
+                android:id="@+id/tv_permiht"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn_kq"
-                android:paddingBottom="@dimen/dimen_5dp"
                 android:paddingLeft="@dimen/dimen_12dp"
-                android:paddingRight="@dimen/dimen_12dp"
                 android:paddingTop="@dimen/dimen_5dp"
+                android:paddingRight="@dimen/dimen_12dp"
+                android:paddingBottom="@dimen/dimen_5dp"
                 android:text="去开启"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_14sp" />
@@ -95,10 +97,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/dimen_12dp"
             android:paddingLeft="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
             android:paddingRight="@dimen/dimen_16dp"
-            android:paddingTop="@dimen/dimen_12dp">
+            android:paddingBottom="@dimen/dimen_12dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -111,6 +113,7 @@
                     android:text="悬浮窗"
                     android:textColor="#333333"
                     android:textSize="@dimen/dimen_15sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -127,13 +130,14 @@
 
 
             <TextView
+                android:id="@+id/tv_xfc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn_kq"
-                android:paddingBottom="@dimen/dimen_5dp"
                 android:paddingLeft="@dimen/dimen_12dp"
-                android:paddingRight="@dimen/dimen_12dp"
                 android:paddingTop="@dimen/dimen_5dp"
+                android:paddingRight="@dimen/dimen_12dp"
+                android:paddingBottom="@dimen/dimen_5dp"
                 android:text="去开启"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_14sp" />
@@ -151,10 +155,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/dimen_12dp"
             android:paddingLeft="@dimen/dimen_16dp"
+            android:paddingTop="@dimen/dimen_12dp"
             android:paddingRight="@dimen/dimen_16dp"
-            android:paddingTop="@dimen/dimen_12dp">
+            android:paddingBottom="@dimen/dimen_12dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -167,6 +171,7 @@
                     android:text="定位"
                     android:textColor="#333333"
                     android:textSize="@dimen/dimen_15sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -183,13 +188,14 @@
 
 
             <TextView
+                android:id="@+id/tv_dingwei"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_btn_kq"
-                android:paddingBottom="@dimen/dimen_5dp"
                 android:paddingLeft="@dimen/dimen_12dp"
-                android:paddingRight="@dimen/dimen_12dp"
                 android:paddingTop="@dimen/dimen_5dp"
+                android:paddingRight="@dimen/dimen_12dp"
+                android:paddingBottom="@dimen/dimen_5dp"
                 android:text="去开启"
                 android:textColor="@color/white"
                 android:textSize="@dimen/dimen_14sp" />

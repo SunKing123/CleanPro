@@ -9,8 +9,11 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hellogeek.permission.Integrate.Permission;
+import com.hellogeek.permission.util.AccessibilitUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
@@ -32,6 +35,13 @@ public class PermissionActivity extends SimpleActivity {
     LinearLayout line_xfc;
     @BindView(R.id.line_dingwei)
     LinearLayout line_dingwei;
+
+    @BindView(R.id.tv_permiht)
+    TextView permihtTv;
+    @BindView(R.id.tv_xfc)
+    TextView xfcTv;
+    @BindView(R.id.tv_dingwei)
+    TextView dingweiTv;
 
     @Override
     public int getLayoutId() {
@@ -68,7 +78,7 @@ public class PermissionActivity extends SimpleActivity {
             }
         });
         line_xfc.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
+            if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(PermissionActivity.this)) {
                 Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
                 startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
             } else {
@@ -81,7 +91,7 @@ public class PermissionActivity extends SimpleActivity {
             }
         });
         line_dingwei.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
+            if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(PermissionActivity.this)) {
                 Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
                 startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
             } else {
@@ -100,6 +110,16 @@ public class PermissionActivity extends SimpleActivity {
     protected void onResume() {
         super.onResume();
         stopService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+
+        // permihtTv  xfcTv  dingweiTv
+//        line_permiht
+//
+        if (AccessibilitUtil.isOpenPermission(this, Permission.SUSPENDEDTOAST)) {
+            line_xfc.setClickable(false);
+            xfcTv.setText("已开启");
+        }
+//
+//        line_dingwei
     }
 
     @Override
@@ -107,8 +127,10 @@ public class PermissionActivity extends SimpleActivity {
         super.onDestroy();
         unRegisterScreenActionReceiver(this);
     }
+
     private boolean isRegisterReceiver = false;
     private HomeKeyEventBroadCastReceiver homeKeyEventBroadCastReceiver = new HomeKeyEventBroadCastReceiver();
+
     /**
      * 广播注册
      *

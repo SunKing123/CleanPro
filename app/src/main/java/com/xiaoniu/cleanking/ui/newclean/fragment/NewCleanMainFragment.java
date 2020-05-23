@@ -1503,7 +1503,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
             long currentTime = System.currentTimeMillis();
             long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
-            // TODO:test
             if (currentTime == preTime) {  // 第一次进来，初始化
                 SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
             } else if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
@@ -1596,9 +1595,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void showPermissionDialog() {
 
+
         Integer setRiskTipsNum = ExternalInterface.getInstance(getActivity()).getDefectPermissionNum(getActivity());
         PermissionGuideDialogFragment permissionGuideDialogFragment = PermissionGuideDialogFragment
-                .newInstance(String.format(getString(R.string.risk_tips), setRiskTipsNum + ""));
+                .newInstance(setRiskTipsNum + "");
+
         permissionGuideDialogFragment.setCancelable(false); // 加上这句外部取消和back取消都无效
         permissionGuideDialogFragment.show(getActivity().getFragmentManager(), "");
         permissionGuideDialogFragment.setOnClickListener(new PermissionGuideDialogFragment.OnClickListener() {

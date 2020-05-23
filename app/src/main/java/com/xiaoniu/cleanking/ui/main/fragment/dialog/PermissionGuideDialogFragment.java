@@ -42,11 +42,11 @@ public class PermissionGuideDialogFragment extends DialogFragment {
     private static final String RISK_TIPS_NUM = "riskTipsNum";
 
     public static PermissionGuideDialogFragment newInstance(String riskTipsNum) {
-        PermissionGuideDialogFragment messageDialogFragment = new PermissionGuideDialogFragment();
+        PermissionGuideDialogFragment permissionGuideDialogFragment = new PermissionGuideDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putString(RISK_TIPS_NUM, riskTipsNum);
-        messageDialogFragment.setArguments(bundle);
-        return messageDialogFragment;
+        permissionGuideDialogFragment.setArguments(bundle);
+        return permissionGuideDialogFragment;
     }
 
     @Nullable
@@ -74,14 +74,7 @@ public class PermissionGuideDialogFragment extends DialogFragment {
                 txtTitle.setText(title);
             }
             if (!TextUtils.isEmpty(content)) {
-                TextView txtTitle = view.findViewById(R.id.txt_content);
-                txtTitle.setText(content);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    txtTitle.setText(Html.fromHtml(content, Html.FROM_HTML_MODE_COMPACT));
-                } else {
-                    txtTitle.setText(Html.fromHtml(content));
-                }
-                txtTitle.setMovementMethod(LinkMovementMethod.getInstance());
+                TextView txtContent = view.findViewById(R.id.txt_content);
 
             }
         }
@@ -97,7 +90,13 @@ public class PermissionGuideDialogFragment extends DialogFragment {
         TitleTv = view.findViewById(R.id.txt_title);
         this.riskTipsNum = getArguments().getString(RISK_TIPS_NUM);
         if (null != this.riskTipsNum) {
-            TitleTv.setText(riskTipsNum);
+            String html = "已发现手机<font color='#06C581'> " + riskTipsNum + " </font> 项风险，请立即修复！";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                TitleTv.setText(Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                TitleTv.setText(Html.fromHtml(html));
+            }
+            TitleTv.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
