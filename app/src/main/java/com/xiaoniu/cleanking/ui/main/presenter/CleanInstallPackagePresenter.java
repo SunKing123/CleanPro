@@ -186,13 +186,31 @@ public class CleanInstallPackagePresenter extends RxPresenter<CleanInstallPackag
         List<AppInfoBean> appInfoAll = apps;
         List<AppInfoBean> lists = new ArrayList<>();
         for (AppInfoBean appInfoBean : appInfoAll) {
-            if (type == 0 && appInfoBean.isInstall == true && !"com.xiaoniu.cleanking".equals(appInfoBean.packageName)) {
+            if (type == 0 && !isSystemAppliation(appInfoBean.packageName) && appInfoBean.isInstall == true && !"com.xiaoniu.cleanking".equals(appInfoBean.packageName)) {
                 lists.add(appInfoBean);
-            } else if (type == 1 && appInfoBean.isInstall == false && !"com.xiaoniu.cleanking".equals(appInfoBean.packageName)) {
+            } else if (type == 1 && !isSystemAppliation(appInfoBean.packageName) && appInfoBean.isInstall == false && !"com.xiaoniu.cleanking".equals(appInfoBean.packageName)) {
                 lists.add(appInfoBean);
             }
         }
         return lists;
+    }
+
+    /**
+     * 是否是系统应用
+     *
+     * @param packageName
+     * @return
+     */
+    private boolean isSystemAppliation(String packageName) {
+        if (mView == null) {
+            return false;
+        }
+        try {
+            return (mView.getPackageManager().getPackageInfo(packageName, 0).applicationInfo.flags & 1) != 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
