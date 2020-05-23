@@ -533,6 +533,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onResume() {
         super.onResume();
+        isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mPresenter.getSwitchInfoList();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
@@ -1500,18 +1501,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private OnCancelListener onCancelListener = this::showWarningDialog;
 
     private void showWarningDialog() {
-        isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
-        Log.e("info", "showWarningDialog----> 1");
         if (isAllopen) {
             return;
         }
-        Log.e("info", "showWarningDialog----> 2");
         long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, 0);
         if (preTime == 0) {  // 第一次进来，初始化
-            Log.e("info", "showWarningDialog----> 3");
             SPUtil.setLong(getActivity(), TIME_STAMP, System.currentTimeMillis());
         } else if (System.currentTimeMillis() - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
-            Log.e("info", "showWarningDialog----> 4");
             SPUtil.setLong(getActivity(), TIME_STAMP, System.currentTimeMillis());
             showPermissionDialog();
         }
