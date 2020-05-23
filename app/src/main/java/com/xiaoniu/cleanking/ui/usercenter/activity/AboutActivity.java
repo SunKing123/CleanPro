@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.AboutPresenter;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.base.SimpleWebActivity;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -40,6 +41,8 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
     LinearLayout line_xy;
     @BindView(R.id.line_share)
     LinearLayout line_share;
+    @BindView(R.id.line_privacy)
+    LinearLayout line_privacy;
 
     @Override
     public int getLayoutId() {
@@ -72,13 +75,12 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             } else {
                 ToastUtils.showShort("当前已是最新版本");
             }
-
         });
 
         line_xy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jumpXieyiActivity(BuildConfig.H5_BASE_URL+"/agree.html");
+                SimpleWebActivity.startActivity(AboutActivity.this, BuildConfig.USER_AGREEMENT, "用户协议");
                 StatisticsUtils.trackClick("Service_agreement_click", "服务协议", "mine_page", "about_page");
             }
         });
@@ -87,8 +89,15 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
             @Override
             public void onClick(View v) {
                 String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
-                mPresenter.share("", BuildConfig.H5_BASE_URL+"/share.html", getString(R.string.app_name), shareContent, -1);
+                mPresenter.share("", BuildConfig.H5_BASE_URL + "/share.html", getString(R.string.app_name), shareContent, -1);
                 StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
+            }
+        });
+
+        line_privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SimpleWebActivity.startActivity(AboutActivity.this, BuildConfig.PRIVACY_POLICY, "隐私政策");
             }
         });
     }
@@ -96,7 +105,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
-        NiuDataAPI.onPageStart("about_view_page","关于");
+        NiuDataAPI.onPageStart("about_view_page", "关于");
     }
 
     @Override
@@ -113,7 +122,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
     public void jumpXieyiActivity(String url) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
-        bundle.putString(Constant.Title, "服务协议");
+        bundle.putString(Constant.Title, "用户协议");
         bundle.putBoolean(Constant.NoTitle, false);
         startActivity(UserLoadH5Activity.class, bundle);
     }
