@@ -179,4 +179,9 @@
         <p><a href="https://www.baidu.com">百度一下, 啥也不知道</a></p>
     </string>
 
+    <string name="user_agreement_label1">欢迎使用悟空清理！我们依据最新的法律要求，更新了隐私政策，特此向您说明。作为互联网安全公司，我们在为用户提供隐私保护的同时，对自身的安全产品提出了更高级别的标准。在使用悟空清理前，请务必仔细阅读并了解</string>
+    <string name="user_agreement_label2">《隐私政策》</string>
+    <string name="user_agreement_label3">和</string>
+    <string name="user_agreement_label4">《用户协议》</string>
+    <string name="user_agreement_label5">全部条款，如您同意并接收全部条款，请点击同意开始使用我们的产品和服务。</string>
 </resources>

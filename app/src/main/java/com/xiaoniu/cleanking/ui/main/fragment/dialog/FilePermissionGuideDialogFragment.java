@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.fragment.dialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -63,8 +63,8 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStop() {
+        super.onStop();
         StatisticsUtils.onPageEnd("read_file_permission_popup_view_page", "读取文件权限弹窗浏览", "launch_page", "home_page");
     }
 
@@ -95,12 +95,23 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
             }
             switch (view.getId()) {
                 case R.id.btn_confirm:
+                    isOutsideDismiss = false;
                     mOnClickListener.onConfirm();
                     StatisticsUtils.trackClick("read_file_permission_popup_click", "读取文件权限弹窗点击", "launch_page", "home_page");
                     break;
             }
         }
     };
+
+    private boolean isOutsideDismiss = true;
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        if (mOnClickListener != null) {
+            mOnClickListener.onCancel(isOutsideDismiss);
+        }
+        super.onDismiss(dialog);
+    }
 
     public OnClickListener getOnClickListener() {
         return mOnClickListener;
@@ -114,7 +125,7 @@ public class FilePermissionGuideDialogFragment extends DialogFragment {
     public interface OnClickListener {
         void onConfirm();
 
-        void onCancel();
+        void onCancel(boolean isOutsideDismiss);
     }
 
 

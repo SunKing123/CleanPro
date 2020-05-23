@@ -182,21 +182,13 @@ public class FileUtils {
     /**
      * 递归遍历file下的所有文件
      */
-    public static void listInnerListFiles(final SecondJunkInfo secondJunkInfo, File file) {
-        final File[] listFiles = file.listFiles();
+    public static void listInnerListFiles(final SecondJunkInfo secondJunkInfo, File rootFile) {
+        final File[] listFiles = rootFile.listFiles();
         if (listFiles == null) {
             return;
         }
-        try {
-            if (listFiles.length == 0) {
-                file.delete();
-                return;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        for (int length = listFiles.length, i = 0; i < length; ++i) {
-            file = listFiles[i];
+        for (int i = 0; i < listFiles.length; i++) {
+            File file = listFiles[i];
             if (file.isDirectory()) {
                 if (file.getName().contains("image") && checkFileTimeout(file, 7)) {
                     listInnerListFiles(secondJunkInfo, file);
@@ -205,6 +197,8 @@ public class FileUtils {
                 } else if (file.getName().contains("audio") && checkFileTimeout(file, 3)) {
                     listInnerListFiles(secondJunkInfo, file);
                 } else if (file.getName().contains("download") && checkFileTimeout(file, 7)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else {
                     listInnerListFiles(secondJunkInfo, file);
                 }
             } else {   //单个文件

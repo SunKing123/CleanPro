@@ -1512,8 +1512,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             return;
         }
         // if (!UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
-        showFilePermissionGuideDialog();
+//        showFilePermissionGuideDialog();
         // }
+
+        //检测如果已经存在
+        if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
+            //检测版本更新
+            mPresenter.queryAppVersion();
+        } else {
+            showFilePermissionGuideDialog();
+        }
     }
 
     private void showFilePermissionGuideDialog() {
@@ -1530,10 +1538,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     public void accept(Boolean aBoolean) throws Exception {
                         if (aBoolean) {
                             StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click", "系统读取文件权限弹窗同意点击", "home_page", "system_read_file_permission_popup");
+
+                            //不管用户是同意授权还是取消授权，都检查是否有更新
+                            mPresenter.queryAppVersion();
+                            
                             return;
                         } else {
                             StatisticsUtils.trackClick("system_read_file_permission_popup_no_agree_click", "系统读取文件权限弹窗不同意点击", "home_page", "system_read_file_permission_popup");
                         }
+                        //不管用户是同意授权还是取消授权，都检查是否有更新
+                        mPresenter.queryAppVersion();
                         if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             // 永久拒绝权限 文件读写权限已被禁止
                             showPermissionDialog1();
@@ -1544,8 +1558,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
 
             @Override
-            public void onCancel() {
-
+            public void onCancel(boolean isOutsideDismiss) {
+                //如果用户直接取消弹框，也要展示
+                if (isOutsideDismiss) {
+                    mPresenter.queryAppVersion();
+                }
             }
         });
     }
@@ -1648,7 +1665,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (hasXiding) {
             rlRiskTipsToast.setVisibility(View.GONE);
         } else {
-            rlRiskTipsToast.setVisibility(isRiskTips ? View.VISIBLE : View.GONE);
+            boolean isShowRiskTips = !isAllopen || isRiskTips;
+            rlRiskTipsToast.setVisibility(isShowRiskTips ? View.VISIBLE : View.GONE);
         }
     }
 

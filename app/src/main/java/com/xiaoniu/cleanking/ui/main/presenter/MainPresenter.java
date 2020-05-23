@@ -52,42 +52,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> {
 
     private final RxAppCompatActivity mActivity;
 
-    private UpdateAgent mUpdateAgent;
     @Inject
     NoClearSPHelper mPreferencesHelper;
 
     @Inject
     public MainPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
-    }
-
-    /**
-     * 版本更新
-     */
-    public void queryAppVersion(final OnCancelListener onCancelListener) {
-        mModel.queryAppVersion(new Common4Subscriber<AppVersion>() {
-
-            @Override
-            public void getData(AppVersion updateInfoEntity) {
-
-                setAppVersion(updateInfoEntity);
-            }
-
-            @Override
-            public void showExtraOp(String code, String message) {
-                Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-            }
-
-            @Override
-            public void netConnectError() {
-
-            }
-        });
     }
 
     //动态获取后台WebUrl+
@@ -280,20 +250,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> {
         }
     }
 
-    public void setAppVersion(AppVersion result) {
-        if (result != null && result.getData() != null) {
-            if (TextUtils.equals("1", result.getData().popup))
-                if (mUpdateAgent == null) {
-                    mUpdateAgent = new UpdateAgent(mActivity, result, () -> {
-                    });
-                    mUpdateAgent.check();
-                } else {
-                    mUpdateAgent.check();
-                }
-        }
-    }
-
-
     /**
      * 本地Push配置
      */
@@ -301,7 +257,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> {
         mModel.getLocalPushSet(new Common4Subscriber<PushSettingList>() {
             @Override
             public void showExtraOp(String code, String message) {
-
             }
 
             @Override

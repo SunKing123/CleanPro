@@ -161,7 +161,7 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (firstJunkInfo.getGarbageIcon() != null) {
                 iv_junk_logo.setImageDrawable(firstJunkInfo.getGarbageIcon());
             } else {
-                iv_junk_logo.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.clean_icon_others));
+                iv_junk_logo.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.icon_other_cache));
             }
 
             if (firstJunkInfo.isAllchecked()) {

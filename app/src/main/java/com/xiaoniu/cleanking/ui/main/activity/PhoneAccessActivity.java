@@ -19,6 +19,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -58,6 +59,7 @@ import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
+import com.xiaoniu.cleanking.utils.PhoneAccessUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -82,6 +84,7 @@ import static com.xiaoniu.cleanking.ui.main.config.SpCacheConfig.WHITE_LIST_SOFT
 
 /**
  * 手机加速--一键清理内存页面
+ * TODO: so terrible code! must refactor！
  */
 public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
@@ -366,6 +369,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     private void showCleanFinishUI(String num, String unit) {
+        // Log.d("PhoneAccessActivity" , "!--->showCleanFinishUI----- num: "+num+"; unit:" +unit);
         //加速完成 更新通知栏状态
         NotificationEvent event = new NotificationEvent();
         event.setType("speed");
@@ -510,38 +514,26 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         acceview.setListInfoSize(listInfo.size());
         if (listInfo.size() != 0) {
             mRamScale = new FileQueryUtils().computeTotalSize(listInfo);
-            computeTotalSize(listInfo);
-            setAdapter(listInfo);
+            updateUi(listInfo);
+        } else {
+            emptyGoFinish();  // XD added
         }
     }
 
-    //计算总的缓存大小
-    public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
-        long totalSizes = 0;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            for (FirstJunkInfo firstJunkInfo : listInfo) {
-                totalSizes += !isCacheWhite(firstJunkInfo.getAppPackageName()) ? firstJunkInfo.getTotalSize() : 0;
-            }
-        } else { //8.0以上内存[200M,2G]随机数
-            long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
-            long timeTemp = System.currentTimeMillis() - lastCheckTime;
-            if (timeTemp >= 3 * 60 * 1000 && timeTemp < 6 * 60 * 1000) {
-                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
-                totalSizes = (long) (cacheSize * 0.3);
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
-            } else if (timeTemp >= 6 * 60 * 1000 && timeTemp < 10 * 60 * 1000) {
-                long cacheSize = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
-                totalSizes = (long) (cacheSize * 0.6);
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, cacheSize);
-            } else {
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
-                SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
-                totalSizes = Long.valueOf(NumberUtils.mathRandom(200 * 1024 * 1024, 2 * 1024 * 1024 * 1024));
-            }
-
+    /**
+     * @param firstJunkInfoList
+     * @author xd.he
+     */
+    private void updateUi(ArrayList<FirstJunkInfo> firstJunkInfoList) {
+        ArrayList<FirstJunkInfo> listInfo =  PhoneAccessUtil.filterFirstJunkInfo(firstJunkInfoList);
+        if (listInfo == null || listInfo.size() == 0) {
+            this.mTotalSizesCleaned = 0;
+            setCleanSize(0, false);
+            return;
         }
-        setCleanSize(totalSizes, true);
-        this.mTotalSizesCleaned = totalSizes;
+        mTotalSizesCleaned = PhoneAccessUtil.computeTotalSize(this, listInfo);
+        setCleanSize(mTotalSizesCleaned, true);
+        setAdapter(listInfo);
     }
 
     /**
@@ -561,10 +553,29 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         this.mTotalSizesCleaned = totalSizes;
     }
 
+
+    /**
+     * @author xd.he
+     */
+    private void emptyGoFinish() {
+        mIsFinish = true;
+        showCleanFinishUI("0", "MB");
+    }
+
+    /**
+     *
+     * @param totalSizes
+     * @param canPlayAnim
+     */
     public void setCleanSize(long totalSizes, boolean canPlayAnim) {
-        if (acceview == null) return;
+        if (acceview == null) {
+            return;
+        }
         String str_totalSize = CleanAllFileScanUtil.getFileSize(totalSizes);
-        if (str_totalSize.endsWith("KB")) return;
+        if (str_totalSize.endsWith("KB") || "0".equals(str_totalSize)) {
+            emptyGoFinish();  // XD added
+            return;
+        }
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
@@ -627,6 +638,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                         mInfo.setAppPackageName(info.processName);
                         mInfo.setAppName(info.processName);
                         aboveListInfo.add(mInfo);
+                        // Log.w("PAA", "!--->getAccessListAbove22-- size < 15 --aboveListInfo--add :"+info.processName);
                     }
                 }
             } else {
@@ -648,18 +660,23 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             } else {
                 un = total / aboveListInfo.size();
             }
-            setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);
-            computeTotalSize(aboveListInfo);
-            setAdapter(aboveListInfo);
+            setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);  //
+            updateUi(aboveListInfo);
         }
     }
 
+    /**
+     *
+     * @param aboveListInfo
+     * @param listP
+     * @param un
+     */
     private void setAppInfo(ArrayList<FirstJunkInfo> aboveListInfo, List<PackageInfo> listP, long un) {
         for (FirstJunkInfo firstJunkInfo : aboveListInfo) {
             for (int j = 0; j < listP.size(); j++) {
                 if (TextUtils.equals(listP.get(j).packageName.trim(), firstJunkInfo.getAppPackageName())) {
                     firstJunkInfo.setAppName(listP.get(j).applicationInfo.loadLabel(packageManager).toString().trim());
-                    firstJunkInfo.setGarbageIcon(listP.get(j).applicationInfo.loadIcon(packageManager));
+                    firstJunkInfo.setGarbageIcon(listP.get(j).applicationInfo.loadIcon(packageManager));  //
                     firstJunkInfo.setTotalSize((long) (Math.random() * un) + un);
                 }
             }
@@ -671,34 +688,19 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     }
 
-    /**
-     * 获取缓存白名单
-     */
-    public boolean isCacheWhite(String packageName) {
-        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_NAME_WHITE_LIST_INSTALL_PACKE, Context.MODE_PRIVATE);
-        Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, new HashSet<>());
-//        Set<String> sets = sp.getStringSet(WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
-        if (null != sets && sets.size() > 0) {
-            Iterator<String> it = sets.iterator();
-            while (it.hasNext()) {
-                String str = it.next();
-            }
-        }
-        if(sets.contains(packageName)){
-            return true;
-        }
-        return WHITE_LIST.contains(packageName);
-    }
 
-    public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
-        if (null == recycle_view)
+    private void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
+        if (null == recycle_view || null == listInfos) {
+            // Log.d("PAA", "!--->setAdapter--recycle_view:"+recycle_view+"; listInfos: "+listInfos);
             return;
-        ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
-        for (FirstJunkInfo firstJunkInfo : listInfos) {
-            if (!isCacheWhite(firstJunkInfo.getAppPackageName()))
-                listInfoData.add(firstJunkInfo);
         }
-        belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfoData);
+//        ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
+//        for (FirstJunkInfo firstJunkInfo : listInfos) {
+//            if (!PhoneAccessUtil.isCacheWhite(firstJunkInfo.getAppPackageName()) ) {  // && firstJunkInfo.getGarbageIcon()!=null
+//                listInfoData.add(firstJunkInfo);
+//            }
+//        }
+        belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfos);
         recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
         recycle_view.setAdapter(belowAdapter);
         belowAdapter.setmOnCheckListener((listFile, pos) -> {

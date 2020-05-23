@@ -8,14 +8,14 @@
 
     <include layout="@layout/activity_splash" />
 
-    <ViewStub
-        android:id="@+id/vs_open_new"
+    <include
+        layout="@layout/activity_open_new"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout="@layout/activity_open_new" />
+        android:layout_height="match_parent"
+        tools:visibility="visible" />
 
     <FrameLayout
-        android:id="@+id/splash_container"
+        android:id="@+id/ad_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="108dp" />

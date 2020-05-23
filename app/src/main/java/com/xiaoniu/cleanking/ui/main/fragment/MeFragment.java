@@ -127,8 +127,8 @@ public class MeFragment extends SimpleFragment {
         } else if (ids == R.id.line_share) {
             String shareContent = "HI，我发现了一款清理手机垃圾神器！推荐给你，帮你清理垃圾，从此再也不怕手机空间不够用来！";
             share("", BuildConfig.H5_BASE_URL + "/share.html", getString(R.string.app_name), shareContent, -1);
-            StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", AppHolder.getInstance().getSourcePageId(), "about_page");
-
+            StatisticsUtils.trackClick("Sharing_friends_click", "分享好友",
+                    AppHolder.getInstance().getSourcePageId(), "about_page");
         }
     }
 

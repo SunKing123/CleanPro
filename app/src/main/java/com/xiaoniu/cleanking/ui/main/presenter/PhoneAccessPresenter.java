@@ -67,6 +67,8 @@ import static android.content.Context.USAGE_STATS_SERVICE;
  */
 public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainModel> {
 
+    private static final String TAG = "PhoneAccessP";
+
     private final RxAppCompatActivity mActivity;
     @Inject
     NoClearSPHelper mSPHelper;
@@ -205,18 +207,18 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         }
         List<UsageStats> lists = usageStatsManager.queryUsageStats(4, System.currentTimeMillis() - 86400000, System.currentTimeMillis());
         ArrayList arrayList = new ArrayList();
-        if (!(lists == null || lists.size() == 0)) {
-            for (UsageStats usageStats : lists) {
-                if (!(usageStats == null || usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.cleanmaster.mguard_cn"))) {
-                    ActivityManager.RunningAppProcessInfo runningAppProcessInfo = new ActivityManager.RunningAppProcessInfo();
-                    runningAppProcessInfo.processName = usageStats.getPackageName();
-                    runningAppProcessInfo.pkgList = new String[]{usageStats.getPackageName()};
-                    int uidForName = Process.getUidForName(usageStats.getPackageName());
-                    arrayList.add(runningAppProcessInfo);
-                }
+        if (lists == null || lists.size() == 0) {
+            return arrayList;
+        }
+        for (UsageStats usageStats : lists) {
+            if (!(usageStats == null || usageStats.getPackageName() == null || usageStats.getPackageName().contains("com.cleanmaster.mguard_cn"))) {
+                ActivityManager.RunningAppProcessInfo runningAppProcessInfo = new ActivityManager.RunningAppProcessInfo();
+                runningAppProcessInfo.processName = usageStats.getPackageName();
+                runningAppProcessInfo.pkgList = new String[]{usageStats.getPackageName()};
+                int uidForName = Process.getUidForName(usageStats.getPackageName());
+                arrayList.add(runningAppProcessInfo);
             }
         }
-
         return arrayList;
     }
 
@@ -232,6 +234,8 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         recyclerView.scheduleLayoutAnimation();
     }
 
+    boolean canPlaying = true;
+
     /**
      * 数字动画
      *
@@ -240,9 +244,9 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
      * @param endNum
      * @param type     1是MB，2是GB
      */
-    boolean canPlaying = true;
-
-    public void setNumAnim(View view, TextView tv_size, TextView tv_size_show, TextView tv_delete, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
+    public void setNumAnim(View view, TextView tv_size, TextView tv_size_show,
+                           TextView tv_delete, TextView tv_gb, TextView tv_gb1, View viewt, View view_top,
+                           int startNum, int endNum, int type) {
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());

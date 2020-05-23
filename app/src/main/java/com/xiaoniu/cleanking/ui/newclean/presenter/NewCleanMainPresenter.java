@@ -1,11 +1,14 @@
 package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.annotation.SuppressLint;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -16,6 +19,8 @@ import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
+import com.xiaoniu.cleanking.utils.update.UpdateAgent;
+import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 
 import java.util.ArrayList;
 
@@ -30,6 +35,56 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
     @Inject
     public NewCleanMainPresenter() {
+    }
+
+    private UpdateAgent mUpdateAgent;
+
+    public void queryAppVersion() {
+        queryAppVersion(new OnCancelListener() {
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    /**
+     * 版本更新
+     */
+    public void queryAppVersion(final OnCancelListener onCancelListener) {
+        mModel.queryAppVersion(new Common4Subscriber<AppVersion>() {
+
+            @Override
+            public void getData(AppVersion updateInfoEntity) {
+                setAppVersion(updateInfoEntity);
+            }
+
+            @Override
+            public void showExtraOp(String code, String message) {
+                Toast.makeText(mView.getActivity(), message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+            }
+        });
+    }
+
+    public void setAppVersion(AppVersion result) {
+        if (result != null && result.getData() != null) {
+            if (TextUtils.equals("1", result.getData().popup))
+                if (mUpdateAgent == null) {
+                    mUpdateAgent = new UpdateAgent(mView.getActivity(), result, () -> {
+                    });
+                    mUpdateAgent.check();
+                } else {
+                    mUpdateAgent.check();
+                }
+        }
     }
 
     /**
@@ -71,7 +126,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             @Override
             public void getData(SwitchInfoList switchInfoList) {
                 Log.d("NewCleanMainPresenter", "!--->getSwitchInfoList---getData---");
-                if(null != switchInfoList) {
+                if (null != switchInfoList) {
                     AppHolder.getInstance().setSwitchInfoMap(switchInfoList.getData());
                 }
             }

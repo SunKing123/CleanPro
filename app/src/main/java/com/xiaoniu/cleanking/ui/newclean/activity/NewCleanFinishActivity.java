@@ -1198,9 +1198,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void onAdShowCallBack(View view) {
                 if(adUpView!=null ){
                     Log.d(TAG, "!--->loadAdUp----onAdShowCallBack---hasXiding:"+hasXiding);
-                    adUpView.setVisibility(View.VISIBLE);
                     adUpView.removeAllViews();
                     adUpView.addView(view);
+                    adUpView.setVisibility(View.VISIBLE);
                     cancelXiDing();    // XD added 20200520
                 }
             }
@@ -1239,9 +1239,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             public void onAdShowCallBack(View view) {
                 if(adDownView!=null ){
                     Log.d(TAG, "!--->loadAdDown----onAdShowCallBack---hasXiding:"+hasXiding);
-                    adDownView.setVisibility(View.VISIBLE);
                     adDownView.removeAllViews();
                     adDownView.addView(view);
+                    adDownView.setVisibility(View.VISIBLE);
                     cancelXiDing();  // XD added 20200520
                 }
             }

@@ -38,7 +38,7 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
         }
 
         adModel.getYLHSplashAd(adRequestParamentersBean, adRequestBean)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .timeout(6, TimeUnit.SECONDS)
                 .subscribe(new Consumer<AdYLHEmitterBean>() {

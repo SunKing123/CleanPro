@@ -196,9 +196,6 @@ public class FileQueryUtils {
     /**
      * 残留文件扫描
      * 锁定文件夹下所有子文件
-     *
-     * @param
-     * @return
      */
     public ArrayList<FirstJunkInfo> getOmiteCache() {
         ArrayList<FirstJunkInfo> junkInfoArrayList = new ArrayList<>();
@@ -211,8 +208,9 @@ public class FileQueryUtils {
                 packMap.put(firstJunkInfo.getAppPackageName(), firstJunkInfo);
             }
         }
-        if (pathMap == null)
+        if (pathMap == null) {
             return junkInfoArrayList;
+        }
 
         for (Map.Entry<String, PathData> pathDataHash : pathMap.entrySet()) {
             if (!packMap.containsKey(pathDataHash.getKey())) {//外部关联路径在私有路径下没有安装包
@@ -287,6 +285,9 @@ public class FileQueryUtils {
                 File appPackage = new File(rootPath + packageName);
                 if (appPackage.exists()) {
                     SecondJunkInfo secondJunkInfo = FileUtils.listFiles(appPackage);
+                    if (secondJunkInfo.getGarbageSize() == 0) {
+                        continue;
+                    }
                     if (mScanFileListener != null) {
                         mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                     }
