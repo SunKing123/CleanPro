@@ -10,7 +10,6 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.strategy.ExternalInterface;
 import com.lxj.xpopup.XPopup;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
@@ -40,6 +40,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.CountDownTimer;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -50,6 +51,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -93,6 +95,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private CountDownTimer countDownTimer;
     private boolean isAgreeUserAgreement;
     private int coldBootStartIndex;
+    private String[] basicPermissions = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,6 +145,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 if (currentTime == 0) {
                     tv_skip.setEnabled(true);
                     tv_skip.setText("跳过");
+
+                    //如果展示跳过按钮之后5s之后自动跳转到主页面
+                    Disposable disposable = Observable.timer(5, TimeUnit.SECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(aLong -> routeMainActivity());
+                    compositeDisposable.add(disposable);
                 } else {
                     tv_skip.setText(String.valueOf(currentTime));
                 }
@@ -216,17 +228,34 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             //由于只要展示用户协议弹框，则就是首次冷启动，所以只要进入该分支，则非首次冷启动
             if (hasSecondaryColdBootStart()) {
                 //如果是二次冷启动，如果用户已经授权过文件读写权限，则直接展示一键授权弹框，否则直接进入首页，并展示文件读写权限引导
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                        && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_APN_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+                if (!hasStoragePermission()) {
                     mHandler.postDelayed(this::routeMainActivity, 1200);
                 } else {
-                    showOneKeyPermission();
+                    if (!hasOneKeyPermission()) {
+                        showOneKeyPermission();
+                    } else {
+                        mHandler.postDelayed(this::routeMainActivity, 1200);
+                    }
                 }
             }
         } else {
             //展示用户协议弹框
             showUserAgreement();
         }
+    }
+
+    /**
+     * 是否存在一键授权必须权限
+     */
+    private boolean hasOneKeyPermission() {
+        return ExternalInterface.getInstance(this).isOpenAllPermission(this);
+    }
+
+    /**
+     * 判断是否有文件读写权限
+     */
+    private boolean hasStoragePermission() {
+        return PermissionUtils.checkPermission(this, basicPermissions);
     }
 
     /**
@@ -251,7 +280,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         });
 
         //开始计时跳过
-        countDownTimer.start(5000);
+        countDownTimer.start(3000);
 
         //点击跳过，进入到首页
         tv_skip.setOnClickListener(v -> {
@@ -505,7 +534,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.skip_view:
                 next();
                 break;

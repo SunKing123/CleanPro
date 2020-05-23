@@ -167,6 +167,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
             @Override
             public void netConnectError() {
+                mView.getInteractionSwitchFailure();
             }
         });
     }

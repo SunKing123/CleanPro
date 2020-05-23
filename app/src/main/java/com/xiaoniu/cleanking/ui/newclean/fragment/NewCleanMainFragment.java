@@ -487,15 +487,33 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     /**
      * 获取互动式广告成功
-     *
-     * @param switchInfoList
      */
     public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
-        if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
+        if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0) {
+            if (isAllopen) {
+                Log.e("info", "------>1");
+                mInteractionIv.setVisibility(View.GONE);
+            }
             return;
+        }
         if (switchInfoList.getData().get(0).isOpen()) {
             mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
             setOperateIcon(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl(), null);
+        } else {
+            if (isAllopen) {
+                Log.e("info", "------>2");
+                mInteractionIv.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    /**
+     * 获取运营位失败
+     */
+    public void getInteractionSwitchFailure() {
+        if (isAllopen) {
+            Log.e("info", "------>3");
+            mInteractionIv.setVisibility(View.GONE);
         }
     }
 
@@ -553,12 +571,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mInteractionPoistion = 0;
             }
             if (mInteractionList.size() == 1) {
-
                 setOperateIcon(mInteractionList.get(0).getImgUrl(), 10000);
             } else {
                 if (mInteractionList.size() - 1 >= mInteractionPoistion) {
                     setOperateIcon(mInteractionList.get(mInteractionPoistion).getImgUrl(), 10000);
                 }
+            }
+        } else {
+            if (isAllopen) {
+                Log.e("info", "------>4");
+                mInteractionIv.setVisibility(View.GONE);
             }
         }
 
@@ -1638,6 +1660,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             GlideUtils.loadGif(getActivity(), url, mInteractionIv, count);
             rlRiskTipsToast.setVisibility(View.GONE);
         } else if (isAllopen) {
+            mInteractionIv.setVisibility(VISIBLE);
             Glide.with(this).load(url).into(mInteractionIv);
             rlRiskTipsToast.setVisibility(View.GONE);
         } else {
