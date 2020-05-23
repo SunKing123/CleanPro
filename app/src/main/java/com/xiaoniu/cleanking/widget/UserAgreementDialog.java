@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.BackgroundColorSpan;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -87,8 +89,8 @@ public class UserAgreementDialog extends CenterPopupView {
         spannableBeans.add(new SpannableStringUtils.SpannableBean(getResources().getString(R.string.user_agreement_label5),
                 Color.parseColor("#666666"), null));
         SpannableStringBuilder builder = SpannableStringUtils.createSpannableString(spannableBeans);
-        txt_content.setText(builder);
         txt_content.setMovementMethod(LinkMovementMethod.getInstance());
+        txt_content.setText(builder);
     }
 
     private void initView() {
