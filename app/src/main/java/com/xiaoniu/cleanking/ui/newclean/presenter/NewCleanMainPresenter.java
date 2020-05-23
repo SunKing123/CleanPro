@@ -39,15 +39,6 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
     private UpdateAgent mUpdateAgent;
 
-    public void queryAppVersion() {
-        queryAppVersion(new OnCancelListener() {
-            @Override
-            public void onCancel() {
-
-            }
-        });
-    }
-
     /**
      * 版本更新
      */
@@ -56,7 +47,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
             @Override
             public void getData(AppVersion updateInfoEntity) {
-                setAppVersion(updateInfoEntity);
+                setAppVersion(updateInfoEntity, onCancelListener);
             }
 
             @Override
@@ -70,20 +61,31 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
             @Override
             public void netConnectError() {
+                if (onCancelListener != null) {
+                    onCancelListener.onCancel();
+                }
             }
         });
     }
 
-    public void setAppVersion(AppVersion result) {
+    public void setAppVersion(AppVersion result, OnCancelListener onCancelListener) {
         if (result != null && result.getData() != null) {
-            if (TextUtils.equals("1", result.getData().popup))
+            if (TextUtils.equals("1", result.getData().popup)) {
                 if (mUpdateAgent == null) {
                     mUpdateAgent = new UpdateAgent(mView.getActivity(), result, () -> {
+                        if (onCancelListener != null) {
+                            onCancelListener.onCancel();
+                        }
                     });
                     mUpdateAgent.check();
                 } else {
                     mUpdateAgent.check();
                 }
+            } else {
+                if (onCancelListener != null) {
+                    onCancelListener.onCancel();
+                }
+            }
         }
     }
 

@@ -102,6 +102,7 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.ScreenUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
+import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.cleanking.widget.MeasureViewPager;
 import com.xiaoniu.cleanking.widget.OperatorNestedScrollView;
@@ -1486,41 +1487,33 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     private void permissionRepair() {
-        mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
-        // 检测是否包含文件读写权限
-        if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
-            // 权限是否全部开启
-            isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
-            if (isAllopen) {
-                return;
-            }
-//            boolean isRepair = SPUtil.getRepairBoolean(getActivity(), "isRepair", false);
-//            if (isRepair) {
-//                SPUtil.setRepair(getActivity(), "isRepair", false);
-//                PermissionIntegrate.getPermission().startWK(getActivity());
-//                return;
-//            }
-
-            long currentTime = System.currentTimeMillis();
-            long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, currentTime);
-            if (currentTime == preTime) {  // 第一次进来，初始化
-                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
-            } else if (currentTime - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
-                SPUtil.setLong(getActivity(), TIME_STAMP, currentTime);
-                showPermissionDialog();
-            }
-            return;
-        }
-        // if (!UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
-//        showFilePermissionGuideDialog();
-        // }
-
+        mInteractionIv.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.icon_warning));
         //检测如果已经存在
-        if (PermissionUtils.checkPermission(getContext(), basicPermissions)) {
+        if (PermissionUtils.checkPermission(requireActivity(), basicPermissions)) {
             //检测版本更新
-            mPresenter.queryAppVersion();
+            mPresenter.queryAppVersion(onCancelListener);
         } else {
             showFilePermissionGuideDialog();
+        }
+    }
+
+    private OnCancelListener onCancelListener = this::showWarningDialog;
+
+    private void showWarningDialog() {
+        isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
+        Log.e("info", "showWarningDialog----> 1");
+        if (isAllopen) {
+            return;
+        }
+        Log.e("info", "showWarningDialog----> 2");
+        long preTime = SPUtil.getLong(getActivity(), TIME_STAMP, 0);
+        if (preTime == 0) {  // 第一次进来，初始化
+            Log.e("info", "showWarningDialog----> 3");
+            SPUtil.setLong(getActivity(), TIME_STAMP, System.currentTimeMillis());
+        } else if (System.currentTimeMillis() - preTime >= 7 * 24 * 60 * 60 * 1000) {  // 7 天弹一次，第一次不弹出
+            Log.e("info", "showWarningDialog----> 4");
+            SPUtil.setLong(getActivity(), TIME_STAMP, System.currentTimeMillis());
+            showPermissionDialog();
         }
     }
 
@@ -1540,14 +1533,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                             StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click", "系统读取文件权限弹窗同意点击", "home_page", "system_read_file_permission_popup");
 
                             //不管用户是同意授权还是取消授权，都检查是否有更新
-                            mPresenter.queryAppVersion();
-                            
+                            mPresenter.queryAppVersion(onCancelListener);
+
                             return;
                         } else {
                             StatisticsUtils.trackClick("system_read_file_permission_popup_no_agree_click", "系统读取文件权限弹窗不同意点击", "home_page", "system_read_file_permission_popup");
                         }
                         //不管用户是同意授权还是取消授权，都检查是否有更新
-                        mPresenter.queryAppVersion();
+                        mPresenter.queryAppVersion(onCancelListener);
                         if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             // 永久拒绝权限 文件读写权限已被禁止
                             showPermissionDialog1();
@@ -1561,7 +1554,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void onCancel(boolean isOutsideDismiss) {
                 //如果用户直接取消弹框，也要展示
                 if (isOutsideDismiss) {
-                    mPresenter.queryAppVersion();
+                    mPresenter.queryAppVersion(onCancelListener);
                 }
             }
         });
@@ -1611,7 +1604,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
 
     private void showPermissionDialog() {
-
 
         Integer setRiskTipsNum = ExternalInterface.getInstance(getActivity()).getDefectPermissionNum(getActivity());
         PermissionGuideDialogFragment permissionGuideDialogFragment = PermissionGuideDialogFragment
