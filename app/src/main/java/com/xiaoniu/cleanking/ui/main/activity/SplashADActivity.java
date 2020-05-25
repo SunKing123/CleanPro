@@ -438,8 +438,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
         }
 
-        if (auditSwitch != null && auditSwitch.getData().equals("1") && hasAgreeUserAgreement() && !hasSecondaryColdBootStart()) {
-            loadAd();
+        if (hasAgreeUserAgreement() && !hasSecondaryColdBootStart()) {
+            if (auditSwitch != null && auditSwitch.getData().equals("1")) {
+                loadAd();
+            } else {
+                routeMainActivity();
+            }
         }
     }
 
