@@ -1510,13 +1510,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     private void permissionRepair() {
-        mInteractionIv.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.icon_warning));
-        //检测如果已经存在
-        if (PermissionUtils.checkPermission(requireActivity(), basicPermissions)) {
-            //检测版本更新
-            mPresenter.queryAppVersion(onCancelListener);
-        } else {
-            showFilePermissionGuideDialog();
+        if (isAdded()) {
+            mInteractionIv.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.icon_warning));
+            //检测如果已经存在
+            if (PermissionUtils.checkPermission(requireActivity(), basicPermissions)) {
+                //检测版本更新
+                mPresenter.queryAppVersion(onCancelListener);
+            } else {
+                showFilePermissionGuideDialog();
+            }
         }
     }
 

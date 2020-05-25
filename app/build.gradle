@@ -78,7 +78,7 @@ android {
         }
 
         debug {
-//            versionNameSuffix "dev"
+            versionNameSuffix "dev"
             minifyEnabled false
             debuggable = false
             signingConfig signingConfigs.release

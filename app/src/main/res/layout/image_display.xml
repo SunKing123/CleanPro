@@ -11,7 +11,8 @@
         android:layout_height="206dp"
         android:scaleType="fitXY"
         android:src="@mipmap/icon_per4"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <ImageView
         android:id="@+id/iv_back"
@@ -33,18 +34,20 @@
         android:id="@+id/iv_pre"
         android:layout_width="80dp"
         android:layout_height="35dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginRight="17dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="@id/image_display_imageview"
         app:layout_constraintRight_toLeftOf="@id/iv_next" />
+
     <ImageView
         android:id="@+id/iv_zhankai"
         android:layout_width="105dp"
         android:layout_height="36dp"
-        android:visibility="gone"
         android:src="@mipmap/icon_zhankai"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/image_display_imageview"
         app:layout_constraintRight_toRightOf="@id/image_display_imageview" />
+
     <ImageView
         android:id="@+id/iv_delete"
         android:layout_width="45dp"
