@@ -42,7 +42,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -284,11 +283,15 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         List<CleanWxItemInfo> listDataTemp = new ArrayList<>();
         List<CleanWxItemInfo> listData = new ArrayList<>();
         long audioSize = 0;
-        for (int i = 0; i < cleanWxEasyInfoAud.getList().size(); i++) {
-            if (cleanWxEasyInfoAud.getList().get(i) instanceof CleanWxFourItemInfo) {
-                CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoAud.getList().get(i);
-                listFour.add(cleanWxHeadInfo);
+        try {
+            for (int i = 0; i < cleanWxEasyInfoAud.getList().size(); i++) {
+                if (cleanWxEasyInfoAud.getList().get(i) instanceof CleanWxFourItemInfo) {
+                    CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoAud.getList().get(i);
+                    listFour.add(cleanWxHeadInfo);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         for (int j = 0; j < listFour.size(); j++) {

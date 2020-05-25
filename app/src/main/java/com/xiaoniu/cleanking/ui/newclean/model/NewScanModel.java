@@ -36,13 +36,13 @@ public class NewScanModel extends BaseModel {
         mRxFragment = rxFragment;
     }
 
-    public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
+    public void queryAppVersion(int versionCode, String versionName, Common4Subscriber<AppVersion> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("os", "android");
         map.put("platform", "1");
-        map.put("versionCode", AppUtils.getVersionCode(mRxFragment.getActivity(), mRxFragment.getActivity().getPackageName()));
-        map.put("appVersion", AppUtils.getVersionName(mRxFragment.getActivity(), mRxFragment.getActivity().getPackageName()));
+        map.put("versionCode", versionCode);
+        map.put("appVersion", versionName);
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.queryAppVersion(body).compose(RxUtil.<AppVersion>rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);

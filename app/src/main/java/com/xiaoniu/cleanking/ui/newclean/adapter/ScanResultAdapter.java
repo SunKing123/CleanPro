@@ -63,9 +63,11 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void submitList(List<JunkResultWrapper> junkResultWrappers) {
-        junkResultWrapperList.clear();
-        junkResultWrapperList.addAll(junkResultWrappers);
-        notifyDataSetChanged();
+        if (junkResultWrappers != null) {
+            junkResultWrapperList.clear();
+            junkResultWrapperList.addAll(junkResultWrappers);
+            notifyDataSetChanged();
+        }
     }
 
     @Override

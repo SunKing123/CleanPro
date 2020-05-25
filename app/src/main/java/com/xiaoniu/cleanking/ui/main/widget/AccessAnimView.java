@@ -39,7 +39,7 @@ public class AccessAnimView extends RelativeLayout {
     private Context mContext;
     RelativeLayout mRlAnimBg;
     LinearLayout line_hj;
-//    TextView line_access;
+    //    TextView line_access;
     LinearLayout line_size;
     LinearLayout line_title;
     ImageView iv_bot;
@@ -496,6 +496,7 @@ public class AccessAnimView extends RelativeLayout {
 
     public void startFinishAnimator() {
         mFlAnim.setVisibility(VISIBLE);
+        mAnimationView.clearAnimation();
         mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data_clean_finish.json");
@@ -537,6 +538,7 @@ public class AccessAnimView extends RelativeLayout {
         line_hj.setVisibility(VISIBLE);
         //小飞机 上升动画
         createStartFadeAnimator();
+        mAnimationCloudView.clearAnimation();
         mAnimationCloudView.useHardwareAcceleration();
         mAnimationCloudView.setImageAssetsFolder("images");
         mAnimationCloudView.setAnimation("data_one_key_speed_up.json");

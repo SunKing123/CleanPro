@@ -93,6 +93,8 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
     protected void initViews(@Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, getView());
 
+        view_lottie_bottom.clearAnimation();
+        view_lottie_bottom.clearAnimation();
         view_lottie_bottom.useHardwareAcceleration();
         view_lottie_top.useHardwareAcceleration();
         ivs = new TextView[]{iv_clean_bg01, iv_clean_bg02, iv_clean_bg03};
@@ -120,6 +122,17 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
                 cleanComplete();
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (view_lottie_bottom != null) {
+            view_lottie_bottom.clearAnimation();
+        }
+        if (view_lottie_top != null) {
+            view_lottie_top.clearAnimation();
+        }
+        super.onDestroyView();
     }
 
     /**

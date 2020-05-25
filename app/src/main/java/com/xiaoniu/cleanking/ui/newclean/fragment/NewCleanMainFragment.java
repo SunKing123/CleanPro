@@ -111,6 +111,7 @@ import com.xiaoniu.cleanking.widget.magicIndicator.MagicIndicator;
 import com.xiaoniu.cleanking.widget.magicIndicator.ViewPagerHelper;
 import com.xiaoniu.cleanking.widget.magicIndicator.buildins.commonnavigator.CommonNavigator;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -801,6 +802,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mTvCleanType.setVisibility(VISIBLE);
             mTvCleanType01.setVisibility(View.GONE);
             showTextView();
+            mLottieHomeView.clearAnimation();
             mLottieHomeView.useHardwareAcceleration(true);
             mLottieHomeView.setAnimation("clean_home_top.json");
             mLottieHomeView.setImageAssetsFolder("images_home");
@@ -1043,6 +1045,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        if (mLottieHomeView != null) {
+            mLottieHomeView.clearAnimation();
+        }
+        super.onDestroyView();
+    }
+
     //低于Android O
     public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
         if (listInfo == null || listInfo.size() <= 0) return;
@@ -1088,6 +1098,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();
                 tvNowClean.setVisibility(View.INVISIBLE);
+                mLottieHomeView.clearAnimation();
                 mLottieHomeView.useHardwareAcceleration(true);
                 mLottieHomeView.setAnimation("clean_home_top2.json");
                 mLottieHomeView.setImageAssetsFolder("images_home_finish");
@@ -1101,6 +1112,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         if (null != mLottieHomeView) {
+                            mLottieHomeView.clearAnimation();
                             mLottieHomeView.playAnimation();
                         }
 
@@ -1147,6 +1159,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void showHomeLottieView() {
         showTextView();
+        mLottieHomeView.clearAnimation();
         mLottieHomeView.useHardwareAcceleration(true);
         mLottieHomeView.setAnimation("clean_home_top.json");
         mLottieHomeView.setImageAssetsFolder("images_home");
@@ -1515,7 +1528,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             //检测如果已经存在
             if (PermissionUtils.checkPermission(requireActivity(), basicPermissions)) {
                 //检测版本更新
-                mPresenter.queryAppVersion(onCancelListener);
+                mPresenter.queryAppVersion(AppUtils.getVersionCode(requireActivity(), requireActivity().getPackageName()),
+                        AppUtils.getVersionName(requireActivity(), requireActivity().getPackageName()), onCancelListener);
             } else {
                 showFilePermissionGuideDialog();
             }
@@ -1553,14 +1567,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                             StatisticsUtils.trackClick("system_read_file_permission_popup_agree_click", "系统读取文件权限弹窗同意点击", "home_page", "system_read_file_permission_popup");
 
                             //不管用户是同意授权还是取消授权，都检查是否有更新
-                            mPresenter.queryAppVersion(onCancelListener);
+                            mPresenter.queryAppVersion(AppUtils.getVersionCode(requireActivity(), requireActivity().getPackageName()),
+                                    AppUtils.getVersionName(requireActivity(), requireActivity().getPackageName()), onCancelListener);
 
                             return;
                         } else {
                             StatisticsUtils.trackClick("system_read_file_permission_popup_no_agree_click", "系统读取文件权限弹窗不同意点击", "home_page", "system_read_file_permission_popup");
                         }
                         //不管用户是同意授权还是取消授权，都检查是否有更新
-                        mPresenter.queryAppVersion(onCancelListener);
+                        mPresenter.queryAppVersion(AppUtils.getVersionCode(requireActivity(), requireActivity().getPackageName()),
+                                AppUtils.getVersionName(requireActivity(), requireActivity().getPackageName()), onCancelListener);
                         if (UpdateAgent.hasPermissionDeniedForever(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             // 永久拒绝权限 文件读写权限已被禁止
                             showPermissionDialog1();
@@ -1574,7 +1590,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void onCancel(boolean isOutsideDismiss) {
                 //如果用户直接取消弹框，也要展示
                 if (isOutsideDismiss) {
-                    mPresenter.queryAppVersion(onCancelListener);
+                    mPresenter.queryAppVersion(AppUtils.getVersionCode(requireActivity(), requireActivity().getPackageName()),
+                            AppUtils.getVersionName(requireActivity(), requireActivity().getPackageName()), onCancelListener);
                 }
             }
         });

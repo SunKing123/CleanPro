@@ -42,8 +42,8 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     /**
      * 版本更新
      */
-    public void queryAppVersion(final OnCancelListener onCancelListener) {
-        mModel.queryAppVersion(new Common4Subscriber<AppVersion>() {
+    public void queryAppVersion(int versionCode, String versionName, final OnCancelListener onCancelListener) {
+        mModel.queryAppVersion(versionCode, versionName, new Common4Subscriber<AppVersion>() {
 
             @Override
             public void getData(AppVersion updateInfoEntity) {

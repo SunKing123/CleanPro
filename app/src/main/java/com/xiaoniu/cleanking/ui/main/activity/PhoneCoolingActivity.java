@@ -495,6 +495,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
      */
     private void startAnimation() {
         if (!isDestroyed()) {
+            mLottieAnimationView.clearAnimation();
             mLottieAnimationView.useHardwareAcceleration();
             mLottieAnimationView.setImageAssetsFolder("images");
             mLottieAnimationView.setAnimation("data_cool.json");
@@ -758,6 +759,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         NiuDataAPIUtil.onPageEnd(sourcePageId, currentPageId, viewPageEventCode, viewPageEventName);
 
         mFlAnim.setVisibility(VISIBLE);
+        mAnimationView.clearAnimation();
         mAnimationView.useHardwareAcceleration();
         mAnimationView.setImageAssetsFolder("images");
         mAnimationView.setAnimation("data_clean_finish.json");
@@ -774,7 +776,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
                 PreferenceUtil.saveCleanCoolUsed(true);
-                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH,PositionId.DRAW_THREE_CODE);
+                boolean isOpen = AppHolder.getInstance().isOpen(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
 
                 //恢复状态栏状态
                 NotificationEvent event = new NotificationEvent();
