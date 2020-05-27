@@ -79,6 +79,9 @@ import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivi
 import com.xiaoniu.cleanking.ui.newclean.activity.JurisdictionGuideActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.newclean.contact.CleanMainTopViewContact;
+import com.xiaoniu.cleanking.ui.newclean.model.CleanMainTopViewModel;
+import com.xiaoniu.cleanking.ui.newclean.presenter.CleanTopViewPresenter;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.news.adapter.ComFragmentAdapter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
@@ -122,6 +125,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -136,7 +141,7 @@ import static android.view.View.VISIBLE;
 /**
  * 1.2.1 新版本清理主页
  */
-public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener, NestedScrollView.OnScrollChangeListener {
+public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener, NestedScrollView.OnScrollChangeListener, CleanMainTopViewContact.View {
 
     private static final String TAG = "NewCleanMainFragment";
 
@@ -185,6 +190,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     ImageView mNotiClearFinishIv;
     @BindView(R.id.iv_electricity_g)
     ImageView mElectricityFinishIv;
+    //todo
     @BindView(R.id.iv_interaction)
     ImageView mInteractionIv;
     @BindView(R.id.image_ad_bottom_first)
@@ -207,8 +213,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
 
+    //todo
     @BindView(R.id.rl_risk_tips_toast)
     RelativeLayout rlRiskTipsToast;
+
     private Boolean isRiskTips = true;
     private boolean isAllopen = false;
     private final String TIME_STAMP = "timeStamp";
@@ -245,6 +253,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
     private HomeRecommendAdapter mRecommendAdapter;
+
+
+    CleanTopViewPresenter topViewPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -286,11 +297,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mInflater = inflater;
         return super.onCreateView(inflater, container, savedInstanceState);
     }
-    /* XD added for feed End >*/
+
+    private void initTopViewPresenter() {
+        CleanMainTopViewModel model=new CleanMainTopViewModel(this);
+        topViewPresenter = new CleanTopViewPresenter(getActivity(), this, model);
+        topViewPresenter.onCreate();
+    }
 
     @Override
     protected void initView() {
         registResceiver();
+        initTopViewPresenter();
         mStickyHeight = ScreenUtil.dp2px(requireContext(), 80);
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
@@ -300,7 +317,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         Log.d(TAG, "!--->initView----getRecommendList-----");
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
-        mPresenter.getInteractionSwitch();
         mPresenter.getAccessListBelow();
         if (PreferenceUtil.isFirstForHomeIcon()) {
             PreferenceUtil.saveFirstForHomeIcon(false);
@@ -379,6 +395,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         }, 1000);
         RxView.clicks(tvNowClean, o -> nowClean());
+
+        mInteractionIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTopViewClick();
+            }
+        });
     }
 
     /*< XD added for feed 20200215 begin */
@@ -486,72 +509,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
     }
 
-    /**
-     * 获取互动式广告成功
-     */
-    public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
-        if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0) {
-            if (isAllopen) {
-                Log.e("info", "------>1");
-                mInteractionIv.setVisibility(View.GONE);
-            }
-            return;
-        }
-        if (switchInfoList.getData().get(0).isOpen()) {
-            mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
-            setOperateIcon(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl(), null);
-        } else {
-            if (isAllopen) {
-                Log.e("info", "------>2");
-                mInteractionIv.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    /**
-     * 获取运营位失败
-     */
-    public void getInteractionSwitchFailure() {
-        if (isAllopen) {
-            Log.e("info", "------>3");
-            mInteractionIv.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * 互动式广告
-     */
-    @OnClick(R.id.iv_interaction)
-    public void interactionClick() {
-        if (!isAllopen) {  // 权限修复
-            isRiskTips = false;
-            PermissionIntegrate.getPermission().startWK(getActivity());
-            StatisticsUtils.trackClick("permission_icon_click", "首页权限图标点击", "cold_splash_page", "home_page");
-            return;
-        }
-        if (mInteractionPoistion > 2) {
-            mInteractionPoistion = 0;
-        }
-        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮", "cold_splash_page", "home_page");
-        if (null != mInteractionList && mInteractionList.size() > 0) {
-
-            if (mInteractionList.size() == 1) {
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
-            } else {
-                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
-                }
-
-            }
-            mInteractionPoistion++;
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
+        topViewPresenter.onResume();
         isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mPresenter.getSwitchInfoList();
@@ -566,24 +527,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
             mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
         }*/
-
-        if (null != mInteractionList && mInteractionList.size() > 0) {
-            if (mInteractionPoistion > 2) {
-                mInteractionPoistion = 0;
-            }
-            if (mInteractionList.size() == 1) {
-                setOperateIcon(mInteractionList.get(0).getImgUrl(), 10000);
-            } else {
-                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
-                    setOperateIcon(mInteractionList.get(mInteractionPoistion).getImgUrl(), 10000);
-                }
-            }
-        } else {
-            if (isAllopen) {
-                Log.e("info", "------>4");
-                mInteractionIv.setVisibility(View.GONE);
-            }
-        }
 
         lineShd.setEnabled(true);
         textWjgl.setEnabled(true);
@@ -1191,6 +1134,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onDestroy() {
         super.onDestroy();
+        topViewPresenter.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 
@@ -1483,7 +1427,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             vTopTitleXiding.setVisibility(View.GONE);
         }
         hasXiding = xiding;
-        showTopRiskTips(xiding);
+        topViewPresenter.onScroll(hasXiding);
     }
 
     private void scrollAnima(int start, int end, int duration) {
@@ -1639,7 +1583,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-
     private void showPermissionDialog() {
 
         Integer setRiskTipsNum = ExternalInterface.getInstance(getActivity()).getDefectPermissionNum(getActivity());
@@ -1662,45 +1605,29 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         });
     }
-    /* XD added for feed End >*/
 
-    public boolean isAllopen() {
-        // 权限是否全部开启
-        if (PermissionIntegrate.getPermission().getIsNecessary()) {
-            isAllopen = ExternalInterface.getInstance(getActivity()).isOpenNecessaryPermission(getActivity());
-        } else {
-            isAllopen = ExternalInterface.getInstance(getActivity()).isOpenAllPermission(getActivity());
-        }
-        return isAllopen;
+    @Override
+    public void loadAdvImage(String url) {
+        GlideUtils.loadGif(getActivity(), url, mInteractionIv, 999);
     }
 
-    public void setOperateIcon(String url, Integer count) {
-        if (isAllopen() && null != count) {
-            GlideUtils.loadGif(getActivity(), url, mInteractionIv, count);
-            rlRiskTipsToast.setVisibility(View.GONE);
-        } else if (isAllopen) {
-            mInteractionIv.setVisibility(VISIBLE);
-            Glide.with(this).load(url).into(mInteractionIv);
-            rlRiskTipsToast.setVisibility(View.GONE);
-        } else {
-            mInteractionIv.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.icon_warning));
-            showTopRiskTips(hasXiding);
-        }
+    @Override
+    public void loadPermissionTipImage() {
+        mInteractionIv.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.icon_warning));
     }
 
-    private void showTopRiskTips(boolean hasXiding) {
-        if (rlRiskTipsToast == null) {
-            return;
-        }
-        if (hasXiding) {
-            rlRiskTipsToast.setVisibility(View.GONE);
-        } else {
-            if (isAllopen) {
-                rlRiskTipsToast.setVisibility(View.GONE);
-            } else {
-                rlRiskTipsToast.setVisibility(isRiskTips ? View.VISIBLE : View.GONE);
-            }
-        }
+    @Override
+    public void setVisibleImage(int visible) {
+        mInteractionIv.setVisibility(visible);
     }
 
+    @Override
+    public void setVisibleFloatingView(int visible) {
+        rlRiskTipsToast.setVisibility(visible);
+    }
+
+    @Override
+    public void onTopViewClick() {
+         topViewPresenter.onTopViewClick();
+    }
 }

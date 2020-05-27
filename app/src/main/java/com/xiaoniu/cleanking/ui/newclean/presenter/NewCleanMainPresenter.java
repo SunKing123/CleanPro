@@ -147,32 +147,6 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     }
 
     /**
-     * 互动式广告开关
-     */
-    public void getInteractionSwitch() {
-        mModel.getInteractionSwitch(new Common4Subscriber<InteractionSwitchList>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(InteractionSwitchList switchInfoList) {
-                mView.getInteractionSwitchSuccess(switchInfoList);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getInteractionSwitchFailure();
-            }
-        });
-    }
-
-    /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
      */
     @SuppressLint("CheckResult")
