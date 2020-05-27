@@ -40,7 +40,7 @@ public class CleanTopViewPresenter implements CleanMainTopViewContact.Presenter 
     //当前的广告数据
     SwitchActiveLineDTOList currentAdvModel;
     int activeAdvIndex = -1;
-
+    boolean advOpen;
     List<SwitchActiveLineDTOList> activeAdvList;
 
     public CleanTopViewPresenter(Activity context, CleanMainTopViewContact.View view, CleanMainTopViewContact.Model model) {
@@ -61,6 +61,7 @@ public class CleanTopViewPresenter implements CleanMainTopViewContact.Presenter 
             @Override
             public void getData(InteractionSwitchList interactionSwitchList) {
                 if (interactionSwitchList != null && interactionSwitchList.getData().size() > 0) {
+                    advOpen=interactionSwitchList.getData().get(0).isOpen();
                     activeAdvList = interactionSwitchList.getData().get(0).getSwitchActiveLineDTOList();
                     currentAdvModel = getNextAdvModel();
                     redrawView();
@@ -125,7 +126,7 @@ public class CleanTopViewPresenter implements CleanMainTopViewContact.Presenter 
 
     //显示互动广告view
     private void showAdvView() {
-        if (currentAdvModel == null) {
+        if (currentAdvModel == null||!advOpen) {
             view.setVisibleImage(View.GONE);
             return;
         }
