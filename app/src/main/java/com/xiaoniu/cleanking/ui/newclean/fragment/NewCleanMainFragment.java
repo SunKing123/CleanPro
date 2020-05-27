@@ -1468,7 +1468,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void permissionRepair() {
         if (isAdded()) {
-            mInteractionIv.setImageDrawable(ContextCompat.getDrawable(requireActivity(), R.drawable.icon_warning));
             //检测如果已经存在
             if (PermissionUtils.checkPermission(requireActivity(), basicPermissions)) {
                 //检测版本更新
