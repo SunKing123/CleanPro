@@ -25,7 +25,7 @@ public class GameSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setData(List<FirstJunkInfo> list) {
-        mData = list;
+        mData = new ArrayList<>(list);
         this.notifyDataSetChanged();
     }
 

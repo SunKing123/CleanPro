@@ -603,8 +603,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_hardware)
     public void onMLayoutHardwareClicked() {
+        if(mHardwareInfo==null){
+            return;
+        }
         StatisticsUtils.trackClick("running_parts_click ", "用户在降温扫描完成后的诊断页点击运行部件", sourcePageId, currentPageId);
-
         Bundle bundle = new Bundle();
         bundle.putSerializable("content", mHardwareInfo);
         startActivityForResult(RouteConstants.HARDWARE_INFO_ACTIVITY, bundle, REQUEST_CODE_HARDWARE, false);
