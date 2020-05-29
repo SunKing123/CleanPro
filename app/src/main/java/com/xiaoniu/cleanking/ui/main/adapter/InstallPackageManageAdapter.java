@@ -85,6 +85,7 @@ public class InstallPackageManageAdapter extends RecyclerView.Adapter {
     }
 
     public void clear() {
+        if(mLists!=null)
         mLists.clear();
     }
 
