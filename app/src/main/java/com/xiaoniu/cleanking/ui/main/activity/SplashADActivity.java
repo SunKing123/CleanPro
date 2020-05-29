@@ -196,6 +196,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 检查是否授权查看手机状态权限
      */
     private void checkPhoneStatePermission() {
+        NiuDataAPI.setIMEI("");//大数据激活后的 imei()事件；
+        mSPHelper.setUploadEmpImeiStatus(true);
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             StatisticsUtils.customTrackEvent("identify_device_information", "识别设备信息弹窗曝光",
                     "launch_page", "launch_page");
@@ -205,7 +208,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                             "cold_splash_page", "cold_splash_page");
 
                     initNiuData();
-                } else {
+                } else {  //授权拒绝
+                    initNiuData();
                     StatisticsUtils.trackClick("identify_device_information_prohibit_click",
                             "识别设备信息权限禁止点击", "cold_splash_page", "cold_splash_page");
                 }
@@ -213,6 +217,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             });
             compositeDisposable.add(disposable);
         } else {
+            initNiuData();
             dispatchAfterPermission();
         }
     }
@@ -383,7 +388,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 埋点事件
      */
     private void initNiuData() {
-        if (!mSPHelper.isUploadImei()) {
+        if (!mSPHelper.isUploadImei()) {   //有效的imei只上报一次
             //有没有传过imei
             String imei = PhoneInfoUtils.getIMEI(mContext);
             if (TextUtils.isEmpty(imei)) {
