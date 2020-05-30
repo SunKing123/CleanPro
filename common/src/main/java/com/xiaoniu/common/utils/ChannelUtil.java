@@ -3,6 +3,8 @@ package com.xiaoniu.common.utils;
 import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 
+import com.xiaoniu.common.BuildConfig;
+
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -48,7 +50,7 @@ public class ChannelUtil {
             while (entries.hasMoreElements()) {
                 ZipEntry entry = ((ZipEntry) entries.nextElement());
                 String entryName = entry.getName();
-                if (entryName.startsWith(key)) {
+                if (!TextUtils.isEmpty(entryName) && entryName.startsWith(key)) {
                     ret = entryName;
                     break;
                 }
@@ -69,7 +71,12 @@ public class ChannelUtil {
         if (split != null && split.length >= 2) {
             channel = ret.substring(split[0].length() + 1);
         }
-        return TextUtils.isEmpty(channel)?"clean_test":channel;
+        if(BuildConfig.DEBUG){
+            return TextUtils.isEmpty(channel)?"clean_test":channel;
+        }else{
+            return TextUtils.isEmpty(channel)?"clean_release":channel;
+        }
+
     }
 
 }

@@ -121,21 +121,25 @@ public final class RemoteService extends Service {
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Intent remoteService = new Intent(RemoteService.this,
-                    LocalService.class);
-            if (Build.VERSION.SDK_INT >= 26) {
-                RemoteService.this.startForegroundService(remoteService);
-            } else {
-                RemoteService.this.startService(remoteService);
-            }
-            RemoteService.this.bindService(new Intent(RemoteService.this,
-                    LocalService.class), connection, Context.BIND_ABOVE_CLIENT);
-            PowerManager pm = (PowerManager) RemoteService.this.getSystemService(Context.POWER_SERVICE);
-            boolean isScreenOn = pm.isScreenOn();
-            if (isScreenOn) {
-                sendBroadcast(new Intent("_ACTION_SCREEN_ON"));
-            } else {
-                sendBroadcast(new Intent("_ACTION_SCREEN_OFF"));
+            try {
+                Intent remoteService = new Intent(RemoteService.this,
+                        LocalService.class);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    RemoteService.this.startForegroundService(remoteService);
+                } else {
+                    RemoteService.this.startService(remoteService);
+                }
+                RemoteService.this.bindService(new Intent(RemoteService.this,
+                        LocalService.class), connection, Context.BIND_ABOVE_CLIENT);
+                PowerManager pm = (PowerManager) RemoteService.this.getSystemService(Context.POWER_SERVICE);
+                boolean isScreenOn = pm.isScreenOn();
+                if (isScreenOn) {
+                    sendBroadcast(new Intent("_ACTION_SCREEN_ON"));
+                } else {
+                    sendBroadcast(new Intent("_ACTION_SCREEN_OFF"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

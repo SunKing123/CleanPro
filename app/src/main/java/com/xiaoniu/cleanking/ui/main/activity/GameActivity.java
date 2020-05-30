@@ -52,6 +52,7 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.CustomGrideLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -202,7 +203,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mRecyclerView.setNestedScrollingEnabled(false);
         mGameSelectAdapter = new GameSelectAdapter(this);
         mGameSelectAdapter.setmOnCheckListener(this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
+        GridLayoutManager gridLayoutManager = new CustomGrideLayoutManger(this, 4);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mGameSelectAdapter);
 

@@ -74,7 +74,11 @@ public class PermissionActivity extends SimpleActivity {
                 FloatingImageDisplayService.imageWidth = new int[]{275, 275};
                 FloatingImageDisplayService.imageHeight = new int[]{186, 186};
 
-                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+                try {
+                    startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         line_xfc.setOnClickListener(v -> {
@@ -87,7 +91,11 @@ public class PermissionActivity extends SimpleActivity {
                 FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_per2, R.mipmap.icon_per3, R.mipmap.icon_per4};
                 FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275};
                 FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206};
-                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+                try {
+                    startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         line_dingwei.setOnClickListener(v -> {
@@ -100,7 +108,11 @@ public class PermissionActivity extends SimpleActivity {
                 FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_ht1, R.mipmap.icon_ht2, R.mipmap.icon_ht3, R.mipmap.icon_ht4};
                 FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275, 275};
                 FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206, 186};
-                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+                try {
+                    startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 

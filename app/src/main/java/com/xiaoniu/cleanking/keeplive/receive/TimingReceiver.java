@@ -68,12 +68,16 @@ public class TimingReceiver extends BroadcastReceiver {
                 PreferenceUtil.saveCleanLogMap(map);
             }
         }
-        //重新打开保活service
-        Intent i = new Intent(context, LocalService.class);
-        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
-            context.startForegroundService(i);
-        } else {
-            context.startService(i);
+        try {
+            //重新打开保活service
+            Intent i = new Intent(context, LocalService.class);
+            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+                context.startForegroundService(i);
+            } else {
+                context.startService(i);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

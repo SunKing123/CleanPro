@@ -54,6 +54,10 @@ public class Constant {
     public static final String WX_CLEAN_BTN = "wx_clean_btn";
     public static final String STORAGE_CLEAN_BTN = "storage_clean_btn";
 
+
+    public static final String CHANNEL_TEST = "clean_test";
+    public static final String CHANNEL_RELEASE ="clean_release";
+
     /**
      * 白名单
      */

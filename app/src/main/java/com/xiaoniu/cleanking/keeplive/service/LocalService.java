@@ -190,22 +190,26 @@ public final class LocalService extends Service {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Intent remoteService = new Intent(LocalService.this,
-                    RemoteService.class);
-            if (Build.VERSION.SDK_INT >= 26) {
-                LocalService.this.startForegroundService(remoteService);
-            } else {
-                LocalService.this.startService(remoteService);
-            }
-            Intent intent = new Intent(LocalService.this, RemoteService.class);
-            LocalService.this.bindService(intent, connection,
-                    Context.BIND_ABOVE_CLIENT);
-            PowerManager pm = (PowerManager) LocalService.this.getSystemService(Context.POWER_SERVICE);
-            boolean isScreenOn = pm.isScreenOn();
-            if (isScreenOn) {
-                sendBroadcast(new Intent("_ACTION_SCREEN_ON"));
-            } else {
-                sendBroadcast(new Intent("_ACTION_SCREEN_OFF"));
+            try {
+                Intent remoteService = new Intent(LocalService.this,
+                        RemoteService.class);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    LocalService.this.startForegroundService(remoteService);
+                } else {
+                    LocalService.this.startService(remoteService);
+                }
+                Intent intent = new Intent(LocalService.this, RemoteService.class);
+                LocalService.this.bindService(intent, connection,
+                        Context.BIND_ABOVE_CLIENT);
+                PowerManager pm = (PowerManager) LocalService.this.getSystemService(Context.POWER_SERVICE);
+                boolean isScreenOn = pm.isScreenOn();
+                if (isScreenOn) {
+                    sendBroadcast(new Intent("_ACTION_SCREEN_ON"));
+                } else {
+                    sendBroadcast(new Intent("_ACTION_SCREEN_OFF"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
