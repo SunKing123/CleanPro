@@ -67,7 +67,7 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
      */
     public void requestAd(boolean isSplash, AdRequestParamentersBean adRequestParamentersBean, AdShowCallBack adShowCallBack) {
         this.adShowCallBack = adShowCallBack;
-        if (adRequestParamentersBean == null || adShowCallBack == null || !NetworkUtils.isNetConnected()) {
+        if (adRequestParamentersBean == null || adShowCallBack == null || (!adRequestParamentersBean.adType.equals(AdType.Splash) && !NetworkUtils.isNetConnected())) {//开屏无网络走缓存数据（有效期1小时）
             Log.d(TAG, "!--->requestAd------没有获取到广告数据！--isSplash:"+isSplash);
             adShowCallBack.onFailure("没有获取到广告数据");
             return;
