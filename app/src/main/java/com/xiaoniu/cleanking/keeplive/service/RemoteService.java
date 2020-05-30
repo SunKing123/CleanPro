@@ -66,6 +66,13 @@ public final class RemoteService extends Service {
             KeepAliveConfig.TITLE = SPUtils.getInstance(getApplicationContext(), SP_NAME).getString(KeepAliveConfig.TITLE);
             String title = SPUtils.getInstance(getApplicationContext(), SP_NAME).getString(KeepAliveConfig.TITLE);
             Log.d("JOB-->"+TAG,"KeepAliveConfig.CONTENT_"+ KeepAliveConfig.CONTENT+"    " + KeepAliveConfig.TITLE+"  "+title);
+
+            if (TextUtils.isEmpty(KeepAliveConfig.TITLE)) {
+                KeepAliveConfig.TITLE = getString(R.string.push_content_default_title);
+            }
+            if (TextUtils.isEmpty(KeepAliveConfig.CONTENT)) {
+                KeepAliveConfig.CONTENT = getString(R.string.push_content_default_content);
+            }
             if (!TextUtils.isEmpty(KeepAliveConfig.TITLE) && !TextUtils.isEmpty( KeepAliveConfig.CONTENT)) {
                 //启用前台服务，提升优先级
                 Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);

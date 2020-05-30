@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.keeplive.config.RunMode;
 import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
+import com.xiaoniu.cleanking.keeplive.utils.KeepAliveUtils;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
@@ -126,7 +127,7 @@ public final class LocalService extends Service {
         }
         //隐藏服务通知
         try {
-            if (Build.VERSION.SDK_INT < 25) {
+            if (Build.VERSION.SDK_INT < 25 && KeepAliveUtils.isServiceRunning(getApplicationContext(), getPackageName() + ":local")) {
                 startService(new Intent(this, HideForegroundService.class));
             }
         } catch (Exception e) {
@@ -290,6 +291,7 @@ public final class LocalService extends Service {
         }
     }
 
+
     private void shouDefNotify() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             KeepAliveConfig.CONTENT = SPUtils.getInstance(getApplicationContext(), SP_NAME).getString(KeepAliveConfig.CONTENT);
@@ -297,16 +299,26 @@ public final class LocalService extends Service {
             KeepAliveConfig.TITLE = SPUtils.getInstance(getApplicationContext(), SP_NAME).getString(KeepAliveConfig.TITLE);
             String title = SPUtils.getInstance(getApplicationContext(), SP_NAME).getString(KeepAliveConfig.TITLE);
             Log.d("JOB-->" + TAG, "KeepAliveConfig.CONTENT_" + KeepAliveConfig.CONTENT + "    " + KeepAliveConfig.TITLE + "  " + title);
-            if (!TextUtils.isEmpty(KeepAliveConfig.TITLE) && !TextUtils.isEmpty(KeepAliveConfig.CONTENT)) {
-                //启用前台服务，提升优先级
-                Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
-                intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
-                Notification notification = NotificationUtils.createNotification(LocalService.this, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
-                startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
-                Log.d("JOB-->", TAG + "显示通知栏");
+            if (TextUtils.isEmpty(KeepAliveConfig.TITLE)) {
+                KeepAliveConfig.TITLE = getString(R.string.push_content_default_title);
             }
+            if (TextUtils.isEmpty(KeepAliveConfig.CONTENT)) {
+                KeepAliveConfig.CONTENT = getString(R.string.push_content_default_content);
+            }
+
+            //部分场景下KeepAliveConfig.TITLE 空字符,小米monkeybug修改
+//           if (!TextUtils.isEmpty(KeepAliveConfig.TITLE) && !TextUtils.isEmpty(KeepAliveConfig.CONTENT)) {
+            //启用前台服务，提升优先级
+            Intent intent2 = new Intent(getApplicationContext(), NotificationClickReceiver.class);
+            intent2.setAction(NotificationClickReceiver.CLICK_NOTIFICATION);
+            Notification notification = NotificationUtils.createNotification(LocalService.this, KeepAliveConfig.TITLE, KeepAliveConfig.CONTENT, KeepAliveConfig.DEF_ICONS, intent2);
+            startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
+            Log.d("JOB-->", TAG + "显示通知栏");
+//            }
         }
     }
+
+
 
 
 }

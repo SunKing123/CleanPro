@@ -1589,9 +1589,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void onCancel(boolean isOutsideDismiss) {
                 //如果用户直接取消弹框，也要展示
-                if (isOutsideDismiss&&isAdded()) {
-                    mPresenter.queryAppVersion(AppUtils.getVersionCode(requireActivity(), requireActivity().getPackageName()),
-                            AppUtils.getVersionName(requireActivity(), requireActivity().getPackageName()), onCancelListener);
+                try {
+                    if (isOutsideDismiss && isAdded() && null != getActivity()) {
+                        mPresenter.queryAppVersion(AppUtils.getVersionCode(requireActivity(), requireActivity().getPackageName()),
+                                AppUtils.getVersionName(requireActivity(), requireActivity().getPackageName()), onCancelListener);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });

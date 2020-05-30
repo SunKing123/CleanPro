@@ -80,7 +80,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(application);
-        // 通过调用此方法初始化 SDK。如果需要在多个进程拉取广告，每个进程都需要初始化 SDK。
+        //优良汇 通过调用此方法初始化 SDK。如果需要在多个进程拉取广告，每个进程都需要初始化 SDK。
         GDTADManager.getInstance().initWith(application, PositionId.APPID);
         setErrorHandler();
     }

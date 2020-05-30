@@ -1,42 +1,25 @@
 package com.xiaoniu.cleanking.keeplive.receive;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Keep;
-import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.geek.push.entity.PushMsg;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.jpush.JPushReceiver;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
-import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
-import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
-import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
-import com.xiaoniu.cleanking.ui.main.bean.CleanLogInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanDetailActivity;
-import com.xiaoniu.cleanking.ui.tool.notify.activity.NotifyCleanGuideActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -53,11 +36,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.DEF_ICONS;
-import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
 /**
  * @author zhengzhihao
@@ -91,7 +70,11 @@ public class TimingReceiver extends BroadcastReceiver {
         }
         //重新打开保活service
         Intent i = new Intent(context, LocalService.class);
-        context.startService(i);
+        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
+            context.startForegroundService(i);
+        } else {
+            context.startService(i);
+        }
 
     }
 
