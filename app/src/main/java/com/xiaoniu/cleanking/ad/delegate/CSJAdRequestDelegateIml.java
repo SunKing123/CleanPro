@@ -27,7 +27,6 @@ import java.util.concurrent.TimeoutException;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -116,8 +115,11 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.d(TAG, "穿山甲 开屏广告异常  错误message："+throwable.getMessage());
-                        if (throwable instanceof TimeoutException && adShowCallBack != null) {
-                            adShowCallBack.onFailure("开屏超时后不在请求，直接结束");
+                        if (throwable instanceof TimeoutException ) {
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "other", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
+                            if(adShowCallBack != null){
+                                adShowCallBack.onFailure("开屏超时后不在请求，直接结束");
+                            }
                         } else {
                             adError(adRequest, adRequestParamentersBean, adShowCallBack);
                         }
@@ -228,6 +230,9 @@ public class CSJAdRequestDelegateIml extends AdRequestDelegateIml {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.d(TAG, "穿山甲 模板广告异常  错误message："+throwable.getMessage());
+                        if (throwable instanceof TimeoutException ) {
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "other", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
+                        }
                         adError(adRequest, adRequestParamentersBean, adShowCallBack);
                     }
                 });

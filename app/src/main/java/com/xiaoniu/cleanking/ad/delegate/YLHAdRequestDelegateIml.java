@@ -8,13 +8,15 @@ import com.xiaoniu.cleanking.ad.bean.AdYLHEmitterBean;
 import com.xiaoniu.cleanking.ad.interfaces.AdAgainRequestCallBack;
 import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.model.AdModel;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.util.Deque;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @ProjectName: clean
@@ -54,7 +56,11 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.d(TAG, "优量会开屏广告失败  message:"+throwable.getMessage());
+                        if (throwable instanceof TimeoutException) {
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "other", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
+                        }
                         adError(adRequest, adRequestParamentersBean, adShowCallBack);
+
                     }
                 });
 
@@ -104,9 +110,36 @@ public class YLHAdRequestDelegateIml extends AdRequestDelegateIml {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
                         Log.d(TAG, "优量会模板广告失败  message:"+throwable.getMessage());
+                        if (throwable instanceof TimeoutException) {
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "other", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
+                        }
                         adError(adRequest, adRequestParamentersBean, adShowCallBack);
+
                     }
                 });
+    }
+
+
+    /**
+     * 埋点获取AdvertPositio
+     *
+     * @param adRequestParamentersBean
+     * @return
+     */
+    private String getAdvertPosition(AdRequestParamentersBean adRequestParamentersBean) {
+        String advertPosition = "1";
+        switch (adRequestParamentersBean.advertPosition) {
+            case PositionId.DRAW_ONE_CODE:
+                advertPosition = "1";
+                break;
+            case PositionId.DRAW_TWO_CODE:
+                advertPosition = "2";
+                break;
+            case PositionId.DRAW_THREE_CODE:
+                advertPosition = "3";
+                break;
+        }
+        return advertPosition;
     }
 
 

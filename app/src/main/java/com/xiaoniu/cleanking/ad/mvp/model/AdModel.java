@@ -72,6 +72,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
             @Override
             public void subscribe(ObservableEmitter<AdYLHEmitterBean> emitter) throws Exception {
                 Log.d(TAG, "优量会模板准备请求 id:"+ adRequestBean.getAdvertId());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "all_ad_request", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                 ADSize adSize = new ADSize(adRequestParamentersBean.viewWidth, ADSize.AUTO_HEIGHT);
                 NativeExpressAD nativeExpressAD = new NativeExpressAD(adRequestParamentersBean.context,
                         adSize,
@@ -171,6 +172,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
             @Override
             public void subscribe(ObservableEmitter<AdYLHEmitterBean> emitter) throws Exception {
                 Log.d(TAG, "优量会开屏准备开始"+adRequestBean.getAdvertId());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "优量汇", "all_ad_request", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                 SplashAD splashAD = new SplashAD((Activity) adRequestParamentersBean.context,
                         adRequestParamentersBean.skipContainer,
                         adRequestBean.getAdvertId(),
@@ -239,6 +241,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
             @Override
             public void subscribe(ObservableEmitter<List<TTNativeExpressAd>> emitter) throws Exception {
                 Log.d(TAG, "穿山甲模板准备开始 id:" + adRequestBean.getAdvertId());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "all_ad_request", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                 TTAdNative mTTAdNative = TTAdManagerHolder.get().createAdNative(adRequestParamentersBean.context);
                 //设置广告参数
                 AdSlot adSlot = new AdSlot.Builder()
@@ -281,6 +284,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
             @Override
             public void subscribe(ObservableEmitter<TTSplashAd> emitter) throws Exception {
                 Log.d(TAG, "穿山甲开屏开始 id:" + adRequestBean.getAdvertId());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", getAdvertPosition(adRequestParamentersBean), adRequestBean.getAdvertId(), "穿山甲", "all_ad_request", adRequestParamentersBean.sourcePageId, adRequestParamentersBean.currentPageId);
                 TTAdNative mTTAdNative = TTAdManagerHolder.get().createAdNative(adRequestParamentersBean.context);
                 AdSlot adSlot = new AdSlot.Builder()
                         .setCodeId(adRequestBean.getAdvertId())
