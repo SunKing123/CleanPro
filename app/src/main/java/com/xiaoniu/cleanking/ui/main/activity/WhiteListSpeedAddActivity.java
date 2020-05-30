@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WhiteListAddAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.WhiteListSpeedAddPresenter;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,7 @@ public class WhiteListSpeedAddActivity extends BaseActivity<WhiteListSpeedAddPre
         mPresenter.scanData(mType);
         }
         mAdapter = new WhiteListAddAdapter(this.getBaseContext());
-        LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
+        LinearLayoutManager mLlManger = new CustomLinearLayoutManger(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
 

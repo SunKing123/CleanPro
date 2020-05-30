@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.CleanFileLoadingDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.DelDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanInstallPackagePresenter;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -88,7 +89,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         mLoading=CleanFileLoadingDialogFragment.newInstance();
 
         mAdapter = new InstallPackageManageAdapter(this.getBaseContext());
-        LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
+        LinearLayoutManager mLlManger = new CustomLinearLayoutManger(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setTabType(mType);

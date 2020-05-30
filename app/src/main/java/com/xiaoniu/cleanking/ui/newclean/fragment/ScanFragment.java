@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.Window;
@@ -36,6 +35,7 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.ScanningPresenter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.widget.ArgbEvaluator;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.cleanking.widget.FuturaRoundTextView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -102,7 +102,7 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
         rxPermissions = new RxPermissions(requireActivity());
 
         scanningJunkAdapter = new ScanningJunkAdapter();
-        rv_content_list.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rv_content_list.setLayoutManager(new CustomLinearLayoutManger(requireContext()));
         rv_content_list.addItemDecoration(new HorizontalDividerItemDecoration.Builder(requireContext())
                 .sizeResId(R.dimen.dimen_0_5dp)
                 .colorResId(R.color.color_EDEDED)

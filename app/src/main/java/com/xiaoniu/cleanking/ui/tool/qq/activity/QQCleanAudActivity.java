@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.tool.qq.activity;
 
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -15,6 +14,7 @@ import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanAudPresenter;
 import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -98,7 +98,7 @@ public class QQCleanAudActivity extends BaseActivity<QQCleanAudPresenter> {
         }
 
         audAdapter = new QQCleanAudAdapter(QQCleanAudActivity.this, listData);
-        recycle_view.setLayoutManager(new LinearLayoutManager(QQCleanAudActivity.this));
+        recycle_view.setLayoutManager(new CustomLinearLayoutManger(QQCleanAudActivity.this));
         recycle_view.setAdapter(audAdapter);
         audAdapter.setmOnCheckListener((listFile, pos) -> {
             int selectCount = 0;

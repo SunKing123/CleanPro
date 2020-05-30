@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -37,6 +36,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -152,7 +152,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
 
         mCleanBigFileAdapter = new CleanExpandAdapter(mData);
 
-        mJunkList.setLayoutManager(new LinearLayoutManager(mContext));
+        mJunkList.setLayoutManager(new CustomLinearLayoutManger(mContext));
 
         mJunkList.setAdapter(mCleanBigFileAdapter);
 

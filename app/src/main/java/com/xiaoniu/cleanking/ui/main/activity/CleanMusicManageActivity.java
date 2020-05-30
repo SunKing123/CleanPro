@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.CleanMusicFilePresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.cleanking.utils.MusicFileUtils;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -98,7 +99,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
     protected void initView() {
         mLoading = CleanFileLoadingDialogFragment.newInstance();
         mAdapter = new CleanMusicManageAdapter(this.getBaseContext());
-        LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
+        LinearLayoutManager mLlManger = new CustomLinearLayoutManger(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);

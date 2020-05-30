@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.bean.ImgBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.QuestionReportLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.QuestionReportPresenter;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -92,7 +93,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
     protected void initView() {
 
         mAdapter = new QuestionReportImgAdapter(getBaseContext());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        LinearLayoutManager linearLayoutManager = new CustomLinearLayoutManger(mContext);
         //调整RecyclerView的排列方向
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);

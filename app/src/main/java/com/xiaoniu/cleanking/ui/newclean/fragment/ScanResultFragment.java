@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +31,7 @@ import com.xiaoniu.cleanking.ui.newclean.contact.ScanResultContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanResultPresenter;
 import com.xiaoniu.cleanking.utils.LayoutAnimationHelper;
 import com.xiaoniu.cleanking.utils.OnItemClickListener;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -86,7 +86,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
     protected void initViews(@Nullable Bundle savedInstanceState) {
         ButterKnife.bind(this, getView());
 
-        rv_content_list.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        rv_content_list.setLayoutManager(new CustomLinearLayoutManger(requireActivity()));
         rv_content_list.setAdapter(mScanResultAdapter = new ScanResultAdapter(this));
 
         if (ExternalInterface.getInstance(requireActivity()).isOpenAllPermission(requireActivity())) {

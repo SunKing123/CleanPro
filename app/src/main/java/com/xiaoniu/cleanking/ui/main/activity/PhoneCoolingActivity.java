@@ -61,6 +61,7 @@ import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -566,7 +567,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     }
 
     private void initAdapter() {
-        mRecyclerProcess.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerProcess.setLayoutManager(new CustomLinearLayoutManger(this, LinearLayoutManager.HORIZONTAL, false));
         mRecyclerProcess.addItemDecoration(new CustomerSpaceDecoration());
         mProcessIconAdapter = new ProcessIconAdapter();
         mRecyclerProcess.setAdapter(mProcessIconAdapter);

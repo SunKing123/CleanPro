@@ -684,7 +684,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             return;
         }
         belowAdapter = new PhoneAccessBelowAdapter(PhoneAccessActivity.this, listInfos);
-        recycle_view.setLayoutManager(new LinearLayoutManager(PhoneAccessActivity.this));
+        recycle_view.setLayoutManager(new CustomLinearLayoutManger(PhoneAccessActivity.this));
         recycle_view.setAdapter(belowAdapter);
         belowAdapter.setmOnCheckListener((listFile, pos) -> {
             int selectCount = 0;

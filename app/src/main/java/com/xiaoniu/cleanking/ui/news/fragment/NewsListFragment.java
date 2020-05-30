@@ -3,20 +3,20 @@ package com.xiaoniu.cleanking.ui.news.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
+import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
-import com.xiaoniu.cleanking.ui.main.bean.NewsListInfo;
-import com.xiaoniu.cleanking.ui.main.bean.NewsType;
 import com.xiaoniu.cleanking.ui.news.listener.OnClickNewsItemListener;
 import com.xiaoniu.cleanking.ui.news.utils.NewsUtils;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.base.BaseFragment;
 import com.xiaoniu.common.http.EHttp;
 import com.xiaoniu.common.http.callback.ApiCallback;
@@ -75,7 +75,7 @@ public class NewsListFragment extends BaseFragment {
     protected void initViews(View contentView, Bundle savedInstanceState) {
         mLlNoNet = contentView.findViewById(R.id.layout_not_net);
         mRecyclerView = contentView.findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new CustomLinearLayoutManger(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setLimitNumberToCallLoadMore(2);

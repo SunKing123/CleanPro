@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.InstallPackageManageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.SoftManagePresenter;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.AppUtils;
 
 import java.util.List;
@@ -66,7 +67,7 @@ SoftManageActivity extends BaseActivity<SoftManagePresenter> implements InstallP
     protected void initView() {
 
         mAdapter = new InstallPackageManageAdapter(this.getBaseContext());
-        LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
+        LinearLayoutManager mLlManger = new CustomLinearLayoutManger(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnCheckListener(this);

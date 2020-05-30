@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WhiteListInstallPackageAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.WhiteListIntallPackagePresenter;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class WhiteListInstallPackgeManageActivity extends BaseActivity<WhiteList
     @Override
     protected void initView() {
         mAdapter = new WhiteListInstallPackageAdapter(this.getBaseContext());
-        LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
+        LinearLayoutManager mLlManger = new CustomLinearLayoutManger(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
         mPresenter.getData();

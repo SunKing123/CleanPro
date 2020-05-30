@@ -226,7 +226,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mBtnLeft = findViewById(R.id.btnLeft);
         mTitleTv = findViewById(R.id.tvTitle);
         mRecyclerView = findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new CustomLinearLayoutManger(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
 

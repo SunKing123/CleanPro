@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.tool.wechat.activity;
 
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxItemInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanAudPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -138,7 +138,7 @@ public class WechatCleanAudActivity extends BaseActivity<WechatCleanAudPresenter
             layout_not_net.setVisibility(View.GONE);
         }
         audAdapter = new WechatCleanAudAdapter(WechatCleanAudActivity.this, listData);
-        recycle_view.setLayoutManager(new LinearLayoutManager(WechatCleanAudActivity.this));
+        recycle_view.setLayoutManager(new CustomLinearLayoutManger(WechatCleanAudActivity.this));
         recycle_view.setAdapter(audAdapter);
         audAdapter.setmOnCheckListener((listFile, pos) -> {
             int selectCount = 0;

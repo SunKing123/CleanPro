@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +24,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -175,7 +175,7 @@ public class GameListActivity extends BaseActivity<GameListPresenter> implements
             return;
         mAllList = listInfos;
         mGameListAdapter = new GameListAdapter(GameListActivity.this, listInfos, mSelectNameList);
-        recycle_view.setLayoutManager(new LinearLayoutManager(GameListActivity.this));
+        recycle_view.setLayoutManager(new CustomLinearLayoutManger(GameListActivity.this));
         recycle_view.setAdapter(mGameListAdapter);
         mGameListAdapter.setmOnCheckListener((listFile, pos) -> {
             StatisticsUtils.trackClick("gameboost_choice_click", "游戏加速添加列表页选择框点击", "gameboost_add_page", CURRENT_PAGE);

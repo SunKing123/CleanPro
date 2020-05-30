@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.os.Build;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -12,6 +11,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessInfoAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -56,7 +56,7 @@ public class ProcessInfoActivity extends SimpleActivity {
 
     private void initData(List<FirstJunkInfo> list) {
         ProcessInfoAdapter processIconAdapter = new ProcessInfoAdapter();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new CustomLinearLayoutManger(this));
         mRecyclerView.setAdapter(processIconAdapter);
         processIconAdapter.setData(list);
 

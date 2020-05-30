@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.ImagePreviewPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import java.io.File;
@@ -81,7 +82,7 @@ public class PreviewImageActivity extends BaseActivity<ImagePreviewPresenter> im
             mImageArrayList = new ArrayList<>();
         }
         adapter = new ImagePreviewAdapter(PreviewImageActivity.this, mImageArrayList, position);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PreviewImageActivity.this);
+        LinearLayoutManager linearLayoutManager = new CustomLinearLayoutManger(PreviewImageActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycle_view.setLayoutManager(linearLayoutManager);
         recycle_view.setAdapter(adapter);

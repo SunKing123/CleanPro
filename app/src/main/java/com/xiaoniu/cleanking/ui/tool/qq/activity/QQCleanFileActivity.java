@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.tool.qq.activity;
 
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +19,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.TimeUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -221,10 +221,10 @@ public class QQCleanFileActivity extends BaseActivity<QQCleanFilePresenter> {
         fileAdapterYestoday = new QQCleanFileAdapter(QQCleanFileActivity.this, listDataYestoday);
         fileAdapterInMonth = new QQCleanFileAdapter(QQCleanFileActivity.this, listDataInMonth);
         fileAdapterInHalfYear = new QQCleanFileAdapter(QQCleanFileActivity.this, listDataInHalfYear);
-        recycleViewToday.setLayoutManager(new LinearLayoutManager(QQCleanFileActivity.this));
-        recycleViewYestoday.setLayoutManager(new LinearLayoutManager(QQCleanFileActivity.this));
-        recycleViewMonth.setLayoutManager(new LinearLayoutManager(QQCleanFileActivity.this));
-        recycleViewHalfyear.setLayoutManager(new LinearLayoutManager(QQCleanFileActivity.this));
+        recycleViewToday.setLayoutManager(new CustomLinearLayoutManger(QQCleanFileActivity.this));
+        recycleViewYestoday.setLayoutManager(new CustomLinearLayoutManger(QQCleanFileActivity.this));
+        recycleViewMonth.setLayoutManager(new CustomLinearLayoutManger(QQCleanFileActivity.this));
+        recycleViewHalfyear.setLayoutManager(new CustomLinearLayoutManger(QQCleanFileActivity.this));
         recycleViewToday.setAdapter(fileAdapterToday);
         recycleViewYestoday.setAdapter(fileAdapterYestoday);
         recycleViewMonth.setAdapter(fileAdapterInMonth);
