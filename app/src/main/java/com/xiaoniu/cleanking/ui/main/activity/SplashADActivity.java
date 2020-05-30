@@ -40,6 +40,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.CountDownTimer;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -183,7 +184,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
         StatisticsUtils.customTrackEvent("cold_splash_page_custom", "冷启动创建时",
                 "cold_splash_page", "cold_splash_page");
-        loadTime = System.currentTimeMillis();
+
 
         //初始化清理Sp配置项
         initSpConfig();
@@ -191,6 +192,17 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         //检查是否授予查看手机状态权限
         checkPhoneStatePermission();
     }
+
+    /**
+     * 埋点上报逻辑优化，当在开屏隐退，再次打开，需清零上报冷启动的数据会计算隐退的时长。
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadTime = System.currentTimeMillis();
+    }
+
+
 
     /**
      * 检查是否授权查看手机状态权限
@@ -361,7 +373,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         extParam.put("cold_start_on_time", (System.currentTimeMillis() - loadTime));
         StatisticsUtils.customTrackEvent("cold_start_on_time", "冷启动开启总时长",
                 "cold_splash_page", "cold_splash_page", extParam);
-
+        LogUtils.i("zz--"+(System.currentTimeMillis() - loadTime));
         finish();
     }
 
