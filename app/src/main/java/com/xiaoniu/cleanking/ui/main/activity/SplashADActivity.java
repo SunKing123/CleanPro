@@ -206,7 +206,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 if (aBoolean) {
                     StatisticsUtils.trackClick("identify_device_information_allow_click", "识别设备信息权限允许点击",
                             "cold_splash_page", "cold_splash_page");
-
                     initNiuData();
                 } else {  //授权拒绝
                     initNiuData();
@@ -226,7 +225,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 授权之后分发逻辑
      */
     private void dispatchAfterPermission() {
-        //请求屏蔽开发
+        //请求屏蔽开关
         mPresenter.getAuditSwitch();
         //请求下发配置开关
         if (hasAgreeUserAgreement()) {
@@ -428,9 +427,18 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      */
     public void getAuditSwitchFailure() {
         if (hasAgreeUserAgreement() && !hasSecondaryColdBootStart()) {
-            routeMainActivity();
+            //读取缓存过审开关
+            String auditSwitch = SPUtil.getString(this, AppApplication.AuditSwitch, "0");
+            if (TextUtils.equals(auditSwitch, "1")) {
+                loadAd();
+            } else {
+                routeMainActivity();
+            }
+
         }
     }
+
+
 
     /**
      * 获取过审开关成功

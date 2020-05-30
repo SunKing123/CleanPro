@@ -72,16 +72,17 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
         })
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .timeout(6, TimeUnit.SECONDS)
+                .timeout(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<AuditSwitch>() {
                     @Override
                     public void accept(AuditSwitch auditSwitch) throws Exception {
+                        Log.d("---zz-----------","success");
                         mView.getAuditSwitch(auditSwitch);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.d("--------------","time out");
+                        Log.d("---zz-----------","time out");
                         mView.getAuditSwitchFailure();
                     }
                 });

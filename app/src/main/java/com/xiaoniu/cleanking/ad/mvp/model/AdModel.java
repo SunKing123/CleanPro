@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ad.mvp.model;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -37,7 +36,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -331,7 +329,7 @@ public class AdModel extends BaseModel implements AdContract.Model {
         if(adRequestParamentersBean.adType.equals(AdType.Splash)){
             ApplicationDelegate.getAppComponent().getApiUserService().getSwitchInfoList(body)
                     .subscribeOn(Schedulers.io())
-                    .timeout(6, TimeUnit.SECONDS)
+                    .timeout(1000, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(commonSubscriber);
         }else {

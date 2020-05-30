@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
 import com.xiaoniu.cleanking.ad.delegate.AdRequestDelegate;
 import com.xiaoniu.cleanking.ad.delegate.CSJAdRequestDelegateIml;
 import com.xiaoniu.cleanking.ad.delegate.YLHAdRequestDelegateIml;
+import com.xiaoniu.cleanking.ad.enums.AdType;
 import com.xiaoniu.cleanking.ad.interfaces.AdAgainRequestCallBack;
 import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
 import com.xiaoniu.cleanking.ad.mvp.contract.AdContract;
@@ -22,7 +23,6 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.common.utils.NetworkUtils;
-
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -262,7 +262,23 @@ public class AdPresenter extends RxPresenter<AdContract.View, AdModel> implement
                 if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().adInfotDao()) {
                     AppHolder.getInstance().setSwitchInfoMap(ApplicationDelegate.getAppDatabase().adInfotDao().getAll());
                 }
+                try {
+                    //开屏场景接口超时情况特殊处理(提升ADRequest/AdShow数量)
+                    if (adRequestParamentersBean.adType.equals(AdType.Splash)) {
+                        SwitchInfoList.DataBean adinfo = getAdInfo(AppHolder.getInstance().getSwitchInfoMap(), adRequestParamentersBean);
+                        if (adinfo == null || adShowCallBack == null || !adinfo.isOpen()) {
+                            adShowCallBack.onFailure("暂无本地缓存数据或开关关闭");
+                        } else {
+                            dispatcherUnion(requestData(adinfo), adRequestParamentersBean);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
             }
+
         });
     }
 
