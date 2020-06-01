@@ -208,8 +208,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 检查是否授权查看手机状态权限
      */
     private void checkPhoneStatePermission() {
-        NiuDataAPI.setIMEI("");//大数据激活后的 imei()事件；
-        mSPHelper.setUploadEmpImeiStatus(true);
+        if (!mSPHelper.isUploadEmpImei()) { //空imei只上报一次
+            NiuDataAPI.setIMEI("");//大数据激活后的 imei()事件；
+            mSPHelper.setUploadEmpImeiStatus(true);
+        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             StatisticsUtils.customTrackEvent("identify_device_information", "识别设备信息弹窗曝光",
