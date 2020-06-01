@@ -90,6 +90,7 @@ dependencies {
 
     api project(path: ':takephoto_library')
     api project(':imagepicker')
-    api project(':lottie')
+//    implementation project(':lottie-lib')
+    api 'com.airbnb.android:lottie:2.7.0'
 //    api project(':lottie')
 }

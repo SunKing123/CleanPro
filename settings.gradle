@@ -4,5 +4,5 @@ include ':app',
         ':common',
         ':asmhelp',
         ':xrecyclerview',
-        ':permission',
-        ':lottie'
+        ':permission'
+
