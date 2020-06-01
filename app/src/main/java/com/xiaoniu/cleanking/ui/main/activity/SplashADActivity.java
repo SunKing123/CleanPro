@@ -476,7 +476,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     protected void onResume() {
         super.onResume();
         if (canJump) {
-            next();
+            //开屏过程中home隐藏,再次进入避免黑屏；
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    next();
+                }
+            },200);
+
         }
         canJump = true;
     }
