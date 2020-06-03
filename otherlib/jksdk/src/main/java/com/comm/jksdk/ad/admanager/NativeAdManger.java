@@ -748,7 +748,15 @@ public class NativeAdManger implements AdManager {
      */
     private void showCsjFeedTemplate(Activity activity, AdInfo info,boolean islamp) {
         TTNativeExpressAd ttNativeExpressAd = info.getTtNativeExpressAd();
-        ttNativeExpressAd.setExpressInteractionListener(new TTNativeExpressAd.ExpressAdInteractionListener() {
+        ttNativeExpressAd.setExpressInteractionListener(new TTNativeExpressAd.AdInteractionListener() {
+
+            @Override
+            public void onAdDismiss() {
+                if (mAdListener != null) {
+                    mAdListener.adClose(info);
+                }
+            }
+
             @Override
             public void onAdClicked(View view, int type) {
                 if (mAdListener != null) {
