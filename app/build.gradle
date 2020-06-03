@@ -146,8 +146,7 @@ dependencies {
     implementation project(':common')
     implementation project(':asmhelp')
     implementation project(':xrecyclerview')
-
-
+    implementation 'com.orhanobut:logger:2.2.0'
 
     //推送
     implementation files('libs\\push-core.aar')

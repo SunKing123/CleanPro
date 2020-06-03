@@ -10,6 +10,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bun.miitmdid.core.JLibrary;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.qq.e.comm.managers.GDTADManager;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
@@ -83,6 +85,16 @@ public class ApplicationDelegate implements IApplicationDelegate {
         //优良汇 通过调用此方法初始化 SDK。如果需要在多个进程拉取广告，每个进程都需要初始化 SDK。
         GDTADManager.getInstance().initWith(application, PositionId.APPID);
         setErrorHandler();
+        initLogger();
+    }
+
+    public void initLogger(){
+        Logger.addLogAdapter(new AndroidLogAdapter() {
+            @Override
+            public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
     }
 
 
