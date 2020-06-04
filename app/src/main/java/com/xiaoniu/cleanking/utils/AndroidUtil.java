@@ -272,6 +272,7 @@ public class AndroidUtil {
 
     /**
      * 获取
+     *
      * @param context
      * @return
      */
@@ -282,7 +283,9 @@ public class AndroidUtil {
             PackageInfo packageInfo = packages.get(i);
             //判断是否系统应用
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) { //非系统应用
-
+                if (packageInfo.applicationInfo.packageName.equals(BuildConfig.APPLICATION_ID)) {
+                    continue;
+                }
                 FirstJunkInfo tmpInfo = new FirstJunkInfo();
                 tmpInfo.setAppName(packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString());
                 tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(context.getPackageManager()));
@@ -296,14 +299,15 @@ public class AndroidUtil {
 
     /**
      * 取本地已安装app信息
+     *
      * @param context
      * @param maxCount 最多取几个
      * @return
      */
-    public static ArrayList<FirstJunkInfo> getRandomMaxCountInstallApp(Context context,int maxCount){
+    public static ArrayList<FirstJunkInfo> getRandomMaxCountInstallApp(Context context, int maxCount) {
         ArrayList<FirstJunkInfo> list = getAllReadyInstallApps(context);
         Collections.shuffle(list);
-        int count=list.size()>maxCount?maxCount:list.size();
-        return  new ArrayList<>(list.subList(0, count - 1));
+        int count = list.size() > maxCount ? maxCount : list.size();
+        return new ArrayList<>(list.subList(0, count - 1));
     }
 }
