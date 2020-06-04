@@ -315,7 +315,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {//当前主进程
                     MmkvUtil.saveInt("isback", 0);
                     LogUtils.i("-cgName-----进入前台");
-                    GeekAdSdk.refAdConfig(application);
+//                    GeekAdSdk.refAdConfig(application);
                 } else {//非当前主进程
                     return;
                 }

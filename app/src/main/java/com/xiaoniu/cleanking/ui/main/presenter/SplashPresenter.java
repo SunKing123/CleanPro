@@ -1,7 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.bean.ConfigBean;
+import com.comm.jksdk.config.listener.ConfigListener;
 import com.comm.jksdk.http.utils.LogUtils;
+import com.comm.jksdk.utils.JsonUtils;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.app.Constant;
@@ -16,6 +19,8 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -122,9 +127,9 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
         if(null==mActivity)
             return;
         LogUtils.i("-cgName-----冷启动进入前台");
-        GeekAdSdk.refAdConfig(mActivity);
+//        GeekAdSdk.refAdConfig(mActivity);
         //1.4.5版本走本地配置
-       /* GeekAdSdk.requestConfig(new ConfigListener() {
+        GeekAdSdk.requestConfig(new ConfigListener() {
             @Override
             public void adSuccess(List<ConfigBean.AdListBean> configList) {
                 String config = JsonUtils.encode(configList);
@@ -137,7 +142,7 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
                 LogUtils.i(errorCode + "----config--error---:" + errorMsg);
 
             }
-        });*/
+        });
     }
 
     /**

@@ -252,6 +252,7 @@ public class AdsConfig {
         if(TextUtils.isEmpty(confString)){
             return null;
         }
+        LogUtils.d("zz---"+postion.trim()+"----"+confString);
         ConfigBean.AdListBean adListBeans = new Gson().fromJson(confString,ConfigBean.AdListBean.class);
         return adListBeans;
 //        // 从sp获取配置信息

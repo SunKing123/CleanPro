@@ -100,7 +100,7 @@ public class AdConfigActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
                 String visionName = TTAdSdk.getAdManager().getSDKVersion();
-                LogUtils.e("visionName>>>"+visionName);
+                LogUtils.e("穿山甲visionName>>>"+visionName);
                 break;
             case R.id.button_init:
                 String product = editProduct.getText().toString().trim();
