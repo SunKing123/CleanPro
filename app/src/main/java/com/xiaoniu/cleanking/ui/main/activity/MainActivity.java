@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppConfig;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -71,7 +73,7 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
-import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
+import static com.xiaoniu.cleanking.keeplive.config.RunMode.POWER_SAVING;
 
 /**
  * main主页面
@@ -227,9 +229,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取定位权限
         mPresenter.requestLocationPermission();
         //测试入口
-       /* if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
-        }*/
+        }
     }
 
     @Override
@@ -592,7 +594,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 //启动保活服务
                 KeepAliveManager.toKeepAlive(
                         getApplication()
-                        , HIGH_POWER_CONSUMPTION,
+                        , POWER_SAVING,
                         mContext.getString(R.string.push_content_default_title),
                         mContext.getString(R.string.push_content_default_content),
                         R.mipmap.applogo,
