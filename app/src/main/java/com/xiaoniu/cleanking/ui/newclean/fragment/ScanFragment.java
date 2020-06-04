@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -32,7 +34,6 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
-import androidx.appcompat.widget.AppCompatTextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -136,8 +137,10 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             }
             if (msg.what == 2) {
                 try {
-                    ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
-                    ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap());
+                    if (getActivity()!=null){
+                        ((NowCleanActivity) getActivity()).setCountEntity(new CountEntity());
+                        ((NowCleanActivity) getActivity()).setJunkGroups(new HashMap<>());
+                    }
                     mPresenter.startScan(ivs);
                     mPresenter.startCleanScanAnimation01(lottieRipple);
                     type = TYPE_SCANING;
@@ -209,20 +212,22 @@ public class ScanFragment extends BaseFragment<NewScanPresenter> {
             return;
         if (mCountEntity != null) {
             if (mCountEntity.getNumber() > 0) {
-                if(null!=lottieRipple){
+                if (null != lottieRipple) {
                     lottieRipple.cancelAnimation();
                     lottieRipple.clearAnimation();
                 }
 
-                if(null!=mLottieHomeView){
+                if (null != mLottieHomeView) {
                     mLottieHomeView.cancelAnimation();
                     mLottieHomeView.clearAnimation();
                 }
 
                 mCountEntity = CleanUtil.formatShortFileSize(CleanUtil.getTotalSize(junkGroups));
-                ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
-                ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
-                ((NowCleanActivity) getActivity()).scanFinish();
+                if (getActivity() != null) {
+                    ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
+                    ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
+                    ((NowCleanActivity) getActivity()).scanFinish();
+                }
                 mArrowRight.setVisibility(VISIBLE);
             } else {
                 //没有扫描到垃圾

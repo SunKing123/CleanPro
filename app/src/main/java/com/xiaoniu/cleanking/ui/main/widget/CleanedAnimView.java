@@ -443,7 +443,9 @@ public class CleanedAnimView extends RelativeLayout {
      * @param countEntity
      */
     public void startClean(AnimatorSet animatorSet, CountEntity countEntity) {
-        ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.valueOf(countEntity.getTotalSize()), 0);
+        if (countEntity == null)
+            return;
+        ValueAnimator valueAnimator = ObjectAnimator.ofFloat(Float.parseFloat(countEntity.getTotalSize()), 0);
         valueAnimator.setDuration(3000);
         String unit = countEntity.getUnit();
         valueAnimator.addUpdateListener(animation -> {

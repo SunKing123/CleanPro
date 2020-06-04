@@ -26,6 +26,7 @@ import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.utils.DisplayUtil;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -72,6 +73,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -550,7 +552,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
                     @Override
                     public void adClose(AdInfo info) {
+                        LogUtils.e("AdInfo:"+new Gson().toJson(info));
                         if (null == info) return;
+                        mCenterAdFramelayout.setVisibility(View.GONE);
                         StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
                     }
 
