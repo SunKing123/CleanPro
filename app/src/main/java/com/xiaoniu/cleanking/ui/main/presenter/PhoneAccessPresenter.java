@@ -45,11 +45,14 @@ import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -126,21 +129,12 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     //当前sdk版本高于22时
     @SuppressLint("CheckResult")
     public void getAccessAbove22() {
-//        mView.showLoadingDialog();
-        Observable.create((ObservableOnSubscribe<List<ActivityManager.RunningAppProcessInfo>>) e -> {
-            //获取到可以加速的应用名单
-            List<ActivityManager.RunningAppProcessInfo> listApp = getProcessAbove();
-
-            List<ActivityManager.RunningAppProcessInfo> listTemp = new ArrayList<>();
-            for (int i = 0; i < listApp.size(); i++) {
-                if (!isSystemApp(mView, listApp.get(i).processName)) {
-                    listTemp.add(listApp.get(i));
-                }
-            }
-            e.onNext(listTemp);
+        Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
+            e.onNext(AndroidUtil.getRandomMaxCountInstallApp(mView.getBaseContext(),20));
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
+                    if (mView == null) return;
                     mView.cancelLoadingDialog();
                     mView.getAccessListAbove22(strings);
                 });
@@ -173,6 +167,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             return false;
         }
     }
+
 
     /*public AlertDialog alertBanLiveDialog(Context context, int deleteNum, final ClickListener okListener) {
         final AlertDialog dlg = new AlertDialog.Builder(context).create();

@@ -140,12 +140,14 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
         checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
 
-        if (totalCountEntity != null) {
-            tvSize.setText(totalCountEntity.getTotalSize());
-            tvUnit.setText(totalCountEntity.getUnit());
+
+        tvSize.setText(totalCountEntity.getTotalSize());
+        tvUnit.setText(totalCountEntity.getUnit());
+        if (checkCountEntity != null) {
             tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
             doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
         }
+
 
         mExpandableListView.setGroupIndicator(null);
         mExpandableListView.setChildIndicator(null);
@@ -170,10 +172,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 mJunkGroups.put(groupPosition, junkGroup);
                 checkedSize = CleanUtil.getTotalSize(mJunkGroups);
                 checkCountEntity = CleanUtil.formatShortFileSize(checkedSize);
-                if (checkCountEntity != null) {
-                    tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
-                    doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
-                }
+                tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+                doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
             }
 
             @Override
@@ -183,11 +183,8 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 mJunkGroups.put(groupPosition, junkGroup);
                 checkedSize = CleanUtil.getTotalSize(mJunkGroups);
                 checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(checkedSize);
-                if (totalCountEntity != null) {
-                    tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
-                    doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
-
-                }
+                tvCheckedSize.setText(mContext.getString(R.string.select_already) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
+                doJunkClean.setText(mContext.getString(R.string.text_clean) + checkCountEntity.getTotalSize() + checkCountEntity.getUnit());
             }
         });
     /*    mAdapter.setOnItemSe lectListener(() -> {
@@ -321,8 +318,11 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         if (!viewLottieTop.isAnimating()) {
             viewLottieTop.playAnimation();
         }
-        tvCleanCount.setText(checkCountEntity.getTotalSize());
-        tvCleanUnit.setText(checkCountEntity.getUnit());
+        if (checkCountEntity != null) {
+            tvCleanCount.setText(checkCountEntity.getTotalSize());
+            tvCleanUnit.setText(checkCountEntity.getUnit());
+        }
+
 
         viewLottieBottom.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
@@ -358,12 +358,16 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                 if (null == tvCleanCount) return;
                 float animatedValue = (float) animation.getAnimatedFraction();
                 if (animatedValue <= 0.74f) {
-                    float currentValue = Float.valueOf(checkCountEntity.getTotalSize()) * (0.74f - animatedValue);
-                    tvCleanCount.setText(String.format("%s", Math.round(currentValue)));
-                    tvCleanUnit.setText(checkCountEntity.getUnit());
+                    if (checkCountEntity != null) {
+                        float currentValue = Float.parseFloat(checkCountEntity.getTotalSize()) * (0.74f - animatedValue);
+                        tvCleanCount.setText(String.format("%s", Math.round(currentValue)));
+                        tvCleanUnit.setText(checkCountEntity.getUnit());
+                    }
                 } else if (animatedValue > 0.76f && animatedValue < 0.76f) {
                     tvCleanCount.setText("0");
-                    tvCleanUnit.setText(checkCountEntity.getUnit());
+                    if (checkCountEntity != null) {
+                        tvCleanUnit.setText(checkCountEntity.getUnit());
+                    }
                 } else {
                     tvCleanCount.setVisibility(View.GONE);
                     tvCleanUnit.setVisibility(View.GONE);

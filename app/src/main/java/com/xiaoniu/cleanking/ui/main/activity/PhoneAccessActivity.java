@@ -246,35 +246,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         Intent intent = getIntent();
         addClick(intent);
 
-        if (!PermissionUtils.isUsageAccessAllowed(this)) {
-            NiuDataAPI.onPageStart("boost_authorization_page_view_page", "用户在加速授权页浏览");
-            NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_page", "boost_authorization_page_view_page", "用户在加速授权页浏览");
-            //umeng --  android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@bb09a5f is not valid; is your activity running?
-            if (isFinishing()) return;
-            mAlertDialog = mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
-                @Override
-                public void clickOKBtn() {
-                    isClick = true;
-                    try {
-                        //开启权限
-                        //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
-                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                        startActivity(intent);
-                    } catch (Exception e) {
-                    }
-                    StatisticsUtils.trackClick("set_up_click", "用户在加速授权页点击【前往设置】按钮", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_page");
-                    startActivity(PhonePremisActivity.class);
-                }
-
-                @Override
-                public void cancelBtn() {
-                    StatisticsUtils.trackClick("close_click", "用户在加速授权页点击【关闭】按钮", AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_page");
-                    mContext.finish();
-                }
-            });
-        } else {
-            startCleanAnim();
-        }
+        startCleanAnim();
 
         iv_back.setOnClickListener(v -> {
             mIsFinish = true;
@@ -390,6 +362,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (mAlertDialog != null) mAlertDialog.cancel();
         //小飞机飞入动画
         acceview.planFlyInAnimator();
+
         if (Build.VERSION.SDK_INT >= 26) {
             mPresenter.getAccessAbove22();
             /*long lastCheckTime = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
@@ -429,14 +402,14 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strNum = "521";
             strUnit = "MB";
             showCleanFinishUI(strNum, strUnit);
-        }else{
+        } else {
             //        mTvSpeed.setVisibility(View.GONE);
 //        mLineAccess.setCompoundDrawables(null, null, null, null);
 //        mLineAccess.setText(getString(R.string.tool_speed_now));
             StatisticsUtils.trackClick("accelerate_clean_button_click", "用户在加速诊断页点击【一键清理】按钮", "boost_scan_page", "boost_scan_result_page");
             ArrayList<FirstJunkInfo> junkTemp = new ArrayList<>();
             ArrayList<FirstJunkInfo> listdata = belowAdapter.getListImage();
-            if(null!= listdata && listdata.size()>0){
+            if (null != listdata && listdata.size() > 0) {
                 for (FirstJunkInfo info : listdata) {
                     if (info.isSelect()) {
                         junkTemp.add(info);
@@ -463,7 +436,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                     SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, mTotalSizesCleaned);
                 }
                 computeTotalSizeDeleteClick(junkTemp);
-            }else{
+            } else {
                 //设置默认值
                 strNum = "521";
                 strUnit = "MB";
@@ -483,22 +456,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             isFromProtect = false;
             return;
         }
-
-        if (isClick) {
-            if (PermissionUtils.isUsageAccessAllowed(this)) {
-                if (mAlertDialog != null)
-                    mAlertDialog.cancel();
-                startCleanAnim();
-                EventBus.getDefault().post(new InternalStoragePremEvent());
-            } else {
-                NiuDataAPI.onPageStart("boost_authorization_fail_page_view_page", "加速授权失败页浏览");
-                NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_authorization_fail_page", "boost_authorization_fail_page_view_page", "加速授权失败页浏览");
-                ToastUtils.showShort(getString(R.string.tool_get_premis));
-                if (isDoubleBack) finish();
-                isDoubleBack = true;
-            }
-        }
-        isClick = false;
     }
 
     @Override
@@ -519,6 +476,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             setAdapter(listInfo);
         }
     }
+
 
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
@@ -600,63 +558,18 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     //Android O以上的
     PackageManager packageManager = AppApplication.getInstance().getPackageManager();
 
-    public void getAccessListAbove22(List<ActivityManager.RunningAppProcessInfo> listInfo) {
-        if (listInfo.size() == 0) {
-            //umeng --  android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@bb09a5f is not valid; is your activity running?
-            if (isFinishing()) return;
-            mPresenter.showPermissionDialog(PhoneAccessActivity.this, new PhoneAccessPresenter.ClickListener() {
-                @Override
-                public void clickOKBtn() {
-                    try {
-                        //开启权限
-                        //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
-                        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                    } catch (Exception e) {
-                    }
-                    startActivity(PhonePremisActivity.class);
-                }
-
-                @Override
-                public void cancelBtn() {
-
-                }
-            });
-
+    public void getAccessListAbove22(ArrayList<FirstJunkInfo> aboveListInfo) {
+        long total = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0L);
+        long un = 80886656;
+        if (total == 0) {
+            un = 80886656;
         } else {
-            ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
-            if (listInfo.size() < 15) {
-                for (ActivityManager.RunningAppProcessInfo info : listInfo) {
-                    //清理管家极速版app加入默认白名单
-                    if (!SpCacheConfig.APP_ID.equals(info.processName)) {
-                        FirstJunkInfo mInfo = new FirstJunkInfo();
-                        mInfo.setAppPackageName(info.processName);
-                        mInfo.setAppName(info.processName);
-                        aboveListInfo.add(mInfo);
-                    }
-                }
-            } else {
-                for (int i = 0; i < 15; i++) {
-                    //清理管家极速版app加入默认白名单
-                    if (!SpCacheConfig.APP_ID.equals(listInfo.get(i).processName)) {
-                        FirstJunkInfo mInfo = new FirstJunkInfo();
-                        mInfo.setAppPackageName(listInfo.get(i).processName);
-                        mInfo.setAppName(listInfo.get(i).processName);
-                        aboveListInfo.add(mInfo);
-                    }
-                }
-            }
-
-            long total = SPUtil.getLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0L);
-            long un = 80886656;
-            if (total == 0) {
-                un = 80886656;
-            } else {
-                un = total / aboveListInfo.size();
-            }
-            setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);
-            computeTotalSize(aboveListInfo);
-            setAdapter(aboveListInfo);
+            un = total / aboveListInfo.size();
         }
+
+        setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);
+        computeTotalSize(aboveListInfo);
+        setAdapter(aboveListInfo);
     }
 
     private void setAppInfo(ArrayList<FirstJunkInfo> aboveListInfo, List<PackageInfo> listP, long un) {
