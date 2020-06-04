@@ -225,6 +225,15 @@
             android:text="外部非全屏插屏"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_16sp" />
+
+
+
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
 
 </LinearLayout>

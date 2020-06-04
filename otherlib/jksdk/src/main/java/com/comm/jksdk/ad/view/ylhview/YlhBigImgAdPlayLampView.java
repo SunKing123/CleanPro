@@ -17,8 +17,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.view.CommAdView;
-import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.comm.jksdk.widget.TopRoundImageView;
 import com.qq.e.ads.nativ.NativeADEventListener;
@@ -28,7 +26,6 @@ import com.qq.e.comm.util.AdError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
   *
@@ -60,7 +57,7 @@ public class YlhBigImgAdPlayLampView extends YlhAdView {
     TextView downTb; //广告下载按钮
     View animationView; //跑马灯的view
 //    ImageView adLogo;
-
+    ImageView tv_ad_close;
     private boolean isLamp; //是否带走马灯
 
     private AnimationDrawable mAnimationDrawable;
@@ -96,7 +93,7 @@ public class YlhBigImgAdPlayLampView extends YlhAdView {
 
     @Override
     public void initView() {
-
+        tv_ad_close = findViewById(R.id.tv_ad_close);
         nativeAdContainer = findViewById(R.id.rl_ad_item_root);
         adImIayout = findViewById(R.id.ad_im_layout);
         brandIconIm = findViewById(R.id.brand_icon_im);
@@ -112,9 +109,9 @@ public class YlhBigImgAdPlayLampView extends YlhAdView {
         int adlogoWidth = DisplayUtil.dp2px(mContext, 30);
         int adlogoHeight = DisplayUtil.dp2px(mContext, 12);
         adlogoParams = new FrameLayout.LayoutParams(adlogoWidth, adlogoHeight);
-        adlogoParams.gravity = Gravity.BOTTOM;
-        adlogoParams.bottomMargin = DisplayUtil.dp2px(mContext, 8);
-        adlogoParams.leftMargin = (int) (getContext().getResources().getDimension(R.dimen.common_ad_img_width_98dp) - adlogoWidth);
+        adlogoParams.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+//        adlogoParams.bottomMargin = DisplayUtil.dp2px(mContext, 8);
+//        adlogoParams.leftMargin = (int) (getContext().getResources().getDimension(R.dimen.common_ad_img_width_98dp) - adlogoWidth);
         requestOptions = new RequestOptions()
                 .transforms(new RoundedCorners(DisplayUtil.dp2px(mContext, 3)))
                 .error(R.color.returncolor);//图片加载失败后，显示的图片
@@ -214,6 +211,14 @@ public class YlhBigImgAdPlayLampView extends YlhAdView {
             public void onADStatusChanged() {
 //                updateClickDesc(tvDownload, mNativeADData);
                 updateAdAction(downTb, ad);
+            }
+        });
+
+        tv_ad_close.setVisibility(VISIBLE);
+        tv_ad_close.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                adClose(adInfo);
             }
         });
 

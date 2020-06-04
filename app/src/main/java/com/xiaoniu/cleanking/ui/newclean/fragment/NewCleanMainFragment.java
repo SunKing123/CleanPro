@@ -435,60 +435,61 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null == getActivity() || null == mTopAdFramelayout) return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadNativeTemplateAd(getActivity(), PositionId.AD_HOME_TOP_MB
-                , Float.valueOf(DisplayUtil.px2dp(getActivity(), DisplayUtil.getScreenWidth(getActivity())) - 28)
-                , new AdListener() {
-                    @Override
-                    public void adSuccess(AdInfo info) {
-                        if (null != info) {
-                            Log.d(TAG, "adSuccess---home--top =" + info.toString());
-                            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                            if (null != mTopAdFramelayout && null != info.getAdView()) {
-                                mTopContentView.setVisibility(View.GONE);
-                                mTopAdFramelayout.setVisibility(VISIBLE);
-                                mTopAdFramelayout.removeAllViews();
-                                mTopAdFramelayout.addView(info.getAdView());
-                            }
-                        }
+        adManager.loadAd(getActivity(), PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null != info) {
+                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                    if (null != mTopAdFramelayout && null != info.getAdView()) {
+                        mTopContentView.setVisibility(View.GONE);
+                        mTopAdFramelayout.setVisibility(VISIBLE);
+                        mTopAdFramelayout.removeAllViews();
+                        mTopAdFramelayout.addView(info.getAdView());
                     }
+                }
+            }
 
-                    @Override
-                    public void adExposed(AdInfo info) {
-                        if (null == info) return;
-                        Log.d(TAG, "adExposed---home--top");
-                        mIsTopAdExposed = true;
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-                    }
+            @Override
+            public void adExposed(AdInfo info) {
+                if (null == info) return;
+                Log.d(TAG, "adExposed---home--top");
+                mIsTopAdExposed = true;
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+            }
 
-                    @Override
-                    public void adClicked(AdInfo info) {
-                        Log.d(TAG, "adClicked---home--top");
-                        if (null == info) return;
-                        if (mIsTopAdExposed) {
-                            StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-                        } else {
-                            StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-                        }
-                        if (info.getAdClickType() == 2) { //2=详情
-                            mIsClickAdTopDetail = true;
-                        } else {
-                            mIsClickAdTopDetail = false;
-                        }
-                    }
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "adClicked---home--top");
+                if (null == info) return;
+                if (mIsTopAdExposed) {
+                    StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+                } else {
+                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                }
+                if (info.getAdClickType() == 2) { //2=详情
+                    mIsClickAdTopDetail = true;
+                } else {
+                    mIsClickAdTopDetail = false;
+                }
+            }
 
-                    @Override
-                    public void adClose(AdInfo info) {
-                        if (null == info) return;
-                        StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-                    }
+            @Override
+            public void adClose(AdInfo info) {
+                if (null == info) return;
+                mTopContentView.setVisibility(VISIBLE);
+                mTopAdFramelayout.setVisibility(View.GONE);
+                mTopAdFramelayout.removeAllViews();
+//                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+            }
 
-                    @Override
-                    public void adError(AdInfo info, int errorCode, String errorMsg) {
-                        if (null == info) return;
-                        Log.d(TAG, "adError---home--top=" + info.toString());
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
-                    }
-                });
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null == info) return;
+                Log.d(TAG, "adError---home--top=" + info.toString());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+            }
+        });
     }
 
     /**

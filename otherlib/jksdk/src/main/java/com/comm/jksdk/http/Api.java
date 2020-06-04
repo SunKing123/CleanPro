@@ -14,18 +14,18 @@ public interface Api {
     String WEATHER_DOMAIN_NAME = "weather";
 
     class URL_DEV {//开发环境
-        public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-dev-default.fqt188.com/";
+        public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-dev-default.xiaoniuhy.com/";
     }
 
     class URL_TEST {//测试环境
         //        public static final String APP_WEATHER_DOMAIN = "http://testadsenseapi.hellogeek.com/adsenseapi/"; //测试环境
         //广告中心整合
-        public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-fat-default.fqt188.com/"; //测试环境
+        public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-fat-default.xiaoniuhy.com/"; //测试环境
     }
 
     class URL_UAT {//预发布环境
         //广告中心整合
-        public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-fat-default.fqt188.com/"; //测试环境
+        public static final String APP_WEATHER_DOMAIN = "http://clsystem-mclean-fat-default.xiaoniuhy.com/"; //测试环境
     }
 
     class URL_PRODUCT {//生产环境

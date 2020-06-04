@@ -6,9 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -24,10 +30,11 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
-import com.xiaoniu.cleanking.utils.quick.QuickUtils;
-import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+
+import static android.view.View.VISIBLE;
 
 /**
  * deprecation:调试页面
@@ -36,7 +43,8 @@ import com.xiaoniu.common.utils.ToastUtils;
  */
 public class DebugActivity extends BaseActivity {
     private TextView tv_hide_icon;
-
+    private FrameLayout frame_layout;
+    private static final String TAG = "DebugActivity";
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -54,6 +62,7 @@ public class DebugActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        frame_layout = findViewById(R.id.frame_layout);
         tv_hide_icon = findViewById(R.id.tv_hide_icon);
         tv_hide_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,7 +279,54 @@ public class DebugActivity extends BaseActivity {
 
     //获取广告配置
     public void gotoPop(View view) {
-        startPop(this);
+//        startPop(this);
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(this, PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null != info) {
+                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                    if (null != frame_layout && null != info.getAdView()) {
+
+                        frame_layout.setVisibility(VISIBLE);
+                        frame_layout.removeAllViews();
+                        frame_layout.addView(info.getAdView());
+                    }
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                if (null == info) return;
+                Log.d(TAG, "adExposed---home--top");
+          
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "adClicked---home--top");
+                if (null == info) return;
+
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                if (null == info) return;
+
+                frame_layout.setVisibility(View.GONE);
+                frame_layout.removeAllViews();
+//                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null == info) return;
+                Log.d(TAG, "adError---home--top=" + info.toString());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+            }
+        });
     }
 
 

@@ -592,7 +592,7 @@
       "productId": 1,
       "adVersion": 4,
       "adPosition": "homepage_ad_1",
-      "adStyle": "BIG_IMG_PLAY_BUTTON_LAMP",
+      "adStyle": "BIG_IMG_PLAY_BUTTON",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [

@@ -81,4 +81,15 @@
         android:id="@+id/animation_lamp"
         android:layout_width="match_parent"
         android:layout_height="233dp"/>
+
+    <ImageView
+        android:id="@+id/tv_ad_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:padding="9dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/insert_screen_ad_close"
+        android:visibility="gone" />
 </RelativeLayout>

@@ -25,14 +25,12 @@ import com.bytedance.sdk.openadsdk.TTImage;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.view.CommAdView;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.comm.jksdk.widget.TopRoundImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
   *
@@ -56,7 +54,7 @@ public class ChjBigImgAdPlayLampView extends CHJAdView {
     private FrameLayout.LayoutParams adlogoParams;
 
     RelativeLayout nativeAdContainer;
-    ImageView brandIconIm; //广告商图标
+    ImageView brandIconIm,tv_ad_close; //广告商图标
     TextView adTitleTv; //广告的title
     TextView adDescribeTv; //广告描述
     TopRoundImageView adIm; //广告主体图片
@@ -99,7 +97,7 @@ public class ChjBigImgAdPlayLampView extends CHJAdView {
 
     @Override
     public void initView() {
-
+        tv_ad_close = findViewById(R.id.tv_ad_close);
         nativeAdContainer = findViewById(R.id.rl_ad_item_root);
         brandIconIm = findViewById(R.id.brand_icon_im);
         adTitleTv = findViewById(R.id.ad_title_tv);
@@ -231,6 +229,13 @@ public class ChjBigImgAdPlayLampView extends CHJAdView {
 //                nativeAdContainer.setVisibility(View.GONE);
 //                ToastUtils.setToastStrShort("交互类型异常");
         }
+        tv_ad_close.setVisibility(VISIBLE);
+        tv_ad_close.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                adClose(adInfo);
+            }
+        });
 
     }
     private void bindDownLoadStatusController( final TTFeedAd ad) {
