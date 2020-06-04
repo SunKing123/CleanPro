@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
 import com.xiaoniu.common.utils.DeviceUtils;
@@ -26,6 +28,7 @@ import com.xiaoniu.common.utils.ToastUtils;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -265,5 +268,42 @@ public class AndroidUtil {
             return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         }
         return 65;
+    }
+
+    /**
+     * 获取
+     * @param context
+     * @return
+     */
+    public static ArrayList<FirstJunkInfo> getAllReadyInstallApps(Context context) {
+        ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
+        List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
+        for (int i = 0; i < packages.size(); i++) {
+            PackageInfo packageInfo = packages.get(i);
+            //判断是否系统应用
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) { //非系统应用
+
+                FirstJunkInfo tmpInfo = new FirstJunkInfo();
+                tmpInfo.setAppName(packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString());
+                tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(context.getPackageManager()));
+                tmpInfo.setAppPackageName(packageInfo.applicationInfo.packageName);
+                tmpInfo.setAppProcessName(packageInfo.applicationInfo.processName);
+                aboveListInfo.add(tmpInfo);
+            }
+        }
+        return aboveListInfo;
+    }
+
+    /**
+     * 取本地已安装app信息
+     * @param context
+     * @param maxCount 最多取几个
+     * @return
+     */
+    public static ArrayList<FirstJunkInfo> getRandomMaxCountInstallApp(Context context,int maxCount){
+        ArrayList<FirstJunkInfo> list = getAllReadyInstallApps(context);
+        Collections.shuffle(list);
+        int count=list.size()>maxCount?maxCount:list.size();
+        return  new ArrayList<>(list.subList(0, count - 1));
     }
 }
