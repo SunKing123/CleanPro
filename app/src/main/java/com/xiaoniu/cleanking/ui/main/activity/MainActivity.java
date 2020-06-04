@@ -73,7 +73,7 @@ import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
-import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
+import static com.xiaoniu.cleanking.keeplive.config.RunMode.POWER_SAVING;
 
 /**
  * main主页面
@@ -594,7 +594,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 //启动保活服务
                 KeepAliveManager.toKeepAlive(
                         getApplication()
-                        , HIGH_POWER_CONSUMPTION,
+                        , POWER_SAVING,
                         mContext.getString(R.string.push_content_default_title),
                         mContext.getString(R.string.push_content_default_content),
                         R.mipmap.applogo,

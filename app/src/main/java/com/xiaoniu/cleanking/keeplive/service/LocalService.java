@@ -275,11 +275,9 @@ public final class LocalService extends Service {
         public void onReceive(final Context context, Intent intent) {
             if (intent.getAction().equals("_ACTION_SCREEN_OFF")) {
                 isPause = false;
-                play();
                 startActivity(context);
             } else if (intent.getAction().equals("_ACTION_SCREEN_ON")) {
                 isPause = true;
-                pause();
                 startActivity(context);
             }
         }

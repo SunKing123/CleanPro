@@ -12,7 +12,7 @@ import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 
-import static com.xiaoniu.cleanking.keeplive.config.RunMode.HIGH_POWER_CONSUMPTION;
+import static com.xiaoniu.cleanking.keeplive.config.RunMode.POWER_SAVING;
 
 /**
  * @author lvdongdong
@@ -58,7 +58,7 @@ public class KSActivity extends SimpleActivity {
                 //启动保活服务
                 KeepAliveManager.toKeepAlive(
                         getApplication()
-                        , HIGH_POWER_CONSUMPTION,
+                        , POWER_SAVING,
                         mContext.getString(R.string.push_content_default_title),
                         mContext.getString(R.string.push_content_default_content),
                         R.mipmap.applogo,
