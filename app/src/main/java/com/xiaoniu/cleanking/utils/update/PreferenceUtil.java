@@ -1535,9 +1535,6 @@ public class PreferenceUtil {
     public static boolean getIsNotificationEnabled() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
-
     }
-
-
 
 }

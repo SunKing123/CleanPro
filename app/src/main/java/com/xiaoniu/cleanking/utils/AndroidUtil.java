@@ -294,6 +294,12 @@ public class AndroidUtil {
         return aboveListInfo;
     }
 
+    /**
+     * 取本地已安装app信息
+     * @param context
+     * @param maxCount 最多取几个
+     * @return
+     */
     public static ArrayList<FirstJunkInfo> getRandomMaxCountInstallApp(Context context,int maxCount){
         ArrayList<FirstJunkInfo> list = getAllReadyInstallApps(context);
         Collections.shuffle(list);
