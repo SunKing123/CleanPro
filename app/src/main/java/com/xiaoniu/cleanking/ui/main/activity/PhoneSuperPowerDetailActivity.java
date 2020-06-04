@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.adapter.SuperPowerCleanAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -27,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PowerGroupInfo;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
@@ -46,6 +48,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * 超强省电 正在分析中...
@@ -305,7 +308,8 @@ public class PhoneSuperPowerDetailActivity extends BaseActivity implements View.
 
         ArrayList<FirstJunkInfo> runningProcess;
         if (Build.VERSION.SDK_INT >= 26) {
-            runningProcess = getProcessAbove();
+           // runningProcess = getProcessAbove();
+            runningProcess= AndroidUtil.getRandomMaxCountInstallApp(this,20);
         } else {
             runningProcess = mFileQueryUtils.getRunningProcess();
         }

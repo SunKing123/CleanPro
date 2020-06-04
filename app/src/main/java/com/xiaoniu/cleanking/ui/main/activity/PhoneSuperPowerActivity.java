@@ -85,12 +85,18 @@ public class PhoneSuperPowerActivity extends SimpleActivity {
         mTvClean = findViewById(R.id.tv_clean);
         mTvClean.setOnClickListener(v -> {
             StatisticsUtils.trackClick("powersave_guidance_page_clean_click", "用户在省电引导页点击【立即清理】", sourcePage, currentPage);
-            if (!isUsageAccessAllowed() && !isFinishing()) {
+           /* if (!isUsageAccessAllowed() && !isFinishing()) {
                 showPermissionDialog();
             } else if (!isFinishing()) {
                 startActivity(PhoneSuperPowerDetailActivity.class);
                 finish();
+            }*/
+
+            if (!isFinishing()) {
+                startActivity(PhoneSuperPowerDetailActivity.class);
+                finish();
             }
+
         });
     }
 
