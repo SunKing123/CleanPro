@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:paddingTop="@dimen/dimen_12dp"
+    android:paddingBottom="@dimen/dimen_12dp">
+
+    <ImageView
+        android:id="@+id/iv_item_main_s2"
+        android:layout_width="@dimen/dimen_32dp"
+        android:layout_height="@dimen/dimen_32dp"
+        android:src="@drawable/icon_yjjs"
+        app:layout_constraintBottom_toTopOf="@+id/tv_main_table_s2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_main_table_s2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_12dp"
+        tools:text="11111111111111111111111111111"
+        android:textColor="@color/color_323232"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_item_main_s2" />
+
+    <android.widget.Space
+        android:id="@+id/space"
+        android:layout_width="21dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@id/iv_item_main_s2"
+        app:layout_constraintRight_toRightOf="@id/iv_item_main_s2"
+        app:layout_constraintTop_toTopOf="@id/iv_item_main_s2" />
+
+    <ImageView
+        android:id="@+id/iv_tick_s2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_acc"
+        android:src="@drawable/icon_finish_clean_g"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/space"
+        app:layout_constraintTop_toTopOf="@id/space" />
+
+    <TextView
+        android:id="@+id/tv_corner_mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tv_corner_mark"
+        android:padding="2px"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/space"
+        app:layout_constraintTop_toTopOf="@id/space"
+        tools:text="有潜在危险" />
+
+    <ImageView
+        android:id="@+id/iv_line"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_line_ver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>
