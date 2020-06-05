@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.bean.MainTableItem;
+import com.xiaoniu.cleanking.ui.main.bean.VirusLlistEntity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -39,13 +40,19 @@ public class MainTableView extends RecyclerView {
     //电量优化按钮
     private ItmMTView itmBattery;
     //病毒查杀
-    private ItmMTView itmKillVirus;
+    private ItmMTView itmMultiple;
 
     private RecycleViewAdapter adapter;
 
+    int mpIndex = -1;
+
+    ArrayList<VirusLlistEntity> multiples;
+
+    MainTableItem multipleItem = new MainTableItem(5, MainTableItem.TAG_KILL_VIRUS, R.drawable.icon_virus, "病毒查杀");
+
     MainTableItem[] items = new MainTableItem[]{
             new MainTableItem(2, MainTableItem.TAG_ACC, R.drawable.icon_yjjs, "一键加速"),
-            new MainTableItem(5, MainTableItem.TAG_KILL_VIRUS, R.drawable.icon_virus, "病毒查杀"),
+            multipleItem,
             new MainTableItem(1, MainTableItem.TAG_COOL, R.drawable.icon_home_jw, "手机降温"),
             new MainTableItem(4, MainTableItem.TAG_BATTER, R.drawable.icon_power, "超强省电"),
             new MainTableItem(1, MainTableItem.TAG_CLEAN_WX, R.drawable.icon_home_wx, "微信专清"),
@@ -67,10 +74,11 @@ public class MainTableView extends RecyclerView {
     }
 
     public void init() {
+        initVirus();
         itmAcc = new ItmMTView(mContext);
         itmNotify = new ItmMTView(mContext);
         itmBattery = new ItmMTView(mContext);
-        itmKillVirus = new ItmMTView(mContext);
+        itmMultiple = new ItmMTView(mContext);
         adapter = new RecycleViewAdapter();
         addItemDecoration(new GridLayoutDivider(mContext, LinearLayoutManager.HORIZONTAL, R.drawable.icon_line_hor));
         setNestedScrollingEnabled(false);
@@ -81,10 +89,19 @@ public class MainTableView extends RecyclerView {
         adapter.setData(Arrays.asList(items));
     }
 
+    /**
+     * the multiple data
+     */
+    private void initVirus() {
+        multiples = new ArrayList<>();
+        multiples.add(new VirusLlistEntity(R.drawable.icon_virus, getString(R.string.virus_kill).toString()));
+        multiples.add(new VirusLlistEntity(R.drawable.icon_network, getString(R.string.network_quicken).toString()));
+        multiples.add(new VirusLlistEntity(R.drawable.icon_game_home, getString(R.string.game_quicken).toString()));
+    }
 
     /**
      * ****************************************************************************************************************************
-     * ******************************************************Adapter***************************************************************
+     * ******************************************************adapter***************************************************************
      * ****************************************************************************************************************************
      */
     public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.StyleViewHolder> {
@@ -110,7 +127,7 @@ public class MainTableView extends RecyclerView {
                     holder = new ViewHolderBattery(itmBattery);
                     break;
                 case 5:
-                    holder = new ViewHolderKillVirus(itmKillVirus);
+                    holder = new ViewHolderMultiple(itmMultiple);
                     break;
             }
             return holder;
@@ -138,13 +155,11 @@ public class MainTableView extends RecyclerView {
             return mData.size();
         }
 
-
         /**
          * ****************************************************************************************************************************
-         * ******************************************************View holders**********************************************************
+         * ******************************************************view holders**********************************************************
          * ****************************************************************************************************************************
          */
-
         class StyleViewHolder extends RecyclerView.ViewHolder {
 
             ItmMTView itmMTView;
@@ -168,6 +183,7 @@ public class MainTableView extends RecyclerView {
 
             protected void visibleLine() {
                 int position = getAdapterPosition();
+                //the gridView right line is gone。
                 if (position % 3 == 0) {
                     itmMTView.setLineVisible(View.GONE);
                 }
@@ -208,9 +224,9 @@ public class MainTableView extends RecyclerView {
             }
         }
 
-        class ViewHolderKillVirus extends StyleViewHolder {
+        class ViewHolderMultiple extends StyleViewHolder {
 
-            public ViewHolderKillVirus(@NonNull ItmMTView itemView) {
+            public ViewHolderMultiple(@NonNull ItmMTView itemView) {
                 super(itemView);
             }
 
@@ -235,6 +251,28 @@ public class MainTableView extends RecyclerView {
 
     public void setOnItemClickListener(OnItemClick onItemClick) {
         this.onItemClick = onItemClick;
+    }
+
+    /**
+     * ****************************************************************************************************************************
+     * ******************************************************slideshow the multiple view and bind tag.*****************************
+     * ****************************************************************************************************************************
+     */
+    public void nextMultipleItem() {
+        mpIndex = mpIndex + 1 == multiples.size() ? 0 : mpIndex + 1;
+        VirusLlistEntity item = multiples.get(mpIndex);
+        setMultipleStyle(item);
+        switch (mpIndex) {
+            case 1:
+                multipleItem.tag = MainTableItem.TAG_KILL_VIRUS;
+                break;
+            case 2:
+                multipleItem.tag = MainTableItem.TAG_SPEED_UP_NETWORK;
+                break;
+            case 3:
+                multipleItem.tag = MainTableItem.TAG_SPEED_UP_GAME;
+                break;
+        }
     }
 
     /**
@@ -343,15 +381,21 @@ public class MainTableView extends RecyclerView {
      * ******************************************************kill virus button styles**********************************************
      * ****************************************************************************************************************************
      */
-    public void killVirusNormalStyle() {
-        itmKillVirus.clearMark();
-        itmKillVirus.setText("病毒查杀");
-        itmKillVirus.loadDrawable(mContext,R.drawable.icon_virus);
+    public void killVirusWarningStyle() {
+        itmMultiple.setMarkText("有风险");
     }
 
-    public void killVirusWarningStyle() {
-        itmKillVirus.setMarkText("有风险");
+    /**
+     * ****************************************************************************************************************************
+     * ******************************************************multiple style********************************************************
+     * ****************************************************************************************************************************
+     */
+    public void setMultipleStyle(VirusLlistEntity item) {
+        itmMultiple.clearMark();
+        itmMultiple.setText(item.getName());
+        itmMultiple.loadDrawable(mContext, item.getIcon());
     }
+
 
     private CharSequence getString(@StringRes int resId) {
         return getResources().getString(resId);

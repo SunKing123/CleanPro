@@ -12,6 +12,8 @@ public class MainTableItem {
     public static final int TAG_CLEAN_NOTIFY = 4;
     public static final int TAG_KILL_VIRUS = 5;
     public static final int TAG_BATTER = 6;
+    public static final int TAG_SPEED_UP_GAME = 7;
+    public static final int TAG_SPEED_UP_NETWORK = 8;
 
     public int styleType;
     public int drawableResId;

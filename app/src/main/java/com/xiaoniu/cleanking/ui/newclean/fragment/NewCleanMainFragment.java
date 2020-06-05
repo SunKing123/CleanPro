@@ -209,7 +209,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         mainTableView.batteryNormalStyle(getActivity());
         mainTableView.notifyCleanStyle(getActivity());
-        mainTableView.killVirusNormalStyle();
+        mainTableView.nextMultipleItem();
 
         initMainTableItemClick();
 
@@ -346,6 +346,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         break;
                     case MainTableItem.TAG_COOL:                  //手机降温
                         mClickJw();
+                        break;
+                    case MainTableItem.TAG_SPEED_UP_GAME:         //游戏加速
+                        toSpeedGame();
+                        break;
+                    case MainTableItem.TAG_SPEED_UP_NETWORK:      //网络加速
+                        toSpeedNetwork();
                         break;
                 }
             }
@@ -866,9 +872,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         if (getString(R.string.virus_kill).contains(event.getTitle()) || getString(R.string.network_quicken).contains(event.getTitle())) {
             forThreeTab();
+            mainTableView.nextMultipleItem();
         }
         if (getString(R.string.game_quicken).contains(event.getTitle()) && isGameMain) {
             forThreeTab();
+            mainTableView.nextMultipleItem();
         }
         initGeekSdkTop();
     }
@@ -987,52 +995,64 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (null != mVirusList && mVirusList.size() > 0) {
             switch (mVirusPoistion) {
                 case 0:
-                    StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
-                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
-                            || null == AppHolder.getInstance().getSwitchInfoList().getData()
-                            || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
-                        startActivity(VirusKillActivity.class);
-                    } else {
-                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                            if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
-                                if (switchInfoList.isOpen()) {
-                                    loadGeekAd();
-                                } else {
-                                    startActivity(VirusKillActivity.class);
-                                }
-                            }
-                        }
-                    }
+                    toKillVirus();
                     break;
                 case 1:
-                    StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
-                    if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
-                            || null == AppHolder.getInstance().getSwitchInfoList().getData()
-                            || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
-                        startActivity(NetWorkActivity.class);
-                    } else {
-                        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                            if (PositionId.KEY_NET_JILI.equals(switchInfoList.getConfigKey())) {
-                                if (switchInfoList.isOpen()) {
-                                    loadGeekAdNet();
-                                } else {
-                                    startActivity(NetWorkActivity.class);
-                                }
-                            }
-                        }
-                    }
+                    toSpeedGame();
                     break;
                 case 2:
-                    isGameMain = true;
-                    StatisticsUtils.trackClick("main_function_area_gameboost_click", "用户在首页主功能区点击【游戏加速】按钮", "home_page", "home_page");
-                    if (PreferenceUtil.getGameTime()) {
-                        getActivity().startActivity(new Intent(getActivity(), GameActivity.class)
-                                .putExtra("main", true));
-                    } else {
-                        goFinishActivity();
-                    }
+                    toSpeedNetwork();
                     break;
             }
+        }
+    }
+
+    private void toKillVirus(){
+        StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+            startActivity(VirusKillActivity.class);
+        } else {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
+                    if (switchInfoList.isOpen()) {
+                        loadGeekAd();
+                    } else {
+                        startActivity(VirusKillActivity.class);
+                    }
+                }
+            }
+        }
+    }
+
+    private void toSpeedGame(){
+        StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+            startActivity(NetWorkActivity.class);
+        } else {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_NET_JILI.equals(switchInfoList.getConfigKey())) {
+                    if (switchInfoList.isOpen()) {
+                        loadGeekAdNet();
+                    } else {
+                        startActivity(NetWorkActivity.class);
+                    }
+                }
+            }
+        }
+    }
+
+    private void toSpeedNetwork(){
+        isGameMain = true;
+        StatisticsUtils.trackClick("main_function_area_gameboost_click", "用户在首页主功能区点击【游戏加速】按钮", "home_page", "home_page");
+        if (PreferenceUtil.getGameTime()) {
+            getActivity().startActivity(new Intent(getActivity(), GameActivity.class)
+                    .putExtra("main", true));
+        } else {
+            goFinishActivity();
         }
     }
 
