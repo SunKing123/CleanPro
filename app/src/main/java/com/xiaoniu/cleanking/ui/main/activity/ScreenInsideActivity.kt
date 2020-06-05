@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.BuildConfig
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
+import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -50,7 +51,7 @@ class ScreenInsideActivity : BaseActivity<MainPresenter>() {
     private fun loadCustomInsertScreenAd() {
         if (null == mAdManager) return
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "inside_advertising_ad_page")
-        mAdManager.loadCustomInsertScreenAd(this, "inside_advertising_ad", 3, object : AdListener {
+        mAdManager.loadCustomInsertScreenAd(this, PositionId.AD_CLEAN_INSIDE_ADVERTISING_AD, 3, object : AdListener {
             override fun adSuccess(info: AdInfo) {
                 if (null == info) return
                 Log.d(TAG, "adSuccess 内部插屏--" + info.toString())

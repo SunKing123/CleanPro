@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
-
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -35,6 +33,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Random;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 /**
@@ -134,7 +133,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     private void initGeekSdkAD() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "hot_splash_page");
         mAdManager = GeekAdSdk.getAdsManger();
-        mAdManager.loadSplashAd(this, "hot_kp", new AdListener() {
+        mAdManager.loadSplashAd(this, PositionId.AD_POSITION_HOT_KP, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {

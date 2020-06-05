@@ -76,6 +76,12 @@ public class PositionId {
     //位置code
     public static final String AD_SOURCE_YLH = "youlianghui";
     public static final String AD_SOURCE_CSJ = "chuanshanjia";
+
+    /*----------------------------------------------广告位置 position_id----------------------------------------------*/
+
+
+    public static final String AD_POSITION_HOT_KP = "hot_kp";   //热启动开屏
+    public static final String AD_POSITION_COLD_KP = "cold_kp";   //冷启动开屏
     public static final String AD_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
     public static final String AD_LOCK_SCREEN_ADVERTISING_1_3_0 = "lock_screen_advertising_1.3.0";
     public static final String AD_LOCK_SCREEN_ADVERTISING_1_4_0 = "lock_screen_advertising_1.4.0";   //锁屏页自渲染样式
@@ -90,7 +96,9 @@ public class PositionId {
     public static final String AD_EXTERNAL_ADVERTISING_02 = "external_advertising_ad_2";//外部插屏全屏广告
     public static final String AD_EXTERNAL_ADVERTISING_03 = "external_advertising_ad_3";//内外部插屏全屏广告
     public static final String AD_EXTERNAL_ADVERTISING_04 = "external_advertising_ad_4";//应用植入插屏全屏广告
-    public static final String AD_VIRUS = "click_virus_killing_ad";//病毒查杀
+
+    public static final String AD_GAMEBOOST_VIDEO_AD = "gameboost_video_ad";//游戏加速_激励视频
+    public static final String AD_VIRUS = "click_virus_killing_ad";//病毒查杀激励视频
     public static final String AD_NETWORK_ACCE = "click_network_acceleration_ad";//网络加速
     public static final String AD_RED_PACKET = "red_envelopes_ad";//红包
     public static final String AD_FINISH_BEFOR = "cp_ad_1";//完成页前全屏视频
@@ -101,6 +109,16 @@ public class PositionId {
     public static final String AD_CLEAN_FINISH_MB_ONE = "success_page_ad_1_mb";//完成页广告位1
     public static final String AD_CLEAN_FINISH_MB_TWO = "success_page_ad_2_mb";//完成页广告位2
     public static final String AD_CLEAN_FINISH_MB_THREE = "success_page_ad_3_mb";//完成页广告位3
+
+    public static final String AD_CLEAN_FINISH_POSITION_ONE = "success_page_ad_1";//完成页广告位1_自渲染
+    public static final String AD_CLEAN_FINISH_POSITION_TWO = "success_page_ad_2";//完成页广告位2_自渲染
+    public static final String AD_CLEAN_FINISH_POSITION_THREE = "success_page_ad_3";//完成页广告位3_自渲染
+    public static final String AD_CLEAN_FINISH_POSITION_CP_AD_2 = "cp_ad_2";//全屏插屏广告
+    public static final String AD_CLEAN_INSIDE_ADVERTISING_AD = "inside_advertising_ad";//应用内部插屏广告
+
+
+
+
 
 
     public static final String LOCK_INTERACTIVE = "lock_interactive";//锁屏互动式广告

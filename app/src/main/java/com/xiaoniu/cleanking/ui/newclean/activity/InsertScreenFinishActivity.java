@@ -12,6 +12,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.InsertScreenFinishPresenter;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -52,7 +53,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     private void loadGeekSdk() {
         StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", " ",  " ", "all_ad_request", NewCleanFinishActivity.currentPage, "screen_advertising");
         mAdManager = GeekAdSdk.getAdsManger();
-        mAdManager.loadCustomInsertScreenAd(this, "cp_ad_2", 3, new AdListener() {
+        mAdManager.loadCustomInsertScreenAd(this, PositionId.AD_CLEAN_FINISH_POSITION_CP_AD_2, 3, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null == info) return;

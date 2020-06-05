@@ -18,10 +18,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -56,6 +52,9 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -509,7 +508,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             NiuDataAPI.onPageStart("gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
             NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_incentive_video_page", "gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
         }
-        mAdManager.loadRewardVideoAd(this, "gameboost_video_ad", "user123", 1, new VideoAdListener() {
+        mAdManager.loadRewardVideoAd(this, PositionId.AD_GAMEBOOST_VIDEO_AD, "user123", 1, new VideoAdListener() {
             @Override
             public void onVideoResume(AdInfo info) {
 
