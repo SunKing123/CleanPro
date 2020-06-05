@@ -87,7 +87,7 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void adSuccess(AdInfo info) {
                 Logger.i(SystemUtils.getProcessName(FullPopLayerActivity.this) +"---zz---success---"+info.getAdSource());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", currentPage, currentPage);
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", currentPage, currentPage);
                 adInfo = info;
                 View adView = info.getAdView();
                 if (adView != null && flayoutAdContainer != null && full_screen_insert_ad_header_layout != null) {
@@ -100,19 +100,19 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public void adExposed(AdInfo info) {
-                Logger.i("zz---adExposed---"+info.getAdSource());
+//                Logger.i("zz---adExposed---"+info.getAdSource());
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), currentPage, currentPage, info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                Logger.i("zz---adClicked---"+info.getAdSource());
+//                Logger.i("zz---adClicked---"+info.getAdSource());
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), currentPage, currentPage, info.getAdTitle());
             }
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Logger.i("zz---adError"+info.getAdSource());
+//                Logger.i("zz---adError"+info.getAdSource());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", currentPage, currentPage);
                 finish();
             }

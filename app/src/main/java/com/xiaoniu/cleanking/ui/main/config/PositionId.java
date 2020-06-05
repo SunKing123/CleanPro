@@ -44,6 +44,7 @@ public class PositionId {
     public static final String KEY_HOME_AD = "page_function_return_complete";
     public static final String KEY_LOCK_SCREEN = "page_lock_screen";
     public static final String KEY_VIDEO_PLAY = "page_video_play_screen";
+    public static final String KEY_ADVERT_LOCK_SCREEN = "advert_lock_screen";  //锁屏模块开关（以advertPosition 区分）
 
 
     public static final String KEY_FINISH_SWITCH = "page_res_fixed_ad_3";

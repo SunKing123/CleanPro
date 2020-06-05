@@ -3,13 +3,13 @@ package com.comm.jksdk.ad.view.chjview;
 import android.content.Context;
 import android.view.View;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.bytedance.sdk.openadsdk.TTSplashAd;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * 穿山甲开屏广告view<p>
@@ -52,25 +52,25 @@ public class ChjSplashAdView extends CHJAdView {
         ttSplashAd.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
             @Override
             public void onAdClicked(View view, int type) {
-                LogUtils.d(TAG, "onAdClicked");
+                LogUtils.d(TAG, "zz--chj--onAdClicked--"+adInfo.getAdId());
                 adClicked(adInfo);
             }
 
             @Override
             public void onAdShow(View view, int type) {
-                LogUtils.d(TAG, "onAdShow");
+                LogUtils.d(TAG, "zz--chj--onAdShow--"+adInfo.getAdId());
                 adExposed(adInfo);
             }
 
             @Override
             public void onAdSkip() {
-                LogUtils.d(TAG, "onAdSkip");
+                LogUtils.d(TAG, "zz--chj--onAdSkip--"+adInfo.getAdId());
 
             }
 
             @Override
             public void onAdTimeOver() {
-                LogUtils.d(TAG, "onAdTimeOver");
+                LogUtils.d(TAG, "zz--chj--onAdTimeOver"+adInfo.getAdId());
                 firstAdError(adInfo, CodeFactory.UNKNOWN, "广告加载超时");
             }
         });

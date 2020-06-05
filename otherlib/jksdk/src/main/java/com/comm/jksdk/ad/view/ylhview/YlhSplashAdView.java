@@ -2,16 +2,15 @@ package com.comm.jksdk.ad.view.ylhview;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
-import com.comm.jksdk.utils.CodeFactory;
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  * 开屏广告view<p>
@@ -49,38 +48,39 @@ public class YlhSplashAdView extends YlhAdView {
         if (activity == null) {
             throw new NullPointerException("loadFullScreenVideoAd activity is null");
         }
-        LogUtils.d(TAG, "YLH appId:" + appId + " adId:" + adId);
         SplashAD splashAD = new SplashAD(activity, appId, adId, new SplashADListener() {
             @Override
             public void onADDismissed() {
-                LogUtils.d(TAG, "YLH onADDismissed:");
+                LogUtils.d(TAG, "zz--YLH onADDismissed--"+adInfo.getAdId());
                 adClose(adInfo);
             }
 
             @Override
             public void onNoAD(AdError adError) {
-                LogUtils.d(TAG, "YLH onNoAD:");
-                adError(adInfo, adError.getErrorCode(), adError.getErrorMsg());
+                LogUtils.d(TAG, "zz--YLH onNoAD:"+adInfo.getAdId());
+//                adError(adInfo, adError.getErrorCode(), adError.getErrorMsg());
+                firstAdError(adInfo, adError.getErrorCode(), "广告加载超时");
             }
 
             @Override
             public void onADPresent() {
+                LogUtils.d(TAG, "zz--YLH onADPresent:"+adInfo.getAdId());
             }
 
             @Override
             public void onADClicked() {
-                LogUtils.d(TAG, "YLH onADClicked:");
+                LogUtils.d(TAG, "zz--YLH onADClicked:"+adInfo.getAdId());
                 adClicked(adInfo);
             }
 
             @Override
             public void onADTick(long l) {
-
+                LogUtils.d(TAG, "zz--YLH onADTick:"+adInfo.getAdId());
             }
 
             @Override
             public void onADExposure() {
-                LogUtils.d(TAG, "YLH onADClicked:");
+                LogUtils.d(TAG, "zz--YLH onADClicked:"+adInfo.getAdId());
                 adExposed(adInfo);
             }
         });

@@ -2,14 +2,12 @@ package com.xiaoniu.cleanking.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.ui.main.bean.GameSelectEntity;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -57,8 +55,8 @@ public class TestActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 int size = ApplicationDelegate.getAppDatabase().gameSelectDao().getAll().size();
-                LogUtils.i("---size---"+size);
-                ToastUtils.showShort("--size--"+size);
+//                LogUtils.i("---size---"+size);
+//                ToastUtils.showShort("--size--"+size);
             }
         });
         btn_insert.setOnClickListener(new View.OnClickListener() {

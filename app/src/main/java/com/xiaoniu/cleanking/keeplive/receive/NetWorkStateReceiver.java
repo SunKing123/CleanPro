@@ -8,15 +8,11 @@ import android.net.Network;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 
-import com.orhanobut.logger.Logger;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
-import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
-import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -24,7 +20,6 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.ToastUtils;
 
 
 /**
@@ -81,9 +76,9 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
         if (PreferenceUtil.getInstants().getInt(SpCacheConfig.WIFI_STATE) == 0 && wifiContected == 1) {
             startFullInsertAd(context);
         }
-        if(!BuildConfig.SYSTEM_EN.contains("prod"))
-        ToastUtils.showShort("WIFI---"+(wifiContected == 0 ? "未连接" : "已连接"));
-        Logger.i("zz---WIFI" + (wifiContected == 0 ? "未连接" : "已连接"));
+//        if(!BuildConfig.SYSTEM_EN.contains("prod"))
+//        ToastUtils.showShort("WIFI---"+(wifiContected == 0 ? "未连接" : "已连接"));
+//        Logger.i("zz---WIFI" + (wifiContected == 0 ? "未连接" : "已连接"));
         //更新sp当前wifi状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.WIFI_STATE, wifiContected);
 
@@ -96,7 +91,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             String auditSwitch = SPUtil.getString(context, AppApplication.AuditSwitch, "1");
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
-            Logger.i("zz---"+(TextUtils.equals(auditSwitch, "1")?"1":"0") + (!ActivityCollector.isActivityExist(PopLayerActivity.class)?"1":"0") + (!ActivityCollector.isActivityExist(LockActivity.class)?"1":0) + (!PreferenceUtil.isShowAD()?"1":"0"));
+//            Logger.i("zz---"+(TextUtils.equals(auditSwitch, "1")?"1":"0") + (!ActivityCollector.isActivityExist(PopLayerActivity.class)?"1":"0") + (!ActivityCollector.isActivityExist(LockActivity.class)?"1":0) + (!PreferenceUtil.isShowAD()?"1":"0"));
             if (TextUtils.equals(auditSwitch, "1") && MmkvUtil.isShowFullInsert()) {
 
                 String adSwitch = MmkvUtil.getInsertSwitchInfo();
@@ -109,7 +104,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
                     int showTimes = 2;
                     if (dataBean.isOpen()) {
                         showTimes = dataBean.getShowRate();
-                        LogUtils.i("zz--times-"+showTimes);
+//                        LogUtils.i("zz--times-"+showTimes);
                         if (MmkvUtil.fullInsertPageIsShow(showTimes)) {
                             startFullInsertPage(context,PositionId.AD_EXTERNAL_ADVERTISING_03);
                         }

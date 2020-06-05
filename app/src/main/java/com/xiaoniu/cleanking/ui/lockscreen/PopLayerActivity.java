@@ -11,7 +11,6 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
@@ -93,14 +92,14 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
                     flayoutAdContainer.addView(info.getAdView());
                     int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
                     PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, number + 1);
-                    Logger.i("zz--" + (number + 1));
+//                    Logger.i("zz--" + (number + 1));
                     PreferenceUtil.getInstants().save(SpCacheConfig.POP_LAYER_TIME, String.valueOf(System.currentTimeMillis()));
                 }
             }
 
             @Override
             public void adExposed(AdInfo info) {
-                Logger.i("zz--adExposed--"+info.getAdSource());
+//                Logger.i("zz--adExposed--"+info.getAdSource());
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "external_advertising_page", "external_advertising_page", info.getAdTitle());
             }
 

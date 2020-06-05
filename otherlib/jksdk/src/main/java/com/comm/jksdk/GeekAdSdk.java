@@ -102,7 +102,6 @@ public final class GeekAdSdk {
      * 获取bid
      */
     public static int getBid(){
-        LogUtils.i("GeekSdk---get"+AdsConfig.getBid());
         return AdsConfig.getBid();
     }
 

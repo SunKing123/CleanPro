@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.activity.divide;
 import android.os.Build;
 import android.util.Log;
 
-import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
@@ -43,9 +42,9 @@ public class DYActivity extends SimpleActivity {
             //唤起本地service
             if (!SystemUtils.isServiceRunning(this, LocalService.class)) {
                 start();
-                Logger.i("zz--22");
+
             } else {
-                Logger.i("zz--11");
+
             }
         }else{
             finish();

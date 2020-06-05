@@ -593,10 +593,10 @@ public class NativeAdManger implements AdManager {
             }
             return;
         }
-        if (GeekAdSdk.mIsFormal.equals("btest")) {//测试环境打印广告配置
-            LogUtils.i("pengfei-\nadPosition：" + adInfo.getPosition() + "\nadStyle:" + adInfo.getAdStyle()+"\nadId:"+adInfo.getAdId()+"\nadUnion:"+adInfo.getAdSource()+"\nrequestOrder:"+adInfo.getRequestOrder());
-            ToastUtils.showToast(mActivity, "adPosition：" + adInfo.getPosition() + "\nadStyle:" + adInfo.getAdStyle()+"\nadId:"+adInfo.getAdId()+"\nadUnion:"+adInfo.getAdSource()+"\nrequestOrder:"+adInfo.getRequestOrder(), Toast.LENGTH_LONG,0);
-        }
+//        if (GeekAdSdk.mIsFormal.equals("btest")) {//测试环境打印广告配置
+//            LogUtils.i("pengfei-\nadPosition：" + adInfo.getPosition() + "\nadStyle:" + adInfo.getAdStyle()+"\nadId:"+adInfo.getAdId()+"\nadUnion:"+adInfo.getAdSource()+"\nrequestOrder:"+adInfo.getRequestOrder());
+//            ToastUtils.showToast(mActivity, "adPosition：" + adInfo.getPosition() + "\nadStyle:" + adInfo.getAdStyle()+"\nadId:"+adInfo.getAdId()+"\nadUnion:"+adInfo.getAdSource()+"\nrequestOrder:"+adInfo.getRequestOrder(), Toast.LENGTH_LONG,0);
+//        }
         //没有缓存对象,走正常流程
         adRequestManager.requestAd(mActivity, adInfo, new AdRequestListener() {
             @Override

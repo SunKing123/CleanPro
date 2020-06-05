@@ -64,7 +64,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.SystemUtils;
-import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
 import java.text.SimpleDateFormat;
@@ -464,7 +463,7 @@ public final class LocalService extends Service {
                 wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
             }
 
-            Logger.i(SystemUtils.getProcessName(this) + "zz--" + (usb ? "usb" : ac ? "ac" : wireless ? "wireless" : ""));
+//            Logger.i(SystemUtils.getProcessName(this) + "zz--" + (usb ? "usb" : ac ? "ac" : wireless ? "wireless" : ""));
             isCharged = usb || ac || wireless;
         } catch (Exception e) {
             e.printStackTrace();
@@ -478,8 +477,8 @@ public final class LocalService extends Service {
             startFullInsertAd(this);
         }
         if (!BuildConfig.SYSTEM_EN.contains("prod"))
-            ToastUtils.showShort("charge--" + (isCharged ? "充电中" : "未充电"));
-        Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
+//            ToastUtils.showShort("charge--" + (isCharged ? "充电中" : "未充电"));
+//        Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
         //更新sp当前充电状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
 
@@ -535,7 +534,7 @@ public final class LocalService extends Service {
     public void startActivity(Context context) {
         try {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
-            boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN);//锁屏开关
+            boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN,PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
             if (TextUtils.equals(auditSwitch, "1") && lock_sw) { //过审开关打开状态
                 Intent screenIntent = new Intent();
                 screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCKACTIVITY);

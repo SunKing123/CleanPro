@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.utils.update;
 
 import android.text.TextUtils;
 
-import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
@@ -78,7 +77,7 @@ public class MmkvUtil {
         int number = kv.decodeInt(SpCacheConfig.POP_FULL_LAYER_NUMBERS);
         //一小时内showTimes次
         if (pretime <= 0 || (System.currentTimeMillis() - pretime) > (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
-            Logger.i(number+"---zz---times---"+showTimes+"---"+(System.currentTimeMillis() - pretime));
+//            Logger.i(number+"---zz---times---"+showTimes+"---"+(System.currentTimeMillis() - pretime));
             if ((System.currentTimeMillis() - pretime) > (60 * 60 * 1000)) {//超过一小时重置次数
                 kv.encode(SpCacheConfig.POP_FULL_LAYER_NUMBERS,0);
             }
@@ -97,7 +96,7 @@ public class MmkvUtil {
         int number = kv.decodeInt(SpCacheConfig.POP_FULL_LAYER_NUMBERS);
         kv.encode(SpCacheConfig.POP_FULL_LAYER_NUMBERS,number+1);
         kv.encode(SpCacheConfig.POP_FULL_LAYER_TIME, String.valueOf(System.currentTimeMillis()));
-        Logger.i("zz--zhanshi" + (number + 1));
+//        Logger.i("zz--zhanshi" + (number + 1));
     }
 
 

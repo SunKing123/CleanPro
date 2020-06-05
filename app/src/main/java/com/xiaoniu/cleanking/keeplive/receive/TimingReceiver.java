@@ -10,7 +10,6 @@ import android.util.Log;
 
 import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.jpush.JPushReceiver;
@@ -135,7 +134,7 @@ public class TimingReceiver extends BroadcastReceiver {
 
             long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME)) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME));
             int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
-            Logger.i("zz--"+System.currentTimeMillis()+"---"+pretime);
+//            Logger.i("zz--"+System.currentTimeMillis()+"---"+pretime);
             //第一次|| 间隔时间大于一个小时||一小时内N次（N<showRate）(每次间隔时间<displayTime)
             if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) > (displayTime * 60 * 1000) && (System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
                 if((System.currentTimeMillis() - pretime)> (60 * 60 * 1000)){//超过一小时重置次数
