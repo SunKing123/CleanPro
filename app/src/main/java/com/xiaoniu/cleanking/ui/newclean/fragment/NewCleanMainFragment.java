@@ -209,6 +209,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         mainTableView.batteryNormalStyle(getActivity());
         mainTableView.notifyCleanStyle(getActivity());
+        mainTableView.killVirusNormalStyle();
+
         initMainTableItemClick();
 
         mPresenter.getRecommendList();
@@ -333,7 +335,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     case MainTableItem.TAG_BATTER:                //电量优化
                         line_shd();
                         break;
-                    case MainTableItem.TAG_CLEAN_FOLDER:          //文件清理
+                    case MainTableItem.TAG_KILL_VIRUS:          //文件清理
                         wjgl();
                         break;
                     case MainTableItem.TAG_CLEAN_NOTIFY:          //通知清理

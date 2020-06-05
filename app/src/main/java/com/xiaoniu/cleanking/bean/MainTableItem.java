@@ -10,7 +10,7 @@ public class MainTableItem {
     public static final int TAG_COOL = 2;
     public static final int TAG_CLEAN_WX = 3;
     public static final int TAG_CLEAN_NOTIFY = 4;
-    public static final int TAG_CLEAN_FOLDER = 5;
+    public static final int TAG_KILL_VIRUS = 5;
     public static final int TAG_BATTER = 6;
 
     public int styleType;

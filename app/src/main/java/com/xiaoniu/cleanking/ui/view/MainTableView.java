@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -32,19 +31,21 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class MainTableView extends RecyclerView {
 
-    Context mContext;
+    private Context mContext;
     //一键清理按钮
-    ItmMTView itmAccView;
+    private ItmMTView itmAcc;
     //通知清理按钮
-    ItmMTView itmNotifyView;
+    private ItmMTView itmNotify;
     //电量优化按钮
-    ItmMTView itmBatteryView;
+    private ItmMTView itmBattery;
+    //病毒查杀
+    private ItmMTView itmKillVirus;
 
-    RecycleViewAdapter adapter;
+    private RecycleViewAdapter adapter;
 
     MainTableItem[] items = new MainTableItem[]{
             new MainTableItem(2, MainTableItem.TAG_ACC, R.drawable.icon_yjjs, "一键加速"),
-            new MainTableItem(1, MainTableItem.TAG_COOL, R.drawable.icon_home_jw, "病毒查杀"),
+            new MainTableItem(5, MainTableItem.TAG_KILL_VIRUS, R.drawable.icon_virus, "病毒查杀"),
             new MainTableItem(1, MainTableItem.TAG_COOL, R.drawable.icon_home_jw, "手机降温"),
             new MainTableItem(4, MainTableItem.TAG_BATTER, R.drawable.icon_power, "超强省电"),
             new MainTableItem(1, MainTableItem.TAG_CLEAN_WX, R.drawable.icon_home_wx, "微信专清"),
@@ -66,9 +67,10 @@ public class MainTableView extends RecyclerView {
     }
 
     public void init() {
-        itmAccView = new ItmMTView(mContext);
-        itmNotifyView = new ItmMTView(mContext);
-        itmBatteryView = new ItmMTView(mContext);
+        itmAcc = new ItmMTView(mContext);
+        itmNotify = new ItmMTView(mContext);
+        itmBattery = new ItmMTView(mContext);
+        itmKillVirus = new ItmMTView(mContext);
         adapter = new RecycleViewAdapter();
         addItemDecoration(new GridLayoutDivider(mContext, LinearLayoutManager.HORIZONTAL, R.drawable.icon_line_hor));
         setNestedScrollingEnabled(false);
@@ -79,18 +81,12 @@ public class MainTableView extends RecyclerView {
         adapter.setData(Arrays.asList(items));
     }
 
-    public ItmMTView getItmAccView() {
-        return itmAccView;
-    }
 
-    public ItmMTView getItmNotifyView() {
-        return itmNotifyView;
-    }
-
-    public ItmMTView getItmBatteryView() {
-        return itmBatteryView;
-    }
-
+    /**
+     * ****************************************************************************************************************************
+     * ******************************************************Adapter***************************************************************
+     * ****************************************************************************************************************************
+     */
     public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.StyleViewHolder> {
 
         List<MainTableItem> mData = new ArrayList<>();
@@ -105,13 +101,16 @@ public class MainTableView extends RecyclerView {
                     holder = new StyleViewHolder(itemView);
                     break;
                 case 2:
-                    holder = new ViewHolderStyle2(itmAccView);
+                    holder = new ViewHolderAcc(itmAcc);
                     break;
                 case 3:
-                    holder = new ViewHolderStyle3(itmNotifyView);
+                    holder = new ViewHolderNotify(itmNotify);
                     break;
                 case 4:
-                    holder = new ViewHolderStyle4(itmBatteryView);
+                    holder = new ViewHolderBattery(itmBattery);
+                    break;
+                case 5:
+                    holder = new ViewHolderKillVirus(itmKillVirus);
                     break;
             }
             return holder;
@@ -138,6 +137,13 @@ public class MainTableView extends RecyclerView {
         public int getItemCount() {
             return mData.size();
         }
+
+
+        /**
+         * ****************************************************************************************************************************
+         * ******************************************************View holders**********************************************************
+         * ****************************************************************************************************************************
+         */
 
         class StyleViewHolder extends RecyclerView.ViewHolder {
 
@@ -168,8 +174,8 @@ public class MainTableView extends RecyclerView {
             }
         }
 
-        class ViewHolderStyle2 extends StyleViewHolder {
-            public ViewHolderStyle2(@NonNull ItmMTView itemView) {
+        class ViewHolderAcc extends StyleViewHolder {
+            public ViewHolderAcc(@NonNull ItmMTView itemView) {
                 super(itemView);
             }
 
@@ -179,8 +185,8 @@ public class MainTableView extends RecyclerView {
             }
         }
 
-        class ViewHolderStyle3 extends StyleViewHolder {
-            public ViewHolderStyle3(@NonNull ItmMTView itemView) {
+        class ViewHolderNotify extends StyleViewHolder {
+            public ViewHolderNotify(@NonNull ItmMTView itemView) {
                 super(itemView);
             }
 
@@ -190,9 +196,21 @@ public class MainTableView extends RecyclerView {
             }
         }
 
-        class ViewHolderStyle4 extends StyleViewHolder {
+        class ViewHolderBattery extends StyleViewHolder {
 
-            public ViewHolderStyle4(@NonNull ItmMTView itemView) {
+            public ViewHolderBattery(@NonNull ItmMTView itemView) {
+                super(itemView);
+            }
+
+            public void bindData(MainTableItem item) {
+                //cover father doing. just do visibleLine
+                super.visibleLine();
+            }
+        }
+
+        class ViewHolderKillVirus extends StyleViewHolder {
+
+            public ViewHolderKillVirus(@NonNull ItmMTView itemView) {
                 super(itemView);
             }
 
@@ -203,6 +221,12 @@ public class MainTableView extends RecyclerView {
         }
     }
 
+
+    /**
+     * ****************************************************************************************************************************
+     * ******************************************************item view click listener**********************************************
+     * ****************************************************************************************************************************
+     */
     OnItemClick onItemClick;
 
     public interface OnItemClick {
@@ -220,34 +244,34 @@ public class MainTableView extends RecyclerView {
      */
     //发现骚扰通知
     public void notifyHasStyle(Context context) {
-        getItmNotifyView().setVisibleTick(View.GONE);
-        getItmNotifyView().loadDrawable(context, R.drawable.icon_home_qq_o);
-        getItmNotifyView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
-        getItmNotifyView().setText(getString(R.string.find_harass_notify));
+        itmNotify.setVisibleTick(View.GONE);
+        itmNotify.loadDrawable(context, R.drawable.icon_home_qq_o);
+        itmNotify.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
+        itmNotify.setText(getString(R.string.find_harass_notify));
     }
 
     //骚扰通知数量更新
     public void notifyNumStyle(Context context) {
-        getItmNotifyView().setVisibleTick(View.GONE);
-        getItmNotifyView().loadDrawable(context, R.drawable.icon_notify);
-        getItmNotifyView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-        getItmNotifyView().setText(context.getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
+        itmNotify.setVisibleTick(View.GONE);
+        itmNotify.loadDrawable(context, R.drawable.icon_notify);
+        itmNotify.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+        itmNotify.setText(context.getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
     }
 
     //通知栏清理
     public void notifyCleanStyle(Context context) {
-        getItmNotifyView().setVisibleTick(View.GONE);
-        getItmNotifyView().loadDrawable(context, R.drawable.icon_home_qq);
-        getItmNotifyView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-        getItmNotifyView().setText(getString(R.string.tool_notification_clean));
+        itmNotify.setVisibleTick(View.GONE);
+        itmNotify.loadDrawable(context, R.drawable.icon_home_qq);
+        itmNotify.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+        itmNotify.setText(getString(R.string.tool_notification_clean));
     }
 
     //清理完成
     public void notifyFinishStyle(Context context) {
-        getItmNotifyView().setVisibleTick(VISIBLE);
-        getItmNotifyView().loadDrawable(context, R.drawable.icon_home_qq);
-        getItmNotifyView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-        getItmNotifyView().setText(getString(R.string.finished_clean_notify_hint));
+        itmNotify.setVisibleTick(VISIBLE);
+        itmNotify.loadDrawable(context, R.drawable.icon_home_qq);
+        itmNotify.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+        itmNotify.setText(getString(R.string.finished_clean_notify_hint));
     }
 
     /**
@@ -256,35 +280,35 @@ public class MainTableView extends RecyclerView {
      * ****************************************************************************************************************************
      */
     public void batteryNormalStyle(Context context) {
-        getItmBatteryView().setVisibleTick(GONE);
-        getItmBatteryView().loadDrawable(context, R.drawable.icon_power);
-        getItmBatteryView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-        getItmBatteryView().setText(getString(R.string.tool_super_power_saving));
+        itmBattery.setVisibleTick(GONE);
+        itmBattery.loadDrawable(context, R.drawable.icon_power);
+        itmBattery.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+        itmBattery.setText(getString(R.string.tool_super_power_saving));
     }
 
     public void batterySavingStyle(Context context) {
-        getItmBatteryView().setVisibleTick(GONE);
-        getItmBatteryView().loadDrawable(context, R.drawable.icon_power_o);
-        getItmBatteryView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
-        getItmBatteryView().setText(getString(R.string.tool_super_power_saving));
+        itmBattery.setVisibleTick(GONE);
+        itmBattery.loadDrawable(context, R.drawable.icon_power_o);
+        itmBattery.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
+        itmBattery.setText(getString(R.string.tool_super_power_saving));
     }
 
     public void batteryNumStyle(Context context) {
-        getItmBatteryView().setVisibleTick(GONE);
-        getItmBatteryView().loadDrawable(context, R.drawable.icon_power_gif);
-        getItmBatteryView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-        getItmBatteryView().setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
+        itmBattery.setVisibleTick(GONE);
+        itmBattery.loadDrawable(context, R.drawable.icon_power_gif);
+        itmBattery.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+        itmBattery.setText(getString(R.string.power_consumption_num, NumberUtils.mathRandom(8, 15)));
     }
 
     public void batteryFinishStyle(Context context) {
-        getItmBatteryView().setVisibleTick(VISIBLE);
-        getItmBatteryView().loadDrawable(context, R.drawable.icon_power);
-        getItmBatteryView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+        itmBattery.setVisibleTick(VISIBLE);
+        itmBattery.loadDrawable(context, R.drawable.icon_power);
+        itmBattery.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
 
         if (TextUtils.isEmpty(PreferenceUtil.getLengthenAwaitTime())) {
-            getItmBatteryView().setText(getString(R.string.lengthen_time, "40"));
+            itmBattery.setText(getString(R.string.lengthen_time, "40"));
         } else {
-            getItmBatteryView().setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
+            itmBattery.setText(getString(R.string.lengthen_time, PreferenceUtil.getLengthenAwaitTime()));
         }
     }
 
@@ -294,24 +318,39 @@ public class MainTableView extends RecyclerView {
      * ****************************************************************************************************************************
      */
     public void accStorageLowStyle(Context context) {
-        getItmAccView().setVisibleTick(VISIBLE);
-        getItmAccView().loadDrawable(context, R.drawable.icon_yjjs);
-        getItmAccView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
-        getItmAccView().setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
+        itmAcc.setVisibleTick(VISIBLE);
+        itmAcc.loadDrawable(context, R.drawable.icon_yjjs);
+        itmAcc.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
+        itmAcc.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(15, 30)) + "%");
     }
 
     public void accStorageHighStyle(Context context) {
-        getItmAccView().setVisibleTick(GONE);
-        getItmAccView().loadDrawable(context, R.drawable.icon_quicken);
-        getItmAccView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
-        getItmAccView().setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
+        itmAcc.setVisibleTick(GONE);
+        itmAcc.loadDrawable(context, R.drawable.icon_quicken);
+        itmAcc.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
+        itmAcc.setText(getString(R.string.internal_storage_scale, NumberUtils.mathRandom(70, 85)) + "%");
     }
 
     public void accOneKeyStyle(Context context) {
-        getItmAccView().setVisibleTick(GONE);
-        getItmAccView().loadDrawable(context, R.drawable.icon_yjjs_o);
-        getItmAccView().setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
-        getItmAccView().setText(getString(R.string.tool_one_key_speed));
+        itmAcc.setVisibleTick(GONE);
+        itmAcc.loadDrawable(context, R.drawable.icon_yjjs_o);
+        itmAcc.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
+        itmAcc.setText(getString(R.string.tool_one_key_speed));
+    }
+
+    /**
+     * ****************************************************************************************************************************
+     * ******************************************************kill virus button styles*********************************************
+     * ****************************************************************************************************************************
+     */
+    public void killVirusNormalStyle() {
+        itmKillVirus.clearMark();
+        itmKillVirus.setText("病毒查杀");
+        itmKillVirus.loadDrawable(mContext,R.drawable.icon_virus);
+    }
+
+    public void killVirusWarningStyle() {
+        itmKillVirus.setMarkText("有风险");
     }
 
     private CharSequence getString(@StringRes int resId) {
