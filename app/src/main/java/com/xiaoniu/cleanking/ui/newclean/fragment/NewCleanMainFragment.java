@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.bean.MainTableItem;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
@@ -208,6 +209,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         mainTableView.batteryNormalStyle(getActivity());
         mainTableView.notifyCleanStyle(getActivity());
+        initMainTableItemClick();
 
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
@@ -320,7 +322,33 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
     }
 
-
+    private void initMainTableItemClick(){
+        mainTableView.setOnItemClickListener(new MainTableView.OnItemClick() {
+            @Override
+            public void onClick(MainTableItem item) {
+                switch (item.tag){
+                    case MainTableItem.TAG_ACC:                   //一键加速
+                        text_acce();
+                        break;
+                    case MainTableItem.TAG_BATTER:                //电量优化
+                        line_shd();
+                        break;
+                    case MainTableItem.TAG_CLEAN_FOLDER:          //文件清理
+                        wjgl();
+                        break;
+                    case MainTableItem.TAG_CLEAN_NOTIFY:          //通知清理
+                        mClickQq();
+                        break;
+                    case MainTableItem.TAG_CLEAN_WX:              //微信清理
+                        mClickWx();
+                        break;
+                    case MainTableItem.TAG_COOL:                  //手机降温
+                        mClickJw();
+                        break;
+                }
+            }
+        });
+    }
     /**
      * 广告sdk
      */
