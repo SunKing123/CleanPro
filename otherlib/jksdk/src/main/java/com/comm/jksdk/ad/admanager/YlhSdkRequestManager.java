@@ -11,6 +11,7 @@ import com.comm.jksdk.ad.listener.AdRequestListener;
 import com.comm.jksdk.config.TTAdManagerHolder;
 import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.utils.LogUtils;
+import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.nativ.NativeADUnifiedListener;
@@ -86,7 +87,7 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
         NativeUnifiedAD mAdManager = new NativeUnifiedAD(activity, adInfo.getAdAppid(), adInfo.getAdId(), new NativeADUnifiedListener() {
             @Override
             public void onNoAD(AdError adError) {
-                LogUtils.d(TAG, "onNoAD->请求优量汇失败,ErrorCode:" + adError.getErrorCode() + ",ErrorMsg:" + adError.getErrorMsg());
+                LogUtils.d(TAG, "zz--ylh--onError()--code-" + adError.getErrorCode() + "---message-" + adError.getErrorMsg() + "---adid-" + adInfo.getAdId());
                 if (listener != null) {
                     listener.adError(adInfo, adError.getErrorCode(), adError.getErrorMsg());
                 }
@@ -95,6 +96,7 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
             @Override
             public void onADLoaded(List<NativeUnifiedADData> list) {
                 if (CollectionUtils.isEmpty(list)) {
+                    LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + adInfo.getAdId());
                     if (listener != null) {
                         listener.adError(adInfo, 1, "广告数据为空");
                     }
@@ -113,6 +115,7 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
                     adInfo.setAdClickType(2);
                 }
                 adInfo.setNativeUnifiedADData(nativeUnifiedADData);
+                LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + adInfo.getAdId());
                 if (listener != null) {
                     listener.adSuccess(adInfo);
                 }

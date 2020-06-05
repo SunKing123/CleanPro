@@ -2,13 +2,16 @@ package com.comm.jksdk.config;
 
 import android.content.Context;
 import android.os.SystemClock;
+import android.text.TextUtils;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.bean.ConfigBean;
+import com.comm.jksdk.constant.Constants;
 import com.comm.jksdk.http.Api;
 import com.comm.jksdk.http.utils.ApiManage;
 import com.comm.jksdk.http.utils.AppEnvironment;
 import com.comm.jksdk.http.utils.LogUtils;
+import com.comm.jksdk.utils.CollectionUtils;
 import com.comm.jksdk.utils.JsonUtils;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
@@ -57,7 +60,7 @@ public class InitBaseConfig {
             mLastClickTime = SystemClock.elapsedRealtime();
 
             String cFileName = "ad_config_gj_1.4.5_c1.json";
-            long userActive = AdsConfig.getUserActive();
+           /* long userActive = AdsConfig.getUserActive();
             if (userActive < 0) {
                 userActive = System.currentTimeMillis();
                 AdsConfig.setUserActive(userActive);
@@ -70,11 +73,21 @@ public class InitBaseConfig {
                 } else if (timeSpace > 12 * 60 * 60 * 1000) {             //12小时以上
                     cFileName = "ad_config_gj_1.4.5_c3.json";
                 }
+            }*/
+            ConfigBean assetConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context, cFileName),ConfigBean.class);
+            /**
+             * 判断是否需要刷新兜底_根据位置数量
+             * 缓存配置>=asset配置情况不进行刷新；
+             */
+            String confString= MmkvUtil.getString(Constants.SPUtils.CONFIG_INFO  ,"");
+            if(!TextUtils.isEmpty(confString) && assetConfig != null){
+                ConfigBean cacheConfig = new Gson().fromJson(confString,ConfigBean.class);
+                if (null != cacheConfig && !CollectionUtils.isEmpty(cacheConfig.getAdList()) && !CollectionUtils.isEmpty(assetConfig.getAdList()) ) {//&&cacheConfig.getAdList().size() >= assetConfig.getAdList().size()
+                    return;
+                }
             }
-
-            ConfigBean jsonConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(context, cFileName),ConfigBean.class);
-            LogUtils.i(System.currentTimeMillis()+"--cgName--"+cFileName+"---size-"+jsonConfig.getAdList().size()+"---first--"+jsonConfig.getAdList().get(0).getAdsInfos().get(0).getAdId());
-            AdsConfig.setAdsInfoslist(jsonConfig);
+            LogUtils.i(System.currentTimeMillis()+"--cgName--"+cFileName+"---size-"+assetConfig.getAdList().size()+"---first--"+assetConfig.getAdList().get(0).getAdsInfos().get(0).getAdId());
+            AdsConfig.setAdsInfoslist(assetConfig);
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }

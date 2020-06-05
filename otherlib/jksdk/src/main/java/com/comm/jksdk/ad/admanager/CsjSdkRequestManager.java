@@ -89,9 +89,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
         TTAdManagerHolder.get().createAdNative(GeekAdSdk.getContext()).loadNativeExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
             @Override
             public void onError(int code, String message) {
-//                TToast.show(NativeExpressActivity.this, "load error : " + code + ", " + message);
-//                mExpressContainer.removeAllViews();
-                LogUtils.e(TAG, "loadNativeAd code:" + code + " message:" + message);
+                LogUtils.d(TAG, "zz--chj--onError()--code-" + code + "---message-" + message + "---adid-" + info.getAdId());
                 if (listener != null) {
                     listener.adError(info, code, message);
                 }
@@ -107,6 +105,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
 //                startTime = System.currentTimeMillis();
 //                mTTAd.render();
                 if (CollectionUtils.isEmpty(ads)) {
+                    LogUtils.d(TAG, "zz--chj--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + info.getAdId());
                     if (listener != null) {
                         listener.adError(info, 1, "没请求到广告数据");
                     }
@@ -114,12 +113,14 @@ public class CsjSdkRequestManager extends SdkRequestManager {
                 }
                 TTNativeExpressAd ttNativeAd = ads.get(0);
                 if (ttNativeAd == null) {
+                    LogUtils.d(TAG, "zz--chj--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + info.getAdId());
                     if (listener != null) {
                         listener.adError(info, 1, "没请求到广告数据");
                     }
                     return;
                 }
                 info.setTtNativeExpressAd(ttNativeAd);
+                LogUtils.d(TAG, "zz--chj--success()--code-" + CodeFactory.SUCCESS + "---message-" + CodeFactory.getError(CodeFactory.SUCCESS) + "---adid-" + info.getAdId());
                 if (listener != null) {
                     listener.adSuccess(info);
                 }
@@ -194,6 +195,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
         TTAdManagerHolder.get().createAdNative(activity.getApplicationContext()).loadInteractionExpressAd(adSlot, new TTAdNative.NativeExpressAdListener() {
             @Override
             public void onError(int code, String message) {
+                LogUtils.d(TAG, "zz--chj--onError()--code-" + code + "---message-" + message + "---adid-" + info.getAdId());
                 if (listener != null) {
                     listener.adError(info, code, message);
                 }
@@ -202,19 +204,22 @@ public class CsjSdkRequestManager extends SdkRequestManager {
             @Override
             public void onNativeExpressAdLoad(List<TTNativeExpressAd> ads) {
                 if (CollectionUtils.isEmpty(ads)) {
+                    LogUtils.d(TAG, "zz--chj--isEmpty:--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + info.getAdId());
                     if (listener != null) {
-                        listener.adError(info, 1, "广告获取为空");
+                        listener.adError(info, CodeFactory.ERROR_EMPTY, CodeFactory.getError(CodeFactory.ERROR_EMPTY));
                     }
                     return;
                 }
                 TTNativeExpressAd ttNativeExpressAd = ads.get(0);
                 if (ttNativeExpressAd == null) {
+                    LogUtils.d(TAG, "zz--chj--isEmpty:--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + info.getAdId());
                     if (listener != null) {
-                        listener.adError(info, 1, "广告获取为空");
+                        listener.adError(info, CodeFactory.ERROR_EMPTY, CodeFactory.getError(CodeFactory.ERROR_EMPTY));
                     }
                     return;
                 }
                 info.setTtNativeExpressAd(ttNativeExpressAd);
+                LogUtils.d(TAG, "zz--chj--success:--code-" + CodeFactory.SUCCESS + "---message-" + CodeFactory.getError(CodeFactory.SUCCESS) + "---adid-" + info.getAdId());
                 if (listener != null) {
                     listener.adSuccess(info);
                 }
@@ -383,7 +388,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
         //step3:(可选，强烈建议在合适的时机调用):申请部分权限，如read_phone_state,防止获取不了imei时候，下载类广告没有填充的问题。
 //        TTAdManagerHolder.get().requestPermissionIfNecessary(mContext);
 
-        LogUtils.d(TAG, "getImageAd->请求穿山甲图文类广告");
+//        LogUtils.d(TAG, "getImageAd->请求穿山甲图文类广告");
 
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(adInfo.getAdId().trim())
@@ -394,7 +399,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
         mTTAdNative.loadFeedAd(adSlot, new TTAdNative.FeedAdListener() {
             @Override
             public void onError(int i, String s) {
-                LogUtils.d(TAG, "onNoAD->请求穿山甲失败,ErrorCode:" + i + ",ErrorMsg:" + s);
+                LogUtils.d(TAG, "zz--onNoAD->请求穿山甲失败,ErrorCode:" + i + ",ErrorMsg:" + s);
                 if (listener != null) {
                     listener.adError(adInfo, i, s);
                 }
@@ -402,8 +407,9 @@ public class CsjSdkRequestManager extends SdkRequestManager {
 
             @Override
             public void onFeedAdLoad(List<TTFeedAd> list) {
-                LogUtils.d(TAG, "onADLoaded->请求穿山甲成功");
+                LogUtils.d(TAG, "zz--chj---onADLoaded->请求穿山甲成功");
                 if (CollectionUtils.isEmpty(list)) {
+                    LogUtils.d(TAG, "zz--chj---onADLoaded->返回物料為空");
                     if (listener != null) {
                         listener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                     }
@@ -411,6 +417,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
                 }
                 TTFeedAd ttFeedAd = list.get(0);
                 if (ttFeedAd == null) {
+                    LogUtils.d(TAG, "zz--chj---onADLoaded->返回物料為空");
                     if (listener != null) {
                         listener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
                     }
@@ -425,6 +432,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
                     adInfo.setAdClickType(2);
                 }
                 adInfo.setTtFeedAd(ttFeedAd);
+                LogUtils.d(TAG, "zz--chj---onADLoaded->success");
                 if (listener != null) {
                     listener.adSuccess(adInfo);
                 }

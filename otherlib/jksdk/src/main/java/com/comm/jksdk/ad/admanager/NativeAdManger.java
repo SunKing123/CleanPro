@@ -1225,6 +1225,14 @@ public class NativeAdManger implements AdManager {
 //                }
 
                 nativeExpressADView = list.get(0);
+                if (null == nativeExpressADView) {
+                    LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + info.getAdId());
+                    if (mAdListener != null) {
+                        mAdListener.adError(info, CodeFactory.ERROR_EMPTY, CodeFactory.getError(CodeFactory.ERROR_EMPTY));
+                    }
+                    return;
+                }
+
                 if (nativeExpressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
                     nativeExpressADView.setMediaListener(new NativeExpressMediaListener() {
                         @Override
@@ -1280,13 +1288,15 @@ public class NativeAdManger implements AdManager {
 
             @Override
             public void onRenderFail(NativeExpressADView nativeExpressADView) {
+                LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_RENDER_FAIL + "---message-" + CodeFactory.getError(CodeFactory.ERROR_RENDER_FAIL) + "---adid-" + info.getAdId());
                 if (mAdListener != null) {
-                    mAdListener.adError(info, 2, "on render fail");
+                    mAdListener.adError(info, CodeFactory.ERROR_RENDER_FAIL, CodeFactory.getError(CodeFactory.ERROR_RENDER_FAIL));
                 }
             }
 
             @Override
             public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
+                LogUtils.d(TAG, "zz--ylh--success()--code-" + CodeFactory.SUCCESS + "---message-" + CodeFactory.getError(CodeFactory.SUCCESS) + "---adid-" + info.getAdId());
                 if (mAdListener != null) {
                     mAdListener.adSuccess(info);
                 }
@@ -1330,6 +1340,7 @@ public class NativeAdManger implements AdManager {
 
             @Override
             public void onNoAD(AdError adError) {
+                LogUtils.d(TAG, "zz--ylh--onError()--code-" + adError.getErrorCode() + "---message-" + adError.getErrorMsg() + "---adid-" + info.getAdId());
                 if (mAdListener != null) {
                     mAdListener.adError(info, adError.getErrorCode(), adError.getErrorMsg());
                 }
