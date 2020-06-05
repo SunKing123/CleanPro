@@ -308,6 +308,6 @@ public class AndroidUtil {
         ArrayList<FirstJunkInfo> list = getAllReadyInstallApps(context);
         Collections.shuffle(list);
         int count = list.size() > maxCount ? maxCount : list.size();
-        return new ArrayList<>(list.subList(0, count - 1));
+        return new ArrayList<>(list.subList(0, count));
     }
 }
