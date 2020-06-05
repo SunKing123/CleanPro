@@ -84,5 +84,12 @@ public class GlideUtils {
             }
         }
     }
+    public static void loadDrawble(Context context, int resourceId, ImageView imageView) {
+        try {
+            Glide.with(context).load(resourceId).into(imageView);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
