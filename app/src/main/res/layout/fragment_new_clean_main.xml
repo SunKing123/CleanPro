@@ -387,6 +387,17 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <com.xiaoniu.cleanking.ui.view.MainTableView
+                android:id="@+id/main_table_view"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/dimen_12dp"
+                android:layout_marginRight="@dimen/dimen_12dp"
+                android:background="@drawable/bg_six"
+                android:gravity="center"
+                android:clipChildren="false"
+                android:padding="@dimen/dimen_16dp">
+            </com.xiaoniu.cleanking.ui.view.MainTableView>
             <!--分享图片-->
             <ImageView
                 android:id="@+id/image_ad_bottom_first"

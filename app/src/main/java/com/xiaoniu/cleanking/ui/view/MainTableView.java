@@ -72,6 +72,7 @@ public class MainTableView extends RecyclerView {
         adapter = new RecycleViewAdapter();
         addItemDecoration(new GridLayoutDivider(mContext, LinearLayoutManager.HORIZONTAL, R.drawable.icon_line_hor));
         setNestedScrollingEnabled(false);
+        setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
         setLayoutManager(gridLayoutManager);
         setAdapter(adapter);
