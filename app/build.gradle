@@ -179,6 +179,7 @@ android {
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.fqt188.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
+            debuggable true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
