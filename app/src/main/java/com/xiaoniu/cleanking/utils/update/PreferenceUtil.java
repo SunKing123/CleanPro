@@ -371,6 +371,54 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存网络加速时间
+     *
+     * @return
+     */
+    public static boolean saveSpeedNetworkTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_SAVE_SPEED_NETWORK_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 保存网络加速值
+     *
+     * @return
+     */
+    public static boolean saveSpeedNetworkValue(String value) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.IS_SAVE_SPEED_NETWORK_VALUE, value).commit();
+        return true;
+    }
+
+    /**
+     * 保存网络加速值
+     *
+     * @return
+     */
+    public static String getSpeedNetworkValue() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.IS_SAVE_SPEED_NETWORK_VALUE,"20");
+    }
+
+    /**
+     * 是否距离上次网络加速至少3分钟
+     *
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getSpeedNetWorkTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_SPEED_NETWORK_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+
+    /**
      * whether display the kill virus warning?
      *
      * condition: the warning displayed the next day,and no used kill virus.

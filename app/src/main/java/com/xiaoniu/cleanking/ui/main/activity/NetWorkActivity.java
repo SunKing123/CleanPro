@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NetWorkSpeedUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatusBarUtil;
 
 import java.math.BigDecimal;
@@ -103,10 +104,16 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 if (null != mValueAnimator) {
                     mValueAnimator.cancel();
                 }
+
+                String speed=NumberUtils.mathRandom(25, 50);
+
                 AppHolder.getInstance().setCleanFinishSourcePageId("network_acceleration_animation_page");
                 startActivity(new Intent(NetWorkActivity.this, ScreenFinishBeforActivity.class)
                         .putExtra(ExtraConstant.TITLE, getString(R.string.network_quicken))
-                        .putExtra(ExtraConstant.NUM, NumberUtils.mathRandom(25, 50)));
+                        .putExtra(ExtraConstant.NUM,speed));
+
+                PreferenceUtil.saveSpeedNetworkTime();
+                PreferenceUtil.saveSpeedNetworkValue(speed);
                 finish();
             }
 

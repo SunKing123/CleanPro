@@ -1021,20 +1021,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private void toSpeedNetwork() {
         StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
-        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
-                || null == AppHolder.getInstance().getSwitchInfoList().getData()
-                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+        if(PreferenceUtil.getSpeedNetWorkTime()){
             startActivity(NetWorkActivity.class);
-        } else {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_NET_JILI.equals(switchInfoList.getConfigKey())) {
-                    if (switchInfoList.isOpen()) {
-                        loadGeekAdNet();
-                    } else {
-                        startActivity(NetWorkActivity.class);
-                    }
-                }
-            }
+        }else {
+            Intent intent=new Intent(getActivity(),NewCleanFinishActivity.class);
+            String num=PreferenceUtil.getSpeedNetworkValue();
+            intent.putExtra("title", "网络加速");
+            intent.putExtra("main", false);
+            intent.putExtra("num", num);
+            startActivity(intent);
         }
     }
 
