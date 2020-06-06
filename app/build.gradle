@@ -3,7 +3,7 @@ apply plugin: 'channel'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao'
-
+apply plugin: 'com.didiglobal.booster'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {

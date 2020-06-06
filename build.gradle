@@ -2,6 +2,7 @@
 apply from: "config.gradle"
 
 buildscript {
+    ext.booster_version = '1.7.1'
     repositories {
         google()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
@@ -23,6 +24,22 @@ buildscript {
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61'
         //greendao
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin
+
+        // 修复系统toast bug
+        classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version"
+        classpath "com.didiglobal.booster:booster-transform-toast:$booster_version"
+        classpath "com.didiglobal.booster:booster-transform-thread:$booster_version"
+        /**
+         *  处理系统 Crash
+         */
+        classpath "com.didiglobal.booster:booster-transform-activity-thread:$booster_version"
+
+        /*修复 MediaPlayer 崩溃
+        */
+        classpath "com.didiglobal.booster:booster-transform-media-player:$booster_version"
+
+        /*修复 finalizer 导致的 TimeoutException*/
+        classpath "com.didiglobal.booster:booster-transform-finalizer-watchdog-daemon:$booster_version"
     }
 }
 
