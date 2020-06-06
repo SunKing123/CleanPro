@@ -96,7 +96,7 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-dev-default.xiaoniuhy.com\""
-            buildConfigField "String", "Base_H5_Host", "\"https://devfddh5.51huihuahua.com\""
+            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
             signingConfig signingConfigs.release
@@ -116,7 +116,7 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
-            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.fqt188.com\""
+            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
             signingConfig signingConfigs.release
@@ -158,7 +158,7 @@ android {
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
 
-            buildConfigField "String", "Base_H5_Host", "\"https://devfddh5.51huihuahua.com\""
+            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
             signingConfig signingConfigs.release
@@ -176,7 +176,7 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
-            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.fqt188.com\""
+            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             minifyEnabled false
             signingConfig signingConfigs.release
