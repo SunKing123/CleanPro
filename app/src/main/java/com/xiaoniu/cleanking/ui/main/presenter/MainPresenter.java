@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -483,8 +484,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {//网络配置异常时读取本地
                     PreferenceUtil.saveCleanLog(FileUtils.readJSONFromAsset(mActivity, "action_log.json"));
                 }
-                //启动保活进程
-                mView.start();
+                //限制华为设置启动包活；
+                if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
+                    //启动保活进程
+                    mView.start();
+                }
+
             }
 
             @Override
