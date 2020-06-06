@@ -211,6 +211,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         initMainTableItemClick();
 
+        if(PreferenceUtil.getShowVirusKillWarning()){
+            mainTableView.killVirusWarningStyle(getActivity());
+        }else {
+            mainTableView.killVirusNormalStyle(getActivity());
+        }
+
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();

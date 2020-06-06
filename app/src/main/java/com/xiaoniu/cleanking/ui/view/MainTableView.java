@@ -21,6 +21,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -344,12 +345,16 @@ public class MainTableView extends RecyclerView {
      * ****************************************************************************************************************************
      */
 
-    public void killVirusNormalStyle() {
+    public void killVirusNormalStyle(Context context) {
         itmVirusKill.clearMark();
+        itmVirusKill.setText("病毒查杀");
+        itmVirusKill.loadDrawable(context,R.drawable.icon_virus);
     }
 
-    public void killVirusWarningStyle() {
+    public void killVirusWarningStyle(Context context) {
         itmVirusKill.setMarkText("有风险");
+        itmVirusKill.setText("病毒查杀");
+        itmVirusKill.loadDrawable(context,R.drawable.icon_virus);
     }
 
     public void killVirusCleanWarningStyle() {

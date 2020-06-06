@@ -22,6 +22,7 @@ import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -369,6 +370,22 @@ public class PreferenceUtil {
         return false;
     }
 
+    /**
+     * whether display the kill virus warning
+     * the warning displayed the next day。
+     * @return true is display
+     */
+    public static boolean getShowVirusKillWarning() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
+        Calendar now = Calendar.getInstance();
+        Calendar last = Calendar.getInstance();
+        last.setTimeInMillis(time);
+        int nowDayOfYear=now.get(Calendar.DAY_OF_YEAR);
+        int lastDayOfYear=last.get(Calendar.DAY_OF_YEAR);
+        //the warning displayed the next day。
+        return nowDayOfYear-lastDayOfYear>1;
+    }
 
     /**
      * 保存垃圾清理是否已使用
