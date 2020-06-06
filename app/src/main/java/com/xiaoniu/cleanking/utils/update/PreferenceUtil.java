@@ -371,20 +371,24 @@ public class PreferenceUtil {
     }
 
     /**
-     * whether display the kill virus warning
-     * the warning displayed the next day。
+     * whether display the kill virus warning?
+     *
+     * condition: the warning displayed the next day,and no used kill virus.
+     *
      * @return true is display
      */
     public static boolean getShowVirusKillWarning() {
+        Calendar now = Calendar.getInstance();
+
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
-        Calendar now = Calendar.getInstance();
         Calendar last = Calendar.getInstance();
         last.setTimeInMillis(time);
-        int nowDayOfYear=now.get(Calendar.DAY_OF_YEAR);
-        int lastDayOfYear=last.get(Calendar.DAY_OF_YEAR);
-        //the warning displayed the next day。
-        return nowDayOfYear-lastDayOfYear>1;
+
+        int nowDayOfYear = now.get(Calendar.DAY_OF_YEAR);
+        int lastDayOfYear = last.get(Calendar.DAY_OF_YEAR);
+        //warning displayed the next day。
+        return nowDayOfYear - lastDayOfYear >= 1;
     }
 
     /**
@@ -1239,8 +1243,6 @@ public class PreferenceUtil {
     }
 
 
-
-
     /**
      * 获取是否有版本更新
      */
@@ -1555,7 +1557,6 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
-
 
 
 }
