@@ -343,8 +343,17 @@ public class MainTableView extends RecyclerView {
      * ******************************************************kill virus button styles**********************************************
      * ****************************************************************************************************************************
      */
+
+    public void killVirusNormalStyle() {
+        itmVirusKill.clearMark();
+    }
+
     public void killVirusWarningStyle() {
         itmVirusKill.setMarkText("有风险");
+    }
+
+    public void killVirusCleanWarningStyle() {
+        itmVirusKill.clearMark();
     }
 
     /**

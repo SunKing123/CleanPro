@@ -317,19 +317,19 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
     }
 
-    private void initMainTableItemClick(){
+    private void initMainTableItemClick() {
         mainTableView.setOnItemClickListener(new MainTableView.OnItemClick() {
             @Override
             public void onClick(MainTableItem item) {
-                switch (item.tag){
+                switch (item.tag) {
                     case MainTableItem.TAG_ACC:                   //一键加速
                         text_acce();
                         break;
                     case MainTableItem.TAG_BATTER:                //电量优化
                         line_shd();
                         break;
-                    case MainTableItem.TAG_KILL_VIRUS:          //文件清理
-                        wjgl();
+                    case MainTableItem.TAG_KILL_VIRUS:            //病毒查杀
+                        toKillVirus();
                         break;
                     case MainTableItem.TAG_CLEAN_NOTIFY:          //通知清理
                         mClickQq();
@@ -350,6 +350,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         });
     }
+
     /**
      * 广告sdk
      */
@@ -424,7 +425,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         StatisticsUtils.trackClick("suspended_interactive_advertising_click", "悬浮互动式广告点击", "clod_splash_page", "home_page");
         if (null != mInteractionList && mInteractionList.size() > 0) {
-            if (mInteractionPoistion > mInteractionList.size()-1) {
+            if (mInteractionPoistion > mInteractionList.size() - 1) {
                 mInteractionPoistion = 0;
             }
 
@@ -450,7 +451,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
         if (null != mInteractionList && mInteractionList.size() > 0) {
-            if (mInteractionPoistion > mInteractionList.size()-1) {
+            if (mInteractionPoistion > mInteractionList.size() - 1) {
                 mInteractionPoistion = 0;
             }
             if (mInteractionList.size() == 1) {
@@ -613,7 +614,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
                     @Override
                     public void adClose(AdInfo info) {
-                        LogUtils.e("AdInfo:"+new Gson().toJson(info));
+                        LogUtils.e("AdInfo:" + new Gson().toJson(info));
                         if (null == info) return;
                         mCenterAdFramelayout.setVisibility(View.GONE);
                         StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
@@ -848,9 +849,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
         }
 
+        if (getString(R.string.virus_kill).contains(event.getTitle())) {
+            //todo 病毒查杀完成回调 清除警告标识
+            mainTableView.killVirusCleanWarningStyle();
+        }
         if (getString(R.string.virus_kill).contains(event.getTitle()) || getString(R.string.network_quicken).contains(event.getTitle())) {
+
             forThreeTab();
         }
+
         if (getString(R.string.game_quicken).contains(event.getTitle()) && isGameMain) {
             forThreeTab();
         }
@@ -983,26 +990,19 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    private void toKillVirus(){
+    private void toKillVirus() {
         StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
-        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
-                || null == AppHolder.getInstance().getSwitchInfoList().getData()
-                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+        if (PreferenceUtil.getVirusKillTime()) {
             startActivity(VirusKillActivity.class);
         } else {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
-                    if (switchInfoList.isOpen()) {
-                        loadGeekAd();
-                    } else {
-                        startActivity(VirusKillActivity.class);
-                    }
-                }
-            }
+            Intent intent=new Intent(getActivity(),NewCleanFinishActivity.class);
+            intent.putExtra("title", "病毒查杀");
+            intent.putExtra("main", false);
+            startActivity(intent);
         }
     }
 
-    private void toSpeedGame(){
+    private void toSpeedGame() {
         isGameMain = true;
         StatisticsUtils.trackClick("main_function_area_gameboost_click", "用户在首页主功能区点击【游戏加速】按钮", "home_page", "home_page");
         if (PreferenceUtil.getGameTime()) {
@@ -1013,7 +1013,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    private void toSpeedNetwork(){
+    private void toSpeedNetwork() {
         StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
         if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
                 || null == AppHolder.getInstance().getSwitchInfoList().getData()

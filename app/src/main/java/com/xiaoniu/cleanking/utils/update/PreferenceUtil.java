@@ -345,7 +345,7 @@ public class PreferenceUtil {
 
 
     /**
-     * 保存游戏加速时间
+     * 保存病毒查杀时间
      *
      * @return
      */
@@ -357,7 +357,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * 是否距离上次游戏加速间隔至少3分钟
+     * 是否距离上次病毒查杀隔至少3分钟
      *
      * @return true 3分钟以上 false 小于3分钟
      */
@@ -368,6 +368,7 @@ public class PreferenceUtil {
             return true;
         return false;
     }
+
 
     /**
      * 保存垃圾清理是否已使用
