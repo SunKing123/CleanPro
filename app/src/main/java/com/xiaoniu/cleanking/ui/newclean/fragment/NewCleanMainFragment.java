@@ -208,8 +208,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         initRecyclerView();
 
         mainTableView.batteryNormalStyle(getActivity());
-        mainTableView.notifyCleanStyle(getActivity());
-        mainTableView.nextMultipleItem();
 
         initMainTableItemClick();
 
@@ -257,7 +255,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
 
-                mainTableView.notifyHasStyle(getActivity());
 
             } else {
                 if (!PreferenceUtil.getNotificationCleanTime()) {
@@ -266,16 +263,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
 
-                    mainTableView.notifyFinishStyle(getActivity());
-
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     mShowCount++;
                     mNotiClearFinishIv.setVisibility(View.GONE);
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_notify, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
-
-                    mainTableView.notifyNumStyle(getActivity());
 
                 }
             }
@@ -668,7 +661,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
 
-                mainTableView.notifyHasStyle(getActivity());
 
             } else {
                 if (!PreferenceUtil.isCleanNotifyUsed() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
@@ -678,14 +670,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
 
-                    mainTableView.notifyNumStyle(getActivity());
 
                 } else if (!PreferenceUtil.isCleanNotifyUsed() && NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.tool_notification_clean);
 
-                    mainTableView.notifyCleanStyle(getActivity());
 
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
 //                    mShowCount--;
@@ -693,8 +683,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
-
-                    mainTableView.notifyFinishStyle(getActivity());
 
                 }
             }
@@ -731,8 +719,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
             mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
             mNotiClearTv.setText(R.string.finished_clean_notify_hint);
-
-            mainTableView.notifyFinishStyle(getActivity());
 
             //一键加速
             if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
@@ -833,8 +819,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FFAC01));
                 mNotiClearTv.setText(R.string.find_harass_notify);
 
-                mainTableView.notifyHasStyle(getActivity());
-
             } else {
                 if (!PreferenceUtil.isCleanNotifyUsed() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     mShowCount++;
@@ -843,14 +827,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_FF4545));
                     mNotiClearTv.setText(getString(R.string.find_harass_notify_num, NotifyCleanManager.getInstance().getAllNotifications().size() + ""));
 
-                    mainTableView.notifyNumStyle(getActivity());
-
                 } else if (!PreferenceUtil.isCleanNotifyUsed() && NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.tool_notification_clean);
-
-                    mainTableView.notifyCleanStyle(getActivity());
 
                 } else if (NotifyCleanManager.getInstance().getAllNotifications().size() <= 0) {
 //                    mShowCount--;
@@ -858,8 +838,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     GlideUtils.loadDrawble(getActivity(), R.drawable.icon_home_qq, mNotiClearIv);
                     mNotiClearTv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_323232));
                     mNotiClearTv.setText(R.string.finished_clean_notify_hint);
-
-                    mainTableView.notifyFinishStyle(getActivity());
 
                 }
             }
@@ -872,11 +850,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
         if (getString(R.string.virus_kill).contains(event.getTitle()) || getString(R.string.network_quicken).contains(event.getTitle())) {
             forThreeTab();
-            mainTableView.nextMultipleItem();
         }
         if (getString(R.string.game_quicken).contains(event.getTitle()) && isGameMain) {
             forThreeTab();
-            mainTableView.nextMultipleItem();
         }
         initGeekSdkTop();
     }
@@ -1027,6 +1003,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     private void toSpeedGame(){
+        isGameMain = true;
+        StatisticsUtils.trackClick("main_function_area_gameboost_click", "用户在首页主功能区点击【游戏加速】按钮", "home_page", "home_page");
+        if (PreferenceUtil.getGameTime()) {
+            getActivity().startActivity(new Intent(getActivity(), GameActivity.class)
+                    .putExtra("main", true));
+        } else {
+            goFinishActivity();
+        }
+    }
+
+    private void toSpeedNetwork(){
         StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
         if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
                 || null == AppHolder.getInstance().getSwitchInfoList().getData()
@@ -1042,17 +1029,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     }
                 }
             }
-        }
-    }
-
-    private void toSpeedNetwork(){
-        isGameMain = true;
-        StatisticsUtils.trackClick("main_function_area_gameboost_click", "用户在首页主功能区点击【游戏加速】按钮", "home_page", "home_page");
-        if (PreferenceUtil.getGameTime()) {
-            getActivity().startActivity(new Intent(getActivity(), GameActivity.class)
-                    .putExtra("main", true));
-        } else {
-            goFinishActivity();
         }
     }
 
