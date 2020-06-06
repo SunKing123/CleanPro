@@ -28,18 +28,18 @@ buildscript {
         // 修复系统toast bug
         classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version"
         classpath "com.didiglobal.booster:booster-transform-toast:$booster_version"
-        classpath "com.didiglobal.booster:booster-transform-thread:$booster_version"
-        /**
-         *  处理系统 Crash
-         */
+//        classpath "com.didiglobal.booster:booster-transform-thread:$booster_version"
+//        /**
+//         *  处理系统 Crash
+//         */
         classpath "com.didiglobal.booster:booster-transform-activity-thread:$booster_version"
-
-        /*修复 MediaPlayer 崩溃
-        */
-        classpath "com.didiglobal.booster:booster-transform-media-player:$booster_version"
-
-        /*修复 finalizer 导致的 TimeoutException*/
-        classpath "com.didiglobal.booster:booster-transform-finalizer-watchdog-daemon:$booster_version"
+//
+//        /*修复 MediaPlayer 崩溃
+//        */
+//        classpath "com.didiglobal.booster:booster-transform-media-player:$booster_version"
+//
+//        /*修复 finalizer 导致的 TimeoutException*/
+//        classpath "com.didiglobal.booster:booster-transform-finalizer-watchdog-daemon:$booster_version"
     }
 }
 
