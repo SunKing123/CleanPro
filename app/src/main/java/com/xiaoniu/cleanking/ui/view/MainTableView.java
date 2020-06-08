@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.bean.MainTableItem;
 import com.xiaoniu.cleanking.ui.main.bean.VirusLlistEntity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.common.utils.RxView;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.widget.divider.GridLayoutDivider;
 
@@ -150,12 +151,11 @@ public class MainTableView extends RecyclerView {
             public StyleViewHolder(ItmMTView view) {
                 super(view);
                 this.itmMTView = view;
-                this.itmMTView.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onItemClick.onClick(mData.get(getAdapterPosition()));
-                    }
-                });
+                RxView.clicks(itmMTView, o -> click());
+            }
+
+            private void click() {
+                onItemClick.onClick(mData.get(getAdapterPosition()));
             }
 
             public void bindData(MainTableItem item) {

@@ -587,7 +587,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //            mShowCount--;
             mainTableView.accStorageLowStyle(getActivity());
 
-
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
@@ -694,7 +693,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
 
         if (getString(R.string.virus_kill).contains(event.getTitle())) {
-            //todo 病毒查杀完成回调 清除警告标识
+            // 病毒查杀完成回调 清除警告标识
             mainTableView.killVirusCleanWarningStyle();
         }
         initGeekSdkTop();
