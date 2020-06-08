@@ -115,7 +115,7 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
                     adInfo.setAdClickType(2);
                 }
                 adInfo.setNativeUnifiedADData(nativeUnifiedADData);
-                LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + adInfo.getAdId());
+                LogUtils.d(TAG, "zz--ylh--success()--code-" + CodeFactory.SUCCESS + "---message-" + CodeFactory.getError(CodeFactory.SUCCESS) + "---adid-" + adInfo.getAdId());
                 if (listener != null) {
                     listener.adSuccess(adInfo);
                 }

@@ -281,7 +281,7 @@ public class DebugActivity extends BaseActivity {
     public void gotoPop(View view) {
 //        startPop(this);
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
+        adManager.loadAd(this, "newlist_1_1", new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
