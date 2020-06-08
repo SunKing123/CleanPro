@@ -1,0 +1,83 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0.0"
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a"//, "x86_64","x86"
+        }
+//        需要配置以下key值
+//        manifestPlaceholders = [
+////                JPUSH_PKGNAME:"您应用的包名",
+////                JPUSH_APPKEY : "a7cc82f3871424f6a0a1d395",//值来自开发者平台取得的AppKey
+////                JPUSH_CHANNEL: "渠道",
+////
+////                XIAOMI_APPKEY:"MI‐您的应用对应的小米的APPKEY",//小米平台注册的appkey
+////                XIAOMI_APPID:"MI‐您的应用对应的小米的APPID",//小米平台注册的appid
+//
+////                HUAWEI_APPID:"您的应用对应华为的appID",//华为平台注册的appid 
+//
+////                MEIZU_APPKEY:"MZ‐您的应用对应的魅族appkey",//魅族平台注册的appkey 
+////                MEIZU_APPID:"MZ‐您的应用对应魅族的appid",//魅族平台注册的appid 
+////
+////                OPPO_APPKEY:"OP‐您的应用对应OPPO的APPKEY",// OPPO平台注册的appkey
+////                OPPO_APPID:"OP‐您的应用对应OPPO的APPID",// OPPO平台注册的appid
+////                OPPO_APPSECRET:"OP‐您的应用对应OPPO的APPSECRET",//OPPO平台注册的appsecret
+////
+////                VIVO_APPKEY:"您的应用对应的vivo的AppKey",// VIVO平台注册的appkey
+////                VIVO_APPID:"您的应用对应的vivo的AppID",// VIVO平台注册的appid
+//        ]
+
+
+
+
+
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+repositories {//表示工程要依赖libs
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    api 'cn.jiguang.sdk:jpush:3.6.0'  // 此处以JPush 3.6.0 版本为例。
+    api 'cn.jiguang.sdk:jcore:2.3.4'  // 此处以JCore 2.3.4 版本为例。
+//
+    implementation 'cn.jiguang.sdk.plugin:xiaomi:3.6.0'//此版本插件仅支持JPushSDK3.2.0及以上版本 
+//
+    implementation'cn.jiguang.sdk.plugin:huawei:3.6.0'//此版本插件仅支持JPushSDK3.2.0及以上版本 
+    implementation files('libs\\HMSSdk-agent.aar')
+//
+    implementation'cn.jiguang.sdk.plugin:meizu:3.6.0'//此版本插件仅支持JPushSDK3.2.0及以上版本 
+
+    implementation'cn.jiguang.sdk.plugin:oppo:3.6.0'//此版本插件仅支持JPushSDK3.1.8及以上版本 
+//
+    implementation 'cn.jiguang.sdk.plugin:vivo:3.6.0'//此版本插件仅支持JPushSDK3.2.0及以上版本 
+}
+

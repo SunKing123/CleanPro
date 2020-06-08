@@ -3,12 +3,15 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
@@ -68,6 +72,7 @@ import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
@@ -443,6 +448,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         getRedPacketList();
     }
 
+    /*
+     * 从服务端获取本地推送的配置
+     */
+    public void getLocalPushConfigFromServer(){
+
+    }
 
     /**
      * 本地Push配置
@@ -668,8 +679,51 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     }
                 }
+                requestPopWindowPermission();
             }
         });
+    }
+
+    //获取本地推送弹框权限
+    @SuppressLint("CheckResult")
+    public void requestPopWindowPermission(){
+        if (mView == null) {
+            return;
+        }
+        if (!RomUtils.checkFloatWindowPermission(mActivity)){
+            new AlertDialog.Builder(mActivity).setTitle("提示").setMessage("").setMessage("您的手机没有授予悬浮窗权限，请开启后再试")
+                    .setPositiveButton("去开启", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                           RomUtils.applyPermission(mActivity, new RomUtils.OnSuspensionPermissionListener() {
+                               @Override
+                               public void onPermissionGranted() {
+
+
+                                   new Handler().postDelayed(() -> {
+                                       if (!RomUtils.checkFloatWindowPermission(mActivity)) {
+                                           // 授权失败
+                                           ToastUtils.showShort("推送授权失败");
+                                       } else {
+                                           //授权成功
+                                           ToastUtils.showShort("推送授权成功");
+                                       }
+                                   }, 2000);
+
+
+
+                               }
+                           });
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            }).show();
+        }else {
+            ToastUtils.showShort("有权限");
+        }
     }
 
 

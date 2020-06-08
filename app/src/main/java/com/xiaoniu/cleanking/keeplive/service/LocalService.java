@@ -30,8 +30,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -63,15 +64,12 @@ import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.keeplive.KeepAliveAidl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import androidx.annotation.RequiresApi;
 
 import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
