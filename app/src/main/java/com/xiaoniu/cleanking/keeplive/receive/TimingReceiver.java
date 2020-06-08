@@ -5,8 +5,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
@@ -17,6 +20,8 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
+import com.xiaoniu.cleanking.ui.localpush.WindowUtil;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -31,7 +36,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -46,8 +50,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -102,19 +104,18 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                     break;
                 case "home"://home按键触发
-                    LogUtils.e("==========home 被触发===========");
                     if (null != context) {
                         startActivity(context);
                     }
+                    //在LocalService中已经Delay了一秒，因此这里只用2秒就成
+                    new Handler().postDelayed(() -> showLocalPushAlertWindow(context), 2000);
                     break;
                 case "app_add_full"://锁屏打开页面||home按键触发  //应用植入插屏全屏广告
-                    LogUtils.e("==========app_add_full 被触发===========");
                     if (null != context) {
                         startFullActivty(context.getApplicationContext());
                     }
                     break;
                 case "unlock_screen"://锁屏打开页面
-                    LogUtils.e("==========unlock_screen 被触发===========");
                     if (null != context) {
                         startActivity(context);
                     }
@@ -125,9 +126,25 @@ public class TimingReceiver extends BroadcastReceiver {
         }
 
 
-        if (!TextUtils.isEmpty(intent.getStringExtra("action")) && (intent.getStringExtra("action").equals("unlock_screen") || intent.getStringExtra("action").equals("home"))) {
+    }
 
-        }
+
+    private void showLocalPushAlertWindow(Context context) {
+        //1.读取本地缓存的推送配置Config列表
+        List<LocalPushConfigModel> mLocalPushModel = new ArrayList<>();
+        //2.根据推送的优先级进行排序
+
+        //3.判断【垃圾清理】功能是否满足推送条件
+        LocalPushConfigModel clearModel = mLocalPushModel.get(0);
+
+        //4.判断【一键加速】功能是否满足推送条件
+
+        //5.判断【手机降温】功能是否满足推送条件
+
+        //6.判断【超强省电】功能是否满足推送条件
+
+
+        WindowUtil.getInstance().showWindowIfHavePermission(context, clearModel);
     }
 
 
