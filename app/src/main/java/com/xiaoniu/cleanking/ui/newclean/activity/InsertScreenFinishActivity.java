@@ -45,6 +45,12 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
         loadGeekSdk();
+        findViewById(R.id.linear_finish_screen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**

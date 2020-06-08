@@ -67,6 +67,10 @@ public class SpCacheConfig {
     //病毒查杀间隔时间
     public static final String IS_SAVE_VIRUS_TIME = "virus_time";
 
+    //网络加速间隔时间
+    public static final String IS_SAVE_SPEED_NETWORK_TIME = "speed_network_time";
+    public static final String IS_SAVE_SPEED_NETWORK_VALUE = "speed_network_value";
+
     public static final String IS_SAVE_NOW_CLEAN_TIME = "now_clean_time";
     public static final String IS_SAVE_WeCLEAN_TIME = "weclean_time";
     public static final String IS_SAVE_NOTIFICATION_TIME = "notification_time";

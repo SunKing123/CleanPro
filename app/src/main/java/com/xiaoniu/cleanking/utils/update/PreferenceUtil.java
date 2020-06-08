@@ -22,6 +22,7 @@ import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -345,7 +346,7 @@ public class PreferenceUtil {
 
 
     /**
-     * 保存游戏加速时间
+     * 保存病毒查杀时间
      *
      * @return
      */
@@ -357,7 +358,7 @@ public class PreferenceUtil {
     }
 
     /**
-     * 是否距离上次游戏加速间隔至少3分钟
+     * 是否距离上次病毒查杀隔至少3分钟
      *
      * @return true 3分钟以上 false 小于3分钟
      */
@@ -367,6 +368,75 @@ public class PreferenceUtil {
         if (System.currentTimeMillis() - time > 3 * 60 * 1000)
             return true;
         return false;
+    }
+
+    /**
+     * 保存网络加速时间
+     *
+     * @return
+     */
+    public static boolean saveSpeedNetworkTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_SAVE_SPEED_NETWORK_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 保存网络加速值
+     *
+     * @return
+     */
+    public static boolean saveSpeedNetworkValue(String value) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.IS_SAVE_SPEED_NETWORK_VALUE, value).commit();
+        return true;
+    }
+
+    /**
+     * 保存网络加速值
+     *
+     * @return
+     */
+    public static String getSpeedNetworkValue() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.IS_SAVE_SPEED_NETWORK_VALUE,"20");
+    }
+
+    /**
+     * 是否距离上次网络加速至少3分钟
+     *
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getSpeedNetWorkTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_SPEED_NETWORK_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+
+    /**
+     * whether display the kill virus warning?
+     *
+     * condition: the warning displayed the next day,and no used kill virus.
+     *
+     * @return true is display
+     */
+    public static boolean getShowVirusKillWarning() {
+        Calendar now = Calendar.getInstance();
+
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
+        Calendar last = Calendar.getInstance();
+        last.setTimeInMillis(time);
+
+        int nowDayOfYear = now.get(Calendar.DAY_OF_YEAR);
+        int lastDayOfYear = last.get(Calendar.DAY_OF_YEAR);
+        //warning displayed the next day。
+        return nowDayOfYear - lastDayOfYear >= 1;
     }
 
     /**
@@ -1221,8 +1291,6 @@ public class PreferenceUtil {
     }
 
 
-
-
     /**
      * 获取是否有版本更新
      */
@@ -1537,7 +1605,6 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
-
 
 
 }
