@@ -44,7 +44,6 @@
         android:id="@+id/iv_tick_s2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/iv_acc"
         android:src="@drawable/icon_finish_clean_g"
         android:visibility="gone"
         app:layout_constraintLeft_toRightOf="@id/space"
