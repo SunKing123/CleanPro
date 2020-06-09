@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -218,6 +217,78 @@ public class FileUtils {
                 e1.printStackTrace();
             }
         }
+    }
+
+
+    //==============================New Toolkit for File Match======================================================
+
+    /**
+     * 遍历文件夹
+     */
+    public static SecondJunkInfo listFiles(final File file) {
+        final SecondJunkInfo secondLevelGarbageInfo = new SecondJunkInfo();
+        listInnerListFiles(secondLevelGarbageInfo, file);
+        return secondLevelGarbageInfo;
+    }
+
+
+
+    /**
+     * 递归遍历file下的所有文件
+     */
+    public static void listInnerListFiles(final SecondJunkInfo secondJunkInfo, File rootFile) {
+        final File[] listFiles = rootFile.listFiles();
+        if (listFiles == null) {
+            return;
+        }
+        for (int i = 0; i < listFiles.length; i++) {
+            File file = listFiles[i];
+            if (file.isDirectory()) {
+                if (file.getName().contains("image") && checkFileTimeout(file, 7)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else if (file.getName().contains("video") && checkFileTimeout(file, 7)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else if (file.getName().contains("audio") && checkFileTimeout(file, 3)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else if (file.getName().contains("download") && checkFileTimeout(file, 7)) {
+                    listInnerListFiles(secondJunkInfo, file);
+                } else {
+                    listInnerListFiles(secondJunkInfo, file);
+                }
+            } else {   //单个文件
+                secondJunkInfo.setFilesCount(secondJunkInfo.getFilesCount() + 1);
+                secondJunkInfo.setGarbageSize(secondJunkInfo.getGarbageSize() + file.length());
+            }
+        }
+    }
+
+
+
+    //判断是否超过n天
+    private static boolean checkFileTimeout(File file, int count) {
+        if (!file.exists()) {
+            return false;
+        }
+        try {
+            long time = file.lastModified();
+            return DateUtils.isOverThreeDay(time, count);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+
+    public static boolean isNotHiddenPath(File file) {
+        if (file.getParent() != null) {
+            File parentFile = new File(file.getParent());
+            if (parentFile.isHidden()) {
+                return true;
+            }
+            return isNotHiddenPath(parentFile);
+        }
+        return false;
     }
 
 }

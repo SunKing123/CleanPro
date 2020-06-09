@@ -2,8 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.Manifest;
 import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
@@ -17,10 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,7 +34,6 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 
 import java.util.ArrayList;
@@ -49,7 +44,6 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 
 public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
 
@@ -113,10 +107,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     mView.showCountNumber(total);
             }
 
-            @Override
-            public void reduceSize(long p0) {
-                Log.v("onAnimationEnd", "reduceSize ");
-            }
 
             @Override
             public void scanFile(String p0) {
@@ -125,10 +115,6 @@ public class NewScanPresenter extends RxPresenter<ScanFragment, NewScanModel> {
                     mView.showScanFile(p0);
             }
 
-            @Override
-            public void totalSize(int p0) {
-                Log.v("onAnimationEnd", "totalSize ");
-            }
         });
 
         Observable.create(e -> {
