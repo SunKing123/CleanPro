@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.BaseModel;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
@@ -152,6 +153,14 @@ public class MainModel extends BaseModel {
      */
     public void getScreentSwitch(Common4Subscriber<InsertAdSwitchInfoList> commonSubscriber) {
         mService.getScreentSwitch().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
+    /*
+     * 从服务端获取本地推送的相关接口
+     */
+    @SuppressLint("CheckResult")
+    public void getLocalPushConfigFromServer(Common4Subscriber<LocalPushConfigModel> commonSubscriber) {
+        mService.getLocalPushConfig().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
 
