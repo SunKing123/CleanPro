@@ -312,11 +312,16 @@ dependencies {
     //推送
   //  implementation files('libs\\push-core.aar')
   //  implementation files('libs\\push-jpush.aar')
+    implementation project(':permission')
     implementation project(':otherlib:jksdk')
 
     //百度统计sdk
 
     implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
+
+    implementation 'me.jessyan:retrofit-url-manager:1.4.0'
+
+    implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
 
 
 }

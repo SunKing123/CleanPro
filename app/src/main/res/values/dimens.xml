@@ -104,4 +104,13 @@
     <dimen name="swipe_card_offset">20dp</dimen>
     <dimen name="rippleStrokeWidth">2dp</dimen>
     <dimen name="rippleRadius">64dp</dimen>
+
+
+
+    <!-- XD added for text size -->
+    <dimen name="text_title_main">20sp</dimen>      <!-- 首页导航栏标题 -->
+    <dimen name="text_title_secondary">18sp</dimen> <!-- 导航栏、小标题、部分标题 -->
+    <dimen name="text_primary">22sp</dimen>   <!-- 正文内容 -->
+    <dimen name="text_secondary">18sp</dimen> <!-- 辅助文字、副文本内容 -->
+    <dimen name="text_tertiary">12sp</dimen>  <!-- 辅助文字 可用最小字 -->
 </resources>

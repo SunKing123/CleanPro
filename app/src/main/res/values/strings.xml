@@ -20,8 +20,9 @@
     <string name="cache_clean">缓存垃圾</string>
     <string name="system_cache">系统缓存</string>
     <string name="select_already">已勾选:</string>
-
-
+    <string name="stop_scan">停止清理</string>
+    <string name="scanning_file">扫描: %1$s</string>
+    <string name="clean_junk">垃圾清理</string>
     <string name="byte_short">B</string>
     <!-- Suffix added to a number to signify size in kilobytes. -->
     <string name="kilo_byte_short">KB</string>
