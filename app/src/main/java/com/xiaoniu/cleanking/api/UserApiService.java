@@ -87,7 +87,7 @@ public interface UserApiService {
      * 本地推送配置
      */
     @GET("/pushLocal/list")
-    Flowable<LocalPushConfigModel> getLocalPushMode();
+    Flowable<LocalPushConfigModel> getLocalPushConfig();
 
 
     /**

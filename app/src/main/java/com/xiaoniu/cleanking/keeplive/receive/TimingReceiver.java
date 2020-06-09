@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,6 +20,8 @@ import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
+import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.localpush.WindowUtil;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -36,6 +37,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -75,14 +77,15 @@ public class TimingReceiver extends BroadcastReceiver {
         Log.e("dong", "收到广播 =" + intent.getStringExtra("action"));
 
         String action = intent.getStringExtra("action");
-        if (TextUtils.isEmpty(action)) {
-            return;
-        } else {
+        if (!TextUtils.isEmpty(action)) {
+
+
+            mBatteryPower = intent.getIntExtra("battery", 50);
+            temp = intent.getIntExtra("temp", 30);
+            isCharged = intent.getBooleanExtra("isCharged", false);
+
             switch (action) {
                 case "scan_heart"://本地push心跳
-                    mBatteryPower = intent.getIntExtra("battery", 50);
-                    temp = intent.getIntExtra("temp", 30);
-                    isCharged = intent.getBooleanExtra("isCharged", false);
                     Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
                     for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
                         PushSettingList.DataBean dataBean = entry.getValue();
@@ -104,11 +107,19 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                     break;
                 case "home"://home按键触发
+                    LogUtils.e("====TimingReceiver中进入Home分支===");
                     if (null != context) {
                         startActivity(context);
                     }
-                    //在LocalService中已经Delay了一秒，因此这里只用2秒就成
-                    new Handler().postDelayed(() -> showLocalPushAlertWindow(context), 2000);
+                    if (!RomUtils.checkFloatWindowPermission(context)) {
+                        LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
+                        return;
+                    }
+                    if (WindowUtil.getInstance().isShowing()) {
+                        LogUtils.e("====TimingReceiver中 PopWindow正在弹出===");
+                        return;
+                    }
+                    showLocalPushAlertWindow(context);
                     break;
                 case "app_add_full"://锁屏打开页面||home按键触发  //应用植入插屏全屏广告
                     if (null != context) {
@@ -131,20 +142,32 @@ public class TimingReceiver extends BroadcastReceiver {
 
     private void showLocalPushAlertWindow(Context context) {
         //1.读取本地缓存的推送配置Config列表
-        List<LocalPushConfigModel> mLocalPushModel = new ArrayList<>();
-        //2.根据推送的优先级进行排序
+        Map<String, LocalPushConfigModel.Item> map = PreferenceUtil.getLocalPushConfig();
+        //2.判断【垃圾清理】功能是否满足推送条件
+        LocalPushConfigModel.Item clearItem = map.get("1");
+        if (LocalPushHandle.getInstance().allowPopClear(clearItem)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, clearItem);
+            return;
+        }
+        //3.判断【一键加速】功能是否满足推送条件
+        LocalPushConfigModel.Item speedItem = map.get("2");
+        if (LocalPushHandle.getInstance().allowPopSpeedUp(clearItem)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, speedItem);
+            return;
+        }
+        //4.判断【手机降温】功能是否满足推送条件
+        LocalPushConfigModel.Item coolItem = map.get("6");
+        if (LocalPushHandle.getInstance().allowPopCool(clearItem, temp)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, coolItem);
+            return;
+        }
+        //5.判断【超强省电】功能是否满足推送条件
+        LocalPushConfigModel.Item powerItem = map.get("9");
+        if (LocalPushHandle.getInstance().allowPopPowerSaving(clearItem, isCharged, mBatteryPower)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, powerItem);
+        }
 
-        //3.判断【垃圾清理】功能是否满足推送条件
-        LocalPushConfigModel clearModel = mLocalPushModel.get(0);
 
-        //4.判断【一键加速】功能是否满足推送条件
-
-        //5.判断【手机降温】功能是否满足推送条件
-
-        //6.判断【超强省电】功能是否满足推送条件
-
-
-        WindowUtil.getInstance().showWindowIfHavePermission(context, clearModel);
     }
 
 

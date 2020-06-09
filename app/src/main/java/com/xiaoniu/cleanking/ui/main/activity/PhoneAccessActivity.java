@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
 import com.xiaoniu.cleanking.ui.main.adapter.PhoneAccessBelowAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AnimationItem;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -73,6 +74,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -337,6 +339,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (PreferenceUtil.getCleanTime()) {
             PreferenceUtil.saveCleanTime();
         }
+        LocalPushHandle.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_SPEED_UP);
         //设置锁屏数据
         LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(1);
         btnInfo.setNormal(true);

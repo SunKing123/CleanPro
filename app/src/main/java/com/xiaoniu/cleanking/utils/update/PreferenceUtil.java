@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
@@ -401,7 +402,7 @@ public class PreferenceUtil {
      */
     public static String getSpeedNetworkValue() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(SpCacheConfig.IS_SAVE_SPEED_NETWORK_VALUE,"20");
+        return sharedPreferences.getString(SpCacheConfig.IS_SAVE_SPEED_NETWORK_VALUE, "20");
     }
 
     /**
@@ -420,7 +421,7 @@ public class PreferenceUtil {
 
     /**
      * whether display the kill virus warning?
-     *
+     * <p>
      * condition: the warning displayed the next day,and no used kill virus.
      *
      * @return true is display
@@ -1550,6 +1551,72 @@ public class PreferenceUtil {
             List<PushSettingList.DataBean> list = new ArrayList<PushSettingList.DataBean>(map.values());
             saveCleanLog(new Gson().toJson(list));
         }
+    }
+
+
+    //保存从服务器拉取的本地推送配置
+    public static void saveLocalPushConfig(String localPushConfigJson) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.KEY_LOCAL_PUSH_CONFIG_FROM_SERVER, localPushConfigJson).apply();
+    }
+
+    //获取从服务器拉取的本地推送配置
+    public static Map<String, LocalPushConfigModel.Item> getLocalPushConfig() {
+        Map<String, LocalPushConfigModel.Item> map = new HashMap<>();
+        SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        String localPushJson = sp.getString(SpCacheConfig.KEY_LOCAL_PUSH_CONFIG_FROM_SERVER, "");
+        if (!TextUtils.isEmpty(localPushJson)) {
+            List<LocalPushConfigModel.Item> itemList = new Gson().fromJson(localPushJson, new TypeToken<List<LocalPushConfigModel.Item>>() {
+            }.getType());
+            if (itemList != null) {
+                for (LocalPushConfigModel.Item item : itemList) {
+                    map.put(String.valueOf(item.getOnlyCode()), item);
+                }
+            }
+        }
+        return map;
+    }
+
+
+    //保存最后一次使用【清理、加速、降温、省电】功能的时间
+    public static void saveLastUseFunctionTime(final String functionType, Long timestamp) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(functionType + "last_used_time", timestamp).apply();
+    }
+
+    //获取最后一次使用【清理、加速、降温、省电】功能的时间
+    public static Long getLastUseFunctionTime(final String functionType) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        return sharedPreferences.getLong(functionType + "last_used_time", 0L);
+    }
+
+    //保存上一次【清理、加速、降温、省电】弹框的时间
+    public static void saveLastPopupTime(final String functionType, Long timestamp) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(functionType + "last_popup_time", timestamp).apply();
+    }
+
+    //获取上一次【清理、加速、降温、省电】弹框的时间
+    public static Long getLastPopupTime(final String functionType) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        return sharedPreferences.getLong(functionType + "last_popup_time", 0L);
+    }
+
+
+    //更新当天弹出【清理、加速、降温、省电】弹框的次数
+    public static void updatePopupCount(final String functionType, String dayLimitJson) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(functionType + "today_popup_count", dayLimitJson).apply();
+    }
+
+    //获取上一次【清理、加速、降温、省电】弹框的时间
+    public static String getPopupCount(final String functionType) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(functionType + "today_popup_count", "");
     }
 
     //保存最近一次操作记录

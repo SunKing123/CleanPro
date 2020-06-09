@@ -274,6 +274,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
             @Override
             public void onHomePressed() {
+                LogUtils.e("=====onHomePressed键被触发====");
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }
@@ -289,6 +290,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
             @Override
             public void onHomeLongPressed() {  //部分手机不走 onHomePressed();
+                LogUtils.e("=====onHomeLongPressed键被触发====");
                 if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                     return;
                 }

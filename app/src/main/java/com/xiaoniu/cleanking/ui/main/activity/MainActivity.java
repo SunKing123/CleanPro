@@ -52,7 +52,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -564,7 +563,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         RomUtils.onActivityResult(this, requestCode, resultCode, data);
-        ToastUtils.showShort(" result   ");
     }
 
     public boolean isBadgeViewShow() {

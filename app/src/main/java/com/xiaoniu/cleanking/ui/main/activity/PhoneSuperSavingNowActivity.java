@@ -28,6 +28,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
@@ -376,6 +377,7 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         if (PreferenceUtil.getPowerCleanTime()) {
             PreferenceUtil.savePowerCleanTime();
         }
+        LocalPushHandle.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_POWER_SAVING);
         PreferenceUtil.saveCleanPowerUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_finish_annimation_page");

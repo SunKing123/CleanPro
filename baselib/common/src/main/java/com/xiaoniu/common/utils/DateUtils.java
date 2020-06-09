@@ -256,6 +256,13 @@ public class DateUtils {
         return timestampToPatternTime(systemTime, pattern);
     }
 
+    /*
+     * 判断两个时间戳之间间隔多少分钟
+     */
+    public static long getMinuteBetweenTimestamp(Long firstTimestamp, Long twoTimestamp) {
+        return Math.abs(firstTimestamp - twoTimestamp) / (1000 * 60);
+    }
+
 
     /**
      * 判断是否为同一天
@@ -528,7 +535,6 @@ public class DateUtils {
     }
 
 
-
     private static SimpleDateFormat sHourFormat24 = new SimpleDateFormat("HH:mm", Locale.getDefault());
     private static SimpleDateFormat sHourFormat12 = new SimpleDateFormat("hh:mm", Locale.getDefault());
 
@@ -547,6 +553,7 @@ public class DateUtils {
 
     /**
      * 获取"yyyyMMddHHmmss"格式的14位时间字符串
+     *
      * @return
      */
     public static String getCurrentSimpleYYYYMMDDHHMM() {

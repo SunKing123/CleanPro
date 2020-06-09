@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
@@ -452,7 +453,31 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 从服务端获取本地推送的配置
      */
     public void getLocalPushConfigFromServer(){
+             mModel.getLocalPushConfigFromServer(new Common4Subscriber<LocalPushConfigModel>() {
+                 @Override
+                 public void showExtraOp(String code, String message) {
 
+                 }
+
+                 @Override
+                 public void getData(LocalPushConfigModel localPushConfigModel) {
+                     List<LocalPushConfigModel.Item> itemList=localPushConfigModel.getData();
+                     if (itemList!=null&&itemList.size()>0){
+                         //将从服务器获取的本地推送配置信息保存在SP中
+                         PreferenceUtil.saveLocalPushConfig(new Gson().toJson(itemList));
+                     }
+                 }
+
+                 @Override
+                 public void showExtraOp(String message) {
+
+                 }
+
+                 @Override
+                 public void netConnectError() {
+
+                 }
+             });
     }
 
     /**
@@ -698,15 +723,13 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                            RomUtils.applyPermission(mActivity, new RomUtils.OnSuspensionPermissionListener() {
                                @Override
                                public void onPermissionGranted() {
-
-
                                    new Handler().postDelayed(() -> {
                                        if (!RomUtils.checkFloatWindowPermission(mActivity)) {
                                            // 授权失败
-                                           ToastUtils.showShort("推送授权失败");
+                                           ToastUtils.showShort("PopWindow授权失败");
                                        } else {
                                            //授权成功
-                                           ToastUtils.showShort("推送授权成功");
+                                           ToastUtils.showShort("PopWindow推送授权成功");
                                        }
                                    }, 2000);
 

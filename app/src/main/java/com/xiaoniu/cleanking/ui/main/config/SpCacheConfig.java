@@ -20,8 +20,19 @@ public class SpCacheConfig {
     public static final String RUN_CACHES_IS_CHECK_ALL = "run_caches_is_check_all";
     public static final String RUN_CHECK_IS_CHECK_ALL = "run_is_check_all";
     public static final String CLEAN_USED = "clean_used";
-
     public static final String CLEAN_ACTION_LOG = "clean_action_log";
+
+
+    public static final String CACHES_LOCAL_PUSH_CONFIG = "caches_local_push_config";
+    public static final String KEY_LOCAL_PUSH_CONFIG_FROM_SERVER="push_config_from_server";
+    //垃圾清理
+    public static final String KEY_FUNCTION_CLEAR_RUBBISH = "function_clear_rubbish";
+    //一键加速
+    public static final String KEY_FUNCTION_SPEED_UP = "function_speed_up";
+    //手机降温
+    public static final String KEY_FUNCTION_COOL = "function_cool";
+    //超强省电
+    public static final String KEY_FUNCTION_POWER_SAVING = "function_power_saving";
 
     public static final String IS_PUSH_DEVICE_INFO = "is_push_device_info";
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";
@@ -147,12 +158,6 @@ public class SpCacheConfig {
     //外部全屏插屏时间、次数
     public static final String POP_FULL_LAYER_TIME = "pop_full_time";
     public static final String POP_FULL_LAYER_NUMBERS = "pop_full_numbers";
-
-
-
-
-
-
 
 
 }
