@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -45,6 +46,8 @@ public class DebugActivity extends BaseActivity {
     private TextView tv_hide_icon;
     private FrameLayout frame_layout;
     private static final String TAG = "DebugActivity";
+    private TextView tv_lottie;
+    private LottieAnimationView lottieAnimationView;
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -62,8 +65,10 @@ public class DebugActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        tv_lottie = findViewById(R.id.tv_lottie);
         frame_layout = findViewById(R.id.frame_layout);
         tv_hide_icon = findViewById(R.id.tv_hide_icon);
+        lottieAnimationView = findViewById(R.id.view_lottie_bottom);
         tv_hide_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +84,14 @@ public class DebugActivity extends BaseActivity {
         finish();
     }
 
+
+
+    public void playLottie(View view){
+        lottieAnimationView.setAnimation("home_top_scan.json");
+        lottieAnimationView.setImageAssetsFolder("home_top_scan");
+        lottieAnimationView.playAnimation();
+        lottieAnimationView.setVisibility(VISIBLE);
+    }
     public void toHomeClean(View view) {
         //原生带参数 native协议
 //        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=0"
