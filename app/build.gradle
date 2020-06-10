@@ -35,6 +35,30 @@ android {
             }
         }
 
+
+        //        需要配置以下key值
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : "com.hellogeek.cleanking",
+                JPUSH_APPKEY  : "fc9c656366bf05b8e450e719",//值来自开发者平台取得的AppKey
+                JPUSH_CHANNEL : "geek_push",
+
+                XIAOMI_APPKEY : "MI‐5531807057088",//小米平台注册的appkey
+                XIAOMI_APPID  : "MI‐2882303761518070088",//小米平台注册的appid
+
+                HUAWEI_APPID  : "100946605",//华为平台注册的appid 
+
+                MEIZU_APPKEY  : "MZ‐704651545da347cc8194d1aec4763002",//魅族平台注册的appkey 
+                MEIZU_APPID   : "MZ‐124077",//魅族平台注册的appid 
+
+                OPPO_APPKEY   : "OP‐9ff701f1ab004d92ae02fc11a514edd5",// OPPO平台注册的appkey
+                OPPO_APPID    : "OP‐30143914",// OPPO平台注册的appid
+                OPPO_APPSECRET: "OP‐1cbb7b63c94540179bbbeb7b35e9bf9b",//OPPO平台注册的appsecret
+
+                VIVO_APPKEY   : "031981ca-ef35-4cd3-a24d-6e46183de8f7",// VIVO平台注册的appkey
+                VIVO_APPID    : "15374",// VIVO平台注册的appid
+        ]
+
+
     }
 
     lintOptions {
@@ -187,7 +211,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
 
-
         }
         preprod {
             buildConfigField "String", "API_APPID", "\"1115553177840652300\""
@@ -288,9 +311,11 @@ dependencies {
     implementation project(':baselib:common')
     implementation project(':otherlib:asmhelp')
     implementation project(':otherlib:xrecyclerview')
+    implementation project(':jpush')
+
     //推送
-    implementation files('libs\\push-core.aar')
-    implementation files('libs\\push-jpush.aar')
+  //  implementation files('libs\\push-core.aar')
+  //  implementation files('libs\\push-jpush.aar')
     implementation project(':otherlib:jksdk')
 
     //百度统计sdk

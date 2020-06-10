@@ -42,6 +42,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HardwareInfo;
@@ -776,6 +777,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 if (PreferenceUtil.getCoolingCleanTime()) {
                     PreferenceUtil.saveCoolingCleanTime();
                 }
+                LocalPushHandle.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_COOL);
                 PreferenceUtil.saveCleanCoolUsed(true);
                 //恢复状态栏状态
                 NotificationEvent event = new NotificationEvent();

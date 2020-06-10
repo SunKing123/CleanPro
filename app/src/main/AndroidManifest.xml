@@ -629,7 +629,7 @@
             android:name="com.xiaoniu.cleanking.app.ApplicationDelegate"
             android:value="IModuleConfig" />
 
-        <meta-data
+    <!--    <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="geek_push" />
 
@@ -642,34 +642,34 @@
             android:value="MI-5531807057088" />
         <meta-data
             android:name="XIAOMI_APPID"
-            android:value="MI-2882303761518070088" /> <!-- 极光推送 -->
+            android:value="MI-2882303761518070088" /> &lt;!&ndash; 极光推送 &ndash;&gt;
         <meta-data
             android:name="com.huawei.hms.client.appid"
-            android:value="100946605" /> <!-- 极光推送静态注册 -->
+            android:value="100946605" /> &lt;!&ndash; 极光推送静态注册 &ndash;&gt;
         <meta-data
             android:name="MEIZU_APPKEY"
             android:value="MZ-704651545da347cc8194d1aec4763002" />
         <meta-data
             android:name="MEIZU_APPID"
-            android:value="MZ-124077" /> <!-- ###########################厂商平台key开始############################# -->
-        <!-- 小米开始 -->
+            android:value="MZ-124077" /> &lt;!&ndash; ###########################厂商平台key开始############################# &ndash;&gt;
+        &lt;!&ndash; 小米开始 &ndash;&gt;
         <meta-data
             android:name="OPPO_APPKEY"
             android:value="OP-9ff701f1ab004d92ae02fc11a514edd5" />
         <meta-data
             android:name="OPPO_APPID"
-            android:value="OP-30143914" /> <!-- 小米结束 -->
-        <!-- huawei start -->
+            android:value="OP-30143914" /> &lt;!&ndash; 小米结束 &ndash;&gt;
+        &lt;!&ndash; huawei start &ndash;&gt;
         <meta-data
             android:name="OPPO_APPSECRET"
-            android:value="OP-1cbb7b63c94540179bbbeb7b35e9bf9b" /> <!-- huawei end -->
-        <!-- meizu start -->
+            android:value="OP-1cbb7b63c94540179bbbeb7b35e9bf9b" /> &lt;!&ndash; huawei end &ndash;&gt;
+        &lt;!&ndash; meizu start &ndash;&gt;
         <meta-data
             android:name="com.vivo.push.api_key"
             android:value="031981ca-ef35-4cd3-a24d-6e46183de8f7" />
         <meta-data
             android:name="com.vivo.push.app_id"
-            android:value="15374" /> <!-- meizhu end -->
+            android:value="15374" />  meizhu end -->
         <!-- oppo start -->
         <meta-data
             android:name="Geek_JPush_106"

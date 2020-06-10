@@ -8,6 +8,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
@@ -17,6 +19,10 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
+import com.xiaoniu.cleanking.ui.localpush.RomUtils;
+import com.xiaoniu.cleanking.ui.localpush.WindowUtil;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -31,6 +37,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -46,7 +53,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -68,62 +74,118 @@ public class TimingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-        Log.e("dong","收到广播 ="+intent.getStringExtra("action"));
+        Log.e("dong", "收到广播 =" + intent.getStringExtra("action"));
 
-        if(!TextUtils.isEmpty( intent.getStringExtra("action"))&& intent.getStringExtra("action").equals("scan_heart")){//本地push心跳
+        String action = intent.getStringExtra("action");
+        if (!TextUtils.isEmpty(action)) {
+
+
             mBatteryPower = intent.getIntExtra("battery", 50);
             temp = intent.getIntExtra("temp", 30);
-            isCharged = intent.getBooleanExtra("isCharged",false);
-            Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
-            for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
-                PushSettingList.DataBean dataBean = entry.getValue();
-                if (isStartScan(dataBean)) { //检测是否达到扫描时间
-                    startScan(dataBean, context);
-                    //更新本地保存的操作时间
-                    dataBean.setLastTime(System.currentTimeMillis());
-                    map.put(entry.getKey(), dataBean);
-                    PreferenceUtil.saveCleanLogMap(map);
-                }
-            }
+            isCharged = intent.getBooleanExtra("isCharged", false);
 
-            Intent i = new Intent(context, LocalService.class);
-            i.putExtra("action","heartbeat");
-            if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O) {
-                context.startForegroundService(i);
-            } else {
-                context.startService(i);
-            }
-        }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("unlock_screen") ||intent.getStringExtra("action").equals("home")) ){//锁屏打开页面||home按键触发
-            if(null==context)return;
-            startActivity(context);
-        }else if(!TextUtils.isEmpty( intent.getStringExtra("action"))&&(intent.getStringExtra("action").equals("app_add_full") ) ){//锁屏打开页面||home按键触发
-            if(null==context)return;
+            switch (action) {
+                case "scan_heart"://本地push心跳
+                    Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
+                    for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
+                        PushSettingList.DataBean dataBean = entry.getValue();
+                        if (isStartScan(dataBean)) { //检测是否达到扫描时间
+                            startScan(dataBean, context);
+                            //更新本地保存的操作时间
+                            dataBean.setLastTime(System.currentTimeMillis());
+                            map.put(entry.getKey(), dataBean);
+                            PreferenceUtil.saveCleanLogMap(map);
+                        }
+                    }
 
-            startFullActivty(context.getApplicationContext());
+                    Intent i = new Intent(context, LocalService.class);
+                    i.putExtra("action", "heartbeat");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(i);
+                    } else {
+                        context.startService(i);
+                    }
+                    break;
+                case "home"://home按键触发
+                    LogUtils.e("====TimingReceiver中进入Home分支===");
+                    if (null != context) {
+                        startActivity(context);
+                    }
+                    if (!RomUtils.checkFloatWindowPermission(context)) {
+                        LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
+                        return;
+                    }
+                    if (WindowUtil.getInstance().isShowing()) {
+                        LogUtils.e("====TimingReceiver中 PopWindow正在弹出===");
+                        return;
+                    }
+                    showLocalPushAlertWindow(context);
+                    break;
+                case "app_add_full"://锁屏打开页面||home按键触发  //应用植入插屏全屏广告
+                    if (null != context) {
+                        startFullActivty(context.getApplicationContext());
+                    }
+                    break;
+                case "unlock_screen"://锁屏打开页面
+                    if (null != context) {
+                        startActivity(context);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+
+
     }
 
 
+    private void showLocalPushAlertWindow(Context context) {
+        //1.读取本地缓存的推送配置Config列表
+        Map<String, LocalPushConfigModel.Item> map = PreferenceUtil.getLocalPushConfig();
+        //2.判断【垃圾清理】功能是否满足推送条件
+        LocalPushConfigModel.Item clearItem = map.get("1");
+        if (LocalPushHandle.getInstance().allowPopClear(clearItem)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, clearItem);
+            return;
+        }
+        //3.判断【一键加速】功能是否满足推送条件
+        LocalPushConfigModel.Item speedItem = map.get("2");
+        if (LocalPushHandle.getInstance().allowPopSpeedUp(clearItem)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, speedItem);
+            return;
+        }
+        //4.判断【手机降温】功能是否满足推送条件
+        LocalPushConfigModel.Item coolItem = map.get("6");
+        if (LocalPushHandle.getInstance().allowPopCool(clearItem, temp)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, coolItem);
+            return;
+        }
+        //5.判断【超强省电】功能是否满足推送条件
+        LocalPushConfigModel.Item powerItem = map.get("9");
+        if (LocalPushHandle.getInstance().allowPopPowerSaving(clearItem, isCharged, mBatteryPower)) {
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, powerItem);
+        }
 
 
-
+    }
 
 
     //悬浮广告页面
     public void startActivity(Context context) {
         try {
             //判断是否进入后台
-            int isBack = MmkvUtil.getInt("isback",-1);
-            Log.e("dong   isBack==",isBack+"");
+            int isBack = MmkvUtil.getInt("isback", -1);
+            Log.e("dong   isBack==", isBack + "");
 
-            if(isBack!=1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class))
+            if (isBack != 1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class))
                 return;
 
             //判断广告开关
             boolean isOpen = false;
             int showTimes = 3;
             int displayTime = 0;
-            if (null != AppHolder.getInstance().getInsertAdSwitchmap()  ) {
+            if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
                 isOpen = null == map.get("page_outside_screen") ? false : map.get("page_outside_screen").isOpen();
                 showTimes = null == map.get("page_outside_screen") ? 3 : map.get("page_outside_screen").getShowRate();
@@ -136,11 +198,11 @@ public class TimingReceiver extends BroadcastReceiver {
             int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
 //            Logger.i("zz--"+System.currentTimeMillis()+"---"+pretime);
             //第一次|| 间隔时间大于一个小时||一小时内N次（N<showRate）(每次间隔时间<displayTime)
-            if (pretime == 0 || (System.currentTimeMillis() - pretime)> (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) > (displayTime * 60 * 1000) && (System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
-                if((System.currentTimeMillis() - pretime)> (60 * 60 * 1000)){//超过一小时重置次数
-                    PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS,0);
+            if (pretime == 0 || (System.currentTimeMillis() - pretime) > (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) > (displayTime * 60 * 1000) && (System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
+                if ((System.currentTimeMillis() - pretime) > (60 * 60 * 1000)) {//超过一小时重置次数
+                    PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, 0);
                 }
-                if(NetworkUtils.isNetConnected()){
+                if (NetworkUtils.isNetConnected()) {
                     Intent screenIntent = getIntent(context);
                     context.startActivity(screenIntent);
                 }
@@ -153,17 +215,17 @@ public class TimingReceiver extends BroadcastReceiver {
     private void startFullActivty(Context context) {
         //判断是否进入后台
         boolean isBack = AppLifecycleUtil.isRunningForeground(context);
-        Log.e("dong","应用内插屏展示isBack =="+isBack);
+        Log.e("dong", "应用内插屏展示isBack ==" + isBack);
 
 //        if (isBack || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class)) {
 //            return;
 //        }
-        if (isBack ) {
+        if (isBack) {
             return;
         }
         if (NetworkUtils.isNetConnected()) {
 //            Toast.makeText(context,"应用内插屏!",Toast.LENGTH_LONG).show();
-            Log.e("dong","应用内插屏展示");
+            Log.e("dong", "应用内插屏展示");
             Intent screenIntent = new Intent();
             screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_FULLPOPLAYERACTIVITY);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -215,7 +277,7 @@ public class TimingReceiver extends BroadcastReceiver {
      */
     public void startScan(PushSettingList.DataBean dataBean, Context mContext) {
         String codeX = dataBean.getCodeX();
-            switch (codeX) {
+        switch (codeX) {
             case "push_1"://垃圾清理
                 startScanAll(dataBean, mContext);
                 break;
@@ -237,10 +299,11 @@ public class TimingReceiver extends BroadcastReceiver {
 
     /**
      * 状态栏更新操作（只做状态栏更新）
+     *
      * @param dataBean
      * @param cxt
      */
-    public void refNotify(PushSettingList.DataBean dataBean, Context cxt){
+    public void refNotify(PushSettingList.DataBean dataBean, Context cxt) {
         int mNotifySize = 0;
         NotificationEvent event = new NotificationEvent();
         event.setType("notification");
@@ -248,12 +311,12 @@ public class TimingReceiver extends BroadcastReceiver {
             if (null != NotifyCleanManager.getInstance().getAllNotifications()) {
                 mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
             }
-            if(mNotifySize>=5){
+            if (mNotifySize >= 5) {
                 event.setFlag(2);
-            }else{
+            } else {
                 event.setFlag(0);
             }
-        }else{
+        } else {
             event.setFlag(0);
         }
         EventBus.getDefault().post(event);
@@ -270,12 +333,12 @@ public class TimingReceiver extends BroadcastReceiver {
         event.setType("cooling");
         if (temp > dataBean.getThresholdNum()) {
             event.setFlag(2);
-            String push_content = cxt.getString(R.string.push_content_phoneCooling, temp+"°C");
+            String push_content = cxt.getString(R.string.push_content_phoneCooling, temp + "°C");
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY);
-            createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_cool_btn));
-        }else{
+            createNotify(cxt, push_content, actionMap, cxt.getString(R.string.push_cool_btn));
+        } else {
             event.setFlag(0);
         }
         EventBus.getDefault().post(event);
@@ -297,8 +360,8 @@ public class TimingReceiver extends BroadcastReceiver {
             //cheme跳转路径
             Map<String, String> actionMap = new HashMap<>();
             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY);
-            createNotify(cxt, push_content, actionMap,cxt.getString(R.string.push_power_btn));
-        }else{
+            createNotify(cxt, push_content, actionMap, cxt.getString(R.string.push_power_btn));
+        } else {
             event.setFlag(0);
         }
         EventBus.getDefault().post(event);
@@ -330,17 +393,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
 
                     @Override
-                    public void reduceSize(long p0) {
-
-                    }
-
-                    @Override
                     public void scanFile(String p0) {
-
-                    }
-
-                    @Override
-                    public void totalSize(int p0) {
 
                     }
                 });
@@ -360,13 +413,13 @@ public class TimingReceiver extends BroadcastReceiver {
                             //cheme跳转路径
                             Map<String, String> actionMap = new HashMap<>();
                             actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY);
-                            createNotify(mContext, push_content, actionMap,mContext.getString(R.string.push_btn_access));
+                            createNotify(mContext, push_content, actionMap, mContext.getString(R.string.push_btn_access));
                             btnInfo.setNormal(false);
-                        }else{
+                        } else {
                             btnInfo.setNormal(true);
                         }
                         btnInfo.setCheckResult(String.valueOf(computeTotalSize));
-                        PreferenceUtil.getInstants().save("lock_pos02",new Gson().toJson(btnInfo));
+                        PreferenceUtil.getInstants().save("lock_pos02", new Gson().toJson(btnInfo));
 
                         NotificationEvent event = new NotificationEvent();
                         event.setType("speed");
@@ -488,14 +541,14 @@ public class TimingReceiver extends BroadcastReceiver {
                     //cheme跳转路径
                     Map<String, String> actionMap = new HashMap<>();
                     actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
-                    createNotify(mContext, push_content, actionMap,mContext.getString(R.string.tool_now_clean));
+                    createNotify(mContext, push_content, actionMap, mContext.getString(R.string.tool_now_clean));
                     btnInfo.setNormal(false);
-                }else{
+                } else {
                     event.setFlag(0);
                     btnInfo.setNormal(true);
                 }
                 btnInfo.setCheckResult(String.valueOf(mbNum));
-                PreferenceUtil.getInstants().save("lock_pos01",new Gson().toJson(btnInfo));
+                PreferenceUtil.getInstants().save("lock_pos01", new Gson().toJson(btnInfo));
 
                 EventBus.getDefault().post(event);
             }
@@ -510,16 +563,16 @@ public class TimingReceiver extends BroadcastReceiver {
      * @param push_content
      * @param actionMap
      */
-    public void createNotify(Context conx, String push_content, final Map<String, String> actionMap,String btn) {
+    public void createNotify(Context conx, String push_content, final Map<String, String> actionMap, String btn) {
         try {
             if (null != mContext) {
                 Intent intent = new Intent(conx, JPushReceiver.class);
                 intent.setAction("com.geek.push.ACTION_RECEIVE_NOTIFICATION_CLICK");
                 //notifyId不关注_跟产品已经确认()
-                intent.putExtra("push_data", new PushMsg((100001+ NumberUtils.mathRandomInt(1,100000)), "清理管家极速版", push_content, null, null, actionMap));
+                intent.putExtra("push_data", new PushMsg((100001 + NumberUtils.mathRandomInt(1, 100000)), "清理管家极速版", push_content, null, null, actionMap));
                 intent.addCategory(mContext.getPackageName());
                 intent.setPackage(mContext.getPackageName());
-                KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent,btn);
+                KeepAliveManager.sendNotification(conx, "", push_content, R.drawable.ic_launcher, intent, btn);
             }
 
         } catch (Exception e) {

@@ -1,6 +1,11 @@
 package com.xiaoniu.cleanking.app;
 
+import android.Manifest;
+
 import com.xiaoniu.cleanking.BuildConfig;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 常用常量
@@ -59,5 +64,25 @@ public class Constant {
     public static final String CLEAN_DB_SAVE = "weather_db_issaved";
 
     public static final String SWITCH_INFO = "switch_info";
+
+
+    /**
+     * 白名单
+     */
+    public static final List<String> WHITE_LIST = Arrays.asList(
+            "com.geek.jk.weather",  // 即刻天气
+            "com.xujin.weather",    // 知心天气
+            "com.yitong.weather",   // 诸葛天气
+            "com.geek.jk.calendar.app",  // 即刻万年历
+            "com.geek.luck.calendar.app", // 诸葛万年历
+            "com.xiaoniu.cleanking", // 悟空清理
+            "com.xiaoniu",
+            "com.geek.jk.weather.fission" // 知心天气
+    );
+
+    public static String[] BASIC_PERMISSIONS = new String[]{
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 }
 

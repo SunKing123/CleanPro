@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
@@ -218,6 +219,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.commitJPushAlias();
         //获取本地推送配置
         mPresenter.getPushSetList();
+        //从服务器获取本地推送的配置信息
+        mPresenter.getLocalPushConfigFromServer();
         //上报设备信息
         if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
             getDeviceInfo();
@@ -559,6 +562,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        RomUtils.onActivityResult(this, requestCode, resultCode, data);
     }
 
     public boolean isBadgeViewShow() {

@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.api;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.base.BaseEntity;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
@@ -80,6 +81,14 @@ public interface UserApiService {
      */
     @GET("/pushLocal/list")
     Flowable<PushSettingList> getPushLocalSet();
+
+
+    /**
+     * 本地推送配置
+     */
+    @GET("/pushLocal/list")
+    Flowable<LocalPushConfigModel> getLocalPushConfig();
+
 
     /**
      * 红包
