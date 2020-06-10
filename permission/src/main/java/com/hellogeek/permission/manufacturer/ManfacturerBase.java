@@ -18,7 +18,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationManagerCompat;
 import android.telecom.TelecomManager;
 import android.text.TextUtils;
 import android.util.Log;

@@ -157,11 +157,13 @@
     <string name="network_quicken">网络加速</string>
     <string name="virus_guard">已开启病毒防御保护</string>
     <string name="already_quicken">已提速%s</string>
-
+    <string name="back">返回</string>
+    <string name="skip">跳过</string>
     <string name="slide_up_to_unlock">向上滑动解锁</string>
     <string name="release_to_unlock">松手解锁</string>
     <string name="pull_canceled">下拉取消</string>
-
+    <string name="to_open_deep_clean">立即开启</string>
+    <string name="memory_clean_title">手机加速</string>
     <string name="garbage_file">垃圾文件</string>
     <string name="garbage_ram">内存使用</string>
     <string name="garbage_virus">病毒查杀</string>
@@ -173,6 +175,19 @@
     <string name="app_dy">抖音</string>
     <string name="app_quick_name">清理极速管家</string>
     <string name="redpack">红包</string>
+    <string name="scan_result_check">%1$s</string>
+
+
+    <string name="memory_clean_content">深度清理内存垃圾，提高手机运行速度</string>
+    <string name="notification_clean_title">通知栏清理</string>
+    <string name="notification_clean_content">拦截骚扰消息</string>
+    <string name="power_clean_title">超强省电</string>
+    <string name="power_clean_content">清理异常耗电应用，延长待机时长</string>
+    <string name="reminder">温馨提示</string>
+    <string name="to_clean">立即使用</string>
+    <string name="clean_btn">清理 %1$s</string>
+    <string name="scan_result_check_total">已勾选: %1$s</string>
+    <string name="deep_scaning">深度清理</string>
 
 
 </resources>

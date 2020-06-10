@@ -2,16 +2,11 @@ package com.hellogeek.permission.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
@@ -19,21 +14,18 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.hellogeek.permission.Integrate.Permission;
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.R;
 import com.hellogeek.permission.R2;
 import com.hellogeek.permission.base.BaseActivity;
 import com.hellogeek.permission.bean.ASBase;
 import com.hellogeek.permission.bean.CustomSharedPreferences;
-import com.hellogeek.permission.Integrate.Permission;
-import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.provider.PermissionProvider;
 import com.hellogeek.permission.server.AccessibilityServiceMonitor;
 import com.hellogeek.permission.server.interfaces.IAccessibilityServiceMonitor;
@@ -51,8 +43,6 @@ import com.hellogeek.permission.util.Constant;
 import com.hellogeek.permission.util.DialogUtil;
 import com.hellogeek.permission.util.PermissionConvertUtils;
 import com.hellogeek.permission.util.PhoneRomUtils;
-import com.hellogeek.permission.util.UIUtil;
-
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,11 +52,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-
-import static com.hellogeek.permission.util.Constant.*;
+import static com.hellogeek.permission.util.Constant.PROVIDER_BACKSTAGEPOPUP;
+import static com.hellogeek.permission.util.Constant.PROVIDER_LOCKDISPLAY;
+import static com.hellogeek.permission.util.Constant.PROVIDER_NECESSARY_PERMISSIONALLOPEN;
+import static com.hellogeek.permission.util.Constant.PROVIDER_NOTICEOFTAKEOVER;
+import static com.hellogeek.permission.util.Constant.PROVIDER_NOTIFICATIONBAR;
+import static com.hellogeek.permission.util.Constant.PROVIDER_PERMISSIONALLOPEN;
+import static com.hellogeek.permission.util.Constant.PROVIDER_REPLACEACLLPAGE;
+import static com.hellogeek.permission.util.Constant.PROVIDER_SELFSTARTING;
+import static com.hellogeek.permission.util.Constant.PROVIDER_SUSPENDEDTOAST;
+import static com.hellogeek.permission.util.Constant.PROVIDER_SYSTEMSETTING;
 
 
 /**

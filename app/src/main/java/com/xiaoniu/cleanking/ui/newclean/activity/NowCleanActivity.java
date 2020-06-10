@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 1.2.1 版本更新 建议清理页面
+ * 一键清理主页面
  */
 public class NowCleanActivity extends BaseActivity {
     private CountEntity mCountEntity;
@@ -105,7 +105,7 @@ public class NowCleanActivity extends BaseActivity {
      * 开始扫描
      */
     private void startScan() {
-        // Umeng --- java.lang.NullPointerException: Attempt to invoke virtual method 'android.support.v7.widget.Toolbar com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity.getToolBar()' on a null object reference
+        // Umeng --- java.lang.NullPointerException: Attempt to invoke virtual method 'androidx.appcompat.widget.Toolbar com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity.getToolBar()' on a null object reference
         if (null != getToolBar()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 getToolBar().setBackgroundColor(getResources().getColor(R.color.color_4690FD));

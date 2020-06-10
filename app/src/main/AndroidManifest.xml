@@ -98,7 +98,9 @@
             android:name=".selfdebug.AdConfigActivity"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.newclean.activity.DeepCleanPermissionActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.ImageActivity"

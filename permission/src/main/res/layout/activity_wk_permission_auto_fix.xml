@@ -161,7 +161,7 @@
     </RelativeLayout>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listFixHint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -207,14 +207,14 @@
 </RelativeLayout>
 
 
-    <!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
     <!--    android:layout_width="match_parent"-->
     <!--    android:layout_height="match_parent"-->
     <!--    android:background="@drawable/bg_top"-->
     <!--    android:fitsSystemWindows="true">-->
 
-    <!--    <android.support.constraint.ConstraintLayout-->
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
     <!--        android:layout_width="match_parent"-->
     <!--        android:layout_height="match_parent"-->
     <!--        android:background="@drawable/bg_top"-->
@@ -231,7 +231,7 @@
     <!--            app:layout_constraintRight_toRightOf="parent"-->
     <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-    <!--        <android.support.constraint.ConstraintLayout-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
     <!--            android:id="@+id/clHintTop"-->
     <!--            android:layout_width="wrap_content"-->
     <!--            android:layout_height="wrap_content"-->
@@ -250,7 +250,7 @@
     <!--                app:layout_constraintRight_toRightOf="parent"-->
     <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-    <!--            <android.support.constraint.ConstraintLayout-->
+    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
     <!--                android:id="@+id/clHintIcon"-->
     <!--                android:layout_width="wrap_content"-->
     <!--                android:layout_height="wrap_content"-->
@@ -301,11 +301,11 @@
     <!--                    app:layout_constraintLeft_toLeftOf="@id/iv_pb_bg"-->
     <!--                    app:layout_constraintRight_toRightOf="@id/iv_pb_bg"-->
     <!--                    app:layout_constraintTop_toTopOf="@id/iv_pb_bg" />-->
-    <!--            </android.support.constraint.ConstraintLayout>-->
+    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-    <!--        </android.support.constraint.ConstraintLayout>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-    <!--        <android.support.constraint.ConstraintLayout-->
+    <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
     <!--            android:id="@+id/cl_title"-->
     <!--            android:layout_width="match_parent"-->
     <!--            android:layout_height="wrap_content"-->
@@ -325,7 +325,7 @@
     <!--                app:layout_constraintRight_toRightOf="parent"-->
     <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-    <!--            <android.support.constraint.ConstraintLayout-->
+    <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
     <!--                android:id="@+id/cot_default"-->
     <!--                android:layout_width="match_parent"-->
     <!--                android:layout_height="wrap_content"-->
@@ -372,7 +372,7 @@
     <!--                    app:layout_constraintRight_toRightOf="parent"-->
     <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-    <!--            </android.support.constraint.ConstraintLayout>-->
+    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <!--            <TextView-->
     <!--                android:id="@+id/tvHintFail"-->
@@ -391,7 +391,7 @@
 
     <!--                />-->
 
-    <!--        </android.support.constraint.ConstraintLayout>-->
+    <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <!--        <View-->
     <!--            android:id="@+id/line"-->
@@ -407,7 +407,7 @@
     <!--            app:layout_constraintTop_toBottomOf="@id/cl_title" />-->
 
 
-    <!--        <android.support.v7.widget.RecyclerView-->
+    <!--        <androidx.recyclerview.widget.RecyclerView-->
     <!--            android:id="@+id/listFixHint"-->
     <!--            android:layout_width="match_parent"-->
     <!--            android:layout_height="0dp"-->
@@ -455,5 +455,5 @@
     <!--            app:layout_constraintBottom_toBottomOf="parent"-->
     <!--            app:layout_constraintLeft_toLeftOf="parent"-->
     <!--            app:layout_constraintRight_toRightOf="parent" />-->
-    <!--    </android.support.constraint.ConstraintLayout>-->
-    <!--</android.support.constraint.ConstraintLayout>-->
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->

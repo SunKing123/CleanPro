@@ -50,6 +50,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -63,6 +64,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 清理操作页面
  */
+@Deprecated
 public class CleanFragment extends BaseFragment<CleanPresenter> {
 
     @BindView(R.id.junk_list)
@@ -102,7 +104,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
     private CountEntity checkCountEntity;
     private long checkedSize = 0;
     private long totalSize = 0;
-    private HashMap<Integer, JunkGroup> mJunkGroups;
+    private LinkedHashMap<Integer, JunkGroup> mJunkGroups;
 
     int shouIndex = 2;
 
@@ -137,7 +139,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         tvUnit.setTypeface(Typeface.createFromAsset(mActivity.getAssets(), "fonts/FuturaRound-Medium.ttf"));
 
         tvCheckedSize = mHeadView.findViewById(R.id.tv_checked_size);
-        mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
+//        mJunkGroups = ((NowCleanActivity) getActivity()).getJunkGroups();
 
         totalSize = checkedSize = CleanUtil.getTotalSize(mJunkGroups);
         checkCountEntity = totalCountEntity = CleanUtil.formatShortFileSize(totalSize);
@@ -156,14 +158,14 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         mExpandableListView.setDividerHeight(0);
         mExpandableListView.addHeaderView(mHeadView);
 
-        mExpandableListView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
-            JunkGroup junkGroup = mJunkGroups.get(groupPosition);
-            if (junkGroup != null) {
-                junkGroup.isExpand = !junkGroup.isExpand();
-                mAdapter.notifyDataSetChanged();
-            }
-            return false;
-        });
+//        mExpandableListView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+//            JunkGroup junkGroup = mJunkGroups.get(groupPosition);
+//            if (junkGroup != null) {
+//                junkGroup.isExpand = !junkGroup.isExpand();
+//                mAdapter.notifyDataSetChanged();
+//            }
+//            return false;
+//        });
 
         mAdapter = new DockingExpandableListViewAdapter(getActivity(), mExpandableListView);
         mAdapter.setOnCleanListSelectListener(new OnCleanListSelectListener() {
@@ -442,9 +444,9 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
                         total += leavedCache;
                     }
                 } else if (entry.getKey() == 4 && value.otherChildren.size() > 0) {//其他垃圾处理
-                    if (!value.isChecked()) {
-                        isCheckAll = false;
-                    }
+//                    if (!value.isChecked()) {
+//                        isCheckAll = false;
+//                    }
 
                     long otherCache = CleanUtil.freeOtherJunkInfos(value.otherChildren);
                     total += otherCache;

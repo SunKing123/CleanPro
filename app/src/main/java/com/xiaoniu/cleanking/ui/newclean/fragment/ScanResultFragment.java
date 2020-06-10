@@ -8,14 +8,12 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ad.bean.AdRequestParamentersBean;
-import com.xiaoniu.cleanking.ad.enums.AdType;
-import com.xiaoniu.cleanking.ad.interfaces.AdShowCallBack;
-import com.xiaoniu.cleanking.ad.mvp.presenter.AdPresenter;
+import com.xiaoniu.cleanking.bean.JunkResultWrapper;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -25,7 +23,6 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.DeepCleanPermissionActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.adapter.ScanResultAdapter;
-import com.xiaoniu.cleanking.ui.newclean.bean.JunkResultWrapper;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanResultContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanResultPresenter;
@@ -113,48 +110,48 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
         final LinkedHashMap<ScanningResultType, JunkGroup> groupLinkedHashMap = ((NowCleanActivity) requireActivity()).getJunkGroups();
         //构造清理数据模型
         presenter.buildJunkResultModel(groupLinkedHashMap);
-        //广告
-        requestAd();
+//        //广告
+//        requestAd();
     }
 
-    /**
-     * 请求广告
-     */
-    private void requestAd() {
-        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_SCAN_RESULT,
-                PositionId.DRAW_ONE_CODE,
-                requireContext(),
-                AdType.Template,
-                (int) ScreenUtils.getScreenWidthDp(requireContext()),
-                0,
-                "clean_scan_page",
-                "home_page");
-        new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
-            @Override
-            public void onAdShowCallBack(View view) {
-                Log.d("ad_status", " scan onAdShowCallBack" + ((view == null) ? "null" : "not null"));
-
-                if (adContainer != null) {
-                    adContainer.removeAllViews();
-                    adContainer.addView(view);
-                }
-            }
-
-            @Override
-            public void onCloseCallback(int index) {
-                if (adContainer != null) {
-                    adContainer.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(String message) {
-                if (adContainer != null) {
-                    adContainer.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
+//    /**
+//     * 请求广告
+//     */
+//    private void requestAd() {
+//        AdRequestParamentersBean adRequestParamentersBean = new AdRequestParamentersBean(PositionId.KEY_SCAN_RESULT,
+//                PositionId.DRAW_ONE_CODE,
+//                requireContext(),
+//                AdType.Template,
+//                (int) ScreenUtils.getScreenWidthDp(requireContext()),
+//                0,
+//                "clean_scan_page",
+//                "home_page");
+//        new AdPresenter().requestAd(adRequestParamentersBean, new AdShowCallBack() {
+//            @Override
+//            public void onAdShowCallBack(View view) {
+//                Log.d("ad_status", " scan onAdShowCallBack" + ((view == null) ? "null" : "not null"));
+//
+//                if (adContainer != null) {
+//                    adContainer.removeAllViews();
+//                    adContainer.addView(view);
+//                }
+//            }
+//
+//            @Override
+//            public void onCloseCallback(int index) {
+//                if (adContainer != null) {
+//                    adContainer.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String message) {
+//                if (adContainer != null) {
+//                    adContainer.setVisibility(View.GONE);
+//                }
+//            }
+//        });
+//    }
 
     /***
      * 展示recyclerView进入动画(非Insert动画)

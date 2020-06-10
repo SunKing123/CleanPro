@@ -3,11 +3,12 @@ package com.hellogeek.permission.activity;
 import android.animation.Animator;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hellogeek.permission.R;
+
+import androidx.annotation.Nullable;
 
 
 /**
@@ -33,7 +34,7 @@ public class PhonePremisActivity extends Activity {
 
     private void initViews() {
         mLottieAnimationView = findViewById(R.id.view_lottie);
-        mLottieAnimationView.useHardwareAcceleration();
+//        mLottieAnimationView.useHardwareAcceleration();
         mLottieAnimationView.setAnimation("data_premis.json");
         mLottieAnimationView.setImageAssetsFolder("images");
         mLottieAnimationView.playAnimation();

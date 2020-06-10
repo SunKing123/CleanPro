@@ -1,11 +1,11 @@
 package com.xiaoniu.cleanking.ui.newclean.contact;
 
+import com.xiaoniu.cleanking.bean.JunkResultWrapper;
 import com.xiaoniu.cleanking.mvp.IBaseModel;
 import com.xiaoniu.cleanking.mvp.IBasePresenter;
 import com.xiaoniu.cleanking.mvp.IBaseView;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.newclean.bean.JunkResultWrapper;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 
 import java.util.ArrayList;

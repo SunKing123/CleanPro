@@ -53,7 +53,6 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
     public void setOnCleanListSelectListener(OnCleanListSelectListener listener) {
         onCleanListSelectListener = listener;
     }
-
     public void setData(HashMap<Integer, JunkGroup> data) {
         mJunkGroups = data;
         if (mJunkGroups == null) {
@@ -126,34 +125,33 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         }
 
         JunkGroup group = mJunkGroups.get(groupPosition);
-        if (null != group) {
-            holder.tvItemTop01.setVisibility(groupPosition == 0 ? View.VISIBLE : View.GONE);
-            holder.mPackageNameTv.setText(group.mName);
-            holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
-            if (group.isCheckPart) {
-                holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_cb_contain));
-            } else {
-                holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_clean_choose_selector));
-                holder.mCheckButton.setSelected(group.isChecked);
-            }
-
-            //判断是否需要展示子类
-            if (!group.needExpand) {
-                holder.mIconArrow.setVisibility(View.GONE);
-            } else {
-                holder.mIconArrow.setVisibility(View.VISIBLE);
-            }
-            if (isExpanded && group.mSize > 0) {
-                holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_arrow_up));
-            } else {
-                holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_arrow_down));
-            }
-            holder.mViewDivider.setVisibility(group.isExpand ? View.GONE : View.VISIBLE);
-            holder.mCheckButton.setOnClickListener(v -> {
-//            group.isChecked = !group.isChecked;
-                resetGroupButton(group, groupPosition);
-            });
+        holder.tvItemTop01.setVisibility(groupPosition==0?View.VISIBLE:View.GONE);
+        holder.mPackageNameTv.setText(group.mName);
+        holder.mPackageSizeTv.setText(CleanUtil.formatShortFileSize(mContext, group.mSize));
+        if(group.isCheckPart){
+            holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_cb_contain));
+        }else{
+            holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_clean_choose_selector));
+            holder.mCheckButton.setSelected(group.isChecked);
         }
+
+        //判断是否需要展示子类
+        if(!group.needExpand){
+            holder.mIconArrow.setVisibility(View.GONE);
+        }else{
+            holder.mIconArrow.setVisibility(View.VISIBLE);
+        }
+        if (isExpanded &&  group.mSize > 0){
+            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_arrow_up));
+        }else {
+            holder.mIconArrow.setImageDrawable(mContext.getResources().getDrawable(R.drawable.icon_arrow_down));
+        }
+        holder.mViewDivider.setVisibility(group.isExpand ? View.GONE : View.VISIBLE);
+        holder.mCheckButton.setOnClickListener(v -> {
+//            group.isChecked = !group.isChecked;
+            resetGroupButton(group,groupPosition);
+        });
+
         return convertView;
     }
 
@@ -177,7 +175,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
-        holder.viewLine.setVisibility(childPosition == (mJunkGroups.get(groupPosition).mChildren.size() - 1) ? View.GONE : View.VISIBLE);
+        holder.viewLine.setVisibility(childPosition ==(mJunkGroups.get(groupPosition).mChildren.size()-1)?View.GONE:View.VISIBLE);
         //名称
         holder.mJunkTypeTv.setText(info.getAppName());
         //垃圾的LOGO
@@ -200,7 +198,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
                     holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.mipmap.icon_lock));
                     info.setAllchecked(false);
                     info.setLock(true);
-                    resetChildSelectButton(mJunkGroups.get(groupPosition), groupPosition, childPosition, false);
+                    resetChildSelectButton(mJunkGroups.get(groupPosition),groupPosition,childPosition,false);
                 } else {
                     holder.mCheckButton.setBackground(mContext.getResources().getDrawable(R.drawable.icon_clean_choose_selector));
                     info.setLock(false);
@@ -216,8 +214,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
         holder.mLayoutCheck.setOnClickListener(v -> {
             boolean checked = !info.isAllchecked();
             info.setAllchecked(checked);
-            resetChildSelectButton(mJunkGroups.get(groupPosition), groupPosition, childPosition, checked);
-
+            resetChildSelectButton(mJunkGroups.get(groupPosition),groupPosition,childPosition,checked);
         });
 
         return convertView;
@@ -225,7 +222,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
 
     //第一级选择框点击时， 设置所有子按钮为选中/未选中状态
     private void resetGroupButton(JunkGroup group, int position) {
-        if (group.isChecked && group.isCheckPart == false) {
+        if(group.isChecked && group.isCheckPart == false){
             group.isChecked = !group.isChecked;
             for (FirstJunkInfo firstJunkInfo : group.mChildren) {
                 if (!firstJunkInfo.isLock()) {
@@ -233,7 +230,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
                     firstJunkInfo.setAllchecked(group.isChecked);
                 }
             }
-        } else if (group.isChecked && group.isCheckPart == true) {
+        }else if(group.isChecked && group.isCheckPart == true){
             group.isChecked = !group.isChecked;
             group.isCheckPart = !group.isCheckPart;
             for (FirstJunkInfo firstJunkInfo : group.mChildren) {
@@ -242,7 +239,7 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
                     firstJunkInfo.setAllchecked(group.isChecked);
                 }
             }
-        } else if (!group.isChecked) {
+        }else if(!group.isChecked){
             group.isChecked = !group.isChecked;
             for (FirstJunkInfo firstJunkInfo : group.mChildren) {
                 if (!firstJunkInfo.isLock()) {
@@ -252,33 +249,33 @@ public class DockingExpandableListViewAdapter extends BaseExpandableListAdapter 
             }
         }
         notifyDataSetChanged();
-        if (onCleanListSelectListener != null)
-            onCleanListSelectListener.onGroupSelected(position, group.isChecked);
+        if(onCleanListSelectListener!=null)
+            onCleanListSelectListener.onGroupSelected(position,group.isChecked);
     }
 
     /**
      * 子类cb点击事件
      */
-    private void resetChildSelectButton(JunkGroup group, int groupPosition, int childPosition, boolean isChecked) {
+    private void resetChildSelectButton(JunkGroup group,int groupPosition, int childPosition,boolean isChecked) {
         int childCheckCount = 0;
         for (FirstJunkInfo firstJunkInfo : group.mChildren) {
             if (firstJunkInfo.isAllchecked()) {
                 childCheckCount++;
             }
         }
-        if (childCheckCount == 0) {
+        if(childCheckCount ==0){
             group.isChecked = false;
             group.isCheckPart = false;
-        } else if (childCheckCount >= 0 && childCheckCount < group.getmChildren().size()) {
+        }else if(childCheckCount>=0 && childCheckCount < group.mChildren.size()){
             group.isChecked = true;
             group.isCheckPart = true;
-        } else if (childCheckCount == group.getmChildren().size()) {
-            group.isChecked = true;
+        }else if(childCheckCount == group.mChildren.size()){
+            group.isChecked= true;
             group.isCheckPart = false;
         }
         notifyDataSetChanged();
-        if (onCleanListSelectListener != null)
-            onCleanListSelectListener.onFistChilSelected(groupPosition, childPosition, isChecked);
+        if(onCleanListSelectListener!=null)
+            onCleanListSelectListener.onFistChilSelected(groupPosition,childPosition,isChecked);
     }
 
 

@@ -4,7 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -265,7 +265,7 @@ public class NodeInfoUtil {
 
     private static final String[] switchNames = new String[]{
             "android.widget.Switch",
-            "android.support.v7.widget.SwitchCompat",
+            "androidx.appcompat.widget.SwitchCompat",
             "android.widget.CheckBox"
     };
     private static final Set<String> switcherSet = new HashSet<>(Arrays.asList(switchNames));

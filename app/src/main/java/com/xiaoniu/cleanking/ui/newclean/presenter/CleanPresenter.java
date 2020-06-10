@@ -6,7 +6,7 @@ import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
 import javax.inject.Inject;
-
+@Deprecated
 public class CleanPresenter extends RxPresenter<CleanFragment, NewScanModel> {
 
     @Inject
