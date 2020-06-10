@@ -60,7 +60,6 @@ import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ArcProgressBar;
-import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -128,8 +127,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
     LottieAnimationView mAnimationView;
     @BindView(R.id.layout_clean_finish)
     ConstraintLayout mLayoutCleanFinish;
-    @BindView(R.id.web_view)
-    NestedScrollWebView mWebView;
     @BindView(R.id.nested_scroll_view)
     NestedScrollView mNestedScrollView;
     @BindView(R.id.layout_not_net)
@@ -227,8 +224,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mPresenter.getRunningProcess();
         mPresenter.getHardwareInfo(false);
         initCoolAnimation(phoneTemperature);
-        initWebView();
-
         //降温
         int tem = new Random().nextInt(3) + 1;
         mTextNumberCool.setText("成功降温" + tem + "°C");
@@ -517,57 +512,6 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         mTvCooling.setVisibility(GONE);
         startFinishAnimator();
     }
-
-    public void initWebView() {
-        WebSettings settings = mWebView.getSettings();
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptEnabled(true);
-        settings.setTextZoom(100);
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-        mWebView.addJavascriptInterface(new JavaInterface(this, mWebView), "cleanPage");
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-//                showLoadingDialog();
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-//                cancelLoadingDialog();
-                if (!isError) {
-                    if (mLayoutNotNet != null) {
-                        mLayoutNotNet.setVisibility(GONE);
-                    }
-                    if (mWebView != null) {
-                        mWebView.setVisibility(SPUtil.isInAudit() ? GONE : View.VISIBLE);
-                    }
-                }
-                isError = false;
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                isError = true;
-                if (mLayoutNotNet != null) {
-                    mLayoutNotNet.setVisibility(VISIBLE);
-                }
-                if (mWebView != null) {
-                    mWebView.setVisibility(GONE);
-                }
-            }
-        });
-
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-            }
-        });
-    }
-
     private void initAdapter() {
         mRecyclerProcess.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mRecyclerProcess.addItemDecoration(new CustomerSpaceDecoration());
@@ -631,7 +575,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onNetLayoutClicked() {
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
+
     }
 
     /**

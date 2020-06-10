@@ -51,10 +51,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        devdebug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        debug{}
+        preprod{}
+        dev{}
+        devdebug{}
+        btestdebug{}
+        releasedebug{}
     }
 
 }

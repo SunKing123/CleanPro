@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_65dp"
+    android:background="@color/color_F7F8FA"
+    tools:background="@android:color/white">
+
+    <View
+        android:id="@+id/v_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_0_5dp"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:background="@color/color_EDEDED" />
+
+    <ImageView
+        android:id="@+id/iv_junk_logo"
+        android:layout_width="@dimen/dimen_32dp"
+        android:layout_height="@dimen/dimen_32dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        tools:background="#334455" />
+
+    <TextView
+        android:id="@+id/tv_junk_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/iv_junk_logo"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_toLeftOf="@+id/tv_checked_total"
+        android:layout_toRightOf="@+id/iv_junk_logo"
+        android:singleLine="true"
+        tools:text="拼多多的垃圾"
+        android:textColor="@color/color_404040"
+        android:textSize="@dimen/dimen_13sp" />
+
+    <TextView
+        android:id="@+id/tv_junk_sub_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_junk_title"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginTop="@dimen/dimen_4dp"
+        android:layout_toLeftOf="@+id/tv_checked_total"
+        android:layout_toRightOf="@+id/iv_junk_logo"
+        android:singleLine="true"
+        tools:text="建议清理"
+        android:textColor="@color/color_66404040"
+        android:textSize="@dimen/dimen_11sp" />
+
+    <TextView
+        android:id="@+id/tv_checked_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_8dp"
+        android:layout_toLeftOf="@+id/iv_check_state"
+        android:singleLine="true"
+        tools:text="已选123MB"
+        android:textColor="@color/color_404040"
+        android:textSize="@dimen/dimen_12sp" />
+
+    <ImageView
+        android:id="@+id/iv_check_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:src="@drawable/ic_scan_result_nomal" />
+</RelativeLayout>

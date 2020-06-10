@@ -5,235 +5,253 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="#06C581"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_16dp"
-            android:background="@mipmap/icon_left_arrow_white"
-            app:layout_constraintBottom_toBottomOf="@id/view_top"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/view_top"
-            android:onClick="close" />
+            android:orientation="vertical" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_12dp"
-            android:text="调试页面"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18sp"
-            app:layout_constraintBottom_toBottomOf="@id/view_top"
-            app:layout_constraintLeft_toRightOf="@id/iv_back"
-            app:layout_constraintTop_toTopOf="@id/view_top" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="#06C581"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_12dp"
-        android:layout_marginTop="@dimen/dimen_12dp"
-        android:text="1.跳转协议"
-        android:textColor="@color/color_262626"
-        android:textSize="@dimen/dimen_16sp" />
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_16dp"
+                    android:background="@mipmap/icon_left_arrow_white"
+                    app:layout_constraintBottom_toBottomOf="@id/view_top"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/view_top"
+                    android:onClick="close" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_12dp"
+                    android:text="调试页面"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_18sp"
+                    app:layout_constraintBottom_toBottomOf="@id/view_top"
+                    app:layout_constraintLeft_toRightOf="@id/iv_back"
+                    app:layout_constraintTop_toTopOf="@id/view_top" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@android:color/holo_purple"
-            android:gravity="center"
-            android:onClick="toHomeClean"
-            android:text="首页清理"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_12dp"
+                android:layout_marginTop="@dimen/dimen_12dp"
+                android:text="1.跳转协议"
+                android:textColor="@color/color_262626"
+                android:textSize="@dimen/dimen_16sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@android:color/holo_orange_dark"
-            android:gravity="center"
-            android:onClick="toHomeTools"
-            android:text="首页工具箱"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@android:color/holo_blue_dark"
-            android:gravity="center"
-            android:onClick="toHomeNews"
-            android:text="首页头条"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_purple"
+                    android:gravity="center"
+                    android:onClick="toHomeClean"
+                    android:text="首页清理"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@android:color/holo_green_dark"
-            android:gravity="center"
-            android:onClick="toHomeMine"
-            android:text="首页我的"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_orange_dark"
+                    android:gravity="center"
+                    android:onClick="toHomeTools"
+                    android:text="首页工具箱"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_blue_dark"
+                    android:gravity="center"
+                    android:onClick="toHomeNews"
+                    android:text="首页头条"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_dark"
+                    android:gravity="center"
+                    android:onClick="toHomeMine"
+                    android:text="首页我的"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_00DA80"
-            android:gravity="center"
-            android:onClick="toH5"
-            android:text="H5协议"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_F98EA2"
-            android:gravity="center"
-            android:onClick="toWeChatClean"
-            android:text="微信专清"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_5A6572"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="toH5"
+                    android:text="H5协议"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_89E00F"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_F98EA2"
+                    android:gravity="center"
+                    android:onClick="toWeChatClean"
+                    android:text="微信专清"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_lottie"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_5A6572"
+                    android:gravity="center"
+                    android:text="lottie动画"
+                    android:onClick="playLottie"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_89E00F"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_00DA80"
-            android:gravity="center"
-            android:onClick="getImei"
-            android:text="获取ImeI"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
-
-        <TextView
-            android:id="@+id/tv_hide_icon"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_00DA80"
-            android:gravity="center"
-            android:text="hide_icon"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
-
-        <TextView
-            android:id="@+id/tv_clean"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_00DA80"
-            android:gravity="center"
-            android:onClick="cleanCodeTime"
-            android:text="冷启动时间"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_00DA80"
-            android:gravity="center"
-            android:onClick="getAdConfig"
-            android:text="广告中心配置"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:orientation="horizontal">
 
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_00DA80"
-            android:gravity="center"
-            android:onClick="gotoFullAd"
-            android:text="外部全屏插屏"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="getImei"
+                    android:text="获取ImeI"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_50dp"
-            android:layout_weight="1"
-            android:background="@color/color_00DA80"
-            android:gravity="center"
-            android:onClick="gotoPop"
-            android:text="外部非全屏插屏"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+                <TextView
+                    android:id="@+id/tv_hide_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:text="hide_icon"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
+
+                <TextView
+                    android:id="@+id/tv_clean"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="cleanCodeTime"
+                    android:text="冷启动时间"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="getAdConfig"
+                    android:text="广告中心配置"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="gotoFullAd"
+                    android:text="外部全屏插屏"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="gotoPop"
+                    android:text="外部非全屏插屏"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
 
 
 
-    </LinearLayout>
-    <FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            </LinearLayout>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/view_lottie_bottom"
+                android:layout_width="match_parent"
+                android:scaleType="centerCrop"
+                app:lottie_repeatMode="restart"
+                android:layout_height="400dp"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </FrameLayout>
+
+
+
 
 </LinearLayout>

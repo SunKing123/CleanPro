@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_top"
+    android:fitsSystemWindows="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_top"
+        android:fitsSystemWindows="true">
+
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_10dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:padding="@dimen/dimen_14dp"
+            android:src="@mipmap/icon_close_fix_white"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clHintTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imTop"
+                android:layout_width="175dp"
+                android:layout_height="137dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:id="@+id/clHintIcon"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivHintIcon"
+                    android:layout_width="175dp"
+                    android:layout_height="137dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_pb_bg"
+                    android:layout_width="@dimen/dimen_105dp"
+                    android:layout_height="@dimen/dimen_105dp"
+                    android:layout_marginTop="@dimen/dimen_30dp"
+                    android:src="@mipmap/img_progressbar_def"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_pb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/img_progressbar"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_pb_bg"
+                    app:layout_constraintLeft_toLeftOf="@id/iv_pb_bg"
+                    app:layout_constraintRight_toRightOf="@id/iv_pb_bg"
+                    app:layout_constraintTop_toTopOf="@id/iv_pb_bg" />
+
+                <TextView
+                    android:id="@+id/tv_pb_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0%"
+                    android:textColor="@color/color_white"
+                    android:textSize="23sp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_pb_bg"
+                    app:layout_constraintLeft_toLeftOf="@id/iv_pb_bg"
+                    app:layout_constraintRight_toRightOf="@id/iv_pb_bg"
+                    app:layout_constraintTop_toTopOf="@id/iv_pb_bg" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clHintTop">
+
+            <TextView
+                android:id="@+id/tvHintTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_6dp"
+                android:text="最后一步了"
+                android:textColor="@color/permission_title"
+                android:textSize="@dimen/dimen_16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cot_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/tvHintTitle">
+
+                <TextView
+                    android:id="@+id/tvClick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="点击"
+                    android:textColor="@color/permission_tips"
+                    android:textSize="@dimen/dimen_12sp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@id/tvOneKeyFix"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvOneKeyFix"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="一键修复"
+                    android:textColor="@color/color_FF3B84"
+                    android:textSize="@dimen/dimen_12sp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toRightOf="@+id/tvClick"
+                    app:layout_constraintRight_toLeftOf="@id/tvHintWait"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvHintWait"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:text="就可以使用来电秀了"
+
+                    android:textColor="@color/permission_tips"
+                    android:textSize="@dimen/dimen_12sp"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintLeft_toRightOf="@id/tvOneKeyFix"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tvHintFail"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:gravity="center"
+                android:text="@string/fail_toast"
+                android:textColor="@color/permission_tips"
+                android:textSize="@dimen/dimen_12sp"
+                android:visibility="gone"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvHintTitle"
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="@dimen/dimen_14dp"
+            android:layout_marginTop="@dimen/dimen_19dp"
+            android:layout_marginRight="@dimen/dimen_14dp"
+            android:layout_marginBottom="@dimen/dimen_20dp"
+            android:background="@color/color_4D64617A"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_title" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listFixHint"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginTop="@dimen/dimen_18dp"
+            android:layout_marginRight="@dimen/dimen_15dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            app:layout_constraintBottom_toTopOf="@id/tvFix"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line" />
+
+
+        <TextView
+            android:id="@+id/tvFix"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44dp"
+            android:layout_marginLeft="@dimen/dimen_46dp"
+            android:layout_marginRight="@dimen/dimen_46dp"
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            android:background="@drawable/shape_common"
+            android:gravity="center"
+            android:text="一键修复"
+            android:textColor="@color/permission_btn_color"
+            android:textSize="@dimen/dimen_18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_add_qq"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tv_add_qq"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44dp"
+            android:layout_marginLeft="@dimen/dimen_46dp"
+            android:layout_marginRight="@dimen/dimen_46dp"
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            android:background="@drawable/shape_add_qq"
+            android:gravity="center"
+            android:text="加入QQ群"
+            android:visibility="gone"
+            android:textColor="@color/permission_title"
+            android:textSize="@dimen/dimen_18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

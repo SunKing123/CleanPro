@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent">
+
+<RelativeLayout
+    android:layout_marginTop="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_corner"
+    android:padding="16dp"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/iconImage"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:src="@mipmap/icon_sd_one"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iconImage"
+        android:layout_toLeftOf="@id/rotationLoading"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTitle"
+            android:textSize="16sp"
+            android:text="@string/vircuskill_item_one_tip"/>
+        <TextView
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtContext"
+            android:textSize="12sp"
+            android:textColor="@color/color_82838C"
+            android:text="@string/vircuskill_item_one_tips"/>
+    </LinearLayout>
+
+    <com.jess.arms.widget.RotationLoadingView
+        android:id="@+id/rotationLoading"
+        android:layout_width="15dp"
+        android:layout_height="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="28dp" />
+
+</RelativeLayout>
+
+</LinearLayout>

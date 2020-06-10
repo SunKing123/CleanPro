@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.HashMap;
@@ -19,6 +20,10 @@ import java.util.Map;
  * 保存埋点来源
  */
 public class AppHolder {
+    private static AppHolder appHolder;
+
+    //广告配置内存缓存
+    public static Map<String, SwitchInfoList.DataBean> mAdsMap = CollectionUtils.createMap();
 
     private AppHolder() {
     }

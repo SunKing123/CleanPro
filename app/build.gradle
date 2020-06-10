@@ -4,7 +4,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'com.didiglobal.booster'
+
 android {
+
+    compileOptions.encoding="UTF-8"
+
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.hellogeek.cleanking"
@@ -272,15 +276,16 @@ repositories {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
 
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-    implementation 'com.google.dagger:dagger:2.11'
+//    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+//    implementation 'com.google.dagger:dagger:2.11'
 
     implementation rootProject.ext.dependencies["butterknife"]
     annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
@@ -295,8 +300,8 @@ dependencies {
     api rootProject.ext.dependencies["arouter"]
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+    implementation "androidx.room:room-runtime:2.0.0"
+    annotationProcessor "androidx.room:room-compiler:2.0.0"
 
     implementation rootProject.ext.dependencies["greendao"]
     annotationProcessor rootProject.ext.dependencies["greendao-generator"]
@@ -312,12 +317,20 @@ dependencies {
     //推送
   //  implementation files('libs\\push-core.aar')
   //  implementation files('libs\\push-jpush.aar')
+    implementation project(':permission')
     implementation project(':otherlib:jksdk')
 
     //百度统计sdk
-
     implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
 
+    implementation 'me.jessyan:retrofit-url-manager:1.4.0'
+    implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+    implementation "org.jetbrains.anko:anko:0.10.8"
+
+    implementation project(':arms')
+
+    api rootProject.ext.dependencies["dagger2"]
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
 
 }
 

@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.RouteConstants;
+import com.xiaoniu.cleanking.app.arm.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -787,7 +788,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void toKillVirus() {
         StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
         if (PreferenceUtil.getVirusKillTime()) {
-            startActivity(VirusKillActivity.class);
+            startActivity(ArmVirusKillActivity.class);
         } else {
             Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
             intent.putExtra("title", "病毒查杀");

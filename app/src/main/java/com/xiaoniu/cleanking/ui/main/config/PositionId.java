@@ -117,6 +117,8 @@ public class PositionId {
     public static final String AD_CLEAN_INSIDE_ADVERTISING_AD = "inside_advertising_ad";//应用内部插屏广告
 
 
+    //悟空开关
+    public static final String KEY_CLEAN_FINSH="page_clean_up_complete";
 
 
 

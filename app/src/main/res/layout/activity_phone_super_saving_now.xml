@@ -126,13 +126,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.xiaoniu.cleanking.widget.NestedScrollWebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:visibility="gone" />
-
             <RelativeLayout
                 android:id="@+id/rl_result"
                 android:layout_width="match_parent"

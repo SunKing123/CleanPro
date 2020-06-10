@@ -8,4 +8,7 @@ include ':app',
         ':otherlib:jksdk',
         ':jsbridge',
         ':geekWebpage',
-        ':jpush'
+        ':jpush',
+        ':permission',
+        ':arms'
+

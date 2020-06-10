@@ -97,11 +97,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.xiaoniu.cleanking.widget.NestedScrollWebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
             <!--无网络-->
             <LinearLayout
                 android:id="@+id/layout_not_net"

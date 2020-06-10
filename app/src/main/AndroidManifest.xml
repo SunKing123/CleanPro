@@ -98,7 +98,9 @@
             android:name=".selfdebug.AdConfigActivity"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.newclean.activity.DeepCleanPermissionActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.ImageActivity"
@@ -399,6 +401,13 @@
 
         <activity
             android:name=".ui.main.activity.VirusKillActivity"
+            android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
+
+        <activity
+            android:name=".app.arm.ArmVirusKillActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
@@ -779,6 +788,11 @@
             android:authorities="${applicationId}.preference"
             android:exported="false"
             android:process=":remote" />
+
+        <provider
+            android:name="com.hellogeek.permission.provider.PermissionProvider"
+            android:authorities="${applicationId}.PreferenceProvider"
+            android:exported="true" />
     </application>
     <!-- 允许程序扩展或收缩状态栏 -->
     <permission

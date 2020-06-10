@@ -1,0 +1,76 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hellogeek.permission">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="com.bbk.launcher2.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.coloros.mcs.permission.RECIEVE_MCS_MESSAGE" />
+    <uses-permission android:name="com.huawei.permission.external_app_settings.USE_COMPONENT" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <application
+        android:allowBackup="true"
+        android:supportsRtl="true">
+        <activity
+            android:name="com.hellogeek.permission.activity.PermissionAutoFixActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.hellogeek.permission.activity.WKPermissionAutoFixActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.hellogeek.permission.activity.ASMGuideActivity"
+            android:theme="@style/transparent_activity" />
+        <activity
+            android:name="com.hellogeek.permission.activity.ToastGuideActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+
+        <service
+            android:name="com.hellogeek.permission.server.AccessibilityServiceMonitor"
+
+            android:label="@string/permission_app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_config">
+
+            </meta-data>
+        </service>
+        <!--        <service-->
+        <!--            android:name="com.hellogeek.permission.server.NotificationMonitorService"-->
+        <!--            android:directBootAware="true"-->
+        <!--            android:label="@string/app_name"-->
+        <!--            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.service.notification.NotificationListenerService" />-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
+
+        <!--        <receiver android:name="com.hellogeek.permission.server.BootBroadcastReceiver">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.BOOT_COMPLETED"/>-->
+        <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
+
+
+        <activity
+            android:name="com.hellogeek.permission.activity.PhonePremisActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/transparent_activity" />
+
+    </application>
+
+</manifest>
+
+

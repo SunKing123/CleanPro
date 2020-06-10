@@ -38,7 +38,6 @@ import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -66,7 +65,6 @@ public class CleanedAnimView extends RelativeLayout {
     TextView mTextGb;
     CoordinatorLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
-    NestedScrollWebView mWebView;
     NestedScrollView mNScrollView;
     LinearLayout mLayoutNotNet;
     AppBarLayout mAppBarLayout;
@@ -136,13 +134,11 @@ public class CleanedAnimView extends RelativeLayout {
         mTextGb = v.findViewById(R.id.tv_gb);
         mLayoutRoot = v.findViewById(R.id.layout_root);
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
-        mWebView = v.findViewById(R.id.web_view);
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
         mNScrollView = v.findViewById(R.id.n_scroll_view);
         mAppBarLayout = v.findViewById(R.id.app_bar_layout);
         mAppBarLayout.setExpanded(true);
 
-        initWebView();
         iv_back.setOnClickListener(v1 -> {
             if (listener != null) {
                 listener.onClick();
@@ -152,65 +148,10 @@ public class CleanedAnimView extends RelativeLayout {
     }
 
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
     }
 
     boolean isError = false;
     JavaInterface javaInterface;
-
-    public void initWebView() {
-        javaInterface = new JavaInterface((Activity) mContext, mWebView);
-        WebSettings settings = mWebView.getSettings();
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptEnabled(true);
-        settings.setTextZoom(100);
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-        mWebView.addJavascriptInterface(javaInterface, "cleanPage");
-        javaInterface.setListener(() -> {
-
-        });
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-//                showLoadingDialog();
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-//                cancelLoadingDialog();
-                if (!isError) {
-                    if (mLayoutNotNet != null) {
-                        mLayoutNotNet.setVisibility(View.GONE);
-                    }
-                    if (mWebView != null) {
-                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
-                    }
-                }
-                isError = false;
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                isError = true;
-                if (mLayoutNotNet != null) {
-                    mLayoutNotNet.setVisibility(VISIBLE);
-                }
-                if (mWebView != null) {
-                    mWebView.setVisibility(GONE);
-                }
-            }
-        });
-
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-            }
-        });
-    }
 
     public void setData(CountEntity countEntity, int page) {
         if (countEntity == null) {
@@ -533,7 +474,6 @@ public class CleanedAnimView extends RelativeLayout {
     public void showWebView() {
         if (mNScrollView == null) return;
         mNScrollView.setVisibility(VISIBLE);
-        mWebView.setVisibility(VISIBLE);
     }
 
     public void setTitle(String title) {

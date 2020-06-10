@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_corner_bg"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/change_call_tools_iv"
+            android:layout_width="140dp"
+            android:layout_height="102dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="23dp"
+            android:src="@mipmap/iv_change_call_tools"/>
+
+        <TextView
+            android:id="@+id/per_change_call_tools_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/change_call_tools_iv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:padding="@dimen/dimen_10dp"
+            android:text="开启【悬浮窗】权限后才能进行一键修复喔"
+            android:textColor="#FFFFFFFF"
+            android:textSize="17sp"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/per_change_call_tools_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="23dp"
+            android:orientation="horizontal">
+
+            <com.hellogeek.permission.widget.StateButton
+                android:id="@+id/per_right_btnOpen"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textStyle="normal"
+                android:background="@null"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingLeft="14dp"
+                android:paddingTop="5dp"
+                android:paddingRight="14dp"
+                android:paddingBottom="5dp"
+                android:text="去开启"
+                android:textColor="#FFFFFFFF"
+                android:textSize="16sp"
+                app:sb_normalBackgroundColor="#FFFF3B84"
+                app:sb_normalStrokeColor="#FFFF3B84"
+                app:sb_normalStrokeWidth="1dp"
+                app:sb_radius="31dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
