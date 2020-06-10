@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -22,6 +23,7 @@ import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushWindow;
 import com.xiaoniu.cleanking.ui.localpush.WindowUtil;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -53,10 +55,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -111,19 +117,23 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                     break;
                 case "home"://home按键触发
-                    if (null != context) {
-                        startActivity(context);
+                    if (null == context) {
+                        return;
                     }
+                    startActivity(context);
                     if (!RomUtils.checkFloatWindowPermission(context)) {
                         LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
                         return;
                     }
-                    if (WindowUtil.getInstance().isShowing()) {
+                   /* if (WindowUtil.getInstance().isShowing()) {
                         LogUtils.e("====TimingReceiver中 PopWindow正在弹出===");
                         return;
-                    }
-                    Long homePressTime=intent.getLongExtra("homePressed",0L);
-                    showLocalPushAlertWindow(context,homePressTime);
+                    }*/
+                    long homePressTime = intent.getLongExtra("homePressed", 0L);
+
+                    showLocalPushAlertWindow(context, homePressTime);
+
+
                     break;
                 case "app_add_full"://锁屏打开页面||home按键触发  //应用植入插屏全屏广告
                     if (null != context) {
@@ -144,7 +154,23 @@ public class TimingReceiver extends BroadcastReceiver {
     }
 
 
-    private void showLocalPushAlertWindow(Context context,Long homePressTime) {
+    private void showToastPopWindow(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
+        long current = System.currentTimeMillis();
+        LogUtils.e("=====current:" + current + "  homeTime:" + homePressTime);
+        long period = current / 1000 - homePressTime / 1000;
+        LogUtils.e("===距离按下Home已经过去了" + period + "秒");
+        LocalPushWindow toast = new LocalPushWindow(context, item);
+        if (period >= 3) {
+            toast.show(1000 * 20);
+        } else {
+            new Handler().postDelayed(() -> {
+                toast.show(1000 * 20);
+            }, (3 - period) * 1000);
+        }
+    }
+
+
+    private void showLocalPushAlertWindow(Context context, Long homePressTime) {
         //1.读取本地缓存的推送配置Config列表
         Map<String, LocalPushConfigModel.Item> map = PreferenceUtil.getLocalPushConfig();
 
@@ -152,7 +178,8 @@ public class TimingReceiver extends BroadcastReceiver {
         LocalPushConfigModel.Item clearItem = map.get("1");
         if (clearItem != null && LocalPushHandle.getInstance().allowPopClear(clearItem)) {
             LogUtils.e("===允许弹出clear的window");
-            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime, clearItem);
+            // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, clearItem);
+            showToastPopWindow(context, homePressTime, clearItem);
             return;
         } else {
             LogUtils.e("===不允许弹出clear的window");
@@ -162,7 +189,8 @@ public class TimingReceiver extends BroadcastReceiver {
         if (speedItem != null) {
             if (LocalPushHandle.getInstance().allowPopSpeedUp(speedItem)) {
                 LogUtils.e("===允许弹出speed的window");
-                WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime,  speedItem);
+                // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, speedItem);
+                showToastPopWindow(context, homePressTime, speedItem);
                 return;
             } else {
                 LogUtils.e("===不允许弹出speed的window");
@@ -174,7 +202,9 @@ public class TimingReceiver extends BroadcastReceiver {
         if (coolItem != null) {
             if (LocalPushHandle.getInstance().allowPopCool(coolItem, temp)) {
                 LogUtils.e("===允许弹出cool的window");
-                WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime,  coolItem);
+                //  WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, coolItem);
+                coolItem.temp = temp;
+                showToastPopWindow(context, homePressTime, coolItem);
                 return;
             } else {
                 LogUtils.e("===不允许弹出cool的window");
@@ -186,7 +216,8 @@ public class TimingReceiver extends BroadcastReceiver {
         if (powerItem != null) {
             if (LocalPushHandle.getInstance().allowPopPowerSaving(powerItem, isCharged, mBatteryPower)) {
                 LogUtils.e("===允许弹出power的window");
-                WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime,  powerItem);
+                // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, powerItem);
+                showToastPopWindow(context, homePressTime, powerItem);
             } else {
                 LogUtils.e("===不允许弹出power的window");
             }

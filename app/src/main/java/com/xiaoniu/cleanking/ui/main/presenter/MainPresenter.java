@@ -465,17 +465,18 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                      if (itemList!=null&&itemList.size()>0){
 
                          /*-------------测试专用 start----------------*/
-                         itemList.clear();
+                      /*   itemList.clear();
                          LocalPushConfigModel.Item item=new LocalPushConfigModel.Item();
                          item.setOnlyCode("2");
+                         item.setIconUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591777551401&di=7c53ecd102576214fee3076839555207&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F68%2F61%2F300000839764127060614318218_950.jpg");
                          item.setDailyLimit(3);
                          //阈值 降温和省电专用
-                         item.setThresholdNum(50);
+                         item.setThresholdNum(10);
                          item.setFunctionUsedInterval(1);
                          item.setPopWindowInterval(1);
-                         item.setTitle("假数据的title");
+                         item.setTitle("手机内存占用#快加速");
                          item.setContent("假数据的content");
-                         itemList.add(item);
+                         itemList.add(item);*/
                          /*-------------测试专用 end----------------*/
 
                          //将从服务器获取的本地推送配置信息保存在SP中
@@ -531,7 +532,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     dataBean.setCodeX("push10");//通知栏类型
                     dataBean.setTitle("通知栏");
                     dataBean.setContent("通知栏");
-                    dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
+                   // dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
 
                     dataBean.setThresholdNum(60);
                     dataBean.setInterValTime(60);//每个小时监测
@@ -725,7 +726,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     }
                 }
-                requestPopWindowPermission();
+
+              //  requestPopWindowPermission();
+
             }
         });
     }

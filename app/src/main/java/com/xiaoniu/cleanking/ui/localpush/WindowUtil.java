@@ -63,14 +63,17 @@ public class WindowUtil {
 
 
     public void showWindowWhenDelayTwoSecond(Context context, Long homeTime, LocalPushConfigModel.Item item) {
-        long period = System.currentTimeMillis() / 1000 - homeTime / 1000;
+        long current = System.currentTimeMillis();
+        LogUtils.e("=====current:"+current+"  homeTime:"+homeTime);
+        long period = current / 1000 - homeTime / 1000;
         LogUtils.e("===距离按下Home已经过去了" + period + "秒");
         if (period >= 3) {
             LogUtils.e("===已经超过3秒，立即弹出");
             showWindow(context, item);
         } else {
-            LogUtils.e("===延迟" + (3 - period) + "秒弹出");
-            new Handler().postDelayed(() -> showWindow(context, item), 3 - period);
+            long delay = 3 - period;
+            LogUtils.e("===延迟" + delay + "秒弹出");
+            new Handler().postDelayed(() -> showWindow(context, item), delay * 1000);
         }
 
     }
@@ -83,7 +86,7 @@ public class WindowUtil {
 
             AppCompatImageView icon = mView.findViewById(R.id.logo);
             if (!TextUtils.isEmpty(item.getIconUrl())) {
-                GlideUtils.loadImage((Activity) context, item.getIconUrl(), icon);
+                GlideUtils.loadImage(context, item.getIconUrl(), icon);
             }
 
             AppCompatTextView title = mView.findViewById(R.id.title);

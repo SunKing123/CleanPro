@@ -38,6 +38,12 @@ public class LocalPushConfigModel extends BaseEntity {
         //1.立即清理 2.一键加速 3.手机清理 4.文件清理 5.微信专清 6.手机温降温 7.QQ专清 8.通知栏 9.超强省电
         private String onlyCode;
 
+
+
+        //本地变量-温度
+        public int temp;
+
+
         public String getIconUrl() {
             return iconUrl;
         }
