@@ -81,14 +81,16 @@ public class PermissionProvider extends ContentProvider {
     public static boolean getBoolen(Context context, String key, boolean defValue) {
         Cursor cursor = query(context, key);
         int ret = defValue ? 1 : 0;
-        if (cursor.moveToNext()) {
+        if (null!= cursor && cursor.moveToNext()) {
             try {
                 ret = cursor.getInt(0);
             } catch (Exception e) {
 
             }
         }
-        cursor.close();
+        if(null!= cursor){
+            cursor.close();
+        }
         boolean isSave = (ret == 1);
         return isSave;
     }
