@@ -17,9 +17,6 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
-import com.hellogeek.permission.Integrate.Permission;
-import com.hellogeek.permission.Integrate.PermissionIntegrate;
-import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
@@ -308,6 +305,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
+                i.putExtra("homePressed", System.currentTimeMillis());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
                 } else {
