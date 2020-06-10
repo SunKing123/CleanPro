@@ -39,7 +39,6 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -64,7 +63,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
     private TextView mTvNum;
     private RelativeLayout mRlResult;
     private LinearLayout mLlResultTop;
-    private NestedScrollWebView mNestedScrollWebView;
     private JavaInterface javaInterface;
     private LinearLayout mLayoutNotNet;
     private FrameLayout mFlAnim;
@@ -144,7 +142,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
         mRlResult = findViewById(R.id.rl_result);
         mLlResultTop = findViewById(R.id.viewt_finish);
-        mNestedScrollWebView = findViewById(R.id.web_view);
         mLayoutNotNet = findViewById(R.id.layout_not_net);
         mIvAnimationStartView = findViewById(R.id.view_lottie_super_saving_sleep);
         mFlAnim = findViewById(R.id.fl_anim);
@@ -156,8 +153,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
 
         mTvNum.setText(String.valueOf(num));
         mTvAllNum.setText("/" + String.valueOf(num));
-        initWebView();
-
     }
 
     @Override
@@ -394,7 +389,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mRlResult.setVisibility(View.GONE);
         mAppBarLayout.setExpanded(true);
         mLlResultTop.setVisibility(View.VISIBLE);
-        mNestedScrollWebView.setVisibility(View.VISIBLE);
         int startHeight = ScreenUtils.getFullActivityHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, 0);
         anim.setDuration(500);
@@ -421,7 +415,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
                 finish();
                 break;
             case R.id.layout_not_net:
-                mNestedScrollWebView.loadUrl(PreferenceUtil.getWebViewUrl());
                 break;
         }
     }
@@ -431,60 +424,6 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         mIsFinish = true;
         StatisticsUtils.trackClick("system_return_click", returnEventName, sourcePage, currentPage);
         super.onBackPressed();
-    }
-
-    public void initWebView() {
-        javaInterface = new JavaInterface(this, mNestedScrollWebView);
-        WebSettings settings = mNestedScrollWebView.getSettings();
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptEnabled(true);
-        settings.setTextZoom(100);
-        mNestedScrollWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-        mNestedScrollWebView.addJavascriptInterface(javaInterface, "cleanPage");
-        javaInterface.setListener(() -> {
-
-        });
-        mNestedScrollWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-                StatisticsUtils.trackClick("Super_Power_Saving_Completion_view_page", "\"超强省电完成\"浏览", "Super_Power_Saving_page", "Super_Power_Saving_Completion_page");
-
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                if (!isError) {
-                    if (mLayoutNotNet != null) {
-                        mLayoutNotNet.setVisibility(View.GONE);
-                    }
-                    if (mNestedScrollWebView != null) {
-//                        mNestedScrollWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
-                    }
-                }
-                isError = false;
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                isError = true;
-                if (mLayoutNotNet != null) {
-//                    mLayoutNotNet.setVisibility(View.VISIBLE);
-                }
-                if (mNestedScrollWebView != null) {
-                    mNestedScrollWebView.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        mNestedScrollWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-            }
-        });
     }
 
 }

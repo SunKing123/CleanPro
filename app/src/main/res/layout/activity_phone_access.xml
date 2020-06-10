@@ -172,15 +172,6 @@
                 android:overScrollMode="never"
                 android:scrollbars="none" />
 
-            <com.xiaoniu.cleanking.widget.NestedScrollWebView
-                android:id="@+id/web_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:touchscreenBlocksFocus="true"
-                android:visibility="gone" />
-
         </FrameLayout>
     </androidx.core.widget.NestedScrollView>
 

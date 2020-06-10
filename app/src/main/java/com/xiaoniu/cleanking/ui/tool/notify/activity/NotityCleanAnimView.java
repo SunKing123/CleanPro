@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -38,13 +37,11 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.callback.OnColorChangeListener;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
-import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -72,7 +69,6 @@ public class NotityCleanAnimView extends RelativeLayout {
     TextView mTextGb;
     RelativeLayout mLayoutRoot;
     ConstraintLayout mLayoutCleanFinish;
-    NestedScrollWebView mWebView;
     LinearLayout mLayoutNotNet;
     TextView mTvAnimTitle;
     FrameLayout mFlAnim;
@@ -146,12 +142,10 @@ public class NotityCleanAnimView extends RelativeLayout {
         mTextGb = v.findViewById(R.id.tv_gb);
         mLayoutRoot = v.findViewById(R.id.layout_root);
         mLayoutCleanFinish = v.findViewById(R.id.layout_clean_finish);
-        mWebView = v.findViewById(R.id.web_view);
         mLayoutNotNet = v.findViewById(R.id.layout_not_net);
         mTvAnimTitle = v.findViewById(R.id.tv_anim_title);
         mFlAnim = v.findViewById(R.id.fl_anim);
         mScrollView = v.findViewById(R.id.n_scroll_view);
-        initWebView();
         iv_back.setOnClickListener(v1 -> {
             if (listener != null) {
                 listener.onClick();
@@ -161,69 +155,10 @@ public class NotityCleanAnimView extends RelativeLayout {
     }
 
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
     }
 
     boolean isError = false;
     JavaInterface javaInterface;
-
-    public void initWebView() {
-        javaInterface = new JavaInterface((Activity) mContext, mWebView);
-        WebSettings settings = mWebView.getSettings();
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptEnabled(true);
-        settings.setTextZoom(100);
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-        mWebView.addJavascriptInterface(javaInterface, "cleanPage");
-        javaInterface.setListener(() -> {
-
-        });
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-//                showLoadingDialog();
-                if (listener != null){
-                    listener.onClick();
-                }
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-//                cancelLoadingDialog();
-
-                if (!isError) {
-                    if (mLayoutNotNet != null) {
-                        mLayoutNotNet.setVisibility(View.GONE);
-                    }
-                    if (mWebView != null) {
-                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
-                    }
-                }
-                isError = false;
-            }
-
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-                isError = true;
-                if (mLayoutNotNet != null) {
-                    mLayoutNotNet.setVisibility(VISIBLE);
-                }
-                if (mWebView != null) {
-                    mWebView.setVisibility(GONE);
-                }
-            }
-        });
-
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-            }
-        });
-    }
 
     public void setData(CountEntity countEntity, int page) {
         if (countEntity == null) {
@@ -331,7 +266,7 @@ public class NotityCleanAnimView extends RelativeLayout {
 
             animatorSet.start();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -385,7 +320,7 @@ public class NotityCleanAnimView extends RelativeLayout {
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(rotation, rotation4);
             animatorSet.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -423,8 +358,8 @@ public class NotityCleanAnimView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-               if (animationStateListener != null)
-                   animationStateListener.onAnimationEnd();
+                if (animationStateListener != null)
+                    animationStateListener.onAnimationEnd();
 //                setViewTrans();
             }
 
@@ -473,7 +408,7 @@ public class NotityCleanAnimView extends RelativeLayout {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {//不走对勾动画
                     if (animationStateListener != null)
                         animationStateListener.onAnimationStart();
-                     }
+                }
             }
 
             @Override
@@ -516,7 +451,7 @@ public class NotityCleanAnimView extends RelativeLayout {
         });
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
-        animatorSetTimer.playTogether(valueAnimator, colorAnim1,colorAnim2);
+        animatorSetTimer.playTogether(valueAnimator, colorAnim1, colorAnim2);
         animatorSetTimer.start();
 
     }
@@ -556,11 +491,9 @@ public class NotityCleanAnimView extends RelativeLayout {
 
     public void showWebView() {
         mScrollView.setVisibility(VISIBLE);
-        mWebView.setVisibility(VISIBLE);
-
     }
 
-    public void setAnimTitle(String animTitle){
+    public void setAnimTitle(String animTitle) {
         mTvAnimTitle.setText(animTitle);
     }
 

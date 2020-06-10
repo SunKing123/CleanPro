@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,7 +43,6 @@ import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.event.InternalStoragePremEvent;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -53,13 +50,10 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.widget.NestedScrollWebView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.KeyboardUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -103,8 +97,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     TextView tv_ql;
     @BindView(R.id.icon_more)
     ImageView icon_more;
-    @BindView(R.id.web_view)
-    NestedScrollWebView mWebView;
     @BindView(R.id.viewt)
     View viewt;
     @BindView(R.id.line_title)
@@ -157,68 +149,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public void inject(ActivityComponent activityComponent) {
         activityComponent.inject(this);
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    public void initWebView() {
-        WebSettings settings = mWebView.getSettings();
-        settings.setDomStorageEnabled(true);
-        settings.setJavaScriptEnabled(true);
-        settings.setTextZoom(100);
-        mWebView.addJavascriptInterface(new JavaInterface(mContext, mWebView), "cleanPage");
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-//                showLoadingDialog();
-            }
-
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                super.onReceivedError(view, errorCode, description, failingUrl);
-                if (mLayoutNetError == null)
-                    return;
-
-                isError = true;
-                if (mLayoutNetError != null) {
-                    mLayoutNetError.setVisibility(View.VISIBLE);
-                }
-                if (mWebView != null) {
-                    mWebView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-//                cancelLoadingDialog();
-                if (!isError) {
-                    //回调成功后的相关操作
-                    if (mLayoutNetError != null) {
-                        mLayoutNetError.setVisibility(View.GONE);
-                    }
-                    if (mWebView != null) {
-                        if (SPUtil.isInAudit())
-                            mWebView.setVisibility(View.GONE);
-//                        mWebView.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
-                    }
-                    if (recycle_view != null) {
-                        recycle_view.setVisibility(SPUtil.isInAudit() ? View.GONE : View.VISIBLE);
-                    }
-                }
-                isError = false;
-            }
-
-        });
-        mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onReceivedTitle(WebView view, String title) {
-                super.onReceivedTitle(view, title);
-
-            }
-        });
-
     }
 
     @Override
@@ -464,7 +394,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onPause() {
         super.onPause();
-        KeyboardUtils.closeKeyboard(mWebView);
         NiuDataAPI.onPageEnd("clean_up_immediately_view_page", "立即一键加速浏览页");
         NiuDataAPI.onPageEnd("once_accelerate_view_page", "一键清理页面浏览");
         NiuDataAPI.onPageEnd("accelerate_access_to_details_view_page", "加速查看详情页浏览");
@@ -705,7 +634,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @OnClick(R.id.layout_not_net)
     public void onTvRefreshClicked() {
-        mWebView.loadUrl(PreferenceUtil.getWebViewUrl());
     }
 
     @Override
