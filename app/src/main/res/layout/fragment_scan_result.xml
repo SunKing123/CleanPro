@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_toolkit">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="230dip"
+                android:background="@color/color_FF5454">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tv_checked_total"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/dimen_10dp">
+
+                    <com.xiaoniu.cleanking.widget.FuturaRoundTextView
+                        android:id="@+id/tv_junk_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/dimen_64sp"
+                        tools:text="886" />
+
+                    <com.xiaoniu.cleanking.widget.FuturaRoundTextView
+                        android:id="@+id/tv_junk_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBaseline="@+id/tv_junk_total"
+                        android:layout_alignBottom="@+id/tv_junk_total"
+                        android:layout_toRightOf="@+id/tv_junk_total"
+                        android:baselineAlignBottom="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/dimen_25sp"
+                        tools:text="MB" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_checked_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/iv_down_arrow"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/scan_result_checked_bg"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/dimen_13sp"
+                    tools:text="666MB" />
+
+                <ImageView
+                    android:id="@+id/iv_down_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/dimen_20dp"
+                    android:background="@drawable/icon_checked_bg02" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_ad_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_content_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:itemCount="100" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/bottom_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_above="@+id/rl_toolkit"
+        android:layout_gravity="bottom"
+        android:background="@mipmap/wl"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/rl_toolkit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_68dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_clean_junk"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_46dp"
+            android:layout_marginLeft="@dimen/dimen_16dp"
+            android:layout_marginRight="@dimen/dimen_16dp"
+            android:background="@drawable/sp_scan_result_btn_bg"
+            android:gravity="center"
+            android:text="@string/to_clean"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dimen_16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="84dip"
+        android:background="@color/color_FF5454"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/v_status_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_25dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_12dp"
+                android:drawableLeft="@drawable/common_icon_back_arrow_white"
+                android:drawablePadding="@dimen/dimen_10dp"
+                android:paddingTop="@dimen/dimen_5dp"
+                android:paddingRight="@dimen/dimen_10dp"
+                android:paddingBottom="@dimen/dimen_5dp"
+                android:text="@string/clean_junk"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_title_main" />
+
+            <LinearLayout
+                android:id="@+id/ll_deep_clean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/scan_result_deep_scan_btn"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen_30dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/dimen_10dp"
+                    android:text="@string/deep_scaning"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_14" />
+
+                <ImageView
+                    android:layout_width="@dimen/dimen_12dp"
+                    android:layout_height="@dimen/dimen_12dp"
+                    android:layout_marginRight="@dimen/dimen_5dp"
+                    android:src="@drawable/ic_deep_clean_arrow" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

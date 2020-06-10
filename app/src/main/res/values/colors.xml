@@ -123,5 +123,12 @@
     <color name="some_translucent01">#A0FFFFFF</color>
 
     <color name="color_82838C">#82838C</color>
+    <color name="color_66404040">#66404040</color>
+    <color name="common_line_grey">#EDEDED</color>
+
+    <color name="color_33FFFFFF">#33FFFFFF</color>
+
+    <color name="color_26FFFFFF">#26FFFFFF</color>
+
 
 </resources>

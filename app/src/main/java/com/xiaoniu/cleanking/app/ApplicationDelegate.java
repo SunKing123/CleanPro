@@ -14,6 +14,9 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
+import com.hellogeek.permission.Integrate.Permission;
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
@@ -63,6 +66,8 @@ import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
@@ -116,6 +121,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         });
         String rootDir = MMKV.initialize(application);
+
     }
 
 

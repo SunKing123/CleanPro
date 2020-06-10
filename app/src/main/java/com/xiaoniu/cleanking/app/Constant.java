@@ -77,7 +77,9 @@ public class Constant {
             "com.geek.luck.calendar.app", // 诸葛万年历
             "com.xiaoniu.cleanking", // 悟空清理
             "com.xiaoniu",
-            "com.geek.jk.weather.fission" // 知心天气
+            "com.geek.jk.weather.fission", // 知心天气
+            "com.hellogeek.cleanking"     //清理管家极速版
+
     );
 
     public static String[] BASIC_PERMISSIONS = new String[]{

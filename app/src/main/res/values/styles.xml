@@ -295,4 +295,10 @@
             <enum name="strokeRipple" value="1" />
         </attr>
     </declare-styleable>
+
+    <style name="CommonHLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/common_line_grey</item>
+    </style>
 </resources>

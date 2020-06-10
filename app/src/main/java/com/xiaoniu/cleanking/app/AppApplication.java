@@ -7,6 +7,9 @@ import android.util.Log;
 import androidx.multidex.MultiDex;
 
 import com.baidu.mobstat.StatService;
+import com.hellogeek.permission.Integrate.Permission;
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.AppProfile;
@@ -16,6 +19,7 @@ import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -58,6 +62,19 @@ public class AppApplication extends BaseApplication {
         //接入百度统计sdk
         StatService.setAppChannel(this,ChannelUtil.getChannel(),true);
         StatService.autoTrace(this);
+
+
+        //权限相关初始化
+        PermissionIntegrate.getInstance(this)
+                .setPermissionList(Permission.SUSPENDEDTOAST, Permission.SELFSTARTING,
+                        Permission.NOTIFICATIONREAD, Permission.PACKAGEUSAGESTATS)
+                .setPermissionRecordCallback(new PermissionRecordCallback() {
+                    @Override
+                    public void usagePermissionRecord(int usageType, String currentPage, String sourcePage, String eventCode, String eventName, Map<String, String> extraMap) {
+
+                    }
+                });
+
     }
 
     /**
