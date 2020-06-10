@@ -463,14 +463,35 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                  public void getData(LocalPushConfigModel localPushConfigModel) {
                      List<LocalPushConfigModel.Item> itemList=localPushConfigModel.getData();
                      if (itemList!=null&&itemList.size()>0){
+
+                         /*-------------测试专用 start----------------*/
+                         itemList.clear();
+                         LocalPushConfigModel.Item item=new LocalPushConfigModel.Item();
+                         item.setOnlyCode("2");
+                         item.setDailyLimit(3);
+                         //阈值 降温和省电专用
+                         item.setThresholdNum(50);
+                         item.setFunctionUsedInterval(1);
+                         item.setPopWindowInterval(1);
+                         item.setTitle("假数据的title");
+                         item.setContent("假数据的content");
+                         itemList.add(item);
+                         /*-------------测试专用 end----------------*/
+
                          //将从服务器获取的本地推送配置信息保存在SP中
                          PreferenceUtil.saveLocalPushConfig(new Gson().toJson(itemList));
+                     }
+
+                     //限制华为设置启动包活；
+                     if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
+                         //启动保活进程
+                         mView.start();
                      }
                  }
 
                  @Override
                  public void showExtraOp(String message) {
-
+                     ToastUtils.showShort(message);
                  }
 
                  @Override
@@ -720,23 +741,15 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     .setPositiveButton("去开启", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                           RomUtils.applyPermission(mActivity, new RomUtils.OnSuspensionPermissionListener() {
-                               @Override
-                               public void onPermissionGranted() {
-                                   new Handler().postDelayed(() -> {
-                                       if (!RomUtils.checkFloatWindowPermission(mActivity)) {
-                                           // 授权失败
-                                           ToastUtils.showShort("PopWindow授权失败");
-                                       } else {
-                                           //授权成功
-                                           ToastUtils.showShort("PopWindow推送授权成功");
-                                       }
-                                   }, 2000);
-
-
-
+                           RomUtils.applyPermission(mActivity, () -> new Handler().postDelayed(() -> {
+                               if (!RomUtils.checkFloatWindowPermission(mActivity)) {
+                                   // 授权失败
+                                   ToastUtils.showShort("PopWindow授权失败");
+                               } else {
+                                   //授权成功
+                                   ToastUtils.showShort("PopWindow推送授权成功");
                                }
-                           });
+                           }, 2000));
                         }
                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 @Override
@@ -744,8 +757,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
                 }
             }).show();
-        }else {
-            ToastUtils.showShort("有权限");
         }
     }
 

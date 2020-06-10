@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
+import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -86,7 +87,7 @@ public class TimingReceiver extends BroadcastReceiver {
 
             switch (action) {
                 case "scan_heart"://本地push心跳
-                    Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
+                   /* Map<String, PushSettingList.DataBean> map = PreferenceUtil.getCleanLog();
                     for (Map.Entry<String, PushSettingList.DataBean> entry : map.entrySet()) {
                         PushSettingList.DataBean dataBean = entry.getValue();
                         if (isStartScan(dataBean)) { //检测是否达到扫描时间
@@ -96,6 +97,9 @@ public class TimingReceiver extends BroadcastReceiver {
                             map.put(entry.getKey(), dataBean);
                             PreferenceUtil.saveCleanLogMap(map);
                         }
+                    }*/
+                    if (isStartScan()) { //检测是否达到扫描时间
+                        startScanAll(null, mContext);
                     }
 
                     Intent i = new Intent(context, LocalService.class);
@@ -107,7 +111,6 @@ public class TimingReceiver extends BroadcastReceiver {
                     }
                     break;
                 case "home"://home按键触发
-                    LogUtils.e("====TimingReceiver中进入Home分支===");
                     if (null != context) {
                         startActivity(context);
                     }
@@ -119,7 +122,8 @@ public class TimingReceiver extends BroadcastReceiver {
                         LogUtils.e("====TimingReceiver中 PopWindow正在弹出===");
                         return;
                     }
-                    showLocalPushAlertWindow(context);
+                    Long homePressTime=intent.getLongExtra("homePressed",0L);
+                    showLocalPushAlertWindow(context,homePressTime);
                     break;
                 case "app_add_full"://锁屏打开页面||home按键触发  //应用植入插屏全屏广告
                     if (null != context) {
@@ -140,31 +144,52 @@ public class TimingReceiver extends BroadcastReceiver {
     }
 
 
-    private void showLocalPushAlertWindow(Context context) {
+    private void showLocalPushAlertWindow(Context context,Long homePressTime) {
         //1.读取本地缓存的推送配置Config列表
         Map<String, LocalPushConfigModel.Item> map = PreferenceUtil.getLocalPushConfig();
+
         //2.判断【垃圾清理】功能是否满足推送条件
         LocalPushConfigModel.Item clearItem = map.get("1");
-        if (LocalPushHandle.getInstance().allowPopClear(clearItem)) {
-            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, clearItem);
+        if (clearItem != null && LocalPushHandle.getInstance().allowPopClear(clearItem)) {
+            LogUtils.e("===允许弹出clear的window");
+            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime, clearItem);
             return;
+        } else {
+            LogUtils.e("===不允许弹出clear的window");
         }
         //3.判断【一键加速】功能是否满足推送条件
         LocalPushConfigModel.Item speedItem = map.get("2");
-        if (LocalPushHandle.getInstance().allowPopSpeedUp(clearItem)) {
-            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, speedItem);
-            return;
+        if (speedItem != null) {
+            if (LocalPushHandle.getInstance().allowPopSpeedUp(speedItem)) {
+                LogUtils.e("===允许弹出speed的window");
+                WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime,  speedItem);
+                return;
+            } else {
+                LogUtils.e("===不允许弹出speed的window");
+            }
         }
+
         //4.判断【手机降温】功能是否满足推送条件
         LocalPushConfigModel.Item coolItem = map.get("6");
-        if (LocalPushHandle.getInstance().allowPopCool(clearItem, temp)) {
-            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, coolItem);
-            return;
+        if (coolItem != null) {
+            if (LocalPushHandle.getInstance().allowPopCool(coolItem, temp)) {
+                LogUtils.e("===允许弹出cool的window");
+                WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime,  coolItem);
+                return;
+            } else {
+                LogUtils.e("===不允许弹出cool的window");
+            }
         }
+
         //5.判断【超强省电】功能是否满足推送条件
         LocalPushConfigModel.Item powerItem = map.get("9");
-        if (LocalPushHandle.getInstance().allowPopPowerSaving(clearItem, isCharged, mBatteryPower)) {
-            WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, powerItem);
+        if (powerItem != null) {
+            if (LocalPushHandle.getInstance().allowPopPowerSaving(powerItem, isCharged, mBatteryPower)) {
+                LogUtils.e("===允许弹出power的window");
+                WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context,homePressTime,  powerItem);
+            } else {
+                LogUtils.e("===不允许弹出power的window");
+            }
         }
 
 
@@ -270,6 +295,19 @@ public class TimingReceiver extends BroadcastReceiver {
 
     }
 
+    //检测是否达到扫描时间
+    public boolean isStartScan() {
+        long lastTime = PreferenceUtil.getLastScanRubbishTime();
+        long currentTime = System.currentTimeMillis();
+        if (lastTime == 0) {
+            return true;
+        } else {
+            long elapseTime = DateUtils.getMinuteBetweenTimestamp(currentTime, lastTime);
+            //每隔一小时扫描一次
+            return elapseTime > 60;
+        }
+    }
+
     /**
      * 超过时间阈值开启功能
      *
@@ -296,6 +334,7 @@ public class TimingReceiver extends BroadcastReceiver {
 
         }
     }
+
 
     /**
      * 状态栏更新操作（只做状态栏更新）
@@ -542,10 +581,12 @@ public class TimingReceiver extends BroadcastReceiver {
             } else {
                 long totalSize = CleanUtil.getTotalSize(mJunkGroups);
                 long mbNum = totalSize / (1024 * 1024);
+                //保存上一次扫秒出来的垃圾大小
+                PreferenceUtil.saveLastScanRubbishSize(mbNum);
                 NotificationEvent event = new NotificationEvent();
                 event.setType("clean");
                 LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
-                if (mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
+                if (dataBean != null && mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
                     event.setFlag(2);
                     String push_content = mContext.getString(R.string.push_content_scan_all, mbNum);
                     //cheme跳转路径

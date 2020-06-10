@@ -24,7 +24,7 @@ public class SpCacheConfig {
 
 
     public static final String CACHES_LOCAL_PUSH_CONFIG = "caches_local_push_config";
-    public static final String KEY_LOCAL_PUSH_CONFIG_FROM_SERVER="push_config_from_server";
+    public static final String KEY_LOCAL_PUSH_CONFIG_FROM_SERVER = "push_config_from_server";
     //垃圾清理
     public static final String KEY_FUNCTION_CLEAR_RUBBISH = "function_clear_rubbish";
     //一键加速
@@ -33,6 +33,10 @@ public class SpCacheConfig {
     public static final String KEY_FUNCTION_COOL = "function_cool";
     //超强省电
     public static final String KEY_FUNCTION_POWER_SAVING = "function_power_saving";
+    //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描完成后的时间
+    public static final String KEY_LAST_BACKGROUND_SCAN_TIME="background_scan_time";
+    //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描到的垃圾大小(单位为MB)
+    public static final String KEY_LAST_BACKGROUND_SCAN_SIZE="background_scan_size";
 
     public static final String IS_PUSH_DEVICE_INFO = "is_push_device_info";
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";

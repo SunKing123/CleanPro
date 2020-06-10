@@ -19,37 +19,12 @@ public class LocalPushConfigModel extends BaseEntity {
 
     public static class Item {
 
-
-        /**
-         * code : push_1
-         * title : 垃圾清理
-         * content : 垃圾过多严重影响手机使用
-         * position : 立即清理页面
-         * url : cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4
-         * thresholdSign : 1
-         * thresholdNum : 200
-         * interValTime : 2
-         * dailyLimit : 12
-         */
-
-
-        /*code	String	模板编码，本地推送唯一编码
-        title	String	模板标题
-        position	String	跳转页面(中文表述，暂时不用)
-        content	String	推送内容，一键加速（push_speed_up）中，#代表占位符，替换成当前已用内存百分比
-        url	String	跳转页面
-        thresholdMin	int	最低阈值，0则代表无限制
-        thresholdMax	int	最高阈值，0则代表无限制
-        interValTime	int	每次推送间隔时间（单位：小时）
-        dailyLimit	int	日限定次数*/
-
         private String code;
         private String position;
         private String url;
         private int thresholdSign;
         private int interValTime;
 
-        /*-------------------------------------------------------------------*/
 
         private int dailyLimit;//日限制次数
         private String iconUrl;//推送图标
@@ -61,7 +36,7 @@ public class LocalPushConfigModel extends BaseEntity {
         private String content;
         private int thresholdNum;//省电功能专用，当前电量的百分比小于这个数值的时候才弹出通知
         //1.立即清理 2.一键加速 3.手机清理 4.文件清理 5.微信专清 6.手机温降温 7.QQ专清 8.通知栏 9.超强省电
-        private int onlyCode;
+        private String onlyCode;
 
         public String getIconUrl() {
             return iconUrl;
@@ -87,11 +62,11 @@ public class LocalPushConfigModel extends BaseEntity {
             this.popWindowInterval = popWindowInterval;
         }
 
-        public int getOnlyCode() {
+        public String getOnlyCode() {
             return onlyCode;
         }
 
-        public void setOnlyCode(int onlyCode) {
+        public void setOnlyCode(String onlyCode) {
             this.onlyCode = onlyCode;
         }
 
