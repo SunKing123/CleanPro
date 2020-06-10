@@ -243,10 +243,11 @@
             </LinearLayout>
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/view_lottie_bottom"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:scaleType="centerCrop"
-                app:lottie_repeatMode="restart"
-                android:layout_height="400dp"/>
+                android:background="@color/color_9B9B9B"
+                app:lottie_loop="true"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

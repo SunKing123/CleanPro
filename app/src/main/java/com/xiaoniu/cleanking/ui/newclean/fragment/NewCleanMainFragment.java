@@ -1332,34 +1332,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 .subscribe(consumer);
     }
 
+    /**
+     * 更多推荐Item点击
+     * @param list
+     * @param pos
+     */
     @Override
     public void onCheck(List<HomeRecommendListEntity> list, int pos) {
-        if (null == getActivity() || null == list || list.size() <= 0) return;
-        if (list.get(pos).getLinkType().equals("1")) {
-//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
-            if (list.get(pos).getName().equals(getString(R.string.game_quicken))) { //游戏加速
-                StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                if (PreferenceUtil.getGameTime()) {
-                    SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
-                } else {
-                    goFinishActivity();
-                }
-                return;
-            } else if (list.get(pos).getName().equals(getString(R.string.tool_one_key_speed))) {
-                StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
-            }
-            SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
-        } else if (list.get(pos).getLinkType().equals("2")) {
-            startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                    .putExtra(ExtraConstant.WEB_URL, list.get(pos).getLinkUrl()));
-        } else if (list.get(pos).getLinkType().equals("3")) {
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            Uri content_url = Uri.parse(list.get(pos).getLinkUrl());
-            intent.setData(content_url);
-            startActivity(intent);
+        if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos ) return;
+        if (pos == 1 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
+            loadMorePageFileGeekAd(list.get(pos));
+            return;
         }
+        //点击流程
+        operationItemClick(list.get(pos));
     }
 
     private void goFinishActivity() {
@@ -1526,6 +1512,110 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "network_acceleration_video_page");
                 }
                 startActivity(NetWorkActivity.class);
+            }
+        });
+    }
+
+    /**
+     * 自运营根据配置linkType 做跳转;
+     */
+    public void operationItemClick(HomeRecommendListEntity entity){
+        if (entity.getLinkType().equals("1")) {//应用内页面跳转
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+            if (entity.getName().equals(getString(R.string.game_quicken))) { //游戏加速
+                StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                if (PreferenceUtil.getGameTime()) {
+                    SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
+                } else {
+                    goFinishActivity();
+                }
+                return;
+            } else if (entity.getName().equals(getString(R.string.tool_one_key_speed))) {
+                StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+            }
+            SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
+        } else if (entity.getLinkType().equals("2")) {  //H5
+            startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                    .putExtra(ExtraConstant.WEB_URL, entity.getLinkUrl()));
+        } else if (entity.getLinkType().equals("3")) {  //deeplink
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri content_url = Uri.parse(entity.getLinkUrl());
+            intent.setData(content_url);
+            startActivity(intent);
+        }
+    }
+
+
+
+    /**
+     * 更多运营位列表 第一Item激励视频
+     */
+    private void loadMorePageFileGeekAd(HomeRecommendListEntity entity) {
+        if (null == getActivity() || null == mAdManager) return;
+//        NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
+//        NiuDataAPIUtil.onPageEnd("home_page", PositionId.AD_HOME_PAGE_OPERATION_POSITION, "view_page", "病毒查杀激励视频页浏览");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "virus_killing_video_page");
+        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_VIRUS, "user123", 1, new VideoAdListener() {
+            @Override
+            public void onVideoResume(AdInfo info) {
+
+            }
+
+            @Override
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+                Log.d(TAG, "-----onVideoComplete-----");
+                NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频结束页浏览");
+            }
+
+            @Override
+            public void adSuccess(AdInfo info) {
+                Log.d(TAG, "-----adSuccess-----");
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "virus_killing_video_page");
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
+                if (null == info) return;
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "-----adClicked-----");
+                if (null == info) return;
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                Log.d(TAG, "-----adClose-----");
+                PreferenceUtil.saveShowAD(false);
+                NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
+                if (null != info) {
+                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", " ");
+                }
+                //跳转自运营
+                operationItemClick(entity);
+//                startActivity(VirusKillActivity.class);
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "-----adError-----" + errorMsg);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
+                }
+                startActivity(VirusKillActivity.class);
             }
         });
     }

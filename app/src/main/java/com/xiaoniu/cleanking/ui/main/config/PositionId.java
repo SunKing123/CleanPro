@@ -66,7 +66,7 @@ public class PositionId {
     public static final String KEY_PAGE_DESK_ICON = "page_desk_icon"; //分身开关
     public static final String KEY_PAGE_ACCELERATE = "page_accelerate";
     public static final String KEY_PAGE_MINE = "page_mine";
-
+    public static final String KEY_PAGE_HOME_MORE_REWARD_VIDEO = "page_home_more_reward_video";   //首页更多列表第一个激励视频开关
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";
@@ -115,6 +115,8 @@ public class PositionId {
     public static final String AD_CLEAN_FINISH_POSITION_THREE = "success_page_ad_3";//完成页广告位3_自渲染
     public static final String AD_CLEAN_FINISH_POSITION_CP_AD_2 = "cp_ad_2";//全屏插屏广告
     public static final String AD_CLEAN_INSIDE_ADVERTISING_AD = "inside_advertising_ad";//应用内部插屏广告
+
+    public static final String AD_HOME_PAGE_OPERATION_POSITION = "page_operation_position";//首页更多第一条点击激励视频 position_id;
 
 
     //悟空开关
