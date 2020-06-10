@@ -8,6 +8,7 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
+import com.qq.e.ads.nativ.NativeExpressADView;
 import com.qq.e.comm.util.AdError;
 
 /**
@@ -60,6 +61,10 @@ public class YlhTemplateInsertScreenAdView extends YlhAdView {
         }
         if (iad == null) {
             iad = new UnifiedInterstitialAD(activity, appId, UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
+
+                public void  onVideoCached(){
+
+                }
                 @Override
                 public void onADReceive() {
                     //广告加载成功

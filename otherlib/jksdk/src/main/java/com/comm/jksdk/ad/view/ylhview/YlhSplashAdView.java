@@ -49,6 +49,10 @@ public class YlhSplashAdView extends YlhAdView {
             throw new NullPointerException("loadFullScreenVideoAd activity is null");
         }
         SplashAD splashAD = new SplashAD(activity, appId, adId, new SplashADListener() {
+            public void onADLoaded(long a){
+
+            }
+
             @Override
             public void onADDismissed() {
                 LogUtils.d(TAG, "zz--YLH onADDismissed--"+adInfo.getAdId());
