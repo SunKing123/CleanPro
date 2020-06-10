@@ -135,23 +135,7 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
                     mLottieAnimationView2.cancelAnimation();
                     mLottieAnimationView2.clearAnimation();
                 }
-                //设置锁屏数据
-                LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(2);
-                btnInfo.setNormal(true);
-                btnInfo.setCheckResult("500");
-                btnInfo.setReShowTime(System.currentTimeMillis() + 1000 * 60 * 5);
-                PreferenceUtil.getInstants().save("lock_pos03", new Gson().toJson(btnInfo));
-                EventBus.getDefault().post(btnInfo);
-                //保存杀毒完成时间
-                PreferenceUtil.saveVirusKillTime();
-                AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
-                Intent mIntent = new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class);
-                mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill));
-                if(mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
-                    mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
-                }
-                startActivity(mIntent);
-                finish();
+                killedCompleteCallBack();
             }
 
             @Override
@@ -165,6 +149,26 @@ public class VirusKillActivity extends BaseActivity<VirusKillPresenter> implemen
             }
         });
 
+    }
+
+    private void killedCompleteCallBack(){
+        //设置锁屏数据
+        LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(2);
+        btnInfo.setNormal(true);
+        btnInfo.setCheckResult("500");
+        btnInfo.setReShowTime(System.currentTimeMillis() + 1000 * 60 * 5);
+        PreferenceUtil.getInstants().save("lock_pos03", new Gson().toJson(btnInfo));
+        EventBus.getDefault().post(btnInfo);
+        //保存杀毒完成时间
+        PreferenceUtil.saveVirusKillTime();
+        AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
+        Intent mIntent = new Intent(VirusKillActivity.this, ScreenFinishBeforActivity.class);
+        mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill));
+        if(mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
+            mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
+        }
+        startActivity(mIntent);
+        finish();
     }
 
     public void showColorChange(int index) {

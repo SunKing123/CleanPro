@@ -2,8 +2,8 @@ package com.xiaoniu.common.http.function;
 
 import com.xiaoniu.common.http.model.ApiException;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 
 /**

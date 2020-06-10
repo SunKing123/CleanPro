@@ -7,6 +7,7 @@ import com.xiaoniu.common.utils.DateUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Random;
 
 /**
  * 处理小数位数工具类
@@ -328,5 +329,36 @@ public class NumberUtils {
 
         }
         return uuid;
+    }
+
+    /**
+     * 生成一个startNum 到 endNum之间的随机数(不包含endNum的随机数)
+     * @param startNum
+     * @param endNum
+     * @return
+     */
+    public static int getNum(int startNum,int endNum){
+        if(endNum > startNum){
+            Random random = new Random();
+            return random.nextInt(endNum - startNum) + startNum;
+        }
+        return 0;
+    }
+
+
+
+
+    /**
+     * 生成一个startNum 到 endNum之间的随机数(不包含endNum的随机数)
+     * @param startNum
+     * @param endNum
+     * @return
+     */
+    public static String getNumStr(int startNum,int endNum){
+        if(endNum > startNum){
+            Random random = new Random();
+            return (random.nextInt(endNum - startNum) + startNum)+"%";
+        }
+        return "";
     }
 }

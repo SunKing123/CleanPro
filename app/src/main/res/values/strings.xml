@@ -174,4 +174,16 @@
     <string name="redpack">红包</string>
 
 
+    <string name="vircuskill_item_one_tip">%d项 隐私风险</string>
+    <string name="vircuskill_item_two_tip">%d项 网络风险</string>
+    <string name="vircuskill_item_three_tip">%d项 病毒应用</string>
+
+
+    <string name="vircuskill_item_one_tips">信息、图片及视频可能被偷窥</string>
+    <string name="vircuskill_item_two_tips">当前网络存在被偷窥风险</string>
+    <string name="vircuskill_item_three_tips">该下载应用携带可疑病毒</string>
+
+    <string name="vircuskill_fg_two_tip_one">优化加密信息防止被偷窥</string>
+    <string name="vircuskill_fg_two_tip_two">加强网络保护防火墙</string>
+
 </resources>

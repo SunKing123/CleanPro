@@ -1,1 +1,3 @@
-include ':app', ':otherlib:takephoto_library', ':baselib:common', ':otherlib:videoplayer', ':otherlib:asmhelp', ':otherlib:xrecyclerview', ':otherlib:major_function_lib', ':otherlib:jksdk',':jsbridge', ':geekWebpage'
+include ':app', ':otherlib:takephoto_library', ':baselib:common', ':otherlib:videoplayer', ':otherlib:asmhelp', ':otherlib:xrecyclerview',
+        ':otherlib:major_function_lib', ':otherlib:jksdk',':jsbridge',
+        ':geekWebpage','arms'

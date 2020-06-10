@@ -41,6 +41,11 @@ android {
 
 }
 
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api rootProject.ext.dependencies["support"]["appcompat-v7"]
@@ -113,11 +118,9 @@ dependencies {
     api rootProject.ext.dependencies["kotlin-reflect"]
     api rootProject.ext.dependencies["mmkv"]
 
-
     api project(path: ':otherlib:takephoto_library')
 
     api project(':otherlib:videoplayer')
-
 
     //oaid  sdk
     api files('libs\\miit_mdid_1.0.9.aar')
