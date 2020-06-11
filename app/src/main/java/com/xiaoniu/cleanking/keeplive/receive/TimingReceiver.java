@@ -22,8 +22,8 @@ import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
-import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushWindow;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -77,7 +77,6 @@ public class TimingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-        Log.e("dong", "收到广播 =" + intent.getStringExtra("action"));
 
         String action = intent.getStringExtra("action");
         if (!TextUtils.isEmpty(action)) {
@@ -117,6 +116,17 @@ public class TimingReceiver extends BroadcastReceiver {
                         return;
                     }
                     startActivity(context);
+
+                    long lastAppPressHome = MmkvUtil.getLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
+                    LogUtils.e("======上次 APP Home时间：" + lastAppPressHome);
+
+                    if (lastAppPressHome > 0) {
+                        long current = System.currentTimeMillis();
+                        long period = current / 1000 - lastAppPressHome / 1000;
+                        if (period < 10 * 60) {
+                            return;
+                        }
+                    }
                   /*   if (!RomUtils.checkFloatWindowPermission(context)) {
                         LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
                         return;
@@ -126,10 +136,7 @@ public class TimingReceiver extends BroadcastReceiver {
                         return;
                     }*/
                     long homePressTime = intent.getLongExtra("homePressed", 0L);
-
                     showLocalPushAlertWindow(context, homePressTime);
-
-
                     break;
                 case "app_add_full"://锁屏打开页面||home按键触发  //应用植入插屏全屏广告
                     if (null != context) {
@@ -172,7 +179,7 @@ public class TimingReceiver extends BroadcastReceiver {
 
         //2.判断【垃圾清理】功能是否满足推送条件
         LocalPushConfigModel.Item clearItem = map.get(LocalPushType.TYPE_NOW_CLEAR);
-        if (clearItem != null && LocalPushHandle.getInstance().allowPopClear(clearItem)) {
+        if (clearItem != null && LocalPushUtils.getInstance().allowPopClear(clearItem)) {
             LogUtils.e("===允许弹出clear的window");
             // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, clearItem);
             showToastPopWindow(context, homePressTime, clearItem);
@@ -183,7 +190,7 @@ public class TimingReceiver extends BroadcastReceiver {
         //3.判断【一键加速】功能是否满足推送条件
         LocalPushConfigModel.Item speedItem = map.get(LocalPushType.TYPE_SPEED_UP);
         if (speedItem != null) {
-            if (LocalPushHandle.getInstance().allowPopSpeedUp(speedItem)) {
+            if (LocalPushUtils.getInstance().allowPopSpeedUp(speedItem)) {
                 LogUtils.e("===允许弹出speed的window");
                 // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, speedItem);
                 showToastPopWindow(context, homePressTime, speedItem);
@@ -196,7 +203,7 @@ public class TimingReceiver extends BroadcastReceiver {
         //4.判断【手机降温】功能是否满足推送条件
         LocalPushConfigModel.Item coolItem = map.get(LocalPushType.TYPE_PHONE_COOL);
         if (coolItem != null) {
-            if (LocalPushHandle.getInstance().allowPopCool(coolItem, temp)) {
+            if (LocalPushUtils.getInstance().allowPopCool(coolItem, temp)) {
                 LogUtils.e("===允许弹出cool的window");
                 //  WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, coolItem);
                 coolItem.temp = temp;
@@ -210,7 +217,7 @@ public class TimingReceiver extends BroadcastReceiver {
         //5.判断【超强省电】功能是否满足推送条件
         LocalPushConfigModel.Item powerItem = map.get(LocalPushType.TYPE_SUPER_POWER);
         if (powerItem != null) {
-            if (LocalPushHandle.getInstance().allowPopPowerSaving(powerItem, isCharged, mBatteryPower)) {
+            if (LocalPushUtils.getInstance().allowPopPowerSaving(powerItem, isCharged, mBatteryPower)) {
                 LogUtils.e("===允许弹出power的window");
                 // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, powerItem);
                 showToastPopWindow(context, homePressTime, powerItem);

@@ -34,9 +34,11 @@ public class SpCacheConfig {
     //超强省电
     public static final String KEY_FUNCTION_POWER_SAVING = "function_power_saving";
     //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描完成后的时间
-    public static final String KEY_LAST_BACKGROUND_SCAN_TIME="background_scan_time";
+    public static final String KEY_LAST_BACKGROUND_SCAN_TIME = "background_scan_time";
     //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描到的垃圾大小(单位为MB)
-    public static final String KEY_LAST_BACKGROUND_SCAN_SIZE="background_scan_size";
+    public static final String KEY_LAST_BACKGROUND_SCAN_SIZE = "background_scan_size";
+    //保存上一次清理APP触发HOME键的时间
+    public static final String KEY_LAST_CLEAR_APP_PRESSED_HOME = "clear_app_pressed_home";
 
     public static final String IS_PUSH_DEVICE_INFO = "is_push_device_info";
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";

@@ -46,6 +46,7 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
@@ -282,9 +283,13 @@ public class ApplicationDelegate implements IApplicationDelegate {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                long currentTimestamp = System.currentTimeMillis();
+                if (AppLifecycleUtil.isAppOnForeground(application)) {
+                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
+                }
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
-                i.putExtra("homePressed", System.currentTimeMillis());
+                i.putExtra("homePressed", currentTimestamp);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
                 } else {
@@ -299,9 +304,13 @@ public class ApplicationDelegate implements IApplicationDelegate {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
+                long currentTimestamp = System.currentTimeMillis();
+                if (AppLifecycleUtil.isAppOnForeground(application)) {
+                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
+                }
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
-                i.putExtra("homePressed", System.currentTimeMillis());
+                i.putExtra("homePressed", currentTimestamp);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
                 } else {

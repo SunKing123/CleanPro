@@ -1,11 +1,9 @@
 package com.xiaoniu.cleanking.ui.localpush;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -23,10 +21,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 
-
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
 
 import static android.content.Context.WINDOW_SERVICE;
 
@@ -140,9 +134,9 @@ public class WindowUtil {
 //            mLayoutParams.y = 0;
             mWindowManager.addView(mView, mLayoutParams);
             //更新上次弹框的时间
-            LocalPushHandle.getInstance().updateLastPopTime(item.getOnlyCode());
+            LocalPushUtils.getInstance().updateLastPopTime(item.getOnlyCode());
             //更新当天弹框的次数
-            LocalPushHandle.getInstance().autoIncrementDayLimit(item.getOnlyCode());
+            LocalPushUtils.getInstance().autoIncrementDayLimit(item.getOnlyCode());
             //五秒后自动消失
             new Handler().postDelayed(this::dismissWindow, 1000 * 5);
         }

@@ -8,20 +8,26 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 
-public class LocalPushHandle {
-    private LocalPushHandle() {
+public class LocalPushUtils {
+    private LocalPushUtils() {
     }
 
 
 
 
     private static class Holder {
-        static LocalPushHandle pushHandle = new LocalPushHandle();
+        static LocalPushUtils pushHandle = new LocalPushUtils();
     }
 
-    public static LocalPushHandle getInstance() {
+    public static LocalPushUtils getInstance() {
          return Holder.pushHandle;
     }
+
+
+
+
+
+
 
 
     private boolean commonParamsVerify(LocalPushConfigModel.Item config, String functionType) {
