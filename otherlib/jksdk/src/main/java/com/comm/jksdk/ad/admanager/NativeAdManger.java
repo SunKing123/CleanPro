@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -71,6 +72,7 @@ import com.qq.e.ads.nativ.NativeExpressMediaListener;
 import com.qq.e.ads.rewardvideo.RewardVideoAD;
 import com.qq.e.ads.rewardvideo.RewardVideoADListener;
 import com.qq.e.comm.constants.AdPatternType;
+import com.qq.e.comm.pi.AdData;
 import com.qq.e.comm.util.AdError;
 
 import java.util.ArrayList;
@@ -1234,52 +1236,49 @@ public class NativeAdManger implements AdManager {
                 }
 
                 if (nativeExpressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
-                    nativeExpressADView.setMediaListener(new NativeExpressMediaListener() {
+                    nativeExpressADView.setMediaListener(mediaListener);
+                  /*  nativeExpressADView.setMediaListener(new NativeExpressMediaListener() {
                         @Override
                         public void onVideoInit(NativeExpressADView nativeExpressADView) {
-
                         }
 
                         @Override
                         public void onVideoLoading(NativeExpressADView nativeExpressADView) {
-
+                            Log.i(TAG, "onVideoLoading");
                         }
 
                         @Override
                         public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
-
+                            Log.i(TAG, "onVideoReady");
                         }
 
                         @Override
                         public void onVideoStart(NativeExpressADView nativeExpressADView) {
-
                         }
 
                         @Override
                         public void onVideoPause(NativeExpressADView nativeExpressADView) {
-
                         }
 
                         @Override
                         public void onVideoComplete(NativeExpressADView nativeExpressADView) {
-
                         }
 
                         @Override
                         public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
-
+                            Log.i(TAG, "onVideoError");
                         }
 
                         @Override
                         public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
-
+                            Log.i(TAG, "onVideoPageOpen");
                         }
 
                         @Override
                         public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
-
+                            Log.i(TAG, "onVideoPageClose");
                         }
-                    });
+                    });*/
                 }
                 // 广告可见才会产生曝光，否则将无法产生收益。
                 info.setAdView(nativeExpressADView);
@@ -1367,6 +1366,53 @@ public class NativeAdManger implements AdManager {
         nativeExpressAD.setVideoPlayPolicy(getVideoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS, activity));  // 本次拉回的视频广告，在用户看来是否为自动播放的
         nativeExpressAD.loadAD(1);
     }
+
+    private NativeExpressMediaListener mediaListener = new NativeExpressMediaListener() {
+        public void  onVideoCached(NativeExpressADView nativeExpressADView){
+
+        }
+
+        @Override
+        public void onVideoInit(NativeExpressADView nativeExpressADView) {
+        }
+
+        @Override
+        public void onVideoLoading(NativeExpressADView nativeExpressADView) {
+            Log.i(TAG, "onVideoLoading");
+        }
+
+        @Override
+        public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
+            Log.i(TAG, "onVideoReady");
+        }
+
+        @Override
+        public void onVideoStart(NativeExpressADView nativeExpressADView) {
+        }
+
+        @Override
+        public void onVideoPause(NativeExpressADView nativeExpressADView) {
+        }
+
+        @Override
+        public void onVideoComplete(NativeExpressADView nativeExpressADView) {
+        }
+
+        @Override
+        public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
+            Log.i(TAG, "onVideoError");
+        }
+
+        @Override
+        public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
+            Log.i(TAG, "onVideoPageOpen");
+        }
+
+        @Override
+        public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
+            Log.i(TAG, "onVideoPageClose");
+        }
+    };
 
     public static int getVideoPlayPolicy(int autoPlayPolicy, Context context){
         if(autoPlayPolicy == VideoOption.AutoPlayPolicy.ALWAYS){
@@ -1482,6 +1528,10 @@ public class NativeAdManger implements AdManager {
             iad = null;
         }
         iad = new UnifiedInterstitialAD(activity, info.getAdAppid(), UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
+
+            public void  onVideoCached(){
+
+            }
             @Override
             public void onADReceive() {
                 //广告加载成功

@@ -107,7 +107,7 @@ public class AdConfigActivity extends AppCompatActivity implements View.OnClickL
                 String chan = editChan.getText().toString().trim();
                 LogUtils.e(">>>product="+product);
                 LogUtils.e(">>>渠道号="+chan);
-                GeekAdSdk.init(this, product, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
+                GeekAdSdk.init(this, product, Constant.CSJ_AD_ID, Constant.YLH_AD_ID,ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
                 break;
             case R.id.next:
                 if (!GeekAdSdk.isInit()) {

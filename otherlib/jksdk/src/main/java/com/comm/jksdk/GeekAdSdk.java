@@ -8,6 +8,7 @@ import com.comm.jksdk.config.AdsConfig;
 import com.comm.jksdk.config.InitBaseConfig;
 import com.comm.jksdk.config.listener.ConfigListener;
 import com.comm.jksdk.http.utils.LogUtils;
+import com.qq.e.comm.managers.GDTADManager;
 import com.tencent.mmkv.MMKV;
 
 /**
@@ -38,13 +39,15 @@ public final class GeekAdSdk {
      * @param channel 渠道名称
      * @param isFormal 是否是正式环境 true对应生产环境
      */
-    public static void init(Context context, String productName, String csjAppId, String channel, String isFormal){
+    public static void init(Context context, String productName, String csjAppId, String ylhAppId,String channel, String isFormal){
         mContext = context.getApplicationContext();
         String mmkvPath = MMKV.initialize(mContext);
         mRroductName = productName;
         mChannel = channel;
         mIsFormal = isFormal;
         //初始化基本配置信息
+        //新版本优量汇初始化
+        GDTADManager.getInstance().initWith(mContext, ylhAppId);
         InitBaseConfig.getInstance().init(mContext);
         InitBaseConfig.getInstance().initChjAd(mContext, csjAppId);
         AdsConfig.setProductName(mRroductName);

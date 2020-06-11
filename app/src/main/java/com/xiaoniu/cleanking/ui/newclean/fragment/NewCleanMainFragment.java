@@ -271,7 +271,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         line_shd();
                         break;
                     case MainTableItem.TAG_KILL_VIRUS:            //病毒查杀
-                        toKillVirus();
+                        onKillVirusItemClick();
                         break;
                     case MainTableItem.TAG_CLEAN_NOTIFY:          //通知清理
                         mClickQq();
@@ -286,7 +286,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         toSpeedGame();
                         break;
                     case MainTableItem.TAG_SPEED_UP_NETWORK:      //网络加速
-                        toSpeedNetwork();
+                        onSpeedNetworkItemClick();
                         break;
                 }
             }
@@ -785,17 +785,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    private void toKillVirus() {
-        StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
-        if (PreferenceUtil.getVirusKillTime()) {
-            startActivity(ArmVirusKillActivity.class);
-        } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-            intent.putExtra("title", "病毒查杀");
-            intent.putExtra("main", false);
-            startActivity(intent);
-        }
-    }
 
     private void toSpeedGame() {
         isGameMain = true;
@@ -808,19 +797,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    private void toSpeedNetwork() {
-        StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
-        if (PreferenceUtil.getSpeedNetWorkTime()) {
-            startActivity(NetWorkActivity.class);
-        } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-            String num = PreferenceUtil.getSpeedNetworkValue();
-            intent.putExtra("title", "网络加速");
-            intent.putExtra("main", false);
-            intent.putExtra("num", num);
-            startActivity(intent);
-        }
-    }
 
     /**
      * 一键加速
@@ -1332,34 +1308,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 .subscribe(consumer);
     }
 
+    /**
+     * 更多推荐Item点击
+     * @param list
+     * @param pos
+     */
     @Override
     public void onCheck(List<HomeRecommendListEntity> list, int pos) {
-        if (null == getActivity() || null == list || list.size() <= 0) return;
-        if (list.get(pos).getLinkType().equals("1")) {
-//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
-            if (list.get(pos).getName().equals(getString(R.string.game_quicken))) { //游戏加速
-                StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                if (PreferenceUtil.getGameTime()) {
-                    SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
-                } else {
-                    goFinishActivity();
-                }
-                return;
-            } else if (list.get(pos).getName().equals(getString(R.string.tool_one_key_speed))) {
-                StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
-            }
-            SchemeProxy.openScheme(getActivity(), list.get(pos).getLinkUrl());
-        } else if (list.get(pos).getLinkType().equals("2")) {
-            startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                    .putExtra(ExtraConstant.WEB_URL, list.get(pos).getLinkUrl()));
-        } else if (list.get(pos).getLinkType().equals("3")) {
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            Uri content_url = Uri.parse(list.get(pos).getLinkUrl());
-            intent.setData(content_url);
-            startActivity(intent);
+        if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos ) return;
+        if (pos == 1 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
+            loadMorePageFileGeekAd(list.get(pos));
+            return;
         }
+        //点击流程
+        operationItemClick(list.get(pos));
     }
 
     private void goFinishActivity() {
@@ -1390,6 +1352,52 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             bundle.putString("num", PreferenceUtil.getGameCleanPer());
             startActivity(NewCleanFinishActivity.class, bundle);
         }
+    }
+
+
+    /*
+     * *********************************************************************************************************************************************
+     * ***********************************************************************病毒查杀点击事件模块*****************************************************
+     * *********************************************************************************************************************************************
+     */
+
+    //病毒查杀按钮点击
+    private void onKillVirusItemClick() {
+        StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
+        if (isShowKillVirusGeekAd()) {
+            loadGeekAd();
+        } else {
+            startKillVirusActivity();
+        }
+    }
+
+    //启动病毒查杀功能
+    private void startKillVirusActivity() {
+        if (PreferenceUtil.getVirusKillTime()) {
+            startActivity(ArmVirusKillActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            intent.putExtra("title", "病毒查杀");
+            intent.putExtra("main", false);
+            startActivity(intent);
+        }
+    }
+
+    //是否显示病毒查杀奖励视频
+    public boolean isShowKillVirusGeekAd() {
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+            return false;
+        }
+        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+            if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
+                if (switchInfoList.isOpen()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -1447,7 +1455,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", " ");
                 }
-                startActivity(VirusKillActivity.class);
+                startKillVirusActivity();
             }
 
             @Override
@@ -1456,9 +1464,63 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
                 }
-                startActivity(VirusKillActivity.class);
+                startKillVirusActivity();
             }
         });
+    }
+
+    /*
+     * *********************************************************************************************************************************************
+     * ***********************************************************************网络加速点击事件模块*****************************************************
+     * *********************************************************************************************************************************************
+     */
+
+    /**
+     * 网络加速按钮点击
+     */
+    private void onSpeedNetworkItemClick() {
+        StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
+        if(isShowSpeedNetGeekAd()){
+            loadGeekAdNet();
+        }else {
+           startSpeedNetworkActivity();
+        }
+    }
+
+    /**
+     * 启动网络加速功能
+     */
+    private void startSpeedNetworkActivity(){
+        if (PreferenceUtil.getSpeedNetWorkTime()) {
+            startActivity(NetWorkActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            String num = PreferenceUtil.getSpeedNetworkValue();
+            intent.putExtra("title", "网络加速");
+            intent.putExtra("main", false);
+            intent.putExtra("num", num);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 是否显示网络加速激励视屏广告
+     * @return
+     */
+    private boolean isShowSpeedNetGeekAd() {
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+            return false;
+        }
+        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+            if (PositionId.KEY_NET_JILI.equals(switchInfoList.getConfigKey())) {
+                if (switchInfoList.isOpen()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -1516,7 +1578,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
                 }
-                startActivity(NetWorkActivity.class);
+                startSpeedNetworkActivity();
             }
 
             @Override
@@ -1525,7 +1587,111 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "network_acceleration_video_page");
                 }
-                startActivity(NetWorkActivity.class);
+                startSpeedNetworkActivity();
+            }
+        });
+    }
+
+    /**
+     * 自运营根据配置linkType 做跳转;
+     */
+    public void operationItemClick(HomeRecommendListEntity entity){
+        if (entity.getLinkType().equals("1")) {//应用内页面跳转
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+            if (entity.getName().equals(getString(R.string.game_quicken))) { //游戏加速
+                StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                if (PreferenceUtil.getGameTime()) {
+                    SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
+                } else {
+                    goFinishActivity();
+                }
+                return;
+            } else if (entity.getName().equals(getString(R.string.tool_one_key_speed))) {
+                StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+            }
+            SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
+        } else if (entity.getLinkType().equals("2")) {  //H5
+            startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                    .putExtra(ExtraConstant.WEB_URL, entity.getLinkUrl()));
+        } else if (entity.getLinkType().equals("3")) {  //deeplink
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri content_url = Uri.parse(entity.getLinkUrl());
+            intent.setData(content_url);
+            startActivity(intent);
+        }
+    }
+
+
+
+    /**
+     * 更多运营位列表 第一Item激励视频
+     */
+    private void loadMorePageFileGeekAd(HomeRecommendListEntity entity) {
+        if (null == getActivity() || null == mAdManager) return;
+//        NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
+//        NiuDataAPIUtil.onPageEnd("home_page", PositionId.AD_HOME_PAGE_OPERATION_POSITION, "view_page", "病毒查杀激励视频页浏览");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "virus_killing_video_page");
+        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_VIRUS, "user123", 1, new VideoAdListener() {
+            @Override
+            public void onVideoResume(AdInfo info) {
+
+            }
+
+            @Override
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+                Log.d(TAG, "-----onVideoComplete-----");
+                NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频结束页浏览");
+            }
+
+            @Override
+            public void adSuccess(AdInfo info) {
+                Log.d(TAG, "-----adSuccess-----");
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "virus_killing_video_page");
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
+                if (null == info) return;
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "-----adClicked-----");
+                if (null == info) return;
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                Log.d(TAG, "-----adClose-----");
+                PreferenceUtil.saveShowAD(false);
+                NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
+                if (null != info) {
+                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", " ");
+                }
+                //跳转自运营
+                operationItemClick(entity);
+//                startActivity(VirusKillActivity.class);
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "-----adError-----" + errorMsg);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
+                }
+                startActivity(VirusKillActivity.class);
             }
         });
     }

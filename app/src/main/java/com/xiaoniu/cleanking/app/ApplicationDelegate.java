@@ -137,7 +137,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         String processName = SystemUtils.getProcessName(application);
         if (!processName.equals(application.getPackageName()))
             return;
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
+        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID,Constant.YLH_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
         //广告sdk_Bid只设置一次
         if (GeekAdSdk.getBid() < 0) {
             GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));

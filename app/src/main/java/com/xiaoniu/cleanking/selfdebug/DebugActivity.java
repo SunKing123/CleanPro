@@ -87,8 +87,8 @@ public class DebugActivity extends BaseActivity {
 
 
     public void playLottie(View view){
-        lottieAnimationView.setAnimation("home_top_scan.json");
-        lottieAnimationView.setImageAssetsFolder("home_top_scan");
+        lottieAnimationView.setAnimation("home_top_scan/anim01a/data.json");
+        lottieAnimationView.setImageAssetsFolder("home_top_scan/anim01a/images");
         lottieAnimationView.playAnimation();
         lottieAnimationView.setVisibility(VISIBLE);
     }
