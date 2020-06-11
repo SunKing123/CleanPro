@@ -16,6 +16,8 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import androidx.collection.SparseArrayCompat;
+
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -78,6 +80,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -452,19 +455,32 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /*
      * 从服务端获取本地推送的配置
      */
-    public void getLocalPushConfigFromServer(){
-             mModel.getLocalPushConfigFromServer(new Common4Subscriber<LocalPushConfigModel>() {
-                 @Override
-                 public void showExtraOp(String code, String message) {
+    public void getLocalPushConfigFromServer() {
+        mModel.getLocalPushConfigFromServer(new Common4Subscriber<LocalPushConfigModel>() {
+            @Override
+            public void showExtraOp(String code, String message) {
 
-                 }
+            }
 
-                 @Override
-                 public void getData(LocalPushConfigModel localPushConfigModel) {
-                     List<LocalPushConfigModel.Item> itemList=localPushConfigModel.getData();
-                     if (itemList!=null&&itemList.size()>0){
+            @Override
+            public void getData(LocalPushConfigModel localPushConfigModel) {
+                List<LocalPushConfigModel.Item> itemList = localPushConfigModel.getData();
+                if (itemList != null && itemList.size() > 0) {
 
-                         /*-------------测试专用 start----------------*/
+                    List<LocalPushConfigModel.Item> pushConfigList = new ArrayList<>();
+                    
+                    List<String> onlyCode = new ArrayList<>(4);
+                    onlyCode.add("1");
+                    onlyCode.add("2");
+                    onlyCode.add("6");
+                    onlyCode.add("9");
+                    for (LocalPushConfigModel.Item item : itemList) {
+                        if (onlyCode.contains(item.getOnlyCode())) {
+                            pushConfigList.add(item);
+                        }
+                    }
+
+                    /*-------------测试专用 start----------------*/
                       /*   itemList.clear();
                          LocalPushConfigModel.Item item=new LocalPushConfigModel.Item();
                          item.setOnlyCode("2");
@@ -477,29 +493,29 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                          item.setTitle("手机内存占用#快加速");
                          item.setContent("假数据的content");
                          itemList.add(item);*/
-                         /*-------------测试专用 end----------------*/
+                    /*-------------测试专用 end----------------*/
 
-                         //将从服务器获取的本地推送配置信息保存在SP中
-                         PreferenceUtil.saveLocalPushConfig(new Gson().toJson(itemList));
-                     }
+                    //将从服务器获取的本地推送配置信息保存在SP中
+                    PreferenceUtil.saveLocalPushConfig(new Gson().toJson(pushConfigList));
+                }
 
-                     //限制华为设置启动包活；
-                     if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
-                         //启动保活进程
-                         mView.start();
-                     }
-                 }
+                //限制华为设置启动包活；
+                if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
+                    //启动保活进程
+                    mView.start();
+                }
+            }
 
-                 @Override
-                 public void showExtraOp(String message) {
-                     ToastUtils.showShort(message);
-                 }
+            @Override
+            public void showExtraOp(String message) {
+                ToastUtils.showShort(message);
+            }
 
-                 @Override
-                 public void netConnectError() {
+            @Override
+            public void netConnectError() {
 
-                 }
-             });
+            }
+        });
     }
 
     /**
@@ -532,7 +548,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     dataBean.setCodeX("push10");//通知栏类型
                     dataBean.setTitle("通知栏");
                     dataBean.setContent("通知栏");
-                   // dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
+                    // dataBean.setUrl(SchemeConstant.LocalPushScheme.SCHEME_NOTIFY_ACTIVITY);
 
                     dataBean.setThresholdNum(60);
                     dataBean.setInterValTime(60);//每个小时监测
@@ -727,7 +743,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }
                 }
 
-              //  requestPopWindowPermission();
+                //  requestPopWindowPermission();
 
             }
         });
@@ -735,24 +751,24 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     //获取本地推送弹框权限
     @SuppressLint("CheckResult")
-    public void requestPopWindowPermission(){
+    public void requestPopWindowPermission() {
         if (mView == null) {
             return;
         }
-        if (!RomUtils.checkFloatWindowPermission(mActivity)){
+        if (!RomUtils.checkFloatWindowPermission(mActivity)) {
             new AlertDialog.Builder(mActivity).setTitle("提示").setMessage("").setMessage("您的手机没有授予悬浮窗权限，请开启后再试")
                     .setPositiveButton("去开启", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                           RomUtils.applyPermission(mActivity, () -> new Handler().postDelayed(() -> {
-                               if (!RomUtils.checkFloatWindowPermission(mActivity)) {
-                                   // 授权失败
-                                   ToastUtils.showShort("PopWindow授权失败");
-                               } else {
-                                   //授权成功
-                                   ToastUtils.showShort("PopWindow推送授权成功");
-                               }
-                           }, 2000));
+                            RomUtils.applyPermission(mActivity, () -> new Handler().postDelayed(() -> {
+                                if (!RomUtils.checkFloatWindowPermission(mActivity)) {
+                                    // 授权失败
+                                    ToastUtils.showShort("PopWindow授权失败");
+                                } else {
+                                    //授权成功
+                                    ToastUtils.showShort("PopWindow推送授权成功");
+                                }
+                            }, 2000));
                         }
                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 @Override
