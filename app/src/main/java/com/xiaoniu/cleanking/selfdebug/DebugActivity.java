@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -48,6 +49,8 @@ public class DebugActivity extends BaseActivity {
     private static final String TAG = "DebugActivity";
     private TextView tv_lottie;
     private LottieAnimationView lottieAnimationView;
+
+    private OneKeyCircleButtonView oneKeyCircleButtonView;
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -65,6 +68,7 @@ public class DebugActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        oneKeyCircleButtonView = findViewById(R.id.view_top);
         tv_lottie = findViewById(R.id.tv_lottie);
         frame_layout = findViewById(R.id.frame_layout);
         tv_hide_icon = findViewById(R.id.tv_hide_icon);
@@ -87,10 +91,7 @@ public class DebugActivity extends BaseActivity {
 
 
     public void playLottie(View view){
-        lottieAnimationView.setAnimation("home_top_scan/anim01a/data.json");
-        lottieAnimationView.setImageAssetsFolder("home_top_scan/anim01a/images");
-        lottieAnimationView.playAnimation();
-        lottieAnimationView.setVisibility(VISIBLE);
+        oneKeyCircleButtonView.startLottie();
     }
     public void toHomeClean(View view) {
         //原生带参数 native协议

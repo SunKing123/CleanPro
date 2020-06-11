@@ -232,9 +232,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //获取定位权限
         mPresenter.requestLocationPermission();
         //测试入口
-        if (BuildConfig.DEBUG) {
-            AppConfig.showDebugWindow(mContext);
-        }
+//        if (BuildConfig.DEBUG) {
+//            AppConfig.showDebugWindow(mContext);
+//        }
     }
 
     @Override

@@ -18,6 +18,7 @@ public class FirstJunkInfo implements Serializable {
     private String descp;
     private String garbageCatalog;
     private Drawable garbageIcon;
+    private int iconSource;
     private boolean isAllchecked;
     private boolean isApkInstalled;
     private boolean isDeploy;
@@ -64,6 +65,15 @@ public class FirstJunkInfo implements Serializable {
 
     public void setLock(boolean lock) {
         isLock = lock;
+    }
+
+
+    public int getIconSource() {
+        return iconSource;
+    }
+
+    public void setIconSource(int iconSource) {
+        this.iconSource = iconSource;
     }
 
     /**
@@ -240,6 +250,7 @@ public class FirstJunkInfo implements Serializable {
         if (isDeploy != that.isDeploy) return false;
         if (isRemoved != that.isRemoved) return false;
         if (pid != that.pid) return false;
+        if (iconSource != that.iconSource) return false;
         if (selectSize != that.selectSize) return false;
         if (totalSize != that.totalSize) return false;
         if (versionCode != that.versionCode) return false;
