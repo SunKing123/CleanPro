@@ -52,24 +52,24 @@ public class LocalPushWindow {
 
         AppCompatButton button = mView.findViewById(R.id.button);
         switch (item.getOnlyCode()) {
-            case "1":
+            case LocalPushType.TYPE_NOW_CLEAR:
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY;
                 long size = PreferenceUtil.getLastScanRubbishSize();
                 button.setText("立即清理");
                 title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>" + size + "MB</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 break;
-            case "2":
+            case LocalPushType.TYPE_SPEED_UP:
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY;
                 int random = NumberUtils.mathRandomInt(70, 86);
                 title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>" + random + "%</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("一键加速");
                 break;
-            case "6":
+            case LocalPushType.TYPE_PHONE_COOL:
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY;
                 title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>" + item.temp + "°</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("一键降温");
                 break;
-            case "9":
+            case LocalPushType.TYPE_SUPER_POWER:
                 title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>40%</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("立即省电");
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY;

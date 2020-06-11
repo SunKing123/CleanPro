@@ -117,7 +117,7 @@ public class LocalPushHandle {
     }
 
     //更新上一次弹框的时间
-    public void updateLastPopTime(String onlyCode) {
+    public void updateLastPopTime(int onlyCode) {
         String type = getFuncTypeByOnlyCode(onlyCode);
         if (!TextUtils.isEmpty(type)) {
             PreferenceUtil.saveLastPopupTime(type, System.currentTimeMillis());
@@ -125,7 +125,7 @@ public class LocalPushHandle {
     }
 
     //更新当天已经弹出的次数，每次+1
-    public void autoIncrementDayLimit(String onlyCode) {
+    public void autoIncrementDayLimit(int onlyCode) {
         String functionType = getFuncTypeByOnlyCode(onlyCode);
         if (!TextUtils.isEmpty(functionType)) {
             String dayLimitJson = PreferenceUtil.getPopupCount(functionType);
@@ -148,15 +148,15 @@ public class LocalPushHandle {
     }
 
 
-    private String getFuncTypeByOnlyCode(String onlyCode) {
+    private String getFuncTypeByOnlyCode(int onlyCode) {
         switch (onlyCode) {
-            case "1":
+            case LocalPushType.TYPE_NOW_CLEAR:
                 return SpCacheConfig.KEY_FUNCTION_CLEAR_RUBBISH;
-            case "2":
+            case LocalPushType.TYPE_SPEED_UP:
                 return SpCacheConfig.KEY_FUNCTION_SPEED_UP;
-            case "6":
+            case LocalPushType.TYPE_PHONE_COOL:
                 return SpCacheConfig.KEY_FUNCTION_COOL;
-            case "9":
+            case LocalPushType.TYPE_SUPER_POWER:
                 return SpCacheConfig.KEY_FUNCTION_POWER_SAVING;
             default:
                 return "";

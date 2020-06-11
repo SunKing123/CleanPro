@@ -6,6 +6,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.collection.SparseArrayCompat;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -1562,8 +1564,8 @@ public class PreferenceUtil {
     }
 
     //获取从服务器拉取的本地推送配置
-    public static Map<String, LocalPushConfigModel.Item> getLocalPushConfig() {
-        Map<String, LocalPushConfigModel.Item> map = new HashMap<>();
+    public static SparseArrayCompat<LocalPushConfigModel.Item> getLocalPushConfig() {
+        SparseArrayCompat<LocalPushConfigModel.Item> sparseArray = new SparseArrayCompat<>();
         SharedPreferences sp = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         String localPushJson = sp.getString(SpCacheConfig.KEY_LOCAL_PUSH_CONFIG_FROM_SERVER, "");
         if (!TextUtils.isEmpty(localPushJson)) {
@@ -1571,11 +1573,11 @@ public class PreferenceUtil {
             }.getType());
             if (itemList != null) {
                 for (LocalPushConfigModel.Item item : itemList) {
-                    map.put(item.getOnlyCode(), item);
+                    sparseArray.put(item.getOnlyCode(), item);
                 }
             }
         }
-        return map;
+        return sparseArray;
     }
 
 
