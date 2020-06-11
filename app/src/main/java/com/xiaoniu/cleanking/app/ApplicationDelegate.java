@@ -348,8 +348,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
                         || activity.getLocalClassName().contains("FullPopLayerActivity")
                         || !PreferenceUtil.isNotFirstOpenApp())
                     return;
+
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0&&PreferenceUtil.getHomeBackTime()) {
                     for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
                         if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen() && !PreferenceUtil.isShowAD()) {

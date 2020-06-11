@@ -81,6 +81,7 @@ import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -130,8 +131,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     ImageView mImageFirstAd;
     @BindView(R.id.image_ad_bottom_second)
     ImageView mImageSecondAd;
-    @BindView(R.id.view_lottie_home)
-    LottieAnimationView mLottieHomeView;
+
     @BindView(R.id.tv_now_clean)
     ImageView tvNowClean;
     @BindView(R.id.recycleview)
@@ -148,7 +148,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     FrameLayout mCenterAdFramelayout;
     @BindView(R.id.main_table_view)
     MainTableView mainTableView;
-
+    @BindView(R.id.view_lottie_top)
+    OneKeyCircleButtonView view_lottie_top;
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
@@ -176,13 +177,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     protected void initView() {
-
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
         initRecyclerView();
 
         mainTableView.batteryNormalStyle(getActivity());
+        mainTableView.accStorageLowStyle(getActivity());
 
         initMainTableItemClick();
 
@@ -720,7 +721,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @Subscribe
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
-        if (null == mTopAdFramelayout || null == mLottieHomeView) return;
+        if (null == mTopAdFramelayout || null == view_lottie_top) return;
         if (lifecycEvent.isActivity()) {
             mTopContentView.setVisibility(VISIBLE);
             mTopAdFramelayout.removeAllViews();
@@ -730,10 +731,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mTvCleanType01.setVisibility(View.GONE);
             showTextView();
 //            mLottieHomeView.useHardwareAcceleration(true);
-            mLottieHomeView.setAnimation("clean_home_top.json");
-            mLottieHomeView.setImageAssetsFolder("images_home");
-            mLottieHomeView.playAnimation();
-            mLottieHomeView.setVisibility(VISIBLE);
+//            mLottieHomeView.setAnimation("clean_home_top.json");
+////            mLottieHomeView.setImageAssetsFolder("images_home");
+////            mLottieHomeView.playAnimation();
+////            mLottieHomeView.setVisibility(VISIBLE);
+            view_lottie_top.startLottie();
         }
     }
 
@@ -750,7 +752,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /**
      * 立即清理
      */
-    @OnClick(R.id.tv_now_clean)
+    @OnClick(R.id.view_lottie_top)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
@@ -1122,31 +1124,32 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();
                 tvNowClean.setVisibility(View.GONE);
+                view_lottie_top.startLottie();
 //                mLottieHomeView.useHardwareAcceleration(true);
-                mLottieHomeView.setAnimation("clean_home_top2.json");
-                mLottieHomeView.setImageAssetsFolder("images_home_finish");
-                mLottieHomeView.playAnimation();
-                mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mLottieHomeView.playAnimation();
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
+//                mLottieHomeView.setAnimation("clean_home_top2.json");
+//                mLottieHomeView.setImageAssetsFolder("images_home_finish");
+//                mLottieHomeView.playAnimation();
+//                mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
+//                    @Override
+//                    public void onAnimationStart(Animator animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        mLottieHomeView.playAnimation();
+//                    }
+//
+//                    @Override
+//                    public void onAnimationCancel(Animator animation) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onAnimationRepeat(Animator animation) {
+//
+//                    }
+//                });
             }
         }
     }
@@ -1178,32 +1181,33 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void showHomeLottieView() {
         showTextView();
+        view_lottie_top.startLottie();
 //        mLottieHomeView.useHardwareAcceleration(true);
-        mLottieHomeView.setAnimation("clean_home_top.json");
-        mLottieHomeView.setImageAssetsFolder("images_home");
-        mLottieHomeView.playAnimation();
-        mLottieHomeView.setVisibility(VISIBLE);
-        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
+//        mLottieHomeView.setAnimation("clean_home_top.json");
+//        mLottieHomeView.setImageAssetsFolder("images_home");
+//        mLottieHomeView.playAnimation();
+//        mLottieHomeView.setVisibility(VISIBLE);
+//        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        });
     }
 
     @Override

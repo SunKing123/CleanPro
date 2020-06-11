@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -56,6 +58,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -90,6 +93,16 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private String mAdSourse = " "; //广告来源
 
     private final String TAG = "GeekSdk";
+
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+    }
 
     @Override
     protected int getLayoutId() {

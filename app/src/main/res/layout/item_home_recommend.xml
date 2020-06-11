@@ -7,6 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_18"
+        android:paddingBottom="@dimen/dp_18"
         android:background="@drawable/bg_recommend"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">
@@ -17,32 +19,6 @@
             android:layout_height="@dimen/dimen_35dp"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_qq" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dimen_12dp"
-            android:layout_toRightOf="@+id/iv_icon"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_404040"
-                android:textSize="@dimen/dimen_17sp" />
-
-            <TextView
-                android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                android:alpha="0.4"
-                android:textColor="@color/color_404040"
-                android:textSize="@dimen/dimen_14sp" />
-        </LinearLayout>
-
         <TextView
             android:id="@+id/tv_button"
             android:layout_width="wrap_content"
@@ -57,6 +33,37 @@
             android:text="@string/tool_now_clean"
             android:textColor="@color/color_777777"
             android:textSize="@dimen/dimen_12sp" />
+
+        <LinearLayout
+            android:id="@+id/tv_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tv_button"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_12dp"
+            android:layout_toRightOf="@+id/iv_icon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_404040"
+                android:text=""
+                android:textSize="@dimen/dimen_17sp" />
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:alpha="0.4"
+                android:text=""
+                android:textColor="@color/color_404040"
+                android:textSize="@dimen/dimen_14sp" />
+        </LinearLayout>
+
+
     </RelativeLayout>
 
 </RelativeLayout>
