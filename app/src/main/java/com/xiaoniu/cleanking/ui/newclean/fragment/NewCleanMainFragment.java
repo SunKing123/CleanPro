@@ -183,6 +183,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         initRecyclerView();
 
         mainTableView.batteryNormalStyle(getActivity());
+        mainTableView.accStorageLowStyle(getActivity());
 
         initMainTableItemClick();
 
