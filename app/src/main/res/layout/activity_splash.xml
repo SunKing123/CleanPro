@@ -6,25 +6,13 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_0dp"
-        android:layout_weight="9" />
-
     <ImageView
-        android:layout_width="260dp"
-        android:layout_height="260dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@mipmap/splash_center" />
-
-    <ImageView
-        android:id="@+id/iv_splash"
+        android:layout_marginTop="@dimen/dimen_100dp"
         android:layout_width="wrap_content"
-        android:layout_height="31dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        android:adjustViewBounds="true"
-        android:src="@mipmap/splash_font" />
+        android:src="@mipmap/splash_logo" />
+
 
     <Space
         android:layout_width="match_parent"
@@ -38,7 +26,9 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
             android:src="@drawable/icon_sp_bottom" />
 
         <!-- 4.自定义跳过按钮区域：开发者可以根据需要自己实现不同样式的跳过按钮 -->
@@ -49,7 +39,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
             android:layout_marginRight="@dimen/dimen_16dp"
             android:visibility="invisible"
             app:isShowProgress="false"
