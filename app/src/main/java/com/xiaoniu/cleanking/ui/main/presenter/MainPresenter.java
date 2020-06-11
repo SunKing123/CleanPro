@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.SparseIntArray;
 import android.widget.Toast;
 
 import androidx.collection.SparseArrayCompat;
@@ -36,6 +37,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
@@ -464,35 +466,36 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(LocalPushConfigModel localPushConfigModel) {
-                List<LocalPushConfigModel.Item> itemList = localPushConfigModel.getData();
-                if (itemList != null && itemList.size() > 0) {
+                List<LocalPushConfigModel.Item> dataList = localPushConfigModel.getData();
+                if (dataList != null && dataList.size() > 0) {
 
                     List<LocalPushConfigModel.Item> pushConfigList = new ArrayList<>();
-                    
-                    List<String> onlyCode = new ArrayList<>(4);
-                    onlyCode.add("1");
-                    onlyCode.add("2");
-                    onlyCode.add("6");
-                    onlyCode.add("9");
-                    for (LocalPushConfigModel.Item item : itemList) {
+
+                    List<Integer> onlyCode = new ArrayList<>(4);
+                    onlyCode.add(LocalPushType.TYPE_NOW_CLEAR);
+                    onlyCode.add(LocalPushType.TYPE_SPEED_UP);
+                    onlyCode.add(LocalPushType.TYPE_PHONE_COOL);
+                    onlyCode.add(LocalPushType.TYPE_SUPER_POWER);
+
+                    for (LocalPushConfigModel.Item item : dataList) {
                         if (onlyCode.contains(item.getOnlyCode())) {
                             pushConfigList.add(item);
                         }
                     }
 
                     /*-------------测试专用 start----------------*/
-                      /*   itemList.clear();
-                         LocalPushConfigModel.Item item=new LocalPushConfigModel.Item();
-                         item.setOnlyCode("2");
-                         item.setIconUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591777551401&di=7c53ecd102576214fee3076839555207&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F68%2F61%2F300000839764127060614318218_950.jpg");
-                         item.setDailyLimit(3);
-                         //阈值 降温和省电专用
-                         item.setThresholdNum(10);
-                         item.setFunctionUsedInterval(1);
-                         item.setPopWindowInterval(1);
-                         item.setTitle("手机内存占用#快加速");
-                         item.setContent("假数据的content");
-                         itemList.add(item);*/
+                   /* itemList.clear();
+                    LocalPushConfigModel.Item item = new LocalPushConfigModel.Item();
+                    item.setOnlyCode(LocalPushType.TYPE_NOW_CLEAR);
+                    item.setIconUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591777551401&di=7c53ecd102576214fee3076839555207&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F68%2F61%2F300000839764127060614318218_950.jpg");
+                    item.setDailyLimit(3);
+                    //阈值 降温和省电专用
+                    item.setThresholdNum(10);
+                    item.setFunctionUsedInterval(1);
+                    item.setPopWindowInterval(1);
+                    item.setTitle("手机内存占用#快加速");
+                    item.setContent("假数据的content");
+                    pushConfigList.add(item);*/
                     /*-------------测试专用 end----------------*/
 
                     //将从服务器获取的本地推送配置信息保存在SP中

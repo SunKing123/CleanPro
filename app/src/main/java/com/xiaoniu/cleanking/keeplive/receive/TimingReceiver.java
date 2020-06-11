@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.collection.SparseArrayCompat;
 
 import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
@@ -22,9 +23,8 @@ import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
-import com.xiaoniu.cleanking.ui.localpush.RomUtils;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushWindow;
-import com.xiaoniu.cleanking.ui.localpush.WindowUtil;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -55,14 +55,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -121,11 +117,11 @@ public class TimingReceiver extends BroadcastReceiver {
                         return;
                     }
                     startActivity(context);
-                    if (!RomUtils.checkFloatWindowPermission(context)) {
+                  /*   if (!RomUtils.checkFloatWindowPermission(context)) {
                         LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
                         return;
                     }
-                   /* if (WindowUtil.getInstance().isShowing()) {
+                   if (WindowUtil.getInstance().isShowing()) {
                         LogUtils.e("====TimingReceiver中 PopWindow正在弹出===");
                         return;
                     }*/
@@ -172,10 +168,10 @@ public class TimingReceiver extends BroadcastReceiver {
 
     private void showLocalPushAlertWindow(Context context, Long homePressTime) {
         //1.读取本地缓存的推送配置Config列表
-        Map<String, LocalPushConfigModel.Item> map = PreferenceUtil.getLocalPushConfig();
+        SparseArrayCompat<LocalPushConfigModel.Item> map = PreferenceUtil.getLocalPushConfig();
 
         //2.判断【垃圾清理】功能是否满足推送条件
-        LocalPushConfigModel.Item clearItem = map.get("1");
+        LocalPushConfigModel.Item clearItem = map.get(LocalPushType.TYPE_NOW_CLEAR);
         if (clearItem != null && LocalPushHandle.getInstance().allowPopClear(clearItem)) {
             LogUtils.e("===允许弹出clear的window");
             // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, clearItem);
@@ -185,7 +181,7 @@ public class TimingReceiver extends BroadcastReceiver {
             LogUtils.e("===不允许弹出clear的window");
         }
         //3.判断【一键加速】功能是否满足推送条件
-        LocalPushConfigModel.Item speedItem = map.get("2");
+        LocalPushConfigModel.Item speedItem = map.get(LocalPushType.TYPE_SPEED_UP);
         if (speedItem != null) {
             if (LocalPushHandle.getInstance().allowPopSpeedUp(speedItem)) {
                 LogUtils.e("===允许弹出speed的window");
@@ -198,7 +194,7 @@ public class TimingReceiver extends BroadcastReceiver {
         }
 
         //4.判断【手机降温】功能是否满足推送条件
-        LocalPushConfigModel.Item coolItem = map.get("6");
+        LocalPushConfigModel.Item coolItem = map.get(LocalPushType.TYPE_PHONE_COOL);
         if (coolItem != null) {
             if (LocalPushHandle.getInstance().allowPopCool(coolItem, temp)) {
                 LogUtils.e("===允许弹出cool的window");
@@ -212,7 +208,7 @@ public class TimingReceiver extends BroadcastReceiver {
         }
 
         //5.判断【超强省电】功能是否满足推送条件
-        LocalPushConfigModel.Item powerItem = map.get("9");
+        LocalPushConfigModel.Item powerItem = map.get(LocalPushType.TYPE_SUPER_POWER);
         if (powerItem != null) {
             if (LocalPushHandle.getInstance().allowPopPowerSaving(powerItem, isCharged, mBatteryPower)) {
                 LogUtils.e("===允许弹出power的window");

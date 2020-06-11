@@ -64,7 +64,7 @@ public class WindowUtil {
 
     public void showWindowWhenDelayTwoSecond(Context context, Long homeTime, LocalPushConfigModel.Item item) {
         long current = System.currentTimeMillis();
-        LogUtils.e("=====current:"+current+"  homeTime:"+homeTime);
+        LogUtils.e("=====current:" + current + "  homeTime:" + homeTime);
         long period = current / 1000 - homeTime / 1000;
         LogUtils.e("===距离按下Home已经过去了" + period + "秒");
         if (period >= 3) {
@@ -98,14 +98,18 @@ public class WindowUtil {
 
             AppCompatButton button = mView.findViewById(R.id.button);
             switch (item.getOnlyCode()) {
-                case "1":
+                case LocalPushType.TYPE_NOW_CLEAR:
                     button.setText("立即清理");
-                case "2":
+                    break;
+                case LocalPushType.TYPE_SPEED_UP:
                     button.setText("一键加速");
-                case "6":
+                    break;
+                case LocalPushType.TYPE_PHONE_COOL:
                     button.setText("一键降温");
-                case "9":
+                    break;
+                case LocalPushType.TYPE_SUPER_POWER:
                     button.setText("立即省电");
+                    break;
                 default:
                     break;
             }

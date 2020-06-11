@@ -36,7 +36,7 @@ public class LocalPushConfigModel extends BaseEntity {
         private String content;
         private int thresholdNum;//省电功能专用，当前电量的百分比小于这个数值的时候才弹出通知
         //1.立即清理 2.一键加速 3.手机清理 4.文件清理 5.微信专清 6.手机温降温 7.QQ专清 8.通知栏 9.超强省电
-        private String onlyCode;
+        private int onlyCode;
 
 
 
@@ -68,11 +68,11 @@ public class LocalPushConfigModel extends BaseEntity {
             this.popWindowInterval = popWindowInterval;
         }
 
-        public String getOnlyCode() {
+        public int getOnlyCode() {
             return onlyCode;
         }
 
-        public void setOnlyCode(String onlyCode) {
+        public void setOnlyCode(int onlyCode) {
             this.onlyCode = onlyCode;
         }
 
