@@ -495,8 +495,13 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     item.setPopWindowInterval(1);
                     item.setTitle("手机内存占用#快加速");
                     item.setContent("假数据的content");
-                    pushConfigList.add(item);*/
+                    pushConfigList.add(item);
+                    LogUtils.e("=====:"+new Gson().toJson(pushConfigList));
+
+                    */
                     /*-------------测试专用 end----------------*/
+
+
 
                     //将从服务器获取的本地推送配置信息保存在SP中
                     PreferenceUtil.saveLocalPushConfig(new Gson().toJson(pushConfigList));

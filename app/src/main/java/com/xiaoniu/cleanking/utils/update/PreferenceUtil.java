@@ -1648,6 +1648,8 @@ public class PreferenceUtil {
         return sharedPreferences.getLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_SIZE, 0L);
     }
 
+
+
     //保存最近一次操作记录
     public static void saveCleanLog(String cleanlog) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_ACTION_LOG, Context.MODE_PRIVATE);

@@ -27,7 +27,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
-import com.xiaoniu.cleanking.ui.localpush.LocalPushHandle;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -49,7 +49,6 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -258,7 +257,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
         if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
             PreferenceUtil.saveNowCleanTime();
         }
-        LocalPushHandle.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_CLEAR_RUBBISH);
+        LocalPushUtils.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_CLEAR_RUBBISH);
         //设置锁屏数据
         LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
         btnInfo.setNormal(true);

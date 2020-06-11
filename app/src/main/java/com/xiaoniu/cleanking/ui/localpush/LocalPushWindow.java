@@ -20,7 +20,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.utils.GlideUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
@@ -79,9 +78,9 @@ public class LocalPushWindow {
         }
 
         //更新上次弹框的时间
-        LocalPushHandle.getInstance().updateLastPopTime(item.getOnlyCode());
+        LocalPushUtils.getInstance().updateLastPopTime(item.getOnlyCode());
         //更新当天弹框的次数
-        LocalPushHandle.getInstance().autoIncrementDayLimit(item.getOnlyCode());
+        LocalPushUtils.getInstance().autoIncrementDayLimit(item.getOnlyCode());
 
         //自定义toast文本
         mView.findViewById(R.id.button).setOnClickListener(v -> {

@@ -376,13 +376,13 @@ public final class LocalService extends Service {
         } else if ((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("home")))) { //home_键监听
             try {
                 long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 1000);
-                Long homeTime=intent.getLongExtra("homePressed",0L);
+                Long homeTime = intent.getLongExtra("homePressed", 0L);
                 Intent inten = new Intent(this, TimingReceiver.class);
                 inten.putExtra("action", "home");
                 inten.putExtra("temp", temp);
                 inten.putExtra("battery", mBatteryPower);
                 inten.putExtra("isCharged", isCharged);
-                inten.putExtra("homePressed",homeTime);
+                inten.putExtra("homePressed", homeTime);
                 PendingIntent pi = PendingIntent.getBroadcast(this, NumberUtils.mathRandomInt(0, 100), inten, 0);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
@@ -479,8 +479,8 @@ public final class LocalService extends Service {
         if (!BuildConfig.SYSTEM_EN.contains("prod"))
 //            ToastUtils.showShort("charge--" + (isCharged ? "充电中" : "未充电"));
 //        Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
-        //更新sp当前充电状态
-        PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
+            //更新sp当前充电状态
+            PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
 
     }
 
@@ -534,7 +534,7 @@ public final class LocalService extends Service {
     public void startActivity(Context context) {
         try {
             String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
-            boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN,PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
+            boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
             if (TextUtils.equals(auditSwitch, "1") && lock_sw) { //过审开关打开状态
                 Intent screenIntent = new Intent();
                 screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCKACTIVITY);
