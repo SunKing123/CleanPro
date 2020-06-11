@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.room.Room;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.bun.miitmdid.core.JLibrary;
@@ -14,9 +17,6 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
-import com.hellogeek.permission.Integrate.Permission;
-import com.hellogeek.permission.Integrate.PermissionIntegrate;
-import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
@@ -66,11 +66,6 @@ import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.room.Room;
 
 /**
  * Created by admin on 2017/6/8.
@@ -138,7 +133,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     //商业sdk初始化
-    public void initAdSdk(Application application){
+    public void initAdSdk(Application application) {
         String processName = SystemUtils.getProcessName(application);
         if (!processName.equals(application.getPackageName()))
             return;
@@ -149,6 +144,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         }
         ContextUtils.initAdBid(GeekAdSdk.getBid());
     }
+
     /**
      * js回调
      */
@@ -272,8 +268,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     //home键监听
     private long mLastClickTime = 0;  //只在local 进程中生效
+
     public void homeCatch(Application application) {
-        if(!SystemUtils.getProcessName(application).contains("local")){  //只在local进程中监听home按键，避免重复调用
+        if (!SystemUtils.getProcessName(application).contains("local")) {  //只在local进程中监听home按键，避免重复调用
             return;
         }
         HomeWatcher mHomeWatcher = new HomeWatcher(application);
@@ -287,6 +284,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
+                i.putExtra("homePressed", System.currentTimeMillis());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
                 } else {
@@ -303,6 +301,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
+                i.putExtra("homePressed", System.currentTimeMillis());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
                 } else {

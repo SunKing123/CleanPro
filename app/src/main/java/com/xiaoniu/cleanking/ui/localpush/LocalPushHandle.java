@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 
@@ -11,38 +12,58 @@ public class LocalPushHandle {
     private LocalPushHandle() {
     }
 
+
+
+
     private static class Holder {
         static LocalPushHandle pushHandle = new LocalPushHandle();
     }
 
     public static LocalPushHandle getInstance() {
-        return Holder.pushHandle;
+         return Holder.pushHandle;
     }
+
 
     private boolean commonParamsVerify(LocalPushConfigModel.Item config, String functionType) {
         //1.先判断今天允许弹出的次数是否小于最大次数
         if (isTodayLimitAllowed(config, functionType)) {
+            LogUtils.e("===当日总次数验证通过==");
             Long currentTimeStamp = System.currentTimeMillis();
             //2.判断距上次使用该功能是否已经大于配置指定的时间
             Long lastUsedTime = PreferenceUtil.getLastUseFunctionTime(functionType);
             //计算上次使用该功能距离现在过于多少分钟
             long elapseUsedTime = DateUtils.getMinuteBetweenTimestamp(currentTimeStamp, lastUsedTime);
             if (elapseUsedTime >= config.getFunctionUsedInterval()) {
+                LogUtils.e("===上次使用功能时间验证通过==");
                 //判断上次弹框的时间是否已经大于配置指定的时间
-                Long lastPopTime = PreferenceUtil.getLastUseFunctionTime(functionType);
+                Long lastPopTime = PreferenceUtil.getLastPopupTime(functionType);
                 //计算上次弹框距离现在过于多少分钟
                 long elapsePopTime = DateUtils.getMinuteBetweenTimestamp(currentTimeStamp, lastPopTime);
+                if (elapsePopTime >= config.getPopWindowInterval()) {
+                    LogUtils.e("===上次弹框时间验证通过==");
+                } else {
+                    LogUtils.e("===上次弹框时间验证不通过==");
+                }
                 return elapsePopTime >= config.getPopWindowInterval();
             } else {
+                LogUtils.e("===上次使用功能时间验证不通过==");
                 return false;
             }
         } else {
+            LogUtils.e("===当日总次数验证不通过==");
             return false;
         }
     }
 
     public boolean allowPopClear(LocalPushConfigModel.Item config) {
-        return commonParamsVerify(config, SpCacheConfig.KEY_FUNCTION_CLEAR_RUBBISH);
+        if (commonParamsVerify(config, SpCacheConfig.KEY_FUNCTION_CLEAR_RUBBISH)) {
+            //上一次垃圾扫描的结果为0的时候也不弹出
+            long size = PreferenceUtil.getLastScanRubbishSize();
+            LogUtils.e("====上次扫描垃圾的大小为：" + size);
+            return size != 0L;
+        } else {
+            return false;
+        }
     }
 
     public boolean allowPopSpeedUp(LocalPushConfigModel.Item config) {
@@ -53,6 +74,7 @@ public class LocalPushHandle {
     public boolean allowPopCool(LocalPushConfigModel.Item config, int temperature) {
         if (commonParamsVerify(config, SpCacheConfig.KEY_FUNCTION_COOL)) {
             //降温在满足公共条件的情况下，还要判断是否大于温度的阈值
+            LogUtils.e("=====:当前设备温度：" + temperature + "  阈值温度：" + config.getThresholdNum());
             return temperature > config.getThresholdNum();
         } else {
             return false;
@@ -62,10 +84,12 @@ public class LocalPushHandle {
 
     public boolean allowPopPowerSaving(LocalPushConfigModel.Item config, boolean isCharged, int mBatteryPower) {
         if (isCharged) {
+            LogUtils.e("===当前设备在充电");
             return false;
         } else {
             if (commonParamsVerify(config, SpCacheConfig.KEY_FUNCTION_POWER_SAVING)) {
                 //省电除了判断服务器返回的参数要符合条件外，还要判断电量是否小于阈值
+                LogUtils.e("=====:当前设备电量：" + mBatteryPower + "  阈值电量：" + config.getThresholdNum());
                 return mBatteryPower < config.getThresholdNum();
             } else {
                 return false;
@@ -80,6 +104,7 @@ public class LocalPushHandle {
         if (TextUtils.isEmpty(dayLimitJson)) {
             return true;
         } else {
+            LogUtils.e("===dayLimitJson==:" + dayLimitJson);
             DayLimit dayLimit = new Gson().fromJson(dayLimitJson, DayLimit.class);
             //如果是同一天判断次数是否小于配置的最大次数
             if (DateUtils.isSameDay(System.currentTimeMillis(), dayLimit.getUpdateTime())) {
@@ -92,7 +117,7 @@ public class LocalPushHandle {
     }
 
     //更新上一次弹框的时间
-    public void updateLastPopTime(int onlyCode) {
+    public void updateLastPopTime(String onlyCode) {
         String type = getFuncTypeByOnlyCode(onlyCode);
         if (!TextUtils.isEmpty(type)) {
             PreferenceUtil.saveLastPopupTime(type, System.currentTimeMillis());
@@ -100,7 +125,7 @@ public class LocalPushHandle {
     }
 
     //更新当天已经弹出的次数，每次+1
-    public void autoIncrementDayLimit(int onlyCode) {
+    public void autoIncrementDayLimit(String onlyCode) {
         String functionType = getFuncTypeByOnlyCode(onlyCode);
         if (!TextUtils.isEmpty(functionType)) {
             String dayLimitJson = PreferenceUtil.getPopupCount(functionType);
@@ -122,15 +147,16 @@ public class LocalPushHandle {
         PreferenceUtil.saveLastUseFunctionTime(funcType, System.currentTimeMillis());
     }
 
-    private String getFuncTypeByOnlyCode(int onlyCode) {
+
+    private String getFuncTypeByOnlyCode(String onlyCode) {
         switch (onlyCode) {
-            case 1:
+            case "1":
                 return SpCacheConfig.KEY_FUNCTION_CLEAR_RUBBISH;
-            case 2:
+            case "2":
                 return SpCacheConfig.KEY_FUNCTION_SPEED_UP;
-            case 6:
+            case "6":
                 return SpCacheConfig.KEY_FUNCTION_COOL;
-            case 9:
+            case "9":
                 return SpCacheConfig.KEY_FUNCTION_POWER_SAVING;
             default:
                 return "";

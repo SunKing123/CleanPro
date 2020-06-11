@@ -271,7 +271,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         line_shd();
                         break;
                     case MainTableItem.TAG_KILL_VIRUS:            //病毒查杀
-                        toKillVirus();
+                        onKillVirusItemClick();
                         break;
                     case MainTableItem.TAG_CLEAN_NOTIFY:          //通知清理
                         mClickQq();
@@ -286,7 +286,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         toSpeedGame();
                         break;
                     case MainTableItem.TAG_SPEED_UP_NETWORK:      //网络加速
-                        toSpeedNetwork();
+                        onSpeedNetworkItemClick();
                         break;
                 }
             }
@@ -785,17 +785,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    private void toKillVirus() {
-        StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
-        if (PreferenceUtil.getVirusKillTime()) {
-            startActivity(ArmVirusKillActivity.class);
-        } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-            intent.putExtra("title", "病毒查杀");
-            intent.putExtra("main", false);
-            startActivity(intent);
-        }
-    }
 
     private void toSpeedGame() {
         isGameMain = true;
@@ -808,19 +797,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    private void toSpeedNetwork() {
-        StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
-        if (PreferenceUtil.getSpeedNetWorkTime()) {
-            startActivity(NetWorkActivity.class);
-        } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-            String num = PreferenceUtil.getSpeedNetworkValue();
-            intent.putExtra("title", "网络加速");
-            intent.putExtra("main", false);
-            intent.putExtra("num", num);
-            startActivity(intent);
-        }
-    }
 
     /**
      * 一键加速
@@ -1378,6 +1354,52 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+
+    /*
+     * *********************************************************************************************************************************************
+     * ***********************************************************************病毒查杀点击事件模块*****************************************************
+     * *********************************************************************************************************************************************
+     */
+
+    //病毒查杀按钮点击
+    private void onKillVirusItemClick() {
+        StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
+        if (isShowKillVirusGeekAd()) {
+            loadGeekAd();
+        } else {
+            startKillVirusActivity();
+        }
+    }
+
+    //启动病毒查杀功能
+    private void startKillVirusActivity() {
+        if (PreferenceUtil.getVirusKillTime()) {
+            startActivity(ArmVirusKillActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            intent.putExtra("title", "病毒查杀");
+            intent.putExtra("main", false);
+            startActivity(intent);
+        }
+    }
+
+    //是否显示病毒查杀奖励视频
+    public boolean isShowKillVirusGeekAd() {
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+            return false;
+        }
+        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+            if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
+                if (switchInfoList.isOpen()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * 病毒查杀激励视频
      */
@@ -1433,7 +1455,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", " ");
                 }
-                startActivity(VirusKillActivity.class);
+                startKillVirusActivity();
             }
 
             @Override
@@ -1442,9 +1464,63 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
                 }
-                startActivity(VirusKillActivity.class);
+                startKillVirusActivity();
             }
         });
+    }
+
+    /*
+     * *********************************************************************************************************************************************
+     * ***********************************************************************网络加速点击事件模块*****************************************************
+     * *********************************************************************************************************************************************
+     */
+
+    /**
+     * 网络加速按钮点击
+     */
+    private void onSpeedNetworkItemClick() {
+        StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
+        if(isShowSpeedNetGeekAd()){
+            loadGeekAdNet();
+        }else {
+           startSpeedNetworkActivity();
+        }
+    }
+
+    /**
+     * 启动网络加速功能
+     */
+    private void startSpeedNetworkActivity(){
+        if (PreferenceUtil.getSpeedNetWorkTime()) {
+            startActivity(NetWorkActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            String num = PreferenceUtil.getSpeedNetworkValue();
+            intent.putExtra("title", "网络加速");
+            intent.putExtra("main", false);
+            intent.putExtra("num", num);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * 是否显示网络加速激励视屏广告
+     * @return
+     */
+    private boolean isShowSpeedNetGeekAd() {
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getSwitchInfoList()
+                || null == AppHolder.getInstance().getSwitchInfoList().getData()
+                || AppHolder.getInstance().getSwitchInfoList().getData().size() <= 0) {
+            return false;
+        }
+        for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+            if (PositionId.KEY_NET_JILI.equals(switchInfoList.getConfigKey())) {
+                if (switchInfoList.isOpen()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -1502,7 +1578,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_page", " ");
                 }
-                startActivity(NetWorkActivity.class);
+                startSpeedNetworkActivity();
             }
 
             @Override
@@ -1511,7 +1587,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "network_acceleration_video_page");
                 }
-                startActivity(NetWorkActivity.class);
+                startSpeedNetworkActivity();
             }
         });
     }

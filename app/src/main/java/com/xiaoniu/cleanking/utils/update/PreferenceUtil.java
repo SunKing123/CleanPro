@@ -1571,7 +1571,7 @@ public class PreferenceUtil {
             }.getType());
             if (itemList != null) {
                 for (LocalPushConfigModel.Item item : itemList) {
-                    map.put(String.valueOf(item.getOnlyCode()), item);
+                    map.put(item.getOnlyCode(), item);
                 }
             }
         }
@@ -1617,6 +1617,33 @@ public class PreferenceUtil {
     public static String getPopupCount(final String functionType) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         return sharedPreferences.getString(functionType + "today_popup_count", "");
+    }
+
+
+    //保存最后一次扫描垃圾的时间
+    public static void saveLastScanRubbishTime(long time) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_TIME, time).apply();
+    }
+
+    //获取最后一次扫描垃圾的时间
+    public static Long getLastScanRubbishTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        return sharedPreferences.getLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_TIME, 0L);
+    }
+
+    //保存最后一次扫描垃圾的大小
+    public static void saveLastScanRubbishSize(long time) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_SIZE, time).apply();
+    }
+
+    //获取最后一次扫描垃圾的大小
+    public static Long getLastScanRubbishSize() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
+        return sharedPreferences.getLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_SIZE, 0L);
     }
 
     //保存最近一次操作记录

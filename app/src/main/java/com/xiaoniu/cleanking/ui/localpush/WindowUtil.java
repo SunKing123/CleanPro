@@ -1,19 +1,27 @@
 package com.xiaoniu.cleanking.ui.localpush;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.utils.GlideUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 
 
 import java.util.concurrent.TimeUnit;
@@ -39,6 +47,7 @@ public class WindowUtil {
     private static final int mCancelViewSize = 200;
     private int statusBarHeight = 0;
 
+
     private WindowUtil() {
 
     }
@@ -52,9 +61,21 @@ public class WindowUtil {
         return SingletonInstance.INSTANCE;
     }
 
-    public void showWindowWhenDelayTwoSecond(Context context, LocalPushConfigModel.Item item) {
-        //在LocalService中已经Delay了一秒，因此这里只用延迟2秒就成
-        new Handler().postDelayed(() -> showWindow(context,item), 2000);
+
+    public void showWindowWhenDelayTwoSecond(Context context, Long homeTime, LocalPushConfigModel.Item item) {
+        long current = System.currentTimeMillis();
+        LogUtils.e("=====current:"+current+"  homeTime:"+homeTime);
+        long period = current / 1000 - homeTime / 1000;
+        LogUtils.e("===距离按下Home已经过去了" + period + "秒");
+        if (period >= 3) {
+            LogUtils.e("===已经超过3秒，立即弹出");
+            showWindow(context, item);
+        } else {
+            long delay = 3 - period;
+            LogUtils.e("===延迟" + delay + "秒弹出");
+            new Handler().postDelayed(() -> showWindow(context, item), delay * 1000);
+        }
+
     }
 
     @SuppressLint("CheckResult")
@@ -62,6 +83,34 @@ public class WindowUtil {
         if (null == mWindowManager && null == mView) {
             mWindowManager = (WindowManager) context.getSystemService(WINDOW_SERVICE);
             mView = LayoutInflater.from(context).inflate(R.layout.dialog_local_push_layout, null);
+
+            AppCompatImageView icon = mView.findViewById(R.id.logo);
+            if (!TextUtils.isEmpty(item.getIconUrl())) {
+                GlideUtils.loadImage(context, item.getIconUrl(), icon);
+            }
+
+            AppCompatTextView title = mView.findViewById(R.id.title);
+            title.setText(item.getTitle());
+
+            AppCompatTextView content = mView.findViewById(R.id.content);
+            content.setText(item.getContent());
+
+
+            AppCompatButton button = mView.findViewById(R.id.button);
+            switch (item.getOnlyCode()) {
+                case "1":
+                    button.setText("立即清理");
+                case "2":
+                    button.setText("一键加速");
+                case "6":
+                    button.setText("一键降温");
+                case "9":
+                    button.setText("立即省电");
+                default:
+                    break;
+            }
+
+
             mWindowManager.getDefaultDisplay().getSize(point);
             initListener(context);
             mLayoutParams = new WindowManager.LayoutParams();

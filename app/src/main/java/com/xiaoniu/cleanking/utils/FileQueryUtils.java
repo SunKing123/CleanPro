@@ -264,7 +264,7 @@ public class FileQueryUtils {
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/android/data/";
         File rootPathFile = new File(rootPath);
         List<String> packageNameList = new ArrayList<>();
-        if (rootPathFile.exists()) {
+        if (rootPathFile.exists() && rootPathFile.listFiles() != null) {
             for (File file : rootPathFile.listFiles()) {
                 if (!file.isHidden() && !"System".equals(file.getName())) {
                     packageNameList.add(file.getName());
