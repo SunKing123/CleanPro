@@ -62,8 +62,9 @@
                     <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
                         android:id="@+id/view_lottie_top"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                        android:layout_height="wrap_content"></com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
+                    </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
 
                     <TextView
                         android:id="@+id/tv_clean_type"

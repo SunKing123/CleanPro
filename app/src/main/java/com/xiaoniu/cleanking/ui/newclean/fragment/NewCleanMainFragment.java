@@ -752,7 +752,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /**
      * 立即清理
      */
-    @OnClick(R.id.view_lottie_top)
+    @OnClick(R.id.iv_center)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
@@ -1180,8 +1180,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 静止时动画
      */
     private void showHomeLottieView() {
-        showTextView();
         view_lottie_top.startLottie();
+        showTextView();
 //        mLottieHomeView.useHardwareAcceleration(true);
 //        mLottieHomeView.setAnimation("clean_home_top.json");
 //        mLottieHomeView.setImageAssetsFolder("images_home");

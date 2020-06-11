@@ -64,13 +64,14 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void setViewLayoutParms(){
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)viewLottieTop.getLayoutParams();
-        layoutParams.height = screenWidth;
-        layoutParams.width = screenWidth;
+        layoutParams.height = Float.valueOf(screenWidth*1.2f).intValue();
+        layoutParams.width = Float.valueOf(screenWidth*1.2f).intValue();
         viewLottieTop.setLayoutParams(layoutParams);
+        viewLottieLower.setLayoutParams(layoutParams);
 
         RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams)ivCenter.getLayoutParams();
-        imglayoutParams.height = Float.valueOf(screenWidth*0.447f).intValue();
-        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f).intValue();
+        imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
+        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
     }
 
@@ -104,21 +105,21 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     }
 
     public void playLottie(LottieAnimationView lottieview,LottiePathdata pathdata,int lottieIndex){
-        if (lottieIndex != 1 && lottieIndex % 2 == 1) {
+        if (lottieIndex != 1 && lottieIndex % 2 == 1) {//变换阶段
             lottieview.setAlpha(0f);
+            lottieview.setVisibility(VISIBLE);
+            lottieview.animate()
+                    .alpha(1f)
+                    .setDuration(500)
+                    .setListener(null);
         }
-        lottieview.setVisibility(VISIBLE);
-        lottieview.animate()
-                .alpha(1f)
-                .setDuration(500)
-                .setListener(null);
+
         if(lottieIndex ==6){
             lottieview.setRepeatCount(LottieDrawable.INFINITE);
         }
         lottieview.setAnimation(pathdata.getJsonPath());
         lottieview.setImageAssetsFolder(pathdata.getImgPath());
         lottieview.playAnimation();
-
         setCenterImg(lottieIndex);
     }
 
