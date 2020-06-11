@@ -163,7 +163,7 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_checked_total.setText(mCountEntity.getResultSize());
             tv_junk_title.setText(firstJunkInfo.getAppName());
 
-            Drawable myDrawable = null;
+      /*      Drawable myDrawable = null;
             if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
                 myDrawable = ContextCompat.getResources().getDrawable(firstJunkInfo.getIconSource(), ContextCompat.getTheme());
             } else {
@@ -173,7 +173,7 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 iv_junk_logo.setImageDrawable(itemView.getResources().getDrawable(firstJunkInfo.getIconSource()));
             } else {
                 iv_junk_logo.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.icon_other_cache));
-            }
+            }*/
 
             if (firstJunkInfo.isAllchecked()) {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);

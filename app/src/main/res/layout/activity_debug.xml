@@ -239,20 +239,16 @@
                     android:textSize="@dimen/dimen_16sp" />
 
 
-
             </LinearLayout>
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/view_lottie_bottom"
                 android:layout_width="300dp"
                 android:scaleType="centerCrop"
-                android:background="@color/color_9B9B9B"
+                android:background="@color/tt_skip_red"
                 app:lottie_loop="true"
-                android:layout_height="wrap_content"/>
+                android:layout_height="300dp"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-
-
 
 
 </LinearLayout>
