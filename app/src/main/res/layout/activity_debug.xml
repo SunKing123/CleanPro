@@ -240,13 +240,20 @@
 
 
             </LinearLayout>
+            <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
+                android:id="@+id/view_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/view_lottie_bottom"
                 android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
-                android:background="@color/tt_skip_red"
-                app:lottie_loop="true"
-                android:layout_height="300dp"/>
+                app:lottie_loop="true" />
+
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.newclean.adapter;
 
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,18 +161,11 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             CountEntity mCountEntity = CleanUtil.formatShortFileSize(firstJunkInfo.getTotalSize());
             tv_checked_total.setText(mCountEntity.getResultSize());
             tv_junk_title.setText(firstJunkInfo.getAppName());
-
-      /*      Drawable myDrawable = null;
-            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
-                myDrawable = ContextCompat.getResources().getDrawable(firstJunkInfo.getIconSource(), ContextCompat.getTheme());
-            } else {
-                myDrawable = ContextCompat.getResources().getDrawable(firstJunkInfo.getIconSource());
-            }
-            if (null != myDrawable) {
-                iv_junk_logo.setImageDrawable(itemView.getResources().getDrawable(firstJunkInfo.getIconSource()));
+            if (firstJunkInfo.getGarbageIcon() != null) {
+                iv_junk_logo.setImageDrawable(firstJunkInfo.getGarbageIcon());
             } else {
                 iv_junk_logo.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.icon_other_cache));
-            }*/
+            }
 
             if (firstJunkInfo.isAllchecked()) {
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
