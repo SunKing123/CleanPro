@@ -157,8 +157,20 @@ public class FileQueryUtils {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             return applicationInfo.loadIcon(mContext.getPackageManager());
         }
+        LogUtils.i("zz---icon--"+applicationInfo.icon);
         PackageManager pm = AppApplication.getInstance().getPackageManager();
         return pm.getApplicationIcon(applicationInfo);
+    }
+
+
+    /**
+     * 获取App图标
+     *
+     * @param applicationInfo
+     * @return
+     */
+    private int getAppIconSource(ApplicationInfo applicationInfo) {
+        return applicationInfo.icon;
     }
 
     //其他垃圾
@@ -223,8 +235,11 @@ public class FileQueryUtils {
                 junkInfo.setAllchecked(true);
                 junkInfo.setAppName(pData.getAppName());
                 junkInfo.setAppPackageName(pData.getPackName());
-                if (!isService)
+                if (!isService){
+                    junkInfo.setIconSource(R.drawable.icon_other_cache);
                     junkInfo.setGarbageIcon(mContext.getResources().getDrawable(R.drawable.icon_other_cache));
+                }
+
                 junkInfo.setGarbageType("TYPE_LEAVED");
                 junkInfo.setSdPath(pData.getFileList().get(0).getFolderName());
 
@@ -440,16 +455,22 @@ public class FileQueryUtils {
             //一级目（私有目录）
             FirstJunkInfo cacheJunkInfo = new FirstJunkInfo();
             cacheJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
-            if (!isService)
+            if (!isService){
                 cacheJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
+                cacheJunkInfo.setIconSource(getAppIconSource(applicationInfo.applicationInfo));
+            }
+
+
             cacheJunkInfo.setAllchecked(true);
             cacheJunkInfo.setGarbageType("TYPE_CACHE");
             cacheJunkInfo.setAppPackageName(applicationInfo.packageName);
 
             FirstJunkInfo adJunkInfo = new FirstJunkInfo();
             adJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
-            if (!isService)
+            if (!isService){
+                adJunkInfo.setIconSource(getAppIconSource(applicationInfo.applicationInfo));
                 adJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
+            }
             adJunkInfo.setAllchecked(true);
             adJunkInfo.setGarbageType("TYPE_AD");
             adJunkInfo.setAppPackageName(applicationInfo.packageName);
@@ -691,8 +712,11 @@ public class FileQueryUtils {
             //一级目（私有目录）
             FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
             firstJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
-            if (!isService)
+            if (!isService){
                 firstJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
+                firstJunkInfo.setIconSource(getAppIconSource(applicationInfo.applicationInfo));
+            }
+
             firstJunkInfo.setAllchecked(true);
             firstJunkInfo.setGarbageType("TYPE_CACHE");
             firstJunkInfo.setAppPackageName(applicationInfo.packageName);
@@ -901,8 +925,10 @@ public class FileQueryUtils {
                             onelevelGarbageInfo.setPid(i2);
                             onelevelGarbageInfo.setAllchecked(true);
                             onelevelGarbageInfo.setAppName(loadLabel.toString().trim());
-                            if (!isService)
+                            if (!isService){
                                 onelevelGarbageInfo.setGarbageIcon(getAppIcon(mPackageManager.getPackageInfo(str, 0).applicationInfo));
+                                onelevelGarbageInfo.setIconSource(getAppIconSource(mPackageManager.getPackageInfo(str, 0).applicationInfo));
+                            }
                             if (mScanFileListener != null && isShowSize) {
                                 mScanFileListener.increaseSize(totalPss);
                             }
@@ -996,8 +1022,11 @@ public class FileQueryUtils {
             junkInfo.setAllchecked(true);
             junkInfo.setAppName(getAppName(p.applicationInfo));
             junkInfo.setAppPackageName(packageName);
-            if (!isService)
+            if (!isService){
                 junkInfo.setGarbageIcon(getAppIcon(p.applicationInfo));
+                junkInfo.setIconSource(getAppIconSource(p.applicationInfo));
+            }
+
             long totalSize = (long) ((Math.random() * 1024 * 1024 * sizeNum) + 1024 * 1024 * sizeNum);
             if (mScanFileListener != null && isShowSize) {
                 mScanFileListener.increaseSize(totalSize);
@@ -1036,6 +1065,7 @@ public class FileQueryUtils {
                     junkInfo.setAppPackageName(packageName);
                     if (!isService) {
                         junkInfo.setGarbageIcon(getAppIcon(packageInfo.applicationInfo));
+                        junkInfo.setIconSource(getAppIconSource(packageInfo.applicationInfo));
                     }
                     long totalSize = (long) ((Math.random() * 1024 * 1024 * 50) + 1024 * 1024 * 50);
                     if (mScanFileListener != null && isShowSize) {
@@ -1139,8 +1169,11 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setPid(appMemoryInfo2.getId());
                         onelevelGarbageInfo.setTotalSize(totalPss);
                         onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
-                        if (!isService)
+                        if (!isService){
                             onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
+                            onelevelGarbageInfo.setIconSource(getAppIconSource(applicationInfo));
+                        }
+
                         if (mScanFileListener != null && isShowSize) {
                             mScanFileListener.increaseSize(totalPss);
                         }
@@ -1226,8 +1259,11 @@ public class FileQueryUtils {
                         onelevelGarbageInfo.setGarbageType("TYPE_PROCESS");
                         onelevelGarbageInfo.setAppPackageName(name);
                         onelevelGarbageInfo.setAppName(getAppName(packageManager.getApplicationInfo(name, 0)));
-                        if (!isService)
+                        if (!isService){
                             onelevelGarbageInfo.setGarbageIcon(getAppIcon(packageManager.getApplicationInfo(name, 0)));
+                            onelevelGarbageInfo.setIconSource(getAppIconSource(packageManager.getApplicationInfo(name,0)));
+                        }
+
 //                        onelevelGarbageInfo.setDescp(CleanAppApplication.getInstance().getString(R.string.clean_suggested));
                         boolean isIgore = false;
                         if (mMemoryCacheWhite != null && mMemoryCacheWhite.size() > 0) {
@@ -1321,8 +1357,10 @@ public class FileQueryUtils {
                                     onelevelGarbageInfo.setVersionName(packageArchiveInfo.versionName);
                                     onelevelGarbageInfo.setVersionCode(packageArchiveInfo.versionCode);
                                     onelevelGarbageInfo.setAppGarbageName(mPackageManager.getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
-                                    if (!isService)
+                                    if (!isService){
                                         onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
+                                        onelevelGarbageInfo.setIconSource(getAppIconSource(applicationInfo));
+                                    }
                                     onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
                                     if (FileUtils.isAppInstalled(packageArchiveInfo.packageName)) {
                                         onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_install));
@@ -1386,6 +1424,7 @@ public class FileQueryUtils {
                     onelevelGarbageInfo.setAllchecked(true);
                     onelevelGarbageInfo.setAppName(appInfoClean.getAppName());
                     onelevelGarbageInfo.setGarbageIcon(getAppIcon(mPackageManager.getApplicationInfo(appInfoClean.getPackageName(), 0)));
+                    onelevelGarbageInfo.setIconSource(getAppIconSource(mPackageManager.getApplicationInfo(appInfoClean.getPackageName(),0)));
                     onelevelGarbageInfo.setAppPackageName(appInfoClean.getPackageName());
                     onelevelGarbageInfo.setGarbageType("TYPE_CACHE");
                     onelevelGarbageInfo.setAppGarbageName(appInfoClean.getAppName());

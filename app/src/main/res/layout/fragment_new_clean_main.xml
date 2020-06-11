@@ -21,6 +21,15 @@
             android:textColor="@color/color_333333"
             android:textSize="20sp" />
 
+        <ImageView
+            android:id="@+id/iv_interaction"
+            android:layout_width="@dimen/dimen_45dp"
+            android:layout_height="@dimen/dimen_45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dimen_10dp"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <!--完成动画-->
@@ -50,42 +59,23 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
+                        android:id="@+id/view_lottie_top"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="20">
-
-                        </TextView>
-
-                        <com.airbnb.lottie.LottieAnimationView
-                            android:id="@+id/view_lottie_home"
-                            android:layout_width="0dp"
-                            android:layout_height="180dp"
-                            android:layout_weight="60" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="20"></TextView>
-                    </LinearLayout>
-
+                        android:layout_height="wrap_content"></com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
 
                     <TextView
                         android:id="@+id/tv_clean_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="-13dp"
                         android:layout_marginBottom="22dp"
                         android:alpha="0"
                         android:gravity="center"
                         android:text="@string/tool_home_hint"
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_666666"
                         android:textSize="15sp" />
 
                     <TextView
@@ -100,7 +90,8 @@
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -131,16 +122,14 @@
 
             <com.xiaoniu.cleanking.ui.view.MainTableView
                 android:id="@+id/main_table_view"
-                android:layout_height="match_parent"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_12dp"
                 android:background="@drawable/bg_six"
-                android:gravity="center"
                 android:clipChildren="false"
-                android:layout_marginTop="-100dp"
-                android:padding="@dimen/dimen_16dp">
-            </com.xiaoniu.cleanking.ui.view.MainTableView>
+                android:gravity="center"
+                android:padding="@dimen/dimen_16dp"></com.xiaoniu.cleanking.ui.view.MainTableView>
             <!--分享图片-->
             <ImageView
                 android:id="@+id/image_ad_bottom_first"
@@ -383,12 +372,5 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <ImageView
-        android:id="@+id/iv_interaction"
-        android:layout_width="@dimen/dimen_65dp"
-        android:layout_height="@dimen/dimen_65dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dimen_10dp"
-        android:visibility="gone" />
+
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>
