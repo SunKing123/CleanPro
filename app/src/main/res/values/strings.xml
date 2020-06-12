@@ -202,4 +202,7 @@
     <string name="vircuskill_fg_two_tip_one">优化加密信息防止被偷窥</string>
     <string name="vircuskill_fg_two_tip_two">加强网络保护防火墙</string>
 
+    <string name="home_top_text_tag">垃圾待清理</string>
+
+
 </resources>

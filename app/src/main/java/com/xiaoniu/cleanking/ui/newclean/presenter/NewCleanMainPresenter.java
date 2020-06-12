@@ -3,6 +3,8 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -12,6 +14,7 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -19,11 +22,14 @@ import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningLevel;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -47,11 +53,14 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     private FileQueryUtils mFileQueryUtils;
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     @Inject
     public NewCleanMainPresenter() {
         compositeDisposable =  new CompositeDisposable();
     }
     private int fileCount = 0;
+
+    private long totalJunk = 0;
     /**
      * 底部广告接口
      */
@@ -120,7 +129,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 //        mView.showLoadingDialog();
         Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
             //获取到可以加速的应用名单
-            FileQueryUtils mFileQueryUtils = new FileQueryUtils();
+            mFileQueryUtils = new FileQueryUtils();
             //文件加载进度回调
             mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
                 @Override
@@ -187,6 +196,8 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         mFileQueryUtils = new FileQueryUtils();
         //初始化扫描模型
         initScanningJunkModel();
+        //初始化扫描监听
+        initScanningListener();
 
     }
 
@@ -205,7 +216,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                         if (hasPermissionDeniedForever()) {
 //                            showPermissionDialog();
                         } else {
-                            checkStoragePermission();
+//                            checkStoragePermission();
                         }
                     }
                 });
@@ -225,12 +236,36 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     }
 
 
+    /**
+     * 监听扫描状态
+     */
+    private void initScanningListener() {
+        mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
 
+            @Override
+            public void currentNumber() {
+            }
+
+            @Override
+            public void increaseSize(long increaseSize) {
+                totalJunk += increaseSize;
+                mHandler.post(() -> {
+                    final CountEntity countEntity = CleanUtil.formatShortFileSize(totalJunk);
+                    mView.setScanningJunkTotal(countEntity.getTotalSize()+countEntity.getUnit());
+                });
+            }
+
+            @Override
+            public void scanFile(String filePath) {
+
+            }
+        });
+    }
     @SuppressLint("CheckResult")
     public void scanningJunk() {
         fileCount = 0;
         ScanDataHolder.getInstance().setScanState(0);
-        Observable.create(e -> {
+        Disposable disposable = Observable.create(e -> {
             //扫描进程占用内存情况
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
@@ -258,6 +293,19 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::dispatchScanningJunkResult);
 
+        compositeDisposable.add(disposable);
+
+    }
+
+    //清除扫描任务
+    public void stopScanning(){
+//        LogUtils.i("zz----stopScanning()");
+        if(null!=compositeDisposable){
+            if (!compositeDisposable.isDisposed()) {
+                compositeDisposable.clear();
+                compositeDisposable.dispose();
+            }
+        }
     }
     // .compose(mView.bindFragmentEvent(FragmentEvent.DESTROY))
 

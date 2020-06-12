@@ -139,10 +139,8 @@ public class NowCleanActivity extends BaseActivity {
                 totalSize += map.getValue().mSize;
             }
             if (totalSize == 0) {
-                LogUtils.i("zz----showCleanResult");
                 showCleanResult();
             } else {
-                LogUtils.i("zz----ScanResultFragment");
                 ScanResultFragment scanResultFragment = ScanResultFragment.createFragment();
                 replaceFragment(R.id.fl_content, scanResultFragment, false);
             }

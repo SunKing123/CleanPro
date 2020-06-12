@@ -3,10 +3,6 @@ package com.xiaoniu.cleanking.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.ImageView;
-
-import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.LogUtils;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
