@@ -14,10 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.SparseIntArray;
 import android.widget.Toast;
-
-import androidx.collection.SparseArrayCompat;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -35,7 +32,6 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
@@ -457,6 +453,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /*
      * 从服务端获取本地推送的配置
      */
+
     public void getLocalPushConfigFromServer() {
         mModel.getLocalPushConfigFromServer(new Common4Subscriber<LocalPushConfigModel>() {
             @Override
@@ -468,8 +465,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             public void getData(LocalPushConfigModel localPushConfigModel) {
                 List<LocalPushConfigModel.Item> dataList = localPushConfigModel.getData();
                 if (dataList != null && dataList.size() > 0) {
-
                     List<LocalPushConfigModel.Item> pushConfigList = new ArrayList<>();
+
 
                     List<Integer> onlyCode = new ArrayList<>(4);
                     onlyCode.add(LocalPushType.TYPE_NOW_CLEAR);
@@ -483,8 +480,11 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         }
                     }
 
+
+
                     /*-------------测试专用 start----------------*/
-                   /* itemList.clear();
+
+                 /*   pushConfigList.clear();
                     LocalPushConfigModel.Item item = new LocalPushConfigModel.Item();
                     item.setOnlyCode(LocalPushType.TYPE_NOW_CLEAR);
                     item.setIconUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591777551401&di=7c53ecd102576214fee3076839555207&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F68%2F61%2F300000839764127060614318218_950.jpg");
@@ -493,16 +493,16 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     item.setThresholdNum(10);
                     item.setFunctionUsedInterval(1);
                     item.setPopWindowInterval(1);
-                    item.setTitle("手机内存占用#快加速");
-                    item.setContent("假数据的content");
+                    item.setTitle("手机内存占用#快假数据的的的的假数据的");
+                    item.setContent("假数据的content假数据的content假数据的content假数据的content");
                     pushConfigList.add(item);
-                    LogUtils.e("=====:"+new Gson().toJson(pushConfigList));
+*/
 
-                    */
+
                     /*-------------测试专用 end----------------*/
 
 
-
+                    LogUtils.e("=====:" + new Gson().toJson(pushConfigList));
                     //将从服务器获取的本地推送配置信息保存在SP中
                     PreferenceUtil.saveLocalPushConfig(new Gson().toJson(pushConfigList));
                 }
@@ -510,7 +510,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 //限制华为设置启动包活；
                 if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
                     //启动保活进程
-//                    mView.start();
+                    mView.start();
                 }
             }
 

@@ -33,6 +33,11 @@ public class SpCacheConfig {
     public static final String KEY_FUNCTION_COOL = "function_cool";
     //超强省电
     public static final String KEY_FUNCTION_POWER_SAVING = "function_power_saving";
+
+    //本地弹窗的间隔时间(所有的弹窗共享这个时间)
+    public static final String KEY_GLOBAL_POPUP_TIME="local_push_popup_time";
+
+
     //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描完成后的时间
     public static final String KEY_LAST_BACKGROUND_SCAN_TIME = "background_scan_time";
     //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描到的垃圾大小(单位为MB)
@@ -80,6 +85,8 @@ public class SpCacheConfig {
     public static final String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
     public static final String IS_SAVE_CLEAN_TIME = "clean_time";
+    //一键清理间隔时间
+    public static final String IS_SAVE_ONE_KEY_CLEAN_TIME = "one_key_clean_time";
 
     //病毒查杀间隔时间
     public static final String IS_SAVE_VIRUS_TIME = "virus_time";
@@ -164,6 +171,9 @@ public class SpCacheConfig {
     //外部全屏插屏时间、次数
     public static final String POP_FULL_LAYER_TIME = "pop_full_time";
     public static final String POP_FULL_LAYER_NUMBERS = "pop_full_numbers";
+
+    public static final String MKV_KEY_HOME_CLEANED_DATA = "mkv_key_home_cleaned_data";
+
 
 
 }

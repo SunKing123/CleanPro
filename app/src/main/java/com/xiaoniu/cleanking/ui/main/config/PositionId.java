@@ -80,8 +80,8 @@ public class PositionId {
     /*----------------------------------------------广告位置 position_id----------------------------------------------*/
 
 
-    public static final String AD_POSITION_HOT_KP = "hot_kp";   //热启动开屏
-    public static final String AD_POSITION_COLD_KP = "cold_kp";   //冷启动开屏
+    public static final String AD_POSITION_HOT_KP = "hot_kp2.0";   //热启动开屏
+    public static final String AD_POSITION_COLD_KP = "cold_kp2.0";   //冷启动开屏
     public static final String AD_LOCK_SCREEN_ADVERTISING = "lock_screen_advertising";
     public static final String AD_LOCK_SCREEN_ADVERTISING_1_3_0 = "lock_screen_advertising_1.3.0";
     public static final String AD_LOCK_SCREEN_ADVERTISING_1_4_0 = "lock_screen_advertising_1.4.0";   //锁屏页自渲染样式

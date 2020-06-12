@@ -141,7 +141,7 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
      */
     private void cleanComplete() {
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_finish_annimation_page");
-        if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
+        if (PreferenceUtil.getNowCleanTime()) {
             PreferenceUtil.saveNowCleanTime();
         }
 

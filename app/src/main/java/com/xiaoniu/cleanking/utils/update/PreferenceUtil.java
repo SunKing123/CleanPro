@@ -348,6 +348,7 @@ public class PreferenceUtil {
     }
 
 
+
     /**
      * 保存病毒查杀时间
      *
@@ -591,16 +592,28 @@ public class PreferenceUtil {
     }
 
     /**
-     * 保存立即清理清理时间
+     * 保存一键清理清理时间
      *
      * @return
      */
     public static boolean saveNowCleanTime() {
-        Constant.APP_IS_LIVE = "1";
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, System.currentTimeMillis()).commit();
         return true;
+    }
+
+    /**
+     * 是否距离上次一键清理清理间隔至少5分钟
+     *
+     * @return true 5分钟以上 false 小于5分钟
+     */
+    public static boolean getNowCleanTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, 0);
+        if (System.currentTimeMillis() - time > 5 * 60 * 1000)
+            return true;
+        return false;
     }
 
 
@@ -689,18 +702,7 @@ public class PreferenceUtil {
         return true;
     }
 
-    /**
-     * 是否距离上次立即清理清理间隔至少3分钟
-     *
-     * @return true 3分钟以上 false 小于3分钟
-     */
-    public static boolean getNowCleanTime() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, 0);
-        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
-            return true;
-        return false;
-    }
+
 
     /**
      * 保存通知栏清理时间
@@ -1595,16 +1597,16 @@ public class PreferenceUtil {
     }
 
     //保存上一次【清理、加速、降温、省电】弹框的时间
-    public static void saveLastPopupTime(final String functionType, Long timestamp) {
+    public static void saveLastPopupTime(Long timestamp) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(functionType + "last_popup_time", timestamp).apply();
+        editor.putLong(SpCacheConfig.KEY_GLOBAL_POPUP_TIME, timestamp).apply();
     }
 
     //获取上一次【清理、加速、降温、省电】弹框的时间
-    public static Long getLastPopupTime(final String functionType) {
+    public static Long getLastPopupTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
-        return sharedPreferences.getLong(functionType + "last_popup_time", 0L);
+        return sharedPreferences.getLong(SpCacheConfig.KEY_GLOBAL_POPUP_TIME, 0L);
     }
 
 
@@ -1615,7 +1617,7 @@ public class PreferenceUtil {
         editor.putString(functionType + "today_popup_count", dayLimitJson).apply();
     }
 
-    //获取上一次【清理、加速、降温、省电】弹框的时间
+    //获取上一次【清理、加速、降温、省电】弹框的次数
     public static String getPopupCount(final String functionType) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         return sharedPreferences.getString(functionType + "today_popup_count", "");
@@ -1647,7 +1649,6 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         return sharedPreferences.getLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_SIZE, 0L);
     }
-
 
 
     //保存最近一次操作记录
@@ -1703,6 +1704,11 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
+
+
+
+
+
 
 
 }
