@@ -166,18 +166,18 @@ public class ArmVirusKillActivity extends BaseActivity<VirusKillPresenter> imple
 
     @Override
     public void onBackPressedSupport() {
-        switch (VirusKillStatus.code){
+        switch (VirusKillStatus.code) {
             case PAGE_VIEW:
-                Log.e("virusKill","用户浏览页面点击返回");
-                StatisticsUtils.trackClick("system_return_click","用户在病毒查杀页返回","","virus_killing_scan_page");
+                Log.e("virusKill", "用户浏览页面点击返回");
+                StatisticsUtils.trackClick("system_return_click", "用户在病毒查杀页返回", "", "virus_killing_scan_page");
                 break;
             case SCAN:
-                Log.e("virusKill","用户扫描页面点击返回");
-                StatisticsUtils.trackClick("system_return_click","病毒查杀动画页返回","virus_killing_scan_page","virus_killing_animation_page");
+                Log.e("virusKill", "用户扫描页面点击返回");
+                StatisticsUtils.trackClick("system_return_click", "病毒查杀动画页返回", "virus_killing_scan_page", "virus_killing_animation_page");
                 break;
             case COMPLETE:
-                Log.e("virusKill","用户完成页面点击返回");
-                StatisticsUtils.trackClick("system_return_click","病毒查杀动画完成页返回","virus_killing_animation_page","virus_killing_finish_animation_page");
+                Log.e("virusKill", "用户完成页面点击返回");
+                StatisticsUtils.trackClick("system_return_click", "病毒查杀动画完成页返回", "virus_killing_animation_page", "virus_killing_finish_animation_page");
                 break;
         }
         super.onBackPressedSupport();

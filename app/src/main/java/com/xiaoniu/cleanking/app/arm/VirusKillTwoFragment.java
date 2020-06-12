@@ -176,10 +176,6 @@ public class VirusKillTwoFragment extends SimpleFragment {
                 if (lottie != null) {
                     lottie.stopRotationAnimation();
                 }
-                if (PreferenceUtil.getVirusKillTime()) {
-                    PreferenceUtil.saveVirusKillTime();
-                }
-
                 killedCompleteCallBack();
             }
 

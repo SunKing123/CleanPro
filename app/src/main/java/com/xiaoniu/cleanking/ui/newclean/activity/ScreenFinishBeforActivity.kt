@@ -249,7 +249,6 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                     StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
                 }
                 goFinishActivity()
-
             }
 
             override fun adError(info: AdInfo?, errorCode: Int, errorMsg: String?) {
