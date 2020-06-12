@@ -1353,7 +1353,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onCheck(List<HomeRecommendListEntity> list, int pos) {
         if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos ) return;
-        if (pos == 1 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
+        if (pos == 0 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
             loadMorePageFileGeekAd(list.get(pos));
             return;
         }
