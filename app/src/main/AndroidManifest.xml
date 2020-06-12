@@ -400,13 +400,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.main.activity.VirusKillActivity"
-            android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task" />
-
-        <activity
             android:name=".app.arm.ArmVirusKillActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"

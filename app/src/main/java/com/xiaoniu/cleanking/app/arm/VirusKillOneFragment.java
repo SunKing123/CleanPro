@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
+
+import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.PAGE_VIEW;
 
 /**
  * Author: lvdongdong
@@ -66,8 +69,13 @@ public class VirusKillOneFragment extends SimpleFragment {
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        NiuDataAPI.onPageStart("virus_killing_scan_page_view_page", "病毒查杀扫描页浏览");
-        NiuDataAPIUtil.onPageEnd("virus_killing_scan_page_view_page", "病毒查杀扫描页浏览","","virus_killing_scan_page");
+        VirusKillStatus.code=PAGE_VIEW;
+        Log.e("virusKill","=========病毒查杀浏览页面=========");
+
+
+        StatisticsUtils.onPageStart("virus_killing_scan_page_view_page","病毒查杀扫描页浏览");
+        StatisticsUtils.onPageEnd("virus_killing_scan_page_view_page","病毒查杀扫描页浏览","","virus_killing_scan_page");
+
         timer = new CountDownTimer(3000, 30) {
             public void onTick(long millisUntilFinished) {
                 if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 30) + "%");
@@ -89,7 +97,6 @@ public class VirusKillOneFragment extends SimpleFragment {
             }
         }, 500);
     }
-
 
 
     public void onFragmentDestroy() {
@@ -132,13 +139,5 @@ public class VirusKillOneFragment extends SimpleFragment {
 
     public void setFragmentCallBack(FragmentCallBack callBack) {
         this.callBack = callBack;
-    }
-
-
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-             StatisticsUtils.trackClick("system_return_click","用户在病毒查杀页返回", "", "virus_killing_scan_page");
-        }
-        return true;
     }
 }

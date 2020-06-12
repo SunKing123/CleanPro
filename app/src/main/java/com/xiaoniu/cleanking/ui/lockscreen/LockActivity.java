@@ -28,12 +28,12 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.arm.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
@@ -598,11 +598,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
-
     }
 
     public void startVirUsKill() {
-        Intent virusIntent = new Intent(this, VirusKillActivity.class);
+        Intent virusIntent = new Intent(this, ArmVirusKillActivity.class);
         virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         virusIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -15,10 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -45,7 +42,6 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
-import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
@@ -78,7 +74,6 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -93,7 +88,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -1377,14 +1371,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     //启动病毒查杀功能
     private void startKillVirusActivity() {
-        if (PreferenceUtil.getVirusKillTime()) {
-            startActivity(ArmVirusKillActivity.class);
-        } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-            intent.putExtra("title", "病毒查杀");
-            intent.putExtra("main", false);
-            startActivity(intent);
-        }
+        startActivity(ArmVirusKillActivity.class);
+
+//        if (PreferenceUtil.getVirusKillTime()) {
+//            startActivity(ArmVirusKillActivity.class);
+//        } else {
+//            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+//            intent.putExtra("title", "病毒查杀");
+//            intent.putExtra("main", false);
+//            startActivity(intent);
+//        }
     }
 
     //是否显示病毒查杀奖励视频
@@ -1695,7 +1691,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
                 }
-                startActivity(VirusKillActivity.class);
+                startKillVirusActivity();
             }
         });
     }
