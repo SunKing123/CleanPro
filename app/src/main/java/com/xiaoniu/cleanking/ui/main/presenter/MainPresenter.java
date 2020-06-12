@@ -476,7 +476,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
                     for (LocalPushConfigModel.Item item : dataList) {
                         if (onlyCode.contains(item.getOnlyCode())) {
-                            item.setPopWindowInterval(1);
                             pushConfigList.add(item);
                         }
                     }
@@ -511,7 +510,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 //限制华为设置启动包活；
                 if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
                     //启动保活进程
-//                    mView.start();
+                    mView.start();
                 }
             }
 
