@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.utils;
 import android.content.res.AssetManager;
 
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,7 +30,7 @@ public class DbHelper {
             AssetManager assets = AppApplication.getInstance().getAssets();
             //执行文件复制
             try {
-                InputStream open = assets.open("clean_db.db");
+                InputStream open = assets.open(Constant.CLEAN_DB_NAME);
                 FileOutputStream fos = new FileOutputStream(file);
                 byte[] bs = new byte[1024];
                 int len;

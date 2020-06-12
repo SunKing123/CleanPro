@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 public class CleanSqlHelper extends SQLiteOpenHelper {
 
     public CleanSqlHelper(@Nullable Context context) {
-        super(context, "clean_db.db", null, 1);
+        super(context, "databases/clean_list.db", null, 1);
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
+import com.huma.room_for_asset.RoomAsset;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
@@ -38,6 +39,7 @@ import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
 import com.xiaoniu.cleanking.lifecyler.LifecycleHelper;
 import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
 import com.xiaoniu.cleanking.room.AppDataBase;
+import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
@@ -76,6 +78,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     private static final String TAG = "Tinker.ApplicationDelegate";
     private static AppDataBase mAppDatabase;
+    private static AppPathDataBase mAppPathDataBase;
 
 
     @Override
@@ -170,6 +173,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
+
+        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "clean_list.db")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
 
@@ -177,6 +185,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         return mAppDatabase;
     }
 
+    public static AppPathDataBase getAppPathDatabase() {
+        return mAppPathDataBase;
+    }
     public static AppComponent getAppComponent() {
         return mAppComponent;
     }

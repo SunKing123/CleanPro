@@ -61,7 +61,7 @@ public class GreenDaoManager {
         if (mInstance == null) {
 
             //数据库升级
-            DaoMaster.OpenHelper openHelper = new UpgradeSQLiteOpenHelper(ContextUtils.getApplication(), Constant.CLEAN_DB_NAME, null);
+            DaoMaster.OpenHelper openHelper = new UpgradeSQLiteOpenHelper(ContextUtils.getApplication(), Constant.WEATHER_DB_NAME, null);
             mWeatherCityDaoMaster = new DaoMaster(openHelper.getWritableDatabase());
             mWeatherCityDaoSession = mWeatherCityDaoMaster.newSession();
 

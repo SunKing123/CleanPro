@@ -159,9 +159,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         });
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
-            readyExternalDb();
-        }
+//        readCleanExternalDb();
+//        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
+//            readyWeatherExternalDb();
+//        }
     }
 
 
@@ -234,7 +235,37 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     /**
      * 拷贝数据库表
      */
-    public void readyExternalDb() {
+    public void readyWeatherExternalDb() {
+        new AsyncTask<String, Integer, Boolean>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+            }
+
+            @Override
+            protected Boolean doInBackground(String... strings) {
+                FileUtils.copyDbFile(ContextUtils.getApplication(), Constant.WEATHER_DB_NAME);
+                PreferenceUtil.getInstants().saveInt(Constant.CLEAN_DB_SAVE,1);
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+
+
+            }
+        }.execute();
+
+
+    }
+
+    public void readCleanExternalDb(){
         new AsyncTask<String, Integer, Boolean>() {
             @Override
             protected void onPreExecute() {
