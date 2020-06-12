@@ -238,13 +238,19 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_16sp" />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="getIcon"
+                    android:text="加载图标测试"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
+
 
             </LinearLayout>
-            <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
-                android:id="@+id/view_top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/view_lottie_bottom"
                 android:layout_width="300dp"
@@ -252,7 +258,17 @@
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
                 app:lottie_loop="true" />
+            <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
+                android:id="@+id/view_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
 
+            <ImageView
+                android:id="@+id/icon_app"
+                android:layout_width="@dimen/dimen_150dp"
+                android:layout_height="@dimen/dimen_50dp">
+            </ImageView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

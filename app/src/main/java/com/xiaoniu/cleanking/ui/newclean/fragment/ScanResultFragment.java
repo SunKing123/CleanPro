@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hellogeek.permission.strategy.ExternalInterface;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkResultWrapper;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
@@ -107,7 +109,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
 
     @Override
     protected void initData() {
-        final LinkedHashMap<ScanningResultType, JunkGroup> groupLinkedHashMap = ((NowCleanActivity) requireActivity()).getJunkGroups();
+        final LinkedHashMap<ScanningResultType, JunkGroup> groupLinkedHashMap = ScanDataHolder.getInstance().getmJunkGroups();
         //构造清理数据模型
         presenter.buildJunkResultModel(groupLinkedHashMap);
 //        //广告
@@ -188,10 +190,10 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
         tv_junk_total.setText(totalSize);
         tv_junk_unit.setText(unit);
 
-        HashMap<String, Object> numParam = new HashMap<>();
-        numParam.put("number_of_documents", ((NowCleanActivity) requireActivity()).getScanningFileCount());
-        StatisticsUtils.customTrackEvent("number_of_documents", "垃圾清理_扫描结果_文件数量",
-                "clean_scan_page", "clean_scan_result_page", numParam);
+//        HashMap<String, Object> numParam = new HashMap<>();
+//        numParam.put("number_of_documents", ((NowCleanActivity) requireActivity()).getScanningFileCount());
+//        StatisticsUtils.customTrackEvent("number_of_documents", "垃圾清理_扫描结果_文件数量",
+//                "clean_scan_page", "clean_scan_result_page", numParam);
     }
 
     @Override

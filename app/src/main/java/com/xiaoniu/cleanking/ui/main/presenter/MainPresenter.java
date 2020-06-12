@@ -510,7 +510,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 //限制华为设置启动包活；
                 if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
                     //启动保活进程
-                    mView.start();
+//                    mView.start();
                 }
             }
 

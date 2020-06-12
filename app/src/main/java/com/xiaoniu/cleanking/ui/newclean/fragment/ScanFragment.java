@@ -24,6 +24,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -180,8 +181,8 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
             totalJunkSize += map.getValue().mSize;
         }
         CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalJunkSize);
-        ((NowCleanActivity) getActivity()).setCountEntity(mCountEntity);
-        ((NowCleanActivity) getActivity()).setJunkGroups(junkGroups);
+        ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
+        ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
         ((NowCleanActivity) getActivity()).scanFinish();
 
         //重置颜色变化状态
@@ -198,7 +199,7 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
 
     @Override
     public void setScanningFileCount(int fileCount) {
-        ((NowCleanActivity) requireActivity()).setScanningFileCount(fileCount);
+//        ((NowCleanActivity) requireActivity()).setScanningFileCount(fileCount);
     }
 
     /**

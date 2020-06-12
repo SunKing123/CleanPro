@@ -1,21 +1,24 @@
 package com.xiaoniu.cleanking.widget;
 
 import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.airbnb.lottie.LottieDrawable;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.bean.LottiePathdata;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,11 +30,14 @@ import java.util.Map;
 public class OneKeyCircleButtonView extends RelativeLayout {
 
     private Context mContext;
-    private LottieAnimationView viewLottieLower;
-    private LottieAnimationView viewLottieTop;
-    private ImageView ivCenter;
+    private LottieAnimationView viewLottieRed;
+    private LottieAnimationView viewLottieYellow;
+    private LottieAnimationView viewLottieGreen;
+    private List<LottieAnimationView> lottieList;
+    private TouchImageView ivCenter;
     private Map<Integer, LottiePathdata> lottiePathdataMap;
-    private int lottieIndex =1;
+    private int lottieIndex =0;
+    private TextView tv_file_total_size;
     public OneKeyCircleButtonView(Context context) {
         super(context);
         initView(context);
@@ -54,97 +60,143 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void initView(Context context) {
         mContext = context;
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_home_top_circle_anim, this, true);
-        viewLottieLower = (LottieAnimationView) v.findViewById(R.id.view_lottie_lower);
-        viewLottieTop = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_tag01);
-        ivCenter = (ImageView) v.findViewById(R.id.iv_center);
-        setViewLayoutParms();
+        viewLottieRed = (LottieAnimationView) v.findViewById(R.id.view_lottie_lower_red);
+        viewLottieYellow = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_yellow);
+        viewLottieGreen = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_green);
+        tv_file_total_size = (TextView)v.findViewById(R.id.tv_file_total_size);
+        lottieList = new ArrayList<>();
+        lottieList.add(viewLottieGreen);
+        lottieList.add(viewLottieYellow);
+        lottieList.add(viewLottieRed);
         setlottieData();
+        ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
+        setViewLayoutParms();
+
     }
 
     public void setViewLayoutParms(){
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)viewLottieTop.getLayoutParams();
-        layoutParams.height = screenWidth;
-        layoutParams.width = screenWidth;
-        viewLottieTop.setLayoutParams(layoutParams);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieYellow.getLayoutParams();
+        layoutParams.height = Float.valueOf(screenWidth*1.2f).intValue();
+        layoutParams.width = Float.valueOf(screenWidth*1.2f).intValue();
+        viewLottieYellow.setLayoutParams(layoutParams);
+        viewLottieRed.setLayoutParams(layoutParams);
+        viewLottieGreen.setLayoutParams(layoutParams);
 
         RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams)ivCenter.getLayoutParams();
-        imglayoutParams.height = Float.valueOf(screenWidth*0.447f).intValue();
-        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f).intValue();
+        imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
+        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
     }
 
     public void startLottie(){
-        lottieIndex = 1;
-        playLottie(viewLottieTop,lottiePathdataMap.get(lottieIndex),lottieIndex);
-        viewLottieTop.addAnimatorListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+        lottieIndex = 0;
+        playLottie(lottieIndex);
 
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if (lottieIndex <= 5) {
-                    lottieIndex++;
-                    playLottie(viewLottieTop, lottiePathdataMap.get(lottieIndex),lottieIndex);
-                }
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
     }
 
-    public void playLottie(LottieAnimationView lottieview,LottiePathdata pathdata,int lottieIndex){
-        if (lottieIndex != 1 && lottieIndex % 2 == 1) {
-            lottieview.setAlpha(0f);
-        }
+    public void playLottie(int index){
+        LottieAnimationView lottieview = lottieList.get(index);
+        LottiePathdata pathdata = lottiePathdataMap.get(index);
+        lottieview.setAlpha(0f);
         lottieview.setVisibility(VISIBLE);
         lottieview.animate()
                 .alpha(1f)
                 .setDuration(500)
                 .setListener(null);
-        if(lottieIndex ==6){
-            lottieview.setRepeatCount(LottieDrawable.INFINITE);
-        }
         lottieview.setAnimation(pathdata.getJsonPath());
         lottieview.setImageAssetsFolder(pathdata.getImgPath());
         lottieview.playAnimation();
+        setCenterImg(index);
+        lottieview.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
 
-        setCenterImg(lottieIndex);
+            @Override
+            public void onAnimationEnd(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                //当前动画隐藏
+                if (null != lottieview.getTag() && lottieview.getTag().toString().trim().equals("stoped"))
+                    return;
+                if(lottieIndex != 2){  //最后一个不隐藏
+                    lottieview.setTag("stoped");
+                    lottieview.setAlpha(1f);
+                    lottieview.setVisibility(VISIBLE);
+                    lottieview.animate()
+                            .alpha(0f)
+                            .setDuration(500)
+                            .setListener(new Animator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    lottieview.cancelAnimation();
+                                    lottieview.clearAnimation();
+                                    lottieview.setVisibility(GONE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animator animation) {
+
+                                }
+                            });
+                }
+
+                //下个动画
+                if (lottieIndex <= 1){
+                    lottieIndex++;
+                    playLottie(lottieIndex);
+                }
+
+            }
+        });
     }
 
-    public void cancleLottie(LottieAnimationView lottieview){
-        lottieview.cancelAnimation();
-        lottieview.clearAnimation();
+
+    public void setTotalSize(String size){
+        tv_file_total_size.setText(size);
+    }
+    public void scanFinish(){
+        LottiePathdata pathdata = lottiePathdataMap.get(3);
+        LottieAnimationView lottieAnimationView = lottieList.get(2);
+        lottieAnimationView.setAnimation(pathdata.getJsonPath());
+        lottieAnimationView.setImageAssetsFolder(pathdata.getImgPath());
+        lottieAnimationView.playAnimation();
     }
 
+    //正常扫描流程
     public void setlottieData(){
         lottiePathdataMap = new HashMap<>();
-        lottiePathdataMap.put(1,new LottiePathdata("home_top_scan/anim01a/data.json","home_top_scan/anim01a/images"));
-        lottiePathdataMap.put(2,new LottiePathdata("home_top_scan/anim01b/data.json","home_top_scan/anim01b/images"));
-        lottiePathdataMap.put(3,new LottiePathdata("home_top_scan/anim02a/data.json","home_top_scan/anim02a/images"));
-        lottiePathdataMap.put(4,new LottiePathdata("home_top_scan/anim02b/data.json","home_top_scan/anim02b/images"));
-        lottiePathdataMap.put(5,new LottiePathdata("home_top_scan/anim03a/data.json","home_top_scan/anim03a/images"));
-        lottiePathdataMap.put(6,new LottiePathdata("home_top_scan/anim03b/data.json","home_top_scan/anim03b/images"));
+        lottiePathdataMap.put(0,new LottiePathdata("home_top_scan/anim01a/data.json","home_top_scan/anim01a/images"));
+        lottiePathdataMap.put(1,new LottiePathdata("home_top_scan/anim02a/data.json","home_top_scan/anim02a/images"));
+        lottiePathdataMap.put(2,new LottiePathdata("home_top_scan/anim03a/data.json","home_top_scan/anim03a/images"));
+        lottiePathdataMap.put(3,new LottiePathdata("home_top_scan/anim03b/data.json","home_top_scan/anim03b/images"));
     }
 
     public void setCenterImg(int index) {
         ivCenter.setVisibility(VISIBLE);
-        if (index <= 2) {
-            ivCenter.setImageResource(R.drawable.icon_circle_btn_green);
-        } else if (index > 2 && index <= 4) {
-            ivCenter.setImageResource(R.drawable.icon_circle_btn_yellow);
-        } else if (index > 4) {
-            ivCenter.setImageResource(R.drawable.icon_circle_btn_red);
+        if (index == 0) {
+            ivCenter.setImageResource(R.drawable.icon_circle_btn_white);
+        } else if (index == 1) {
+            ivCenter.setImageResource(R.drawable.icon_circle_btn_white);
+        } else if (index == 2) {
+            ivCenter.setImageResource(R.drawable.icon_circle_btn_white);
         }
 
     }
