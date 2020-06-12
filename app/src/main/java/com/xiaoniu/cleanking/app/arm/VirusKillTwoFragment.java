@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -66,7 +67,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
     @BindView(R.id.fl_anim)
     FrameLayout flAnim;
     @BindView(R.id.flyTop)
-    LinearLayout flyTop;
+    RelativeLayout flyTop;
 
     @Override
     protected int getLayoutId() {
