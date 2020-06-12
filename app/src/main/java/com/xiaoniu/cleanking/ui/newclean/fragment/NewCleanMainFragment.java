@@ -1371,16 +1371,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     //启动病毒查杀功能
     private void startKillVirusActivity() {
-        startActivity(ArmVirusKillActivity.class);
-
-//        if (PreferenceUtil.getVirusKillTime()) {
-//            startActivity(ArmVirusKillActivity.class);
-//        } else {
-//            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-//            intent.putExtra("title", "病毒查杀");
-//            intent.putExtra("main", false);
-//            startActivity(intent);
-//        }
+        if (PreferenceUtil.getVirusKillTime()) {
+            startActivity(ArmVirusKillActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            intent.putExtra("title", "病毒查杀");
+            intent.putExtra("main", false);
+            startActivity(intent);
+        }
     }
 
     //是否显示病毒查杀奖励视频
