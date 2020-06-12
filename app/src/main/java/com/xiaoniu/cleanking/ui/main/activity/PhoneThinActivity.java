@@ -250,4 +250,9 @@ public class PhoneThinActivity extends BaseActivity<PhoneThinPresenter> {
             StatisticsUtils.trackClick("system_return_back","\"手机返回\"点击"  ,"","one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

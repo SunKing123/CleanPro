@@ -5,10 +5,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -30,6 +35,7 @@ import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.DeviceUtils;
@@ -49,6 +55,7 @@ public class DebugActivity extends BaseActivity {
     private static final String TAG = "DebugActivity";
     private TextView tv_lottie;
     private LottieAnimationView lottieAnimationView;
+    private ImageView icon_app;
 
     private OneKeyCircleButtonView oneKeyCircleButtonView;
     @Override
@@ -68,6 +75,7 @@ public class DebugActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        icon_app = findViewById(R.id.icon_app);
         oneKeyCircleButtonView = findViewById(R.id.view_top);
         tv_lottie = findViewById(R.id.tv_lottie);
         frame_layout = findViewById(R.id.frame_layout);
@@ -91,7 +99,11 @@ public class DebugActivity extends BaseActivity {
 
 
     public void playLottie(View view){
-        oneKeyCircleButtonView.startLottie();
+//        oneKeyCircleButtonView.startLottie();
+        lottieAnimationView.setAnimation("home_top_scan/anim10/data.json");
+        lottieAnimationView.setImageAssetsFolder("home_top_scan/anim10/images");
+        lottieAnimationView.playAnimation();
+        lottieAnimationView.setVisibility(VISIBLE);
     }
     public void toHomeClean(View view) {
         //原生带参数 native协议
@@ -367,6 +379,43 @@ public class DebugActivity extends BaseActivity {
         screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_02);
         context.startActivity(screenIntent);
     }
+
+
+
+    public void getIcon(View view){
+        FileQueryUtils fileQueryUtils = new FileQueryUtils();
+        ApplicationInfo applicationInfo = fileQueryUtils.installedAppList.get(0);
+        try {
+            Resources resources=mContext.getPackageManager().getResourcesForApplication(applicationInfo);
+            LogUtils.i("zz---"+applicationInfo.icon);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                icon_app.setImageDrawable(resources.getDrawable(applicationInfo.icon,null));
+            }else
+            {
+                icon_app.setImageDrawable(resources.getDrawable(applicationInfo.icon));
+
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+  /*  *//**
+     * 获取App图标
+     *
+     * @param applicationInfo
+     * @return
+     *//*
+    private Drawable getAppIcon(ApplicationInfo applicationInfo) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return applicationInfo.loadIcon(mContext.getPackageManager());
+        }
+        LogUtils.i("zz---icon--"+applicationInfo.icon);
+        PackageManager pm = AppApplication.getInstance().getPackageManager();
+        applicationInfo.icon;
+        return pm.getApplicationIcon(applicationInfo);
+    }*/
+
 
 
 

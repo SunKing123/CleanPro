@@ -29,8 +29,11 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
+import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
@@ -42,6 +45,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
@@ -59,6 +63,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -123,13 +128,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private int mCurrentPosition = 1;
     private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
     private boolean mShowRedFirst; //红包是否已经展示
-
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
     private NewCleanMainFragment mainFragment;
-
     private final String TAG = "GeekSdk";
-
 //    private MyHandler mHandler = new MyHandler(this);
 
   /*  private class MyHandler extends Handler {
@@ -230,11 +232,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //初始插屏广告开关
         mPresenter.getScreentSwitch();
         //获取定位权限
-        mPresenter.requestLocationPermission();
+        mPresenter.requestPhoneStatePermission();
         //测试入口
-//        if (BuildConfig.DEBUG) {
-//            AppConfig.showDebugWindow(mContext);
-//        }
+        if (BuildConfig.DEBUG) {
+            AppConfig.showDebugWindow(mContext);
+        }
     }
 
     @Override
