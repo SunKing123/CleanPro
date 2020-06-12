@@ -118,11 +118,11 @@ public class TimingReceiver extends BroadcastReceiver {
                     startActivity(context);
 
                     long lastAppPressHome = MmkvUtil.getLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
-                    LogUtils.e("======上次 APP Home时间：" + lastAppPressHome);
 
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
+                        LogUtils.e("======距离上次清理APP触发Home键过了" + period + "秒");
                         if (period < 10 * 60) {
                             return;
                         }
