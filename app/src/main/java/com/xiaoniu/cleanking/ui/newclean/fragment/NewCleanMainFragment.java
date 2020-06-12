@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -35,6 +37,7 @@ import com.xiaoniu.cleanking.app.arm.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.MainTableItem;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
@@ -46,11 +49,13 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
+import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.VirusLlistEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -62,6 +67,7 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
@@ -72,6 +78,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.MainTableView;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
@@ -91,7 +98,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
@@ -103,6 +112,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -167,7 +178,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private boolean mIsClickAdCenterDetail; //顶部广告点击是否跳转详情还是下载
     private boolean mIsTopAdExposed; //广告是否曝光
     private boolean mIsCenterAdExposed; //广告是否曝光
-
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private RxPermissions rxPermissions;
     private static final String TAG = "GeekSdk";
 
     @Override
@@ -177,6 +189,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     protected void initView() {
+        rxPermissions = new RxPermissions(requireActivity());
         tvNowClean.setVisibility(View.VISIBLE);
         EventBus.getDefault().register(this);
         showHomeLottieView();
@@ -192,7 +205,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             mainTableView.killVirusNormalStyle(getActivity());
         }
-
+        mPresenter.readyScanningJunk();
+        mPresenter.checkStoragePermission();
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
@@ -755,8 +769,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.iv_center)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
         ((MainActivity) getActivity()).commitJpushClickTime(1);
+        //getScanState ==0//扫描中
+        if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {
+            startActivity(NowCleanActivity.class);
+        } else {
+            checkStoragePermission();
+        }
+
+//        startActivity(NowCleanActivity.class);
+      /*  checkStoragePermission();
         if (true) {
             startActivity(NowCleanActivity.class);
         } else {
@@ -784,9 +806,31 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 bundle.putString("home", "");
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
-        }
+        }*/
     }
 
+
+    /**
+     * 检查文件存贮权限
+     */
+
+    private void checkStoragePermission() {
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Disposable disposable = rxPermissions.request(permissions)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        mPresenter.scanningJunk();
+                    } else {
+                        if (hasPermissionDeniedForever()) {
+//                          showPermissionDialog();
+                        } else {
+                            checkStoragePermission();
+                        }
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
 
     private void toSpeedGame() {
         isGameMain = true;
@@ -1212,8 +1256,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
     }
 
 
@@ -1698,5 +1746,34 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 startActivity(VirusKillActivity.class);
             }
         });
+    }
+
+
+    /**
+     * 是否有权限被永久拒绝
+     */
+    private boolean hasPermissionDeniedForever() {
+        boolean hasDeniedForever = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                hasDeniedForever = true;
+            }
+        }
+        return hasDeniedForever;
+    }
+
+
+    public void setScanningFinish(LinkedHashMap<ScanningResultType, JunkGroup> junkGroups) {
+        long totalJunkSize = 0;
+        for (Map.Entry<ScanningResultType, JunkGroup> map : junkGroups.entrySet()) {
+            totalJunkSize += map.getValue().mSize;
+        }
+        CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalJunkSize);
+        ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
+        ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
+        ScanDataHolder.getInstance().setScanState(1);
+//        ((NowCleanActivity) getActivity()).scanFinish();
+//        //重置颜色变化状态
+//        lottie_animation_view.pauseAnimation();
     }
 }
