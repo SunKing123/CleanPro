@@ -13,50 +13,42 @@ public class LocalPushUtils {
     }
 
 
-
-
     private static class Holder {
         static LocalPushUtils pushHandle = new LocalPushUtils();
     }
 
     public static LocalPushUtils getInstance() {
-         return Holder.pushHandle;
+        return Holder.pushHandle;
     }
-
-
-
-
-
-
 
 
     private boolean commonParamsVerify(LocalPushConfigModel.Item config, String functionType) {
         //1.先判断今天允许弹出的次数是否小于最大次数
         if (isTodayLimitAllowed(config, functionType)) {
-            LogUtils.e("===当日总次数验证通过==");
+            LogUtils.e("===当日总次数验证通过:" + functionType);
             Long currentTimeStamp = System.currentTimeMillis();
             //2.判断距上次使用该功能是否已经大于配置指定的时间
             Long lastUsedTime = PreferenceUtil.getLastUseFunctionTime(functionType);
             //计算上次使用该功能距离现在过于多少分钟
             long elapseUsedTime = DateUtils.getMinuteBetweenTimestamp(currentTimeStamp, lastUsedTime);
             if (elapseUsedTime >= config.getFunctionUsedInterval()) {
-                LogUtils.e("===上次使用功能时间验证通过==");
+                LogUtils.e("===上次使用功能时间验证通过:" + functionType);
                 //判断上次弹框的时间是否已经大于配置指定的时间
-                Long lastPopTime = PreferenceUtil.getLastPopupTime(functionType);
+                Long lastPopTime = PreferenceUtil.getLastPopupTime();
                 //计算上次弹框距离现在过于多少分钟
                 long elapsePopTime = DateUtils.getMinuteBetweenTimestamp(currentTimeStamp, lastPopTime);
                 if (elapsePopTime >= config.getPopWindowInterval()) {
-                    LogUtils.e("===上次弹框时间验证通过==");
+                    LogUtils.e("===上次弹框时间验证通过:" + functionType);
                 } else {
-                    LogUtils.e("===上次弹框时间验证不通过==");
+                    LogUtils.e("===上次弹框时间验证不通过:" + functionType);
                 }
                 return elapsePopTime >= config.getPopWindowInterval();
             } else {
-                LogUtils.e("===上次使用功能时间验证不通过==");
+                LogUtils.e("===上次使用功能时间验证不通过:" + functionType);
                 return false;
             }
         } else {
-            LogUtils.e("===当日总次数验证不通过==");
+            LogUtils.e("===当日总次数验证不通过:" + functionType);
             return false;
         }
     }
@@ -77,14 +69,8 @@ public class LocalPushUtils {
     }
 
 
-    public boolean allowPopCool(LocalPushConfigModel.Item config, int temperature) {
-        if (commonParamsVerify(config, SpCacheConfig.KEY_FUNCTION_COOL)) {
-            //降温在满足公共条件的情况下，还要判断是否大于温度的阈值
-            LogUtils.e("=====:当前设备温度：" + temperature + "  阈值温度：" + config.getThresholdNum());
-            return temperature > config.getThresholdNum();
-        } else {
-            return false;
-        }
+    public boolean allowPopCool(LocalPushConfigModel.Item config) {
+        return commonParamsVerify(config, SpCacheConfig.KEY_FUNCTION_COOL);
     }
 
 
@@ -108,10 +94,11 @@ public class LocalPushUtils {
         //1.先判断今天的次数是否小于最大次数
         String dayLimitJson = PreferenceUtil.getPopupCount(functionType);
         if (TextUtils.isEmpty(dayLimitJson)) {
+            LogUtils.e("===第一次弹框次数为0：" + " 当前最大次数是:" + config.getDailyLimit() + " 类型：" + functionType);
             return true;
         } else {
-            LogUtils.e("===dayLimitJson==:" + dayLimitJson);
             DayLimit dayLimit = new Gson().fromJson(dayLimitJson, DayLimit.class);
+            LogUtils.e("===弹框次数为:" + new Gson().toJson(dayLimit) + "  当前最大次数是:" + config.getDailyLimit() + " 类型：" + functionType);
             //如果是同一天判断次数是否小于配置的最大次数
             if (DateUtils.isSameDay(System.currentTimeMillis(), dayLimit.getUpdateTime())) {
                 return dayLimit.getAlreadyPopCount() < config.getDailyLimit();
@@ -126,7 +113,7 @@ public class LocalPushUtils {
     public void updateLastPopTime(int onlyCode) {
         String type = getFuncTypeByOnlyCode(onlyCode);
         if (!TextUtils.isEmpty(type)) {
-            PreferenceUtil.saveLastPopupTime(type, System.currentTimeMillis());
+            PreferenceUtil.saveLastPopupTime(System.currentTimeMillis());
         }
     }
 

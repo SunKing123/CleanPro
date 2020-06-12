@@ -42,6 +42,7 @@ public class LocalPushConfigModel extends BaseEntity {
 
         //本地变量-温度
         public int temp;
+        public int power;
 
 
         public String getIconUrl() {
