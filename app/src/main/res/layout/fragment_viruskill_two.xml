@@ -34,7 +34,7 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/flyTop"
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="2"
+        android:layout_marginTop="140dp"
         android:orientation="vertical">
 
         <com.jess.arms.widget.LeiDaView
@@ -83,14 +83,16 @@
         android:id="@+id/llyContext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dimen_80dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -136,6 +138,6 @@
 
     </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

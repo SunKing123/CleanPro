@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#06C581">
 
     <RelativeLayout
         android:id="@+id/v_lottie"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#06C581">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_120dp">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie"
@@ -42,10 +43,11 @@
             android:id="@+id/tv_net_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lottie"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_100dp"
+            android:layout_below="@+id/lottie"
             android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16sp" />
+            android:textSize="@dimen/dimen_18sp" />
     </RelativeLayout>
 
 

@@ -2,18 +2,23 @@ package com.xiaoniu.cleanking.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.util.Util;
 
@@ -45,15 +50,34 @@ public class GlideUtils {
     }
 
     public static void loadRoundImage(Activity context, String url, ImageView imageView, int round) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            if (null != context && !context.isDestroyed()) {
-                try {
-                    Glide.with(context).load(url)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCorners(round)))
-                            .into(imageView);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (null != context && !context.isDestroyed()) {
+            try {
+                Glide.with(context).load(url)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCorners(round)))
+                        .into(imageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void loadRoundImage(Context context, String url, ImageView imageView, int round) {
+        if (null != context) {
+            try {
+                RequestOptions options = new RequestOptions().transform(new CenterCrop());
+                Glide.with(context).asBitmap().load(url)
+                        .apply(options).into(new BitmapImageViewTarget(imageView) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        super.setResource(resource);
+                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        roundedBitmapDrawable.setCornerRadius(round);
+                        imageView.setImageDrawable(roundedBitmapDrawable);
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

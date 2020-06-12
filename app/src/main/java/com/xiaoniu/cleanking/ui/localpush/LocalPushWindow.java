@@ -42,7 +42,7 @@ public class LocalPushWindow {
 
         AppCompatImageView icon = mView.findViewById(R.id.logo);
         if (!TextUtils.isEmpty(item.getIconUrl())) {
-            GlideUtils.loadImage(context, item.getIconUrl(), icon);
+            GlideUtils.loadRoundImage(context, item.getIconUrl(), icon, 20);
         }
 
         AppCompatTextView title = mView.findViewById(R.id.title);
@@ -56,21 +56,21 @@ public class LocalPushWindow {
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY;
                 long size = PreferenceUtil.getLastScanRubbishSize();
                 button.setText("立即清理");
-                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>" + size + "MB</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + size + "MB</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 break;
             case LocalPushType.TYPE_SPEED_UP:
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY;
                 int random = NumberUtils.mathRandomInt(70, 85);
-                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>" + random + "%</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + random + "%</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("一键加速");
                 break;
             case LocalPushType.TYPE_PHONE_COOL:
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY;
-                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>" + item.temp + "°</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + item.temp + "°</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("一键降温");
                 break;
             case LocalPushType.TYPE_SUPER_POWER:
-                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>"+item.power+"%</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + item.power + "%</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("立即省电");
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY;
                 break;
@@ -86,7 +86,7 @@ public class LocalPushWindow {
         //自定义toast文本
         mView.findViewById(R.id.button).setOnClickListener(v -> {
             if (!TextUtils.isEmpty(urlSchema)) {
-                StatisticsUtils.trackClick("local_push_window_click","本地推送弹窗点击","","local_push_window");
+                StatisticsUtils.trackClick("local_push_window_click", "本地推送弹窗点击", "", "local_push_window");
                 hide();
                 SchemeProxy.openScheme(context, urlSchema);
             }

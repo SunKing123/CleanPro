@@ -167,7 +167,7 @@ public class MainTableView extends RecyclerView {
             protected void visibleLine() {
                 int position = getAdapterPosition();
                 //the gridView right line is gone。
-                if (position % 3 == 0) {
+                if ((position + 1) % 3 == 0) {
                     itmMTView.setLineVisible(View.GONE);
                 }
             }
@@ -346,13 +346,13 @@ public class MainTableView extends RecyclerView {
     public void killVirusNormalStyle(Context context) {
         itmVirusKill.clearMark();
         itmVirusKill.setText("病毒查杀");
-        itmVirusKill.loadDrawable(context,R.drawable.icon_virus);
+        itmVirusKill.loadDrawable(context, R.drawable.icon_virus);
     }
 
     public void killVirusWarningStyle(Context context) {
         itmVirusKill.setMarkText("有风险");
         itmVirusKill.setText("病毒查杀");
-        itmVirusKill.loadDrawable(context,R.drawable.icon_virus);
+        itmVirusKill.loadDrawable(context, R.drawable.icon_virus);
     }
 
     public void killVirusCleanWarningStyle() {
