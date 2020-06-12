@@ -254,7 +254,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
      */
     public void cleanFinish() {
         AppHolder.getInstance().setCleanFinishSourcePageId("clean_finish_annimation_page");
-        if (PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE)) {
+        if (PreferenceUtil.getNowCleanTime()) {
             PreferenceUtil.saveNowCleanTime();
         }
         LocalPushUtils.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_CLEAR_RUBBISH);

@@ -80,6 +80,8 @@ public class SpCacheConfig {
     public static final String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
     public static final String IS_SAVE_CLEAN_TIME = "clean_time";
+    //一键清理间隔时间
+    public static final String IS_SAVE_ONE_KEY_CLEAN_TIME = "one_key_clean_time";
 
     //病毒查杀间隔时间
     public static final String IS_SAVE_VIRUS_TIME = "virus_time";
@@ -164,6 +166,9 @@ public class SpCacheConfig {
     //外部全屏插屏时间、次数
     public static final String POP_FULL_LAYER_TIME = "pop_full_time";
     public static final String POP_FULL_LAYER_NUMBERS = "pop_full_numbers";
+
+    public static final String MKV_KEY_HOME_CLEANED_DATA = "mkv_key_home_cleaned_data";
+
 
 
 }

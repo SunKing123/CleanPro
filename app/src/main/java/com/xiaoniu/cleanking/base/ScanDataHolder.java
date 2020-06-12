@@ -1,8 +1,11 @@
 package com.xiaoniu.cleanking.base;
 
+import com.comm.jksdk.utils.MmkvUtil;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.utils.LogUtils;
 
@@ -36,16 +39,21 @@ public class ScanDataHolder {
     private int scanState = 0;
     private CountEntity mCountEntity;
     private int scanningFileCount = 0;
-    private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups;
+    private long prevScanTime = 0;  //扫描缓存时间
+    private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups;   //扫描缓存
     private LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap;
 
 
     public int getScanState() {
+        if (System.currentTimeMillis() - prevScanTime > 5 * 60 * 1000) {  //五分钟缓存
+            scanState = 0;
+        }
         return scanState;
     }
 
     public void setScanState(int scanState) {
         LogUtils.i("zz----setScanState()--"+scanState);
+
         this.scanState = scanState;
     }
 
@@ -63,6 +71,7 @@ public class ScanDataHolder {
 
     public void setmJunkGroups(LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups) {
         this.mJunkGroups = mJunkGroups;
+        prevScanTime = System.currentTimeMillis();
     }
 
     public LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> getJunkContentMap() {
