@@ -302,26 +302,27 @@ public class NumberUtils {
 
     /**
      * 产生n位随机数
+     *
      * @return
      */
-    public static long generateRandomNumber(int n){
-        if(n<1){
+    public static long generateRandomNumber(int n) {
+        if (n < 1) {
             throw new IllegalArgumentException("随机数位数必须大于0");
         }
-        return (long)(Math.random()*9*Math.pow(10,n-1)) + (long)Math.pow(10,n-1);
+        return (long) (Math.random() * 9 * Math.pow(10, n - 1)) + (long) Math.pow(10, n - 1);
     }
-
 
 
     /**
      * 获取文件中保存的uuid，可能是生成的随机字符串
+     *
      * @param context
      * @return
      */
-    public static synchronized String getSpUuid(Context context){
+    public static synchronized String getSpUuid(Context context) {
         String uuid = null;
-        if(TextUtils.isEmpty(uuid)){
-            if(TextUtils.isEmpty(uuid)) {
+        if (TextUtils.isEmpty(uuid)) {
+            if (TextUtils.isEmpty(uuid)) {
                 //获取失败，则生成随机数保存
                 //"uuid": 接口请求传的"aa3a1cc2ab24c049_28b2748c"
                 uuid = "jk_clean" + DateUtils.getCurrentSimpleYYYYMMDDHHMM() + "_" + generateRandomNumber(8);
@@ -333,31 +334,30 @@ public class NumberUtils {
 
     /**
      * 生成一个startNum 到 endNum之间的随机数(不包含endNum的随机数)
+     *
      * @param startNum
      * @param endNum
      * @return
      */
-    public static int getNum(int startNum,int endNum){
-        if(endNum > startNum){
+    public static int getNum(int startNum, int endNum) {
+        if (endNum > startNum) {
             Random random = new Random();
             return random.nextInt(endNum - startNum) + startNum;
         }
         return 0;
     }
 
-
-
-
     /**
      * 生成一个startNum 到 endNum之间的随机数(不包含endNum的随机数)
+     *
      * @param startNum
      * @param endNum
      * @return
      */
-    public static String getNumStr(int startNum,int endNum){
-        if(endNum > startNum){
+    public static String getNumStr(int startNum, int endNum) {
+        if (endNum > startNum) {
             Random random = new Random();
-            return (random.nextInt(endNum - startNum) + startNum)+"%";
+            return (random.nextInt(endNum - startNum) + startNum) + "%";
         }
         return "";
     }

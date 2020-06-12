@@ -113,7 +113,7 @@ public class VirusKillOneFragment extends SimpleFragment {
 
     }
 
-    private int[] tip = {R.string.clean_all_hint, R.string.vircuskill_item_two_tip, R.string.vircuskill_item_three_tip};
+    private int[] tip = {R.string.vircuskill_item_one_tip, R.string.vircuskill_item_two_tip, R.string.vircuskill_item_three_tip};
     private int[] tips = {R.string.vircuskill_item_one_tips, R.string.vircuskill_item_two_tips, R.string.vircuskill_item_three_tips};
     private int[] iconImage = {R.mipmap.icon_sd_one, R.mipmap.icon_sd_two, R.mipmap.icon_sd_three};
 
@@ -125,7 +125,7 @@ public class VirusKillOneFragment extends SimpleFragment {
             ImageView imageView = view.findViewById(R.id.iconImage);
             RotationLoadingView rotationLoading = view.findViewById(R.id.rotationLoading);
             rotationLoading.startRotationAnimation();
-            SpannableString spannableString = new SpannableString(String.format(getResources().getString(tip[i]), NumberUtils.getNum(1, 3)));
+            SpannableString spannableString = new SpannableString(String.format(getResources().getString(tip[i]), NumberUtils.getNum(1, 4)));
             spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF6D58")), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtTip.setText(spannableString);
             txtTips.setText(tips[i]);
@@ -133,7 +133,6 @@ public class VirusKillOneFragment extends SimpleFragment {
             llyContext.addView(view);
         }
     }
-
 
     private FragmentCallBack callBack;
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff376fff"
+    android:background="#06C581"
     android:gravity="center"
     android:orientation="vertical">
     <FrameLayout
@@ -28,11 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="100dp"
-            android:text="@string/tool_cleaned_up"
+            android:text="@string/tool_virus_killed_up"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone" />
-
     </FrameLayout>
 
     <LinearLayout
@@ -131,7 +130,6 @@
                 android:layout_gravity="center_vertical"
                 android:max="100"
                 android:progress="0"
-
                 android:progressDrawable="@drawable/progress_fund_detail"
                 android:visibility="visible"/>
 

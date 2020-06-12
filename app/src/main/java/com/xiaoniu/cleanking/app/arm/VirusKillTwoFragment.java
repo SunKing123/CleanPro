@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -205,6 +206,9 @@ public class VirusKillTwoFragment extends SimpleFragment {
         //保存杀毒完成时间
         PreferenceUtil.saveVirusKillTime();
         AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
+
+        EventBus.getDefault().post(new FromHomeCleanFinishEvent(getString(R.string.virus_kill)));
+
         Intent mIntent = new Intent(getActivity(), ScreenFinishBeforActivity.class);
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill));
         if(getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
