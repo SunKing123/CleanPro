@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.lang.reflect.Field;
 
@@ -59,7 +60,7 @@ public class LocalPushWindow {
                 break;
             case LocalPushType.TYPE_SPEED_UP:
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONEACCESSACTIVITY;
-                int random = NumberUtils.mathRandomInt(70, 86);
+                int random = NumberUtils.mathRandomInt(70, 85);
                 title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>" + random + "%</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("一键加速");
                 break;
@@ -69,7 +70,7 @@ public class LocalPushWindow {
                 button.setText("一键降温");
                 break;
             case LocalPushType.TYPE_SUPER_POWER:
-                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>40%</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#ff0000'>"+item.power+"%</font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("立即省电");
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY;
                 break;
@@ -85,6 +86,7 @@ public class LocalPushWindow {
         //自定义toast文本
         mView.findViewById(R.id.button).setOnClickListener(v -> {
             if (!TextUtils.isEmpty(urlSchema)) {
+                StatisticsUtils.trackClick("local_push_window_click","本地推送弹窗点击","","local_push_window");
                 hide();
                 SchemeProxy.openScheme(context, urlSchema);
             }

@@ -1597,16 +1597,16 @@ public class PreferenceUtil {
     }
 
     //保存上一次【清理、加速、降温、省电】弹框的时间
-    public static void saveLastPopupTime(final String functionType, Long timestamp) {
+    public static void saveLastPopupTime(Long timestamp) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(functionType + "last_popup_time", timestamp).apply();
+        editor.putLong(SpCacheConfig.KEY_GLOBAL_POPUP_TIME, timestamp).apply();
     }
 
     //获取上一次【清理、加速、降温、省电】弹框的时间
-    public static Long getLastPopupTime(final String functionType) {
+    public static Long getLastPopupTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
-        return sharedPreferences.getLong(functionType + "last_popup_time", 0L);
+        return sharedPreferences.getLong(SpCacheConfig.KEY_GLOBAL_POPUP_TIME, 0L);
     }
 
 
@@ -1617,7 +1617,7 @@ public class PreferenceUtil {
         editor.putString(functionType + "today_popup_count", dayLimitJson).apply();
     }
 
-    //获取上一次【清理、加速、降温、省电】弹框的时间
+    //获取上一次【清理、加速、降温、省电】弹框的次数
     public static String getPopupCount(final String functionType) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         return sharedPreferences.getString(functionType + "today_popup_count", "");
@@ -1649,7 +1649,6 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         return sharedPreferences.getLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_SIZE, 0L);
     }
-
 
 
     //保存最近一次操作记录

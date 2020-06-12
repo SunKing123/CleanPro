@@ -33,6 +33,11 @@ public class SpCacheConfig {
     public static final String KEY_FUNCTION_COOL = "function_cool";
     //超强省电
     public static final String KEY_FUNCTION_POWER_SAVING = "function_power_saving";
+
+    //本地弹窗的间隔时间(所有的弹窗共享这个时间)
+    public static final String KEY_GLOBAL_POPUP_TIME="local_push_popup_time";
+
+
     //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描完成后的时间
     public static final String KEY_LAST_BACKGROUND_SCAN_TIME = "background_scan_time";
     //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描到的垃圾大小(单位为MB)
