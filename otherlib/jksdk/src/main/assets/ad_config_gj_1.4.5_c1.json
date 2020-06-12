@@ -599,7 +599,7 @@
     {
       "productId": 1,
       "adVersion": 4,
-      "adPosition": "hot_kp",
+      "adPosition": "hot_kp2.0",
       "adStyle": "OPEN_ADS",
       "adRequestTimeOut": 0,
       "isChange": 1,
@@ -703,7 +703,7 @@
     {
       "productId": 1,
       "adVersion": 10,
-      "adPosition": "cold_kp",
+      "adPosition": "cold_kp2.0",
       "adStyle": "OPEN_ADS",
       "adRequestTimeOut": 0,
       "isChange": 1,

@@ -348,6 +348,7 @@ public class PreferenceUtil {
     }
 
 
+
     /**
      * 保存病毒查杀时间
      *
@@ -591,16 +592,28 @@ public class PreferenceUtil {
     }
 
     /**
-     * 保存立即清理清理时间
+     * 保存一键清理清理时间
      *
      * @return
      */
     public static boolean saveNowCleanTime() {
-        Constant.APP_IS_LIVE = "1";
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, System.currentTimeMillis()).commit();
         return true;
+    }
+
+    /**
+     * 是否距离上次一键清理清理间隔至少5分钟
+     *
+     * @return true 5分钟以上 false 小于5分钟
+     */
+    public static boolean getNowCleanTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, 0);
+        if (System.currentTimeMillis() - time > 5 * 60 * 1000)
+            return true;
+        return false;
     }
 
 
@@ -689,18 +702,7 @@ public class PreferenceUtil {
         return true;
     }
 
-    /**
-     * 是否距离上次立即清理清理间隔至少3分钟
-     *
-     * @return true 3分钟以上 false 小于3分钟
-     */
-    public static boolean getNowCleanTime() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_NOW_CLEAN_TIME, 0);
-        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
-            return true;
-        return false;
-    }
+
 
     /**
      * 保存通知栏清理时间
@@ -1702,6 +1704,11 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
+
+
+
+
+
 
 
 }

@@ -3,9 +3,12 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.annotation.SuppressLint;
 import android.os.Environment;
 
+import com.comm.jksdk.utils.MmkvUtil;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanCleanContact;
@@ -51,6 +54,8 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
         //设置垃圾清理总量数据
         long junkTotal = setCheckedJunkResult();
         CountEntity countEntity = CleanUtil.formatShortFileSize(junkTotal);
+        //作为首页头部数据展示缓存
+        MmkvUtil.saveString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA,new Gson().toJson(countEntity));
         if (getView() != null) {
             //统计清理总数
             getView().setTotalJunkCount(countEntity.getTotalSize(), countEntity.getUnit());

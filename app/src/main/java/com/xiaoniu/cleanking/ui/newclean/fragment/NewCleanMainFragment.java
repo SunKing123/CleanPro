@@ -34,6 +34,7 @@ import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.utils.DisplayUtil;
+import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.hellogeek.permission.strategy.AutoFixAction;
 import com.hellogeek.permission.util.PermissionPageUtils;
@@ -765,12 +766,35 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         ((MainActivity) getActivity()).commitJpushClickTime(1);
-        if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {
-            mPresenter.stopScanning();
-            startActivity(NowCleanActivity.class);
-        } else {    //scanState ==0: 扫描中
-            checkStoragePermission();
+        if(PreferenceUtil.getNowCleanTime()){ //清理缓存五分钟_未扫过或者间隔五分钟以上
+            if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                mPresenter.stopScanning();
+                startActivity(NowCleanActivity.class);
+            } else {    //scanState ==0: 扫描中
+                checkStoragePermission();
+            }
+        } else {
+            String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+            CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+            if (null != countEntity && getActivity() != null && this.isAdded()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
+                bundle.putString("num", countEntity.getTotalSize());
+                bundle.putString("unit", countEntity.getUnit());
+                Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else {
+                //判断扫描缓存；
+                if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                    mPresenter.stopScanning();
+                    startActivity(NowCleanActivity.class);
+                } else {    //scanState ==0: 扫描中
+                    checkStoragePermission();
+                }
+            }
         }
+
 
 //        startActivity(NowCleanActivity.class);
       /*  checkStoragePermission();
