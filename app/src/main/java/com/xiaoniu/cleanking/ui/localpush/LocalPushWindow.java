@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.lang.reflect.Field;
 
@@ -85,6 +86,7 @@ public class LocalPushWindow {
         //自定义toast文本
         mView.findViewById(R.id.button).setOnClickListener(v -> {
             if (!TextUtils.isEmpty(urlSchema)) {
+                StatisticsUtils.trackClick("local_push_window_click","本地推送弹窗点击","","local_push_window");
                 hide();
                 SchemeProxy.openScheme(context, urlSchema);
             }
