@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 
@@ -33,8 +34,10 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +47,15 @@ import javax.inject.Inject;
 import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.COMPLETE;
+import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.PAGE_VIEW;
+import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.SCAN;
 
 
 /**
  * 病毒查杀
  */
 public class ArmVirusKillActivity extends BaseActivity<VirusKillPresenter> implements VirusKillContract.View, FragmentCallBack {
-
 
     @BindView(R.id.frame_layout)
     FrameLayout frameLayout;
@@ -158,13 +163,23 @@ public class ArmVirusKillActivity extends BaseActivity<VirusKillPresenter> imple
         showHideFragment(1, 0);
     }
 
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (mFragments.get(positionIndex) instanceof VirusKillOneFragment) {
-            ((VirusKillOneFragment) mFragments.get(positionIndex)).onKeyDown(keyCode, event);
-        } else if (mFragments.get(positionIndex) instanceof VirusKillTwoFragment) {
-            ((VirusKillTwoFragment) mFragments.get(positionIndex)).onKeyDown(keyCode, event);
+    public void onBackPressedSupport() {
+        switch (VirusKillStatus.code) {
+            case PAGE_VIEW:
+                Log.e("virusKill", "用户浏览页面点击返回");
+                StatisticsUtils.trackClick("system_return_click", "用户在病毒查杀页返回", "", "virus_killing_scan_page");
+                break;
+            case SCAN:
+                Log.e("virusKill", "用户扫描页面点击返回");
+                StatisticsUtils.trackClick("system_return_click", "病毒查杀动画页返回", "virus_killing_scan_page", "virus_killing_animation_page");
+                break;
+            case COMPLETE:
+                Log.e("virusKill", "用户完成页面点击返回");
+                StatisticsUtils.trackClick("system_return_click", "病毒查杀动画完成页返回", "virus_killing_animation_page", "virus_killing_finish_animation_page");
+                break;
         }
-        return super.onKeyDown(keyCode, event);
+        super.onBackPressedSupport();
     }
 }

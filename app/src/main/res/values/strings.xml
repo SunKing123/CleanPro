@@ -73,6 +73,7 @@
     <string name="tool_one_key_speed">一键加速</string>
     <string name="tool_soft_manager">软件管理</string>
     <string name="tool_cleaned_up">已清理</string>
+    <string name="tool_virus_killed_up">已优化至最佳</string>
     <string name="tool_accelerated">已加速</string>
     <string name="tool_cooled_down">已降温</string>
     <string name="tool_super_power_saving">超强省电</string>
@@ -155,7 +156,7 @@
     <string name="clean_game_hint">一键加速畅玩游戏</string>
     <string name="virus_kill">病毒查杀</string>
     <string name="network_quicken">网络加速</string>
-    <string name="virus_guard">已开启病毒防御保护</string>
+    <string name="virus_guard">已解决所有风险</string>
     <string name="already_quicken">已提速%s</string>
     <string name="back">返回</string>
     <string name="skip">跳过</string>
@@ -201,5 +202,8 @@
 
     <string name="vircuskill_fg_two_tip_one">优化加密信息防止被偷窥</string>
     <string name="vircuskill_fg_two_tip_two">加强网络保护防火墙</string>
+
+    <string name="home_top_text_tag">垃圾待清理</string>
+
 
 </resources>

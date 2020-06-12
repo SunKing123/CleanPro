@@ -34,7 +34,6 @@ public class ItmMTView extends LinearLayout {
 
     public ItmMTView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
     }
 
     public ItmMTView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {

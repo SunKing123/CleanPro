@@ -22,7 +22,6 @@ import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SoftManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
-import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
@@ -120,8 +119,6 @@ public interface ActivityComponent {
     void inject(GameActivity activity);
 
     void inject(GameListActivity activity);
-
-    void inject(VirusKillActivity activity);
 
     void inject(NetWorkActivity activity);
 

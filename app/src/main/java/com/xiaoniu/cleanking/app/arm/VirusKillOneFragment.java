@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
+
+import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.PAGE_VIEW;
 
 /**
  * Author: lvdongdong
@@ -66,8 +69,13 @@ public class VirusKillOneFragment extends SimpleFragment {
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        NiuDataAPI.onPageStart("virus_killing_scan_page_view_page", "病毒查杀扫描页浏览");
-        NiuDataAPIUtil.onPageEnd("virus_killing_scan_page_view_page", "病毒查杀扫描页浏览","","virus_killing_scan_page");
+        VirusKillStatus.code=PAGE_VIEW;
+        Log.e("virusKill","=========病毒查杀浏览页面=========");
+
+
+        StatisticsUtils.onPageStart("virus_killing_scan_page_view_page","病毒查杀扫描页浏览");
+        StatisticsUtils.onPageEnd("virus_killing_scan_page_view_page","病毒查杀扫描页浏览","","virus_killing_scan_page");
+
         timer = new CountDownTimer(3000, 30) {
             public void onTick(long millisUntilFinished) {
                 if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 30) + "%");
@@ -91,7 +99,6 @@ public class VirusKillOneFragment extends SimpleFragment {
     }
 
 
-
     public void onFragmentDestroy() {
         if (lottie != null) {
             lottie.stopRotationAnimation();
@@ -106,7 +113,7 @@ public class VirusKillOneFragment extends SimpleFragment {
 
     }
 
-    private int[] tip = {R.string.clean_all_hint, R.string.vircuskill_item_two_tip, R.string.vircuskill_item_three_tip};
+    private int[] tip = {R.string.vircuskill_item_one_tip, R.string.vircuskill_item_two_tip, R.string.vircuskill_item_three_tip};
     private int[] tips = {R.string.vircuskill_item_one_tips, R.string.vircuskill_item_two_tips, R.string.vircuskill_item_three_tips};
     private int[] iconImage = {R.mipmap.icon_sd_one, R.mipmap.icon_sd_two, R.mipmap.icon_sd_three};
 
@@ -118,7 +125,7 @@ public class VirusKillOneFragment extends SimpleFragment {
             ImageView imageView = view.findViewById(R.id.iconImage);
             RotationLoadingView rotationLoading = view.findViewById(R.id.rotationLoading);
             rotationLoading.startRotationAnimation();
-            SpannableString spannableString = new SpannableString(String.format(getResources().getString(tip[i]), NumberUtils.getNum(1, 3)));
+            SpannableString spannableString = new SpannableString(String.format(getResources().getString(tip[i]), NumberUtils.getNum(1, 4)));
             spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF6D58")), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             txtTip.setText(spannableString);
             txtTips.setText(tips[i]);
@@ -127,18 +134,9 @@ public class VirusKillOneFragment extends SimpleFragment {
         }
     }
 
-
     private FragmentCallBack callBack;
 
     public void setFragmentCallBack(FragmentCallBack callBack) {
         this.callBack = callBack;
-    }
-
-
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-             StatisticsUtils.trackClick("system_return_click","用户在病毒查杀页返回", "", "virus_killing_scan_page");
-        }
-        return true;
     }
 }

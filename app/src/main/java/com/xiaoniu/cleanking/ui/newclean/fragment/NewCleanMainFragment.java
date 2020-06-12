@@ -1,18 +1,26 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.Manifest;
 import android.animation.Animator;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +35,9 @@ import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
+import com.hellogeek.permission.strategy.AutoFixAction;
+import com.hellogeek.permission.util.PermissionPageUtils;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.ApplicationDelegate;
@@ -35,6 +46,7 @@ import com.xiaoniu.cleanking.app.arm.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
+import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.MainTableItem;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
@@ -45,12 +57,13 @@ import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
-import com.xiaoniu.cleanking.ui.main.activity.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
+import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.VirusLlistEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -62,6 +75,7 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
@@ -72,13 +86,13 @@ import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.MainTableView;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -91,9 +105,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -103,6 +118,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -114,11 +131,6 @@ import static android.view.View.VISIBLE;
 public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener {
 
     private long firstTime;
-    @BindView(R.id.tv_clean_type)
-    TextView mTvCleanType;
-    @BindView(R.id.tv_clean_type01)
-    TextView mTvCleanType01;
-
     @BindView(R.id.view_phone_thin)
     View viewPhoneThin;
     @BindView(R.id.view_news)
@@ -132,16 +144,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @BindView(R.id.image_ad_bottom_second)
     ImageView mImageSecondAd;
 
-    @BindView(R.id.tv_now_clean)
-    ImageView tvNowClean;
+
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
     @BindView(R.id.layout_scroll)
     NestedScrollView mNestedScrollView;
     @BindView(R.id.v_no_net)
     View mNoNetView;
-    @BindView(R.id.v_top_view)
-    View mTopContentView;
+
     @BindView(R.id.framelayout_top_ad)
     FrameLayout mTopAdFramelayout;
     @BindView(R.id.framelayout_center_ad)
@@ -167,9 +177,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private boolean mIsClickAdCenterDetail; //顶部广告点击是否跳转详情还是下载
     private boolean mIsTopAdExposed; //广告是否曝光
     private boolean mIsCenterAdExposed; //广告是否曝光
-
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private RxPermissions rxPermissions;
     private static final String TAG = "GeekSdk";
-
+    private AlertDialog dlg;
+    private boolean isGotoSetting = false;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_new_clean_main;
@@ -177,7 +189,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     protected void initView() {
-        tvNowClean.setVisibility(View.VISIBLE);
+        rxPermissions = new RxPermissions(requireActivity());
+
         EventBus.getDefault().register(this);
         showHomeLottieView();
         initRecyclerView();
@@ -192,7 +205,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             mainTableView.killVirusNormalStyle(getActivity());
         }
-
+        mPresenter.readyScanningJunk();
+        mPresenter.checkStoragePermission();
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
@@ -389,6 +403,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onResume() {
         super.onResume();
+        if (isGotoSetting) {
+            isGotoSetting = false;
+        }
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
@@ -416,6 +433,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
+    }
+
+    public void setIsGotoSetting(boolean isGotoSetting) {
+        this.isGotoSetting = isGotoSetting;
     }
 
     /**
@@ -446,7 +467,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     Log.d(TAG, "adSuccess---home--top =" + info.toString());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                     if (null != mTopAdFramelayout && null != info.getAdView()) {
-                        mTopContentView.setVisibility(View.GONE);
+                        view_lottie_top.setVisibility(View.GONE);
                         mTopAdFramelayout.setVisibility(VISIBLE);
                         mTopAdFramelayout.removeAllViews();
                         mTopAdFramelayout.addView(info.getAdView());
@@ -481,7 +502,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adClose(AdInfo info) {
                 if (null == info) return;
-                mTopContentView.setVisibility(VISIBLE);
+                view_lottie_top.setVisibility(VISIBLE);
                 mTopAdFramelayout.setVisibility(View.GONE);
                 mTopAdFramelayout.removeAllViews();
 //                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
@@ -688,11 +709,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         }
-        if (mShowCount <= 0) {
-            mTvCleanType01.setText(getString(R.string.recommend_count_hint_all));
-        } else {
-            mTvCleanType01.setText(getString(R.string.recommend_count_hint, String.valueOf(mShowCount)));
-        }
+
 
         if (getString(R.string.virus_kill).contains(event.getTitle())) {
             // 病毒查杀完成回调 清除警告标识
@@ -723,18 +740,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
         if (null == mTopAdFramelayout || null == view_lottie_top) return;
         if (lifecycEvent.isActivity()) {
-            mTopContentView.setVisibility(VISIBLE);
+            view_lottie_top.setVisibility(VISIBLE);
             mTopAdFramelayout.removeAllViews();
             mTopAdFramelayout.setVisibility(View.GONE);
-            tvNowClean.setVisibility(VISIBLE);
-            mTvCleanType.setVisibility(VISIBLE);
-            mTvCleanType01.setVisibility(View.GONE);
             showTextView();
-//            mLottieHomeView.useHardwareAcceleration(true);
-//            mLottieHomeView.setAnimation("clean_home_top.json");
-////            mLottieHomeView.setImageAssetsFolder("images_home");
-////            mLottieHomeView.playAnimation();
-////            mLottieHomeView.setVisibility(VISIBLE);
             view_lottie_top.startLottie();
         }
     }
@@ -750,13 +759,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 立即清理
+     * 点击立即清理
      */
-    @OnClick(R.id.view_lottie_top)
+    @OnClick(R.id.iv_center)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        //PreferenceUtil.getNowCleanTime() || TextUtils.isEmpty(Constant.APP_IS_LIVE
         ((MainActivity) getActivity()).commitJpushClickTime(1);
+        if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {
+            mPresenter.stopScanning();
+            startActivity(NowCleanActivity.class);
+        } else {    //scanState ==0: 扫描中
+            checkStoragePermission();
+        }
+
+//        startActivity(NowCleanActivity.class);
+      /*  checkStoragePermission();
         if (true) {
             startActivity(NowCleanActivity.class);
         } else {
@@ -784,9 +801,33 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 bundle.putString("home", "");
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
-        }
+        }*/
     }
 
+
+    /**
+     * 检查文件存贮权限
+     */
+
+    private void checkStoragePermission() {
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Disposable disposable = rxPermissions.request(permissions)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        mPresenter.stopScanning();
+                        startActivity(NowCleanActivity.class);
+                    } else {
+                        if (hasPermissionDeniedForever()) {
+                            //todo
+//                            showPermissionDialog();
+                        } else {
+//                            checkStoragePermission();
+                        }
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
 
     private void toSpeedGame() {
         isGameMain = true;
@@ -1123,7 +1164,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
                 showTextView01();
-                tvNowClean.setVisibility(View.GONE);
                 view_lottie_top.startLottie();
 //                mLottieHomeView.useHardwareAcceleration(true);
 //                mLottieHomeView.setAnimation("clean_home_top2.json");
@@ -1180,8 +1220,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 静止时动画
      */
     private void showHomeLottieView() {
-        showTextView();
         view_lottie_top.startLottie();
+        showTextView();
 //        mLottieHomeView.useHardwareAcceleration(true);
 //        mLottieHomeView.setAnimation("clean_home_top.json");
 //        mLottieHomeView.setImageAssetsFolder("images_home");
@@ -1212,8 +1252,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     @Override
     public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
     }
 
 
@@ -1222,18 +1266,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         SpannableString msp = new SpannableString(hintText);
 //        msp.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 18)), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), hintText.indexOf("存在大量垃圾"), hintText.indexOf("，"), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mTvCleanType != null && msp != null) {
-                    mTvCleanType.setText(msp);
-                    mTvCleanType.animate()
-                            .alpha(1f)
-                            .setDuration(500)
-                            .setListener(null);
-                }
-            }
-        }, 1000);
+
     }
 
     public void showTextView01() {
@@ -1248,10 +1281,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         SpannableString msp01 = new SpannableString(showText01);
         msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        mTvCleanType.setText(msp);
-        mTvCleanType.setVisibility(VISIBLE);
-        mTvCleanType01.setText(msp01);
-        mTvCleanType01.setVisibility(VISIBLE);
+
     }
 
     /**
@@ -1320,7 +1350,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onCheck(List<HomeRecommendListEntity> list, int pos) {
         if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos ) return;
-        if (pos == 1 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
+        if (pos == 0 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
             loadMorePageFileGeekAd(list.get(pos));
             return;
         }
@@ -1695,8 +1725,88 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
                 }
-                startActivity(VirusKillActivity.class);
+                startKillVirusActivity();
             }
         });
+    }
+
+
+    /**
+     * 是否有权限被永久拒绝
+     */
+    private boolean hasPermissionDeniedForever() {
+        boolean hasDeniedForever = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                hasDeniedForever = true;
+            }
+        }
+        return hasDeniedForever;
+    }
+
+
+    public void setScanningFinish(LinkedHashMap<ScanningResultType, JunkGroup> junkGroups) {
+        long totalJunkSize = 0;
+        for (Map.Entry<ScanningResultType, JunkGroup> map : junkGroups.entrySet()) {
+            totalJunkSize += map.getValue().mSize;
+        }
+        CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalJunkSize);
+        ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
+        ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
+        ScanDataHolder.getInstance().setScanState(1);
+        view_lottie_top.scanFinish();
+//        ((NowCleanActivity) getActivity()).scanFinish();
+//        //重置颜色变化状态
+//        lottie_animation_view.pauseAnimation();
+    }
+
+
+    private void showPermissionDialog() {
+        dlg = new AlertDialog.Builder(requireContext()).create();
+        if (requireActivity().isFinishing()) {
+            return;
+        }
+        dlg.show();
+        Window window = dlg.getWindow();
+        if (window != null) {
+            window.setContentView(R.layout.alite_redp_send_dialog);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            //这里设置居中
+            lp.gravity = Gravity.CENTER;
+            window.setAttributes(lp);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView btnOk = window.findViewById(R.id.btnOk);
+
+            TextView btnCancle = window.findViewById(R.id.btnCancle);
+            TextView tipTxt = window.findViewById(R.id.tipTxt);
+            TextView content = window.findViewById(R.id.content);
+            btnCancle.setText("退出");
+            btnOk.setText("去设置");
+            tipTxt.setText("提示!");
+            content.setText("清理功能无法使用，请先开启文件读写权限。");
+            btnOk.setOnClickListener(v -> {
+                dlg.dismiss();
+                goSetting();
+            });
+            btnCancle.setOnClickListener(v -> {
+                dlg.dismiss();
+                requireActivity().finish();
+            });
+        }
+    }
+
+
+    public void goSetting() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            setIsGotoSetting(true);
+            requireActivity().startActivity(intent);
+        }
+    }
+
+    public void setScanningJunkTotal(String totalSize){
+        view_lottie_top.setTotalSize(totalSize);
     }
 }

@@ -7,13 +7,12 @@
             <corners android:radius="5dip" />
             <gradient
                 android:angle="0"
-                android:centerColor="#618CFD"
+                android:centerColor="#33ffffff"
                 android:centerY="0.75"
-                android:endColor="#618CFD"
-                android:startColor="#618CFD" />
+                android:endColor="#33ffffff"
+                android:startColor="#33ffffff" />
         </shape>
     </item>
-
 
     <!--进度条从左到右色值，渐变-->
     <item android:id="@android:id/progress">

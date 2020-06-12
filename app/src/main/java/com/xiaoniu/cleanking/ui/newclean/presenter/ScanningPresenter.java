@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -105,6 +106,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
     @SuppressLint("CheckResult")
     @Override
     public void scanningJunk() {
+        ScanDataHolder.getInstance().setScanState(10);
         scanningStartTime = System.currentTimeMillis();
         Observable.create(e -> {
             //扫描进程占用内存情况
@@ -172,7 +174,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                 getView().setScanningCountTime(scanningCountTime);
 
                 //计算扫描文件总数
-                getView().setScanningFileCount(fileCount);
+//                getView().setScanningFileCount(fileCount);
             }
         }
     }
