@@ -12,7 +12,7 @@ public class SecondJunkInfo implements Serializable {
     private String garbageName;
     private long garbageSize;
     private String garbagetype;
-    private boolean isChecked;
+    private boolean isChecked;  //是否建议清理
     private String packageName;
     
     public String getAppGarbageName() {

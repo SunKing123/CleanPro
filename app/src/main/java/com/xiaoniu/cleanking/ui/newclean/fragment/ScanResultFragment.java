@@ -226,6 +226,12 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
             case R.id.iv_check_state:
                 presenter.updateJunkContentCheckState(data);
                 break;
+            case R.id.iv_check_uncareful_state:
+                presenter.updateChildJunkContentCheckState(data,1);
+                break;
+            case R.id.iv_check_careful_state:
+                presenter.updateChildJunkContentCheckState(data,0);
+                break;
         }
     }
 

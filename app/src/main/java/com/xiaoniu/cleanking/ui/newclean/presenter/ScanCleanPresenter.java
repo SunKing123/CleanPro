@@ -170,9 +170,19 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
         for (Map.Entry<ScanningResultType, ArrayList<FirstJunkInfo>> contentMap : junkContentMap.entrySet()) {
             if (!CollectionUtils.isEmpty(contentMap.getValue())) {
                 for (FirstJunkInfo firstJunkInfo : contentMap.getValue()) {
-                    if (firstJunkInfo.isAllchecked()) {
-                        checkedTotalSize += firstJunkInfo.getTotalSize();
+                    if(firstJunkInfo.isIsthreeLevel()){
+                        if(firstJunkInfo.isCarefulIsChecked()){
+                            checkedTotalSize += firstJunkInfo.getCareFulSize();
+                        }
+                        if(firstJunkInfo.isUncarefulIsChecked()){
+                            checkedTotalSize += firstJunkInfo.getUncarefulSize();
+                        }
+                    }else{
+                        if (firstJunkInfo.isAllchecked()) {
+                            checkedTotalSize += firstJunkInfo.getTotalSize();
+                        }
                     }
+
                 }
             }
         }
