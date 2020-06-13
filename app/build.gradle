@@ -334,6 +334,8 @@ dependencies {
 //    implementation 'com.github.daolq3012:AssetSQLiteOpenHelper:V1.0.1'
     implementation 'com.github.humazed:RoomAsset:1.0.3'
 
+    implementation 'com.jzp:rotate3D:1.0.0'
+
 }
 
 

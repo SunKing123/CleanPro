@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -38,6 +39,7 @@ import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.hellogeek.permission.strategy.AutoFixAction;
 import com.hellogeek.permission.util.PermissionPageUtils;
+import com.jzp.rotate3d.Rotate3D;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -161,6 +163,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     MainTableView mainTableView;
     @BindView(R.id.view_lottie_top)
     OneKeyCircleButtonView view_lottie_top;
+
+    @BindView(R.id.layout_clean_top)
+    RelativeLayout layoutCleanTop;
+
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
@@ -183,18 +189,27 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private static final String TAG = "GeekSdk";
     private AlertDialog dlg;
     private boolean isGotoSetting = false;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_new_clean_main;
     }
 
+    Rotate3D anim;
+
     @Override
     protected void initView() {
         rxPermissions = new RxPermissions(requireActivity());
-
         EventBus.getDefault().register(this);
         showHomeLottieView();
         initRecyclerView();
+
+
+        anim = new Rotate3D.Builder(getActivity())
+                .setParentView(layoutCleanTop)
+                .setPositiveView(view_lottie_top)
+                .setNegativeView(mTopAdFramelayout)
+                .create();
 
         mainTableView.batteryNormalStyle(getActivity());
         mainTableView.accStorageLowStyle(getActivity());
@@ -468,10 +483,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     Log.d(TAG, "adSuccess---home--top =" + info.toString());
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
                     if (null != mTopAdFramelayout && null != info.getAdView()) {
-                        view_lottie_top.setVisibility(View.GONE);
-                        mTopAdFramelayout.setVisibility(VISIBLE);
-                        mTopAdFramelayout.removeAllViews();
-                        mTopAdFramelayout.addView(info.getAdView());
+                        //   view_lottie_top.setVisibility(View.GONE);
+                        showAd(info.getAdView());
                     }
                 }
             }
@@ -503,9 +516,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void adClose(AdInfo info) {
                 if (null == info) return;
-                view_lottie_top.setVisibility(VISIBLE);
-                mTopAdFramelayout.setVisibility(View.GONE);
-                mTopAdFramelayout.removeAllViews();
+                closeAd();
+                //view_lottie_top.setVisibility(VISIBLE);
+                //mTopAdFramelayout.setVisibility(View.GONE);
+                //mTopAdFramelayout.removeAllViews();
 //                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
             }
 
@@ -516,6 +530,26 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
             }
         });
+    }
+
+    private void showAd(View adView) {
+        mTopAdFramelayout.removeAllViews();
+        mTopAdFramelayout.addView(adView);
+        if (!anim.isOpen()) {
+            anim.transform();
+        }
+    }
+
+    private void closeAd() {
+        if(anim.isOpen()){
+            anim.transform();
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mTopAdFramelayout.removeAllViews();
+            }
+        },2000);
     }
 
     /**
@@ -741,9 +775,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void changeLifecyEvent(LifecycEvent lifecycEvent) {
         if (null == mTopAdFramelayout || null == view_lottie_top) return;
         if (lifecycEvent.isActivity()) {
-            view_lottie_top.setVisibility(VISIBLE);
-            mTopAdFramelayout.removeAllViews();
-            mTopAdFramelayout.setVisibility(View.GONE);
+            closeAd();
             showTextView();
             view_lottie_top.startLottie();
         }
@@ -766,7 +798,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
         ((MainActivity) getActivity()).commitJpushClickTime(1);
-        if(PreferenceUtil.getNowCleanTime()){ //清理缓存五分钟_未扫过或者间隔五分钟以上
+        if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
                 mPresenter.stopScanning();
                 startActivity(NowCleanActivity.class);
@@ -1368,12 +1400,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     /**
      * 更多推荐Item点击
+     *
      * @param list
      * @param pos
      */
     @Override
     public void onCheck(List<HomeRecommendListEntity> list, int pos) {
-        if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos ) return;
+        if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos)
+            return;
         if (pos == 0 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
             loadMorePageFileGeekAd(list.get(pos));
             return;
@@ -1538,17 +1572,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void onSpeedNetworkItemClick() {
         StatisticsUtils.trackClick("network_acceleration_click", "用户在首页点击【网络加速】按钮", "home_page", "home_page");
-        if(isShowSpeedNetGeekAd()){
+        if (isShowSpeedNetGeekAd()) {
             loadGeekAdNet();
-        }else {
-           startSpeedNetworkActivity();
+        } else {
+            startSpeedNetworkActivity();
         }
     }
 
     /**
      * 启动网络加速功能
      */
-    private void startSpeedNetworkActivity(){
+    private void startSpeedNetworkActivity() {
         if (PreferenceUtil.getSpeedNetWorkTime()) {
             startActivity(NetWorkActivity.class);
         } else {
@@ -1563,6 +1597,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     /**
      * 是否显示网络加速激励视屏广告
+     *
      * @return
      */
     private boolean isShowSpeedNetGeekAd() {
@@ -1653,7 +1688,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /**
      * 自运营根据配置linkType 做跳转;
      */
-    public void operationItemClick(HomeRecommendListEntity entity){
+    public void operationItemClick(HomeRecommendListEntity entity) {
         if (entity.getLinkType().equals("1")) {//应用内页面跳转
 //            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
             if (entity.getName().equals(getString(R.string.game_quicken))) { //游戏加速
@@ -1680,7 +1715,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             startActivity(intent);
         }
     }
-
 
 
     /**
@@ -1830,7 +1864,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    public void setScanningJunkTotal(String totalSize){
+    public void setScanningJunkTotal(String totalSize) {
         view_lottie_top.setTotalSize(totalSize);
     }
 }

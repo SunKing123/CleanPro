@@ -51,8 +51,8 @@
             <RelativeLayout
                 android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="wrap_content"
+                >
 
                 <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
                     android:id="@+id/view_lottie_top"
@@ -64,7 +64,6 @@
 
                 </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
 
-
                 <FrameLayout
                     android:id="@+id/framelayout_top_ad"
                     android:layout_width="wrap_content"
@@ -73,6 +72,7 @@
                     android:layout_marginRight="@dimen/dimen_18dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="40dp"
+                    android:visibility="gone"
                     android:background="@drawable/ad_container_white_bg" />
             </RelativeLayout>
 
@@ -85,7 +85,7 @@
                 android:background="@drawable/bg_six"
                 android:clipChildren="false"
                 android:gravity="center"
-                android:padding="@dimen/dimen_16dp"></com.xiaoniu.cleanking.ui.view.MainTableView>
+                android:padding="@dimen/dimen_16dp"/>
             <!--分享图片-->
             <ImageView
                 android:id="@+id/image_ad_bottom_first"
