@@ -694,7 +694,7 @@ public class FileQueryUtils {
                             if (cachefile.exists()) {
                                 secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
                                 if(!TextUtils.isEmpty(entry.getValue()) && entry.getValue().endsWith("_手动")){
-                                    LogUtils.i("zz--手动");
+//                                    LogUtils.i("zz--手动");
                                     secondJunkInfo.setChecked(false);
                                     cacheJunkInfo.setCarefulIsChecked(false);
                                 }else{

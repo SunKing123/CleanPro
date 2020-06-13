@@ -222,7 +222,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mainTableView.killVirusNormalStyle(getActivity());
         }
         mPresenter.readyScanningJunk();
-        mPresenter.checkStoragePermission();
+        mPresenter.checkStoragePermission();  //开始扫描
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
@@ -449,6 +449,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
+
+        isReScan();
     }
 
     public void setIsGotoSetting(boolean isGotoSetting) {
@@ -630,6 +632,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onPause() {
         super.onPause();
         NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
+    }
+
+
+    public  void isReScan(){
+        if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
+            mPresenter.checkStoragePermission();  //重新开始扫描
+            if(null!=view_lottie_top)
+            view_lottie_top.startLottie();
+        } else {
+            if(!PreferenceUtil.getNowCleanTime()){
+                if(null!=view_lottie_top)
+                    view_lottie_top.setGreenState();
+            }
+        }
     }
 
     /**
@@ -1201,9 +1217,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), true);
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
             } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), false);
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
             }
             initGeekAdSdk();
             initGeekSdkCenter();

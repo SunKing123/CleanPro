@@ -70,6 +70,8 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         lottieList.add(viewLottieRed);
         setlottieData();
         ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
+        ivCenter.setAlpha(0f);
+        ivCenter.animate().alpha(1f).setDuration(100);
         setViewLayoutParms();
 
     }
@@ -95,6 +97,21 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     }
 
+    //清理完成绿色状态;
+    public void setGreenState(){
+        //"home_top_scan/anim01a/data.json","home_top_scan/anim01a/images"
+        viewLottieGreen.setAnimation("home_top_scan/anim01b/data.json");
+        viewLottieGreen.setImageAssetsFolder("home_top_scan/anim01b/images");
+        viewLottieGreen.playAnimation();
+        setCenterImg(0);
+    }
+
+
+    public void clancleAnim(LottieAnimationView lottieAnimationView){
+        lottieAnimationView.cancelAnimation();
+        lottieAnimationView.clearAnimation();
+        lottieAnimationView.setVisibility(GONE);
+    }
     public void playLottie(int index){
         LottieAnimationView lottieview = lottieList.get(index);
         LottiePathdata pathdata = lottiePathdataMap.get(index);
@@ -141,9 +158,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    lottieview.cancelAnimation();
-                                    lottieview.clearAnimation();
-                                    lottieview.setVisibility(GONE);
+                                    clancleAnim(lottieview);
                                 }
 
                                 @Override
