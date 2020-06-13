@@ -34,8 +34,8 @@ public class TouchImageView extends AppCompatImageView {
                 break;
 //            case MotionEvent.ACTION_POINTER_UP:
             case MotionEvent.ACTION_UP:
-                this.animate().scaleX((float) 1.0).setDuration(10);;
-                this.animate().scaleY((float) 1.0).setDuration(10);;
+                this.animate().scaleX((float) 1.0).setDuration(30);;
+                this.animate().scaleY((float) 1.0).setDuration(30);;
                 break;
 //            case MotionEvent.ACTION_HOVER_MOVE:
 //                LogUtils.i("zz---ACTION_HOVER_MOVE");
