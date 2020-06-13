@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -138,6 +139,10 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private TextView tv_junk_sub_title;
         private TextView tv_checked_total;
         private ImageView iv_check_state;
+        private LinearLayout linear_uncareful,linear_careful,linear_child_view;
+        private ImageView iv_check_careful_state,iv_check_uncareful_state;
+        private TextView tv_checked_uncareful_total,tv_checked_careful_total;
+
         private OnItemClickListener<JunkResultWrapper> mOnItemClickListener;
 
         ScanResultContentViewHolder(@NonNull View itemView, OnItemClickListener<JunkResultWrapper> onItemClickListener) {
@@ -149,6 +154,16 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_junk_sub_title = itemView.findViewById(R.id.tv_junk_sub_title);
             tv_checked_total = itemView.findViewById(R.id.tv_checked_total);
             iv_check_state = itemView.findViewById(R.id.iv_check_state);
+
+            linear_child_view = itemView.findViewById(R.id.linear_child_view);
+            linear_uncareful = itemView.findViewById(R.id.linear_uncareful);
+            linear_careful = itemView.findViewById(R.id.linear_careful);
+
+            iv_check_careful_state = itemView.findViewById(R.id.iv_check_careful_state);
+            iv_check_uncareful_state = itemView.findViewById(R.id.iv_check_uncareful_state);
+            tv_checked_uncareful_total = itemView.findViewById(R.id.tv_checked_uncareful_total);
+            tv_checked_careful_total = itemView.findViewById(R.id.tv_checked_careful_total);
+
         }
 
         public void bind(JunkResultWrapper wrapper) {
@@ -167,10 +182,15 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 iv_junk_logo.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.icon_other_cache));
             }
 
-            if (firstJunkInfo.isAllchecked()) {
+            if (firstJunkInfo.isClidenAllChecked()) {   //二级对象全部建议清理；
+                linear_child_view.setVisibility(View.GONE);
                 iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
             } else {
-                iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
+                linear_child_view.setVisibility(View.VISIBLE);
+                CountEntity carefulEntity = CleanUtil.formatShortFileSize(firstJunkInfo.getCareFulSize());
+                CountEntity unCarefulEntity = CleanUtil.formatShortFileSize(firstJunkInfo.getUncarefulSize());
+                tv_checked_careful_total.setText(carefulEntity.getResultSize());
+                tv_checked_uncareful_total.setText(unCarefulEntity.getResultSize());
             }
 
             iv_check_state.setOnClickListener(v -> {
@@ -178,8 +198,9 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
                 }
             });
-            tv_junk_sub_title.setVisibility(View.VISIBLE);
+
             if (wrapper.scanningResultType == ScanningResultType.APK_JUNK) {
+                tv_junk_sub_title.setVisibility(View.VISIBLE);
                 tv_junk_sub_title.setText(firstJunkInfo.getDescp() + " v" + firstJunkInfo.getVersionName());
             } else if (wrapper.scanningResultType == ScanningResultType.CACHE_JUNK) {
                 tv_junk_sub_title.setText("建议清理");

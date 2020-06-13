@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.main.bean;
 
 import android.graphics.drawable.Drawable;
 
+import com.xiaoniu.cleanking.utils.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +30,33 @@ public class FirstJunkInfo implements Serializable {
     private long selectSize;
     private List<SecondJunkInfo> subGarbages = new ArrayList<>();
     private long totalSize;
+    private long uncarefulSize;//建议清理大小
+    private long careFulSize;   //谨慎清理大小
     private String versionName;
     private int versionCode;
     private boolean isSelect;
     private boolean isLock;
     private String sdPath;
     private boolean isFirstItem;
+
+
+    public long getUncarefulSize() {
+        uncarefulSizeCount();
+        return uncarefulSize;
+    }
+
+    public void setUncarefulSize(long uncarefulSize) {
+        this.uncarefulSize = uncarefulSize;
+    }
+
+    public long getCareFulSize() {
+        uncarefulSizeCount();
+        return careFulSize;
+    }
+
+    public void setCareFulSize(long careFulSize) {
+        this.careFulSize = careFulSize;
+    }
 
     public String getAppProcessName() {
         return appProcessName;
@@ -157,6 +180,11 @@ public class FirstJunkInfo implements Serializable {
         isAllchecked = allchecked;
     }
 
+    //是否全部选中
+    public boolean isClidenAllChecked(){
+        return isAllcheckedList();
+    }
+
     public boolean isApkInstalled() {
         return isApkInstalled;
     }
@@ -164,6 +192,8 @@ public class FirstJunkInfo implements Serializable {
     public void setApkInstalled(boolean apkInstalled) {
         isApkInstalled = apkInstalled;
     }
+
+
 
     public boolean isDeploy() {
         return isDeploy;
@@ -304,5 +334,32 @@ public class FirstJunkInfo implements Serializable {
         result = 31 * result + (sdPath != null ? sdPath.hashCode() : 0);
         result = 31 * result + (isFirstItem ? 1 : 0);
         return result;
+    }
+
+
+    public void uncarefulSizeCount(){
+        uncarefulSize = 0;
+        for(SecondJunkInfo secondJunkInfo:subGarbages){
+            if(secondJunkInfo.isChecked()){
+                uncarefulSize += secondJunkInfo.getGarbageSize();
+            }
+        }
+        careFulSize = (totalSize - uncarefulSize) > 0 ? (totalSize - uncarefulSize) : 0;
+    }
+
+    public boolean isAllcheckedList() {
+        if(!CollectionUtils.isEmpty(subGarbages)){
+            boolean isAllChecked = true;
+            for(SecondJunkInfo secondJunkInfo:subGarbages){
+                if(!secondJunkInfo.isChecked()){
+                    isAllChecked = false;
+                    break;
+                }
+            }
+            return isAllChecked;
+        }else{
+            return true;
+        }
+
     }
 }

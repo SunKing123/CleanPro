@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.room.clean;
 
 import com.xiaoniu.cleanking.bean.path.AppPath;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 
 import java.util.List;
 
@@ -22,8 +23,8 @@ public interface CleanPathDao {
     @Query("SELECT * FROM applist")
     List<AppPath> getAll();
 //
-//    @Query("SELECT * FROM AdInfo WHERE configKey= :configKey AND advertPosition= :advertPosition")
-//    List<SwitchInfoList.DataBean> getAdInfo(String configKey, String advertPosition);
+    @Query("SELECT * FROM applist WHERE package_name= :packageName ")
+    List<AppPath> getPathList(String packageName);
 
     @Insert
     void insertAll(List<AppPath> list);

@@ -124,10 +124,10 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             //缓存垃圾
             HashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkResultMap = mFileQueryUtils.getFileJunkResult();
             if (!CollectionUtils.isEmpty(junkResultMap)) {
-                ArrayList<FirstJunkInfo> adJunkInfoList = junkResultMap.get(ScanningResultType.AD_JUNK);
+//                ArrayList<FirstJunkInfo> adJunkInfoList = junkResultMap.get(ScanningResultType.AD_JUNK);
                 ArrayList<FirstJunkInfo> cacheJunkInfoList = junkResultMap.get(ScanningResultType.CACHE_JUNK);
                 e.onNext(new JunkWrapper(ScanningResultType.CACHE_JUNK, cacheJunkInfoList));
-                e.onNext(new JunkWrapper(ScanningResultType.AD_JUNK, adJunkInfoList));
+//                e.onNext(new JunkWrapper(ScanningResultType.AD_JUNK, adJunkInfoList));
             }
 
             //扫描完成表示
