@@ -672,7 +672,7 @@ public class FileQueryUtils {
 
         HashMap<ScanningResultType, ArrayList<FirstJunkInfo>> listHashMap = new HashMap<>();
         listHashMap.put(ScanningResultType.CACHE_JUNK, cacheJunkListInfo);
-        listHashMap.put(ScanningResultType.AD_JUNK, adJunkListInfo);
+        listHashMap.put(ScanningResultType.CACHE_JUNK, adJunkListInfo);
         return listHashMap;
     }
 
