@@ -450,7 +450,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             initGeekSdkCenter();
         }
 
-        isReScan();
+//        isReScan();
     }
 
     public void setIsGotoSetting(boolean isGotoSetting) {
@@ -767,6 +767,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mainTableView.killVirusCleanWarningStyle();
         }
         initGeekSdkTop();
+        isReScan();
     }
 
 
