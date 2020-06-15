@@ -1753,7 +1753,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 Log.d(TAG, "-----onVideoComplete-----");
                 NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
                 //跳转自运营广告
-                operationItemClick(entity);
+               // operationItemClick(entity);
             }
 
             @Override
