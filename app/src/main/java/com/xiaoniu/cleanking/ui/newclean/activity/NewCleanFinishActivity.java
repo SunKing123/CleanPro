@@ -1126,7 +1126,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         super.onResume();
         StatusBarCompat.setStatusBarColor(mContext, getResources().getColor(R.color.color_27D698), true);
-    }
+}
 
     @Override
     protected void onPause() {

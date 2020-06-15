@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.localpush;
 import com.google.gson.annotations.SerializedName;
 import com.xiaoniu.cleanking.base.BaseEntity;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class LocalPushConfigModel extends BaseEntity {
@@ -17,7 +18,7 @@ public class LocalPushConfigModel extends BaseEntity {
         this.data = data;
     }
 
-    public static class Item {
+    public static class Item implements Serializable {
 
         private String code;
         private String position;
@@ -41,9 +42,24 @@ public class LocalPushConfigModel extends BaseEntity {
 
 
         //本地变量-温度
-        public int temp;
-        public int power;
+        private int localTemp;
+        private int localPower;
 
+        public int getLocalTemp() {
+            return localTemp;
+        }
+
+        public void setLocalTemp(int localTemp) {
+            this.localTemp = localTemp;
+        }
+
+        public int getLocalPower() {
+            return localPower;
+        }
+
+        public void setLocalPower(int localPower) {
+            this.localPower = localPower;
+        }
 
         public String getIconUrl() {
             return iconUrl;

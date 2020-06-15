@@ -24,7 +24,7 @@ import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
-import com.xiaoniu.cleanking.ui.localpush.LocalPushWindow;
+import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -48,7 +48,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
-import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -123,8 +122,8 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
-                        if (period < 10 * 60) {
-                            //if (period < 5) {
+                         if (period < 10 * 60) {
+                       // if (period < 5) {
                             LogUtils.e("====距离上次清理APP触发Home键过了" + period + "秒小于限制时间，直接返回");
                             return;
                         }
@@ -159,7 +158,7 @@ public class TimingReceiver extends BroadcastReceiver {
     }
 
 
-    private void showToastPopWindow(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
+   /* private void showToastPopWindow(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
         StatisticsUtils.customTrackEvent("local_push_window_custom", "推送弹窗满足推送时机弹窗创建时", "", "local_push_window");
         long current = System.currentTimeMillis();
         long period = current / 1000 - homePressTime / 1000;
@@ -169,6 +168,24 @@ public class TimingReceiver extends BroadcastReceiver {
         } else {
             new Handler().postDelayed(() -> {
                 toast.show(1000 * 20);
+            }, (3 - period) * 1000);
+        }
+    }*/
+
+    private void startPopActivity(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
+        Intent screenIntent = new Intent(context, PopPushActivity.class);
+        screenIntent.putExtra("config", item);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        long current = System.currentTimeMillis();
+        long period = current / 1000 - homePressTime / 1000;
+        if (period >= 3) {
+            context.startActivity(screenIntent);
+        } else {
+            new Handler().postDelayed(() -> {
+                context.startActivity(screenIntent);
             }, (3 - period) * 1000);
         }
     }
@@ -181,13 +198,18 @@ public class TimingReceiver extends BroadcastReceiver {
 
         //2.判断【一键加速】功能是否满足推送条件
         LocalPushConfigModel.Item speedItem = map.get(LocalPushType.TYPE_SPEED_UP);
+
         if (speedItem != null) {
             if (LocalPushUtils.getInstance().allowPopSpeedUp(speedItem)) {
                 LogUtils.e("===允许弹出speed的window");
                 // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, speedItem);
-                showToastPopWindow(context, homePressTime, speedItem);
+                startPopActivity(context, homePressTime, speedItem);
                 return;
+            } else {
+                LogUtils.e("===不允许弹出speed的window");
             }
+        } else {
+            LogUtils.e("=====speedItem为空");
         }
 
 
@@ -196,7 +218,7 @@ public class TimingReceiver extends BroadcastReceiver {
         if (clearItem != null && LocalPushUtils.getInstance().allowPopClear(clearItem)) {
             LogUtils.e("===允许弹出clear的window");
             // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, clearItem);
-            showToastPopWindow(context, homePressTime, clearItem);
+            startPopActivity(context, homePressTime, clearItem);
             return;
         }
 
@@ -206,8 +228,8 @@ public class TimingReceiver extends BroadcastReceiver {
             if (LocalPushUtils.getInstance().allowPopCool(coolItem)) {
                 LogUtils.e("===允许弹出cool的window");
                 //  WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, coolItem);
-                coolItem.temp = temp;
-                showToastPopWindow(context, homePressTime, coolItem);
+                coolItem.setLocalTemp(temp);
+                startPopActivity(context, homePressTime, coolItem);
                 return;
             }
         }
@@ -218,8 +240,8 @@ public class TimingReceiver extends BroadcastReceiver {
             if (LocalPushUtils.getInstance().allowPopPowerSaving(powerItem, isCharged, mBatteryPower)) {
                 LogUtils.e("===允许弹出power的window");
                 // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, powerItem);
-                powerItem.power = mBatteryPower;
-                showToastPopWindow(context, homePressTime, powerItem);
+                powerItem.setLocalPower(mBatteryPower);
+                startPopActivity(context, homePressTime, powerItem);
             }
         }
 
