@@ -173,7 +173,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private int mInteractionPoistion; //互动式广告position
     private int mShowCount;
 
-    private List<VirusLlistEntity> mVirusList;
     private HomeRecommendAdapter mRecommendAdapter;
     private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
     private int mVirusPoistion;
@@ -238,10 +237,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 mShowCount++;
                 if (!PermissionUtils.isUsageAccessAllowed(getActivity())) {
                     mainTableView.accOneKeyStyle(getActivity());
-
                 } else {
                     mainTableView.accStorageHighStyle(getActivity());
-
                 }
             }
 
@@ -278,7 +275,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             viewNews.setVisibility(VISIBLE);
         }
-        initVirus();
         initGeekAdSdk();
 //        initGeekSdkCenter();
 //        if (null != getActivity()) {
@@ -289,6 +285,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
 //        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
     }
+
 
     private void initMainTableItemClick() {
         mainTableView.setOnItemClickListener(new MainTableView.OnItemClick() {
@@ -331,15 +328,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mAdManager = GeekAdSdk.getAdsManger();
     }
 
-    /**
-     * 病毒查杀、网络加速、游戏加速轮播
-     */
-    private void initVirus() {
-        mVirusList = new ArrayList<>();
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_virus, getString(R.string.virus_kill)));
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_network, getString(R.string.network_quicken)));
-        mVirusList.add(new VirusLlistEntity(R.drawable.icon_game_home, getString(R.string.game_quicken)));
-    }
 
     private void initRecyclerView() {
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -394,7 +382,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     @OnClick(R.id.iv_interaction)
     public void interactionClick() {
-
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
 
         StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
@@ -544,7 +531,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     private void closeAd() {
-        if(anim.isOpen()){
+        if (anim.isOpen()) {
             anim.transform();
         }
         new Handler().postDelayed(new Runnable() {
@@ -552,7 +539,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void run() {
                 mTopAdFramelayout.removeAllViews();
             }
-        },2000);
+        }, 2000);
     }
 
     /**
@@ -882,7 +869,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     /**
      * 检查文件存贮权限
      */
-
     private void checkStoragePermission() {
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Disposable disposable = rxPermissions.request(permissions)
