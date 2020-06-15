@@ -88,7 +88,8 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
         rv_content_list.setLayoutManager(new CustomLinearLayoutManger(requireActivity()));
         rv_content_list.setAdapter(mScanResultAdapter = new ScanResultAdapter(this));
 
-        if (ExternalInterface.getInstance(requireActivity()).isOpenAllPermission(requireActivity())) {
+        //深度清理去除
+      /*  if (ExternalInterface.getInstance(requireActivity()).isOpenAllPermission(requireActivity())) {
             ll_deep_clean.setVisibility(View.GONE);
         } else {
             ll_deep_clean.setVisibility(View.VISIBLE);
@@ -99,7 +100,7 @@ public class ScanResultFragment extends BaseFragment implements ScanResultContac
             StatisticsUtils.trackClick("deep_cleaning_click", "深度清理点击",
                     "clean_scan_page", "clean_scan_result_page");
             DeepCleanPermissionActivity.start(requireActivity());
-        });
+        });*/
 
         //计算用户选中需要清理的垃圾文件，并且跳转清理界面
         tv_clean_junk.setOnClickListener(v -> presenter.jumpToCleanPage());
