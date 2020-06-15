@@ -163,7 +163,6 @@ public class ArmVirusKillActivity extends BaseActivity<VirusKillPresenter> imple
         showHideFragment(1, 0);
     }
 
-
     @Override
     public void onBackPressedSupport() {
         switch (VirusKillStatus.code) {

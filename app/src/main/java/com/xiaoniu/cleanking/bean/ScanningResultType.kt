@@ -5,7 +5,7 @@ enum class ScanningResultType(var type: Int, var title: String) {
     /**
      * 缓存垃圾
      */
-    CACHE_JUNK(type = 1, title = "缓存垃圾"),
+    CACHE_JUNK(type = 1, title = "应用垃圾"),
 
     /**
      * 卸载残留

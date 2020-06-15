@@ -85,6 +85,8 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
             if (!CollectionUtils.isEmpty(firstJunkList)) {
                 for (FirstJunkInfo firstJunkInfo : firstJunkList) {
                     firstJunkInfo.setAllchecked(junkGroup.isChecked);
+                    firstJunkInfo.setUncarefulIsChecked(junkGroup.isChecked);
+                    firstJunkInfo.setCarefulIsChecked(junkGroup.isChecked);
                 }
                 junkContentMap.put(wrapper.scanningResultType, firstJunkList);
                 refreshResultModel();
@@ -102,7 +104,29 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
             int checkedCount = 0;
             for (FirstJunkInfo firstJunkInfo : firstJunkList) {
                 if (firstJunkInfo.equals(wrapper.firstJunkInfo)) {
-                    firstJunkInfo.setAllchecked(!firstJunkInfo.isAllchecked());
+                    if(firstJunkInfo.isIsthreeLevel()){
+                        if (firstJunkInfo.getCareFulSize() > 0 && firstJunkInfo.getUncarefulSize() > 0) {
+                            if (firstJunkInfo.isUncarefulIsChecked() && firstJunkInfo.isCarefulIsChecked()) {
+                                firstJunkInfo.setCarefulIsChecked(false);
+                                firstJunkInfo.setUncarefulIsChecked(false);
+                                firstJunkInfo.setAllchecked(false);
+                            } else if (firstJunkInfo.isUncarefulIsChecked() || firstJunkInfo.isCarefulIsChecked()) {
+                                firstJunkInfo.setCarefulIsChecked(true);
+                                firstJunkInfo.setUncarefulIsChecked(true);
+                                firstJunkInfo.setAllchecked(true);
+                            }
+                        } else if (firstJunkInfo.getCareFulSize() > 0 && firstJunkInfo.getUncarefulSize() == 0) {
+                            firstJunkInfo.setCarefulIsChecked(!firstJunkInfo.isCarefulIsChecked());
+                            firstJunkInfo.setAllchecked(!firstJunkInfo.isAllchecked());
+                        } else if (firstJunkInfo.getCareFulSize() == 0 && firstJunkInfo.getUncarefulSize() > 0) {
+                            firstJunkInfo.setUncarefulIsChecked(!firstJunkInfo.isUncarefulIsChecked());
+                            firstJunkInfo.setAllchecked(!firstJunkInfo.isAllchecked());
+                        }
+
+                    }else{
+                        firstJunkInfo.setAllchecked(!firstJunkInfo.isAllchecked());
+                    }
+
                 }
                 if (firstJunkInfo.isAllchecked()) {
                     checkedCount++;
@@ -121,6 +145,81 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
             }
             refreshResultModel();
         }
+    }
+
+
+    @Override
+    public void updateChildJunkContentCheckState(JunkResultWrapper wrapper,int childType) {
+
+        if (junkTitleMap == null || junkTitleMap.size() == 0) {
+            return;
+        }
+
+            ArrayList<FirstJunkInfo> firstJunkList = junkContentMap.get(wrapper.scanningResultType);
+            if (!CollectionUtils.isEmpty(firstJunkList)) {
+                int appCheckedCount = 0;  //应用列表选择
+                for (FirstJunkInfo firstJunkInfo : firstJunkList) {
+                    if (firstJunkInfo.equals(wrapper.firstJunkInfo)) {
+                        if(childType==1){
+                            firstJunkInfo.setUncarefulIsChecked(!firstJunkInfo.isUncarefulIsChecked());
+
+                            if(firstJunkInfo.getCareFulSize()>0){//两种类别同时存在
+                                if ((firstJunkInfo.getUncarefulSize() > 0 && firstJunkInfo.isUncarefulIsChecked()) && (firstJunkInfo.getCareFulSize() > 0 && firstJunkInfo.isCarefulIsChecked())) {
+                                    firstJunkInfo.setAllchecked(true);
+                                    firstJunkInfo.setSomeShecked(false);
+                                } else if (!firstJunkInfo.isUncarefulIsChecked() && !firstJunkInfo.isCarefulIsChecked()) {
+                                    firstJunkInfo.setAllchecked(false);
+                                    firstJunkInfo.setSomeShecked(false);
+                                } else {
+                                    firstJunkInfo.setAllchecked(false);
+                                    firstJunkInfo.setSomeShecked(true);
+                                }
+                            }else{
+                                firstJunkInfo.setAllchecked(firstJunkInfo.isUncarefulIsChecked());
+                                firstJunkInfo.setSomeShecked(!firstJunkInfo.isUncarefulIsChecked());
+                            }
+                        }else if(childType==0){
+                            firstJunkInfo.setCarefulIsChecked(!firstJunkInfo.isCarefulIsChecked());
+
+                            if(firstJunkInfo.getUncarefulSize()>0){//两种类别同时存在
+                                if ((firstJunkInfo.getUncarefulSize() > 0 && firstJunkInfo.isUncarefulIsChecked()) && (firstJunkInfo.getCareFulSize() > 0 && firstJunkInfo.isCarefulIsChecked())) {
+                                    firstJunkInfo.setAllchecked(true);
+                                    firstJunkInfo.setSomeShecked(false);
+
+                                } else if (!firstJunkInfo.isUncarefulIsChecked() && !firstJunkInfo.isCarefulIsChecked()) {
+                                    firstJunkInfo.setAllchecked(false);
+                                    firstJunkInfo.setSomeShecked(false);
+
+                                } else {
+                                    firstJunkInfo.setAllchecked(false);
+                                    firstJunkInfo.setSomeShecked(true);
+                                }
+                            }else{
+                                firstJunkInfo.setAllchecked(firstJunkInfo.isCarefulIsChecked());
+                                firstJunkInfo.setSomeShecked(!firstJunkInfo.isCarefulIsChecked());
+                            }
+                        }
+                    }
+                    if(firstJunkInfo.isAllchecked()){
+                        appCheckedCount++;
+                    }
+                }
+                //更新应用级别列表
+                junkContentMap.put(wrapper.scanningResultType, firstJunkList);
+                //更新分类级别列表
+                JunkGroup junkGroup = junkTitleMap.get(wrapper.scanningResultType);
+                if (junkGroup != null) {
+                    junkGroup.isCheckPart = appCheckedCount != 0 && appCheckedCount != firstJunkList.size();
+                    if (appCheckedCount == 0) {
+                        junkGroup.isChecked = false;
+                    } else {
+                        junkGroup.isChecked = appCheckedCount == firstJunkList.size();
+                    }
+                    junkTitleMap.put(wrapper.scanningResultType, junkGroup);
+                }
+                refreshResultModel();
+            }
+
     }
 
     @Override

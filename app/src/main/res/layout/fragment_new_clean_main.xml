@@ -51,19 +51,17 @@
             <RelativeLayout
                 android:id="@+id/layout_clean_top"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="wrap_content"
+                >
 
                 <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
                     android:id="@+id/view_lottie_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-20dp"
                     android:layout_marginBottom="40dp"
                     android:minHeight="300dp">
 
                 </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
-
 
                 <FrameLayout
                     android:id="@+id/framelayout_top_ad"
@@ -72,7 +70,8 @@
                     android:layout_marginLeft="@dimen/dimen_18dp"
                     android:layout_marginRight="@dimen/dimen_18dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginBottom="40dp"
+                    android:layout_marginBottom="35dp"
+                    android:visibility="gone"
                     android:background="@drawable/ad_container_white_bg" />
             </RelativeLayout>
 
@@ -83,9 +82,10 @@
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_12dp"
                 android:background="@drawable/bg_six"
-                android:clipChildren="false"
                 android:gravity="center"
-                android:padding="@dimen/dimen_16dp"></com.xiaoniu.cleanking.ui.view.MainTableView>
+                android:paddingBottom="@dimen/dimen_16dp"
+                android:paddingLeft="@dimen/dimen_16dp"
+                android:paddingRight="@dimen/dimen_16dp"/>
             <!--分享图片-->
             <ImageView
                 android:id="@+id/image_ad_bottom_first"

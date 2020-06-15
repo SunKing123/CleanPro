@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.main.bean;
 
 import android.graphics.drawable.Drawable;
 
+import com.xiaoniu.cleanking.utils.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class FirstJunkInfo implements Serializable {
     private Drawable garbageIcon;
     private int iconSource;
     private boolean isAllchecked;
+    private boolean isSomeShecked;
     private boolean isApkInstalled;
     private boolean isDeploy;
     private boolean isRemoved;
@@ -27,7 +30,13 @@ public class FirstJunkInfo implements Serializable {
     private String garbageType;
     private long selectSize;
     private List<SecondJunkInfo> subGarbages = new ArrayList<>();
+    private List<SecondJunkInfo> checkSubGarbages = new ArrayList<>();
     private long totalSize;
+    private long uncarefulSize;//建议清理大小
+    private long careFulSize;   //谨慎清理大小
+    private boolean uncarefulIsChecked = true;
+    private boolean carefulIsChecked = false;
+    private boolean isthreeLevel= false;
     private String versionName;
     private int versionCode;
     private boolean isSelect;
@@ -35,12 +44,71 @@ public class FirstJunkInfo implements Serializable {
     private String sdPath;
     private boolean isFirstItem;
 
+    public boolean isIsthreeLevel() {
+        return isthreeLevel;
+    }
+
+    public void setIsthreeLevel(boolean isthreeLevel) {
+        this.isthreeLevel = isthreeLevel;
+    }
+
+    public boolean isUncarefulIsChecked() {
+        return uncarefulIsChecked;
+    }
+
+    public void setUncarefulIsChecked(boolean uncarefulIsChecked) {
+        this.uncarefulIsChecked = uncarefulIsChecked;
+    }
+
+    public boolean isCarefulIsChecked() {
+        return carefulIsChecked;
+    }
+
+    public void setCarefulIsChecked(boolean carefulIsChecked) {
+        this.carefulIsChecked = carefulIsChecked;
+    }
+
+    public long getUncarefulSize() {
+        uncarefulSizeCount();
+        return uncarefulSize;
+    }
+
+    public void setUncarefulSize(long uncarefulSize) {
+        this.uncarefulSize = uncarefulSize;
+    }
+
+    public long getCareFulSize() {
+        uncarefulSizeCount();
+        return careFulSize;
+    }
+
+    public void setCareFulSize(long careFulSize) {
+        this.careFulSize = careFulSize;
+    }
+
     public String getAppProcessName() {
         return appProcessName;
     }
 
     public void setAppProcessName(String appProcessName) {
         this.appProcessName = appProcessName;
+    }
+
+
+    public boolean isSomeShecked() {
+        return isSomeShecked;
+    }
+
+    public void setSomeShecked(boolean someShecked) {
+        isSomeShecked = someShecked;
+    }
+
+    public List<SecondJunkInfo> getCheckSubGarbages() {
+        return checkSubGarbages;
+    }
+
+    public void setCheckSubGarbages(List<SecondJunkInfo> checkSubGarbages) {
+        this.checkSubGarbages = checkSubGarbages;
     }
 
     public boolean isSelect() {
@@ -83,6 +151,7 @@ public class FirstJunkInfo implements Serializable {
      */
     public void addSecondJunk(SecondJunkInfo secondJunkInfo) {
         subGarbages.add(secondJunkInfo);
+
     }
 
     public String getVersionName() {
@@ -150,11 +219,21 @@ public class FirstJunkInfo implements Serializable {
     }
 
     public boolean isAllchecked() {
-        return isAllchecked;
+        if (isIsthreeLevel()) {//三级目录
+            return isCarefulIsChecked() && isUncarefulIsChecked();
+        } else {
+            return isAllchecked;
+        }
+
     }
 
     public void setAllchecked(boolean allchecked) {
         isAllchecked = allchecked;
+    }
+
+    //是否全部选中
+    public boolean isClidenAllChecked(){
+        return isAllcheckedList();
     }
 
     public boolean isApkInstalled() {
@@ -164,6 +243,8 @@ public class FirstJunkInfo implements Serializable {
     public void setApkInstalled(boolean apkInstalled) {
         isApkInstalled = apkInstalled;
     }
+
+
 
     public boolean isDeploy() {
         return isDeploy;
@@ -237,6 +318,9 @@ public class FirstJunkInfo implements Serializable {
         isFirstItem = firstItem;
     }
 
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -304,5 +388,32 @@ public class FirstJunkInfo implements Serializable {
         result = 31 * result + (sdPath != null ? sdPath.hashCode() : 0);
         result = 31 * result + (isFirstItem ? 1 : 0);
         return result;
+    }
+
+
+    public void uncarefulSizeCount(){
+        uncarefulSize = 0;
+        for(SecondJunkInfo secondJunkInfo:subGarbages){
+            if(secondJunkInfo.isChecked()){
+                uncarefulSize += secondJunkInfo.getGarbageSize();
+            }
+        }
+        careFulSize = (totalSize - uncarefulSize) > 0 ? (totalSize - uncarefulSize) : 0;
+    }
+
+    public boolean isAllcheckedList() {
+        if(!CollectionUtils.isEmpty(subGarbages)){
+            boolean isAllChecked = true;
+            for(SecondJunkInfo secondJunkInfo:subGarbages){
+                if(!secondJunkInfo.isChecked()){
+                    isAllChecked = false;
+                    break;
+                }
+            }
+            return isAllChecked;
+        }else{
+            return true;
+        }
+
     }
 }

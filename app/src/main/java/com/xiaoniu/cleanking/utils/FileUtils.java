@@ -205,8 +205,6 @@ public class FileUtils {
                 out.write(buf, 0, length);
             }
             out.flush();
-            PreferenceUtil.getInstants().saveInt(Constant.CLEAN_DB_SAVE,1);
-            LogUtils.i("-zzh-finish");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

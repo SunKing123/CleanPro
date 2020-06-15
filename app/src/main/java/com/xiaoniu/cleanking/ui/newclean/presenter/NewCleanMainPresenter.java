@@ -325,7 +325,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             } else if (wrapper.type == ScanningResultType.CACHE_JUNK) {
                 setCacheJunkResult(wrapper);
             } else if (wrapper.type == ScanningResultType.AD_JUNK) {
-                setAdJunkResult(wrapper);
+//                setAdJunkResult(wrapper);
             }
         }
 

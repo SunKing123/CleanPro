@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -138,6 +139,12 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private TextView tv_junk_sub_title;
         private TextView tv_checked_total;
         private ImageView iv_check_state;
+
+        private LinearLayout linear_uncareful,linear_careful,linear_child_view;
+        private ImageView iv_check_careful_state,iv_check_uncareful_state;
+        private TextView tv_checked_uncareful_total,tv_checked_careful_total;
+        private RelativeLayout rel_first_level;
+
         private OnItemClickListener<JunkResultWrapper> mOnItemClickListener;
 
         ScanResultContentViewHolder(@NonNull View itemView, OnItemClickListener<JunkResultWrapper> onItemClickListener) {
@@ -149,6 +156,18 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_junk_sub_title = itemView.findViewById(R.id.tv_junk_sub_title);
             tv_checked_total = itemView.findViewById(R.id.tv_checked_total);
             iv_check_state = itemView.findViewById(R.id.iv_check_state);
+
+
+            linear_child_view = itemView.findViewById(R.id.linear_child_view);
+            linear_careful = itemView.findViewById(R.id.linear_careful);
+            linear_uncareful = itemView.findViewById(R.id.linear_uncareful);
+            rel_first_level = itemView.findViewById(R.id.rel_first_level);
+
+            iv_check_careful_state = itemView.findViewById(R.id.iv_check_careful_state);
+            iv_check_uncareful_state = itemView.findViewById(R.id.iv_check_uncareful_state);
+
+            tv_checked_uncareful_total = itemView.findViewById(R.id.tv_checked_uncareful_total);
+            tv_checked_careful_total = itemView.findViewById(R.id.tv_checked_careful_total);
         }
 
         public void bind(JunkResultWrapper wrapper) {
@@ -167,17 +186,20 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 iv_junk_logo.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), R.drawable.icon_other_cache));
             }
 
-            if (firstJunkInfo.isAllchecked()) {
-                iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
-            } else {
-                iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
-            }
 
             iv_check_state.setOnClickListener(v -> {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
                 }
             });
+
+            if (firstJunkInfo.isAllchecked()) {
+                iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
+            } else {
+                iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
+            }
+
+
             tv_junk_sub_title.setVisibility(View.VISIBLE);
             if (wrapper.scanningResultType == ScanningResultType.APK_JUNK) {
                 tv_junk_sub_title.setText(firstJunkInfo.getDescp() + " v" + firstJunkInfo.getVersionName());
@@ -186,6 +208,80 @@ public class ScanResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             } else {
                 tv_junk_sub_title.setVisibility(View.GONE);
             }
+
+
+            if(firstJunkInfo.isIsthreeLevel()){
+                tv_junk_sub_title.setVisibility(View.GONE);
+                if (firstJunkInfo.getCareFulSize() > 0 && firstJunkInfo.getUncarefulSize() > 0) {
+                    if (firstJunkInfo.isUncarefulIsChecked() && firstJunkInfo.isCarefulIsChecked()) {
+                        iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
+                    } else if (!firstJunkInfo.isUncarefulIsChecked() && !firstJunkInfo.isCarefulIsChecked()) {
+                        iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
+                    } else {
+                        iv_check_state.setImageResource(R.drawable.ic_scan_result_check);
+                    }
+                } else if (firstJunkInfo.getCareFulSize() > 0 && firstJunkInfo.getUncarefulSize() == 0) {
+                    if (firstJunkInfo.isCarefulIsChecked()) {
+                        iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
+                    } else {
+                        iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
+                    }
+                } else if (firstJunkInfo.getCareFulSize() == 0 && firstJunkInfo.getUncarefulSize() > 0) {
+                    if (firstJunkInfo.isUncarefulIsChecked()) {
+                        iv_check_state.setImageResource(R.drawable.ic_scan_result_checked);
+                    } else {
+                        iv_check_state.setImageResource(R.drawable.ic_scan_result_nomal);
+                    }
+                }
+
+                if(firstJunkInfo.isUncarefulIsChecked()){
+                    iv_check_uncareful_state.setImageResource(R.drawable.ic_scan_result_checked);
+                }else{
+                    iv_check_uncareful_state.setImageResource(R.drawable.ic_scan_result_nomal);
+                }
+
+                if(firstJunkInfo.isCarefulIsChecked()){
+                    iv_check_careful_state.setImageResource(R.drawable.ic_scan_result_checked);
+                }else{
+                    iv_check_careful_state.setImageResource(R.drawable.ic_scan_result_nomal);
+                }
+                long carefulSize = firstJunkInfo.getCareFulSize();
+                long uncarefulSize = firstJunkInfo.getUncarefulSize();
+                if(carefulSize>0){
+                    linear_careful.setVisibility(View.VISIBLE);
+                    tv_checked_careful_total.setText(CleanUtil.formatShortFileSize(firstJunkInfo.getCareFulSize()).getResultSize());
+                }else{
+                    linear_careful.setVisibility(View.GONE);
+                }
+                if(uncarefulSize>0){
+                    linear_uncareful.setVisibility(View.VISIBLE);
+                    tv_checked_uncareful_total.setText(CleanUtil.formatShortFileSize(firstJunkInfo.getUncarefulSize()).getResultSize());
+                }else{
+                    linear_uncareful.setVisibility(View.GONE);
+                }
+
+
+
+
+                iv_check_uncareful_state.setOnClickListener(v -> {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
+                    }
+                });
+
+                iv_check_careful_state.setOnClickListener(v -> {
+                    if (mOnItemClickListener != null) {
+                        mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
+                    }
+                });
+
+                rel_first_level.setOnClickListener(v -> {
+                    linear_child_view.setVisibility(linear_child_view.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+                });
+            }
+
+
+
         }
     }
 }

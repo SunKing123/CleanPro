@@ -1,7 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +46,7 @@ import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -159,9 +162,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         });
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
-            readyExternalDb();
-        }
+//        readCleanExternalDb();
+//        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
+//            readyWeatherExternalDb();
+//        }
     }
 
 
@@ -234,7 +238,37 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     /**
      * 拷贝数据库表
      */
-    public void readyExternalDb() {
+    public void readyWeatherExternalDb() {
+        new AsyncTask<String, Integer, Boolean>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+            }
+
+            @Override
+            protected Boolean doInBackground(String... strings) {
+                FileUtils.copyDbFile(ContextUtils.getApplication(), Constant.WEATHER_DB_NAME);
+                PreferenceUtil.getInstants().saveInt(Constant.CLEAN_DB_SAVE, 1);
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+
+
+            }
+        }.execute();
+
+
+    }
+
+    public void readCleanExternalDb() {
         new AsyncTask<String, Integer, Boolean>() {
             @Override
             protected void onPreExecute() {

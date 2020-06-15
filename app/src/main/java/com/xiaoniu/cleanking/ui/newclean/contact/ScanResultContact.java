@@ -73,6 +73,12 @@ public interface ScanResultContact {
          */
         void updateJunkContentCheckState(JunkResultWrapper data);
 
+
+        /**
+         * 更新垃圾内容选中状态
+         */
+        void updateChildJunkContentCheckState(JunkResultWrapper data,int childType);
+
         /**
          * 计算用户选中的清理数据，并跳转清理界面
          */

@@ -155,11 +155,13 @@ public class CleanUtil {
                 if (i2 >= junks.size()) {
                     break;
                 }
-                if (junks.get(i2) != null && junks.get(i2).isAllchecked()) {
+                if (junks.get(i2) != null && (junks.get(i2).isAllchecked()||junks.get(i2).isUncarefulIsChecked()||junks.get(i2).isCarefulIsChecked())) {
                     total += junks.get(i2).getTotalSize();
                     if (junks.get(i2).getSubGarbages() != null) {
                         for (SecondJunkInfo secondlevelGarbageInfo : junks.get(i2).getSubGarbages()) {
-                            if (secondlevelGarbageInfo != null) {
+                            if(!secondlevelGarbageInfo.isChecked() && !junks.get(i2).isCarefulIsChecked())//需要手动删除的情况,未选中删除，默认不删除
+                                continue;
+                            if (secondlevelGarbageInfo != null ) {
                                 try {
                                     if (secondlevelGarbageInfo.getFilecatalog() != null) {
                                         File delFile = new File(secondlevelGarbageInfo.getFilecatalog());

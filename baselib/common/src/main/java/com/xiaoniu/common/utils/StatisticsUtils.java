@@ -397,7 +397,25 @@ public class StatisticsUtils {
         }
         NiuDataAPI.trackEvent(event_code, event_name, extension);
     }
-
+    /**
+     * 广告请求_自定义 类型
+     * @param event_code
+     * @param event_name
+     * @param testing_status
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void customCheckPermission(String event_code,String event_name,String testing_status, String source_page_id, String current_page_id) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("testing_status", testing_status);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackEvent(event_code, event_name, extension);
+    }
     /**
      * 广告请求_自定义 类型
      * @param event_code
