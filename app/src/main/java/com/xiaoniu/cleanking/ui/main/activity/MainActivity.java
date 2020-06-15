@@ -166,10 +166,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void initView() {
 //        RoomHelper.getInstance();
-//        List<UninstallList> uselessApks = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getAll();
-//        List<AppPath> appPaths = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getAll();
-//        List<UselessApk> uselessApks1 = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
-//        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
+        List<UninstallList> uselessApks = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getAll();
+        List<AppPath> appPaths = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getAll();
+        List<UselessApk> uselessApks1 = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
+        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
         PreferenceUtil.saveShowAD(false);
         getIconListFail();
         mPresenter.getIconList();
@@ -243,10 +243,14 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.getScreentSwitch();
         //获取定位权限
         mPresenter.requestPhoneStatePermission();
-        //测试入口
-//        if (BuildConfig.DEBUG) {
+//        测试入口
+//        if (BuildConfig.BUILD_TYPE.contains("dev") || BuildConfig.BUILD_TYPE.contains("btestdeug")) {
 //            AppConfig.showDebugWindow(mContext);
 //        }
+
+        if (BuildConfig.DEBUG) {
+            AppConfig.showDebugWindow(mContext);
+        }
     }
 
     @Override
