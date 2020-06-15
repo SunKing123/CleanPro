@@ -165,13 +165,13 @@ public class ArmVirusKillActivity extends BaseActivity<VirusKillPresenter> imple
     public void onBackPressedSupport() {
         switch (VirusKillStatus.code) {
             case PAGE_VIEW:
-                StatisticsUtils.trackClick(Points.EVENT_CODE_SYSTEM_RETURN_CLICK, Points.Virus.EVENT_NAME_SCAN_SYSTEM_RETURN, "", Points.Virus.PAGE_SCAN);
+                StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, Points.Virus.SCAN_SYSTEM_RETURN_EVENT_NAME, "", Points.Virus.SCAN_PAGE);
                 break;
             case SCAN:
-                StatisticsUtils.trackClick(Points.EVENT_CODE_SYSTEM_RETURN_CLICK, Points.Virus.EVENT_NAME_ANIMATION_SYSTEM_RETURN, Points.Virus.PAGE_SCAN, Points.Virus.PAGE_ANIMATION);
+                StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, Points.Virus.ANIMATION_SYSTEM_RETURN_EVENT_NAME, Points.Virus.SCAN_PAGE, Points.Virus.ANIMATION_PAGE);
                 break;
             case COMPLETE:
-                StatisticsUtils.trackClick(Points.EVENT_CODE_SYSTEM_RETURN_CLICK, Points.Virus.EVENT_NAME_ANIMATION_FINISH_SYSTEM_RETURN, Points.Virus.PAGE_ANIMATION, Points.Virus.PAGE_ANIMATION_FINISH);
+                StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, Points.Virus.ANIMATION_FINISH_SYSTEM_RETURN_EVENT_NAME, Points.Virus.ANIMATION_PAGE, Points.Virus.ANIMATION_FINISH_PAGE);
                 break;
         }
         super.onBackPressedSupport();

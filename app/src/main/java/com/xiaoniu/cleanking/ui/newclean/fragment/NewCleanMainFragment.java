@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,11 +22,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -37,8 +34,6 @@ import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
-import com.hellogeek.permission.strategy.AutoFixAction;
-import com.hellogeek.permission.util.PermissionPageUtils;
 import com.jzp.rotate3d.Rotate3D;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
@@ -68,7 +63,6 @@ import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.VirusLlistEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
@@ -295,10 +289,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void checkAndUploadPoint() {
         //SD卡读写权限是否打开埋点上报
         String storagePrmStatus = AppUtils.checkStoragePermission(getActivity()) ? "open" : "close";
-        StatisticsUtils.customCheckPermission(Points.EVENT_CODE_STORAGE_PERMISSION, Points.EVENT_NAME_STORAGE_PERMISSION, storagePrmStatus, "", "home_page");
+        StatisticsUtils.customCheckPermission(Points.STORAGE_PERMISSION_EVENT_CODE, Points.STORAGE_PERMISSION_EVENT_NAME, storagePrmStatus, "", "home_page");
         //读取手机状态权限是否打开埋点上报
         String phoneStatePrmStatus = AppUtils.checkPhoneStatePermission(getActivity()) ? "open" : "close";
-        StatisticsUtils.customCheckPermission(Points.EVENT_CODE_DEVICE_IDENTIFICATION, Points.EVENT_NAME_DEVICE_IDENTIFICATION, phoneStatePrmStatus, "", "home_page");
+        StatisticsUtils.customCheckPermission(Points.DEVICE_IDENTIFICATION_EVENT_CODE, Points.DEVICE_IDENTIFICATION_EVENT_NAME, phoneStatePrmStatus, "", "home_page");
     }
 
     private void initMainTableItemClick() {

@@ -103,7 +103,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
     private void setProgressBar() {
 
-        StatisticsUtils.onPageStart(Points.Virus.EVENT_CODE_ANIMATION_PAGE, Points.Virus.EVENT_NAME_ANIMATION_PAGE);
+        StatisticsUtils.onPageStart(Points.Virus.ANIMATION_PAGE_EVENT_CODE, Points.Virus.ANIMATION_PAGE_EVENT_NAME);
 
         VirusKillStatus.code = SCAN;
         timer = new CountDownTimer(5000, 50) {
@@ -118,7 +118,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
             public void onFinish() {
                 showFinishLottie();
-                StatisticsUtils.onPageEnd(Points.Virus.EVENT_CODE_ANIMATION_PAGE, Points.Virus.EVENT_NAME_ANIMATION_PAGE, Points.Virus.PAGE_SCAN, Points.Virus.PAGE_ANIMATION);
+                StatisticsUtils.onPageEnd(Points.Virus.ANIMATION_PAGE_EVENT_CODE, Points.Virus.ANIMATION_PAGE_EVENT_NAME, Points.Virus.SCAN_PAGE, Points.Virus.ANIMATION_PAGE);
             }
         };
         timer.start();
@@ -148,7 +148,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
     private void showFinishLottie() {
 
         VirusKillStatus.code = COMPLETE;
-        StatisticsUtils.onPageStart(Points.Virus.EVENT_CODE_ANIMATION_FINISH_PAGE, Points.Virus.EVENT_NAME_ANIMATION_FINISH_PAGE);
+        StatisticsUtils.onPageStart(Points.Virus.ANIMATION_FINISH_PAGE_EVENT_CODE, Points.Virus.ANIMATION_FINISH_PAGE_EVENT_NAME);
 
         tvAnimTitle.setVisibility(VISIBLE);
         flyTop.setVisibility(View.GONE);
@@ -168,7 +168,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
                 if (lottie != null) {
                     lottie.stopRotationAnimation();
                 }
-                StatisticsUtils.onPageEnd(Points.Virus.EVENT_CODE_ANIMATION_FINISH_PAGE, Points.Virus.EVENT_NAME_ANIMATION_FINISH_PAGE, Points.Virus.PAGE_ANIMATION, Points.Virus.PAGE_ANIMATION_FINISH);
+                StatisticsUtils.onPageEnd(Points.Virus.ANIMATION_FINISH_PAGE_EVENT_CODE, Points.Virus.ANIMATION_FINISH_PAGE_EVENT_NAME, Points.Virus.ANIMATION_PAGE, Points.Virus.ANIMATION_FINISH_PAGE);
                 killedCompleteCallBack();
             }
 

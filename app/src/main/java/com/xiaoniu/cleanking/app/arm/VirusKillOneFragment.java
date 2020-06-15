@@ -67,14 +67,14 @@ public class VirusKillOneFragment extends SimpleFragment {
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         VirusKillStatus.code = PAGE_VIEW;
-        StatisticsUtils.onPageStart(Points.Virus.EVENT_CODE_SCAN_PAGE, Points.Virus.EVENT_NAME_SCAN_PAGE);
+        StatisticsUtils.onPageStart(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME);
         timer = new CountDownTimer(3000, 30) {
             public void onTick(long millisUntilFinished) {
                 if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 30) + "%");
             }
 
             public void onFinish() {
-                StatisticsUtils.onPageEnd(Points.Virus.EVENT_CODE_SCAN_PAGE, Points.Virus.EVENT_NAME_SCAN_PAGE, "", Points.Virus.PAGE_SCAN);
+                StatisticsUtils.onPageEnd(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME, "", Points.Virus.SCAN_PAGE);
                 if (lottie != null) {
                     lottie.stopRotationAnimation();
                 }
