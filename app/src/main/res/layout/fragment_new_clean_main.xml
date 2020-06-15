@@ -83,9 +83,10 @@
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_12dp"
                 android:background="@drawable/bg_six"
-                android:clipChildren="false"
                 android:gravity="center"
-                android:padding="@dimen/dimen_16dp"/>
+                android:paddingBottom="@dimen/dimen_16dp"
+                android:paddingLeft="@dimen/dimen_16dp"
+                android:paddingRight="@dimen/dimen_16dp"/>
             <!--分享图片-->
             <ImageView
                 android:id="@+id/image_ad_bottom_first"

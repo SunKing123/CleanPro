@@ -100,6 +100,7 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -202,7 +203,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         EventBus.getDefault().register(this);
         showHomeLottieView();
         initRecyclerView();
-
+        checkAndUploadPoint();
 
         anim = new Rotate3D.Builder(getActivity())
                 .setParentView(layoutCleanTop)
@@ -286,6 +287,30 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
     }
 
+
+    /**
+     * 权限埋点上报
+     *
+     */
+    private void checkAndUploadPoint() {
+        //SD卡读写权限是否打开埋点上报
+        String storagePrmStatus = "";
+        if (AppUtils.checkStoragePermission(getActivity())) {
+            storagePrmStatus = "open";
+        } else {
+            storagePrmStatus = "close";
+        }
+        StatisticsUtils.customCheckPermission("storage_permission_detection", "存储权限检测", storagePrmStatus, "", "home_page");
+
+        //读取手机状态权限是否打开埋点上报
+        String phoneStatePrmStatus = "";
+        if (AppUtils.checkPhoneStatePermission(getActivity())) {
+            phoneStatePrmStatus = "open";
+        } else {
+            phoneStatePrmStatus = "close";
+        }
+        StatisticsUtils.customCheckPermission("device_identification_authority_detection", "设备识别检测", phoneStatePrmStatus, "", "home_page");
+    }
 
     private void initMainTableItemClick() {
         mainTableView.setOnItemClickListener(new MainTableView.OnItemClick() {

@@ -110,8 +110,6 @@ public class VirusKillTwoFragment extends SimpleFragment {
         Log.e("virusKill","=========病毒查杀扫描页面展示=========");
 
         StatisticsUtils.onPageStart("virus_killing_animation_page_view_page","病毒查杀动画页浏览");
-        StatisticsUtils.onPageEnd("virus_killing_animation_page_view_page","病毒查杀动画页浏览","virus_killing_scan_page","virus_killing_animation_page");
-
 
         VirusKillStatus.code=SCAN;
         timer = new CountDownTimer(5000, 50) {
@@ -126,6 +124,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
             public void onFinish() {
                 showFinishLottie();
+                StatisticsUtils.onPageEnd("virus_killing_animation_page_view_page","病毒查杀动画页浏览","virus_killing_scan_page","virus_killing_animation_page");
             }
         };
         timer.start();
@@ -157,7 +156,6 @@ public class VirusKillTwoFragment extends SimpleFragment {
         Log.e("virusKill","=========病毒查杀完成页面===========");
 
         StatisticsUtils.onPageStart("virus_killing_finish_animation_page_view_page","病毒查杀动画完成页浏览");
-        StatisticsUtils.onPageEnd("virus_killing_finish_animation_page_view_page","病毒查杀动画完成页浏览","virus_killing_animation_page","virus_killing_finish_animation_page");
 
         tvAnimTitle.setVisibility(VISIBLE);
         flyTop.setVisibility(View.GONE);
@@ -177,7 +175,9 @@ public class VirusKillTwoFragment extends SimpleFragment {
                 if (lottie != null) {
                     lottie.stopRotationAnimation();
                 }
+                StatisticsUtils.onPageEnd("virus_killing_finish_animation_page_view_page","病毒查杀动画完成页浏览","virus_killing_animation_page","virus_killing_finish_animation_page");
                 killedCompleteCallBack();
+
             }
 
             @Override

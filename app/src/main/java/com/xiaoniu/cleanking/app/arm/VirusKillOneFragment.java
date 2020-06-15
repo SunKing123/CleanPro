@@ -74,14 +74,13 @@ public class VirusKillOneFragment extends SimpleFragment {
 
 
         StatisticsUtils.onPageStart("virus_killing_scan_page_view_page","病毒查杀扫描页浏览");
-        StatisticsUtils.onPageEnd("virus_killing_scan_page_view_page","病毒查杀扫描页浏览","","virus_killing_scan_page");
-
         timer = new CountDownTimer(3000, 30) {
             public void onTick(long millisUntilFinished) {
                 if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 30) + "%");
             }
 
             public void onFinish() {
+                StatisticsUtils.onPageEnd("virus_killing_scan_page_view_page","病毒查杀扫描页浏览","","virus_killing_scan_page");
                 if (lottie != null) {
                     lottie.stopRotationAnimation();
                 }
