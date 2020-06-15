@@ -24,7 +24,7 @@ import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
-import com.xiaoniu.cleanking.ui.localpush.LocalPushWindow;
+import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -122,8 +122,8 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
-                        if (period < 10 * 60) {
-                       //if (period < 5) {
+                         if (period < 10 * 60) {
+                       // if (period < 5) {
                             LogUtils.e("====距离上次清理APP触发Home键过了" + period + "秒小于限制时间，直接返回");
                             return;
                         }
@@ -158,7 +158,8 @@ public class TimingReceiver extends BroadcastReceiver {
     }
 
 
-    private void showToastPopWindow(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
+   /* private void showToastPopWindow(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
+        StatisticsUtils.customTrackEvent("local_push_window_custom", "推送弹窗满足推送时机弹窗创建时", "", "local_push_window");
         long current = System.currentTimeMillis();
         long period = current / 1000 - homePressTime / 1000;
         LocalPushWindow toast = new LocalPushWindow(context, item);
@@ -169,6 +170,24 @@ public class TimingReceiver extends BroadcastReceiver {
                 toast.show(1000 * 20);
             }, (3 - period) * 1000);
         }
+    }*/
+
+    private void startPopActivity(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
+        Intent screenIntent = new Intent(context, PopPushActivity.class);
+        screenIntent.putExtra("config", item);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        long current = System.currentTimeMillis();
+        long period = current / 1000 - homePressTime / 1000;
+        if (period >= 3) {
+            context.startActivity(screenIntent);
+        } else {
+            new Handler().postDelayed(() -> {
+                context.startActivity(screenIntent);
+            }, (3 - period) * 1000);
+        }
     }
 
 
@@ -177,23 +196,30 @@ public class TimingReceiver extends BroadcastReceiver {
         //1.读取本地缓存的推送配置Config列表
         SparseArrayCompat<LocalPushConfigModel.Item> map = PreferenceUtil.getLocalPushConfig();
 
-        //2.判断【垃圾清理】功能是否满足推送条件
-        LocalPushConfigModel.Item clearItem = map.get(LocalPushType.TYPE_NOW_CLEAR);
-        if (clearItem != null && LocalPushUtils.getInstance().allowPopClear(clearItem)) {
-            LogUtils.e("===允许弹出clear的window");
-            // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, clearItem);
-            showToastPopWindow(context, homePressTime, clearItem);
-            return;
-        }
-        //3.判断【一键加速】功能是否满足推送条件
+        //2.判断【一键加速】功能是否满足推送条件
         LocalPushConfigModel.Item speedItem = map.get(LocalPushType.TYPE_SPEED_UP);
+
         if (speedItem != null) {
             if (LocalPushUtils.getInstance().allowPopSpeedUp(speedItem)) {
                 LogUtils.e("===允许弹出speed的window");
                 // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, speedItem);
-                showToastPopWindow(context, homePressTime, speedItem);
+                startPopActivity(context, homePressTime, speedItem);
                 return;
+            } else {
+                LogUtils.e("===不允许弹出speed的window");
             }
+        } else {
+            LogUtils.e("=====speedItem为空");
+        }
+
+
+        //3.判断【垃圾清理】功能是否满足推送条件
+        LocalPushConfigModel.Item clearItem = map.get(LocalPushType.TYPE_NOW_CLEAR);
+        if (clearItem != null && LocalPushUtils.getInstance().allowPopClear(clearItem)) {
+            LogUtils.e("===允许弹出clear的window");
+            // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, clearItem);
+            startPopActivity(context, homePressTime, clearItem);
+            return;
         }
 
         //4.判断【手机降温】功能是否满足推送条件
@@ -202,8 +228,8 @@ public class TimingReceiver extends BroadcastReceiver {
             if (LocalPushUtils.getInstance().allowPopCool(coolItem)) {
                 LogUtils.e("===允许弹出cool的window");
                 //  WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, coolItem);
-                coolItem.temp = temp;
-                showToastPopWindow(context, homePressTime, coolItem);
+                coolItem.setLocalTemp(temp);
+                startPopActivity(context, homePressTime, coolItem);
                 return;
             }
         }
@@ -214,8 +240,8 @@ public class TimingReceiver extends BroadcastReceiver {
             if (LocalPushUtils.getInstance().allowPopPowerSaving(powerItem, isCharged, mBatteryPower)) {
                 LogUtils.e("===允许弹出power的window");
                 // WindowUtil.getInstance().showWindowWhenDelayTwoSecond(context, homePressTime, powerItem);
-                powerItem.power = mBatteryPower;
-                showToastPopWindow(context, homePressTime, powerItem);
+                powerItem.setLocalPower(mBatteryPower);
+                startPopActivity(context, homePressTime, powerItem);
             }
         }
 
@@ -507,8 +533,8 @@ public class TimingReceiver extends BroadcastReceiver {
         mFileQueryUtils.setIsService(false);
         Observable.create(e -> {
             //扫描进程占用内存情况
-             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
-             e.onNext(runningProcess);
+            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+            e.onNext(runningProcess);
             //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
             e.onNext(apkJunkInfos);
@@ -600,7 +626,7 @@ public class TimingReceiver extends BroadcastReceiver {
                 long mbNum = totalSize / (1024 * 1024);
                 //保存上一次扫秒出来的垃圾大小
                 //为了保证比扫描页面的数小，强制性的/2
-                long temp=mbNum/2;
+                long temp = mbNum / 2;
                 PreferenceUtil.saveLastScanRubbishSize(temp);
                 NotificationEvent event = new NotificationEvent();
                 event.setType("clean");

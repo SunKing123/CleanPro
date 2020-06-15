@@ -66,11 +66,11 @@ public class LocalPushWindow {
                 break;
             case LocalPushType.TYPE_PHONE_COOL:
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONECOOLINGACTIVITY;
-                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + item.temp + "°</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + item.getLocalTemp() + "°</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("一键降温");
                 break;
             case LocalPushType.TYPE_SUPER_POWER:
-                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + item.power + "%</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                title.setText(HtmlCompat.fromHtml(item.getTitle().replace("#", "<font color='#FF4545'><b>" + item.getLocalPower() + "%</b></font>"), HtmlCompat.FROM_HTML_MODE_COMPACT));
                 button.setText("立即省电");
                 urlSchema = SchemeConstant.LocalPushScheme.SCHEME_PHONESUPERPOWERACTIVITY;
                 break;

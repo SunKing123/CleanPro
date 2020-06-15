@@ -437,6 +437,17 @@
             android:theme="@style/common_locker_screen"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
+
+        <activity
+            android:name=".ui.localpush.PopPushActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style_2"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+
         <activity
             android:name=".ui.lockscreen.PopLayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
