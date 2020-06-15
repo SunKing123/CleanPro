@@ -101,6 +101,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -293,12 +294,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void checkAndUploadPoint() {
         //SD卡读写权限是否打开埋点上报
+
         String storagePrmStatus = AppUtils.checkStoragePermission(getActivity())?"open":"close";
-        StatisticsUtils.customCheckPermission("storage_permission_detection", "存储权限检测", storagePrmStatus, "", "home_page");
+        StatisticsUtils.customCheckPermission(Points.EVENT_CODE_STORAGE_PERMISSION, Points.EVENT_NAME_STORAGE_PERMISSION, storagePrmStatus, "", "home_page");
 
         //读取手机状态权限是否打开埋点上报
         String phoneStatePrmStatus = AppUtils.checkPhoneStatePermission(getActivity())? "open":"close";
-        StatisticsUtils.customCheckPermission("device_identification_authority_detection", "设备识别检测", phoneStatePrmStatus, "", "home_page");
+        StatisticsUtils.customCheckPermission(Points.EVENT_CODE_DEVICE_IDENTIFICATION, Points.EVENT_NAME_DEVICE_IDENTIFICATION, phoneStatePrmStatus, "", "home_page");
     }
 
     private void initMainTableItemClick() {

@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,11 +20,10 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.widget.LeiDaView;
 import com.jess.arms.widget.RotationLoadingView;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
-import com.xiaoniu.statistic.NiuDataAPI;
 
 import butterknife.BindView;
 
@@ -70,17 +67,14 @@ public class VirusKillOneFragment extends SimpleFragment {
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         VirusKillStatus.code=PAGE_VIEW;
-        Log.e("virusKill","=========病毒查杀浏览页面=========");
-
-
-        StatisticsUtils.onPageStart("virus_killing_scan_page_view_page","病毒查杀扫描页浏览");
+        StatisticsUtils.onPageStart(Points.Virus.EVENT_CODE_SCAN_PAGE,Points.Virus.EVENT_NAME_SCAN_PAGE);
         timer = new CountDownTimer(3000, 30) {
             public void onTick(long millisUntilFinished) {
                 if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 30) + "%");
             }
 
             public void onFinish() {
-                StatisticsUtils.onPageEnd("virus_killing_scan_page_view_page","病毒查杀扫描页浏览","","virus_killing_scan_page");
+                StatisticsUtils.onPageEnd(Points.Virus.EVENT_CODE_SCAN_PAGE,Points.Virus.EVENT_NAME_SCAN_PAGE,"",Points.Virus.PAGE_SCAN);
                 if (lottie != null) {
                     lottie.stopRotationAnimation();
                 }

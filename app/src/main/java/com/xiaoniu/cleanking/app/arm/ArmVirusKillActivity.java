@@ -19,8 +19,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -34,10 +32,10 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
-import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,16 +165,13 @@ public class ArmVirusKillActivity extends BaseActivity<VirusKillPresenter> imple
     public void onBackPressedSupport() {
         switch (VirusKillStatus.code) {
             case PAGE_VIEW:
-                Log.e("virusKill", "用户浏览页面点击返回");
-                StatisticsUtils.trackClick("system_return_click", "用户在病毒查杀页返回", "", "virus_killing_scan_page");
+                StatisticsUtils.trackClick(Points.EVENT_CODE_SYSTEM_RETURN_CLICK, Points.Virus.EVENT_NAME_SCAN_SYSTEM_RETURN, "", Points.Virus.PAGE_SCAN);
                 break;
             case SCAN:
-                Log.e("virusKill", "用户扫描页面点击返回");
-                StatisticsUtils.trackClick("system_return_click", "病毒查杀动画页返回", "virus_killing_scan_page", "virus_killing_animation_page");
+                StatisticsUtils.trackClick(Points.EVENT_CODE_SYSTEM_RETURN_CLICK, Points.Virus.EVENT_NAME_ANIMATION_SYSTEM_RETURN, Points.Virus.PAGE_SCAN, Points.Virus.PAGE_ANIMATION);
                 break;
             case COMPLETE:
-                Log.e("virusKill", "用户完成页面点击返回");
-                StatisticsUtils.trackClick("system_return_click", "病毒查杀动画完成页返回", "virus_killing_animation_page", "virus_killing_finish_animation_page");
+                StatisticsUtils.trackClick(Points.EVENT_CODE_SYSTEM_RETURN_CLICK, Points.Virus.EVENT_NAME_ANIMATION_FINISH_SYSTEM_RETURN, Points.Virus.PAGE_ANIMATION, Points.Virus.PAGE_ANIMATION_FINISH);
                 break;
         }
         super.onBackPressedSupport();
