@@ -1,11 +1,12 @@
 package com.xiaoniu.cleanking.ui.localpush;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,6 @@ import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.utils.GlideUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -32,6 +32,15 @@ public class PopPushActivity extends AppCompatActivity {
 
     private Handler mHandle = new Handler();
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            finish();
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +57,8 @@ public class PopPushActivity extends AppCompatActivity {
 
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-               // | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                // | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         );
         setContentView(R.layout.activity_pop_layout);
 
@@ -99,15 +108,17 @@ public class PopPushActivity extends AppCompatActivity {
         //更新当天弹框的次数
         LocalPushUtils.getInstance().autoIncrementDayLimit(item.getOnlyCode());
 
-        button.setOnClickListener(v -> {
-           /* if (!TextUtils.isEmpty(urlSchema)) {
-                StatisticsUtils.trackClick("local_push_window_click", "本地推送弹窗点击", "", "local_push_window");
-                SchemeProxy.openScheme(this, urlSchema);
-            }*/
-            LogUtils.e("=========单击了button按钮====:"+urlSchema);
+        button.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (!TextUtils.isEmpty(urlSchema)) {
+                    StatisticsUtils.trackClick("local_push_window_click", "本地推送弹窗点击", "", "local_push_window");
+                    SchemeProxy.openScheme(PopPushActivity.this, urlSchema);
+                    finish();
+                }
+            }
+            return true;
         });
-
-      //  mHandle.postDelayed(this::finish, 5000);
+        mHandle.postDelayed(this::finish, 5000);
     }
 
 

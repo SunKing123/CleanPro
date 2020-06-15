@@ -122,8 +122,8 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
-                         if (period < 10 * 60) {
-                       // if (period < 5) {
+                        if (period < 10 * 60) {
+                        //if (period < 5) {
                             LogUtils.e("====距离上次清理APP触发Home键过了" + period + "秒小于限制时间，直接返回");
                             return;
                         }
