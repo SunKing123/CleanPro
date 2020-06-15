@@ -1769,7 +1769,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void onVideoComplete(AdInfo info) {
                 Log.d(TAG, "-----onVideoComplete-----");
                 NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
-                //跳转自运营
+                //跳转自运营广告
                 operationItemClick(entity);
             }
 
@@ -1803,7 +1803,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.clickAD("close_click", "首页运营位激励视频页页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
                 }
-                //跳转自运营
+                //跳转自运营广告
                 operationItemClick(entity);
 //                startActivity(VirusKillActivity.class);
             }
@@ -1814,7 +1814,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (null != info) {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page_incentive_video_page");
                 }
-                startKillVirusActivity();
+                //跳转自运营广告
+                operationItemClick(entity);
             }
         });
     }

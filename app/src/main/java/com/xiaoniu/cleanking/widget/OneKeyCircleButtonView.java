@@ -91,9 +91,10 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams)ivCenter.getLayoutParams();
         imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
         imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
+        imglayoutParams.topMargin = 0-Float.valueOf(imglayoutParams.height*0.1f).intValue();
+        imglayoutParams.bottomMargin = 0-Float.valueOf(imglayoutParams.height*0.1f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
 
-//
 //        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams)lin.getLayoutParams();
 //        imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
 //        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
