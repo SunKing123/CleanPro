@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     private Map<Integer, LottiePathdata> lottiePathdataMap;
     private int lottieIndex =0;
     private TextView tv_file_total_size;
+    private LinearLayout linear_text_tag;
     public OneKeyCircleButtonView(Context context) {
         super(context);
         initView(context);
@@ -60,6 +62,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void initView(Context context) {
         mContext = context;
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_home_top_circle_anim, this, true);
+        linear_text_tag = (LinearLayout)v.findViewById(R.id.linear_text_tag);
         viewLottieRed = (LottieAnimationView) v.findViewById(R.id.view_lottie_lower_red);
         viewLottieYellow = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_yellow);
         viewLottieGreen = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_green);
@@ -89,6 +92,12 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
         imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
+
+//
+//        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams)lin.getLayoutParams();
+//        imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
+//        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
+//        ivCenter.setLayoutParams(imglayoutParams);
     }
 
     public void startLottie(){

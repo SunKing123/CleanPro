@@ -1743,7 +1743,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         NiuDataAPI.onPageStart("home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
 
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page_incentive_video_page");
-        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_VIRUS, "user123", 1, new VideoAdListener() {
+        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_HOME_PAGE_OPERATION_POSITION, "user123", 1, new VideoAdListener() {
             @Override
             public void onVideoResume(AdInfo info) {
 
