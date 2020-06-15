@@ -460,6 +460,8 @@ public class FileQueryUtils {
             //一级目（私有目录）
             FirstJunkInfo cacheJunkInfo = new FirstJunkInfo();
             cacheJunkInfo.setAppName(getAppName(applicationInfo.applicationInfo));
+            cacheJunkInfo.setIsthreeLevel(true);  //三级文件目录
+            cacheJunkInfo.setUncarefulIsChecked(true);
             if (!isService){
                 cacheJunkInfo.setGarbageIcon(getAppIcon(applicationInfo.applicationInfo));
 //                cacheJunkInfo.setIconSource(getAppIconSource(applicationInfo.applicationInfo));
@@ -691,7 +693,13 @@ public class FileQueryUtils {
                             SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                             if (cachefile.exists()) {
                                 secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
-                                secondJunkInfo.setChecked(true);
+                                if(!TextUtils.isEmpty(entry.getValue()) && entry.getValue().endsWith("_手动")){
+//                                    LogUtils.i("zz--手动");
+                                    secondJunkInfo.setChecked(false);
+                                    cacheJunkInfo.setCarefulIsChecked(false);
+                                }else{
+                                    secondJunkInfo.setChecked(true);
+                                }
                                 secondJunkInfo.setPackageName(applicationInfo.packageName);
                                 secondJunkInfo.setGarbagetype("TYPE_CACHE");
                                 secondJunkInfo.setGarbageSize(cachefile.length());
@@ -1975,9 +1983,9 @@ public class FileQueryUtils {
                         }
                     }
 
-//                    if (TextUtils.isEmpty(map.get(file2.getAbsolutePath())) && appPath.getClean_type() == 2) {  //手动清理
-//                        map.get()
-//                    }
+                    if (!TextUtils.isEmpty(map.get(file2.getAbsolutePath())) && appPath.getClean_type() == 0) {  //手动清理
+                        map.put(file2.getAbsolutePath(), map.get(file2.getAbsolutePath()) + "_手动");
+                    }
                 }
             }
         }

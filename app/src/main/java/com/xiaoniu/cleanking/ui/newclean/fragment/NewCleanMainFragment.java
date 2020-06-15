@@ -221,7 +221,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mainTableView.killVirusNormalStyle(getActivity());
         }
         mPresenter.readyScanningJunk();
-        mPresenter.checkStoragePermission();
+        mPresenter.checkStoragePermission();  //开始扫描
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
@@ -383,7 +383,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.iv_interaction)
     public void interactionClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        StatisticsUtils.trackClick("suspended_interactive_advertising_click", "悬浮互动式广告点击", "clod_splash_page", "home_page");
+
+        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > mInteractionList.size() - 1) {
                 mInteractionPoistion = 0;
@@ -436,6 +437,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
+
+//        isReScan();
     }
 
     public void setIsGotoSetting(boolean isGotoSetting) {
@@ -619,6 +622,20 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
     }
 
+
+    public  void isReScan(){
+        if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
+            mPresenter.checkStoragePermission();  //重新开始扫描
+            if(null!=view_lottie_top)
+            view_lottie_top.startLottie();
+        } else {
+            if(!PreferenceUtil.getNowCleanTime()){
+                if(null!=view_lottie_top)
+                    view_lottie_top.setGreenState();
+            }
+        }
+    }
+
     /**
      * 清理完成回调
      *
@@ -738,6 +755,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mainTableView.killVirusCleanWarningStyle();
         }
         initGeekSdkTop();
+        isReScan();
     }
 
 
@@ -1187,9 +1205,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), true);
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
             } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_28d1a6), false);
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
             }
             initGeekAdSdk();
             initGeekSdkCenter();
@@ -1708,10 +1726,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void loadMorePageFileGeekAd(HomeRecommendListEntity entity) {
         if (null == getActivity() || null == mAdManager) return;
-//        NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
-//        NiuDataAPIUtil.onPageEnd("home_page", PositionId.AD_HOME_PAGE_OPERATION_POSITION, "view_page", "病毒查杀激励视频页浏览");
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "virus_killing_video_page");
-        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_VIRUS, "user123", 1, new VideoAdListener() {
+        NiuDataAPI.onPageStart("home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
+
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page_incentive_video_page");
+        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_HOME_PAGE_OPERATION_POSITION, "user123", 1, new VideoAdListener() {
             @Override
             public void onVideoResume(AdInfo info) {
 
@@ -1725,14 +1743,16 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void onVideoComplete(AdInfo info) {
                 Log.d(TAG, "-----onVideoComplete-----");
-                NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频结束页浏览");
+                NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
+                //跳转自运营
+                operationItemClick(entity);
             }
 
             @Override
             public void adSuccess(AdInfo info) {
                 Log.d(TAG, "-----adSuccess-----");
                 if (null == info) return;
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "virus_killing_video_page");
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page_incentive_video_page");
             }
 
             @Override
@@ -1740,23 +1760,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 Log.d(TAG, "-----adExposed-----");
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
             }
 
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked-----");
                 if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
             }
 
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "-----adClose-----");
                 PreferenceUtil.saveShowAD(false);
-                NiuDataAPIUtil.onPageEnd("home_page", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
+                NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "view_page", "病毒查杀激励视频结束页浏览");
                 if (null != info) {
-                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", " ");
+                    StatisticsUtils.clickAD("close_click", "首页运营位激励视频页页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
                 }
                 //跳转自运营
                 operationItemClick(entity);
@@ -1767,7 +1787,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void adError(AdInfo info, int errorCode, String errorMsg) {
                 Log.d(TAG, "-----adError-----" + errorMsg);
                 if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page_incentive_video_page");
                 }
                 startKillVirusActivity();
             }

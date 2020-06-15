@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
+        android:id="@+id/rel_first_level"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_65dp"
         android:background="@color/color_F7F8FA"
@@ -31,10 +31,10 @@
             android:id="@+id/tv_junk_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/iv_junk_logo"
             android:layout_marginLeft="@dimen/dimen_12dp"
             android:layout_toLeftOf="@+id/tv_checked_total"
             android:layout_toRightOf="@+id/iv_junk_logo"
+            android:layout_centerVertical="true"
             android:singleLine="true"
             tools:text="拼多多的垃圾"
             android:textColor="@color/color_404040"
@@ -85,13 +85,14 @@
         android:visibility="gone"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <LinearLayout
             android:id="@+id/linear_uncareful"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            tools:background="@color/color_f2f2f2">
+            android:background="@color/color_f2f2f2">
 
 
             <ImageView
@@ -102,25 +103,28 @@
                 android:src="@drawable/type_uncareful" />
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:singleLine="true"
-                tools:text="放心清理"
+                android:layout_weight="1"
+                android:text="放心清理"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
+
 
             <TextView
                 android:id="@+id/tv_checked_uncareful_total"
                 android:layout_width="wrap_content"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:gravity="right"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_8dp"
                 android:layout_toLeftOf="@+id/iv_check_state"
                 android:singleLine="true"
-                tools:text="已选123MB"
+                android:text="已选123MB"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
 
@@ -141,7 +145,7 @@
             android:layout_height="@dimen/dp_50"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            tools:background="@color/color_f2f2f2">
+            android:background="@color/color_f2f2f2">
 
 
             <ImageView
@@ -149,7 +153,7 @@
                 android:layout_height="@dimen/dimen_32dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_30"
-                android:src="@drawable/type_uncareful" />
+                android:src="@drawable/type_careful" />
 
             <TextView
                 android:layout_width="0dp"
@@ -157,20 +161,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:singleLine="true"
-                tools:text="谨慎清理"
+                android:text="谨慎清理"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
 
             <TextView
                 android:id="@+id/tv_checked_careful_total"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginRight="@dimen/dimen_8dp"
+                android:layout_weight="1"
+                android:gravity="right"
                 android:layout_toLeftOf="@+id/iv_check_state"
                 android:singleLine="true"
-                tools:text="已选123MB"
+                android:text="已选123MB"
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
 
