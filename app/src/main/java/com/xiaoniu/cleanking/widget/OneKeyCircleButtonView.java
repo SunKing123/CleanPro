@@ -2,9 +2,11 @@ package com.xiaoniu.cleanking.widget;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,8 +27,7 @@ import java.util.Map;
 /**
  * @author zhengzhihao
  * @date 2020/6/11 09
- * @mail：zhengzhihao@hellogeek.com
- * 首页头部一键清理按钮
+ * @mail：zhengzhihao@hellogeek.com 首页头部一键清理按钮
  */
 public class OneKeyCircleButtonView extends RelativeLayout {
 
@@ -37,9 +38,11 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     private List<LottieAnimationView> lottieList;
     private TouchImageView ivCenter;
     private Map<Integer, LottiePathdata> lottiePathdataMap;
-    private int lottieIndex =0;
+    private int lottieIndex = 0;
     private TextView tv_file_total_size;
     private LinearLayout linear_text_tag;
+    private RelativeLayout rel_container;
+
     public OneKeyCircleButtonView(Context context) {
         super(context);
         initView(context);
@@ -57,16 +60,19 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     /**
      * 初始化布局
+     *
      * @return
      */
     public void initView(Context context) {
         mContext = context;
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_home_top_circle_anim, this, true);
-        linear_text_tag = (LinearLayout)v.findViewById(R.id.linear_text_tag);
+        linear_text_tag = (LinearLayout) v.findViewById(R.id.linear_text_tag);
+//        fragment_parent = (FrameLayout)v.findViewById(R.id.fragment_parent);
         viewLottieRed = (LottieAnimationView) v.findViewById(R.id.view_lottie_lower_red);
         viewLottieYellow = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_yellow);
         viewLottieGreen = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_green);
-        tv_file_total_size = (TextView)v.findViewById(R.id.tv_file_total_size);
+        tv_file_total_size = (TextView) v.findViewById(R.id.tv_file_total_size);
+        rel_container = (RelativeLayout) v.findViewById(R.id.rel_parent);
         lottieList = new ArrayList<>();
         lottieList.add(viewLottieGreen);
         lottieList.add(viewLottieYellow);
@@ -79,36 +85,35 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     }
 
-    public void setViewLayoutParms(){
+    public void setViewLayoutParms() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieYellow.getLayoutParams();
-        layoutParams.height = Float.valueOf(screenWidth*1.2f).intValue();
-        layoutParams.width = Float.valueOf(screenWidth*1.2f).intValue();
+        layoutParams.height = Float.valueOf(screenWidth * 1.2f).intValue();
+        layoutParams.width = Float.valueOf(screenWidth * 1.2f).intValue();
         viewLottieYellow.setLayoutParams(layoutParams);
         viewLottieRed.setLayoutParams(layoutParams);
         viewLottieGreen.setLayoutParams(layoutParams);
 
-        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams)ivCenter.getLayoutParams();
-        imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
-        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
-        imglayoutParams.topMargin = 0-Float.valueOf(imglayoutParams.height*0.1f).intValue();
-        imglayoutParams.bottomMargin = 0-Float.valueOf(imglayoutParams.height*0.1f).intValue();
+        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) ivCenter.getLayoutParams();
+        imglayoutParams.height = Float.valueOf(screenWidth * 0.497f * 1.2f).intValue();
+        imglayoutParams.width = Float.valueOf(screenWidth * 0.497f * 1.2f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
 
-//        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams)lin.getLayoutParams();
-//        imglayoutParams.height = Float.valueOf(screenWidth*0.447f*1.2f).intValue();
-//        imglayoutParams.width =  Float.valueOf(screenWidth*0.447f*1.2f).intValue();
-//        ivCenter.setLayoutParams(imglayoutParams);
+        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
+        textLayout.height = Float.valueOf(screenWidth * 0.1f * 1.2f).intValue();
+        linear_text_tag.setLayoutParams(textLayout);
+        linear_text_tag.setVisibility(VISIBLE);
+
     }
 
-    public void startLottie(){
+    public void startLottie() {
         lottieIndex = 0;
         playLottie(lottieIndex);
 
     }
 
     //清理完成绿色状态;
-    public void setGreenState(){
+    public void setGreenState() {
         //"home_top_scan/anim01a/data.json","home_top_scan/anim01a/images"
         viewLottieGreen.setAnimation("home_top_scan/anim01b/data.json");
         viewLottieGreen.setImageAssetsFolder("home_top_scan/anim01b/images");
@@ -117,12 +122,13 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     }
 
 
-    public void clancleAnim(LottieAnimationView lottieAnimationView){
+    public void clancleAnim(LottieAnimationView lottieAnimationView) {
         lottieAnimationView.cancelAnimation();
         lottieAnimationView.clearAnimation();
         lottieAnimationView.setVisibility(GONE);
     }
-    public void playLottie(int index){
+
+    public void playLottie(int index) {
         LottieAnimationView lottieview = lottieList.get(index);
         LottiePathdata pathdata = lottiePathdataMap.get(index);
         lottieview.setAlpha(0f);
@@ -153,7 +159,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                 //当前动画隐藏
                 if (null != lottieview.getTag() && lottieview.getTag().toString().trim().equals("stoped"))
                     return;
-                if(lottieIndex != 2){  //最后一个不隐藏
+                if (lottieIndex != 2) {  //最后一个不隐藏
                     lottieview.setTag("stoped");
                     lottieview.setAlpha(1f);
                     lottieview.setVisibility(VISIBLE);
@@ -184,7 +190,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                 }
 
                 //下个动画
-                if (lottieIndex <= 1){
+                if (lottieIndex <= 1) {
                     lottieIndex++;
                     playLottie(lottieIndex);
                 }
@@ -194,10 +200,11 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     }
 
 
-    public void setTotalSize(String size){
+    public void setTotalSize(String size) {
         tv_file_total_size.setText(size);
     }
-    public void scanFinish(){
+
+    public void scanFinish() {
         LottiePathdata pathdata = lottiePathdataMap.get(3);
         LottieAnimationView lottieAnimationView = lottieList.get(2);
         lottieAnimationView.setAnimation(pathdata.getJsonPath());
@@ -206,12 +213,12 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     }
 
     //正常扫描流程
-    public void setlottieData(){
+    public void setlottieData() {
         lottiePathdataMap = new HashMap<>();
-        lottiePathdataMap.put(0,new LottiePathdata("home_top_scan/anim01a/data.json","home_top_scan/anim01a/images"));
-        lottiePathdataMap.put(1,new LottiePathdata("home_top_scan/anim02a/data.json","home_top_scan/anim02a/images"));
-        lottiePathdataMap.put(2,new LottiePathdata("home_top_scan/anim03a/data.json","home_top_scan/anim03a/images"));
-        lottiePathdataMap.put(3,new LottiePathdata("home_top_scan/anim03b/data.json","home_top_scan/anim03b/images"));
+        lottiePathdataMap.put(0, new LottiePathdata("home_top_scan/anim01a/data.json", "home_top_scan/anim01a/images"));
+        lottiePathdataMap.put(1, new LottiePathdata("home_top_scan/anim02a/data.json", "home_top_scan/anim02a/images"));
+        lottiePathdataMap.put(2, new LottiePathdata("home_top_scan/anim03a/data.json", "home_top_scan/anim03a/images"));
+        lottiePathdataMap.put(3, new LottiePathdata("home_top_scan/anim03b/data.json", "home_top_scan/anim03b/images"));
     }
 
     public void setCenterImg(int index) {

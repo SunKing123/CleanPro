@@ -53,6 +53,7 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
 
         //设置垃圾清理总量数据
         long junkTotal = setCheckedJunkResult();
+
         CountEntity countEntity = CleanUtil.formatShortFileSize(junkTotal);
         //作为首页头部数据展示缓存
         MmkvUtil.saveString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA,new Gson().toJson(countEntity));
@@ -63,7 +64,13 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
             //开始清理垃圾
             getView().setStartCleanJunk(Float.parseFloat(countEntity.getTotalSize()), countEntity.getUnit());
         }
-
+        /*-------------------本地推送逻辑存储-----------------------------------*/
+        long mbNum = junkTotal / (1024 * 1024);
+        //保存上一次扫秒出来的垃圾大小
+        //为了保证比扫描页面的数小，强制性的/2
+        long temp = mbNum / 2;
+        PreferenceUtil.saveLastScanRubbishSize(temp);
+        /*-------------------本地推送逻辑存储 结束-----------------------------------*/
         clearAll();
     }
 

@@ -58,7 +58,6 @@
                     android:id="@+id/view_lottie_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="40dp"
                     android:minHeight="300dp">
 
                 </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
