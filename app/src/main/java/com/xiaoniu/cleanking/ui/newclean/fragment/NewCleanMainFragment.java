@@ -294,12 +294,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      */
     private void checkAndUploadPoint() {
         //SD卡读写权限是否打开埋点上报
-
-        String storagePrmStatus = AppUtils.checkStoragePermission(getActivity())?"open":"close";
+        String storagePrmStatus = AppUtils.checkStoragePermission(getActivity()) ? "open" : "close";
         StatisticsUtils.customCheckPermission(Points.EVENT_CODE_STORAGE_PERMISSION, Points.EVENT_NAME_STORAGE_PERMISSION, storagePrmStatus, "", "home_page");
-
         //读取手机状态权限是否打开埋点上报
-        String phoneStatePrmStatus = AppUtils.checkPhoneStatePermission(getActivity())? "open":"close";
+        String phoneStatePrmStatus = AppUtils.checkPhoneStatePermission(getActivity()) ? "open" : "close";
         StatisticsUtils.customCheckPermission(Points.EVENT_CODE_DEVICE_IDENTIFICATION, Points.EVENT_NAME_DEVICE_IDENTIFICATION, phoneStatePrmStatus, "", "home_page");
     }
 
@@ -639,14 +637,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
 
-    public  void isReScan(){
+    public void isReScan() {
         if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             mPresenter.checkStoragePermission();  //重新开始扫描
-            if(null!=view_lottie_top)
-            view_lottie_top.startLottie();
+            if (null != view_lottie_top)
+                view_lottie_top.startLottie();
         } else {
-            if(!PreferenceUtil.getNowCleanTime()){
-                if(null!=view_lottie_top)
+            if (!PreferenceUtil.getNowCleanTime()) {
+                if (null != view_lottie_top)
                     view_lottie_top.setGreenState();
             }
         }
