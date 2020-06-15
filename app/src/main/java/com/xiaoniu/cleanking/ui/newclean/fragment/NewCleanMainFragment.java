@@ -644,6 +644,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+
+
+
     /**
      * 清理完成回调
      *
@@ -790,7 +793,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (lifecycEvent.isActivity()) {
             closeAd();
             showTextView();
-            view_lottie_top.startLottie();
+
         }
     }
 
@@ -1231,8 +1234,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onEventClean(CleanEvent cleanEvent) {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
-                showTextView01();
-                view_lottie_top.startLottie();
+//                showTextView01();
+                String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+                CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+                view_lottie_top.setClendedState(countEntity);
 //                mLottieHomeView.useHardwareAcceleration(true);
 //                mLottieHomeView.setAnimation("clean_home_top2.json");
 //                mLottieHomeView.setImageAssetsFolder("images_home_finish");
@@ -1292,7 +1297,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
         textLayout.setMargins(0,0-Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(),0,0);
         view_lottie_top.setLayoutParams(textLayout);
-        view_lottie_top.startLottie();
+
         showTextView();
     }
 
@@ -1856,7 +1861,19 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    public void setScanningJunkTotal(String totalSize) {
+    public void setScanningJunkTotal(long totalSize) {
+        if(null!=view_lottie_top)
         view_lottie_top.setTotalSize(totalSize);
+    }
+
+
+    public void permissionDenied(){
+        if(null!=view_lottie_top)
+        view_lottie_top.setNoSize();
+    }
+
+    public void startScan(){
+        if(null!=view_lottie_top)
+        view_lottie_top.startLottie();
     }
 }

@@ -2,12 +2,9 @@ package com.xiaoniu.cleanking.widget;
 
 import android.animation.Animator;
 import android.content.Context;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,7 +27,7 @@ import java.util.Map;
  * @date 2020/6/11 09
  * @mail：zhengzhihao@hellogeek.com 首页头部一键清理按钮
  */
-public class OneKeyCircleButtonView extends RelativeLayout {
+public class OneKeyCircleButtonView01 extends RelativeLayout {
 
     private Context mContext;
     private LottieAnimationView viewLottieRed;
@@ -39,25 +36,24 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     private List<LottieAnimationView> lottieList;
     private TouchImageView ivCenter;
     private Map<Integer, LottiePathdata> lottiePathdataMap;
-    public int lottieIndex = 0;
+    private int lottieIndex = 0;
     private TextView tv_file_total_size,tv_file_total_tag;
     private LinearLayout linear_text_tag;
     private RelativeLayout rel_container;
 
-    public OneKeyCircleButtonView(Context context) {
+    public OneKeyCircleButtonView01(Context context) {
         super(context);
         initView(context);
     }
 
-    public OneKeyCircleButtonView(Context context, AttributeSet attrs) {
+    public OneKeyCircleButtonView01(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
 
-    public OneKeyCircleButtonView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public OneKeyCircleButtonView01(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context);
-
     }
 
 
@@ -69,6 +65,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
      * @return
      */
     public void initView(Context context) {
+        LogUtils.i("zz---initView()");
         mContext = context;
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_home_top_circle_anim, this, true);
         linear_text_tag = (LinearLayout) v.findViewById(R.id.linear_text_tag);
@@ -93,19 +90,19 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     public void setViewLayoutParms() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieYellow.getLayoutParams();
+        LayoutParams layoutParams = (LayoutParams) viewLottieYellow.getLayoutParams();
         layoutParams.height = Float.valueOf(screenWidth * 1.2f).intValue();
         layoutParams.width = Float.valueOf(screenWidth * 1.2f).intValue();
         viewLottieYellow.setLayoutParams(layoutParams);
         viewLottieRed.setLayoutParams(layoutParams);
         viewLottieGreen.setLayoutParams(layoutParams);
 
-        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) ivCenter.getLayoutParams();
+        LayoutParams imglayoutParams = (LayoutParams) ivCenter.getLayoutParams();
         imglayoutParams.height = Float.valueOf(screenWidth * 0.497f * 1.2f).intValue();
         imglayoutParams.width = Float.valueOf(screenWidth * 0.497f * 1.2f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
 
-        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
+        LayoutParams textLayout = (LayoutParams) linear_text_tag.getLayoutParams();
         textLayout.height = Float.valueOf(screenWidth * 0.1f * 1.2f).intValue();
         linear_text_tag.setLayoutParams(textLayout);
         linear_text_tag.setVisibility(VISIBLE);
@@ -120,12 +117,18 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     //清理完成绿色状态;
     public void setGreenState() {
-        viewLottieGreen.setVisibility(VISIBLE);
+        //"home_top_scan/anim01a/data.json","home_top_scan/anim01a/images"
         viewLottieGreen.setAnimation("home_top_scan/anim01b/data.json");
         viewLottieGreen.setImageAssetsFolder("home_top_scan/anim01b/images");
         viewLottieGreen.playAnimation();
-        animShow(viewLottieGreen,null);
         setCenterImg(0);
+        if(viewLottieRed.getVisibility()==VISIBLE){
+            stopAnim(viewLottieRed);
+        }
+        if(viewLottieYellow.getVisibility()==VISIBLE){
+            stopAnim(viewLottieYellow);
+        }
+
     }
 
 
@@ -133,7 +136,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void playLottie(int index) {
         LottieAnimationView lottieview = lottieList.get(index);
         LottiePathdata pathdata = lottiePathdataMap.get(index);
-        lottieview.setTag("playing");
+
         animShow(lottieview,null);//展示view
         lottieview.setAnimation(pathdata.getJsonPath());
         lottieview.setImageAssetsFolder(pathdata.getImgPath());
@@ -159,14 +162,12 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                     return;
                 if (lottieIndex != 2) {  //最后一个不隐藏
                     stopAnim(lottieview);
-                    LogUtils.i("zz---stopAnim()"+lottieIndex);
                 }
 
                 //下个动画
                 if (lottieIndex <= 1) {
                     lottieIndex++;
                     playLottie(lottieIndex);
-                    LogUtils.i("zz---playLottie()"+lottieIndex);
                 }
 
             }
@@ -174,41 +175,48 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     }
 
     public void stopAnim(LottieAnimationView lottieview) {
-        if(null!=lottieview && !lottieview.getTag().toString().contains("stoped")){
-            lottieview.setTag("stoped");
-            lottieview.setAlpha(1f);
-            lottieview.setVisibility(VISIBLE);
-            lottieview.animate()
-                    .alpha(0f)
-                    .setDuration(500)
-                    .setListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
+        if(null!=lottieview ){
 
-                        }
+            hideShow(lottieview,new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            lottieview.cancelAnimation();
-                            lottieview.clearAnimation();
-                            lottieview.setVisibility(GONE);
-                        }
+                }
 
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    lottieview.cancelAnimation();
+                    lottieview.clearAnimation();
+                    lottieview.setVisibility(GONE);
+                }
 
-                        }
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
+                }
 
-                        }
-                    });
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
         }
     }
 
 
     public void animShow(LottieAnimationView lottieview, Animator.AnimatorListener listener){
+        lottieview.setTag("playing");
+        lottieview.setAlpha(1f);
+        lottieview.setVisibility(VISIBLE);
+        lottieview.animate()
+                .alpha(0f)
+                .setDuration(500)
+                .setListener(listener);
+    }
+
+
+    public void hideShow(LottieAnimationView lottieview, Animator.AnimatorListener listener){
+        lottieview.setTag("stoped");
         lottieview.setAlpha(0f);
         lottieview.setVisibility(VISIBLE);
         lottieview.animate()
@@ -216,8 +224,6 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                 .setDuration(500)
                 .setListener(listener);
     }
-
-
 
 
 
@@ -233,14 +239,6 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         tv_file_total_size.setText(getContext().getResources().getString(R.string.home_top_pop01_tag));
         tv_file_total_size.setVisibility(VISIBLE);
         tv_file_total_tag.setVisibility(GONE);
-        setGreenState();
-    }
-
-    //清理完成狀態
-    public void setClendedState(CountEntity countEntity) {
-        tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_pop02_tag,countEntity.getResultSize()));
-        tv_file_total_size.setVisibility(GONE);
-        tv_file_total_tag.setVisibility(VISIBLE);
         setGreenState();
     }
 
@@ -273,6 +271,4 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         }
 
     }
-
-
 }

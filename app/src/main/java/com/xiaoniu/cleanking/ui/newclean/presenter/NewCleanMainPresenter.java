@@ -211,12 +211,13 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
+                        mView.startScan();
                         scanningJunk();
                     } else {
                         if (hasPermissionDeniedForever()) {
-//                            showPermissionDialog();
+                            mView.permissionDenied();
                         } else {
-//                            checkStoragePermission();
+                            mView.permissionDenied();
                         }
                     }
                 });
@@ -250,8 +251,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             public void increaseSize(long increaseSize) {
                 totalJunk += increaseSize;
                 mHandler.post(() -> {
-                    final CountEntity countEntity = CleanUtil.formatShortFileSize(totalJunk);
-                    mView.setScanningJunkTotal(countEntity.getTotalSize()+countEntity.getUnit());
+                    mView.setScanningJunkTotal(totalJunk);
                 });
             }
 
