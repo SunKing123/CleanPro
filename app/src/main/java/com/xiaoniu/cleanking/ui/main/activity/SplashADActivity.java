@@ -1,7 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +46,7 @@ import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -102,6 +105,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+
+        checkAndUploadPoint();
     }
 
     @Override
@@ -250,7 +255,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             protected Boolean doInBackground(String... strings) {
                 FileUtils.copyDbFile(ContextUtils.getApplication(), Constant.WEATHER_DB_NAME);
-                PreferenceUtil.getInstants().saveInt(Constant.CLEAN_DB_SAVE,1);
+                PreferenceUtil.getInstants().saveInt(Constant.CLEAN_DB_SAVE, 1);
                 return true;
             }
 
@@ -265,7 +270,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     }
 
-    public void readCleanExternalDb(){
+    public void readCleanExternalDb() {
         new AsyncTask<String, Integer, Boolean>() {
             @Override
             protected void onPreExecute() {
@@ -580,6 +585,33 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         bundle.putString(Constant.Title, "服务协议");
         bundle.putBoolean(Constant.NoTitle, false);
         startActivity(UserLoadH5Activity.class, bundle);
+    }
+
+    /**
+     * 权限埋点上报
+     * current_page_id：home_page：看起来有点奇怪，就上报实际来说这个埋点的时机是在冷启的时候，放在splash页面是很合适的。
+     * 只是埋点page要求home_page。不影响整体的埋点逻辑
+     */
+    private void checkAndUploadPoint() {
+
+        //SD卡读写权限是否打开埋点上报
+        String storagePrmStatus = "";
+        if (AppUtils.checkStoragePermission(this)) {
+            storagePrmStatus = "open";
+        } else {
+            storagePrmStatus = "close";
+        }
+
+        StatisticsUtils.customCheckPermission("storage_permission_detection", "存储权限检测", storagePrmStatus, "", "home_page");
+
+        //读取手机状态权限是否打开埋点上报
+        String phoneStatePrmStatus = "";
+        if (AppUtils.checkPhoneStatePermission(this)) {
+            phoneStatePrmStatus = "open";
+        } else {
+            phoneStatePrmStatus = "close";
+        }
+        StatisticsUtils.customCheckPermission("device_identification_authority_detection", "设备识别检测", phoneStatePrmStatus, "", "home_page");
     }
 
     /**
