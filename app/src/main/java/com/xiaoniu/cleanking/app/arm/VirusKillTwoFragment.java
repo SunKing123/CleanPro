@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -25,10 +23,9 @@ import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,7 +36,6 @@ import butterknife.BindView;
 
 import static android.view.View.VISIBLE;
 import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.COMPLETE;
-import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.PAGE_VIEW;
 import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.SCAN;
 
 /**
@@ -107,11 +103,9 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
     private void setProgressBar() {
 
-        Log.e("virusKill","=========病毒查杀扫描页面展示=========");
+        StatisticsUtils.onPageStart(Points.Virus.ANIMATION_PAGE_EVENT_CODE, Points.Virus.ANIMATION_PAGE_EVENT_NAME);
 
-        StatisticsUtils.onPageStart("virus_killing_animation_page_view_page","病毒查杀动画页浏览");
-
-        VirusKillStatus.code=SCAN;
+        VirusKillStatus.code = SCAN;
         timer = new CountDownTimer(5000, 50) {
             public void onTick(long millisUntilFinished) {
                 long pro = (100 - millisUntilFinished / 50);
@@ -124,7 +118,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
             public void onFinish() {
                 showFinishLottie();
-                StatisticsUtils.onPageEnd("virus_killing_animation_page_view_page","病毒查杀动画页浏览","virus_killing_scan_page","virus_killing_animation_page");
+                StatisticsUtils.onPageEnd(Points.Virus.ANIMATION_PAGE_EVENT_CODE, Points.Virus.ANIMATION_PAGE_EVENT_NAME, Points.Virus.SCAN_PAGE, Points.Virus.ANIMATION_PAGE);
             }
         };
         timer.start();
@@ -135,6 +129,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
     public void setData(@Nullable Object data) {
 
     }
+
     public void onFragmentDestroy() {
         if (lottie != null) {
             lottie.stopRotationAnimation();
@@ -152,10 +147,8 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
     private void showFinishLottie() {
 
-        VirusKillStatus.code=COMPLETE;
-        Log.e("virusKill","=========病毒查杀完成页面===========");
-
-        StatisticsUtils.onPageStart("virus_killing_finish_animation_page_view_page","病毒查杀动画完成页浏览");
+        VirusKillStatus.code = COMPLETE;
+        StatisticsUtils.onPageStart(Points.Virus.ANIMATION_FINISH_PAGE_EVENT_CODE, Points.Virus.ANIMATION_FINISH_PAGE_EVENT_NAME);
 
         tvAnimTitle.setVisibility(VISIBLE);
         flyTop.setVisibility(View.GONE);
@@ -175,9 +168,8 @@ public class VirusKillTwoFragment extends SimpleFragment {
                 if (lottie != null) {
                     lottie.stopRotationAnimation();
                 }
-                StatisticsUtils.onPageEnd("virus_killing_finish_animation_page_view_page","病毒查杀动画完成页浏览","virus_killing_animation_page","virus_killing_finish_animation_page");
+                StatisticsUtils.onPageEnd(Points.Virus.ANIMATION_FINISH_PAGE_EVENT_CODE, Points.Virus.ANIMATION_FINISH_PAGE_EVENT_NAME, Points.Virus.ANIMATION_PAGE, Points.Virus.ANIMATION_FINISH_PAGE);
                 killedCompleteCallBack();
-
             }
 
             @Override
@@ -192,7 +184,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
     }
 
 
-    private void killedCompleteCallBack(){
+    private void killedCompleteCallBack() {
         //设置锁屏数据
         LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(2);
         btnInfo.setNormal(true);
@@ -208,7 +200,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
         Intent mIntent = new Intent(getActivity(), ScreenFinishBeforActivity.class);
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill));
-        if(getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))){
+        if (getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
             mIntent.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
         }
         startActivity(mIntent);
