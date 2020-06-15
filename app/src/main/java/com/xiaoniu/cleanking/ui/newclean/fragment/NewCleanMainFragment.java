@@ -290,25 +290,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     /**
      * 权限埋点上报
-     *
      */
     private void checkAndUploadPoint() {
         //SD卡读写权限是否打开埋点上报
-        String storagePrmStatus = "";
-        if (AppUtils.checkStoragePermission(getActivity())) {
-            storagePrmStatus = "open";
-        } else {
-            storagePrmStatus = "close";
-        }
+        String storagePrmStatus = AppUtils.checkStoragePermission(getActivity())?"open":"close";
         StatisticsUtils.customCheckPermission("storage_permission_detection", "存储权限检测", storagePrmStatus, "", "home_page");
 
         //读取手机状态权限是否打开埋点上报
-        String phoneStatePrmStatus = "";
-        if (AppUtils.checkPhoneStatePermission(getActivity())) {
-            phoneStatePrmStatus = "open";
-        } else {
-            phoneStatePrmStatus = "close";
-        }
+        String phoneStatePrmStatus = AppUtils.checkPhoneStatePermission(getActivity())? "open":"close";
         StatisticsUtils.customCheckPermission("device_identification_authority_detection", "设备识别检测", phoneStatePrmStatus, "", "home_page");
     }
 
