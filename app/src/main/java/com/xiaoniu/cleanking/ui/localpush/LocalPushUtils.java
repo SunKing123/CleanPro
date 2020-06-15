@@ -29,6 +29,9 @@ public class LocalPushUtils {
             Long currentTimeStamp = System.currentTimeMillis();
             //2.判断距上次使用该功能是否已经大于配置指定的时间
             Long lastUsedTime = PreferenceUtil.getLastUseFunctionTime(functionType);
+
+            LogUtils.e("=====上次使用"+functionType+"的时间为:"+lastUsedTime);
+
             //计算上次使用该功能距离现在过于多少分钟
             long elapseUsedTime = DateUtils.getMinuteBetweenTimestamp(currentTimeStamp, lastUsedTime);
             if (elapseUsedTime >= config.getFunctionUsedInterval()) {
@@ -87,6 +90,7 @@ public class LocalPushUtils {
                 return false;
             }
         }
+
     }
 
 
