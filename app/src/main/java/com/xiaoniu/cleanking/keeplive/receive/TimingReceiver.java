@@ -122,8 +122,8 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
-                        if (period < 10 * 60) {
-                        //if (period < 5) {
+                         if (period < 10 * 60) {
+                       // if (period < 5) {
                             LogUtils.e("====距离上次清理APP触发Home键过了" + period + "秒小于限制时间，直接返回");
                             return;
                         }
@@ -181,12 +181,13 @@ public class TimingReceiver extends BroadcastReceiver {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         long current = System.currentTimeMillis();
         long period = current / 1000 - homePressTime / 1000;
-        if (period >= 3) {
+        //本来是延迟3秒后弹出，但是启动Activity时间较长，所以这里改成2秒
+        if (period >= 2) {
             context.startActivity(screenIntent);
         } else {
             new Handler().postDelayed(() -> {
                 context.startActivity(screenIntent);
-            }, (3 - period) * 1000);
+            }, 1000);
         }
     }
 
