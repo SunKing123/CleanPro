@@ -96,6 +96,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private String mAdSourse = " "; //广告来源
 
     private final String TAG = "GeekSdk";
+    private boolean adClicked=false;
 
 
     @Override
@@ -396,6 +397,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "adClicked 冷启动");
+                adClicked=true;
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", info.getAdTitle());
@@ -413,6 +415,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adClose(AdInfo info) {
+                if(adClicked){
+                    return;
+                }
                 if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
                     jumpActivity();
                 }
@@ -533,7 +538,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     PreferenceUtil.saveShowAD(false);
-                    if (!mIsAdError) {
+                    if (!mIsAdError&&!adClicked) {
                         jumpActivity();
                     }
                 }
@@ -601,5 +606,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 mSPHelper.setUploadImeiStatus(true);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(adClicked){
+            jumpActivity();
+        }
+
     }
 }
