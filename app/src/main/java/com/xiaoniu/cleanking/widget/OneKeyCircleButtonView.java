@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.widget;
 
 import android.animation.Animator;
+import android.animation.IntArrayEvaluator;
 import android.content.Context;
 import android.content.Entity;
 import android.opengl.Visibility;
@@ -211,9 +212,9 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         lottiePathdataMap.put(0, new LottiePathdata("home_top_scan/anim01a/data.json", "home_top_scan/anim01a/images"));
         lottiePathdataMap.put(1, new LottiePathdata("home_top_scan/anim02a/data.json", "home_top_scan/anim02a/images"));
         lottiePathdataMap.put(2, new LottiePathdata("home_top_scan/anim03a/data.json", "home_top_scan/anim03a/images"));
-        lottiePathdataMap.put(10, new LottiePathdata("home_top_scan/anim03b/data.json", "home_top_scan/anim03b/images"));
-        lottiePathdataMap.put(11, new LottiePathdata("home_top_scan/anim03a/data.json", "home_top_scan/anim03b/images"));
-        lottiePathdataMap.put(12, new LottiePathdata("home_top_scan/anim03c/data.json", "home_top_scan/anim03c/images"));
+        lottiePathdataMap.put(10, new LottiePathdata("home_top_scan/anim01b/data.json", "home_top_scan/anim01b/images"));
+        lottiePathdataMap.put(11, new LottiePathdata("home_top_scan/anim02b/data.json", "home_top_scan/anim02b/images"));
+        lottiePathdataMap.put(12, new LottiePathdata("home_top_scan/anim03b/data.json", "home_top_scan/anim03b/images"));
 
     }
 
@@ -249,10 +250,11 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                     .setDuration(500)
                     .setListener(null);
         }
-        if (!viewLottieGreen.isAnimating()) {
+        if (!viewLottieGreen.isAnimating() || !(Boolean.parseBoolean(viewLottieGreen.getTag().toString())&&isFinish) ) {
             viewLottieGreen.setAnimation(lottiePathdataMap.get(isFinish ? 10 : 0).getJsonPath());
             viewLottieGreen.setImageAssetsFolder(lottiePathdataMap.get(isFinish ? 10 : 0).getImgPath());
             viewLottieGreen.playAnimation();
+            viewLottieGreen.setTag(isFinish);
             setCenterImg(0);
         }
         if (viewLottieYellow.getVisibility() == VISIBLE) {
@@ -271,10 +273,12 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                     .setDuration(500)
                     .setListener(null);
         }
-        if (!viewLottieYellow.isAnimating()) {
+
+        if (!viewLottieYellow.isAnimating() || !(Boolean.parseBoolean(viewLottieYellow.getTag().toString())&&isFinish)) {
             viewLottieYellow.setAnimation(lottiePathdataMap.get(isFinish ? 11 : 1).getJsonPath());
             viewLottieYellow.setImageAssetsFolder(lottiePathdataMap.get(isFinish ? 11 : 1).getImgPath());
             viewLottieYellow.playAnimation();
+            viewLottieYellow.setTag(isFinish);
             setCenterImg(2);
         }
 
@@ -287,6 +291,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     }
 
     public void redState(boolean isFinish) {
+
         viewLottieRed.setVisibility(VISIBLE);
         if (viewLottieRed.getAlpha() < 1f) {
             viewLottieRed.animate()
@@ -294,13 +299,18 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                     .setDuration(500)
                     .setListener(null);
         }
-        if (!viewLottieRed.isAnimating()) {
-            viewLottieRed.setAnimation(lottiePathdataMap.get(isFinish ? 12 : 2).getJsonPath());
-            viewLottieRed.setImageAssetsFolder(lottiePathdataMap.get(isFinish ? 12 : 2).getImgPath());
+        String newPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getImgPath().toString();
+        String newjsonPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getJsonPath().toString();
+        LogUtils.i("zz-----"+newPath+"----"+newjsonPath);
+        if (!viewLottieRed.isAnimating() || !viewLottieRed.getImageAssetsFolder().equals(newPath) ) {
+//            if(viewLottieRed.isAnimating()){
+//
+//            }
+            viewLottieRed.setAnimation(newjsonPath);
+            viewLottieRed.setImageAssetsFolder(newPath);
             viewLottieRed.playAnimation();
             setCenterImg(3);
         }
-
 
         if (viewLottieGreen.getVisibility() == VISIBLE) {
             viewLottieGreen.setVisibility(GONE);
