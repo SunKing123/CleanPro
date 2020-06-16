@@ -219,7 +219,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mainTableView.killVirusNormalStyle(getActivity());
         }
         mPresenter.readyScanningJunk();
-        mPresenter.checkStoragePermission();  //开始扫描
+//        mPresenter.checkStoragePermission();  //开始扫描
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
@@ -893,10 +893,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         startActivity(NowCleanActivity.class);
                     } else {
                         if (hasPermissionDeniedForever()) {
-                            //todo
-//                            showPermissionDialog();
+                            startActivity(NowCleanActivity.class);
                         } else {
-//                            checkStoragePermission();
+                            showPermissionDialog();
                         }
                     }
                 });
