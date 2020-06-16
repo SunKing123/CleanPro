@@ -206,14 +206,14 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
      */
     @SuppressLint("CheckResult")
     public void checkStoragePermission() {
+        //动画开始播放
+        mView.startScan();
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         new RxPermissions(mView.getActivity()).request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
-
                         scanningJunk();
-                        mView.startScan();
                     } else {
                         if (hasPermissionDeniedForever()) {
                             mView.permissionDenied();
