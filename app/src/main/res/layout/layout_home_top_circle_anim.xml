@@ -2,44 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:id="@+id/rel_parent"
     android:layout_height="wrap_content">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie_lower_red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:lottie_loop="true" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/view_lottie_lower_red"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:lottie_loop="true" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie_top_yellow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:lottie_loop="true" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/view_lottie_top_yellow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:lottie_loop="true" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/view_lottie_top_green"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            app:lottie_loop="true" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/view_lottie_top_green"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        app:lottie_loop="true" />
-
-    <com.xiaoniu.cleanking.widget.TouchImageView
-        android:id="@+id/iv_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:elevation="@dimen/dp_20"
-        android:layout_centerInParent="true"
-        app:srcCompat="@drawable/icon_circle_btn_white" />
+        <com.xiaoniu.cleanking.widget.TouchImageView
+            android:id="@+id/iv_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:elevation="@dimen/dp_20"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/icon_circle_btn_white" />
 
 
     <LinearLayout
@@ -47,7 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="@dimen/dp_50"
+
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
@@ -60,9 +60,11 @@
             android:textSize="15sp"
             />
         <TextView
+            android:id="@+id/tv_file_total_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/home_top_text_tag"
+            android:visibility="gone"
             android:textColor="@color/color_666666"
             android:textSize="15sp"
             />

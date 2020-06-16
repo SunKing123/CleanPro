@@ -100,10 +100,10 @@ public class DebugActivity extends BaseActivity {
 
     public void playLottie(View view){
 //        oneKeyCircleButtonView.startLottie();
-        lottieAnimationView.setAnimation("home_top_scan/anim10/data.json");
-        lottieAnimationView.setImageAssetsFolder("home_top_scan/anim10/images");
-        lottieAnimationView.playAnimation();
-        lottieAnimationView.setVisibility(VISIBLE);
+//        lottieAnimationView.setAnimation("home_top_scan/anim10/data.json");
+//        lottieAnimationView.setImageAssetsFolder("home_top_scan/anim10/images");
+//        lottieAnimationView.playAnimation();
+//        lottieAnimationView.setVisibility(VISIBLE);
     }
     public void toHomeClean(View view) {
         //原生带参数 native协议

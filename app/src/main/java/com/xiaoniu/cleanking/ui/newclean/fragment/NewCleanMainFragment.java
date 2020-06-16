@@ -644,6 +644,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+
+
+
     /**
      * 清理完成回调
      *
@@ -790,7 +793,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (lifecycEvent.isActivity()) {
             closeAd();
             showTextView();
-            view_lottie_top.startLottie();
+
         }
     }
 
@@ -1231,8 +1234,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onEventClean(CleanEvent cleanEvent) {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
-                showTextView01();
-                view_lottie_top.startLottie();
+//                showTextView01();
+                String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+                CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+                view_lottie_top.setClendedState(countEntity);
 //                mLottieHomeView.useHardwareAcceleration(true);
 //                mLottieHomeView.setAnimation("clean_home_top2.json");
 //                mLottieHomeView.setImageAssetsFolder("images_home_finish");
@@ -1288,34 +1293,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 静止时动画
      */
     private void showHomeLottieView() {
-        view_lottie_top.startLottie();
+        int screenWidth = ScreenUtils.getScreenWidth(mContext);
+        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
+        textLayout.setMargins(0,0-Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(),0,0);
+        view_lottie_top.setLayoutParams(textLayout);
+
         showTextView();
-//        mLottieHomeView.useHardwareAcceleration(true);
-//        mLottieHomeView.setAnimation("clean_home_top.json");
-//        mLottieHomeView.setImageAssetsFolder("images_home");
-//        mLottieHomeView.playAnimation();
-//        mLottieHomeView.setVisibility(VISIBLE);
-//        mLottieHomeView.addAnimatorListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        });
     }
 
     @Override
@@ -1735,7 +1718,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void loadMorePageFileGeekAd(HomeRecommendListEntity entity) {
         if (null == getActivity() || null == mAdManager) return;
         NiuDataAPI.onPageStart("home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
-
+        NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page_incentive_video_page");
         mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_HOME_PAGE_OPERATION_POSITION, "user123", 1, new VideoAdListener() {
             @Override
@@ -1751,7 +1734,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             @Override
             public void onVideoComplete(AdInfo info) {
                 Log.d(TAG, "-----onVideoComplete-----");
-                NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
                 //跳转自运营广告
                // operationItemClick(entity);
             }
@@ -1879,7 +1861,19 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    public void setScanningJunkTotal(String totalSize) {
+    public void setScanningJunkTotal(long totalSize) {
+        if(null!=view_lottie_top)
         view_lottie_top.setTotalSize(totalSize);
+    }
+
+
+    public void permissionDenied(){
+        if(null!=view_lottie_top)
+        view_lottie_top.setNoSize();
+    }
+
+    public void startScan(){
+        if(null!=view_lottie_top)
+        view_lottie_top.startLottie();
     }
 }
