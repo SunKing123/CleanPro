@@ -86,8 +86,6 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         lottieList.add(viewLottieRed);
         setlottieData();
         ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
-        ivCenter.setAlpha(0f);
-        ivCenter.animate().alpha(1f).setDuration(100);
         setViewLayoutParms();
 
     }
@@ -115,7 +113,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
 
 
-    //清理完成绿色状态;
+/*    //清理完成绿色状态;
     public void setGreenState() {
         viewLottieGreen.setVisibility(VISIBLE);
         viewLottieGreen.setAnimation("home_top_scan/anim01b/data.json");
@@ -123,7 +121,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         viewLottieGreen.playAnimation();
         animShow(viewLottieGreen, null);
         setCenterImg(0);
-    }
+    }*/
 
 
     public void stopAnim(LottieAnimationView lottieview) {
@@ -184,7 +182,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         tv_file_total_size.setText(getContext().getResources().getString(R.string.home_top_pop01_tag));
         tv_file_total_size.setVisibility(VISIBLE);
         tv_file_total_tag.setVisibility(GONE);
-        setGreenState();
+        greenState(true);
     }
 
     //清理完成狀態
@@ -192,7 +190,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_pop02_tag, countEntity.getResultSize()));
         tv_file_total_size.setVisibility(GONE);
         tv_file_total_tag.setVisibility(VISIBLE);
-        setGreenState();
+        greenState(true);
     }
 
     //扫描完毕
