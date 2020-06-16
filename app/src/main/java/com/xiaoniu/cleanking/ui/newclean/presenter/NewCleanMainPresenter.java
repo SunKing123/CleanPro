@@ -207,7 +207,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     @SuppressLint("CheckResult")
     public void checkStoragePermission() {
         //动画开始播放
-        mView.startScan();
+//        mView.startScan();
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         new RxPermissions(mView.getActivity()).request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -215,10 +215,10 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                     if (aBoolean) {
                         scanningJunk();
                     } else {
-                        if (hasPermissionDeniedForever()) {
+                        if (hasPermissionDeniedForever()) {//点击拒绝
                             mView.permissionDenied();
-                        } else {
-                            mView.permissionDenied();
+                        } else {//点击永久拒绝
+                            mView.showPermissionDialog();
                         }
                     }
                 });
@@ -265,11 +265,9 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     @SuppressLint("CheckResult")
     public void scanningJunk() {
         fileCount = 0;
-
-        mJunkGroups.clear();
         Disposable disposable = Observable.create(e -> {
             //扫描进程占用内存情况
-            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
             //扫描apk安装包
