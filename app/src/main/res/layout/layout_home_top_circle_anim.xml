@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:scaleType="centerCrop"
-            android:visibility="gone"
             app:lottie_loop="true" />
 
         <com.xiaoniu.cleanking.widget.TouchImageView
@@ -61,9 +60,11 @@
             android:textSize="15sp"
             />
         <TextView
+            android:id="@+id/tv_file_total_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/home_top_text_tag"
+            android:visibility="gone"
             android:textColor="@color/color_666666"
             android:textSize="15sp"
             />

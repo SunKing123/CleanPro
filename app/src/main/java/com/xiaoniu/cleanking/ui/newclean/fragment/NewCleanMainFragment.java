@@ -90,6 +90,7 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -107,6 +108,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -634,8 +636,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void isReScan() {
         if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             mPresenter.checkStoragePermission();  //重新开始扫描
-            if (null != view_lottie_top)
-                view_lottie_top.startLottie();
+//            if (null != view_lottie_top)
+//                view_lottie_top.startLottie();
         } else {
             if (!PreferenceUtil.getNowCleanTime()) {
                 if (null != view_lottie_top)
@@ -643,6 +645,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
         }
     }
+
+
+
 
     /**
      * 清理完成回调
@@ -790,7 +795,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (lifecycEvent.isActivity()) {
             closeAd();
             showTextView();
-            view_lottie_top.startLottie();
+
         }
     }
 
@@ -1231,8 +1236,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void onEventClean(CleanEvent cleanEvent) {
         if (cleanEvent != null) {
             if (cleanEvent.isCleanAminOver()) {
-                showTextView01();
-                view_lottie_top.startLottie();
+//                showTextView01();
+                String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+                CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+                view_lottie_top.setClendedState(countEntity);
 //                mLottieHomeView.useHardwareAcceleration(true);
 //                mLottieHomeView.setAnimation("clean_home_top2.json");
 //                mLottieHomeView.setImageAssetsFolder("images_home_finish");
@@ -1292,7 +1299,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
         textLayout.setMargins(0,0-Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(),0,0);
         view_lottie_top.setLayoutParams(textLayout);
-        view_lottie_top.startLottie();
+
         showTextView();
     }
 
@@ -1804,7 +1811,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
         ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
         ScanDataHolder.getInstance().setScanState(1);
-        view_lottie_top.scanFinish();
+        view_lottie_top.scanFinish(totalJunkSize);
 //        ((NowCleanActivity) getActivity()).scanFinish();
 //        //重置颜色变化状态
 //        lottie_animation_view.pauseAnimation();
@@ -1856,7 +1863,19 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
-    public void setScanningJunkTotal(String totalSize) {
+    public void setScanningJunkTotal(long totalSize) {
+        if(null!=view_lottie_top)
         view_lottie_top.setTotalSize(totalSize);
+    }
+
+
+    public void permissionDenied(){
+        if(null!=view_lottie_top)
+        view_lottie_top.setNoSize();
+    }
+
+    public void startScan(){
+        if(null!=view_lottie_top)
+        view_lottie_top.setTotalSize(NumberUtils.mathRandomInt(10,30)*1024*1024);
     }
 }
