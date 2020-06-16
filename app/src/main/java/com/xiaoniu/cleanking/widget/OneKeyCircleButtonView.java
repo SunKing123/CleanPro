@@ -80,13 +80,14 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         tv_file_total_size = (TextView) v.findViewById(R.id.tv_file_total_size);
         tv_file_total_tag = (TextView) v.findViewById(R.id.tv_file_total_tag);
         rel_container = (RelativeLayout) v.findViewById(R.id.rel_parent);
+        ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
         lottieList = new ArrayList<>();
         lottieList.add(viewLottieGreen);
         lottieList.add(viewLottieYellow);
         lottieList.add(viewLottieRed);
         setlottieData();
-        ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
         setViewLayoutParms();
+        greenState(false);
 
     }
 
