@@ -1458,64 +1458,186 @@ public class FileQueryUtils {
         Cursor cursor;
         String absolutePath;
         try {
-
             List<UselessApk> apks = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
             List<FirstJunkInfo> arrayList = new ArrayList();
             for(int i=0;i<apks.size();i++){
                 String apkPath = apks.get(i).getFilePath();
                 File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + apkPath);
-
-                if(scanExtFile.isFile() && scanExtFile.length()>0){
-                    String scanFilePath = scanExtFile.getAbsolutePath();
-                    FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
-                    onelevelGarbageInfo.setAllchecked(true);
-                    onelevelGarbageInfo.setGarbageType("TYPE_APK");
-                    onelevelGarbageInfo.setTotalSize(scanExtFile.length());
-                    onelevelGarbageInfo.setGarbageCatalog(scanExtFile.getAbsolutePath());
-                    if (com.xiaoniu.common.utils.FileUtils.isSDCardEnable()) {
-                        absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    } else {
-                        absolutePath = AppApplication.getInstance().getFilesDir().getAbsolutePath();
-                    }
-                    if (scanFilePath.contains(absolutePath) || scanFilePath.contains("sdcard0") || scanFilePath.contains("sdcard1")) {
-                        PackageInfo packageArchiveInfo = mPackageManager.getPackageArchiveInfo(scanFilePath, PackageManager.GET_ACTIVITIES);
-                        if (packageArchiveInfo != null && !isSystemAppliation(packageArchiveInfo.packageName)) {
-                            ApplicationInfo applicationInfo = packageArchiveInfo.applicationInfo;
-                            applicationInfo.sourceDir = scanFilePath;
-                            applicationInfo.publicSourceDir = scanFilePath;
-                            onelevelGarbageInfo.setAppPackageName(packageArchiveInfo.packageName);
-                            onelevelGarbageInfo.setVersionName(packageArchiveInfo.versionName);
-                            onelevelGarbageInfo.setVersionCode(packageArchiveInfo.versionCode);
-                            onelevelGarbageInfo.setAppGarbageName(mPackageManager.getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
-                            if (!isService){
-                                onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
-//                                        onelevelGarbageInfo.setIconSource(getAppIconSource(applicationInfo));
-                            }
-                            onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
-                            if (FileUtils.isAppInstalled(packageArchiveInfo.packageName)) {
-                                onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_install));
-                                onelevelGarbageInfo.setApkInstalled(true);
-                                onelevelGarbageInfo.setAllchecked(true);
+                if(scanExtFile.isDirectory()){   //文件夹处理方式
+                    List<File> resultList = new ArrayList();
+                    findFiles(scanExtFile.getAbsolutePath(), "*apk", resultList);
+                    if(!CollectionUtils.isEmpty(resultList)){
+                        for(File file:resultList){
+                            String scanFilePath = file.getAbsolutePath();
+                            FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
+                            onelevelGarbageInfo.setAllchecked(true);
+                            onelevelGarbageInfo.setGarbageType("TYPE_APK");
+                            onelevelGarbageInfo.setTotalSize(file.length());
+                            onelevelGarbageInfo.setGarbageCatalog(file.getAbsolutePath());
+                            if (com.xiaoniu.common.utils.FileUtils.isSDCardEnable()) {
+                                absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
                             } else {
-                                onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_uninstall));
-                                onelevelGarbageInfo.setApkInstalled(false);
-                                onelevelGarbageInfo.setAllchecked(false);
+                                absolutePath = AppApplication.getInstance().getFilesDir().getAbsolutePath();
                             }
-                            if (!WHITE_LIST.contains(packageArchiveInfo.packageName)) {
-                                arrayList.add(onelevelGarbageInfo);
-                                if (mScanFileListener != null) {
-                                    mScanFileListener.increaseSize(scanExtFile.length());
+                            if (scanFilePath.contains(absolutePath) || scanFilePath.contains("sdcard0") || scanFilePath.contains("sdcard1")) {
+                                PackageInfo packageArchiveInfo = mPackageManager.getPackageArchiveInfo(scanFilePath, PackageManager.GET_ACTIVITIES);
+                                if (packageArchiveInfo != null && !isSystemAppliation(packageArchiveInfo.packageName)) {
+                                    ApplicationInfo applicationInfo = packageArchiveInfo.applicationInfo;
+                                    applicationInfo.sourceDir = scanFilePath;
+                                    applicationInfo.publicSourceDir = scanFilePath;
+                                    onelevelGarbageInfo.setAppPackageName(packageArchiveInfo.packageName);
+                                    onelevelGarbageInfo.setVersionName(packageArchiveInfo.versionName);
+                                    onelevelGarbageInfo.setVersionCode(packageArchiveInfo.versionCode);
+                                    onelevelGarbageInfo.setAppGarbageName(mPackageManager.getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
+                                    if (!isService){
+                                        onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
+//                                        onelevelGarbageInfo.setIconSource(getAppIconSource(applicationInfo));
+                                    }
+                                    onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
+                                    if (FileUtils.isAppInstalled(packageArchiveInfo.packageName)) {
+                                        onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_install));
+                                        onelevelGarbageInfo.setApkInstalled(true);
+                                        onelevelGarbageInfo.setAllchecked(true);
+                                    } else {
+                                        onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_uninstall));
+                                        onelevelGarbageInfo.setApkInstalled(false);
+                                        onelevelGarbageInfo.setAllchecked(false);
+                                    }
+                                    if (!WHITE_LIST.contains(packageArchiveInfo.packageName)) {
+                                        arrayList.add(onelevelGarbageInfo);
+                                        if (mScanFileListener != null) {
+                                            mScanFileListener.increaseSize(file.length());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }else{//文件处理方式
+                    if(scanExtFile.isFile() && scanExtFile.length()>0){
+                        String scanFilePath = scanExtFile.getAbsolutePath();
+                        FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
+                        onelevelGarbageInfo.setAllchecked(true);
+                        onelevelGarbageInfo.setGarbageType("TYPE_APK");
+                        onelevelGarbageInfo.setTotalSize(scanExtFile.length());
+                        onelevelGarbageInfo.setGarbageCatalog(scanExtFile.getAbsolutePath());
+                        if (com.xiaoniu.common.utils.FileUtils.isSDCardEnable()) {
+                            absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+                        } else {
+                            absolutePath = AppApplication.getInstance().getFilesDir().getAbsolutePath();
+                        }
+                        if (scanFilePath.contains(absolutePath) || scanFilePath.contains("sdcard0") || scanFilePath.contains("sdcard1")) {
+                            PackageInfo packageArchiveInfo = mPackageManager.getPackageArchiveInfo(scanFilePath, PackageManager.GET_ACTIVITIES);
+                            if (packageArchiveInfo != null && !isSystemAppliation(packageArchiveInfo.packageName)) {
+                                ApplicationInfo applicationInfo = packageArchiveInfo.applicationInfo;
+                                applicationInfo.sourceDir = scanFilePath;
+                                applicationInfo.publicSourceDir = scanFilePath;
+                                onelevelGarbageInfo.setAppPackageName(packageArchiveInfo.packageName);
+                                onelevelGarbageInfo.setVersionName(packageArchiveInfo.versionName);
+                                onelevelGarbageInfo.setVersionCode(packageArchiveInfo.versionCode);
+                                onelevelGarbageInfo.setAppGarbageName(mPackageManager.getApplicationLabel(packageArchiveInfo.applicationInfo).toString());
+                                if (!isService){
+                                    onelevelGarbageInfo.setGarbageIcon(getAppIcon(applicationInfo));
+//                                        onelevelGarbageInfo.setIconSource(getAppIconSource(applicationInfo));
+                                }
+                                onelevelGarbageInfo.setAppName(getAppName(applicationInfo));
+                                if (FileUtils.isAppInstalled(packageArchiveInfo.packageName)) {
+                                    onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_install));
+                                    onelevelGarbageInfo.setApkInstalled(true);
+                                    onelevelGarbageInfo.setAllchecked(true);
+                                } else {
+                                    onelevelGarbageInfo.setDescp(this.mContext.getString(R.string.clean_apk_file_uninstall));
+                                    onelevelGarbageInfo.setApkInstalled(false);
+                                    onelevelGarbageInfo.setAllchecked(false);
+                                }
+                                if (!WHITE_LIST.contains(packageArchiveInfo.packageName)) {
+                                    arrayList.add(onelevelGarbageInfo);
+                                    if (mScanFileListener != null) {
+                                        mScanFileListener.increaseSize(scanExtFile.length());
+                                    }
                                 }
                             }
                         }
                     }
                 }
+
                 }
 
             return arrayList;
         } catch (Exception e) {
             return new ArrayList<>();
         }
+    }
+
+    /**
+     * 递归查找文件
+     * @param baseDirName  查找的文件夹路径
+     * @param targetFileName  需要查找的文件名
+     * @param fileList  查找到的文件集合
+     */
+    public static void findFiles(String baseDirName, String targetFileName, List fileList) {
+
+        File baseDir = new File(baseDirName);		// 创建一个File对象
+        if (!baseDir.exists() || !baseDir.isDirectory()) {	// 判断目录是否存在
+//            System.out.println("文件查找失败：" + baseDirName + "不是一个目录！");
+        }
+        String tempName = null;
+        //判断目录是否存在
+        File tempFile;
+        File[] files = baseDir.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            tempFile = files[i];
+            if(tempFile.isDirectory()){
+                findFiles(tempFile.getAbsolutePath(), targetFileName, fileList);
+            }else if(tempFile.isFile()){
+                tempName = tempFile.getName();
+                if(wildcardMatch(targetFileName, tempName)){
+                    // 匹配成功，将文件名添加到结果集
+                    fileList.add(tempFile.getAbsoluteFile());
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 通配符匹配
+     * @param pattern    通配符模式
+     * @param str    待匹配的字符串
+     * @return    匹配成功则返回true，否则返回false
+     */
+    private static boolean wildcardMatch(String pattern, String str) {
+        int patternLength = pattern.length();
+        int strLength = str.length();
+        int strIndex = 0;
+        char ch;
+        for (int patternIndex = 0; patternIndex < patternLength; patternIndex++) {
+            ch = pattern.charAt(patternIndex);
+            if (ch == '*') {
+                //通配符星号*表示可以匹配任意多个字符
+                while (strIndex < strLength) {
+                    if (wildcardMatch(pattern.substring(patternIndex + 1),
+                            str.substring(strIndex))) {
+                        return true;
+                    }
+                    strIndex++;
+                }
+            } else if (ch == '?') {
+                //通配符问号?表示匹配任意一个字符
+                strIndex++;
+                if (strIndex > strLength) {
+                    //表示str中已经没有字符匹配?了。
+                    return false;
+                }
+            } else {
+                if ((strIndex >= strLength) || (ch != str.charAt(strIndex))) {
+                    return false;
+                }
+                strIndex++;
+            }
+        }
+        return (strIndex == strLength);
     }
 
     public ArrayList<FirstJunkInfo> getAppCacheAndAdGarbage(ArrayList<FirstJunkInfo> list) {
