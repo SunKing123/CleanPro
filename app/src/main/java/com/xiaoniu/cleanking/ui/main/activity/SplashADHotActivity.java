@@ -53,6 +53,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private final String TAG = "GeekSdk";
 
+    private boolean adClicked=false;
     @Override
     protected int getLayoutId() {
         return R.layout.activity_splash_ad_hot;
@@ -142,9 +143,11 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     mAdSourse = info.getAdSource();
                 }
                 if (null == info || null == container) return;
+
                 if (info.getAdSource().equals(PositionId.AD_SOURCE_CSJ)) {
                     showProgressBar();
                 }
+                Log.d(TAG, "-----adSuccess 热启动-- 添加了广告");
                 container.addView(info.getAdView());
                 StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "hot_splash_page", "hot_splash_page");
             }
@@ -152,7 +155,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed 热启动");
-                if (null == info) return;
+
+                if (null == info||adClicked) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
                 if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
                     jumpActivity();
@@ -163,6 +167,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked 热启动");
                 if (null == info) return;
+                adClicked=true;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
             }
 
@@ -261,7 +266,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (!mIsAdError) {
+                if (!mIsAdError&&!adClicked) {
                     jumpActivity();
                 }
             }
@@ -280,5 +285,13 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     @Override
     public void netError() {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(adClicked){
+            jumpActivity();
+        }
     }
 }
