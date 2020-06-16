@@ -211,8 +211,9 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
-                        mView.startScan();
+
                         scanningJunk();
+                        mView.startScan();
                     } else {
                         if (hasPermissionDeniedForever()) {
                             mView.permissionDenied();

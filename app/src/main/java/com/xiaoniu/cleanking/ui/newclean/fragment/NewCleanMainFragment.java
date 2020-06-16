@@ -90,6 +90,7 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -107,6 +108,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -634,8 +636,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void isReScan() {
         if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             mPresenter.checkStoragePermission();  //重新开始扫描
-            if (null != view_lottie_top)
-                view_lottie_top.startLottie();
+//            if (null != view_lottie_top)
+//                view_lottie_top.startLottie();
         } else {
             if (!PreferenceUtil.getNowCleanTime()) {
                 if (null != view_lottie_top)
@@ -1809,7 +1811,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
         ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
         ScanDataHolder.getInstance().setScanState(1);
-        view_lottie_top.scanFinish();
+        view_lottie_top.scanFinish(totalJunkSize);
 //        ((NowCleanActivity) getActivity()).scanFinish();
 //        //重置颜色变化状态
 //        lottie_animation_view.pauseAnimation();
@@ -1874,6 +1876,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     public void startScan(){
         if(null!=view_lottie_top)
-        view_lottie_top.startLottie();
+        view_lottie_top.setTotalSize(NumberUtils.mathRandomInt(10,30)*1024*1024);
     }
 }
