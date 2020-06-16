@@ -637,14 +637,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
 
     public void isReScan() {
-        if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
-            mPresenter.checkStoragePermission();  //重新开始扫描
-        } else {
-            if (!PreferenceUtil.getNowCleanTime()) {
-                if (null != view_lottie_top)
-                    view_lottie_top.greenState(true);
+//        if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
+//
+//        } else {
+            if (PreferenceUtil.getNowCleanTime()) {  //五分钟以内
+                if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                    mPresenter.readyScanningJunk();
+                    mPresenter.checkStoragePermission();  //重新开始扫描
+                } else {    //scanState ==0: 扫描中
+                    checkStoragePermission();
+                }
+            }else{
+                String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+                CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+                view_lottie_top.setClendedState(countEntity);
+
             }
-        }
+//        }
     }
 
 

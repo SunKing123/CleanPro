@@ -265,7 +265,8 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     @SuppressLint("CheckResult")
     public void scanningJunk() {
         fileCount = 0;
-        ScanDataHolder.getInstance().setScanState(0);
+
+        mJunkGroups.clear();
         Disposable disposable = Observable.create(e -> {
             //扫描进程占用内存情况
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
@@ -304,7 +305,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         if(null!=compositeDisposable){
             if (!compositeDisposable.isDisposed()) {
                 compositeDisposable.clear();
-                compositeDisposable.dispose();
+//                compositeDisposable.dispose();
             }
         }
     }
@@ -340,6 +341,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
 //                getView().setInitScanningModel(scanningModelList);
                 mView.setScanningFinish(mJunkGroups);
+                ScanDataHolder.getInstance().setScanState(1);
 
 //                //计算总的扫描时间，并回传记录
 //                long scanningCountTime = System.currentTimeMillis() - scanningStartTime;

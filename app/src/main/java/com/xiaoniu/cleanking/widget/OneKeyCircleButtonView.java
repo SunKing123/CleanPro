@@ -197,10 +197,13 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     //扫描完毕
     public void scanFinish(long totalSize) {
         if (totalSize < 50 * 1024 * 1024) {//50mb以内
+            LogUtils.i("zzz---state--green---"+totalSize);
             greenState(true);
         } else if (totalSize > 50 * 1024 * 1024 && totalSize < 100 * 1024 * 1024) {
+            LogUtils.i("zzz---state--yellow---"+totalSize);
             yellowState(true);
         } else {
+            LogUtils.i("zzz---state--red---"+totalSize);
             redState(true);
         }
     }
