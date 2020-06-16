@@ -123,7 +123,7 @@ public class TimingReceiver extends BroadcastReceiver {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
                          if (period < 10 * 60) {
-                       // if (period < 5) {
+                        //if (period < 5) {
                             LogUtils.e("====距离上次清理APP触发Home键过了" + period + "秒小于限制时间，直接返回");
                             return;
                         }
@@ -173,7 +173,8 @@ public class TimingReceiver extends BroadcastReceiver {
     }*/
 
     private void startPopActivity(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
-        Intent screenIntent = new Intent(context, PopPushActivity.class);
+        Intent screenIntent = new Intent();
+        screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCAL_PUSH_ACTIVITY);
         screenIntent.putExtra("config", item);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
