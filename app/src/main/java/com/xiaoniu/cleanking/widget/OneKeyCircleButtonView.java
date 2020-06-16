@@ -250,9 +250,11 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                     .setDuration(500)
                     .setListener(null);
         }
-        if (!viewLottieGreen.isAnimating() || !(Boolean.parseBoolean(viewLottieGreen.getTag().toString())&&isFinish) ) {
-            viewLottieGreen.setAnimation(lottiePathdataMap.get(isFinish ? 10 : 0).getJsonPath());
-            viewLottieGreen.setImageAssetsFolder(lottiePathdataMap.get(isFinish ? 10 : 0).getImgPath());
+        String newjsonPath =  lottiePathdataMap.get(isFinish ?  10 : 0).getJsonPath().toString();
+        String newPath =  lottiePathdataMap.get(isFinish ?  10 : 0).getImgPath().toString();
+        if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath) ) {
+            viewLottieGreen.setAnimation(newjsonPath);
+            viewLottieGreen.setImageAssetsFolder(newPath);
             viewLottieGreen.playAnimation();
             viewLottieGreen.setTag(isFinish);
             setCenterImg(0);
@@ -273,10 +275,11 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                     .setDuration(500)
                     .setListener(null);
         }
-
-        if (!viewLottieYellow.isAnimating() || !(Boolean.parseBoolean(viewLottieYellow.getTag().toString())&&isFinish)) {
-            viewLottieYellow.setAnimation(lottiePathdataMap.get(isFinish ? 11 : 1).getJsonPath());
-            viewLottieYellow.setImageAssetsFolder(lottiePathdataMap.get(isFinish ? 11 : 1).getImgPath());
+        String newjsonPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getJsonPath().toString();
+        String newPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getImgPath().toString();
+        if (!viewLottieYellow.isAnimating() || !viewLottieYellow.getImageAssetsFolder().equals(newPath)) {
+            viewLottieYellow.setAnimation(newjsonPath);
+            viewLottieYellow.setImageAssetsFolder(newPath);
             viewLottieYellow.playAnimation();
             viewLottieYellow.setTag(isFinish);
             setCenterImg(2);
@@ -301,11 +304,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         }
         String newPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getImgPath().toString();
         String newjsonPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getJsonPath().toString();
-        LogUtils.i("zz-----"+newPath+"----"+newjsonPath);
         if (!viewLottieRed.isAnimating() || !viewLottieRed.getImageAssetsFolder().equals(newPath) ) {
-//            if(viewLottieRed.isAnimating()){
-//
-//            }
             viewLottieRed.setAnimation(newjsonPath);
             viewLottieRed.setImageAssetsFolder(newPath);
             viewLottieRed.playAnimation();
