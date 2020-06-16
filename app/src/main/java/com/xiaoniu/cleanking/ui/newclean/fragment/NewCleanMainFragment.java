@@ -1835,7 +1835,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize());//展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
 
-                } else {//开始扫描
+                } else {//重新开始扫描
+                    setScanningJunkTotal(0);
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
                 }
