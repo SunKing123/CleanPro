@@ -1882,7 +1882,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if(AppUtils.checkStoragePermission(getActivity())){
             isReScan();
         }else{
-            permissionDenied();
+            mPresenter.checkStoragePermission();  //重新开始扫描
         }
 
     }
