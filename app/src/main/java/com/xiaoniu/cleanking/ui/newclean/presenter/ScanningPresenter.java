@@ -114,7 +114,10 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
             //扫描apk安装包
-            List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
+            List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFileByDb();
+            if(CollectionUtils.isEmpty(apkJunkInfos)){
+                apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
+            }
             e.onNext(new JunkWrapper(ScanningResultType.APK_JUNK, apkJunkInfos));
 
             //扫描卸载残余垃圾
