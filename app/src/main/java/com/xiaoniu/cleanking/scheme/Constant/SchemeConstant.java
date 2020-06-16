@@ -67,7 +67,8 @@ public class SchemeConstant {
         //插屏锁屏页面
         public static final String CLASS_LOCKACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.LockActivity";
 
-
+       //本地推送弹窗界面
+       public static final String CLASS_LOCAL_PUSH_ACTIVITY="com.xiaoniu.cleanking.ui.localpush.PopPushActivity";
     }
 
 }

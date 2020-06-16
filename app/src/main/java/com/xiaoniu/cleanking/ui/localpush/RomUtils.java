@@ -11,7 +11,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.DisplayCutout;
+import android.view.TextureView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,6 +22,7 @@ import androidx.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 
 /**
  * Description:
@@ -132,8 +136,121 @@ public class RomUtils {
     }
 
     public static boolean checkIsHuaWeiRom() {
-        return Build.MANUFACTURER.contains("HUAWEI");
+        //全部转换为小写，因为有的机型显示的大小写不规定
+        String manufacturer = Build.MANUFACTURER;
+        if (manufacturer != null && manufacturer.length() > 0) {
+            String phoneType = manufacturer.toLowerCase();
+            return phoneType.contains("huawei");
+        } else {
+            return false;
+        }
     }
+
+
+    public static boolean checkIsMIUIRom() {
+        //全部转换为小写，因为有的机型显示的大小写不规定
+        String manufacturer = Build.MANUFACTURER;
+        if (manufacturer != null && manufacturer.length() > 0) {
+            String phoneType = manufacturer.toLowerCase();
+            return phoneType.contains("xiaomi");
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * 判断vivo是否有刘海屏
+     * https://swsdl.vivo.com.cn/appstore/developer/uploadfile/20180328/20180328152252602.pdf
+     *
+     * @param activity
+     * @return
+     */
+    private static boolean hasNotchVIVO(Activity activity) {
+        try {
+            Class<?> c = Class.forName("android.util.FtFeature");
+            Method get = c.getMethod("isFeatureSupport", int.class);
+            return (boolean) (get.invoke(c, 0x20));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 判断oppo是否有刘海屏
+     * https://open.oppomobile.com/wiki/doc#id=10159
+     *
+     * @param activity
+     * @return
+     */
+    private static boolean hasNotchOPPO(Activity activity) {
+        return activity.getPackageManager().hasSystemFeature("com.oppo.feature.screen.heteromorphism");
+    }
+
+    /**
+     * 判断xiaomi是否有刘海屏
+     * https://dev.mi.com/console/doc/detail?pId=1293
+     *
+     * @param activity
+     * @return
+     */
+    private static boolean hasNotchXiaoMi(Activity activity) {
+        try {
+            Class<?> c = Class.forName("android.os.SystemProperties");
+            Method get = c.getMethod("getInt", String.class, int.class);
+            return (int) (get.invoke(c, "ro.miui.notch", 0)) == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    /**
+     * 是否有刘海屏
+     *
+     * @return
+     */
+    public static boolean hasNotchInScreen(Activity activity) {
+
+        // android  P 以上有标准 API 来判断是否有刘海屏
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            DisplayCutout displayCutout = activity.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout();
+            if (displayCutout != null) {
+                // 说明有刘海屏
+                return true;
+            }
+        } else {
+            // 通过其他方式判断是否有刘海屏  目前官方提供有开发文档的就 小米，vivo，华为（荣耀），oppo
+            String manufacturer = Build.MANUFACTURER;
+
+            if (TextUtils.isEmpty(manufacturer)) {
+                return false;
+            } else if (manufacturer.equalsIgnoreCase("HUAWEI")) {
+                return hasNotchAtHuaWei(activity);
+            } else if (manufacturer.equalsIgnoreCase("xiaomi")) {
+                return hasNotchXiaoMi(activity);
+            } else if (manufacturer.equalsIgnoreCase("oppo")) {
+                return hasNotchOPPO(activity);
+            } else if (manufacturer.equalsIgnoreCase("vivo")) {
+                return hasNotchVIVO(activity);
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public static int getStatusBarHeight(Context context) {
+        int statusBarHeight = 0;
+        int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+        }
+        return statusBarHeight;
+    }
+
 
     public static void onActivityResult(Context context, int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_PERMISSION_CODE) {
@@ -142,6 +259,46 @@ public class RomUtils {
                     mOnSuspensionPermissionListener.onPermissionGranted();
                 }
             }
+        }
+    }
+
+
+    public static boolean hasNotchAtHuaWei(Context context) {
+        boolean ret = false;
+        try {
+            ClassLoader classLoader = context.getClassLoader();
+            Class HwNotchSizeUtil = classLoader.loadClass("com.huawei.android.util.HwNotchSizeUtil");
+            Method get = HwNotchSizeUtil.getMethod("hasNotchInScreen");
+            ret = (boolean) get.invoke(HwNotchSizeUtil);
+        } catch (ClassNotFoundException e) {
+            Log.e("Notch", "hasNotchAtHuawei ClassNotFoundException");
+        } catch (NoSuchMethodException e) {
+            Log.e("Notch", "hasNotchAtHuawei NoSuchMethodException");
+        } catch (Exception e) {
+            Log.e("Notch", "hasNotchAtHuawei Exception");
+        } finally {
+            return ret;
+        }
+    }
+
+
+    //获取刘海尺寸：width、height
+    //int[0]值为刘海宽度 int[1]值为刘海高度
+    public static int[] getNotchSizeAtHuawei(Context context) {
+        int[] ret = new int[]{0, 0};
+        try {
+            ClassLoader cl = context.getClassLoader();
+            Class HwNotchSizeUtil = cl.loadClass("com.huawei.android.util.HwNotchSizeUtil");
+            Method get = HwNotchSizeUtil.getMethod("getNotchSize");
+            ret = (int[]) get.invoke(HwNotchSizeUtil);
+        } catch (ClassNotFoundException e) {
+            Log.e("Notch", "getNotchSizeAtHuawei ClassNotFoundException");
+        } catch (NoSuchMethodException e) {
+            Log.e("Notch", "getNotchSizeAtHuawei NoSuchMethodException");
+        } catch (Exception e) {
+            Log.e("Notch", "getNotchSizeAtHuawei Exception");
+        } finally {
+            return ret;
         }
     }
 

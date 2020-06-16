@@ -33,6 +33,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 
 public class PopPushActivity extends AppCompatActivity {
 
+
     String urlSchema;
 
     private Handler mHandle = new Handler();
@@ -71,7 +72,7 @@ public class PopPushActivity extends AppCompatActivity {
                 mPopupWindow.dismiss();
                 finish();
             }
-        }, 5000);
+        }, 5500);
     }
 
 
@@ -92,7 +93,17 @@ public class PopPushActivity extends AppCompatActivity {
         // 解决特殊版本android的bug
         mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // 设置窗口出现的位置（任意位置的窗口）
-        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+
+        int y = 0;
+        if (RomUtils.checkIsHuaWeiRom()) {
+            if (RomUtils.hasNotchAtHuaWei(this)) {
+                y = RomUtils.getNotchSizeAtHuawei(this)[1];
+            }
+        }
+
+
+
+        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
 
 
         LocalPushConfigModel.Item item = (LocalPushConfigModel.Item) getIntent().getSerializableExtra("config");
