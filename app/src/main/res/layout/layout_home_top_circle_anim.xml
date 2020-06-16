@@ -35,7 +35,6 @@
             android:id="@+id/iv_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:elevation="@dimen/dp_20"
             android:layout_centerInParent="true"
             app:srcCompat="@drawable/icon_circle_btn_white" />

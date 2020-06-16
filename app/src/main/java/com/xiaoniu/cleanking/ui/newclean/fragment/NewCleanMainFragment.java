@@ -424,6 +424,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
+
+        //互动式广告展示逻辑;
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > mInteractionList.size() - 1) {
                 mInteractionPoistion = 0;
@@ -441,6 +443,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
 
+        //广告点击跳转逻辑
         if (mIsClickAdTopDetail) {
             initGeekSdkTop();
         }
@@ -448,7 +451,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             initGeekSdkCenter();
         }
 
-//        isReScan();
+        checkScanState();
     }
 
     public void setIsGotoSetting(boolean isGotoSetting) {
@@ -636,12 +639,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void isReScan() {
         if (ScanDataHolder.getInstance().getScanState() == 0) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             mPresenter.checkStoragePermission();  //重新开始扫描
-//            if (null != view_lottie_top)
-//                view_lottie_top.startLottie();
         } else {
             if (!PreferenceUtil.getNowCleanTime()) {
                 if (null != view_lottie_top)
-                    view_lottie_top.setGreenState();
+                    view_lottie_top.greenState(true);
             }
         }
     }
@@ -768,7 +769,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mainTableView.killVirusCleanWarningStyle();
         }
         initGeekSdkTop();
-        isReScan();
+
     }
 
 
@@ -1299,7 +1300,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
         textLayout.setMargins(0,0-Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(),0,0);
         view_lottie_top.setLayoutParams(textLayout);
-
         showTextView();
     }
 
@@ -1878,4 +1878,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if(null!=view_lottie_top)
         view_lottie_top.setTotalSize(NumberUtils.mathRandomInt(10,30)*1024*1024);
     }
+
+    public void checkScanState(){
+        if(AppUtils.checkStoragePermission(getActivity())){
+            isReScan();
+        }else{
+            permissionDenied();
+        }
+
+    }
+
 }
