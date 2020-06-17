@@ -47,7 +47,7 @@ public class ChjSplashAdView extends CHJAdView {
     public void loadSplashAd(TTSplashAd ttSplashAd, AdInfo adInfo) {
         splashContainer.removeAllViews();
         splashContainer.addView(ttSplashAd.getSplashView());
-        ttSplashAd.setNotAllowSdkCountdown();
+//        ttSplashAd.setNotAllowSdkCountdown();
         //设置SplashView的交互监听器
         ttSplashAd.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
             @Override
@@ -64,6 +64,7 @@ public class ChjSplashAdView extends CHJAdView {
 
             @Override
             public void onAdSkip() {
+                adClose(adInfo);
                 LogUtils.d(TAG, "zz--chj--onAdSkip--"+adInfo.getAdId());
 
             }
