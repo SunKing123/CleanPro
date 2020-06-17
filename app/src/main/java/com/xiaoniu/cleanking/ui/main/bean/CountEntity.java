@@ -19,10 +19,22 @@ public class CountEntity implements Serializable {
      */
     private String resultSize = "0.0MB";
 
+
+    private long totalLong =0;
+
     /**
      * 扫描的文件大小 单位 B
      */
     private long number;
+
+
+    public long getTotalLong() {
+        return totalLong;
+    }
+
+    public void setTotalLong(long totalLong) {
+        this.totalLong = totalLong;
+    }
 
     public long getNumber() {
         return number;

@@ -257,7 +257,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         if(compositeDisposable.isDisposed()){
             compositeDisposable = new CompositeDisposable();
         }
-        totalJunk = 0;
+
         mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
 
             @Override
@@ -360,7 +360,6 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 }
 //                final List<JunkGroup> scanningModelList = new ArrayList<>(mJunkGroups.values());
                 mView.setScanningFinish(mJunkGroups);
-                ScanDataHolder.getInstance().setScanState(1);
                 isScaning = false;
 //                getView().setInitScanningModel(scanningModelList);
 //                //计算总的扫描时间，并回传记录

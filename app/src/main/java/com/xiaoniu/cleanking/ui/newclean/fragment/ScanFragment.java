@@ -184,6 +184,7 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
         ScanDataHolder.getInstance().setTotalSize(totalJunkSize);
         ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
         ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
+        ScanDataHolder.getInstance().setScanState(1);
         ((NowCleanActivity) getActivity()).scanFinish();
 
         //重置颜色变化状态
