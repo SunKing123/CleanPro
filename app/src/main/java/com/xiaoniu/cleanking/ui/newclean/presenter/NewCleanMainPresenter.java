@@ -207,18 +207,22 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     @SuppressLint("CheckResult")
     public void checkStoragePermission() {
         //动画开始播放
-        mView.startScan();
+//        mView.startScan();
+        LogUtils.i("checkStoragePermission()");
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         new RxPermissions(mView.getActivity()).request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
+                        LogUtils.i("checkStoragePermission()---true");
                         scanningJunk();
                     } else {
-                        if (hasPermissionDeniedForever()) {
+                        if (hasPermissionDeniedForever()) {//点击拒绝
+                            LogUtils.i("checkStoragePermission()---denied");
                             mView.permissionDenied();
-                        } else {
-                            mView.permissionDenied();
+                        } else {//点击永久拒绝
+                            LogUtils.i("checkStoragePermission()---denied--faile");
+                            mView.showPermissionDialog();
                         }
                     }
                 });
@@ -265,10 +269,9 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     @SuppressLint("CheckResult")
     public void scanningJunk() {
         fileCount = 0;
-        ScanDataHolder.getInstance().setScanState(0);
         Disposable disposable = Observable.create(e -> {
             //扫描进程占用内存情况
-            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
             //扫描apk安装包
@@ -304,7 +307,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         if(null!=compositeDisposable){
             if (!compositeDisposable.isDisposed()) {
                 compositeDisposable.clear();
-                compositeDisposable.dispose();
+//                compositeDisposable.dispose();
             }
         }
     }
@@ -340,6 +343,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
 //                getView().setInitScanningModel(scanningModelList);
                 mView.setScanningFinish(mJunkGroups);
+                ScanDataHolder.getInstance().setScanState(1);
 
 //                //计算总的扫描时间，并回传记录
 //                long scanningCountTime = System.currentTimeMillis() - scanningStartTime;

@@ -80,13 +80,14 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         tv_file_total_size = (TextView) v.findViewById(R.id.tv_file_total_size);
         tv_file_total_tag = (TextView) v.findViewById(R.id.tv_file_total_tag);
         rel_container = (RelativeLayout) v.findViewById(R.id.rel_parent);
+        ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
         lottieList = new ArrayList<>();
         lottieList.add(viewLottieGreen);
         lottieList.add(viewLottieYellow);
         lottieList.add(viewLottieRed);
         setlottieData();
-        ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
         setViewLayoutParms();
+        greenState(false);
 
     }
 
@@ -173,7 +174,9 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalSize);
         tv_file_total_size.setText(countEntity.getTotalSize() + countEntity.getUnit());
         tv_file_total_size.setVisibility(VISIBLE);
+
         tv_file_total_tag.setVisibility(VISIBLE);
+        tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_text_tag));
         changeScanAnim(totalSize);
     }
 
@@ -187,8 +190,8 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     //清理完成狀態
     public void setClendedState(CountEntity countEntity) {
-        tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_pop02_tag, countEntity.getResultSize()));
         tv_file_total_size.setVisibility(GONE);
+        tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_pop02_tag, countEntity.getResultSize()));
         tv_file_total_tag.setVisibility(VISIBLE);
         greenState(true);
     }
@@ -196,10 +199,13 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     //扫描完毕
     public void scanFinish(long totalSize) {
         if (totalSize < 50 * 1024 * 1024) {//50mb以内
+            LogUtils.i("zzz---state--green---"+totalSize);
             greenState(true);
         } else if (totalSize > 50 * 1024 * 1024 && totalSize < 100 * 1024 * 1024) {
+            LogUtils.i("zzz---state--yellow---"+totalSize);
             yellowState(true);
         } else {
+            LogUtils.i("zzz---state--red---"+totalSize);
             redState(true);
         }
     }

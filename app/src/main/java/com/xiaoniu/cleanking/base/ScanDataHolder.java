@@ -37,6 +37,7 @@ public class ScanDataHolder {
     }
 
     private int scanState = 0;
+    private long totalSize =0;
     private CountEntity mCountEntity;
     private int scanningFileCount = 0;
     private long prevScanTime = 0;  //扫描缓存时间
@@ -52,9 +53,15 @@ public class ScanDataHolder {
     }
 
     public void setScanState(int scanState) {
-        LogUtils.i("zz----setScanState()--"+scanState);
-
         this.scanState = scanState;
+    }
+
+    public long getTotalSize() {
+        return totalSize;
+    }
+
+    public void setTotalSize(long totalSize) {
+        this.totalSize = totalSize;
     }
 
     public CountEntity getmCountEntity() {

@@ -181,6 +181,7 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
             totalJunkSize += map.getValue().mSize;
         }
         CountEntity mCountEntity = CleanUtil.formatShortFileSize(totalJunkSize);
+        ScanDataHolder.getInstance().setTotalSize(totalJunkSize);
         ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
         ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
         ((NowCleanActivity) getActivity()).scanFinish();

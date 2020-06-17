@@ -106,7 +106,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
     @SuppressLint("CheckResult")
     @Override
     public void scanningJunk() {
-        ScanDataHolder.getInstance().setScanState(10);
+
         scanningStartTime = System.currentTimeMillis();
         Observable.create(e -> {
             //扫描进程占用内存情况
@@ -114,7 +114,10 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
             //扫描apk安装包
-            List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
+            List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFileByDb();
+            if(CollectionUtils.isEmpty(apkJunkInfos)){
+                apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
+            }
             e.onNext(new JunkWrapper(ScanningResultType.APK_JUNK, apkJunkInfos));
 
             //扫描卸载残余垃圾
@@ -172,7 +175,7 @@ public class ScanningPresenter extends BasePresenter<ScanningContact.View, Scann
                 //计算总的扫描时间，并回传记录
                 long scanningCountTime = System.currentTimeMillis() - scanningStartTime;
                 getView().setScanningCountTime(scanningCountTime);
-
+                ScanDataHolder.getInstance().setScanState(1);
                 //计算扫描文件总数
 //                getView().setScanningFileCount(fileCount);
             }

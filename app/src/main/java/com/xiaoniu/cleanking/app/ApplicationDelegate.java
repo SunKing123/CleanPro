@@ -41,6 +41,7 @@ import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
@@ -174,7 +175,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .fallbackToDestructiveMigration()
                 .build();
 
-        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert.db")
+        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert0617.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
@@ -351,6 +352,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                         || ActivityCollector.isActivityExist(SplashADActivity.class)
                         || ActivityCollector.isActivityExist(SplashADHotActivity.class)
                         || ActivityCollector.isActivityExist(FullPopLayerActivity.class)
+                        || ActivityCollector.isActivityExist(PopPushActivity.class)
                         || activity.getLocalClassName().contains(".wx")
                         || activity.getLocalClassName().contains(".aqy")
                         || activity.getLocalClassName().contains(".ks")
