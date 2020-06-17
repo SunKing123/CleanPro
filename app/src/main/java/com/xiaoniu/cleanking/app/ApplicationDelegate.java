@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -81,7 +83,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     private static AppDataBase mAppDatabase;
     private static AppPathDataBase mAppPathDataBase;
 
-
+    private static Handler sHandler = new Handler(Looper.getMainLooper());
     @Override
     public void onCreate(Application application) {
 
@@ -388,6 +390,26 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 }
             }
         });
+    }
+
+
+
+    public static void post(Runnable runnable) {
+        if (sHandler != null && runnable != null) {
+            sHandler.post(runnable);
+        }
+    }
+
+    public static void postDelay(Runnable runnable, long delayTime) {
+        if (sHandler != null && runnable != null) {
+            sHandler.postDelayed(runnable, delayTime);
+        }
+    }
+
+    public static void removeTask(Runnable runnable) {
+        if (sHandler != null && runnable != null) {
+            sHandler.removeCallbacks(runnable);
+        }
     }
 
 

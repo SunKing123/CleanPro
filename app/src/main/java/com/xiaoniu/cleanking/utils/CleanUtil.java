@@ -99,6 +99,7 @@ public class CleanUtil {
         } else {
             value = String.format("%.0f", result);
         }
+        countEntity.setTotalLong(number);
         countEntity.setTotalSize(value);
         if (null != AppApplication.getInstance()) {
             countEntity.setUnit(AppApplication.getInstance().getString(suffix));

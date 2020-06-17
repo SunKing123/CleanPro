@@ -253,7 +253,7 @@ public class FileQueryUtils {
             if (TextUtils.isEmpty(packageName)) {
                 continue;
             }
-            LogUtils.i("getOmiteCache()-packageName-"+packageName);
+//            LogUtils.i("getOmiteCache()-packageName-"+packageName);
             //根据包名筛选的——未安装应用路径列表
             List<UninstallList> uninstallLists = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getPathList(packageName);
             if (!CollectionUtils.isEmpty(uninstallLists)) {
@@ -271,7 +271,8 @@ public class FileQueryUtils {
                     if (TextUtils.isEmpty(filePath)) {
                         continue;
                     }
-                    File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filePath);
+//                    LogUtils.i("getOmiteCache()--------"+filePath);
+                    File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + filePath);
 //                    LogUtils.i("getOmiteCache()-scanExtFile-"+scanExtFile.getAbsolutePath());
                     Map<String, String> filePathMap = checkAllGarbageFolder(scanExtFile);
 
@@ -576,7 +577,7 @@ public class FileQueryUtils {
 //            if (appExtDir != null && appExtDir.size() > 0) {
 //                Map<String, String> filePathMap = new HashMap<>();
 //                for (String dirPath : appExtDir) {
-//                    File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + dirPath);
+//                    File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + dirPath);
 //                    Map<String, String> innerFilePathMap = this.checkOutAllGarbageFolder(scanExtFile, applicationInfo.packageName);
 //                    for (Map.Entry<String, String> entry : innerFilePathMap.entrySet()) {
 //                        filePathMap.put(entry.getKey(), entry.getValue());
@@ -637,7 +638,7 @@ public class FileQueryUtils {
                         if(TextUtils.isEmpty(adspath)){
                             continue;
                         }
-                        File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" +adspath);
+                        File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +adspath);
                         Map<String, String> innerFilePathMap = this.checkOutAllGarbageFolderFromDb(scanExtFile, applicationInfo.packageName,pathObj);
                         for (Map.Entry<String, String> entry : innerFilePathMap.entrySet()) {
                             filePathMap.put(entry.getKey(), entry.getValue());
@@ -712,7 +713,7 @@ public class FileQueryUtils {
         //扫描指定的广告文件夹
         Map<String, String> adExtPathList = ScanPathExt.getAdExtPath();
         for (Map.Entry<String, String> adExtPath : adExtPathList.entrySet()) {
-            File rootPathFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + adExtPath.getKey());
+            File rootPathFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + adExtPath.getKey());
             if (rootPathFile.exists()) {
                 FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
                 firstJunkInfo.setAppName(adExtPath.getValue());
@@ -1476,10 +1477,11 @@ public class FileQueryUtils {
             List<FirstJunkInfo> arrayList = new ArrayList();
             for(int i=0;i<apks.size();i++){
                 String apkPath = AESUtils01.decrypt(apks.get(i).getFilePath());
-                File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + apkPath);
+                File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + apkPath);
                 if(scanExtFile.isDirectory()){   //文件夹处理方式
                     List<File> resultList = new ArrayList();
-                    findFiles(scanExtFile.getAbsolutePath(), "*apk", resultList);
+                    findFiles(scanExtFile.getAbsolutePath(), ".apk", resultList);
+//                    findFiles(scanExtFile.getAbsolutePath(), "*apk", resultList);
                     if(!CollectionUtils.isEmpty(resultList)){
                         for(File file:resultList){
                             String scanFilePath = file.getAbsolutePath();
@@ -2002,7 +2004,7 @@ public class FileQueryUtils {
                 if (args.length > 0 && !TextUtils.isEmpty(packageName)) {//排除指定包下的指定目录
                     boolean isSame = false;
                     for (String x : args) {
-                        if (file2.getAbsoluteFile().getAbsolutePath().endsWith(packageName + "/" + x)) {
+                        if (file2.getAbsoluteFile().getAbsolutePath().endsWith(packageName + File.separator + x)) {
                             isSame = true;
                             break;
                         }
@@ -2179,7 +2181,7 @@ public class FileQueryUtils {
 
     private Map<String, String> checkAllGarbageFolder(final File file) {
         final HashMap<String, String> hashMap = new HashMap<String, String>();
-        checAllkFiles(hashMap, file, 0);
+        checAllkFiles(hashMap, file);
         return hashMap;
     }
 
@@ -2187,15 +2189,13 @@ public class FileQueryUtils {
     /**
      * 筛选file下需要清理的文件夹
      *
-     * @param map
-     * @param file
      */
-    private void checAllkFiles(final Map<String, String> map, final File file, int t) {
+    private void checAllkFiles(final Map<String, String> map, final File file) {
         File[] listFiles = file.listFiles();
-        if (listFiles != null && listFiles.length > 0 && t < 2) {
+        if (listFiles != null && listFiles.length > 0) {
             for (File file2 : listFiles) {
                 if (file2.isDirectory()) {//文件夹
-                    checAllkFiles(map, file2, t + 1);
+                    checAllkFiles(map, file2);
                 } else { //文件类型
                     if (file2.length() > 0)
                         map.put(file2.getAbsolutePath(), "残留文件");
