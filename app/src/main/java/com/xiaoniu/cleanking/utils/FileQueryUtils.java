@@ -200,7 +200,7 @@ public class FileQueryUtils {
                     otherJunkInfo.setChecked(true);
                     otherJunkInfo.setPackageName("other");
                     otherJunkInfo.setGarbagetype("TYPE_OTHER");
-                    otherJunkInfo.setGarbageSize(outFile.length());
+                    otherJunkInfo.setGarbageSize(cachefile.length());
 
                     otherList.add(otherJunkInfo);
 
@@ -245,6 +245,7 @@ public class FileQueryUtils {
             if (TextUtils.isEmpty(packageName)) {
                 continue;
             }
+            LogUtils.i("getOmiteCache()-packageName-"+packageName);
             //根据包名筛选的——未安装应用路径列表
             List<UninstallList> uninstallLists = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getPathList(packageName);
             if (!CollectionUtils.isEmpty(uninstallLists)) {
@@ -258,26 +259,27 @@ public class FileQueryUtils {
                 junkInfo.setGarbageType("TYPE_LEAVED");
 
                 for (UninstallList pathObj : uninstallLists) {
-                    String filePath = pathObj.getFilePath();
+                    String filePath = AESUtils01.decrypt(pathObj.getFilePath());
                     if (TextUtils.isEmpty(filePath)) {
                         continue;
                     }
                     File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filePath);
+//                    LogUtils.i("getOmiteCache()-scanExtFile-"+scanExtFile.getAbsolutePath());
                     Map<String, String> filePathMap = checkAllGarbageFolder(scanExtFile);
 
                     for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
                         if (new File(entry.getKey()).isFile()) { //文件路径
                             File cachefile = new File(entry.getKey());
+//                            LogUtils.i("getOmiteCache()-scanExtFile-"+cachefile.getAbsolutePath());
                             SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
                             if (cachefile.exists()) {
                                 secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
                                 secondJunkInfo.setChecked(true);
                                 secondJunkInfo.setPackageName(scanExtFile.getName());
                                 secondJunkInfo.setGarbagetype("TYPE_LEAVED");
-                                secondJunkInfo.setGarbageSize(scanExtFile.length());
-
-                                junkInfo.addSecondJunk(secondJunkInfo);
+                                secondJunkInfo.setGarbageSize(cachefile.length());
                                 junkInfo.setTotalSize(junkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                                junkInfo.addSecondJunk(secondJunkInfo);
                                 if (mScanFileListener != null) {
                                     mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
                                 }
@@ -622,7 +624,8 @@ public class FileQueryUtils {
             if(!CollectionUtils.isEmpty(pathList)){
                     Map<String, String> filePathMap = new HashMap<>();
                     for (AppPath pathObj : pathList) {
-                        String adspath = pathObj.getFile_path();
+                        String adspath = AESUtils01.decrypt(pathObj.getFile_path());
+                        LogUtils.i("---path---"+adspath);
                         if(TextUtils.isEmpty(adspath)){
                             continue;
                         }
@@ -1461,7 +1464,7 @@ public class FileQueryUtils {
             List<UselessApk> apks = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
             List<FirstJunkInfo> arrayList = new ArrayList();
             for(int i=0;i<apks.size();i++){
-                String apkPath = apks.get(i).getFilePath();
+                String apkPath = AESUtils01.decrypt(apks.get(i).getFilePath());
                 File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + apkPath);
                 if(scanExtFile.isDirectory()){   //文件夹处理方式
                     List<File> resultList = new ArrayList();

@@ -175,7 +175,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .fallbackToDestructiveMigration()
                 .build();
 
-        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert.db")
+        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert0617.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
