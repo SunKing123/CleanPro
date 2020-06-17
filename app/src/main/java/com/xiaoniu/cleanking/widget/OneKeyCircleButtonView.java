@@ -174,7 +174,9 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalSize);
         tv_file_total_size.setText(countEntity.getTotalSize() + countEntity.getUnit());
         tv_file_total_size.setVisibility(VISIBLE);
+
         tv_file_total_tag.setVisibility(VISIBLE);
+        tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_text_tag));
         changeScanAnim(totalSize);
     }
 
