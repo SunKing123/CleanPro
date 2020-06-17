@@ -448,6 +448,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
+        LogUtils.i("onResum()");
         //重新检查状态
         checkScanState();
     }
@@ -781,6 +782,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (lifecycEvent.isActivity()) {
             closeAd();
         }
+        //热启动后重新检测权限
+        isDenied = false;
+        LogUtils.i("--changeLifecyEvent()");
     }
 
     @Override
@@ -875,9 +879,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                         mPresenter.stopScanning();
                         startActivity(NowCleanActivity.class);
                     } else {
-                        if (hasPermissionDeniedForever()) {
+                        if (hasPermissionDeniedForever()) {  //点击拒绝
                             startActivity(NowCleanActivity.class);
-                        } else {
+                        } else {                            //点击永久拒绝
                             showPermissionDialog();
                         }
                     }
@@ -1207,6 +1211,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             }
             initGeekAdSdk();
             initGeekSdkCenter();
+            //重新检测头部扫描状态
+            checkScanState();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -1846,10 +1852,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 view_lottie_top.setClendedState(countEntity);
             }
         }else{//未取得权限
-            permissionDenied();
+            LogUtils.i("--checkScanState()");
             if(!isDenied){
                 mPresenter.checkStoragePermission();  //重新开始扫描
             }
+            //未授权默认样式——存在大量垃圾；
+            if(null!=view_lottie_top)
+                view_lottie_top.setNoSize();
         }
     }
 

@@ -208,16 +208,20 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     public void checkStoragePermission() {
         //动画开始播放
 //        mView.startScan();
+        LogUtils.i("checkStoragePermission()");
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         new RxPermissions(mView.getActivity()).request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
+                        LogUtils.i("checkStoragePermission()---true");
                         scanningJunk();
                     } else {
                         if (hasPermissionDeniedForever()) {//点击拒绝
+                            LogUtils.i("checkStoragePermission()---denied");
                             mView.permissionDenied();
                         } else {//点击永久拒绝
+                            LogUtils.i("checkStoragePermission()---denied--faile");
                             mView.showPermissionDialog();
                         }
                     }
