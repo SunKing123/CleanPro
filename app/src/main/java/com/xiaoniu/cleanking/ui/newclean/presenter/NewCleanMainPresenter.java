@@ -268,6 +268,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             public void increaseSize(long increaseSize) {
                 totalJunk += increaseSize;
                 mHandler.post(() -> {
+                    if(mView!=null)
                     mView.setScanningJunkTotal(totalJunk);
                 });
             }

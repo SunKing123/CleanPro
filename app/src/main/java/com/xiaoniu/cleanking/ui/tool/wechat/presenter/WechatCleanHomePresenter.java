@@ -286,7 +286,7 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
                 listFour.add(cleanWxHeadInfo);
             }
         }
-
+       
         for (int j = 0; j < listFour.size(); j++) {
             listDataTemp.addAll(listFour.get(j).getFourItem());
         }

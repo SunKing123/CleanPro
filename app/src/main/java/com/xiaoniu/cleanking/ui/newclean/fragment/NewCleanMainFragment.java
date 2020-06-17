@@ -552,6 +552,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                if(mTopAdFramelayout!=null)
                 mTopAdFramelayout.removeAllViews();
             }
         }, 2000);
@@ -1785,6 +1786,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
         ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
         ScanDataHolder.getInstance().setScanState(1);
+        if(view_lottie_top!=null)
         view_lottie_top.scanFinish(totalJunkSize);
 //        ((NowCleanActivity) getActivity()).scanFinish();
 //        //重置颜色变化状态
