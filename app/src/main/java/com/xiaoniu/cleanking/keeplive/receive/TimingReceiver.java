@@ -490,6 +490,7 @@ public class TimingReceiver extends BroadcastReceiver {
 
                     }
                 });
+                mFileQueryUtils.setRandRamNum(true);
                 ArrayList<FirstJunkInfo> listInfo = mFileQueryUtils.getRunningProcess();
                 if (listInfo == null) {
                     listInfo = new ArrayList<>();
@@ -534,6 +535,7 @@ public class TimingReceiver extends BroadcastReceiver {
         mFileQueryUtils.setIsService(false);
         Observable.create(e -> {
             //扫描进程占用内存情况
+            mFileQueryUtils.setRandRamNum(true);
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(runningProcess);
             //扫描apk安装包

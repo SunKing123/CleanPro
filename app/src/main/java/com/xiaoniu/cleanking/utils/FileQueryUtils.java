@@ -81,6 +81,7 @@ public class FileQueryUtils {
     HashMap<String, FirstJunkInfo> outJunkMap; //根目录筛选出来的文件，文件名key
     List<PackageInfo> installedList; //已经安装的应用信息
     private boolean isService = false;
+    private boolean isRandRamNum = false;// 随机展示
 
     /**
      * 是否终止标识符， 如果停止，结束查询数据
@@ -101,6 +102,13 @@ public class FileQueryUtils {
             }
         }
 
+    }
+
+
+
+
+    public void setRandRamNum(boolean randRamNum) {
+        isRandRamNum = randRamNum;
     }
 
     public void setIsService(boolean isServiceScan) {
@@ -1034,9 +1042,10 @@ public class FileQueryUtils {
             return junkList;
         int sizeNum = 50;
 //        if(isService)
-
-        float sizeNumF = (float) sizeNum * PreferenceUtil.getMulCacheNum();
-        sizeNum = (int) sizeNumF;
+        if(!isRandRamNum){
+            float sizeNumF = (float) sizeNum * PreferenceUtil.getMulCacheNum();
+            sizeNum = (int) sizeNumF;
+        }
         List<PackageInfo> customAppList = new ArrayList<>();
         List<String> packageNameList = new ArrayList<>();
         for (PackageInfo p : installedList) {
