@@ -197,6 +197,8 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     }
 
     public void readyScanningJunk() {
+        if (isScaning == true)
+            return;
         LogUtils.i("readyScanningJunk()");
         mFileQueryUtils = new FileQueryUtils();
         //初始化扫描模型
@@ -279,13 +281,15 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         });
     }
 
+    private Disposable disposable;
+
     @SuppressLint("CheckResult")
     public void scanningJunk() {
         fileCount = 0;
         if (isScaning == true)
             return;
         isScaning = true;
-        Disposable disposable = Observable.create(e -> {
+        disposable = Observable.create(e -> {
             //扫描进程占用内存情况
             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
@@ -323,12 +327,14 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         totalJunk = 0;
         isScaning = false;
         ScanDataHolder.getInstance().setScanState(0);
-
-        if (null != compositeDisposable) {
-            if (!compositeDisposable.isDisposed()) {
+        if (null != disposable &&  !disposable.isDisposed()) {
+            if (!disposable.isDisposed()) {
+                disposable.dispose();
+            }
+        }
+        if (null != compositeDisposable &&  !compositeDisposable.isDisposed()) {
                 compositeDisposable.clear();
                 compositeDisposable.dispose();
-            }
         }
     }
 
