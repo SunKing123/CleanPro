@@ -171,7 +171,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        List<UselessApk> uselessApks1 = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
 //        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
 //        LogUtils.i("zz-----path----"+appPaths.get(0).getFile_path()+"----"+ AESUtils01.decrypt(appPaths.get(0).getFile_path(),"E3A37D84081C89D9787D0B8546BA8BA5"));
-//        LogUtils.i("zz-----path----"+appPaths.get(1).getFile_path()+"----"+ AESUtils01.decrypt(appPaths.get(1).getFile_path(),"E3A37D84081C89D9787D0B8546BA8BA5"));
+//        LogUtils.i("zz-----path----"+uselessApks1.get(1).getFilePath()+"----"+ AESUtils01.decrypt(uselessApks1.get(1).getFilePath(),"E3A37D84081C89D9787D0B8546BA8BA5"));
         PreferenceUtil.saveShowAD(false);
         getIconListFail();
         mPresenter.getIconList();
@@ -250,9 +250,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //            AppConfig.showDebugWindow(mContext);
 //        }
 
-        if (BuildConfig.DEBUG) {
-            AppConfig.showDebugWindow(mContext);
-        }
+//        if (BuildConfig.DEBUG) {
+////            AppConfig.showDebugWindow(mContext);
+////        }
     }
 
     @Override

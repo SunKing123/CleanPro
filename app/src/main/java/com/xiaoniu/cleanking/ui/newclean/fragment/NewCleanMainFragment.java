@@ -412,9 +412,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+        LogUtils.i("onResum()");
         if (isGotoSetting) {
             isGotoSetting = false;
         }
@@ -448,10 +450,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
-        LogUtils.i("onResum()");
         //重新检查状态
         checkScanState();
     }
+
+
 
     public void setIsGotoSetting(boolean isGotoSetting) {
         this.isGotoSetting = isGotoSetting;
@@ -631,10 +634,23 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onPause() {
         super.onPause();
+        LogUtils.i("onPause()");
         NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        LogUtils.i("onStart()");
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LogUtils.i("onStop()");
+    }
 
     /**
      * 清理完成回调
@@ -806,7 +822,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         ((MainActivity) getActivity()).commitJpushClickTime(1);
         if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                mPresenter.stopScanning();
+                //读取扫描缓存
                 startActivity(NowCleanActivity.class);
             } else {    //scanState ==0: 扫描中
                 checkStoragePermission();
@@ -825,45 +841,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             } else {
                 //判断扫描缓存；
                 if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                    mPresenter.stopScanning();
+                    //读取扫描缓存
                     startActivity(NowCleanActivity.class);
-                } else {    //scanState ==0: 扫描中
+                } else {                //scanState ==0: 扫描中
                     checkStoragePermission();
                 }
             }
         }
 
-
-//        startActivity(NowCleanActivity.class);
-      /*  checkStoragePermission();
-        if (true) {
-            startActivity(NowCleanActivity.class);
-        } else {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putString("home", "");
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
-        }*/
     }
 
 
@@ -1827,8 +1812,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     private boolean isDenied = false;
     public void permissionDenied(){//授权被拒绝
-        if(null!=view_lottie_top)
-        view_lottie_top.setNoSize();
+        if (null != view_lottie_top)
+            view_lottie_top.setNoSize();
         isDenied = true;
     }
 
@@ -1841,8 +1826,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
 
                 } else {//重新开始扫描
-                    view_lottie_top.greenState(false);
-                    setScanningJunkTotal(0);
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
                 }

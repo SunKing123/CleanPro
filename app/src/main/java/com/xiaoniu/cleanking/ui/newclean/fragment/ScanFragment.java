@@ -116,10 +116,10 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
             StatisticsUtils.trackClick("stop_it_button_click", "停止按钮点击", "home_page", "clean_scan_page");
             ((NowCleanActivity) requireActivity()).backClick(true);
         });
-        tv_back.setOnClickListener(v -> {
-            StatisticsUtils.trackClick("return_click", "返回点击", "home_page", "clean_scan_page");
-            ((NowCleanActivity) requireActivity()).backClick(true);
-        });
+//        tv_back.setOnClickListener(v -> {
+//            StatisticsUtils.trackClick("return_click", "返回点击", "home_page", "clean_scan_page");
+//            ((NowCleanActivity) requireActivity()).backClick(true);
+//        });
     }
 
     @Override

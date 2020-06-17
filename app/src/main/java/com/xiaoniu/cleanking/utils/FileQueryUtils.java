@@ -883,7 +883,7 @@ public class FileQueryUtils {
              * 遍历文件3/4以上 && 未扫描出apk文件 && 遍历私有路径下包含垃圾
              */
             if (index > (float) total * 3 / 4 && !isScanFile && list.size() > 0) {
-                Log.v("onAnimationEnd", "mScanFileListener " + mScanFileListener);
+//                Log.v("onAnimationEnd", "mScanFileListener " + mScanFileListener);
 
                 if (mScanFileListener != null) {
                     mScanFileListener.currentNumber();
@@ -1033,6 +1033,8 @@ public class FileQueryUtils {
         if (packageSize == 0)
             return junkList;
         int sizeNum = 50;
+//        if(isService)
+
         float sizeNumF = (float) sizeNum * PreferenceUtil.getMulCacheNum();
         sizeNum = (int) sizeNumF;
         List<PackageInfo> customAppList = new ArrayList<>();

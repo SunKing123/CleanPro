@@ -54,13 +54,17 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
+
     @Inject
     public NewCleanMainPresenter() {
-        compositeDisposable =  new CompositeDisposable();
+        compositeDisposable = new CompositeDisposable();
     }
+
     private int fileCount = 0;
 
     private long totalJunk = 0;
+
+    boolean isScaning = false;   //避免重复扫描
     /**
      * 底部广告接口
      */
@@ -103,7 +107,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                     if (TextUtils.equals(dataBean.getSwitcherKey(), "page_lock")) {
                         try {
                             MmkvUtil.saveString(PositionId.LOCK_INTERACTIVE, JSONObject.toJSONString(dataBean));
-                            Log.e("dong",JSONObject.toJSONString(dataBean));
+                            Log.e("dong", JSONObject.toJSONString(dataBean));
                         } catch (Exception e) {
                         }
                     }
@@ -193,6 +197,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     }
 
     public void readyScanningJunk() {
+        LogUtils.i("readyScanningJunk()");
         mFileQueryUtils = new FileQueryUtils();
         //初始化扫描模型
         initScanningJunkModel();
@@ -215,6 +220,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
                         LogUtils.i("checkStoragePermission()---true");
+                        readyScanningJunk();
                         scanningJunk();
                     } else {
                         if (hasPermissionDeniedForever()) {//点击拒绝
@@ -246,6 +252,12 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
      * 监听扫描状态
      */
     private void initScanningListener() {
+        if (isScaning == true)
+            return;
+        if(compositeDisposable.isDisposed()){
+            compositeDisposable = new CompositeDisposable();
+        }
+        totalJunk = 0;
         mFileQueryUtils.setScanFileListener(new FileQueryUtils.ScanFileListener() {
 
             @Override
@@ -266,12 +278,16 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             }
         });
     }
+
     @SuppressLint("CheckResult")
     public void scanningJunk() {
         fileCount = 0;
+        if (isScaning == true)
+            return;
+        isScaning = true;
         Disposable disposable = Observable.create(e -> {
             //扫描进程占用内存情况
-             ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
             e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
             //扫描apk安装包
@@ -302,16 +318,19 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     }
 
     //清除扫描任务
-    public void stopScanning(){
-//        LogUtils.i("zz----stopScanning()");
-        if(null!=compositeDisposable){
+    public void stopScanning() {
+        fileCount = 0;
+        totalJunk = 0;
+        isScaning = false;
+        ScanDataHolder.getInstance().setScanState(0);
+
+        if (null != compositeDisposable) {
             if (!compositeDisposable.isDisposed()) {
                 compositeDisposable.clear();
-//                compositeDisposable.dispose();
+                compositeDisposable.dispose();
             }
         }
     }
-    // .compose(mView.bindFragmentEvent(FragmentEvent.DESTROY))
 
     /**
      * 分发扫描结果
@@ -339,12 +358,11 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 if (junkGroup != null) {
                     junkGroup.isScanningOver = true;
                 }
-                final List<JunkGroup> scanningModelList = new ArrayList<>(mJunkGroups.values());
-
-//                getView().setInitScanningModel(scanningModelList);
+//                final List<JunkGroup> scanningModelList = new ArrayList<>(mJunkGroups.values());
                 mView.setScanningFinish(mJunkGroups);
                 ScanDataHolder.getInstance().setScanState(1);
-
+                isScaning = false;
+//                getView().setInitScanningModel(scanningModelList);
 //                //计算总的扫描时间，并回传记录
 //                long scanningCountTime = System.currentTimeMillis() - scanningStartTime;
 //                getView().setScanningCountTime(scanningCountTime);
@@ -448,9 +466,6 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             }
         }
     }
-
-
-
 
 
     /**
