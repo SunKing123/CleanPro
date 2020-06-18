@@ -30,7 +30,7 @@ public class GZipUtils {
                 outStr.append(line);
             }
         } else {
-            outStr.append(compressed);
+            outStr.append(new String(compressed));
         }
         return outStr.toString();
     }

@@ -9,8 +9,8 @@ import java.io.RandomAccessFile;
 import java.io.StringWriter;
 
 public class Logger {
-    public static String TAG = "GGTag";
-    public static String ZYTAG = "zytag";
+    public static final String TAG = "GGTag";
+    public static final String ZYTAG = "zytag";
     private static boolean isSave2File = true;
     private static String logFileName = "CMLog.txt";
     private static String loggerSavePath = Environment.getExternalStorageDirectory().getAbsolutePath();

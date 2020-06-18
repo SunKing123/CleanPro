@@ -51,7 +51,6 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
     private String path;
 
 
-
     /**
      * 聊天图片
      */
@@ -60,8 +59,6 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
      * 相机图片
      */
     private List<FileTitleEntity> listsCamera = new ArrayList<>();
-
-
 
 
     /**
@@ -127,14 +124,13 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
     }
 
 
-
     public void delFile(List<FileChildEntity> list) {
         List<FileChildEntity> files = list;
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 
-                for ( FileChildEntity fileChildEntity : files) {
+                for (FileChildEntity fileChildEntity : files) {
                     File file = new File(fileChildEntity.path);
                     if (null != file) {
                         file.delete();
@@ -172,7 +168,7 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
     public void start() {
 
         getImgChat();
-       // getImgCamera();
+        // getImgCamera();
     }
 
 
@@ -196,8 +192,8 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
 
                     @Override
                     public void onNext(String value) {
-                      totalFileSize(listsChat);
-                       mView.updateImgChat(listsChat);
+                        totalFileSize(listsChat);
+                        mView.updateImgChat(listsChat);
                     }
 
                     @Override
@@ -213,24 +209,25 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
     }
 
 
-    public   void totalFileSize(List<FileTitleEntity> lists){
-        if(null==lists ||  lists.size()==0){
+    public void totalFileSize(List<FileTitleEntity> lists) {
+        if (null == lists || lists.size() == 0) {
             return;
         }
-        for(FileTitleEntity fileTitleEntity: lists){
-            long size=0L;
-            for(FileChildEntity fileChildEntity:fileTitleEntity.lists){
-                size+=fileChildEntity.size;
+        for (FileTitleEntity fileTitleEntity : lists) {
+            long size = 0L;
+            for (FileChildEntity fileChildEntity : fileTitleEntity.lists) {
+                size += fileChildEntity.size;
             }
-            fileTitleEntity.size=size;
+            fileTitleEntity.size = size;
         }
     }
+
     /**
      * 获取相机图片
      */
     private void getImgCamera() {
 
-        String pathLocal=wxRootPath+"/WeiXin";
+        String pathLocal = wxRootPath + "/WeiXin";
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
@@ -268,34 +265,36 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
 
     /**
      * 导入文件
+     *
      * @param files
      */
     //文件的总大小
-    private  int mFileTotalSize=0;
+    private int mFileTotalSize = 0;
     //文件读写的大小
-    private  int mFileReadSize=0;
-    public   void copyFile(List<File> files ){
-        mFileTotalSize=0;
-        mFileReadSize=0;
-       //相册路径
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+"/img_cl";
+    private int mFileReadSize = 0;
 
-        File file=new File(path);
-        if(!file.exists()){
+    public void copyFile(List<File> files) {
+        mFileTotalSize = 0;
+        mFileReadSize = 0;
+        //相册路径
+        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString() + "/img_cl";
+
+        File file = new File(path);
+        if (!file.exists()) {
             file.mkdir();
         }
 
-        for(File fileSize: files){
-            mFileTotalSize+=fileSize.length();
+        for (File fileSize : files) {
+            mFileTotalSize += fileSize.length();
         }
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
 
 
-                for(File file: files){
-                    File fileCopy=new File(path,file.getName());
-                    copyFileUsingFileStreams(file,fileCopy,emitter);
+                for (File file : files) {
+                    File fileCopy = new File(path, file.getName());
+                    copyFileUsingFileStreams(file, fileCopy, emitter);
 
                 }
                 emitter.onComplete();
@@ -328,28 +327,22 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
 
     /**
      * 文件拷贝
-     *
      */
-    private  void copyFileUsingFileStreams(File source, File dest,ObservableEmitter<Integer> emitter)
-            throws IOException {
-        InputStream input = null;
-        OutputStream output = null;
-        try {
-            input = new FileInputStream(source);
-            output = new FileOutputStream(dest);
+    private void copyFileUsingFileStreams(File source, File dest, ObservableEmitter<Integer> emitter) {
+        try (InputStream input = new FileInputStream(source); OutputStream output = new FileOutputStream(dest)) {
             byte[] buf = new byte[1024];
             int bytesRead;
             while ((bytesRead = input.read(buf)) > 0) {
                 output.write(buf, 0, bytesRead);
-                mFileReadSize+=bytesRead;
+                mFileReadSize += bytesRead;
                 int progress = (int) (mFileReadSize * 1.0f / mFileTotalSize * 100);
                 emitter.onNext(progress);
             }
-        } finally {
-            input.close();
-            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
     /**
      * 扫描聊天中的图片，包括缩略图
      *
@@ -363,35 +356,35 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
                 for (File file : files) {
                     if (file.isDirectory()) {
                         scanAllImgChat(path + "/" + file.getName());
-                    }else if (file.getName().startsWith("th_")){
+                    } else if (file.getName().startsWith("th_")) {
                         FileChildEntity fileChildEntity = new FileChildEntity();
-                        fileChildEntity.name = file.getName()+".jpg";
+                        fileChildEntity.name = file.getName() + ".jpg";
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
-                        fileChildEntity.parentId=FileTitleEntity.Type.TH;
-                        Log.i(TAG,"file="+file.getName()+",path"+file.getPath()+",time="+file.lastModified());
-                            listsChat.get(FileTitleEntity.Type.TH).lists.add(fileChildEntity);
+                        fileChildEntity.parentId = FileTitleEntity.Type.TH;
+                        Log.i(TAG, "file=" + file.getName() + ",path" + file.getPath() + ",time=" + file.lastModified());
+                        listsChat.get(FileTitleEntity.Type.TH).lists.add(fileChildEntity);
                     } else if (file.getName().endsWith(".jpg") || file.getName().endsWith(".png")) {
                         FileChildEntity fileChildEntity = new FileChildEntity();
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
 
-                        Log.i(TAG,"file="+file.getName()+",time="+file.lastModified());
+                        Log.i(TAG, "file=" + file.getName() + ",time=" + file.lastModified());
                         if (file.getName().contains("th_")) {
-                            fileChildEntity.parentId=FileTitleEntity.Type.TH;
+                            fileChildEntity.parentId = FileTitleEntity.Type.TH;
                             listsChat.get(FileTitleEntity.Type.TH).lists.add(fileChildEntity);
                         } else if (DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
                             //是否为今天
-                            fileChildEntity.parentId=FileTitleEntity.Type.TODAY;
+                            fileChildEntity.parentId = FileTitleEntity.Type.TODAY;
                             listsChat.get(FileTitleEntity.Type.TODAY).lists.add(fileChildEntity);
                         } else if (DateUtils.isYesterday(file.lastModified())) {
                             //是否为昨天
-                            fileChildEntity.parentId=FileTitleEntity.Type.YESTERDAY;
+                            fileChildEntity.parentId = FileTitleEntity.Type.YESTERDAY;
                             listsChat.get(FileTitleEntity.Type.YESTERDAY).lists.add(fileChildEntity);
                         } else if (DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
                             //是否为同一个月
-                            fileChildEntity.parentId=FileTitleEntity.Type.MONTH;
+                            fileChildEntity.parentId = FileTitleEntity.Type.MONTH;
                             listsChat.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
                         }
 //                        else if(){
@@ -421,17 +414,17 @@ public class WXCleanFilePresenter extends RxPresenter<WXFileFragment, CleanMainM
                         fileChildEntity.name = file.getName();
                         fileChildEntity.path = file.getPath();
                         fileChildEntity.size = file.length();
-                        Log.i(TAG,"filename="+fileChildEntity.path);
-                         if (file.getName().startsWith("wx_camera") && DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
+                        Log.i(TAG, "filename=" + fileChildEntity.path);
+                        if (file.getName().startsWith("wx_camera") && DateUtils.isSameDay(System.currentTimeMillis(), file.lastModified())) {
                             //是否为今天
                             listsCamera.get(FileTitleEntity.Type.TODAY).lists.add(fileChildEntity);
-                        } else if ( file.getName().startsWith("wx_camera") && DateUtils.isYesterday(file.lastModified())) {
+                        } else if (file.getName().startsWith("wx_camera") && DateUtils.isYesterday(file.lastModified())) {
                             //是否为昨天
-                             listsCamera.get(FileTitleEntity.Type.YESTERDAY).lists.add(fileChildEntity);
+                            listsCamera.get(FileTitleEntity.Type.YESTERDAY).lists.add(fileChildEntity);
                         } else if (file.getName().startsWith("wx_camera") && DateUtils.isSameMonth(System.currentTimeMillis(), file.lastModified())) {
                             //是否为同一个月
-                             listsCamera.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
-                        } else if(file.getName().startsWith("wx_camera")){
+                            listsCamera.get(FileTitleEntity.Type.MONTH).lists.add(fileChildEntity);
+                        } else if (file.getName().startsWith("wx_camera")) {
                             //是否为半年内
                         }
 

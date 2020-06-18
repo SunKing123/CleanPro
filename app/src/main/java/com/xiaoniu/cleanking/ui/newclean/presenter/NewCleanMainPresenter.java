@@ -339,7 +339,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 if (junkGroup != null) {
                     junkGroup.isScanningOver = true;
                 }
-                final List<JunkGroup> scanningModelList = new ArrayList<>(mJunkGroups.values());
+           //     final List<JunkGroup> scanningModelList = new ArrayList<>(mJunkGroups.values());
 
 //                getView().setInitScanningModel(scanningModelList);
                 mView.setScanningFinish(mJunkGroups);

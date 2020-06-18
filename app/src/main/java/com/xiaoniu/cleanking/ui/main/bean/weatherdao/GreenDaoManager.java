@@ -319,14 +319,14 @@ public class GreenDaoManager {
      * test 测试通过，可以查询数据了
      */
     public List<WeatherCity> selectAll() {
-        List<WeatherCity> weatherCityEntities = mWeatherCityDaoSession.getWeatherCityDao().loadAll();
+      /*  List<WeatherCity> weatherCityEntities =
         if (weatherCityEntities == null) {
             Log.d(TAG, "searchMatchCity->onNext:无记录 ");
         }
         for (int i = 0; i < weatherCityEntities.size(); i++) {
             Log.d(TAG, "searchMatchCity->onNext: " + weatherCityEntities.get(i).toString());
-        }
-        return weatherCityEntities;
+        }*/
+        return mWeatherCityDaoSession.getWeatherCityDao().loadAll();
     }
 
     public void getSearchCity(Observer<List<WeatherCity>> observer, final String searchText) {

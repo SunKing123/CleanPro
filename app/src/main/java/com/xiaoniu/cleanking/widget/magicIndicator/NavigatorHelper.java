@@ -29,7 +29,7 @@ public class NavigatorHelper {
             leftToRight = true;
         }
         if (mScrollState != ScrollState.SCROLL_STATE_IDLE) {
-            if (currentPositionOffsetSum == mLastPositionOffsetSum) {
+            if (Math.abs(currentPositionOffsetSum - mLastPositionOffsetSum) >= 0) {
                 return;
             }
             int nextPosition = position + 1;

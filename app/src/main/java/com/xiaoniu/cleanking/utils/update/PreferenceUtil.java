@@ -60,8 +60,6 @@ public class PreferenceUtil {
             record = sp.getString(key, "");
         } catch (Exception ex) {
             Log.e("", ex.getMessage());
-        } finally {
-
         }
         return record;
     }

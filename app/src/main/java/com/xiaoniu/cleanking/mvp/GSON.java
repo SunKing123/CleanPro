@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class GSON {
 
-    public static Gson getGson = new GsonBuilder().disableInnerClassSerialization().create();
+    public final static Gson getGson = new GsonBuilder().disableInnerClassSerialization().create();
 
     public static String toJsonString(Object object) {
         return getGson.toJson(object);

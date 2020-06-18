@@ -11,10 +11,10 @@ public class FileDBManager {
 	
 	public static SQLiteDatabase db = null;
 
-	public static String TYPE_IMAGE = "TYPE_IMAGE";
-	public static String TYPE_VIDEO = "TYPE_VIDEO";
-	public static String TYPE_APK = "TYPE_APK";
-	public static String TYPE_MUSIC = "TYPE_MUSIC";
+	public static final String TYPE_IMAGE = "TYPE_IMAGE";
+	public static final String TYPE_VIDEO = "TYPE_VIDEO";
+	public static final String TYPE_APK = "TYPE_APK";
+	public static final String TYPE_MUSIC = "TYPE_MUSIC";
 
 	
 	/**

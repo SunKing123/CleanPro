@@ -327,7 +327,7 @@ public class Constants {
     public static final String ISHOMETIME = "isHomeTime";
     public static final String ISPRESSHOMEKEY = "isPressHomeKey";
     public static final boolean IS_FORMAL = true;
-    public static boolean IS_LOG_CONTROLER = false;
+    public static final boolean IS_LOG_CONTROLER = false;
     public static final String IS_TIME_TO_CHECKUPDATE = "is_time_to_checkupdate";
     public static final String IS_TIME_TO_SHOW_DIALOG = "is_time_to_show_dialog";
     public static final String KEY_ACC_CLEAN_MEMORY_PERCENT = "KEY_ACC_CLEAN_MEMORY_PERCENT";
@@ -353,13 +353,13 @@ public class Constants {
     public static final String NOTIFICATION_FLAG = "notification_flag";
     public static final String NOTIFY_DOWNLOAD_CACHE = "notify_download_cache";
     public static final String NOTIFY_DOWNSUCCESS = "notify_downsuccess";
-    public static String NOTIFY_GARB_TIME = "notify_garb_time";
+    public static final String NOTIFY_GARB_TIME = "notify_garb_time";
     public static final int NOTIFY_PUSHDATA_CLICK_TO_BOUTIQUE = 38184;
     public static final String NOTIFY_PUSHDATA_LAST_ID = "notify_last_id";
     public static final String PLACE_ID_CLEAN_FINISH = "433ED6D3941CBEDAB79A9A3F64D2B550";
     public static final String PLACE_ID_XIHAYIKE = "6C84B603F86F4213427BCC9141D818E";
     public static final String PREFS_CONNETTING_PUSHDATA_LONG = "clean_pushdata_time_long";
-    public static boolean PRIVATE_LOG_CONTROLER = false;
+    public static final boolean PRIVATE_LOG_CONTROLER = false;
     public static final String PUSH_GET_ACTION_DAY = "push_get_action_day";
     public static final String QQ_PAGE_FIRST_CLICK_CLEAN_BTN = "qq_page_first_click_clean_btn";
     public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";

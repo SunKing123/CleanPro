@@ -72,7 +72,7 @@ public class AdConfigActivity extends AppCompatActivity implements View.OnClickL
                     return;
                 }
                 try {
-                    GeekAdSdk.setBid(Integer.valueOf(bidEt.getText().toString()));
+                    GeekAdSdk.setBid(Integer.parseInt(bidEt.getText().toString()));
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -100,14 +100,14 @@ public class AdConfigActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
                 String visionName = TTAdSdk.getAdManager().getSDKVersion();
-                LogUtils.e("穿山甲visionName>>>"+visionName);
+                LogUtils.e("穿山甲visionName>>>" + visionName);
                 break;
             case R.id.button_init:
                 String product = editProduct.getText().toString().trim();
                 String chan = editChan.getText().toString().trim();
-                LogUtils.e(">>>product="+product);
-                LogUtils.e(">>>渠道号="+chan);
-                GeekAdSdk.init(this, product, Constant.CSJ_AD_ID, Constant.YLH_AD_ID,ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
+                LogUtils.e(">>>product=" + product);
+                LogUtils.e(">>>渠道号=" + chan);
+                GeekAdSdk.init(this, product, Constant.CSJ_AD_ID, Constant.YLH_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
                 break;
             case R.id.next:
                 if (!GeekAdSdk.isInit()) {

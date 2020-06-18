@@ -121,8 +121,8 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
-                         if (period < 10 * 60) {
-                        //if (period < 5) {
+                        if (period < 10 * 60) {
+                            //if (period < 5) {
                             LogUtils.e("====距离上次清理APP触发Home键过了" + period + "秒小于限制时间，直接返回");
                             return;
                         }
@@ -273,12 +273,13 @@ public class TimingReceiver extends BroadcastReceiver {
             if (!isOpen) return;
 
 
-            long pretime = TextUtils.isEmpty(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME)) ? 0 : Long.valueOf(PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME));
+            String mPopLayerTime = PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME);
+            long preTime = TextUtils.isEmpty(mPopLayerTime) ? 0 : Long.parseLong(mPopLayerTime);
             int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
 //            Logger.i("zz--"+System.currentTimeMillis()+"---"+pretime);
             //第一次|| 间隔时间大于一个小时||一小时内N次（N<showRate）(每次间隔时间<displayTime)
-            if (pretime == 0 || (System.currentTimeMillis() - pretime) > (60 * 60 * 1000) || ((System.currentTimeMillis() - pretime) > (displayTime * 60 * 1000) && (System.currentTimeMillis() - pretime) <= (60 * 60 * 1000) && number < showTimes)) {
-                if ((System.currentTimeMillis() - pretime) > (60 * 60 * 1000)) {//超过一小时重置次数
+            if (preTime == 0 || (System.currentTimeMillis() - preTime) > (60 * 60 * 1000) || ((System.currentTimeMillis() - preTime) > (displayTime * 60 * 1000) && (System.currentTimeMillis() - preTime) <= (60 * 60 * 1000) && number < showTimes)) {
+                if ((System.currentTimeMillis() - preTime) > (60 * 60 * 1000)) {//超过一小时重置次数
                     PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, 0);
                 }
                 if (NetworkUtils.isNetConnected()) {

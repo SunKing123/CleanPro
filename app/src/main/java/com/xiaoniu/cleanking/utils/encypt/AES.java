@@ -8,7 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AES {
 
-    public static String _KEY = "api.JHuan.com)!^";
+    public static final String _KEY = "api.JHuan.com)!^";
     private static byte[] AESKeys = {0x41, 0x72, 0x65, 0x79, 0x6F, 0x75, 0x6D, 0x79, 0x53, 0x6E, 0x6F, 0x77, 0x6D, 0x61, 0x6E, 0x3F};
 
     /**

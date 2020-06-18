@@ -82,6 +82,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
@@ -112,19 +113,19 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 商城页
      */
-    public static int TOOL = 1;
+    public final static int TOOL = 1;
     /**
      * 生活页
      */
-    public static int LIFE = -1;
+    public final static int LIFE = -1;
     /**
      * 提额
      */
-    public static int NEWS = 2;
+    public final static int NEWS = 2;
     /**
      * 我的页面
      */
-    public static int MINE = 3;
+    public final static int MINE = 3;
 
     @Inject
     NoClearSPHelper mSPHelper;
@@ -169,7 +170,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         List<UninstallList> uselessApks = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getAll();
         List<AppPath> appPaths = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getAll();
         List<UselessApk> uselessApks1 = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
-        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
+        LogUtils.i("zz---db---" + uselessApks.size() + "---" + appPaths.size() + "---" + uselessApks1.size());
         PreferenceUtil.saveShowAD(false);
         getIconListFail();
         mPresenter.getIconList();
@@ -177,9 +178,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         isFirstCreate = true;
         initFragments();
         CLEAN = 0;
-        TOOL = 1;
+      /*  TOOL = 1;
         NEWS = 2;
-        MINE = 3;
+        MINE = 3;*/
         showHideFragment(0, -1);
 
         this.mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
@@ -232,7 +233,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
         //获取本地推送配置
-     //   mPresenter.getPushSetList();
+        //   mPresenter.getPushSetList();
         //从服务器获取本地推送的配置信息
         mPresenter.getLocalPushConfigFromServer();
         //上报设备信息

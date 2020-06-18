@@ -22,8 +22,15 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
 
     public static ForegroundCallbacks init(Application application) {
         if (INSTANCE == null) {
-            INSTANCE = new ForegroundCallbacks();
+            INSTANCE = createInstance();
             application.registerActivityLifecycleCallbacks(INSTANCE);
+        }
+        return INSTANCE;
+    }
+
+    private synchronized static ForegroundCallbacks createInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ForegroundCallbacks();
         }
         return INSTANCE;
     }

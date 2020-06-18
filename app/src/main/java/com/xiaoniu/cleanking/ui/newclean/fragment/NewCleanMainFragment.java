@@ -1318,7 +1318,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             showText01 = getString(R.string.recommend_count_hint, String.valueOf(mShowCount));
         }
-        SpannableString msp = new SpannableString(showText);
+      //  SpannableString msp = new SpannableString(showText);
         SpannableString msp01 = new SpannableString(showText01);
         msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

@@ -37,7 +37,7 @@ public class AppApplication extends BaseApplication {
     public static Set<Integer> popSet = new HashSet<>();//运营弹窗是否一弹过位置统计
     public static String officialAccountContent;
     public static String officialAccountName;
-    public static String AuditSwitch = "AuditSwitch";
+    public final static String AuditSwitch = "AuditSwitch";
     public static boolean isAudit;//是否市场审核中
 
     public AppApplication() {

@@ -24,7 +24,7 @@ import com.xiaoniu.cleanking.R;
  */
 
 public class FloatingImageDisplayService extends Service {
-    public static boolean isStarted = false;
+  //  public static boolean isStarted = false;
 
     private WindowManager windowManager;
     private WindowManager.LayoutParams layoutParams;
@@ -37,7 +37,7 @@ public class FloatingImageDisplayService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        isStarted = true;
+      //  isStarted = true;
         setWindowParam();
     }
 
