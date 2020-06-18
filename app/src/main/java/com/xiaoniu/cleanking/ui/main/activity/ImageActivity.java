@@ -90,7 +90,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         });
         //删除图片
         tv_delete.setOnClickListener(v -> {
-            if (!tv_delete.isSelected())
+            if (!tv_delete.isSelected()||imageAdapter==null)
                 return;
             List<FileEntity> listF = new ArrayList<>();
             List<FileEntity> listData = imageAdapter.getListImage();
