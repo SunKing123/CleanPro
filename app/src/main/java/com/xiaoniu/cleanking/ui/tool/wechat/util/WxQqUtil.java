@@ -39,17 +39,17 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class WxQqUtil {
     public static boolean a = false;
-    public static CleanWxEasyInfo d = new CleanWxEasyInfo(1, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_GARBAGE_FILES_CHECKED, true));   //垃圾文件   不含聊天记录建议清理
-    public static CleanWxEasyInfo e = new CleanWxEasyInfo(2, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_FACE_CACHE_CHECKED, true));      //缓存表情   浏览聊天记录产生的表情
-    public static CleanWxEasyInfo f = new CleanWxEasyInfo(3, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_OTHERS_CACHE_CHECKED, true));    //其他缓存   浏览公众号小程序产生
-    public static CleanWxEasyInfo g = new CleanWxEasyInfo(4, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_FRIENDS_CACHE_CHECKED, true));   //朋友圈缓存
-    public static CleanWxEasyInfo h = new CleanWxEasyInfo(5, false);   //图片 1911张209M
-    public static CleanWxEasyInfo i = new CleanWxEasyInfo(6, false);   //视频（确认）(可以视频跳转)
-    public static CleanWxEasyInfo j = new CleanWxEasyInfo(7, false);   //我的--收藏的表情（确认）
-    public static CleanWxEasyInfo k = new CleanWxEasyInfo(8, false);   // 语音                               貌似是所有的微信视频的第一帧图  361张图7.8M
-    public static CleanWxEasyInfo l = new CleanWxEasyInfo(9, false);   //拍摄及保存的图片（确认） 650张237M
-    public static CleanWxEasyInfo m = new CleanWxEasyInfo(11, false);  //拍摄以及保存的视频（确认）
-    public static CleanWxEasyInfo n = new CleanWxEasyInfo(10, false);  //接收的文件（确认）
+    public static final   CleanWxEasyInfo d = new CleanWxEasyInfo(1, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_GARBAGE_FILES_CHECKED, true));   //垃圾文件   不含聊天记录建议清理
+    public static final CleanWxEasyInfo e = new CleanWxEasyInfo(2, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_FACE_CACHE_CHECKED, true));      //缓存表情   浏览聊天记录产生的表情
+    public static final CleanWxEasyInfo f = new CleanWxEasyInfo(3, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_OTHERS_CACHE_CHECKED, true));    //其他缓存   浏览公众号小程序产生
+    public static final CleanWxEasyInfo g = new CleanWxEasyInfo(4, PrefsCleanUtil.getInstance().getBoolean(Constants.CLEAN_WX_FRIENDS_CACHE_CHECKED, true));   //朋友圈缓存
+    public static final CleanWxEasyInfo h = new CleanWxEasyInfo(5, false);   //图片 1911张209M
+    public static final CleanWxEasyInfo i = new CleanWxEasyInfo(6, false);   //视频（确认）(可以视频跳转)
+    public static final CleanWxEasyInfo j = new CleanWxEasyInfo(7, false);   //我的--收藏的表情（确认）
+    public static final CleanWxEasyInfo k = new CleanWxEasyInfo(8, false);   // 语音                               貌似是所有的微信视频的第一帧图  361张图7.8M
+    public static final CleanWxEasyInfo l = new CleanWxEasyInfo(9, false);   //拍摄及保存的图片（确认） 650张237M
+    public static final CleanWxEasyInfo m = new CleanWxEasyInfo(11, false);  //拍摄以及保存的视频（确认）
+    public static final CleanWxEasyInfo n = new CleanWxEasyInfo(10, false);  //接收的文件（确认）
     public static long o;
     public boolean b;
     public boolean c;

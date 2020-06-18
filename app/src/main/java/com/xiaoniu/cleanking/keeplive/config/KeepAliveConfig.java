@@ -35,6 +35,6 @@ public class KeepAliveConfig {
     public static String CONTENT = "CONTENT";
     public static String RES_ICON = "RES_ICON";
     public static int DEF_ICONS = R.drawable.ic_launcher;
-    public static String SP_NAME = "KeepAliveConfig";
+    public final static String SP_NAME = "KeepAliveConfig";
 
 }

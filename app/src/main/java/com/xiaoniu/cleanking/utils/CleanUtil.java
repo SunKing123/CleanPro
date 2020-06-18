@@ -156,7 +156,7 @@ public class CleanUtil {
                 if (i2 >= junks.size()) {
                     break;
                 }
-                if (junks.get(i2) != null && (junks.get(i2).isAllchecked()||junks.get(i2).isUncarefulIsChecked()||junks.get(i2).isCarefulIsChecked())) {
+                if (junks.get(i2) != null && (junks.get(i2).isAllchecked()|| (junks.get(i2).isIsthreeLevel()&&junks.get(i2).isUncarefulIsChecked())||(junks.get(i2).isIsthreeLevel()&&junks.get(i2).isCarefulIsChecked()) || (junks.get(i2).isSomeShecked()&&(junks.get(i2).isUncarefulIsChecked() || junks.get(i2).isCarefulIsChecked())))) {
                     total += junks.get(i2).getTotalSize();
                     if (junks.get(i2).getSubGarbages() != null) {
                         for (SecondJunkInfo secondlevelGarbageInfo : junks.get(i2).getSubGarbages()) {

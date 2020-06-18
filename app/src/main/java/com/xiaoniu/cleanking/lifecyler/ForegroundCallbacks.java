@@ -6,8 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.umeng.commonsdk.debug.W;
-
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -25,8 +23,15 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
 
     public static ForegroundCallbacks init(Application application) {
         if (INSTANCE == null) {
-            INSTANCE = new ForegroundCallbacks();
+            INSTANCE = createInstance();
             application.registerActivityLifecycleCallbacks(INSTANCE);
+        }
+        return INSTANCE;
+    }
+
+    private synchronized static ForegroundCallbacks createInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ForegroundCallbacks();
         }
         return INSTANCE;
     }
@@ -102,10 +107,8 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
         paused = true;
         if (checkRunnable != null) {
             handler.removeCallbacks(checkRunnable);
+            checkRunnable.setWeakReference(activity);
         }
-
-        checkRunnable.setWeakReference(activity);
-
         handler.postDelayed(checkRunnable, CHECK_DELAY);
     }
 
@@ -132,6 +135,7 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
 
             }
         }
+
     }
 
     @Override

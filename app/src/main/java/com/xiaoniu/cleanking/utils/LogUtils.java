@@ -294,7 +294,7 @@ public class LogUtils {
 
         String tag = generateTag(getCallerStackTraceElement());
         Log.d(tag, "╔═══════════════════════════════════════════════════════════════════════════════════════");
-        String[] lines = message.split(File.separator);
+        String[] lines = message.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
         StringBuilder jsonContent = new StringBuilder();
         for (String line : lines)
             jsonContent.append("║ ").append(line).append(File.separator);

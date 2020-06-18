@@ -497,9 +497,16 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         mJunkGroups.put(ScanningResultType.APK_JUNK, new JunkGroup(ScanningResultType.APK_JUNK.getTitle(),
                 ScanningResultType.APK_JUNK.getType()));
 
+
         //内存加速
         mJunkGroups.put(ScanningResultType.MEMORY_JUNK, new JunkGroup(ScanningResultType.MEMORY_JUNK.getTitle(),
                 ScanningResultType.MEMORY_JUNK.getType()));
 
     }
+
+
+//    public void cleanData(){
+//        if(null!=mJunkGroups)
+//        mJunkGroups.clear();
+//    }
 }

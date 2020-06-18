@@ -4,7 +4,9 @@ import android.Manifest;
 
 import com.xiaoniu.cleanking.BuildConfig;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,17 +37,21 @@ public class Constant {
     /**
      * QQ专清图片集合
      */
-    public static final String PARAMS_QQ_IMG_LIST="params_qq_img_list";
+    public static final String PARAMS_QQ_IMG_LIST = "params_qq_img_list";
     /**
      * QQ专清视频集合
      */
-    public static final String PARAMS_QQ_VIDEO_LIST="params_qq_video_list";
+    public static final String PARAMS_QQ_VIDEO_LIST = "params_qq_video_list";
 
-    /** 微信图片清理key*/
-    public static final String WX_CACHE_SIZE_IMG="wx_cache_size_img";
+    /**
+     * 微信图片清理key
+     */
+    public static final String WX_CACHE_SIZE_IMG = "wx_cache_size_img";
 
-    /** 微信视频清理key*/
-    public static final String WX_CACHE_SIZE_VIDEO="wx_cache_size_video";
+    /**
+     * 微信视频清理key
+     */
+    public static final String WX_CACHE_SIZE_VIDEO = "wx_cache_size_video";
 
     //全局心跳间隔（秒）
     public static final int SCAN_SPACE_LONG = 20;
@@ -73,7 +79,25 @@ public class Constant {
     /**
      * 白名单
      */
-    public static final List<String> WHITE_LIST = Arrays.asList(
+
+    private static final List<String> list = new ArrayList<>();
+
+    static {
+        list.add("com.geek.jk.weather"); // 即刻天气
+        list.add("ccom.xujin.weather"); // 知心天气
+        list.add("com.yitong.weather"); // 诸葛天气
+        list.add("com.geek.jk.calendar.app"); // 即刻万年历
+        list.add("com.geek.luck.calendar.app"); // 诸葛万年历
+        list.add("com.xiaoniu.cleanking");// 悟空清理
+        list.add("com.xiaoniu");
+        list.add("com.geek.jk.weather.fission"); // 知心天气
+        list.add("com.hellogeek.cleanking"); //清理管家极速版
+    }
+
+    public static List<String> WHITE_LIST() {
+        return Collections.unmodifiableList(list);
+    }
+   /* public static final List<String> WHITE_LIST = Arrays.asList(
             "com.geek.jk.weather",  // 即刻天气
             "com.xujin.weather",    // 知心天气
             "com.yitong.weather",   // 诸葛天气
@@ -85,6 +109,7 @@ public class Constant {
             "com.hellogeek.cleanking"     //清理管家极速版
 
     );
+*/
 
     public static String[] BASIC_PERMISSIONS = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,

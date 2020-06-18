@@ -73,11 +73,11 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
     /**
      * 移除本地apps,添加缓存
      */
-    public void addWhiteList(List<AppInfoBean> lists,String type) {
-        apps.remove(lists);
-        if ("white_list".equals(type)){
+    public void addWhiteList(List<AppInfoBean> lists, String type) {
+        apps.removeAll(lists);
+        if ("white_list".equals(type)) {
             updateCache(lists);
-        }else {
+        } else {
             updateSoftCache(lists);
         }
     }
@@ -99,6 +99,7 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
         Set<String> sets = sp.getStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, new HashSet<>());
         return sets;
     }
+
     //扫描已安装的apk信息
     public void scanData(String type) {
         try {
@@ -124,8 +125,8 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
         List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
         Set<String> caches;
         if ("white_list".equals(type)) {
-             caches = getCacheWhite();
-        }else {
+            caches = getCacheWhite();
+        } else {
             caches = getSoftCacheWhite();
         }
         for (int i = 0; i < packages.size(); i++) {
@@ -133,15 +134,15 @@ public class WhiteListSpeedAddPresenter extends RxPresenter<WhiteListSpeedAddAct
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
 
                 if ("com.hellogeek.cleanking".equals(packageInfo.packageName)) {
-                   continue;
+                    continue;
                 }
                 boolean isExist = false;
                 for (String packeName : caches) {
-                    if (packeName.equals(packageInfo.packageName)){
+                    if (packeName.equals(packageInfo.packageName)) {
                         isExist = true;
                     }
                 }
-                if(!isExist){
+                if (!isExist) {
                     AppInfoBean appInfoBean = new AppInfoBean();
                     appInfoBean.name = packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString();
                     //应用icon

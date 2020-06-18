@@ -1211,10 +1211,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         adManager.loadAd(this, PositionId.AD_CLEAN_FINISH_POSITION_ONE, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                 if (info == null) {
                     Log.d(TAG, "DEMO>>>adSuccess1， AdInfo is empty");
                 } else {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                     Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
                     if (info.getAdView() != null) {
                         ad_container_pos01.removeAllViews();
@@ -1228,9 +1228,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (info == null) {
                     Log.d(TAG, "DEMO>>>adExposed1， AdInfo is empty");
                 } else {
+                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
                     Log.d(TAG, "DEMO>>>adExposed1， ");
                 }
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
+
             }
 
             @Override

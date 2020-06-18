@@ -9,9 +9,9 @@ import com.xiaoniu.cleanking.BuildConfig;
  */
 public class SchemeConstant {
     //协议SCHEME和协议HOST
-    public static String SCHEME = "cleanking";
-    public static String HOST = BuildConfig.APPLICATION_ID;
-    public  static String XIAONIU_HOST = "com.xiaoniu.cleanking";//java代码路径
+    public static final String SCHEME = "cleanking";
+    public static final String HOST = BuildConfig.APPLICATION_ID;
+    public static final String XIAONIU_HOST = "com.xiaoniu.cleanking";//java代码路径
     //公共协议类型
     public static final String JUMP = "/jump";
     public static final String NATIVE = "/native";
@@ -33,7 +33,7 @@ public class SchemeConstant {
     /**
      * 本地push scheme
      */
-    public static class LocalPushScheme{
+    public static class LocalPushScheme {
         //通知栏清理
         public static final String SCHEME_NOTIFY_ACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "tool.notify.activity.NotifyCleanGuideActivity";
 
@@ -57,7 +57,7 @@ public class SchemeConstant {
     }
 
     //根据className启动
-    public static class StartFromClassName{
+    public static class StartFromClassName {
         //插屏全屏页面
         public static final String CLASS_FULLPOPLAYERACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity";
 
@@ -67,8 +67,8 @@ public class SchemeConstant {
         //插屏锁屏页面
         public static final String CLASS_LOCKACTIVITY = "com.xiaoniu.cleanking.ui.lockscreen.LockActivity";
 
-       //本地推送弹窗界面
-       public static final String CLASS_LOCAL_PUSH_ACTIVITY="com.xiaoniu.cleanking.ui.localpush.PopPushActivity";
+        //本地推送弹窗界面
+        public static final String CLASS_LOCAL_PUSH_ACTIVITY = "com.xiaoniu.cleanking.ui.localpush.PopPushActivity";
     }
 
 }

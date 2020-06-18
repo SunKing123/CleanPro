@@ -20,7 +20,7 @@ public class SPUtil {
     //    public static String mytoken = "38ef122c894e4cc2a820170223155249";
     public static String mytoken = "";
     public static String myBrName = "myBrName";
-    public static String ONEKEY_ACCESS = "onekey_access";
+    public static final String ONEKEY_ACCESS = "onekey_access";
     public static String myBrHomeName = "myBrHomeName";
     public static String ATTENTIONUP = "ATTENTIONUP";
     public static String ATTENTIONDOWN = "ATTENTIONDOWN";
@@ -43,13 +43,13 @@ public class SPUtil {
     public static String FIRST_TIME_CALENDAR = "FIRST_TIME_CALENDAR";
     public static String SECOND_TIME_CALENDAR = "SECOND_TIME_CALENDAR";
     public static String THIRD_TIME_CALENDAR = "THIRD_TIME_CALENDAR";
-    public static String ISADDQUICK = "is_add_quick";
+    public static final String ISADDQUICK = "is_add_quick";
 
     public static String Guide = "";
 
     public static String IS_First = "is_first";
     public static String IS_CLEAR = "is_clear";
-    public static String TOTLE_CLEAR_CATH = "totle_clear_cath";
+    public  static final String TOTLE_CLEAR_CATH = "totle_clear_cath";
     private static final String KEY_ENABLE_CLEAN_NOTIFICATION = "key_enable_clean_notification";
     private static final String KEY_DISABLE_CLEAN_PACKAGE = "key_disable_clean_package";
     private static final String KEY_NOTIFY_CLEAN_COUNT = "key_notify_clean_count";

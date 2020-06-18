@@ -12,7 +12,6 @@ import com.baidu.mobstat.StatService;
 import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
-import com.squareup.leakcanary.LeakCanary;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.AppProfile;
@@ -40,7 +39,7 @@ public class AppApplication extends BaseApplication {
     public static Set<Integer> popSet = new HashSet<>();//运营弹窗是否一弹过位置统计
     public static String officialAccountContent;
     public static String officialAccountName;
-    public static String AuditSwitch = "AuditSwitch";
+    public final static String AuditSwitch = "AuditSwitch";
     public static boolean isAudit;//是否市场审核中
 
     public AppApplication() {
@@ -114,15 +113,6 @@ public class AppApplication extends BaseApplication {
                 Log.e("lifeCycle","onActivityDestroyed()"+activity.getLocalClassName());
             }
         });
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
-
-
     }
 
     /**

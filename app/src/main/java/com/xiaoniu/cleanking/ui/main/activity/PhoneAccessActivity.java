@@ -423,7 +423,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             } else {
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.ONEKEY_ACCESS, 0);
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
-                totalSizes = Long.valueOf(NumberUtils.mathRandom(200 * 1024 * 1024, 2 * 1024 * 1024 * 1024));
+                totalSizes = Long.parseLong(NumberUtils.mathRandom(200 * 1024 * 1024, 2 * 1024 * 1024 * 1024));
             }
 
         }

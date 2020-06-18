@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class DispatcherController {
     //native协议键值Map[注意:添加Activity需要放在静态代码块]
-    public static Map<String, Class<?>> sNativeClassMap = new HashMap<>();
+    public static final Map<String, Class<?>> sNativeClassMap = new HashMap<>();
 
     private static DispatcherController sInstance = new DispatcherController();
 

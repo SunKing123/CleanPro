@@ -299,28 +299,21 @@ public class WXCleanImgPresenter extends RxPresenter<WXImgChatFragment, CleanMai
      */
     private  void copyFileUsingFileStreams(File source, File dest,ObservableEmitter<Integer> emitter)
             throws IOException {
-        InputStream input = null;
-        OutputStream output = null;
-        try {
-            input = new FileInputStream(source);
-            output = new FileOutputStream(dest);
+        try (InputStream input = new FileInputStream(source); OutputStream output = new FileOutputStream(dest)) {
             byte[] buf = new byte[1024];
             int bytesRead;
             while ((bytesRead = input.read(buf)) > 0) {
                 output.write(buf, 0, bytesRead);
-                mFileReadSize+=bytesRead;
+                mFileReadSize += bytesRead;
                 int progress = (int) (mFileReadSize * 1.0f / mFileTotalSize * 100);
                 emitter.onNext(progress);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             mView.onCopyFaile();
-            if(null!=mDispoableCopyFile){
+            if (null != mDispoableCopyFile) {
                 mDispoableCopyFile.dispose();
             }
-            return;
-        }finally {
-            input.close();
-            output.close();
+        } finally {
             //更新相册
             mView.updateDIM(dest);
         }

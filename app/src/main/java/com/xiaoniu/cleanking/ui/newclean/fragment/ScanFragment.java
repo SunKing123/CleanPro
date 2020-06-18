@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
@@ -146,7 +147,7 @@ public class ScanFragment extends BaseFragment implements ScanningContact.View {
 
     @Override
     public void setScanningFilePath(String filePath) {
-        for (String packageName : WHITE_LIST) {
+        for (String packageName :  Constant.WHITE_LIST()) {
             if (filePath.indexOf(packageName) != -1) {   // 如果存在于白名单
                 return;
             }

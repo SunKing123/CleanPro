@@ -62,7 +62,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     String path = Environment.getExternalStorageDirectory().getPath();
     //loading是否为首次弹窗
-    private  boolean isShowFirst=true;
+    private boolean isShowFirst = true;
 
     private CleanFileLoadingDialogFragment mLoading;
 
@@ -86,7 +86,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
     protected void initView() {
         showLoadingDialog();
         setStatusView(mType);
-        mLoading=CleanFileLoadingDialogFragment.newInstance();
+        mLoading = CleanFileLoadingDialogFragment.newInstance();
 
         mAdapter = new InstallPackageManageAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
@@ -100,7 +100,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
                 mIsCheckAll = false;
             } else {
                 mIsCheckAll = true;
-                StatisticsUtils.trackClick("Installation_pack_pleaning_all_election_click","\"全选按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
+                StatisticsUtils.trackClick("Installation_pack_pleaning_all_election_click", "\"全选按钮\"点击", "file_cleaning_page", "Installation_pack_pleaning_page");
 
             }
             mCheckBoxAll.setSelected(mIsCheckAll);
@@ -111,7 +111,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     @Override
     public void onBackPressed() {
-        StatisticsUtils.trackClick("Installation_pack_pleaning_back_click","\"安装包清理\"返回按钮点击","file_cleaning_page","Installation_pack_pleaning_page");
+        StatisticsUtils.trackClick("Installation_pack_pleaning_back_click", "\"安装包清理\"返回按钮点击", "file_cleaning_page", "Installation_pack_pleaning_page");
         super.onBackPressed();
     }
 
@@ -121,7 +121,7 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         int id = view.getId();
 
         if (id == R.id.img_back) {
-            StatisticsUtils.trackClick("Installation_pack_pleaning_back_click","\"安装包清理\"返回按钮点击","file_cleaning_page","Installation_pack_pleaning_page");
+            StatisticsUtils.trackClick("Installation_pack_pleaning_back_click", "\"安装包清理\"返回按钮点击", "file_cleaning_page", "Installation_pack_pleaning_page");
 
             finish();
         } else if (id == R.id.txt_install) {
@@ -147,9 +147,9 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
             totalSelectFiles();
 
         } else if (id == R.id.btn_del) { //删除文件
-            StatisticsUtils.trackClick("Installation_pack_pleaning_delete_click","\"删除按钮\"点击","file_cleaning_page","Installation_pack_pleaning_page");
+            StatisticsUtils.trackClick("Installation_pack_pleaning_delete_click", "\"删除按钮\"点击", "file_cleaning_page", "Installation_pack_pleaning_page");
 
-            String title=String.format("确认删除这%s个安装包",getSelectSize());
+            String title = String.format("确认删除这%s个安装包", getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
             dialogFragment.setDialogClickListener(new DelDialogFragment.DialogClickListener() {
@@ -171,10 +171,10 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
                         }
                     }
                     mPresenter.delFile(appInfoSelect);
-                    if(!isShowFirst){
-                        mLoading.setReportSuccess(0,"");
+                    if (!isShowFirst) {
+                        mLoading.setReportSuccess(0, "");
                     }
-                    mLoading.show(getSupportFragmentManager(),"");
+                    mLoading.show(getSupportFragmentManager(), "");
 
                 }
             });
@@ -185,43 +185,46 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
 
     /**
      * 设置空视图
-     * */
+     */
     private void setEmptyView(int size) {
-        if(null==mLLEmptyView){
-            mLLEmptyView=findViewById(R.id.ll_install_empty_view);
+        if (null == mLLEmptyView) {
+            mLLEmptyView = findViewById(R.id.ll_install_empty_view);
         }
         if (size > 0) {
             if (null != mLLEmptyView) {
                 mLLEmptyView.setVisibility(View.GONE);
             }
             boolean isCheckAll = true;
-            List<AppInfoBean> lists=mAdapter.getLists();
+            List<AppInfoBean> lists = mAdapter.getLists();
             for (AppInfoBean appInfoBean : lists) {
                 if (!appInfoBean.isSelect) {
-                    isCheckAll=false;
+                    isCheckAll = false;
                 }
             }
-            mIsCheckAll=isCheckAll;
-            mCheckBoxAll.setSelected(mIsCheckAll);
+            mIsCheckAll = isCheckAll;
+            if (mCheckBoxAll != null) {
+                mCheckBoxAll.setSelected(mIsCheckAll);
+            }
         } else {
             if (null != mLLEmptyView) {
                 mLLEmptyView.setVisibility(View.VISIBLE);
             }
-            mIsCheckAll=false;
+            mIsCheckAll = false;
             mCheckBoxAll.setSelected(mIsCheckAll);
         }
     }
 
-    private  int getSelectSize(){
-        int size=0;
-        List<AppInfoBean>  lists=mAdapter.getLists();
-        for(AppInfoBean appInfoBean:lists){
-            if(appInfoBean.isSelect){
+    private int getSelectSize() {
+        int size = 0;
+        List<AppInfoBean> lists = mAdapter.getLists();
+        for (AppInfoBean appInfoBean : lists) {
+            if (appInfoBean.isSelect) {
                 size++;
             }
         }
-        return  size;
+        return size;
     }
+
     /**
      * 全选
      *
@@ -278,13 +281,13 @@ public class CleanInstallPackageActivity extends BaseActivity<CleanInstallPackag
         //更新缓存
         mPresenter.updateRemoveCache(appInfoBeans);
 
-        mLoading.setReportSuccess(1,"成功删除" + FileSizeUtils.formatFileSize(totalSize));
+        mLoading.setReportSuccess(1, "成功删除" + FileSizeUtils.formatFileSize(totalSize));
         mBtnDel.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mLoading.dismissAllowingStateLoss();
             }
-        },1500);
+        }, 1500);
         totalSelectFiles();
     }
 

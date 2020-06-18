@@ -39,6 +39,8 @@ public class ApkSearchUtils {
 
     public ApkSearchUtils(Context context) {
         super();
+        apkmap.clear();
+        myFiles.clear();
         this.context = context;
 
     }
@@ -90,8 +92,9 @@ public class ApkSearchUtils {
 //                Log.i("ok", "处理类型:"+ String.valueOf(type)+"\n" + "------------------我是纯洁的分割线-------------------");
                 if(!apkmap.containsKey(myFile.getFilePath())){
                     apkmap.put(myFile.getFilePath(),myFile.getPackageName());
+                    myFiles.add(myFile);
                 }
-                myFiles.add(myFile);
+
 
             }
             // String apk_app = name_s.substring(name_s.lastIndexOf("."));
