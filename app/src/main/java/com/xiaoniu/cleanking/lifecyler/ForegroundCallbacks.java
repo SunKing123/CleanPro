@@ -21,7 +21,6 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
     private boolean paused = true;
     private Handler handler = new Handler();
     private List<LifecycleListener> listeners = new CopyOnWriteArrayList<LifecycleListener>();
-    private Runnable check;
     private CheckRunnable checkRunnable=new CheckRunnable();
 
     public static ForegroundCallbacks init(Application application) {
@@ -82,8 +81,8 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
         paused = false;
         boolean wasBackground = !foreground;
         foreground = true;
-        if (check != null) {
-            handler.removeCallbacks(check);
+        if (checkRunnable != null) {
+            handler.removeCallbacks(checkRunnable);
         }
         if (wasBackground) {
             for (LifecycleListener l : listeners) {
@@ -101,30 +100,13 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
     @Override
     public void onActivityPaused(final Activity activity) {
         paused = true;
-        if (check != null) {
-            handler.removeCallbacks(check);
+        if (checkRunnable != null) {
+            handler.removeCallbacks(checkRunnable);
         }
 
         checkRunnable.setWeakReference(activity);
 
-        check = new Runnable() {
-            @Override
-            public void run() {
-                if (foreground && paused) {
-                    foreground = false;
-                    for (LifecycleListener l : listeners) {
-                        try {
-                            l.onBecameBackground(activity);
-                        } catch (Exception exc) {
-//                            L.d("Listener threw exception!:" + exc.toString());
-                        }
-                    }
-                } else {
-//                    L.d("still foreground");
-                }
-            }
-        };
-        handler.postDelayed(check, CHECK_DELAY);
+        handler.postDelayed(checkRunnable, CHECK_DELAY);
     }
 
     public class CheckRunnable implements Runnable {
@@ -143,11 +125,11 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
                         if (weakReference!=null&&weakReference.get() != null)
                             l.onBecameBackground(weakReference.get());
                     } catch (Exception exc) {
-//                            L.d("Listener threw exception!:" + exc.toString());
+
                     }
                 }
             } else {
-//                    L.d("still foreground");
+
             }
         }
     }
