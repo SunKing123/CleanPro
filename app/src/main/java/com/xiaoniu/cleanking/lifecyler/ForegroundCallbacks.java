@@ -6,6 +6,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.umeng.commonsdk.debug.W;
+
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -19,6 +22,7 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
     private Handler handler = new Handler();
     private List<LifecycleListener> listeners = new CopyOnWriteArrayList<LifecycleListener>();
     private Runnable check;
+    private CheckRunnable checkRunnable=new CheckRunnable();
 
     public static ForegroundCallbacks init(Application application) {
         if (INSTANCE == null) {
@@ -100,6 +104,9 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
         if (check != null) {
             handler.removeCallbacks(check);
         }
+
+        checkRunnable.setWeakReference(activity);
+
         check = new Runnable() {
             @Override
             public void run() {
@@ -117,8 +124,32 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
                 }
             }
         };
-
         handler.postDelayed(check, CHECK_DELAY);
+    }
+
+    public class CheckRunnable implements Runnable {
+        WeakReference<Activity> weakReference = new WeakReference<>(null);
+
+        public void setWeakReference(Activity activity) {
+            weakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void run() {
+            if (foreground && paused) {
+                foreground = false;
+                for (LifecycleListener l : listeners) {
+                    try {
+                        if (weakReference!=null&&weakReference.get() != null)
+                            l.onBecameBackground(weakReference.get());
+                    } catch (Exception exc) {
+//                            L.d("Listener threw exception!:" + exc.toString());
+                    }
+                }
+            } else {
+//                    L.d("still foreground");
+            }
+        }
     }
 
     @Override
