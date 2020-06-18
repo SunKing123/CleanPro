@@ -82,7 +82,7 @@ public class Constant {
             "com.xiaoniu.cleanking", // 悟空清理
             "com.xiaoniu",
             "com.geek.jk.weather.fission", // 知心天气
-            "com.hellogeek.cleanking"     //清理管家极速版
+            "com.hellogeek.cleanking"     //清理极速管家
 
     );
 
