@@ -64,7 +64,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
         if (!TextUtils.isEmpty(intent.getStringExtra(ExtraConstant.UNIT))) {
             mUnit = intent.getStringExtra(ExtraConstant.UNIT)
         }
-        initGeegAd()
+        initGeekAd()
         mFileQueryUtils = FileQueryUtils()
         mPowerSize = mFileQueryUtils.runningProcess.size
         mNotifySize = NotifyCleanManager.getInstance().allNotifications.size
@@ -73,7 +73,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
         }
     }
 
-    private fun initGeegAd() {
+    private fun initGeekAd() {
         var isOpen = false;
         if (null != AppHolder.getInstance().switchInfoList && null != AppHolder.getInstance().switchInfoList.data && AppHolder.getInstance().switchInfoList.data.size > 0) {
             for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
