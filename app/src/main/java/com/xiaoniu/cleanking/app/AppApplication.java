@@ -12,7 +12,6 @@ import com.baidu.mobstat.StatService;
 import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
-import com.squareup.leakcanary.LeakCanary;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.AppProfile;
@@ -114,15 +113,6 @@ public class AppApplication extends BaseApplication {
                 Log.e("lifeCycle","onActivityDestroyed()"+activity.getLocalClassName());
             }
         });
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
-
-
     }
 
     /**

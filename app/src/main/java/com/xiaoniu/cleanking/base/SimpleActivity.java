@@ -117,6 +117,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         MobclickAgent.onResume(this);
     }
 
