@@ -28,7 +28,7 @@ public class ApkSearchUtils {
 
     private Context context;
     public static List<ApkFileInfo> myFiles = new ArrayList<ApkFileInfo>();
-    public static LinkedHashMap<String,String> apkmap = new LinkedHashMap<>();
+    public LinkedHashMap<String,String> apkmap = new LinkedHashMap<>();
     public List<ApkFileInfo> getMyFiles() {
         return myFiles;
     }
@@ -39,7 +39,8 @@ public class ApkSearchUtils {
 
     public ApkSearchUtils(Context context) {
         super();
-        apkmap = new LinkedHashMap<>();
+        apkmap.clear();
+        myFiles.clear();
         this.context = context;
 
     }
