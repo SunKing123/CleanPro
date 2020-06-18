@@ -334,6 +334,10 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
                 for (FirstJunkInfo firstJunkInfo : contentMap.getValue()) {
                     if (firstJunkInfo.isAllchecked()) {
                         checkedTotalSize += firstJunkInfo.getTotalSize();
+                    } else if(firstJunkInfo.isIsthreeLevel() && firstJunkInfo.isCarefulIsChecked()){
+                        checkedTotalSize += firstJunkInfo.getCareFulSize();
+                    } else if( firstJunkInfo.isIsthreeLevel() && firstJunkInfo.isUncarefulIsChecked()){
+                        checkedTotalSize += firstJunkInfo.getUncarefulSize();
                     }
                 }
             }
