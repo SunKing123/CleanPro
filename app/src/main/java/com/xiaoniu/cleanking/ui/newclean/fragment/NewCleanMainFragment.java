@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -412,9 +413,11 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+        LogUtils.i("onResum()");
         if (isGotoSetting) {
             isGotoSetting = false;
         }
@@ -434,24 +437,19 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (mInteractionList.size() - 1 >= mInteractionPoistion) {
                     GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
                 }
-
             }
         }
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
 
-        //广告点击跳转逻辑
-        if (mIsClickAdTopDetail) {
-            initGeekSdkTop();
-        }
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
-        LogUtils.i("onResum()");
         //重新检查状态
         checkScanState();
     }
+
 
     public void setIsGotoSetting(boolean isGotoSetting) {
         this.isGotoSetting = isGotoSetting;
@@ -509,9 +507,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
                 }
                 if (info.getAdClickType() == 2) { //2=详情
-                    mIsClickAdTopDetail = true;
+                    initGeekSdkTop();
                 } else {
-                    mIsClickAdTopDetail = false;
+
                 }
             }
 
@@ -545,13 +543,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void closeAd() {
         if (anim.isOpen()) {
             anim.transform();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mTopAdFramelayout != null)
+                        mTopAdFramelayout.removeAllViews();
+                }
+            }, 500);
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mTopAdFramelayout.removeAllViews();
-            }
-        }, 2000);
     }
 
     /**
@@ -633,7 +632,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         super.onPause();
         NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
     }
-
 
 
     /**
@@ -806,7 +804,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         ((MainActivity) getActivity()).commitJpushClickTime(1);
         if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                mPresenter.stopScanning();
+                //读取扫描缓存
                 startActivity(NowCleanActivity.class);
             } else {    //scanState ==0: 扫描中
                 checkStoragePermission();
@@ -825,45 +823,14 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             } else {
                 //判断扫描缓存；
                 if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                    mPresenter.stopScanning();
+                    //读取扫描缓存
                     startActivity(NowCleanActivity.class);
-                } else {    //scanState ==0: 扫描中
+                } else {                //scanState ==0: 扫描中
                     checkStoragePermission();
                 }
             }
         }
 
-
-//        startActivity(NowCleanActivity.class);
-      /*  checkStoragePermission();
-        if (true) {
-            startActivity(NowCleanActivity.class);
-        } else {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            boolean isOpen = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putString("home", "");
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
-        }*/
     }
 
 
@@ -1212,7 +1179,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             initGeekAdSdk();
             initGeekSdkCenter();
             //重新检测头部扫描状态
-            checkScanState();
+//            checkScanState();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -1286,7 +1253,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void showHomeLottieView() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
-        textLayout.setMargins(0,0-Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(),0,0);
+        textLayout.setMargins(0, 0 - Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(), 0, 0);
         view_lottie_top.setLayoutParams(textLayout);
 //        showTextView();
     }
@@ -1725,7 +1692,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void onVideoComplete(AdInfo info) {
                 Log.d(TAG, "-----onVideoComplete-----");
                 //跳转自运营广告
-               // operationItemClick(entity);
+                // operationItemClick(entity);
             }
 
             @Override
@@ -1800,14 +1767,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         ScanDataHolder.getInstance().setmCountEntity(mCountEntity);
         ScanDataHolder.getInstance().setmJunkGroups(junkGroups);
         ScanDataHolder.getInstance().setScanState(1);
-        view_lottie_top.scanFinish(totalJunkSize);
+        if (view_lottie_top != null)
+            view_lottie_top.scanFinish(totalJunkSize);
 //        ((NowCleanActivity) getActivity()).scanFinish();
 //        //重置颜色变化状态
 //        lottie_animation_view.pauseAnimation();
     }
-
-
-
 
 
     public void goSetting() {
@@ -1821,44 +1786,51 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     public void setScanningJunkTotal(long totalSize) {
-        if(null!=view_lottie_top)
-        view_lottie_top.setTotalSize(totalSize);
+        if (null != view_lottie_top)
+            view_lottie_top.setTotalSize(totalSize);
     }
 
     private boolean isDenied = false;
-    public void permissionDenied(){//授权被拒绝
-        if(null!=view_lottie_top)
-        view_lottie_top.setNoSize();
+
+    public void permissionDenied() {//授权被拒绝
+        if (null != view_lottie_top)
+            view_lottie_top.setNoSize();
         isDenied = true;
     }
 
     //重新检测头部扫描状态
-    public void checkScanState(){
-        if(AppUtils.checkStoragePermission(getActivity())){//已经获得权限
+    public void checkScanState() {
+        if (AppUtils.checkStoragePermission(getActivity())) {//已经获得权限
             if (PreferenceUtil.getNowCleanTime()) {  //清理结果五分钟以外
-                if (ScanDataHolder.getInstance().getScanState() > 0 && null!=ScanDataHolder.getInstance().getmCountEntity()) {//扫描缓存5分钟内_展示缓存结果
+                if (ScanDataHolder.getInstance().getScanState() > 0 && null != ScanDataHolder.getInstance().getmCountEntity() && ScanDataHolder.getInstance().getTotalSize() > 50 * 1024 * 1024) {//扫描缓存5分钟内_展示缓存结果
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
-
                 } else {//重新开始扫描
-                    view_lottie_top.greenState(false);
-                    setScanningJunkTotal(0);
+                    mPresenter.cleanData();
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
                 }
-            }else{ //清理结果五分钟以内
+            } else { //清理结果五分钟以内
                 String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
                 CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                 view_lottie_top.setClendedState(countEntity);
+
             }
-        }else{//未取得权限
+        } else {//未取得权限
             LogUtils.i("--checkScanState()");
-            if(!isDenied){
-                mPresenter.checkStoragePermission();  //重新开始扫描
-            }
+            //避免重复弹出
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isDenied) {
+                        mPresenter.checkStoragePermission();  //重新开始扫描
+                    }
+                }
+            }, 200);
             //未授权默认样式——存在大量垃圾；
-            if(null!=view_lottie_top)
+            if (null != view_lottie_top)
                 view_lottie_top.setNoSize();
+
         }
     }
 

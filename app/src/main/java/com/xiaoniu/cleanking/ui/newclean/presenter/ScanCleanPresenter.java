@@ -154,7 +154,7 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
             }
             PreferenceUtil.saveIsCheckedAll(isCheckAll);
             PreferenceUtil.saveCacheIsCheckedAll(isCacheCheckAll);
-            PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum() * 0.3f);
+            PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum() * 0.75f);
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             //清理完成，存储时间点

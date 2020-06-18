@@ -54,6 +54,7 @@ import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
+import com.xiaoniu.cleanking.utils.AESUtils01;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
@@ -82,7 +83,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
@@ -113,19 +113,19 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 商城页
      */
-    public final static int TOOL = 1;
+    public static int TOOL = 1;
     /**
      * 生活页
      */
-    public final static int LIFE = -1;
+    public static int LIFE = -1;
     /**
      * 提额
      */
-    public final static int NEWS = 2;
+    public static int NEWS = 2;
     /**
      * 我的页面
      */
-    public final static int MINE = 3;
+    public static int MINE = 3;
 
     @Inject
     NoClearSPHelper mSPHelper;
@@ -166,11 +166,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
-//        RoomHelper.getInstance();
-        List<UninstallList> uselessApks = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getAll();
-        List<AppPath> appPaths = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getAll();
-        List<UselessApk> uselessApks1 = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
-        LogUtils.i("zz---db---" + uselessApks.size() + "---" + appPaths.size() + "---" + uselessApks1.size());
+//        List<UninstallList> uselessApks = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getAll();
+//        List<AppPath> appPaths = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getAll();
+//        List<UselessApk> uselessApks1 = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
+//        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
+//        LogUtils.i("zz-----path----"+appPaths.get(0).getFile_path()+"----"+ AESUtils01.decrypt(appPaths.get(0).getFile_path(),"E3A37D84081C89D9787D0B8546BA8BA5"));
+//        LogUtils.i("zz-----path----"+uselessApks1.get(1).getFilePath()+"----"+ AESUtils01.decrypt(uselessApks1.get(1).getFilePath(),"E3A37D84081C89D9787D0B8546BA8BA5"));
         PreferenceUtil.saveShowAD(false);
         getIconListFail();
         mPresenter.getIconList();
@@ -178,9 +179,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         isFirstCreate = true;
         initFragments();
         CLEAN = 0;
-      /*  TOOL = 1;
+        TOOL = 1;
         NEWS = 2;
-        MINE = 3;*/
+        MINE = 3;
         showHideFragment(0, -1);
 
         this.mBottomBar.setOnTabSelectedListener(new BottomBar.OnTabSelectedListener() {
@@ -233,7 +234,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
         //获取本地推送配置
-        //   mPresenter.getPushSetList();
+     //   mPresenter.getPushSetList();
         //从服务器获取本地推送的配置信息
         mPresenter.getLocalPushConfigFromServer();
         //上报设备信息
@@ -249,9 +250,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //            AppConfig.showDebugWindow(mContext);
 //        }
 
-        if (BuildConfig.DEBUG) {
-            AppConfig.showDebugWindow(mContext);
-        }
+//        if (BuildConfig.DEBUG) {
+////            AppConfig.showDebugWindow(mContext);
+////        }
     }
 
     @Override

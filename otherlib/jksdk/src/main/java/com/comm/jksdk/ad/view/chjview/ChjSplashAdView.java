@@ -64,6 +64,7 @@ public class ChjSplashAdView extends CHJAdView {
 
             @Override
             public void onAdSkip() {
+//                adClose(adInfo);
                 LogUtils.d(TAG, "zz--chj--onAdSkip--"+adInfo.getAdId());
 
             }
@@ -73,6 +74,8 @@ public class ChjSplashAdView extends CHJAdView {
                 LogUtils.d(TAG, "zz--chj--onAdTimeOver"+adInfo.getAdId());
                 firstAdError(adInfo, CodeFactory.UNKNOWN, "广告加载超时");
             }
+
         });
+
     }
 }

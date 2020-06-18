@@ -48,7 +48,7 @@ public class YlhSplashAdView extends YlhAdView {
         if (activity == null) {
             throw new NullPointerException("loadFullScreenVideoAd activity is null");
         }
-        SplashAD splashAD = new SplashAD(activity, appId, adId, new SplashADListener() {
+        SplashAD splashAD = new SplashAD(activity, adId, new SplashADListener() {
             public void onADLoaded(long a){
 
             }
@@ -87,7 +87,7 @@ public class YlhSplashAdView extends YlhAdView {
                 LogUtils.d(TAG, "zz--YLH onADClicked:"+adInfo.getAdId());
                 adExposed(adInfo);
             }
-        });
+        },6000);
         splashAD.fetchAndShowIn(splashContainer);
 //        adSuccess(adInfo);
     }

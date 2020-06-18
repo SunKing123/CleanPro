@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class SystemUtils {
     /**
@@ -86,11 +87,15 @@ public class SystemUtils {
             return "";
         }
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
-            if (processInfo.pid == android.os.Process.myPid()) {
-                return processInfo.processName;
+        List<ActivityManager.RunningAppProcessInfo> list=manager.getRunningAppProcesses();
+        if(list!=null&&list.size()>0){
+            for (ActivityManager.RunningAppProcessInfo processInfo : list) {
+                if (processInfo.pid == android.os.Process.myPid()) {
+                    return processInfo.processName;
+                }
             }
         }
+
         return "";
     }
 

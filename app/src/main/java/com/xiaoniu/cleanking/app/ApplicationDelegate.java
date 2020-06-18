@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -81,7 +83,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     private static AppDataBase mAppDatabase;
     private static AppPathDataBase mAppPathDataBase;
 
-
+    private static Handler sHandler = new Handler(Looper.getMainLooper());
     @Override
     public void onCreate(Application application) {
 
@@ -175,7 +177,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 .fallbackToDestructiveMigration()
                 .build();
 
-        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert.db")
+        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert0617.db")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
@@ -372,10 +374,12 @@ public class ApplicationDelegate implements IApplicationDelegate {
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
                             application.getApplicationContext().startActivity(intent);
                             mIsBack = false;
+                            //only hot launch to send LifecycleEvent
+                            EventBus.getDefault().post(new LifecycEvent(true));
+
                         }
                     }
                 }
-                EventBus.getDefault().post(new LifecycEvent(true));
             }
 
             @Override
@@ -388,6 +392,26 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 }
             }
         });
+    }
+
+
+
+    public static void post(Runnable runnable) {
+        if (sHandler != null && runnable != null) {
+            sHandler.post(runnable);
+        }
+    }
+
+    public static void postDelay(Runnable runnable, long delayTime) {
+        if (sHandler != null && runnable != null) {
+            sHandler.postDelayed(runnable, delayTime);
+        }
+    }
+
+    public static void removeTask(Runnable runnable) {
+        if (sHandler != null && runnable != null) {
+            sHandler.removeCallbacks(runnable);
+        }
     }
 
 

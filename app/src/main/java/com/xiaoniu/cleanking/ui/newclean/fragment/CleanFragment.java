@@ -453,7 +453,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             }
             PreferenceUtil.saveIsCheckedAll(isCheckAll);
             PreferenceUtil.saveCacheIsCheckedAll(isCacheCheckAll);
-            PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum() * 0.3f);
+            PreferenceUtil.saveMulCacheNum(PreferenceUtil.getMulCacheNum() * 0.75f);
             e.onNext(total);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(o -> {
             double memoryShow = NoClearSPHelper.getMemoryShow();

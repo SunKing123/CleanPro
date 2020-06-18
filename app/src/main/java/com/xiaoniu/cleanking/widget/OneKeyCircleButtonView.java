@@ -174,7 +174,9 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalSize);
         tv_file_total_size.setText(countEntity.getTotalSize() + countEntity.getUnit());
         tv_file_total_size.setVisibility(VISIBLE);
+
         tv_file_total_tag.setVisibility(VISIBLE);
+        tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_text_tag));
         changeScanAnim(totalSize);
     }
 
@@ -197,13 +199,10 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     //扫描完毕
     public void scanFinish(long totalSize) {
         if (totalSize < 50 * 1024 * 1024) {//50mb以内
-            LogUtils.i("zzz---state--green---"+totalSize);
             greenState(true);
         } else if (totalSize > 50 * 1024 * 1024 && totalSize < 100 * 1024 * 1024) {
-            LogUtils.i("zzz---state--yellow---"+totalSize);
             yellowState(true);
         } else {
-            LogUtils.i("zzz---state--red---"+totalSize);
             redState(true);
         }
     }
