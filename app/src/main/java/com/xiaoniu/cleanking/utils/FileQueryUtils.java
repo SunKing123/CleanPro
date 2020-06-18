@@ -1472,13 +1472,16 @@ public class FileQueryUtils {
         if (isFinish) {
             return new ArrayList<>();
         }
-
+        LinkedHashMap<String,String> apkmap = new LinkedHashMap<>();
         try {
             List<UselessApk> apks = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
             List<FirstJunkInfo> arrayList = new ArrayList();
 //            LogUtils.i("zz----apk-path()--"+arrayList.size());
             ApkSearchUtils apkSearchUtils = new ApkSearchUtils(mContext);
             for (int i = 0; i < apks.size(); i++) {
+                if (isFinish) {
+                    return arrayList;
+                }
                 String apkPath = AESUtils01.decrypt(apks.get(i).getFilePath());
                 File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + apkPath);
                 if (scanExtFile.isDirectory()) {
@@ -1500,7 +1503,8 @@ public class FileQueryUtils {
             LogUtils.i("zz----apkFileInfos--"+apkFileInfos.size());
             for(ApkFileInfo apkFileInfo:apkFileInfos){
 //                apkFileInfo.get
-                if (null!= apkFileInfo) {
+
+                if (null!= apkFileInfo && !apkmap.containsKey(apkFileInfo.getFilePath())) {
                     FirstJunkInfo onelevelGarbageInfo = new FirstJunkInfo();
                     onelevelGarbageInfo.setAllchecked(true);
                     onelevelGarbageInfo.setGarbageType("TYPE_APK");
@@ -1529,6 +1533,7 @@ public class FileQueryUtils {
                         }
                         onelevelGarbageInfo.setIsthreeLevel(false);
                         if (!WHITE_LIST.contains(apkFileInfo.getPackageName())) {
+                            apkmap.put(onelevelGarbageInfo.getGarbageCatalog(),onelevelGarbageInfo.getAppPackageName());
                             arrayList.add(onelevelGarbageInfo);
                             if (mScanFileListener != null) {
                                 mScanFileListener.increaseSize(onelevelGarbageInfo.getTotalSize());

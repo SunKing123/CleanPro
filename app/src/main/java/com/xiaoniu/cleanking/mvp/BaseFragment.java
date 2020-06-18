@@ -82,6 +82,7 @@ public abstract class BaseFragment extends RxFragment implements IBaseView {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(null!=mProxyFragment)
         mProxyFragment.unbindPresenter();
     }
 }

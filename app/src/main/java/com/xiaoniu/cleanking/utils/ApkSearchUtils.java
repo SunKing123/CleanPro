@@ -28,7 +28,7 @@ public class ApkSearchUtils {
 
     private Context context;
     public static List<ApkFileInfo> myFiles = new ArrayList<ApkFileInfo>();
-    public LinkedHashMap<String,String> apkmap = new LinkedHashMap<>();
+    public static LinkedHashMap<String,String> apkmap = new LinkedHashMap<>();
     public List<ApkFileInfo> getMyFiles() {
         return myFiles;
     }
@@ -39,6 +39,7 @@ public class ApkSearchUtils {
 
     public ApkSearchUtils(Context context) {
         super();
+        apkmap = new LinkedHashMap<>();
         this.context = context;
 
     }
@@ -90,8 +91,9 @@ public class ApkSearchUtils {
 //                Log.i("ok", "处理类型:"+ String.valueOf(type)+"\n" + "------------------我是纯洁的分割线-------------------");
                 if(!apkmap.containsKey(myFile.getFilePath())){
                     apkmap.put(myFile.getFilePath(),myFile.getPackageName());
+                    myFiles.add(myFile);
                 }
-                myFiles.add(myFile);
+
 
             }
             // String apk_app = name_s.substring(name_s.lastIndexOf("."));

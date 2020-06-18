@@ -1186,7 +1186,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             initGeekAdSdk();
             initGeekSdkCenter();
             //重新检测头部扫描状态
-            checkScanState();
+//            checkScanState();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -1815,6 +1815,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
+                    mPresenter.cleanData();
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
                 }

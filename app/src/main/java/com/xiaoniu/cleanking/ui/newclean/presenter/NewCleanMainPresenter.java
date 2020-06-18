@@ -502,4 +502,10 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                 ScanningResultType.MEMORY_JUNK.getType()));
 
     }
+
+
+    public void cleanData(){
+        if(null!=mJunkGroups)
+        mJunkGroups.clear();
+    }
 }
