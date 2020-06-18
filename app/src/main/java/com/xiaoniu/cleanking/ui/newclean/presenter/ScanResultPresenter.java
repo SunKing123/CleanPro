@@ -148,6 +148,13 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
     }
 
 
+    /**
+     * 建议、清理按钮点击事件
+     * 1：建议清理；
+     * 2：谨慎清理；
+     * @param wrapper
+     * @param childType
+     */
     @Override
     public void updateChildJunkContentCheckState(JunkResultWrapper wrapper,int childType) {
 
@@ -160,10 +167,10 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
                 int appCheckedCount = 0;  //应用列表选择
                 for (FirstJunkInfo firstJunkInfo : firstJunkList) {
                     if (firstJunkInfo.equals(wrapper.firstJunkInfo)) {
-                        if(childType==1){
+                        if (childType == 1) {
                             firstJunkInfo.setUncarefulIsChecked(!firstJunkInfo.isUncarefulIsChecked());
 
-                            if(firstJunkInfo.getCareFulSize()>0){//两种类别同时存在
+                            if(firstJunkInfo.getCareFulSize()>0){//手动、建议两种类别同时存在
                                 if ((firstJunkInfo.getUncarefulSize() > 0 && firstJunkInfo.isUncarefulIsChecked()) && (firstJunkInfo.getCareFulSize() > 0 && firstJunkInfo.isCarefulIsChecked())) {
                                     firstJunkInfo.setAllchecked(true);
                                     firstJunkInfo.setSomeShecked(false);
@@ -327,6 +334,10 @@ public class ScanResultPresenter extends BasePresenter<ScanResultContact.View, S
                 for (FirstJunkInfo firstJunkInfo : contentMap.getValue()) {
                     if (firstJunkInfo.isAllchecked()) {
                         checkedTotalSize += firstJunkInfo.getTotalSize();
+                    } else if(firstJunkInfo.isIsthreeLevel() && firstJunkInfo.isCarefulIsChecked()){
+                        checkedTotalSize += firstJunkInfo.getCareFulSize();
+                    } else if( firstJunkInfo.isIsthreeLevel() && firstJunkInfo.isUncarefulIsChecked()){
+                        checkedTotalSize += firstJunkInfo.getUncarefulSize();
                     }
                 }
             }
