@@ -437,17 +437,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 if (mInteractionList.size() - 1 >= mInteractionPoistion) {
                     GlideUtils.loadGif(getActivity(), mInteractionList.get(mInteractionPoistion).getImgUrl(), mInteractionIv, 10000);
                 }
-
             }
         }
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
 
-        //广告点击跳转逻辑
-        if (mIsClickAdTopDetail) {
-            initGeekSdkTop();
-        }
         if (mIsClickAdCenterDetail) {
             initGeekSdkCenter();
         }
@@ -512,9 +507,9 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
                 }
                 if (info.getAdClickType() == 2) { //2=详情
-                    mIsClickAdTopDetail = true;
+                    initGeekSdkTop();
                 } else {
-                    mIsClickAdTopDetail = false;
+
                 }
             }
 

@@ -374,10 +374,12 @@ public class ApplicationDelegate implements IApplicationDelegate {
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
                             application.getApplicationContext().startActivity(intent);
                             mIsBack = false;
+                            //only hot launch to send LifecycleEvent
+                            EventBus.getDefault().post(new LifecycEvent(true));
+
                         }
                     }
                 }
-                EventBus.getDefault().post(new LifecycEvent(true));
             }
 
             @Override
