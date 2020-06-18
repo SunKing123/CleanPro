@@ -2,14 +2,32 @@
   "adList": [
     {
       "productId": 1,
-      "adVersion": 5,
-      "adPosition": "homepage_ad_2",
-      "adStyle": "BIG_IMG_PLAY_BUTTON",
+      "adVersion": 4,
+      "adPosition": "click_network_acceleration_ad",
+      "adStyle": "REWARD_VIDEO",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "945224877",
+          "adId": "945224737",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 7,
+      "adPosition": "cp_ad_1",
+      "adStyle": "FULL_SCREEN_VIDEO",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224621",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
@@ -17,7 +35,33 @@
           "adsAppName": "清理极速管家"
         },
         {
-          "adId": "5081413592859040",
+          "adId": "945224681",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 10,
+      "adPosition": "lock_screen_advertising",
+      "adStyle": "DATU_ICON_TEXT",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "936430648",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "9050293563765186",
           "adUnion": "youlianghui",
           "requestOrder": 2,
           "requestType": 0,
@@ -29,6 +73,268 @@
     {
       "productId": 1,
       "adVersion": 4,
+      "adPosition": "click_virus_killing_ad",
+      "adStyle": "REWARD_VIDEO",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224739",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 6,
+      "adPosition": "newlist_1_1",
+      "adStyle": "FAKE_VIDEO_IARGE_IMAGE",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224861",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "1031010656254125",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 6,
+      "adPosition": "acceleration_page_below_ad_mb",
+      "adStyle": "FEED_TEMPLATE",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224866",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理管家极速"
+        },
+        {
+          "adId": "9091510512942913",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理管家极速"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 3,
+      "adPosition": "newlist_1_2",
+      "adStyle": "FAKE_VIDEO_IARGE_IMAGE",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "936430775",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "936430775",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "2040899184044247",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "2040899184044247",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 4,
+      "adPosition": "personal_center_page_below_ad",
+      "adStyle": "DATU_ICON_TEXT",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "942340944",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 7,
+      "adPosition": "success_page_ad_2",
+      "adStyle": "DATU_ICON_TEXT",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224716",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "3001817686759192",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 7,
+      "adPosition": "red_envelopes_ad",
+      "adStyle": "REWARD_VIDEO",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224750",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 5,
+      "adPosition": "success_page_ad_3",
+      "adStyle": "DATU_ICON_TEXT_BUTTON_CENTER",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224719",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "8041214562342743",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 5,
+      "adPosition": "cp_ad_2",
+      "adStyle": "FULLSCREEN_CP_01",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945224891",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "6011016582554004",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 9,
+      "adPosition": "homepage_ad_1",
+      "adStyle": "BIG_IMG_PLAY_BUTTON",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "945226563",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "1001214626959119",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 4,
+      "adPosition": "newlist_1_3",
+      "adStyle": "FAKE_VIDEO_IARGE_IMAGE",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "936430775",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "2040899184044247",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 5,
       "adPosition": "newlist_other_1",
       "adStyle": "FAKE_VIDEO_IARGE_IMAGE",
       "adRequestTimeOut": 0,
@@ -43,7 +349,7 @@
           "adsAppName": "清理极速管家"
         },
         {
-          "adId": "4041510572649807",
+          "adId": "6071716626650198",
           "adUnion": "youlianghui",
           "requestOrder": 2,
           "requestType": 0,
@@ -168,158 +474,70 @@
     },
     {
       "productId": 1,
+      "adVersion": 3,
+      "adPosition": "hot_kp2.0",
+      "adStyle": "OPEN_ADS",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "887333487",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "1091719592349236",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
       "adVersion": 4,
-      "adPosition": "click_network_acceleration_ad",
+      "adPosition": "cold_kp2.0",
+      "adStyle": "OPEN_ADS",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "887333487",
+          "adUnion": "chuanshanjia",
+          "requestOrder": 1,
+          "requestType": 0,
+          "adsAppId": "5036430",
+          "adsAppName": "清理极速管家"
+        },
+        {
+          "adId": "1091719592349236",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理极速管家"
+        }
+      ]
+    },
+    {
+      "productId": 1,
+      "adVersion": 4,
+      "adPosition": "gameboost_video_ad",
       "adStyle": "REWARD_VIDEO",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "945224737",
+          "adId": "945224734",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
           "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 4,
-      "adPosition": "page_operation_position",
-      "adStyle": "REWARD_VIDEO",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224737",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 4,
-      "adPosition": "cp_ad_1",
-      "adStyle": "FULL_SCREEN_VIDEO",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224601",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "3021314592447578",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 10,
-      "adPosition": "lock_screen_advertising",
-      "adStyle": "DATU_ICON_TEXT",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "936430648",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "9050293563765186",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 4,
-      "adPosition": "click_virus_killing_ad",
-      "adStyle": "REWARD_VIDEO",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224739",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 6,
-      "adPosition": "acceleration_page_below_ad_mb",
-      "adStyle": "FEED_TEMPLATE",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224866",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理管家极速"
-        },
-        {
-          "adId": "9091510512942913",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理管家极速"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 5,
-      "adPosition": "newlist_1_1",
-      "adStyle": "FAKE_VIDEO_IARGE_IMAGE",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224861",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "9001615562642821",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
           "adsAppName": "清理极速管家"
         }
       ]
@@ -352,32 +570,14 @@
     },
     {
       "productId": 1,
-      "adVersion": 4,
-      "adPosition": "personal_center_page_below_ad",
-      "adStyle": "DATU_ICON_TEXT",
+      "adVersion": 5,
+      "adPosition": "external_advertising_ad_4",
+      "adStyle": "EXTERNAL_DIALOG_BIG_IMAGE_02",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "942340944",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 4,
-      "adPosition": "gameboost_video_ad",
-      "adStyle": "REWARD_VIDEO",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224734",
+          "adId": "945224852",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
@@ -389,25 +589,17 @@
     {
       "productId": 1,
       "adVersion": 3,
-      "adPosition": "newlist_1_2",
-      "adStyle": "FAKE_VIDEO_IARGE_IMAGE",
+      "adPosition": "external_advertising_ad_3",
+      "adStyle": "EXTERNAL_DIALOG_BIG_IMAGE_02",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "936430775",
+          "adId": "942652816",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
-          "adsAppId": "936430775",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "2040899184044247",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "2040899184044247",
+          "adsAppId": "5036430",
           "adsAppName": "清理极速管家"
         }
       ]
@@ -440,14 +632,14 @@
     },
     {
       "productId": 1,
-      "adVersion": 3,
-      "adPosition": "external_advertising_ad_3",
-      "adStyle": "EXTERNAL_DIALOG_BIG_IMAGE_02",
+      "adVersion": 2,
+      "adPosition": "page_operation_position",
+      "adStyle": "OPEN_ADS",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "942652816",
+          "adId": "945224743",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
@@ -458,32 +650,14 @@
     },
     {
       "productId": 1,
-      "adVersion": 7,
-      "adPosition": "red_envelopes_ad",
-      "adStyle": "REWARD_VIDEO",
+      "adVersion": 8,
+      "adPosition": "hot_kp",
+      "adStyle": "OPEN_ADS",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "945224750",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 6,
-      "adPosition": "success_page_ad_2",
-      "adStyle": "DATU_ICON_TEXT",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224716",
+          "adId": "887333486",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
@@ -491,77 +665,7 @@
           "adsAppName": "清理极速管家"
         },
         {
-          "adId": "3011114582642780",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 5,
-      "adPosition": "external_advertising_ad_4",
-      "adStyle": "EXTERNAL_DIALOG_BIG_IMAGE_02",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224852",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 5,
-      "adPosition": "cp_ad_2",
-      "adStyle": "FULLSCREEN_CP_01",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224891",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "6011016582554004",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 5,
-      "adPosition": "success_page_ad_3",
-      "adStyle": "DATU_ICON_TEXT_BUTTON_CENTER",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945224719",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "8041214562342743",
+          "adId": "6021914582341284",
           "adUnion": "youlianghui",
           "requestOrder": 2,
           "requestType": 0,
@@ -598,14 +702,14 @@
     },
     {
       "productId": 1,
-      "adVersion": 4,
-      "adPosition": "hot_kp2.0",
+      "adVersion": 14,
+      "adPosition": "cold_kp",
       "adStyle": "OPEN_ADS",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "887333485",
+          "adId": "887333486",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
@@ -624,118 +728,14 @@
     },
     {
       "productId": 1,
-      "adVersion": 5,
-      "adPosition": "homepage_ad_1",
-      "adStyle": "BIG_IMG_PLAY_BUTTON",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "945226563",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "4081319563484211",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 4,
-      "adPosition": "newlist_1_3",
-      "adStyle": "FAKE_VIDEO_IARGE_IMAGE",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "936430775",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "2040899184044247",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 5,
-      "adPosition": "homepage_ad_1_mb",
-      "adStyle": "FEED_TEMPLATE",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "943303622",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "7000796644372682",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 10,
-      "adPosition": "cold_kp2.0",
-      "adStyle": "OPEN_ADS",
-      "adRequestTimeOut": 0,
-      "isChange": 1,
-      "adsInfos": [
-        {
-          "adId": "887333485",
-          "adUnion": "chuanshanjia",
-          "requestOrder": 1,
-          "requestType": 0,
-          "adsAppId": "5036430",
-          "adsAppName": "清理极速管家"
-        },
-        {
-          "adId": "6021914582341284",
-          "adUnion": "youlianghui",
-          "requestOrder": 2,
-          "requestType": 0,
-          "adsAppId": "1110047950",
-          "adsAppName": "清理极速管家"
-        }
-      ]
-    },
-    {
-      "productId": 1,
-      "adVersion": 6,
+      "adVersion": 17,
       "adPosition": "success_page_ad_1",
       "adStyle": "BIG_IMG_PLAY_BUTTON",
       "adRequestTimeOut": 0,
       "isChange": 1,
       "adsInfos": [
         {
-          "adId": "945224708",
+          "adId": "945224714",
           "adUnion": "chuanshanjia",
           "requestOrder": 1,
           "requestType": 0,
@@ -743,7 +743,7 @@
           "adsAppName": "清理极速管家"
         },
         {
-          "adId": "6021217552542648",
+          "adId": "2071910696149985",
           "adUnion": "youlianghui",
           "requestOrder": 2,
           "requestType": 0,
