@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
@@ -280,13 +281,19 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         List<CleanWxItemInfo> listDataTemp = new ArrayList<>();
         List<CleanWxItemInfo> listData = new ArrayList<>();
         long audioSize = 0;
+
         for (int i = 0; i < cleanWxEasyInfoAud.getList().size(); i++) {
-            if (cleanWxEasyInfoAud.getList().get(i) instanceof CleanWxFourItemInfo) {
-                CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoAud.getList().get(i);
-                listFour.add(cleanWxHeadInfo);
+            MultiItemEntity entity = cleanWxEasyInfoAud.getList().get(i);
+            if (entity instanceof CleanWxFourItemInfo) {
+                try {
+                    CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) entity;
+                    listFour.add(cleanWxHeadInfo);
+                } catch (Exception e) {
+
+                }
             }
         }
-       
+
         for (int j = 0; j < listFour.size(); j++) {
             listDataTemp.addAll(listFour.get(j).getFourItem());
         }
