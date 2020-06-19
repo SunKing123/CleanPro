@@ -2,11 +2,14 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.multidex.MultiDex;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
 import com.baidu.mobstat.StatService;
 import com.hellogeek.permission.Integrate.Permission;
@@ -20,6 +23,11 @@ import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 
+import org.json.JSONException;
+
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +47,7 @@ public class AppApplication extends BaseApplication {
     public static Set<Integer> popSet = new HashSet<>();//运营弹窗是否一弹过位置统计
     public static String officialAccountContent;
     public static String officialAccountName;
+    private RxErrorHandler mRxErrorHandler;
     public static String AuditSwitch = "AuditSwitch";
     public static boolean isAudit;//是否市场审核中
 
@@ -64,7 +73,7 @@ public class AppApplication extends BaseApplication {
         //接入百度统计sdk
         StatService.setAppChannel(this,ChannelUtil.getChannel(),true);
         StatService.autoTrace(this);
-
+        initErrorHandler(this);
 
         //权限相关初始化
         PermissionIntegrate.getInstance(this)
@@ -128,5 +137,38 @@ public class AppApplication extends BaseApplication {
         //解决4.4以下手机启动失败
         MultiDex.install(base);
     }
+
+    //商业sdk初始化
+    public void initErrorHandler(Application application) {
+        String processName = SystemUtils.getProcessName(application);
+        if (!processName.equals(application.getPackageName()))
+            return;
+        mRxErrorHandler = RxErrorHandler
+                .builder()
+                .with(application)
+                .responseErrorListener(new ResponseErrorListener() {
+                    @Override
+                    public void handleResponseError(Context context, Throwable t) {
+                        if (t instanceof UnknownHostException) {
+                            //do something ...
+                        } else if (t instanceof SocketTimeoutException) {
+                            //do something ...
+                        } else if (t instanceof ParseException || t instanceof JSONException) {
+                            //do something ...
+                        } else {
+                            //handle other Exception ...
+                        }
+//                        Log.w(TAG, "Error handle");
+                    }
+                }).build();
+
+    }
+
+
+    public RxErrorHandler getRxErrorHandler() {
+        return mRxErrorHandler;
+    }
+
+
 
 }
