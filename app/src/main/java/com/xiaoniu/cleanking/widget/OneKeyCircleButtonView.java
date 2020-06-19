@@ -190,10 +190,13 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     //清理完成狀態
     public void setClendedState(CountEntity countEntity) {
-        tv_file_total_size.setVisibility(GONE);
-        tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_pop02_tag, countEntity.getResultSize()));
-        tv_file_total_tag.setVisibility(VISIBLE);
-        greenState(true);
+        if (null != countEntity) {
+            tv_file_total_size.setVisibility(GONE);
+            tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_pop02_tag, countEntity.getResultSize()));
+            tv_file_total_tag.setVisibility(VISIBLE);
+            greenState(true);
+        }
+
     }
 
     //扫描完毕
