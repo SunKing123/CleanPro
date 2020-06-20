@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -231,78 +232,91 @@ public class FileQueryUtils {
      */
     public ArrayList<FirstJunkInfo> getOmiteCache() {
         ArrayList<FirstJunkInfo> junkInfoArrayList = new ArrayList<>();
-        //已安裝应用map
-        HashMap<String, PackageInfo> packMap = new HashMap<>();
-        if (installedList == null)
-            installedList = getInstalledList();
-        if (installedList != null && installedList.size() > 0) {
-            for (PackageInfo installList : installedList) {
-                packMap.put(installList.packageName, installList);
-            }
-        }
-        if (pathMap == null) {
-            return junkInfoArrayList;
-        }
-
-        //开始扫描uninstallList_db文件中路径
-        //包名去重列表
-        List<String> packNameList = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getUninstallList();
-//        LinkedHashMap<String,List<UninstallList>> leavedCache = new LinkedHashMap<>();
-        for (String packageName : packNameList) {
-            if (packMap.containsKey(packageName.trim())) {//排除当前已安装应用
-                continue;
-            }
-            if (TextUtils.isEmpty(packageName)) {
-                continue;
-            }
-//            LogUtils.i("getOmiteCache()-packageName-"+packageName);
-            //根据包名筛选的——未安装应用路径列表
-            List<UninstallList> uninstallLists = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getPathList(packageName);
-            if (!CollectionUtils.isEmpty(uninstallLists)) {
-                FirstJunkInfo junkInfo = new FirstJunkInfo();
-                junkInfo.setAllchecked(true);
-                junkInfo.setAppName(uninstallLists.get(0).getNameZh());
-                junkInfo.setAppPackageName(uninstallLists.get(0).getPackageName());
-                if (!isService) {
-                    junkInfo.setGarbageIcon(mContext.getResources().getDrawable(R.drawable.icon_other_cache));
+        try {
+            //已安裝应用map
+            HashMap<String, PackageInfo> packMap = new HashMap<>();
+            if (installedList == null)
+                installedList = getInstalledList();
+            if (installedList != null && installedList.size() > 0) {
+                for (PackageInfo installList : installedList) {
+                    packMap.put(installList.packageName, installList);
                 }
-                junkInfo.setGarbageType("TYPE_LEAVED");
+            }
+            if (pathMap == null) {
+                return junkInfoArrayList;
+            }
 
-                for (UninstallList pathObj : uninstallLists) {
-                    String filePath = AESUtils01.decrypt(pathObj.getFilePath());
-                    if (TextUtils.isEmpty(filePath)) {
-                        continue;
+            //开始扫描uninstallList_db文件中路径
+            //包名去重列表
+            List<String> packNameList = new ArrayList<>();
+            try {
+                List<String> dbList =  ApplicationDelegate.getAppPathDatabase().uninstallListDao().getUninstallList();
+                if(!CollectionUtils.isEmpty(dbList)){
+                    packNameList.addAll(dbList);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (!CollectionUtils.isEmpty(packNameList))
+            for (String packageName : packNameList) {
+                if (packMap.containsKey(packageName.trim())) {//排除当前已安装应用
+                    continue;
+                }
+                if (TextUtils.isEmpty(packageName)) {
+                    continue;
+                }
+    //            LogUtils.i("getOmiteCache()-packageName-"+packageName);
+                //根据包名筛选的——未安装应用路径列表
+                List<UninstallList> uninstallLists = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getPathList(packageName);
+                if (!CollectionUtils.isEmpty(uninstallLists)) {
+                    FirstJunkInfo junkInfo = new FirstJunkInfo();
+                    junkInfo.setAllchecked(true);
+                    junkInfo.setAppName(uninstallLists.get(0).getNameZh());
+                    junkInfo.setAppPackageName(uninstallLists.get(0).getPackageName());
+                    if (!isService) {
+                        junkInfo.setGarbageIcon(mContext.getResources().getDrawable(R.drawable.icon_other_cache));
                     }
-//                    LogUtils.i("getOmiteCache()--------"+filePath);
-                    File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + filePath);
-//                    LogUtils.i("getOmiteCache()-scanExtFile-"+scanExtFile.getAbsolutePath());
-                    Map<String, String> filePathMap = checkAllGarbageFolder(scanExtFile);
+                    junkInfo.setGarbageType("TYPE_LEAVED");
 
-                    for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
-                        if (new File(entry.getKey()).isFile()) { //文件路径
-                            File cachefile = new File(entry.getKey());
-//                            LogUtils.i("getOmiteCache()-scanExtFile-"+cachefile.getAbsolutePath());
-                            SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
-                            if (cachefile.exists()) {
-                                secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
-                                secondJunkInfo.setChecked(true);
-                                secondJunkInfo.setPackageName(scanExtFile.getName());
-                                secondJunkInfo.setGarbagetype("TYPE_LEAVED");
-                                secondJunkInfo.setGarbageSize(cachefile.length());
-                                junkInfo.setTotalSize(junkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
-                                junkInfo.addSecondJunk(secondJunkInfo);
-                                if (mScanFileListener != null) {
-                                    mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                    for (UninstallList pathObj : uninstallLists) {
+                        String filePath = AESUtils01.decrypt(pathObj.getFilePath());
+                        if (TextUtils.isEmpty(filePath)) {
+                            continue;
+                        }
+    //                    LogUtils.i("getOmiteCache()--------"+filePath);
+                        File scanExtFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + filePath);
+    //                    LogUtils.i("getOmiteCache()-scanExtFile-"+scanExtFile.getAbsolutePath());
+                        Map<String, String> filePathMap = checkAllGarbageFolder(scanExtFile);
+
+                        for (final Map.Entry<String, String> entry : filePathMap.entrySet()) {
+                            if (new File(entry.getKey()).isFile()) { //文件路径
+                                File cachefile = new File(entry.getKey());
+    //                            LogUtils.i("getOmiteCache()-scanExtFile-"+cachefile.getAbsolutePath());
+                                SecondJunkInfo secondJunkInfo = new SecondJunkInfo();
+                                if (cachefile.exists()) {
+                                    secondJunkInfo.setFilecatalog(cachefile.getAbsolutePath());
+                                    secondJunkInfo.setChecked(true);
+                                    secondJunkInfo.setPackageName(scanExtFile.getName());
+                                    secondJunkInfo.setGarbagetype("TYPE_LEAVED");
+                                    secondJunkInfo.setGarbageSize(cachefile.length());
+                                    junkInfo.setTotalSize(junkInfo.getTotalSize() + secondJunkInfo.getGarbageSize());
+                                    junkInfo.addSecondJunk(secondJunkInfo);
+                                    if (mScanFileListener != null) {
+                                        mScanFileListener.increaseSize(secondJunkInfo.getGarbageSize());
+                                    }
                                 }
                             }
                         }
                     }
+                    if (junkInfo.getSubGarbages() == null || junkInfo.getSubGarbages().size() <= 0) {
+                        continue;
+                    }
+                    junkInfoArrayList.add(junkInfo);
                 }
-                if (junkInfo.getSubGarbages() == null || junkInfo.getSubGarbages().size() <= 0) {
-                    continue;
-                }
-                junkInfoArrayList.add(junkInfo);
             }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
 
         return junkInfoArrayList;
@@ -630,8 +644,15 @@ public class FileQueryUtils {
 //            }
 
             //开始扫描clean_db文件中路径
-            List<AppPath> pathList = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getPathList(applicationInfo.packageName);
-
+            List<AppPath> pathList = new ArrayList<>();
+            try {
+                List<AppPath> dblist = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getPathList(applicationInfo.packageName);
+                if(!CollectionUtils.isEmpty(dblist)){
+                    pathList.addAll(dblist);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if(!CollectionUtils.isEmpty(pathList)){
                     Map<String, String> filePathMap = new HashMap<>();
                     for (AppPath pathObj : pathList) {
@@ -1474,9 +1495,14 @@ public class FileQueryUtils {
         }
         LinkedHashMap<String,String> apkmap = new LinkedHashMap<>();
         try {
-            List<UselessApk> apks = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
+            List<UselessApk> apks = new ArrayList<>();
+
+            List<UselessApk> dbList = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
+            if(!CollectionUtils.isEmpty(dbList)){
+                apks.addAll(dbList);
+            }
+
             List<FirstJunkInfo> arrayList = new ArrayList();
-//            LogUtils.i("zz----apk-path()--"+arrayList.size());
             ApkSearchUtils apkSearchUtils = new ApkSearchUtils(mContext);
             for (int i = 0; i < apks.size(); i++) {
                 if (isFinish) {
@@ -1500,7 +1526,8 @@ public class FileQueryUtils {
                 }
             }
             List<ApkFileInfo> apkFileInfos = apkSearchUtils.getMyFiles();
-            LogUtils.i("zz----apkFileInfos--"+apkFileInfos.size());
+//            LogUtils.i("zz----apkFileInfos--"+apkFileInfos.size());
+            if(!CollectionUtils.isEmpty(apkFileInfos))
             for(ApkFileInfo apkFileInfo:apkFileInfos){
 //                apkFileInfo.get
 
