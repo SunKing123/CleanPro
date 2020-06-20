@@ -14,7 +14,6 @@ import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
-import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
