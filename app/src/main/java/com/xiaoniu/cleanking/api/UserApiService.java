@@ -149,16 +149,7 @@ public interface UserApiService {
     @POST("/appVersion/query")
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
 
-    /**
-     * 查询app是否有补丁版本
-     *
-     * @param baseVersionName 基线版本
-     * @param clientType
-     * @param patchVersion    当前补丁版本
-     * @return
-     */
-    @GET("/gateway/config/patch")
-    Flowable<Patch> queryPatch(@Query("baseVersionName") String baseVersionName, @Query("clientType") String clientType, @Query("patchVersion") String patchVersion);
+
 
 
     /**

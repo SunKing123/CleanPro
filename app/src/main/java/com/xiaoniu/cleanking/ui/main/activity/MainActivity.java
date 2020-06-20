@@ -265,7 +265,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mPresenter.queryAppVersion(() -> {
             });
             //获取WebUrl
-            mPresenter.getWebUrl();
+//            mPresenter.getWebUrl();
             isFirstCreate = false;
         }
     }
