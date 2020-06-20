@@ -24,8 +24,6 @@ import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.tencent.tinker.lib.tinker.Tinker;
-import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -66,10 +64,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
-import com.xiaoniu.common.hotfix.listener.MyPatchListener;
-import com.xiaoniu.common.hotfix.log.HotfixLogcat;
-import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -99,14 +93,13 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by tie on 2017/5/15.
  */
-public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements UpdateUtil.PatchCallback, AMapLocationListener {
+public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements  AMapLocationListener {
 
     private final RxAppCompatActivity mActivity;
 
     private UpdateAgent mUpdateAgent;
     @Inject
     NoClearSPHelper mPreferencesHelper;
-    private MyPatchListener mMyPatchListener;
     private AMapLocationClient mLocationClient = null;
     private AMapLocationClientOption mLocationOption = null;
 
@@ -144,25 +137,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
-    private String path;
 
-    @Override
-    public void downloadSuccess(String path) {
-        this.path = path;
-        File file = new File(path);
-        if (file.canRead()) {
-            mMyPatchListener = MyPatchListener.getInstance(mActivity);
-            mMyPatchListener.setPath(path);
-            if (mMyPatchListener != null && !mMyPatchListener.isPatching()) {
-                mMyPatchListener.patching();
-            }
-        }
-    }
-
-    @Override
-    public void downloadError(String message) {
-
-    }
 
     //动态获取后台WebUrl+
     @Deprecated

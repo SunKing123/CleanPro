@@ -41,9 +41,9 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
     implementation 'com.zhaozhibo.guideview:guideview:1.0.6'
     implementation project(':baselib:common')
-    implementation (rootProject.ext.dependencies["tinker-android-lib"]) { changing = true }
-    annotationProcessor (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
-    implementation (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
+//    implementation (rootProject.ext.dependencies["tinker-android-lib"]) { changing = true }
+//    annotationProcessor (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
+//    implementation (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
 
 
 

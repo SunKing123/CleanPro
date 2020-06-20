@@ -81,9 +81,9 @@ dependencies {
 
     api rootProject.ext.dependencies["glide"]
 
-    api (rootProject.ext.dependencies["tinker-android-lib"]) { changing = true }
-    annotationProcessor (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
-    api (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
+//    api (rootProject.ext.dependencies["tinker-android-lib"]) { changing = true }
+//    annotationProcessor (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
+//    api (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
 
     api  rootProject.ext.dependencies["fastjson"]
     api  rootProject.ext.dependencies["constraint-layout"]

@@ -58,8 +58,8 @@ ext {
             "rxlifecycle"                  : "com.trello.rxlifecycle2:rxlifecycle:2.1.0",
             "rxlifecycle-components"       : "com.trello.rxlifecycle2:rxlifecycle-components:2.1.0",
             "glide"                        : "com.github.bumptech.glide:glide:4.6.1",
-            "tinker-android-lib"           : "com.tencent.tinker:tinker-android-lib:1.9.9",
-            "tinker-android-anno"          : "com.tencent.tinker:tinker-android-anno:1.9.9",
+//            "tinker-android-lib"           : "com.tencent.tinker:tinker-android-lib:1.9.9",
+//            "tinker-android-anno"          : "com.tencent.tinker:tinker-android-anno:1.9.9",
 
             "fastjson"                     : "com.alibaba:fastjson:1.2.46",
             "constraint-layout"            : "androidx.constraintlayout:constraintlayout:1.1.3",
