@@ -19,7 +19,6 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
-import com.huma.room_for_asset.RoomAsset;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
@@ -79,10 +78,8 @@ import org.json.JSONObject;
 
 public class ApplicationDelegate implements IApplicationDelegate {
 
-    private static final String TAG = "Tinker.ApplicationDelegate";
     private static AppDataBase mAppDatabase;
     private static AppPathDataBase mAppPathDataBase;
-
     private static Handler sHandler = new Handler(Looper.getMainLooper());
     @Override
     public void onCreate(Application application) {
@@ -172,15 +169,20 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
 
     private void initRoom(Application application) {
-        mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "guanjia_cleanking.db")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
+        try {
+            mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "guanjia_cleanking.db")
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
 
-        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert0617.db")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
+            mAppPathDataBase = Room.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert0617.db")
+                    .createFromAsset("databases/convert0617.db")
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
