@@ -93,8 +93,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     TextView mTvGb;
     @BindView(R.id.acceview)
     CleanAnimView mCleanAnimView;
-    @BindView(R.id.web_view)
-    WebView mWebView;
+   // @BindView(R.id.web_view)
+  //  WebView mWebView;
     @BindView(R.id.layout_no_file)
     LinearLayout mLayoutNoFile;
     private CleanExpandAdapter mCleanBigFileAdapter;

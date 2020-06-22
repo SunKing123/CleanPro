@@ -194,12 +194,6 @@
 
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/viewt"
-        android:visibility="gone" />
 
     <com.xiaoniu.cleanking.ui.main.widget.CleanAnimView
         android:id="@+id/acceview"

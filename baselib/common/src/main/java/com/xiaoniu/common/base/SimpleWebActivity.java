@@ -19,6 +19,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.geek.webpage.web.webview.LollipopFixedWebView;
 import com.xiaoniu.common.R;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -27,7 +28,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
  */
 
 public class SimpleWebActivity extends BaseActivity {
-    public WebView mWebView;
+    public LollipopFixedWebView mWebView;
     public ProgressBar mProgressBar;
     public static final String KEY_URL = "url";//网页url
     public static final String KEY_TITLE = "title";//标题内容
@@ -62,8 +63,8 @@ public class SimpleWebActivity extends BaseActivity {
     @Override
     protected void initViews(Bundle savedInstanceState) {
         StatisticsUtils.trackClick("information_page_view_page", "信息页面浏览", "selected_page", "information_page");
-        mWebView = (WebView) findViewById(R.id.webView);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mWebView = findViewById(R.id.webView);
+        mProgressBar = findViewById(R.id.progressBar);
         setLeftTitle(title);
         setLeftButton(R.drawable.common_icon_back_arrow_white, new View.OnClickListener() {
             @Override
@@ -96,11 +97,11 @@ public class SimpleWebActivity extends BaseActivity {
         settings.setDisplayZoomControls(false); //隐藏原生的缩放控件
 
         /*缓存模式
-        * LOAD_DEFAULT: （默认）根据cache-control决定是否从网络上取数据。
-        * LOAD_CACHE_ONLY: 只读取本地缓存数据
-        * LOAD_NO_CACHE:只从网络获取数据.
-        * LOAD_CACHE_ELSE_NETWORK：没网，则从本地获取，即离线加载。
-        * */
+         * LOAD_DEFAULT: （默认）根据cache-control决定是否从网络上取数据。
+         * LOAD_CACHE_ONLY: 只读取本地缓存数据
+         * LOAD_NO_CACHE:只从网络获取数据.
+         * LOAD_CACHE_ELSE_NETWORK：没网，则从本地获取，即离线加载。
+         * */
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setDomStorageEnabled(true); // 开启 DOM storage API 功能
         settings.setDatabaseEnabled(true);   //开启 database storage API 功能
@@ -142,7 +143,7 @@ public class SimpleWebActivity extends BaseActivity {
 
             @Override
             public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-               /* webView默认是不处理https请求的，页面显示空白，需要进行如下设置*/
+                /* webView默认是不处理https请求的，页面显示空白，需要进行如下设置*/
                 handler.proceed();  //表示等待证书响应
             }
 
@@ -160,7 +161,7 @@ public class SimpleWebActivity extends BaseActivity {
             /*是否拦截JS的提示框，默认false不拦截(同onJsAlert，onJsConfirm)*/
             @Override
             public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-               /* 可用于java和js交互场景，可以根据需要定制协议，是难点*/
+                /* 可用于java和js交互场景，可以根据需要定制协议，是难点*/
                 return super.onJsPrompt(view, url, message, defaultValue, result);
             }
 
@@ -189,10 +190,10 @@ public class SimpleWebActivity extends BaseActivity {
     }
 
     /*JS通过WebView调用 Android 代码
-    * 将Java对象映射为JS对象,在JS里可以使用该对象
-    * object：java对象，name：对象名称
-    * 4.2以下版本有漏洞，请使用onJsPrompt拦截提示框的方式进行交互
-    * */
+     * 将Java对象映射为JS对象,在JS里可以使用该对象
+     * object：java对象，name：对象名称
+     * 4.2以下版本有漏洞，请使用onJsPrompt拦截提示框的方式进行交互
+     * */
     @SuppressLint("JavascriptInterface")
     public void addJavascriptInterface(Object object, String name) {
         mWebView.addJavascriptInterface(object, name);
