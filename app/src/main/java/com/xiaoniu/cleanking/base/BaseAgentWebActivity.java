@@ -33,7 +33,7 @@ import com.just.agentweb.WebViewClient;
 public abstract class BaseAgentWebActivity extends AppCompatActivity {
 
     protected AgentWeb mAgentWeb;
-    private AgentWebUIControllerImplBase mAgentWebUIController;
+ //   private AgentWebUIControllerImplBase mAgentWebUIController;
     private ErrorLayoutEntity mErrorLayoutEntity;
     private MiddlewareWebChromeBase mMiddleWareWebChrome;
     private MiddlewareWebClientBase mMiddleWareWebClient;
