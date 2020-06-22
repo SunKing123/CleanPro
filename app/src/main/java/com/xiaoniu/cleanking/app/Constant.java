@@ -75,6 +75,8 @@ public class Constant {
 
     public static final String SWITCH_INFO = "switch_info";
 
+    public static final String APP_NAME = "gj_clean";
+
 
     /**
      * 白名单

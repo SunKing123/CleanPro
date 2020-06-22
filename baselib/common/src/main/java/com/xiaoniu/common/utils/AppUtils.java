@@ -31,6 +31,8 @@ import static android.graphics.Bitmap.Config.RGB_565;
 
 public class AppUtils {
 
+    public static final String APP_NAME = "gj_clean";
+
     public static Drawable getApkIconFromPath(Context context, String filePath) {
         if (context == null || TextUtils.isEmpty(filePath)) {
             return null;
