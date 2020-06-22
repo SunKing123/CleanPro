@@ -11,6 +11,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
+import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
@@ -19,7 +21,6 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
-import com.huma.room_for_asset.RoomAsset;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
@@ -79,10 +80,8 @@ import org.json.JSONObject;
 
 public class ApplicationDelegate implements IApplicationDelegate {
 
-    private static final String TAG = "Tinker.ApplicationDelegate";
     private static AppDataBase mAppDatabase;
     private static AppPathDataBase mAppPathDataBase;
-
     private static Handler sHandler = new Handler(Looper.getMainLooper());
     @Override
     public void onCreate(Application application) {
@@ -104,7 +103,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
         UMConfigure.init(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
-
+        setErrorHander();
         initRoom(application);
         initNiuData(application);
         initOaid(application);
@@ -170,17 +169,34 @@ public class ApplicationDelegate implements IApplicationDelegate {
         JPushNotificationManager.customPushNotification(application, 1, R.layout.layout_notivition, R.id.image, R.id.title, R.id.text, R.mipmap.applogo, R.mipmap.applogo);
     }
 
-
+    //room初始化
     private void initRoom(Application application) {
-        mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "guanjia_cleanking.db")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
+        try {
+            mAppDatabase = Room.databaseBuilder(application.getApplicationContext(), AppDataBase.class, "guanjia_cleanking.db")
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
 
-        mAppPathDataBase = RoomAsset.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert0617.db")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
+            mAppPathDataBase = Room.databaseBuilder(application.getApplicationContext(), AppPathDataBase.class, "convert0617.db")
+                    .createFromAsset("databases/convert0617.db")
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 全局神值rxjava下游取消订阅后抛出异常统一处理
+     */
+    private void setErrorHander() {
+        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                LogUtils.e("e: " + throwable.getMessage());
+            }
+        });
     }
 
 

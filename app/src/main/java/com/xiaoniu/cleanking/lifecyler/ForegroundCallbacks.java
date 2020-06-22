@@ -112,6 +112,7 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
         handler.postDelayed(checkRunnable, CHECK_DELAY);
     }
 
+
     public class CheckRunnable implements Runnable {
         WeakReference<Activity> weakReference = new WeakReference<>(null);
 
@@ -125,7 +126,7 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
                 foreground = false;
                 for (LifecycleListener l : listeners) {
                     try {
-                        if (weakReference!=null&&weakReference.get() != null)
+                        if (weakReference!=null)
                             l.onBecameBackground(weakReference.get());
                     } catch (Exception exc) {
 

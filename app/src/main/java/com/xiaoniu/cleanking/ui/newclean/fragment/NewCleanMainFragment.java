@@ -801,7 +801,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @OnClick(R.id.iv_center)
     public void nowClean() {
         StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        ((MainActivity) getActivity()).commitJpushClickTime(1);
         if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
                 //读取扫描缓存
@@ -875,7 +874,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-        ((MainActivity) getActivity()).commitJpushClickTime(2);
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
@@ -922,7 +920,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void line_shd() {
 //        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        ((MainActivity) getActivity()).commitJpushClickTime(9);
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
         StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
         if (PreferenceUtil.getPowerCleanTime()) {
@@ -1016,7 +1013,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
-        ((MainActivity) getActivity()).commitJpushClickTime(5);
         StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
@@ -1064,7 +1060,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void mClickQq() {
 //        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        ((MainActivity) getActivity()).commitJpushClickTime(8);
+
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
         if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
@@ -1107,7 +1103,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     public void mClickJw() {
 //        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        ((MainActivity) getActivity()).commitJpushClickTime(6);
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
 
         if (PreferenceUtil.getCoolingCleanTime()) {

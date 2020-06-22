@@ -488,7 +488,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (total == 0) {
             un = 80886656;
         } else {
-            un = total / aboveListInfo.size();
+            un = total / aboveListInfo.size()==0?1:aboveListInfo.size();
         }
 
         setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);

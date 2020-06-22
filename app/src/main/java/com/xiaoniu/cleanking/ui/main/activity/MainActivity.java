@@ -598,6 +598,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      *
      * @param type（1-立即清理 2-一键加速 3-手机清理 4-文件清理 5-微信专清 6-手机降温 7-qq专清 8-通知栏 9- 超强省电  10-病毒查杀 11-游戏加速  12-网络加速 ）
      */
+    @Deprecated
     public void commitJpushClickTime(int type) {
         mPresenter.commitJpushClickTime(type);
     }

@@ -308,8 +308,8 @@ dependencies {
     api rootProject.ext.dependencies["arouter"]
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
-    implementation "androidx.room:room-runtime:2.0.0"
-    annotationProcessor "androidx.room:room-compiler:2.0.0"
+    implementation "androidx.room:room-runtime:2.2.0"
+    annotationProcessor "androidx.room:room-compiler:2.2.0"
 
     implementation rootProject.ext.dependencies["greendao"]
     annotationProcessor rootProject.ext.dependencies["greendao-generator"]
@@ -339,8 +339,6 @@ dependencies {
 
     api rootProject.ext.dependencies["dagger2"]
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
-//    implementation 'com.github.daolq3012:AssetSQLiteOpenHelper:V1.0.1'
-    implementation 'com.github.humazed:RoomAsset:1.0.3'
 
     implementation 'com.jzp:rotate3D:1.0.0'
 
