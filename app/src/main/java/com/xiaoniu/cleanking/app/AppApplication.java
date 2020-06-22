@@ -14,7 +14,6 @@ import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;
-import com.xiaoniu.common.AppProfile;
 import com.xiaoniu.common.base.BaseApplication;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -44,16 +43,6 @@ public class AppApplication extends BaseApplication {
 
     public AppApplication() {
         super();
-        AppProfile.API_APPID = BuildConfig.API_APPID;
-        AppProfile.API_APPSECRET = BuildConfig.API_APPSECRET;
-        AppProfile.APPLICATION_ID = BuildConfig.APPLICATION_ID;
-        AppProfile.BUILD_TYPE = BuildConfig.BUILD_TYPE;
-        AppProfile.DEBUG = BuildConfig.DEBUG;
-        AppProfile.MESSAGE = BuildConfig.MESSAGE;
-        AppProfile.PLATFORM = BuildConfig.PLATFORM;
-        AppProfile.TINKER_ID = BuildConfig.TINKER_ID;
-        AppProfile.VERSION_CODE = BuildConfig.VERSION_CODE;
-        AppProfile.VERSION_NAME = BuildConfig.VERSION_NAME;
     }
 
     @Override

@@ -588,7 +588,6 @@
 
 #########################common lib混淆开始########################
 -ignorewarning
--keep class com.xiaoniu.common.hotfix.CleanApplicationLike
 -keep class com.xiaoniu.common.base.** { *; }
 -keep class com.xiaoniu.common.http.** { *; }
 #-keep class com.xiaoniu.common.widget.** { *; }

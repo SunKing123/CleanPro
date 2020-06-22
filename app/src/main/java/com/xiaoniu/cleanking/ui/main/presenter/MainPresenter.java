@@ -24,8 +24,6 @@ import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.tencent.tinker.lib.tinker.Tinker;
-import com.tencent.tinker.lib.tinker.TinkerLoadResult;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -66,10 +64,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
-import com.xiaoniu.common.hotfix.listener.MyPatchListener;
-import com.xiaoniu.common.hotfix.log.HotfixLogcat;
-import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -99,14 +93,13 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by tie on 2017/5/15.
  */
-public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements UpdateUtil.PatchCallback, AMapLocationListener {
+public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements  AMapLocationListener {
 
     private final RxAppCompatActivity mActivity;
 
     private UpdateAgent mUpdateAgent;
     @Inject
     NoClearSPHelper mPreferencesHelper;
-    private MyPatchListener mMyPatchListener;
     private AMapLocationClient mLocationClient = null;
     private AMapLocationClientOption mLocationOption = null;
 
@@ -144,92 +137,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
-    private String path;
-    private boolean isLoaded;
-    private boolean isInstalled;
-    private String patchVersion;
 
-    //热更新相关代码
-    public void queryPatch() {
-        isLoaded = Tinker.with(mActivity).isTinkerLoaded();
-        isInstalled = Tinker.with(mActivity).isTinkerInstalled();
-        final String currentVersionName = AppUtils.getVersionName(mActivity, mActivity.getPackageName());
-        final String channel = ChannelUtil.getChannel();
-        if (isLoaded) {
-            TinkerLoadResult loadResult = Tinker.with(mActivity).getTinkerLoadResultIfPresent();
-            Map<String, String> config = loadResult.packageConfig;
-            patchVersion = config.get("patchVersion");
-        }
-        Map<String, String> queryParams = new HashMap<>();
-        // queryParams.put("channel", channel);
-        queryParams.put("baseVersionName", currentVersionName);
-        queryParams.put("clientType", "1");
-        if (!TextUtils.isEmpty(patchVersion)) {
-            queryParams.put("patchVersion", patchVersion);
-        } else {
-            queryParams.put("patchVersion", "");
-        }
-        mModel.getPatch(queryParams, new Common4Subscriber<Patch>() {
-            @Override
-            public void getData(Patch patch) {
-                if (patch != null && patch.getData() != null) {
-                    if (currentVersionName.equals(patch.getData().getBaseVersion()) && !TextUtils.isEmpty(patch.getData().getPatchUrl())) {
-                        //补丁版本要么等于空是首先安装补丁，要么补丁的版本有升级
-                        if (isInstalled && TextUtils.isEmpty(patchVersion) || !patchVersion.equals(patch.getData().getPatchVersion())) {
-                            //Log.v(MyPatchListener.TAG, "current version has new patch, current version is " +patchVersion +" new version is " + result.patchVersion);
-                            HotfixLogcat.log("current version has new patch, current version is " + patchVersion + " new version is " + patch.getData().getPatchVersion());
-                            Thread thread = new Thread(new LoadFileTask(mActivity, patch, MainPresenter.this));
-                            thread.start();
-                        } else {
-                            HotfixLogcat.log("current version has patch,but already fixed");
-                            //Log.v(MyPatchListener.TAG, "current version has patch,but already fixed");
-                            //Toast.makeText(context, "该版本下有补丁包，但是已修复补丁 ", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                } else {
-                    HotfixLogcat.log("current version don't have patch");
-                    //Log.v(MyPatchListener.TAG, "current version don't have patch");
-                    //该版本下没有补丁包
-                    //Toast.makeText(context, "该版本下没有补丁包 ", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void showExtraOp(String code, String message) {
-                Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                //Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void netConnectError() {
-                //Toast.makeText(mActivity, "netConnectError", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public void downloadSuccess(String path) {
-        this.path = path;
-        File file = new File(path);
-        if (file.canRead()) {
-            mMyPatchListener = MyPatchListener.getInstance(mActivity);
-            mMyPatchListener.setPath(path);
-            if (mMyPatchListener != null && !mMyPatchListener.isPatching()) {
-                mMyPatchListener.patching();
-            }
-        }
-    }
-
-    @Override
-    public void downloadError(String message) {
-
-    }
 
     //动态获取后台WebUrl+
+    @Deprecated
     public void getWebUrl() {
         mModel.getWebUrl(new Common4Subscriber<WebUrlEntity>() {
             @Override

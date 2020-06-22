@@ -104,18 +104,6 @@ public class MainModel extends BaseModel {
         mService.commitJPushClickTime(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
-    /**
-     * 热修复补丁查询
-     *
-     * @param maps
-     * @param commonSubscriber
-     */
-    public void getPatch(Map<String, String> maps, Common4Subscriber<Patch> commonSubscriber) {
-        String baseVersionName = maps.get("baseVersionName");
-        String clientType = maps.get("clientType");
-        String patchVersion = maps.get("patchVersion");
-        mService.queryPatch(baseVersionName, clientType, patchVersion).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
-    }
 
     public void queryAuditSwitch(Common4Subscriber<AuditSwitch> commonSubscriber) {
         Gson gson = new Gson();
