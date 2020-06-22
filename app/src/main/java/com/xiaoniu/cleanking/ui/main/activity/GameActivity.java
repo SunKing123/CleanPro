@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
@@ -223,67 +224,71 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mGameSelectAdapter);
 
-        //展示之前加速过的应用
-        if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().gameSelectDao()
-                && null != ApplicationDelegate.getAppDatabase().gameSelectDao().getAll()
-                && ApplicationDelegate.getAppDatabase().gameSelectDao().getAll().size() > 0) {
-            Observable<List<GameSelectEntity>> observable = Observable.create(new ObservableOnSubscribe<List<GameSelectEntity>>() {
-                @Override
-                public void subscribe(ObservableEmitter<List<GameSelectEntity>> emitter) throws Exception {
-                    emitter.onNext(ApplicationDelegate.getAppDatabase().gameSelectDao().getAll());
-                }
-            });
-            Consumer<List<GameSelectEntity>> consumer = new Consumer<List<GameSelectEntity>>() {
-                @Override
-                public void accept(List<GameSelectEntity> list) throws Exception {
-                    if (null == mSelectList || null == mSelectNameList || null == list || list.size() <= 0)
-                        return;
-
-                    ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
-                    List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
-                    for (int i = 0; i < packages.size(); i++) {
-                        PackageInfo packageInfo = packages.get(i);
-                        //判断是否系统应用
-                        if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) { //非系统应用
-                            FirstJunkInfo tmpInfo = new FirstJunkInfo();
-                            tmpInfo.setAppName(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
-                            tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
-                            tmpInfo.setAppPackageName(packageInfo.applicationInfo.packageName);
-                            tmpInfo.setAppProcessName(packageInfo.applicationInfo.processName);
-                            aboveListInfo.add(tmpInfo);
-                        }
+        try {
+            //展示之前加速过的应用
+            if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().gameSelectDao()
+                    && null != ApplicationDelegate.getAppDatabase().gameSelectDao().getAll()
+                    && ApplicationDelegate.getAppDatabase().gameSelectDao().getAll().size() > 0) {
+                Observable<List<GameSelectEntity>> observable = Observable.create(new ObservableOnSubscribe<List<GameSelectEntity>>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<List<GameSelectEntity>> emitter) throws Exception {
+                        emitter.onNext(ApplicationDelegate.getAppDatabase().gameSelectDao().getAll());
                     }
-                    if (!aboveListInfo.isEmpty()) {
-                        for (int i = 0; i < aboveListInfo.size(); i++) {
-                            for (int j = 0; j < list.size(); j++) {
-                                if (aboveListInfo.get(i).getAppName().equals(list.get(j).getAppName())) {
-                                    FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
-                                    firstJunkInfo.setAppName(aboveListInfo.get(i).getAppName());
-                                    firstJunkInfo.setGarbageIcon(aboveListInfo.get(i).getGarbageIcon());
-                                    mSelectList.add(firstJunkInfo);
-                                    mSelectNameList.add(aboveListInfo.get(i).getAppName());
+                });
+                Consumer<List<GameSelectEntity>> consumer = new Consumer<List<GameSelectEntity>>() {
+                    @Override
+                    public void accept(List<GameSelectEntity> list) throws Exception {
+                        if (null == mSelectList || null == mSelectNameList || null == list || list.size() <= 0)
+                            return;
+
+                        ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
+                        List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+                        for (int i = 0; i < packages.size(); i++) {
+                            PackageInfo packageInfo = packages.get(i);
+                            //判断是否系统应用
+                            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) { //非系统应用
+                                FirstJunkInfo tmpInfo = new FirstJunkInfo();
+                                tmpInfo.setAppName(packageInfo.applicationInfo.loadLabel(getPackageManager()).toString());
+                                tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
+                                tmpInfo.setAppPackageName(packageInfo.applicationInfo.packageName);
+                                tmpInfo.setAppProcessName(packageInfo.applicationInfo.processName);
+                                aboveListInfo.add(tmpInfo);
+                            }
+                        }
+                        if (!aboveListInfo.isEmpty()) {
+                            for (int i = 0; i < aboveListInfo.size(); i++) {
+                                for (int j = 0; j < list.size(); j++) {
+                                    if (aboveListInfo.get(i).getAppName().equals(list.get(j).getAppName())) {
+                                        FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                                        firstJunkInfo.setAppName(aboveListInfo.get(i).getAppName());
+                                        firstJunkInfo.setGarbageIcon(aboveListInfo.get(i).getGarbageIcon());
+                                        mSelectList.add(firstJunkInfo);
+                                        mSelectNameList.add(aboveListInfo.get(i).getAppName());
+                                    }
                                 }
                             }
                         }
+                        FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                        firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
+                        mSelectList.add(firstJunkInfo);
+                        mGameSelectAdapter.setData(mSelectList);
                     }
-                    FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
-                    firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
-                    mSelectList.add(firstJunkInfo);
-                    mGameSelectAdapter.setData(mSelectList);
-                }
-            };
-            observable.subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(consumer);
-            mOpenTv.setEnabled(true);
-            mOpenTv.getBackground().setAlpha(255);
-        } else {
-            mOpenTv.setEnabled(false);
-            mOpenTv.getBackground().setAlpha(75);
-            FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
-            firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
-            mSelectList.add(firstJunkInfo);
-            mGameSelectAdapter.setData(mSelectList);
+                };
+                observable.subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(consumer);
+                mOpenTv.setEnabled(true);
+                mOpenTv.getBackground().setAlpha(255);
+            } else {
+                mOpenTv.setEnabled(false);
+                mOpenTv.getBackground().setAlpha(75);
+                FirstJunkInfo firstJunkInfo = new FirstJunkInfo();
+                firstJunkInfo.setGarbageIcon(getResources().getDrawable(R.drawable.icon_add));
+                mSelectList.add(firstJunkInfo);
+                mGameSelectAdapter.setData(mSelectList);
+            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -487,9 +492,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
-                ApplicationDelegate.getAppDatabase().gameSelectDao().deleteAll();
-                ApplicationDelegate.getAppDatabase().gameSelectDao().insertAll(selectSaveList);
+                //Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
+                try {
+                    ApplicationDelegate.getAppDatabase().gameSelectDao().deleteAll();
+                    ApplicationDelegate.getAppDatabase().gameSelectDao().insertAll(selectSaveList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
