@@ -2,11 +2,13 @@ package com.xiaoniu.cleanking.jpush;
 
 import android.content.Context;
 import android.text.TextUtils;
+
 import com.geek.push.GeekPush;
 import com.geek.push.entity.PushCommand;
 import com.geek.push.entity.PushMsg;
 import com.geek.push.receiver.BasePushReceiver;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -23,10 +25,16 @@ public class JPushReceiver extends BasePushReceiver {
                 String url = msg.getKeyValue().get("url");
                 if (!TextUtils.isEmpty(url)) {
                     AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
-                    NiuDataAPIUtil.trackClickJPush("push_info_click", "推送消息点击", "", "notification_page",url,msg.getNotifyId(),msg.getTitle());
+                    NiuDataAPIUtil.trackClickJPush("push_info_click", "推送消息点击", "", "notification_page", url, msg.getNotifyId(), msg.getTitle());
                     SchemeProxy.openScheme(context, url);
+                } else {
+                    //跳转url为空的时候默认冷启动
+                    SchemeProxy.openScheme(context, SchemeConstant.LocalPushScheme.SCHEME_COLD_START);
                 }
             }
+        } else {
+            //没有配置跳转url的时候默认冷启动
+            SchemeProxy.openScheme(context, SchemeConstant.LocalPushScheme.SCHEME_COLD_START);
         }
     }
 
@@ -38,7 +46,7 @@ public class JPushReceiver extends BasePushReceiver {
             for (String key : msg.getKeyValue().keySet()) {
                 String url = msg.getKeyValue().get("url");
                 if (!TextUtils.isEmpty(url)) {
-                    StatisticsUtils.trackClickJShow("push_info_show", "推送消息曝光", "", "notification_page",url,msg.getNotifyId(),msg.getTitle());
+                    StatisticsUtils.trackClickJShow("push_info_show", "推送消息曝光", "", "notification_page", url, msg.getNotifyId(), msg.getTitle());
                 }
             }
         }
