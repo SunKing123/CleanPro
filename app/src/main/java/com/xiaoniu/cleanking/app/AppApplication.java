@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.app;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,6 +20,9 @@ import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +55,7 @@ public class AppApplication extends BaseApplication {
         super.onCreate();
         ContextUtils.initApplication(this);
         //接入百度统计sdk
-        StatService.setAppChannel(this,ChannelUtil.getChannel(),true);
+        StatService.setAppChannel(this, ChannelUtil.getChannel(), true);
         StatService.autoTrace(this);
 
 
@@ -69,7 +73,7 @@ public class AppApplication extends BaseApplication {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                Log.e("lifeCycle","onActivityCreated()"+activity.getLocalClassName());
+                Log.e("lifeCycle", "onActivityCreated()" + activity.getLocalClassName());
             }
 
             @Override
@@ -99,7 +103,7 @@ public class AppApplication extends BaseApplication {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                Log.e("lifeCycle","onActivityDestroyed()"+activity.getLocalClassName());
+                Log.e("lifeCycle", "onActivityDestroyed()" + activity.getLocalClassName());
             }
         });
     }
@@ -116,6 +120,45 @@ public class AppApplication extends BaseApplication {
         super.attachBaseContext(base);
         //解决4.4以下手机启动失败
         MultiDex.install(base);
+        bugFix();
+    }
+
+    /**
+     * bug修复
+     * java.util.concurrent.TimeoutException: com.android.internal.os.BinderInternal$GcWatcher.finalize() timed out
+     * after 10 seconds at com.android.internal.os.BinderInternal$GcWatcher.finalize(BinderInternal.java:47)
+     * https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3256526365190
+     */
+    public static void bugFix() {
+        try {
+            String manufacturer = Build.MANUFACTURER;
+            if (manufacturer != null && manufacturer.length() > 0) {
+                String phone_type = manufacturer.toLowerCase();
+                switch (phone_type) {
+                    case "oppo":
+                    case "xiaomi":
+                        Class clazz = Class.forName("java.lang.Daemons$FinalizerWatchdogDaemon");
+                        Method method = clazz.getSuperclass().getDeclaredMethod("stop");
+                        method.setAccessible(true);
+                        Field field = clazz.getDeclaredField("INSTANCE");
+                        field.setAccessible(true);
+                        method.invoke(field.get(null));
+                        break;
+                }
+
+
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
 }
