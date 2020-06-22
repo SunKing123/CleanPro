@@ -181,14 +181,8 @@ public class TimingReceiver extends BroadcastReceiver {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         long current = System.currentTimeMillis();
         long period = current / 1000 - homePressTime / 1000;
-        //本来是延迟3秒后弹出，但是启动Activity时间较长，所以这里改成2秒
-        if (period >= 2) {
-            context.startActivity(screenIntent);
-        } else {
-            new Handler().postDelayed(() -> {
-                context.startActivity(screenIntent);
-            }, 1000);
-        }
+        //本来是延迟3秒后弹出，但是启动Activity时间较长，所以这里改成2秒(popup window里面延迟了一秒，所以这里先不延迟)
+        context.startActivity(screenIntent);
     }
 
 

@@ -66,18 +66,26 @@ public class PopPushActivity extends AppCompatActivity {
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         );
         setContentView(R.layout.activity_pop_layout);
-        mHandle.postDelayed(this::showPopWindow, 500);
-        mHandle.postDelayed(() -> {
-            if (mPopupWindow != null) {
-                mPopupWindow.dismiss();
-                finish();
-            }
-        }, 5500);
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if (!isFinishing()) {
+            mHandle.postDelayed(this::showPopWindow, 1000);
+            mHandle.postDelayed(() -> {
+                if (mPopupWindow != null) {
+                    mPopupWindow.dismiss();
+                    finish();
+                }
+            }, 6000);
+        }
+    }
 
     private void showPopWindow() {
-
+        if (isFinishing()) {
+            return;
+        }
         // 加载布局
         View mView = View.inflate(this, R.layout.dialog_local_push_layout, null);
         mPopupWindow = new PopupWindow(mView);
@@ -100,7 +108,6 @@ public class PopPushActivity extends AppCompatActivity {
                 y = RomUtils.getNotchSizeAtHuawei(this)[1];
             }
         }
-
 
 
         mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
