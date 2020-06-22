@@ -291,32 +291,36 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             return;
         isScaning = true;
         disposable = Observable.create(e -> {
-            //扫描进程占用内存情况
-            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
-            e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
+            try {
+                //扫描进程占用内存情况
+                ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+                e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
-            //扫描apk安装包
-            List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFileByDb();
-            if(CollectionUtils.isEmpty(apkJunkInfos)){
-                apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
+                //扫描apk安装包
+                List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFileByDb();
+                if(CollectionUtils.isEmpty(apkJunkInfos)){
+                    apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
+                }
+                e.onNext(new JunkWrapper(ScanningResultType.APK_JUNK, apkJunkInfos));
+
+                //扫描卸载残余垃圾
+                ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
+                e.onNext(new JunkWrapper(ScanningResultType.UNINSTALL_JUNK, leaveDataInfo));
+
+                //缓存垃圾
+                HashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkResultMap = mFileQueryUtils.getFileJunkResult();
+                if (!CollectionUtils.isEmpty(junkResultMap)) {
+                    ArrayList<FirstJunkInfo> adJunkInfoList = junkResultMap.get(ScanningResultType.AD_JUNK);
+                    ArrayList<FirstJunkInfo> cacheJunkInfoList = junkResultMap.get(ScanningResultType.CACHE_JUNK);
+                    e.onNext(new JunkWrapper(ScanningResultType.CACHE_JUNK, cacheJunkInfoList));
+                    e.onNext(new JunkWrapper(ScanningResultType.AD_JUNK, adJunkInfoList));
+                }
+
+                //扫描完成表示
+                e.onNext("FINISH");
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            e.onNext(new JunkWrapper(ScanningResultType.APK_JUNK, apkJunkInfos));
-
-            //扫描卸载残余垃圾
-            ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
-            e.onNext(new JunkWrapper(ScanningResultType.UNINSTALL_JUNK, leaveDataInfo));
-
-            //缓存垃圾
-            HashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkResultMap = mFileQueryUtils.getFileJunkResult();
-            if (!CollectionUtils.isEmpty(junkResultMap)) {
-                ArrayList<FirstJunkInfo> adJunkInfoList = junkResultMap.get(ScanningResultType.AD_JUNK);
-                ArrayList<FirstJunkInfo> cacheJunkInfoList = junkResultMap.get(ScanningResultType.CACHE_JUNK);
-                e.onNext(new JunkWrapper(ScanningResultType.CACHE_JUNK, cacheJunkInfoList));
-                e.onNext(new JunkWrapper(ScanningResultType.AD_JUNK, adJunkInfoList));
-            }
-
-            //扫描完成表示
-            e.onNext("FINISH");
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::dispatchScanningJunkResult);
