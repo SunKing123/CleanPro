@@ -30,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.geek.webpage.web.webview.LollipopFixedWebView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
@@ -64,7 +65,7 @@ import butterknife.OnClick;
 public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
 
     @BindView(R.id.webview)
-    WebView mWebView;
+    LollipopFixedWebView mWebView;
     String title;
     String url;
     @BindView(R.id.back)
