@@ -54,7 +54,7 @@ public class TestActivity extends BaseActivity {
         btnSerch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int size = ApplicationDelegate.getAppDatabase().gameSelectDao().getAll().size();
+//                int size = ApplicationDelegate.getAppDatabase().gameSelectDao().getAll().size();
 //                LogUtils.i("---size---"+size);
 //                ToastUtils.showShort("--size--"+size);
             }

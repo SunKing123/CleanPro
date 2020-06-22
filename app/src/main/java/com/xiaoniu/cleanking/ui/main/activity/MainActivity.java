@@ -58,7 +58,6 @@ import com.xiaoniu.cleanking.utils.AESUtils01;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
-import com.xiaoniu.cleanking.utils.db.RoomHelper;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;

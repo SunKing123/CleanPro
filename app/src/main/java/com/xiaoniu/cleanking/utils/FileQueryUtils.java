@@ -268,7 +268,15 @@ public class FileQueryUtils {
                 }
     //            LogUtils.i("getOmiteCache()-packageName-"+packageName);
                 //根据包名筛选的——未安装应用路径列表
-                List<UninstallList> uninstallLists = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getPathList(packageName);
+                List<UninstallList> uninstallLists = new ArrayList<>();
+                try {
+                    List<UninstallList> dbList = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getPathList(packageName);
+                    if(!CollectionUtils.isEmpty(dbList)){
+                        uninstallLists.addAll(dbList);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if (!CollectionUtils.isEmpty(uninstallLists)) {
                     FirstJunkInfo junkInfo = new FirstJunkInfo();
                     junkInfo.setAllchecked(true);

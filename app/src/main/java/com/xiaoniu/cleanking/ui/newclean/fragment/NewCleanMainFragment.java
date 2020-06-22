@@ -1302,11 +1302,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
-                if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao())
-                    return;
-                ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
-                ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
+//                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
+                try {
+                    if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao())
+                        return;
+                    ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
+                    ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -1328,16 +1332,24 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         Observable<List<HomeRecommendListEntity>> observable = Observable.create(new ObservableOnSubscribe<List<HomeRecommendListEntity>>() {
             @Override
             public void subscribe(ObservableEmitter<List<HomeRecommendListEntity>> emitter) throws Exception {
-                Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
-                emitter.onNext(ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll());
+//                Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
+                try {
+                    emitter.onNext(ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         Consumer<List<HomeRecommendListEntity>> consumer = new Consumer<List<HomeRecommendListEntity>>() {
             @Override
             public void accept(List<HomeRecommendListEntity> list) throws Exception {
-                Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
-                if (null == mRecommendAdapter) return;
-                mRecommendAdapter.setData(list);
+//                Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
+                try {
+                    if (null == mRecommendAdapter) return;
+                    mRecommendAdapter.setData(list);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
         observable.subscribeOn(Schedulers.newThread())
