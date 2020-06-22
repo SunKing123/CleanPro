@@ -269,33 +269,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
     }
 
-    public void readCleanExternalDb() {
-        new AsyncTask<String, Integer, Boolean>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onProgressUpdate(Integer... values) {
-                super.onProgressUpdate(values);
-            }
-
-            @Override
-            protected Boolean doInBackground(String... strings) {
-                FileUtils.copyDbFile(ContextUtils.getApplication(), Constant.CLEAN_DB_NAME);
-                return true;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                super.onPostExecute(aBoolean);
-
-
-            }
-        }.execute();
-    }
-
 
     /**
      * 拉取广告开关成功

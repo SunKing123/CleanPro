@@ -69,7 +69,6 @@ public class Constant {
     public static final String YLH_AD_ID = "1110047950";
 
     public static final String WEATHER_DB_NAME = "weatherCity.db";
-    public static final String CLEAN_DB_NAME = "databases/clean_list.db";
     public static final String CLEAN_TABLE_NAME = "XNWeatherCityModel";
     public static final String CLEAN_DB_SAVE = "weather_db_issaved";
 
