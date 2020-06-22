@@ -208,7 +208,6 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("wechat_cleaning_click", "微信专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
-            ((MainActivity) getActivity()).commitJpushClickTime(5);
             if (PreferenceUtil.getWeChatCleanTime()) {
                 // 每次清理间隔 至少3秒
                 startActivity(WechatCleanHomeActivity.class);
@@ -248,7 +247,6 @@ public class ToolFragment extends SimpleFragment {
                 return;
             }
 //            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
-            ((MainActivity) getActivity()).commitJpushClickTime(7);
             if (QQUtil.audioList != null)
                 QQUtil.audioList.clear();
             if (QQUtil.fileList != null)
@@ -257,7 +255,6 @@ public class ToolFragment extends SimpleFragment {
             StatisticsUtils.trackClick("qq_cleaning_click", "QQ专清点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
         } else if (ids == R.id.ll_phone_speed) {
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-            ((MainActivity) getActivity()).commitJpushClickTime(2);
             StatisticsUtils.trackClick("Mobile_phone_acceleration_click", "手机加速点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
             //保存本次清理完成时间 保证每次清理时间间隔为3分钟
             if (!PreferenceUtil.getCleanTime()) {
@@ -300,7 +297,6 @@ public class ToolFragment extends SimpleFragment {
 //            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
             AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_COOLING);
             StatisticsUtils.trackClick("detecting_mobile_temperature_click", "手机降温点击", AppHolder.getInstance().getSourcePageId(), "clean_up_toolbox_page");
-            ((MainActivity) getActivity()).commitJpushClickTime(6);
             // 添加每次降温时间间隔至少3分钟
             if (PreferenceUtil.getCoolingCleanTime()) {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
@@ -351,7 +347,6 @@ public class ToolFragment extends SimpleFragment {
                     if (aBoolean) {//开始更新
                         //手机清理
                         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.PHONE_CLEAN);
-                        //((MainActivity) getActivity()).commitJpushClickTime(3);
                         StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "acceleration_page");
                         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
                     } else {

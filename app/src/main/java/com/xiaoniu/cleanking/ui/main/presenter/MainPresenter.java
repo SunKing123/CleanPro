@@ -27,6 +27,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -93,7 +94,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by tie on 2017/5/15.
  */
-public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements  AMapLocationListener {
+public class MainPresenter extends RxPresenter<MainActivity, MainModel> implements AMapLocationListener {
 
     private final RxAppCompatActivity mActivity;
 
@@ -138,7 +139,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
 
-
     //动态获取后台WebUrl+
     @Deprecated
     public void getWebUrl() {
@@ -176,7 +176,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void commitJPushAlias() {
         if (PreferenceUtil.getIsSaveJPushAlias(AppApplication.getInstance()))
             return;
-        GeekPush.bindAlias(DeviceUtils.getUdid());
+        // GeekPush.bindAlias(DeviceUtils.getUdid());
+        GeekPush.addTag(Constant.APP_NAME + "_" + BuildConfig.VERSION_CODE);
         GeekPush.addTag(BuildConfig.PUSH_TAG);//区分推送环境
         mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
             @Override

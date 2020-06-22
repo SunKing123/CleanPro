@@ -20,10 +20,10 @@ import java.util.Map;
  * 保存埋点来源
  */
 public class AppHolder {
-    private static AppHolder appHolder;
+   // private static AppHolder appHolder;
 
     //广告配置内存缓存
-    public static Map<String, SwitchInfoList.DataBean> mAdsMap = CollectionUtils.createMap();
+  //  public static Map<String, SwitchInfoList.DataBean> mAdsMap = CollectionUtils.createMap();
 
     private AppHolder() {
     }

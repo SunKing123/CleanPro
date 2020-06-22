@@ -80,10 +80,9 @@ public class KeepAliveUtils {
             packageManager = application.getPackageManager();
             applicationInfo = packageManager.getApplicationInfo(application.getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
-            applicationInfo = null;
+            //applicationInfo = null;
+            e.printStackTrace();
         }
-        String applicationName =
-                (String) packageManager.getApplicationLabel(applicationInfo);
-        return applicationName;
+        return  packageManager.getApplicationLabel(applicationInfo).toString();
     }
 }
