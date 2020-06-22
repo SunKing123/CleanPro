@@ -230,7 +230,7 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
 
         mLoading.setReportSuccess(1, "成功删除" + FileSizeUtils.formatFileSize(totalSize));
-        mBtnDel.postDelayed(() -> mLoading.dismissAllowingStateLoss(), 1500);
+        mBtnDel.postDelayed(() -> mLoading.dismissAllowingStateLoss(), 2000);
 
         totalSelectFiles();
 
