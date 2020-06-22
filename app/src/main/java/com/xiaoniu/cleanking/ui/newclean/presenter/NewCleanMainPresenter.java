@@ -235,6 +235,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
                         } else {//点击永久拒绝
                             LogUtils.i("checkStoragePermission()---denied--faile");
                             mView.showPermissionDialog();
+                            mView.permissionDenied();
                         }
                     }
                 });
