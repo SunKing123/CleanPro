@@ -65,6 +65,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     private long totalJunk = 0;
 
     boolean isScaning = false;   //避免重复扫描
+
     /**
      * 底部广告接口
      */
@@ -213,6 +214,9 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
      */
     @SuppressLint("CheckResult")
     public void checkStoragePermission() {
+        if (mView.getActivity() == null || mView.getActivity().isFinishing()) {
+            return;
+        }
         //动画开始播放
 //        mView.startScan();
         LogUtils.i("checkStoragePermission()");
@@ -256,7 +260,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
     private void initScanningListener() {
         if (isScaning == true)
             return;
-        if(compositeDisposable.isDisposed()){
+        if (compositeDisposable.isDisposed()) {
             compositeDisposable = new CompositeDisposable();
         }
 
@@ -270,8 +274,8 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
             public void increaseSize(long increaseSize) {
                 totalJunk += increaseSize;
                 mHandler.post(() -> {
-                    if(mView!=null)
-                    mView.setScanningJunkTotal(totalJunk);
+                    if (mView != null)
+                        mView.setScanningJunkTotal(totalJunk);
                 });
             }
 
@@ -298,7 +302,7 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
 
                 //扫描apk安装包
                 List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFileByDb();
-                if(CollectionUtils.isEmpty(apkJunkInfos)){
+                if (CollectionUtils.isEmpty(apkJunkInfos)) {
                     apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
                 }
                 e.onNext(new JunkWrapper(ScanningResultType.APK_JUNK, apkJunkInfos));
@@ -335,14 +339,14 @@ public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, New
         totalJunk = 0;
         isScaning = false;
         ScanDataHolder.getInstance().setScanState(0);
-        if (null != disposable &&  !disposable.isDisposed()) {
+        if (null != disposable && !disposable.isDisposed()) {
             if (!disposable.isDisposed()) {
                 disposable.dispose();
             }
         }
-        if (null != compositeDisposable &&  !compositeDisposable.isDisposed()) {
-                compositeDisposable.clear();
-                compositeDisposable.dispose();
+        if (null != compositeDisposable && !compositeDisposable.isDisposed()) {
+            compositeDisposable.clear();
+            compositeDisposable.dispose();
         }
     }
 
