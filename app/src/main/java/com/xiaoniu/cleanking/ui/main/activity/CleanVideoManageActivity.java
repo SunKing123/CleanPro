@@ -267,12 +267,14 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
         mPresenter.updateRemoveCache(appInfoBeans);
 
         mLoading.setReportSuccess(1,"成功删除" + FileSizeUtils.formatFileSize(totalSize));
-        mBtnDel.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mLoading.dismissAllowingStateLoss();
-            }
-        },1500);
+        if (mBtnDel!=null){
+            mBtnDel.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mLoading.dismissAllowingStateLoss();
+                }
+            },1500);
+        }
         totalSelectFiles();
 
 
