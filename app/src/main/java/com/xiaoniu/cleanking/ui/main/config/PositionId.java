@@ -30,6 +30,9 @@ public class PositionId {
     public static final String DRAW_TWO_CODE = "advert_position_advert2";
     public static final String DRAW_THREE_CODE = "advert_position_advert3";
 
+
+    public static final String DRAW_TWO_CODE4 = "advert_position_advert4";
+
     public static final String KEY_CLEAN_ALL = "page_immediately_complete";
     public static final String KEY_JIASU = "page_speed_up_complete";
     public static final String KEY_CQSD = "page_save_power_complete";
@@ -45,6 +48,7 @@ public class PositionId {
     public static final String KEY_LOCK_SCREEN = "page_lock_screen";
     public static final String KEY_VIDEO_PLAY = "page_video_play_screen";
     public static final String KEY_ADVERT_LOCK_SCREEN = "advert_lock_screen";  //锁屏模块开关（以advertPosition 区分）
+    public static final String KEY_AD_PAGE_HOME= "page_home";
 
 
     public static final String KEY_FINISH_SWITCH = "page_res_fixed_ad_3";
@@ -105,7 +109,7 @@ public class PositionId {
     public static final String AD_HOME_TOP = "homepage_ad_1";//首页上方广告
     public static final String AD_HOME_TOP_MB = "homepage_ad_1_mb";//首页上方广告//
     public static final String AD_HOME_BOTTOM = "homepage_ad_2";//首页下方广告
-    public static final String AD_HOME_BOTTOM_MB = "homepage_ad_2_mb";//首页下方广告
+    public static final String AD_HOME_CENTER = "homepage_ad_5";//首页下方广告
     public static final String AD_CLEAN_FINISH_MB_ONE = "success_page_ad_1_mb";//完成页广告位1
     public static final String AD_CLEAN_FINISH_MB_TWO = "success_page_ad_2_mb";//完成页广告位2
     public static final String AD_CLEAN_FINISH_MB_THREE = "success_page_ad_3_mb";//完成页广告位3

@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
@@ -38,6 +37,7 @@ import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.ad.view.chjview.ChjBigImgIcTvFlickerBtAdView;
 import com.comm.jksdk.ad.view.chjview.ChjExternalDialogBigImageView;
+import com.comm.jksdk.ad.view.chjview.ChjFeedLeftImageRightTextView;
 import com.comm.jksdk.ad.view.chjview.ChjFullScreenBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.ad.view.chjview.ChjSplashAdView;
 import com.comm.jksdk.ad.view.chjview.InsertScreenAdFullDownloadDialog;
@@ -50,6 +50,7 @@ import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvBtAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhBigImgIcTvFlickerBtAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhExternalDialogBigImageView;
+import com.comm.jksdk.ad.view.ylhview.YlhFeedLeftImageRightTextView;
 import com.comm.jksdk.ad.view.ylhview.YlhFullBigImgIcTvBtCenterAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhFullScreenVideoAdView;
 import com.comm.jksdk.ad.view.ylhview.YlhSplashAdView;
@@ -61,7 +62,6 @@ import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CodeFactory;
 import com.comm.jksdk.utils.CollectionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
-import com.comm.jksdk.utils.ToastUtils;
 import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
@@ -72,7 +72,6 @@ import com.qq.e.ads.nativ.NativeExpressMediaListener;
 import com.qq.e.ads.rewardvideo.RewardVideoAD;
 import com.qq.e.ads.rewardvideo.RewardVideoADListener;
 import com.qq.e.comm.constants.AdPatternType;
-import com.qq.e.comm.pi.AdData;
 import com.qq.e.comm.util.AdError;
 
 import java.util.ArrayList;
@@ -244,6 +243,7 @@ public class NativeAdManger implements AdManager {
         }
         adInfo.setAdStyle(mConfigInfoBean.getAdStyle());
         adInfo.setAdRequestTimeOut(mConfigInfoBean.getAdRequestTimeOut());
+
         adsInfoslist.addAll(mConfigInfoBean.getAdsInfos());
     }
 
@@ -726,6 +726,8 @@ public class NativeAdManger implements AdManager {
             adView = new ChjFullScreenBigImgIcTvBtCenterAdView(activity);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) { //开屏广告
             adView = new ChjSplashAdView(activity);
+        }else if(Constants.AdStyle.ZIXUANRAN_ZUOTU_YOUWEN.equals(style)){
+            adView = new ChjFeedLeftImageRightTextView(activity);
         }
         if (adView == null) {
             if (mAdListener != null) {
@@ -1185,6 +1187,8 @@ public class NativeAdManger implements AdManager {
             adView = new YlhSplashAdView(activity);
         } else if (Constants.AdStyle.FULL_SCREEN_VIDEO.equals(style)) { //全屏视频广告
             adView = new YlhFullScreenVideoAdView(activity);
+        }else if(Constants.AdStyle.ZIXUANRAN_ZUOTU_YOUWEN.equals(style)){
+            adView = new YlhFeedLeftImageRightTextView(activity);
         }
         if (adView == null) {
             if (mAdListener != null) {

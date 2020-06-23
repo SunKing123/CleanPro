@@ -8,45 +8,39 @@
 
     <com.qq.e.ads.nativ.widget.NativeAdContainer
         android:id="@+id/ad_im_layout"
-        android:layout_marginTop="5.5dp"
         android:layout_width="0dp"
         android:layout_height="100dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/ad_tv_title"
-        app:layout_constraintHorizontal_weight="0.5"
-        android:layout_marginRight="10dp">
+        app:layout_constraintDimensionRatio="1.52:1"
+        android:layout_marginRight="5dp">
     <ImageView
         android:id="@+id/ad_item_image"
-        android:background="@color/appdownloader_detail_download_blue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/ad_tv_title"
-        app:layout_constraintHorizontal_weight="0.5"
-        android:layout_marginRight="10dp"
+        android:scaleType="fitXY"
         />
     </com.qq.e.ads.nativ.widget.NativeAdContainer>
     <TextView
         android:id="@+id/ad_tv_title"
-        android:background="@color/tt_skip_red"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         toos:text="淘宝新势力，全场5折起男神传达新风尚"
         android:textSize="@dimen/sp_20"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/ad_im_layout"
-        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintRight_toRightOf="parent"
         android:lines="2"
         />
 
     <TextView
         android:id="@+id/ad_tv_glanceOver"
-        android:background="@color/tt_skip_red"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         toos:text="18899人浏览"
@@ -60,10 +54,12 @@
         android:id="@+id/ad_tv_look"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="立即查看"
-        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/ad_bg_shape_radio_white_12"
+        toos:text="立即查看"
+        android:textColor="#06C581"
         app:layout_constraintBottom_toBottomOf="@+id/ad_im_layout"
-        android:background="@color/appdownloader_detail_download_blue"
+        app:layout_constraintRight_toRightOf="parent"
+        android:padding="6dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

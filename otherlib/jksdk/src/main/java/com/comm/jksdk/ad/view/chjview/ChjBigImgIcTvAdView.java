@@ -59,7 +59,6 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
 
     public ChjBigImgIcTvAdView(Context context) {
         super(context);
-
     }
 
 

@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.utils.AdsUtils;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.NativeADEventListener;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
@@ -28,7 +29,7 @@ import java.util.List;
  * Created by xinxiaolong on 2020/6/23.
  * email：xinxiaolong123@foxmail.com
  */
-public class YlhFeedLeftImageRightText extends YlhAdView {
+public class YlhFeedLeftImageRightTextView extends YlhAdView {
     private ViewGroup adContainer;
     private NativeAdContainer container;
     private ImageView adImage;
@@ -39,14 +40,13 @@ public class YlhFeedLeftImageRightText extends YlhAdView {
     private RequestOptions requestOptions;
     private FrameLayout.LayoutParams adlogoParams;
 
-
-    protected YlhFeedLeftImageRightText(Context context) {
+    public YlhFeedLeftImageRightTextView(Context context) {
         super(context);
     }
-    
+
     @Override
     public int getLayoutId() {
-        return R.layout.ylh_ad_feed_left_image_right_text;
+        return R.layout.ylh_ad_feed_left_image_right_text_layout;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class YlhFeedLeftImageRightText extends YlhAdView {
         int adlogoHeight = DisplayUtil.dp2px(mContext, 12);
         adlogoParams = new FrameLayout.LayoutParams(adlogoWidth, adlogoHeight);
         adlogoParams.gravity = Gravity.BOTTOM;
-        adlogoParams.bottomMargin = DisplayUtil.dp2px(mContext, 8);
-        adlogoParams.leftMargin = (int) (getContext().getResources().getDimension(R.dimen.common_ad_img_width_98dp) - adlogoWidth);
+        adlogoParams.bottomMargin = DisplayUtil.dp2px(mContext, 2);
+        adlogoParams.leftMargin = DisplayUtil.dp2px(mContext, 2);
         requestOptions = new RequestOptions()
                 .transforms(new RoundedCorners(DisplayUtil.dp2px(mContext, 3)))
                 .error(R.color.returncolor);//图片加载失败后，显示的图片
@@ -101,17 +101,20 @@ public class YlhFeedLeftImageRightText extends YlhAdView {
             e.printStackTrace();
         }
 
-        adTitle.setText(ad.getTitle());
-        adGlanceOver.setText(ad.getDesc());
-
+        adTitle.setText(ad.getDesc());
+        adGlanceOver.setText(AdsUtils.getRandomNumByDigit(6) + "人在浏览");
+        adLook.setText("立即查看");
         List<View> clickableViews = new ArrayList<>();
         clickableViews.add(adImage);
-        clickableViews.add(adLook);
+
         try {
             ad.bindAdToView(adContainer.getContext(), container, adlogoParams, clickableViews);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        adLook.setOnClickListener(v -> adImage.callOnClick());
+        adTitle.setOnClickListener(v -> adImage.callOnClick());
 
         ad.setNativeAdEventListener(new NativeADEventListener() {
             @Override

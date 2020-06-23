@@ -57,9 +57,7 @@ public class YlhBigImgIcTvBtAdView extends YlhAdView {
 
     public YlhBigImgIcTvBtAdView(Context context) {
         super(context);
-
     }
-
 
     @Override
     public int getLayoutId() {
