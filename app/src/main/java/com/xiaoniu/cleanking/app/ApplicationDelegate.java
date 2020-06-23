@@ -2,17 +2,19 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
-import io.reactivex.functions.Consumer;
-import io.reactivex.plugins.RxJavaPlugins;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
@@ -44,7 +46,9 @@ import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
+import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
@@ -74,6 +78,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
+
 /**
  * Created by admin on 2017/6/8.
  */
@@ -83,6 +90,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     private static AppDataBase mAppDatabase;
     private static AppPathDataBase mAppPathDataBase;
     private static Handler sHandler = new Handler(Looper.getMainLooper());
+
     @Override
     public void onCreate(Application application) {
 
@@ -113,7 +121,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
 //        LogUtils.i("GeekSdk--"+SystemUtils.getProcessName(application));
         initAdSdk(application);
         initJsBridge();
-        homeCatch(application);
+        if (RomUtils.checkIsHuaWeiRom()) {
+            homeCatch(application);
+        } else if (isMainProcess(application)) {
+            homeCatchOtherDevice(application);
+        }
         initLifecycle(application);
         Logger.addLogAdapter(new AndroidLogAdapter() {
             @Override
@@ -207,6 +219,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     public static AppPathDataBase getAppPathDatabase() {
         return mAppPathDataBase;
     }
+
     public static AppComponent getAppComponent() {
         return mAppComponent;
     }
@@ -351,6 +364,85 @@ public class ApplicationDelegate implements IApplicationDelegate {
         mHomeWatcher.startWatch();
     }
 
+    private LocalPushService.PushBinder mLocalBinder;
+
+    public void homeCatchOtherDevice(Application application) {
+        HomeWatcher mHomeWatcher = new HomeWatcher(application);
+        mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
+            @Override
+            public void onHomePressed() {
+                LogUtils.e("====localPushService onHomePressed键被触发====");
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                long currentTimestamp = System.currentTimeMillis();
+                if (AppLifecycleUtil.isAppOnForeground(application)) {
+                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
+                }
+                if (isMainProcess(application)){
+                    bindLocalPushService(application, currentTimestamp);
+                }
+
+            }
+
+            @Override
+            public void onHomeLongPressed() {  //部分手机不走 onHomePressed();
+                LogUtils.e("=====localPushService onHomeLongPressed键被触发====");
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+                long currentTimestamp = System.currentTimeMillis();
+                if (AppLifecycleUtil.isAppOnForeground(application)) {
+                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
+                }
+                if (isMainProcess(application)){
+                    bindLocalPushService(application, currentTimestamp);
+                }
+            }
+        });
+        mHomeWatcher.startWatch();
+    }
+
+
+    private void bindLocalPushService(Application application, long pressTime) {
+        if (!RomUtils.checkIsHuaWeiRom()) {
+            if (mLocalBinder != null) {
+                mLocalBinder.getService().showPopActivity(pressTime);
+            } else {
+                Intent intent = new Intent(application, LocalPushService.class);
+                LocalPushConnection connection = new LocalPushConnection(pressTime);
+                application.bindService(intent, connection, Context.BIND_ABOVE_CLIENT);
+            }
+        }
+    }
+
+
+    private class LocalPushConnection implements ServiceConnection {
+
+        private long mHomePressHomeTime;
+
+
+        public LocalPushConnection(long time) {
+            this.mHomePressHomeTime = time;
+
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLocalBinder = (LocalPushService.PushBinder) service;
+            if (mLocalBinder != null) {
+                mLocalBinder.getService().showPopActivity(mHomePressHomeTime);
+            }
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    }
 
     private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
 
@@ -381,10 +473,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
                     return;
 
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0&&PreferenceUtil.getHomeBackTime()) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                    for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
-                        if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen() && !PreferenceUtil.isShowAD()) {
+                        if (PositionId.HOT_CODE.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen() && !PreferenceUtil.isShowAD()
+                                && PreferenceUtil.getHomeBackTime(switchInfo.getHotStartInterval())) {
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
@@ -411,7 +504,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
 
-
     public static void post(Runnable runnable) {
         if (sHandler != null && runnable != null) {
             sHandler.post(runnable);
@@ -430,5 +522,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
         }
     }
 
+    private boolean isMainProcess(Application application) {
+        String processName = SystemUtils.getProcessName(application);
+        return processName.equals(application.getPackageName());
+    }
 
 }
