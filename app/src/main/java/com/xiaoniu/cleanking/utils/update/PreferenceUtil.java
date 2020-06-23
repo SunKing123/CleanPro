@@ -1566,6 +1566,19 @@ public class PreferenceUtil {
         return count;
     }
 
+    //更新按返回键退出程序的次数
+    public static void updatePressBackExitAppCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        int count = getPressBackExitAppCount();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, count + 1).apply();
+    }
+
+    //获取按返回键退出程序的次数
+    public static int getPressBackExitAppCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, 0);
+    }
 
     //保存最近一次操作记录_map值
     public static void saveCleanLogMap(Map<String, PushSettingList.DataBean> map) {

@@ -3,26 +3,27 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 
-import com.airbnb.lottie.L;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.AppConfig;
-import com.xiaoniu.cleanking.app.ApplicationDelegate;
 import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -30,20 +31,13 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
-import com.xiaoniu.cleanking.bean.path.AppPath;
-import com.xiaoniu.cleanking.bean.path.UninstallList;
-import com.xiaoniu.cleanking.bean.path.UselessApk;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
-import com.xiaoniu.cleanking.room.clean.UninstallListDao;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
-import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
-import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
-import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
@@ -54,12 +48,11 @@ import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
+import com.xiaoniu.cleanking.ui.main.widget.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
-import com.xiaoniu.cleanking.utils.AESUtils01;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
@@ -74,19 +67,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
@@ -529,11 +513,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
-            } else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof NewCleanMainFragment) {
+            }/* else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof NewCleanMainFragment) {
                 NewCleanMainFragment fragment = (NewCleanMainFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
-            } else {
+            }*/ else {
 //                long secondTime = System.currentTimeMillis();
 //                if (secondTime - firstTime > 1500) {
 //                    // 如果两次按键时间间隔大于800毫秒，则不退出
@@ -550,10 +534,24 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //                    SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);
 //                    AppManager.getAppManager().clearStack();
 //                }
-                Intent home = new Intent(Intent.ACTION_MAIN);
-                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                home.addCategory(Intent.CATEGORY_HOME);
-                startActivity(home);
+                int serverConfig = 0;
+                if (serverConfig == 0) {
+                    ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                    retainDialog.show();
+                } else {
+                    int alreadyExitCount = PreferenceUtil.getPressBackExitAppCount();
+                    if ((alreadyExitCount + 1) % serverConfig == 0) {
+                        ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                        retainDialog.show();
+                    } else {
+                        Intent home = new Intent(Intent.ACTION_MAIN);
+                        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        home.addCategory(Intent.CATEGORY_HOME);
+                        startActivity(home);
+                        //更新按返回键退出程序的次数
+                        PreferenceUtil.updatePressBackExitAppCount();
+                    }
+                }
             }
         }
         StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
