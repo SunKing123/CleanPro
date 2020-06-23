@@ -346,7 +346,6 @@ public class PreferenceUtil {
     }
 
 
-
     /**
      * 保存病毒查杀时间
      *
@@ -699,7 +698,6 @@ public class PreferenceUtil {
         editor.putLong(key, value).commit();
         return true;
     }
-
 
 
     /**
@@ -1058,16 +1056,18 @@ public class PreferenceUtil {
 
 
     /**
-     * 从后台回到前台的时间是否大于5分钟
+     * 从后台回到前台的时间是否大于服务配置好的分钟
      *
-     * @return true 大于2分钟 false 小于2分钟
+     * @return true 大于配置分钟 false 小于配置分钟
      */
-    public static boolean getHomeBackTime() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long time = sharedPreferences.getLong(SpCacheConfig.IS_HOME_BACK_TIME, 0);
-        if (System.currentTimeMillis() - time > 2 * 60 * 1000)
+    public static boolean getHomeBackTime(int configTime) {
+        if (configTime == 0) {
             return true;
-        return false;
+        } else {
+            SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+            long time = sharedPreferences.getLong(SpCacheConfig.IS_HOME_BACK_TIME, 0);
+            return System.currentTimeMillis() - time > configTime * 60 * 1000;
+        }
     }
 
 
@@ -1388,6 +1388,26 @@ public class PreferenceUtil {
         return true;
     }
 
+
+    /**
+     * 保存冷、热启动的次数
+     *
+     * @return
+     */
+    public static void saveColdAndHotStartCount(int count) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.COLD_AND_HOT_START_COUNT, count).apply();
+    }
+
+    /**
+     * 获取冷、热启动的次数
+     */
+    public static int getColdAndHotStartCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.COLD_AND_HOT_START_COUNT, 0);
+    }
+
     /**
      * 获取冷启动打底广告循环展示到第几个
      */
@@ -1702,11 +1722,6 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
-
-
-
-
-
 
 
 }

@@ -74,6 +74,8 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -511,10 +513,19 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
                 if (dataBean.isOpen()) {//内部插屏广告
-                    if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
+                    /*if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
                         PreferenceUtil.saveScreenInsideTime();
                         mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
                         return;
+                    }*/
+                    if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
+                        List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
+                        int startCount = PreferenceUtil.getColdAndHotStartCount();
+                        if (internalList.contains(String.valueOf(startCount))) {
+                            PreferenceUtil.saveScreenInsideTime();
+                            mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
+                            return;
+                        }
                     }
                 }
             }

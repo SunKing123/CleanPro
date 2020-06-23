@@ -11,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Room;
+
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 
@@ -83,6 +84,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     private static AppDataBase mAppDatabase;
     private static AppPathDataBase mAppPathDataBase;
     private static Handler sHandler = new Handler(Looper.getMainLooper());
+
     @Override
     public void onCreate(Application application) {
 
@@ -207,6 +209,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
     public static AppPathDataBase getAppPathDatabase() {
         return mAppPathDataBase;
     }
+
     public static AppComponent getAppComponent() {
         return mAppComponent;
     }
@@ -381,10 +384,11 @@ public class ApplicationDelegate implements IApplicationDelegate {
                     return;
 
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0&&PreferenceUtil.getHomeBackTime()) {
-                    for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                    for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
-                        if (PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen() && !PreferenceUtil.isShowAD()) {
+                        if (PositionId.HOT_CODE.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen() && !PreferenceUtil.isShowAD()
+                                && PreferenceUtil.getHomeBackTime(switchInfo.getHotStartInterval())) {
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
@@ -409,7 +413,6 @@ public class ApplicationDelegate implements IApplicationDelegate {
             }
         });
     }
-
 
 
     public static void post(Runnable runnable) {

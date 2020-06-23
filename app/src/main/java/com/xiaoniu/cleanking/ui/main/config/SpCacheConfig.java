@@ -123,6 +123,7 @@ public class SpCacheConfig {
     public static final String GAME_QUIKCEN_NUM = "game_quikcen_num";
     public static final String RED_PACKET_SHOW = "RedPacketShow";
     public static final String RED_PACKET_FOR = "RedPacketFor";
+    public static final String COLD_AND_HOT_START_COUNT = "cold_and_hot_start_count";
     public static final String RED_PACKET_SHOW_TRIGGER = "RedPacketShowTrigger";
     public static final String IS_SHOW_AD = "isShowAd";
     public static final String HASE_UPDATE_VERSION = "HaseUpdateVersion";
