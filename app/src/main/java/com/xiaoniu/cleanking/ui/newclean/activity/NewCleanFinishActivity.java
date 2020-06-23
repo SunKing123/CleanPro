@@ -18,6 +18,7 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.umeng.socialize.UMShareAPI;
@@ -26,6 +27,7 @@ import com.xiaoniu.cleanking.app.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
@@ -1208,7 +1210,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     public void initPos01Ad() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, PositionId.AD_CLEAN_FINISH_POSITION_ONE, new AdListener() {
+
+        adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_POSITION_FOUR,Float.valueOf (DisplayUtil.px2dp(NewCleanFinishActivity.this, DisplayUtil.getScreenWidth(NewCleanFinishActivity.this)) -28), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (info == null) {
@@ -1216,7 +1219,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 } else {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                     Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
-                    if (info.getAdView() != null) {
+                    if (info.getAdView() != null && null!=ad_container_pos01) {
                         ad_container_pos01.removeAllViews();
                         ad_container_pos01.addView(info.getAdView());
                     }

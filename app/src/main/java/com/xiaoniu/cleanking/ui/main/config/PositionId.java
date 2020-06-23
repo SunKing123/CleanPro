@@ -113,6 +113,8 @@ public class PositionId {
     public static final String AD_CLEAN_FINISH_POSITION_ONE = "success_page_ad_1";//完成页广告位1_自渲染
     public static final String AD_CLEAN_FINISH_POSITION_TWO = "success_page_ad_2";//完成页广告位2_自渲染
     public static final String AD_CLEAN_FINISH_POSITION_THREE = "success_page_ad_3";//完成页广告位3_自渲染
+    public static final String AD_CLEAN_FINISH_POSITION_FOUR = "successpage_ad_1_2";//信息流模板广告
+
     public static final String AD_CLEAN_FINISH_POSITION_CP_AD_2 = "cp_ad_2";//全屏插屏广告
     public static final String AD_CLEAN_INSIDE_ADVERTISING_AD = "inside_advertising_ad";//应用内部插屏广告
 
