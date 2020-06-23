@@ -35,7 +35,7 @@ public class SpCacheConfig {
     public static final String KEY_FUNCTION_POWER_SAVING = "function_power_saving";
 
     //本地弹窗的间隔时间(所有的弹窗共享这个时间)
-    public static final String KEY_GLOBAL_POPUP_TIME="local_push_popup_time";
+    public static final String KEY_GLOBAL_POPUP_TIME = "local_push_popup_time";
 
 
     //后台每隔一小时扫描一次垃圾，该值保存上一次后台扫描完成后的时间
@@ -44,6 +44,9 @@ public class SpCacheConfig {
     public static final String KEY_LAST_BACKGROUND_SCAN_SIZE = "background_scan_size";
     //保存上一次清理APP触发HOME键的时间
     public static final String KEY_LAST_CLEAR_APP_PRESSED_HOME = "clear_app_pressed_home";
+
+    //保存挽留弹窗的次数
+    public static final String KEY_EXIT_RETAIN_DIALOG_COUNT = "exit_retain_dialog_count";
 
     public static final String IS_PUSH_DEVICE_INFO = "is_push_device_info";
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";
@@ -123,6 +126,7 @@ public class SpCacheConfig {
     public static final String GAME_QUIKCEN_NUM = "game_quikcen_num";
     public static final String RED_PACKET_SHOW = "RedPacketShow";
     public static final String RED_PACKET_FOR = "RedPacketFor";
+    public static final String COLD_AND_HOT_START_COUNT = "cold_and_hot_start_count";
     public static final String RED_PACKET_SHOW_TRIGGER = "RedPacketShowTrigger";
     public static final String IS_SHOW_AD = "isShowAd";
     public static final String HASE_UPDATE_VERSION = "HaseUpdateVersion";
@@ -173,7 +177,6 @@ public class SpCacheConfig {
     public static final String POP_FULL_LAYER_NUMBERS = "pop_full_numbers";
 
     public static final String MKV_KEY_HOME_CLEANED_DATA = "mkv_key_home_cleaned_data";
-
 
 
 }

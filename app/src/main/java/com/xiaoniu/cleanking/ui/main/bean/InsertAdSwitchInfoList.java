@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * 插屏广告数据
- *
  */
 public class InsertAdSwitchInfoList extends BaseEntity {
 
@@ -25,6 +24,7 @@ public class InsertAdSwitchInfoList extends BaseEntity {
          * configKey : ID19070801051408093330944156320000
          * isOpen : false
          * switcherName : 开屏广告-android
+         * internalAdRate 当内部插屏该条数据配置返回“展示频次”参数为1,2,3,4  则代表当日第一次、第二次、第三次、第四次启动app时（不分冷热启动）内部插屏显示
          */
 
         private boolean isOpen;
@@ -35,7 +35,17 @@ public class InsertAdSwitchInfoList extends BaseEntity {
         private String advertId;
         private String secondAdvertId;
         private int displayTime;
-        private int showRate =3 ;
+        private int showRate = 3;
+        private String internalAdRate;
+
+        public String getInternalAdRate() {
+            return internalAdRate;
+        }
+
+        public void setInternalAdRate(String internalAdRate) {
+            this.internalAdRate = internalAdRate;
+        }
+
         public int getDisplayTime() {
             return displayTime;
         }
@@ -43,7 +53,6 @@ public class InsertAdSwitchInfoList extends BaseEntity {
         public void setDisplayTime(int displayTime) {
             this.displayTime = displayTime;
         }
-
 
 
         public String getSecondAdvertId() {

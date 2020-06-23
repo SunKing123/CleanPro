@@ -2,12 +2,15 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.animation.Animator;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -30,10 +33,11 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 /**
@@ -53,7 +57,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private final String TAG = "GeekSdk";
 
-    private boolean adClicked=false;
+    private boolean adClicked = false;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_splash_ad_hot;
@@ -85,10 +90,19 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                         InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
                         if (dataBean.isOpen()) {//内部插屏广告
-                            if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
+                           /* if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
                                 PreferenceUtil.saveScreenInsideTime();
                                 startActivity(new Intent(this, ScreenInsideActivity.class));
                                 return;
+                            }*/
+                            if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
+                                List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
+                                int startCount = PreferenceUtil.getColdAndHotStartCount();
+                                if (internalList.contains(String.valueOf(startCount))) {
+                                    PreferenceUtil.saveScreenInsideTime();
+                                    startActivity(new Intent(this, ScreenInsideActivity.class));
+                                    return;
+                                }
                             }
                         }
                     }
@@ -111,6 +125,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         } else {
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         }
+        /*保存冷、热启动的次数*/
+        PreferenceUtil.saveColdAndHotStartCount(PreferenceUtil.getColdAndHotStartCount()+1);
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         initGeekSdkAD();
@@ -156,7 +172,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed 热启动");
 
-                if (null == info||adClicked) return;
+                if (null == info || adClicked) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
                 if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
                     jumpActivity();
@@ -167,7 +183,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "-----adClicked 热启动");
                 if (null == info) return;
-                adClicked=true;
+                adClicked = true;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "hot_splash_page", "hot_splash_page", info.getAdTitle());
             }
 
@@ -266,7 +282,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (!mIsAdError&&!adClicked) {
+                if (!mIsAdError && !adClicked) {
                     jumpActivity();
                 }
             }
@@ -290,7 +306,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
-        if(adClicked){
+        if (adClicked) {
             jumpActivity();
         }
     }

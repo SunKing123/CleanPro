@@ -66,7 +66,6 @@ import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.common.utils.ContextUtils;
-import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -74,7 +73,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -395,10 +394,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
 
                     /*-------------测试专用 start----------------*/
-
-                /*    pushConfigList.clear();
+/*
+                    pushConfigList.clear();
                     LocalPushConfigModel.Item item = new LocalPushConfigModel.Item();
-                    item.setOnlyCode(LocalPushType.TYPE_SPEED_UP);
+                    item.setOnlyCode(LocalPushType.TYPE_SUPER_POWER);
                     item.setIconUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591777551401&di=7c53ecd102576214fee3076839555207&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F68%2F61%2F300000839764127060614318218_950.jpg");
                     item.setDailyLimit(3);
                     //阈值 降温和省电专用
@@ -415,7 +414,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     /*-------------测试专用 end----------------*/
 
 
-                    LogUtils.e("=====:" + new Gson().toJson(pushConfigList));
                     //将从服务器获取的本地推送配置信息保存在SP中
                     PreferenceUtil.saveLocalPushConfig(new Gson().toJson(pushConfigList));
                 }
@@ -511,10 +509,19 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
                 if (dataBean.isOpen()) {//内部插屏广告
-                    if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
+                    /*if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
                         PreferenceUtil.saveScreenInsideTime();
                         mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
                         return;
+                    }*/
+                    if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
+                        List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
+                        int startCount = PreferenceUtil.getColdAndHotStartCount();
+                        if (internalList.contains(String.valueOf(startCount))) {
+                            PreferenceUtil.saveScreenInsideTime();
+                            mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
+                            return;
+                        }
                     }
                 }
             }

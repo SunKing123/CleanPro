@@ -22,6 +22,7 @@ public class SwitchInfoList extends BaseEntity {
          * configKey : ID19070801051408093330944156320000
          * isOpen : false
          * switcherName : 开屏广告-android
+         * hotStartInterval:热启动时间间隔，单位分钟
          */
 
         private boolean isOpen;
@@ -32,6 +33,7 @@ public class SwitchInfoList extends BaseEntity {
         private String advertId;
         private String secondAdvertId;
         private int showRate;
+        private int hotStartInterval;
 
         public String getSecondAdvertId() {
             return secondAdvertId;
@@ -63,6 +65,15 @@ public class SwitchInfoList extends BaseEntity {
 
         public String getAdvertId() {
             return advertId;
+        }
+
+
+        public int getHotStartInterval() {
+            return hotStartInterval;
+        }
+
+        public void setHotStartInterval(int hotStartInterval) {
+            this.hotStartInterval = hotStartInterval;
         }
     }
 }

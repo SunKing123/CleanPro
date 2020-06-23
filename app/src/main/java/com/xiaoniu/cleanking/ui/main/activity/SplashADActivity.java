@@ -1,9 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +15,9 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -46,7 +47,6 @@ import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -60,8 +60,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -96,7 +94,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private String mAdSourse = " "; //广告来源
 
     private final String TAG = "GeekSdk";
-    private boolean adClicked=false;
+    private boolean adClicked = false;
 
 
     @Override
@@ -134,7 +132,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         } else {
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         }
-
+        /*保存冷、热启动的次数*/
+        PreferenceUtil.saveColdAndHotStartCount(PreferenceUtil.getColdAndHotStartCount() + 1);
         if (!NetworkUtils.isNetConnected()) {
             if (!PreferenceUtil.isNotFirstOpenApp()) {
                 mStartView.setVisibility(View.VISIBLE);
@@ -370,7 +369,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void adClicked(AdInfo info) {
                 Log.d(TAG, "adClicked 冷启动");
-                adClicked=true;
+                adClicked = true;
                 PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "clod_splash_page", "clod_splash_page", info.getAdTitle());
@@ -388,7 +387,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void adClose(AdInfo info) {
-                if(adClicked){
+                if (adClicked) {
                     return;
                 }
                 if (info.getAdSource().equals(PositionId.AD_SOURCE_YLH)) {
@@ -511,7 +510,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     PreferenceUtil.saveShowAD(false);
-                    if (!mIsAdError&&!adClicked) {
+                    if (!mIsAdError && !adClicked) {
                         jumpActivity();
                     }
                 }
@@ -584,7 +583,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     @Override
     protected void onResume() {
         super.onResume();
-        if(adClicked){
+        if (adClicked) {
             jumpActivity();
         }
 
