@@ -3,15 +3,19 @@ package com.xiaoniu.cleanking.ui.main.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.L;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -33,6 +37,7 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.room.clean.UninstallListDao;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
@@ -82,6 +87,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import butterknife.BindView;
 import cn.jzvd.Jzvd;
 
@@ -233,9 +239,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
         //获取本地推送配置
-     //   mPresenter.getPushSetList();
+        //   mPresenter.getPushSetList();
         //从服务器获取本地推送的配置信息
         mPresenter.getLocalPushConfigFromServer();
+        //启动本地推送服务的Service(仅针对非华为手机的设备启动，因为在非华为设备在保活进程没有做适配)
+        if (!RomUtils.checkIsHuaWeiRom()) {
+            LogUtils.e("====非华为设备，启动推送Service");
+            startService(new Intent(this, LocalPushService.class));
+
+        }
         //上报设备信息
         if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
             getDeviceInfo();
@@ -253,6 +265,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 ////            AppConfig.showDebugWindow(mContext);
 ////        }
     }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
