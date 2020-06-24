@@ -20,8 +20,10 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
@@ -77,13 +79,15 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
-        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getRedPacketEntityList()
-                || null == AppHolder.getInstance().getRedPacketEntityList().getData()
-                || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
-                || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
-                || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getPopupDataEntity()) {
             return;
-        switch (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
+        }
+        RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
+                AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
+        );
+        if (null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
+            return;
+        switch (redPacketDataBean.getLocation()) {
             case 5:
                 if (null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
                     Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
@@ -108,8 +112,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     }
                 }
                 //所有页面展示红包
-                if (AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0
-                        || PreferenceUtil.getRedPacketShowCount() % AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getTrigger() == 0) {
+                if (redPacketDataBean.getTrigger() == 0
+                        || PreferenceUtil.getRedPacketShowCount() % redPacketDataBean.getTrigger() == 0) {
                     startActivity(new Intent(this, RedPacketHotActivity.class));
                 }
                 break;
@@ -126,7 +130,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         }
         /*保存冷、热启动的次数*/
-        PreferenceUtil.saveColdAndHotStartCount(PreferenceUtil.getColdAndHotStartCount()+1);
+        PreferenceUtil.saveColdAndHotStartCount(PreferenceUtil.getColdAndHotStartCount() + 1);
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         initGeekSdkAD();

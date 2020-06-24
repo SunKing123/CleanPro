@@ -15,6 +15,8 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
+import com.xiaoniu.cleanking.bean.PopupWindowType
+import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.cleanking.utils.ExtraConstant
@@ -57,34 +59,35 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
      * 展示红包
      */
     private fun showRedPacket() {
-        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().redPacketEntityList
-                || null == AppHolder.getInstance().redPacketEntityList.data
-                || AppHolder.getInstance().redPacketEntityList.data.size <= 0
-                || null == AppHolder.getInstance().redPacketEntityList.data[0].imgUrls
-                || AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size <= 0)
+        if (AppHolder.getInstance() == null || AppHolder.getInstance().popupDataEntity == null) {
             return
-        if (AppHolder.getInstance().redPacketEntityList.data[0].showType == 1) { //循环
-            if (PreferenceUtil.getRedPacketShowTrigger() != AppHolder.getInstance().redPacketEntityList.data[0].trigger) {
+        }
+        val redPacketData = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().popupDataEntity, PopupWindowType.POPUP_RED_PACKET)
+
+        if (null == redPacketData.imgUrls || redPacketData.imgUrls.size <= 0)
+            return
+        if (redPacketData.showType == 1) { //循环
+            if (PreferenceUtil.getRedPacketShowTrigger() != redPacketData.trigger) {
                 PreferenceUtil.saveRedPacketForCount(0)
             }
-            PreferenceUtil.saveRedPacketShowTrigger(AppHolder.getInstance().redPacketEntityList.data[0].trigger)
+            PreferenceUtil.saveRedPacketShowTrigger(redPacketData.trigger)
             mCount = PreferenceUtil.getRedPacketForCount()
-            if (mCount >= AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size - 1) {
+            if (mCount >=redPacketData.imgUrls.size - 1) {
                 PreferenceUtil.saveRedPacketForCount(0)
             } else {
                 PreferenceUtil.saveRedPacketForCount(PreferenceUtil.getRedPacketForCount() + 1)
             }
         } else { //随机
-            if (AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size == 1) {
+            if (redPacketData.imgUrls.size == 1) {
                 mCount = 0
             } else {
-                mCount = Random().nextInt(AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size - 1)
+                mCount = Random().nextInt(redPacketData.imgUrls.size - 1)
             }
         }
         if (!isFinishing()) {
 //            preloadingSplashAd(this, PositionId.AD_RED_PACKET, getString(R.string.redpack))
             NiuDataAPI.onPageStart("red_envelopes_page_view_page", "红包弹窗浏览")
-            WebDialogManager.getInstance().showWebDialog(this, this, AppHolder.getInstance().redPacketEntityList.data[0].htmlUrl + AppHolder.getInstance().redPacketEntityList.data[0].imgUrls[mCount])
+            WebDialogManager.getInstance().showWebDialog(this, this, redPacketData.htmlUrl +redPacketData.imgUrls[mCount])
             WebDialogManager.getInstance().setFinishInterface(this)
         }
     }
@@ -194,20 +197,21 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
     }
 
     private fun showWebView() {
-        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().redPacketEntityList
-                || null == AppHolder.getInstance().redPacketEntityList.data
-                || AppHolder.getInstance().redPacketEntityList.data.size <= 0
-                || null == AppHolder.getInstance().redPacketEntityList.data[0].imgUrls
-                || AppHolder.getInstance().redPacketEntityList.data[0].imgUrls.size <= 0) {
+        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().popupDataEntity){
+            return;
+        }
+        val redPacketData = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().popupDataEntity, PopupWindowType.POPUP_RED_PACKET)
+
+        if (null == redPacketData.imgUrls || redPacketData.imgUrls.size <= 0) {
             finish()
             return
         }
-        if (AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount].contains("http")) {
+        if (redPacketData.jumpUrls[mCount].contains("http")) {
             AppHolder.getInstance().cleanFinishSourcePageId = "red_envelopes_page_video_end_page"
             startActivity(Intent(this@RedPacketHotActivity, AgentWebViewActivity::class.java)
-                    .putExtra(ExtraConstant.WEB_URL, AppHolder.getInstance().redPacketEntityList.data[0].jumpUrls[mCount]))
+                    .putExtra(ExtraConstant.WEB_URL,redPacketData.jumpUrls[mCount]))
         }
-        if (!isFinishing()) {
+        if (!isFinishing) {
             finish()
         }
     }

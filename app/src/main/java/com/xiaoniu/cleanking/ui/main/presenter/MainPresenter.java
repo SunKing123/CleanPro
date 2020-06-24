@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
@@ -538,8 +539,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void getData(RedPacketEntity pushSettingList) {
-                AppHolder.getInstance().setRedPacketEntityList(pushSettingList);
-                mView.getRedPacketListSuccess(pushSettingList);
+                AppHolder.getInstance().setPopupDataEntityList(pushSettingList);
+                RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(pushSettingList, PopupWindowType.POPUP_RED_PACKET);
+                mView.getRedPacketListSuccess(data);
             }
 
             @Override
