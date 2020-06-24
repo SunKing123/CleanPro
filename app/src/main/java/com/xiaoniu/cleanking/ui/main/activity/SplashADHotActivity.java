@@ -85,7 +85,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
                 AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
         );
-        if (null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
+        if (redPacketDataBean==null||null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
             return;
         switch (redPacketDataBean.getLocation()) {
             case 5:

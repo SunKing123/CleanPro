@@ -104,6 +104,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
         switch (v.getId()) {
             case R.id.btn_exit:
                 //更新按返回键退出程序的次数
+                dismiss();
                 PreferenceUtil.updatePressBackExitAppCount();
                 Intent home = new Intent(Intent.ACTION_MAIN);
                 home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

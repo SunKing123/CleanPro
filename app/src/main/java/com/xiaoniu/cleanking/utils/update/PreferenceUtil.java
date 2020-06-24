@@ -13,7 +13,6 @@ import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
