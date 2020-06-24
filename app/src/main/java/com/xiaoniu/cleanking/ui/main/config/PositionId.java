@@ -124,6 +124,8 @@ public class PositionId {
 
     public static final String AD_HOME_PAGE_OPERATION_POSITION = "page_operation_position";//首页更多第一条点击激励视频 position_id;
 
+    public static final String AD_RETAIN_THE_POP_UP_WINDOW = "retain_the_pop_up_window";//完成页广告位2_自渲染
+
 
     //悟空开关
     public static final String KEY_CLEAN_FINSH="page_clean_up_complete";

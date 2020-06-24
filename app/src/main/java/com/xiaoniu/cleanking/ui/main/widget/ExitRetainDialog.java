@@ -64,13 +64,13 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
             cancel.setOnClickListener(this);
         }
 
-        initAd02();
+        initAdv();
     }
 
 
-    public void initAd02() {
+    public void initAdv() {
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(activity, PositionId.AD_CLEAN_FINISH_POSITION_TWO, new AdListener() {
+        adManager.loadAd(activity, PositionId.AD_RETAIN_THE_POP_UP_WINDOW, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
