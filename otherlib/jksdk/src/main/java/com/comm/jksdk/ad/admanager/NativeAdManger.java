@@ -125,7 +125,6 @@ public class NativeAdManger implements AdManager {
     private String mProgress;
 
 
-
     private FirstAdListener mFirstAdListener = new FirstAdListener() {
         @Override
         public void firstAdError(AdInfo adInfo, int errorCode, String errorMsg) {
@@ -229,9 +228,10 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 准备数据
+     *
      * @param adInfo
      */
-    public void readyInfo(AdInfo adInfo){
+    public void readyInfo(AdInfo adInfo) {
         //获取本地配置信息
         adsInfoslist.clear();
         ConfigBean.AdListBean mConfigInfoBean = AdsConfig.getInstance(GeekAdSdk.getContext()).getConfig(adInfo.getPosition());
@@ -241,6 +241,16 @@ public class NativeAdManger implements AdManager {
 //            }
             return;
         }
+
+        switch (mConfigInfoBean.getAdPosition()) {
+            case "retain_the_pop_up_window":
+            case "homepage_ad_4":
+            case "successpage_ad_4":
+                Log.e("advInfo", mConfigInfoBean.getAdPosition() + "    " + mConfigInfoBean.getAdStyle() + "   " + mConfigInfoBean.getAdsInfos().get(0).getAdId());
+                break;
+
+        }
+
         adInfo.setAdStyle(mConfigInfoBean.getAdStyle());
         adInfo.setAdRequestTimeOut(mConfigInfoBean.getAdRequestTimeOut());
 
@@ -529,6 +539,7 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 轮询请求
+     *
      * @param adInfo
      * @param adsInfosBean
      */
@@ -558,7 +569,7 @@ public class NativeAdManger implements AdManager {
     /**
      * api 请求
      */
-    public void apiRequest(AdInfo adInfo){
+    public void apiRequest(AdInfo adInfo) {
         // TODO: 2019/12/3
         if (mAdListener != null) {
             mAdListener.adError(adInfo, 2, "暂时不支持api广告");
@@ -568,7 +579,7 @@ public class NativeAdManger implements AdManager {
     /**
      * sdk 请求
      */
-    public void sdkRequest(AdInfo adInfo){
+    public void sdkRequest(AdInfo adInfo) {
         AdRequestManager adRequestManager = new RequestManagerFactory().produce(adInfo);
         if (adRequestManager == null) {
             if (adInfo.isPreload()) {
@@ -582,8 +593,14 @@ public class NativeAdManger implements AdManager {
             }
             return;
         }
+
         //是否已有缓存Adinfo
         AdInfo temAdinfo = CacheAd.getAd(adInfo.getPosition());
+
+        if (temAdinfo != null) {
+            Log.e("advInfo", "取出了缓存数据" + temAdinfo.getAdStyle() + "    " + temAdinfo.getPosition() + "   " + temAdinfo.getAdId());
+        }
+
         if (temAdinfo != null) {
             if (adInfo.isPreload()) {//预加载成功
                 if (mAdPreloadingListener != null) {
@@ -652,10 +669,11 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 创建穿山甲view
+     *
      * @param activity
      * @param adInfo
      */
-    private void createCsjAdView(Activity activity, AdInfo adInfo){
+    private void createCsjAdView(Activity activity, AdInfo adInfo) {
         if (activity == null) {
             if (mAdListener != null) {
                 mAdListener.adError(adInfo, CodeFactory.UNKNOWN, CodeFactory.getError(CodeFactory.UNKNOWN));
@@ -671,12 +689,12 @@ public class NativeAdManger implements AdManager {
         String style = adInfo.getAdStyle();
         //信息流模板广告_带跑马灯
         if (Constants.AdStyle.FEED_TEMPLATE_LAMP.equals(style)) {
-            showCsjFeedTemplate(activity, adInfo,true);
+            showCsjFeedTemplate(activity, adInfo, true);
             return;
         }
         //信息流模板广告
         if (Constants.AdStyle.FEED_TEMPLATE.equals(style)) {
-            showCsjFeedTemplate(activity, adInfo,false);
+            showCsjFeedTemplate(activity, adInfo, false);
             return;
         }
         //全屏视频
@@ -707,7 +725,7 @@ public class NativeAdManger implements AdManager {
         CHJAdView adView = null;
         if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style)) { // 大图_带icon文字按钮
             adView = new ChjBigImgIcTvBtAdView(activity);
-        } else if(Constants.AdStyle.DATU_ICON_TEXT_FLICKER_BUTTON.equals(style)){// 大图_带icon文字_激光按钮
+        } else if (Constants.AdStyle.DATU_ICON_TEXT_FLICKER_BUTTON.equals(style)) {// 大图_带icon文字_激光按钮
             adView = new ChjBigImgIcTvFlickerBtAdView(activity);
         } else if (Constants.AdStyle.DATU_ICON_TEXT.equals(style)) { //大图_带icon文字
             adView = new ChjBigImgIcTvAdView(activity);
@@ -726,7 +744,7 @@ public class NativeAdManger implements AdManager {
             adView = new ChjFullScreenBigImgIcTvBtCenterAdView(activity);
         } else if (Constants.AdStyle.OPEN_ADS.equals(style)) { //开屏广告
             adView = new ChjSplashAdView(activity);
-        }else if(Constants.AdStyle.ZIXUANRAN_ZUOTU_YOUWEN.equals(style)){
+        } else if (Constants.AdStyle.ZIXUANRAN_ZUOTU_YOUWEN.equals(style)) {
             adView = new ChjFeedLeftImageRightTextView(activity);
         }
         if (adView == null) {
@@ -747,10 +765,11 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 显示穿山甲信息模板广告
+     *
      * @param activity
      * @param info
      */
-    private void showCsjFeedTemplate(Activity activity, AdInfo info,boolean islamp) {
+    private void showCsjFeedTemplate(Activity activity, AdInfo info, boolean islamp) {
         TTNativeExpressAd ttNativeExpressAd = info.getTtNativeExpressAd();
         ttNativeExpressAd.setExpressInteractionListener(new TTNativeExpressAd.AdInteractionListener() {
 
@@ -790,10 +809,10 @@ public class NativeAdManger implements AdManager {
 //                TToast.show(mContext, "渲染成功");
 //                mExpressContainer.removeAllViews();
 //                mExpressContainer.addView(view);
-                if(islamp){//带跑马灯样式
+                if (islamp) {//带跑马灯样式
                     RelativeLayout rl = new RelativeLayout(activity);
-                    int currentpx = DisplayUtil.dp2px(activity,10);
-                    rl.setPadding(currentpx,currentpx,currentpx,currentpx);
+                    int currentpx = DisplayUtil.dp2px(activity, 10);
+                    rl.setPadding(currentpx, currentpx, currentpx, currentpx);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         AnimationDrawable mAnimationDrawable;
                         rl.setBackground(activity.getResources().getDrawable(R.drawable.anim_ad));
@@ -806,7 +825,7 @@ public class NativeAdManger implements AdManager {
                     lp1.addRule(RelativeLayout.CENTER_IN_PARENT);
                     rl.addView(view, lp1);
                     info.setAdView(rl);
-                }else{
+                } else {
                     info.setAdView(view);
                 }
 
@@ -817,7 +836,7 @@ public class NativeAdManger implements AdManager {
         });
         //dislike设置
 //        bindDislike(ttNativeExpressAd, false);
-        if (ttNativeExpressAd.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD){
+        if (ttNativeExpressAd.getInteractionType() == TTAdConstant.INTERACTION_TYPE_DOWNLOAD) {
             ttNativeExpressAd.setDownloadListener(new TTAppDownloadListener() {
                 @Override
                 public void onIdle() {
@@ -859,6 +878,7 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 显示穿山甲自定义全屏插屏广告
+     *
      * @param activity
      * @param info
      */
@@ -896,6 +916,7 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 显示穿山甲自定义插屏
+     *
      * @param activity
      * @param info
      */
@@ -931,6 +952,7 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 显示穿山甲模板插屏
+     *
      * @param activity
      * @param info
      */
@@ -978,6 +1000,7 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 显示穿山甲激励视频
+     *
      * @param activity
      * @param adInfo
      */
@@ -1078,10 +1101,11 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 显示穿山甲全屏视频
+     *
      * @param activity
      * @param adInfo
      */
-    private void showCsjFullVideo(Activity activity, AdInfo adInfo){
+    private void showCsjFullVideo(Activity activity, AdInfo adInfo) {
         TTFullScreenVideoAd ttFullScreenVideoAd = adInfo.getTtFullScreenVideoAd();
         if (mAdListener != null) {
             mAdListener.adSuccess(adInfo);
@@ -1127,6 +1151,7 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 创建优量汇view
+     *
      * @param activity
      * @param adInfo
      */
@@ -1167,7 +1192,7 @@ public class NativeAdManger implements AdManager {
         YlhAdView adView = null;
         if (Constants.AdStyle.DATU_ICON_TEXT_BUTTON.equals(style)) { // 大图_带icon文字按钮
             adView = new YlhBigImgIcTvBtAdView(activity);
-        } else if(Constants.AdStyle.DATU_ICON_TEXT_FLICKER_BUTTON.equals(style)){ // 大图_带icon文字_激光按钮
+        } else if (Constants.AdStyle.DATU_ICON_TEXT_FLICKER_BUTTON.equals(style)) { // 大图_带icon文字_激光按钮
             adView = new YlhBigImgIcTvFlickerBtAdView(activity);
         } else if (Constants.AdStyle.DATU_ICON_TEXT.equals(style)) { //大图_带icon文字
             adView = new YlhBigImgIcTvAdView(activity);
@@ -1187,7 +1212,7 @@ public class NativeAdManger implements AdManager {
             adView = new YlhSplashAdView(activity);
         } else if (Constants.AdStyle.FULL_SCREEN_VIDEO.equals(style)) { //全屏视频广告
             adView = new YlhFullScreenVideoAdView(activity);
-        }else if(Constants.AdStyle.ZIXUANRAN_ZUOTU_YOUWEN.equals(style)){
+        } else if (Constants.AdStyle.ZIXUANRAN_ZUOTU_YOUWEN.equals(style)) {
             adView = new YlhFeedLeftImageRightTextView(activity);
         }
         if (adView == null) {
@@ -1207,8 +1232,10 @@ public class NativeAdManger implements AdManager {
     }
 
     NativeExpressADView nativeExpressADView = null;
+
     /**
      * 展示优量汇信息流模板广告
+     *
      * @param activity
      * @param info
      */
@@ -1372,7 +1399,7 @@ public class NativeAdManger implements AdManager {
     }
 
     private NativeExpressMediaListener mediaListener = new NativeExpressMediaListener() {
-        public void  onVideoCached(NativeExpressADView nativeExpressADView){
+        public void onVideoCached(NativeExpressADView nativeExpressADView) {
 
         }
 
@@ -1418,15 +1445,15 @@ public class NativeAdManger implements AdManager {
         }
     };
 
-    public static int getVideoPlayPolicy(int autoPlayPolicy, Context context){
-        if(autoPlayPolicy == VideoOption.AutoPlayPolicy.ALWAYS){
+    public static int getVideoPlayPolicy(int autoPlayPolicy, Context context) {
+        if (autoPlayPolicy == VideoOption.AutoPlayPolicy.ALWAYS) {
             return VideoOption.VideoPlayPolicy.AUTO;
-        }else if(autoPlayPolicy == VideoOption.AutoPlayPolicy.WIFI){
+        } else if (autoPlayPolicy == VideoOption.AutoPlayPolicy.WIFI) {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo wifiNetworkInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             return wifiNetworkInfo != null && wifiNetworkInfo.isConnected() ? VideoOption.VideoPlayPolicy.AUTO
                     : VideoOption.VideoPlayPolicy.MANUAL;
-        }else if(autoPlayPolicy == VideoOption.AutoPlayPolicy.NEVER){
+        } else if (autoPlayPolicy == VideoOption.AutoPlayPolicy.NEVER) {
             return VideoOption.VideoPlayPolicy.MANUAL;
         }
         return VideoOption.VideoPlayPolicy.UNKNOWN;
@@ -1434,6 +1461,7 @@ public class NativeAdManger implements AdManager {
 
     /**
      * 展示优量汇激励视频
+     *
      * @param activity
      * @param info
      */
@@ -1518,8 +1546,10 @@ public class NativeAdManger implements AdManager {
     }
 
     UnifiedInterstitialAD iad = null;
+
     /**
      * 展示优量插屏广告（优量汇只有模板插屏）
+     *
      * @param activity
      * @param info
      */
@@ -1533,9 +1563,10 @@ public class NativeAdManger implements AdManager {
         }
         iad = new UnifiedInterstitialAD(activity, info.getAdAppid(), UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
 
-            public void  onVideoCached(){
+            public void onVideoCached() {
 
             }
+
             @Override
             public void onADReceive() {
                 //广告加载成功
@@ -1588,7 +1619,8 @@ public class NativeAdManger implements AdManager {
 //            UnifiedInterstitialAD finalIad = iad;
 //        }
     }
-    private void showAd(UnifiedInterstitialAD iad){
+
+    private void showAd(UnifiedInterstitialAD iad) {
         if (iad != null) {
             iad.showAsPopupWindow();
         }
