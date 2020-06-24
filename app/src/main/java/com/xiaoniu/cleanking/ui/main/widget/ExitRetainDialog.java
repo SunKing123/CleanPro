@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.widget;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -17,11 +16,9 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
-import com.hellogeek.permission.widget.floatwindow.IFloatingWindow;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * 锁屏退出dialog<p>
