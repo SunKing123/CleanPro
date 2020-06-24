@@ -131,12 +131,11 @@ public class AppHolder {
     }
 
 
-
     public RedPacketEntity.DataBean getPopupDataFromListByType(RedPacketEntity redPacketEntity, @PopupWindowType String type) {
         RedPacketEntity.DataBean dataBean = null;
-        if (redPacketEntity != null) {
+        if (redPacketEntity != null && redPacketEntity.getData() != null) {
             for (RedPacketEntity.DataBean item : redPacketEntity.getData()) {
-                if (item.getPopUpType().equals(type)) {
+                if (!TextUtils.isEmpty(item.getPopUpType()) && type.equals(item.getPopUpType())) {
                     dataBean = item;
                     break;
                 }
