@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.widget;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -12,9 +13,15 @@ import android.widget.FrameLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdListener;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.hellogeek.permission.widget.floatwindow.IFloatingWindow;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 /**
  * 锁屏退出dialog<p>
@@ -56,6 +63,40 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
         if (cancel != null) {
             cancel.setOnClickListener(this);
         }
+
+        initAdv();
+    }
+
+
+    public void initAdv() {
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(activity, PositionId.AD_RETAIN_THE_POP_UP_WINDOW, new AdListener() {
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null != info) {
+                    if (info.getAdView() != null) {
+                        container.removeAllViews();
+                        container.addView(info.getAdView());
+                    }
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                if (null == info) return;
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                if (null == info) return;
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null != info) {
+                }
+            }
+        });
     }
 
     @Override
