@@ -533,8 +533,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //                    AppManager.getAppManager().clearStack();
 //                }
                 RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
-                //更新按返回键退出程序的次数
-                PreferenceUtil.updatePressBackExitAppCount();
                 if (data != null) {
                     int serverConfig = data.getTrigger();
                     if (serverConfig == 0) {
@@ -546,6 +544,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                             ExitRetainDialog retainDialog = new ExitRetainDialog(this);
                             retainDialog.show();
                         } else {
+                            //更新按返回键退出程序的次数
+                            PreferenceUtil.updatePressBackExitAppCount();
                             Intent home = new Intent(Intent.ACTION_MAIN);
                             home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             home.addCategory(Intent.CATEGORY_HOME);
@@ -553,6 +553,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         }
                     }
                 } else {
+                    //更新按返回键退出程序的次数
+                    PreferenceUtil.updatePressBackExitAppCount();
                     Intent home = new Intent(Intent.ACTION_MAIN);
                     home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     home.addCategory(Intent.CATEGORY_HOME);
