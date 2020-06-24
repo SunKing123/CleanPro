@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.DisplayUtil;
+import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.umeng.socialize.UMShareAPI;
@@ -51,6 +53,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -70,6 +73,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cn.jzvd.Jzvd;
+
+import static android.view.View.VISIBLE;
 
 /**
  * 1.2.0 版本以后清理完成 显示资讯
@@ -92,10 +97,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private ImageView iv_quicken, iv_power, iv_notification;
     private boolean isScreenSwitchOpen; //插屏广告开关
     private int mScreenShowCount; //插屏广告展示次数
-
+    private ViewGroup advContentView;
     private int mShowCount; //推荐显示的数量
     private int mRamScale; //所有应用所占内存大小
-
+    private boolean advBottomClicked;
     public static String sourcePage = "";
     public static String currentPage = "";
     String createEventCode = "";
@@ -154,7 +159,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
-
+        advContentView=headerTool.findViewById(R.id.finish_framelayout_ad);
         ad_container_pos02 = headerTool.findViewById(R.id.ad_container_pos02);
         error_ad_iv2 = headerTool.findViewById(R.id.error_ad_iv2);
         mRecommendV = headerTool.findViewById(R.id.v_recommend);
@@ -277,6 +282,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     }
                 }
             }
+
             if (isOpenOne) {
                 initPos01Ad();
             }
@@ -621,6 +627,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         showTool();
     }
 
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+    }
+
+    int showToolMacCount = 2;
+
     /**
      * 是否显示推荐功能项
      */
@@ -628,11 +641,15 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mShowCount = 0;
         mRecommendV.setVisibility(View.VISIBLE);
         if (!getString(R.string.tool_suggest_clean).contains(mTitle) && !PreferenceUtil.isCleanAllUsed()) {
+
+            if (mShowCount >= showToolMacCount) return;
             mShowCount++;
             v_clean_all.setVisibility(View.VISIBLE);
             line_clean_all.setVisibility(View.VISIBLE);
         }
         if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
+            if (mShowCount >= showToolMacCount) return;
+
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;
                 v_quicken.setVisibility(View.VISIBLE);
@@ -646,18 +663,21 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         }
         if (!getString(R.string.tool_super_power_saving).contains(mTitle)) {
+
+            if (mShowCount >= showToolMacCount) return;
+
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;
                 v_power.setVisibility(View.VISIBLE);
-                if (mShowCount < 3) {
+                if (mShowCount < showToolMacCount) {
                     line_power.setVisibility(View.VISIBLE);
                 }
             } else if (!PreferenceUtil.isCleanPowerUsed()) {
                 // 超强省电间隔时间至少3分钟 否则隐藏
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || processNum > 0) {
                     mShowCount++;
-                    v_power.setVisibility(View.VISIBLE);
-                    if (mShowCount < 3) {
+                    if (mShowCount < showToolMacCount) {
+                        v_power.setVisibility(View.VISIBLE);
                         line_power.setVisibility(View.VISIBLE);
                     }
                 }
@@ -665,20 +685,20 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         if (!getString(R.string.tool_notification_clean).contains(mTitle)) {
-            if (mShowCount >= 3) return;
+            if (mShowCount >= showToolMacCount) return;
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 // 通知栏清理间隔时间至少3分钟 否则隐藏
                 mShowCount++;
-                v_notification.setVisibility(View.VISIBLE);
-                if (mShowCount < 3) {
+                if (mShowCount < showToolMacCount) {
+                    v_notification.setVisibility(View.VISIBLE);
                     line_notification.setVisibility(View.VISIBLE);
                 }
             } else if (!PreferenceUtil.isCleanNotifyUsed()) {
                 if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     // 通知栏清理间隔时间至少3分钟 否则隐藏
                     mShowCount++;
-                    v_notification.setVisibility(View.VISIBLE);
-                    if (mShowCount < 3) {
+                    if (mShowCount < showToolMacCount) {
+                        v_notification.setVisibility(View.VISIBLE);
                         line_notification.setVisibility(View.VISIBLE);
                     }
                 }
@@ -687,32 +707,32 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (!getString(R.string.tool_chat_clear).contains(mTitle)) {
             if (!PreferenceUtil.isCleanWechatUsed()) {
                 // 微信清理间隔时间至少3分钟 否则隐藏功能项
-                if (mShowCount >= 3) return;
+                if (mShowCount >= showToolMacCount) return;
                 mShowCount++;
                 v_wechat.setVisibility(View.VISIBLE);
-                if (mShowCount < 3) {
+                if (mShowCount < showToolMacCount) {
                     line_wechat.setVisibility(View.VISIBLE);
                 }
             }
         }
         if (!getString(R.string.game_quicken).contains(mTitle) && !PreferenceUtil.isCleanGameUsed()) {
-            if (mShowCount >= 3) return;
+            if (mShowCount >= showToolMacCount) return;
             mShowCount++;
             v_game.setVisibility(View.VISIBLE);
-            if (mShowCount >= 3) return;
+            if (mShowCount >= showToolMacCount) return;
             line_game.setVisibility(View.VISIBLE);
         }
         if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && !PreferenceUtil.isCleanCoolUsed()) {
             // 手机降温间隔时间至少3分钟 否则隐藏
-            if (mShowCount >= 3) return;
+            if (mShowCount >= showToolMacCount) return;
             mShowCount++;
             v_cool.setVisibility(View.VISIBLE);
-            if (mShowCount >= 3) return;
+            if (mShowCount >= showToolMacCount) return;
             line_cool.setVisibility(View.VISIBLE);
         }
 
         //文件清理
-        if (mShowCount >= 3) return;
+        if (mShowCount >= showToolMacCount) return;
         mShowCount++;
         v_file.setVisibility(View.VISIBLE);
     }
@@ -1083,6 +1103,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     protected void onResume() {
         super.onResume();
         v_power.setEnabled(true);
+        initBottomAdv();
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
         } else {
@@ -1128,7 +1149,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         super.onResume();
         StatusBarCompat.setStatusBarColor(mContext, getResources().getColor(R.color.color_27D698), true);
-}
+    }
 
     @Override
     protected void onPause() {
@@ -1211,7 +1232,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
 
-        adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_POSITION_FOUR,Float.valueOf (DisplayUtil.px2dp(NewCleanFinishActivity.this, DisplayUtil.getScreenWidth(NewCleanFinishActivity.this)) -28), new AdListener() {
+        adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_POSITION_FOUR, Float.valueOf(DisplayUtil.px2dp(NewCleanFinishActivity.this, DisplayUtil.getScreenWidth(NewCleanFinishActivity.this)) - 28), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (info == null) {
@@ -1219,7 +1240,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 } else {
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                     Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
-                    if (info.getAdView() != null && null!=ad_container_pos01) {
+                    if (info.getAdView() != null && null != ad_container_pos01) {
                         ad_container_pos01.removeAllViews();
                         ad_container_pos01.addView(info.getAdView());
                     }
@@ -1386,6 +1407,77 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
+
+    private void initBottomAdv() {
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                Log.e("advInfo",switchInfoList.getConfigKey()+"    "+switchInfoList.getAdvertPosition());
+                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                    break;
+                }
+            }
+        }
+        if (!isOpen) return;
+        if (null == advContentView) return;
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(this, PositionId.DRAW_FINISH_CODE
+                , new AdListener() {
+                    @Override
+                    public void adSuccess(AdInfo info) {
+                        if (null != info) {
+                            Log.d(TAG, "adSuccess--home--center =" + info.getAdSource());
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                            if (null != advContentView && null != info.getAdView()) {
+                                advContentView.setVisibility(VISIBLE);
+                                advContentView.removeAllViews();
+                                advContentView.addView(info.getAdView());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void adExposed(AdInfo info) {
+                        if (null == info) return;
+                        Log.d(TAG, "adExposed--home--center");
+                        advBottomClicked = true;
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
+                    }
+
+                    @Override
+                    public void adClicked(AdInfo info) {
+                        Log.d(TAG, "adClicked--home--center");
+                        if (null == info) return;
+                        if (advBottomClicked) {
+                            StatisticsUtils.clickAD("ad_click", "网络加速激励视频结束页下载点击", "2", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
+                        } else {
+                            StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                        }
+                        if (info.getAdClickType() == 2) { //2=详情
+                            advBottomClicked = true;
+                        } else {
+                            advBottomClicked = false;
+                        }
+                    }
+
+                    @Override
+                    public void adClose(AdInfo info) {
+                        LogUtils.e("AdInfo:" + new Gson().toJson(info));
+                        if (null == info) return;
+                        advContentView.setVisibility(View.GONE);
+                        StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
+                    }
+
+                    @Override
+                    public void adError(AdInfo info, int errorCode, String errorMsg) {
+                        if (null == info) return;
+                        Log.d(TAG, "adError--home--center =" + errorCode + "---" + errorMsg + info.toString());
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+                    }
+                });
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

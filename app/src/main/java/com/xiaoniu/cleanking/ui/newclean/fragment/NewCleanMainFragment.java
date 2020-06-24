@@ -174,7 +174,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private boolean mIsFristShowTopAd; //是否第一次展示头图广告
     private boolean isGameMain; //点击的是主功能的游戏加速还是推荐下的游戏加速
     private boolean mIsClickAdTopDetail; //顶部广告点击是否跳转详情还是下载
-    private boolean mIsClickAdCenterDetail; //顶部广告点击是否跳转详情还是下载
     private boolean mIsTopAdExposed; //广告是否曝光
     private boolean mIsCenterAdExposed; //广告是否曝光
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -268,7 +267,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             viewNews.setVisibility(VISIBLE);
         }
         initGeekAdSdk();
-//        initGeekSdkCenter();
 //        if (null != getActivity()) {
 //            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_VIRUS, getString(R.string.virus_kill));
 //        }
@@ -438,11 +436,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
 
-        if (mIsClickAdCenterDetail) {
-
-        }
-
         initGeekSdkCenter();
+
         //重新检查状态
         checkScanState();
     }
@@ -555,17 +550,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 更多推荐上方广告 样式---大图_下载播放按钮_跑马灯
      */
     private void initGeekSdkCenter() {
-//        boolean isOpen = false;
-//        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-//                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-//            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-//                if (PositionId.KEY_AD_PAGE_HOME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE4.equals(switchInfoList.getAdvertPosition())) {
-//                    isOpen = switchInfoList.isOpen();
-//                    break;
-//                }
-//            }
-//        }
-//        if (!isOpen) return;
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_AD_PAGE_HOME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE5.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                    break;
+                }
+            }
+        }
+        if (!isOpen) return;
         if (null == getActivity() || null == mCenterAdFramelayout) return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", "home_page", "home_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
@@ -602,9 +597,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                             StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
                         }
                         if (info.getAdClickType() == 2) { //2=详情
-                            mIsClickAdCenterDetail = true;
                         } else {
-                            mIsClickAdCenterDetail = false;
                         }
                     }
 
@@ -1170,7 +1163,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
             }
             initGeekAdSdk();
-            initGeekSdkCenter();
             //重新检测头部扫描状态
             checkScanState();
         } else {
