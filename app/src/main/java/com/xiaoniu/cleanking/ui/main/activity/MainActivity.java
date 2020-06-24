@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -192,14 +193,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     }
                 }
 
-                if (null == AppHolder.getInstance().getRedPacketEntityList()
-                        || null == AppHolder.getInstance().getRedPacketEntityList().getData()
-                        || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
-                        || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
-                        || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+                RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
+                        AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
+                );
+                if (null == redPacketDataBean || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
                     return;
-                if (!mShowRedFirst && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-                    showRedPacket(AppHolder.getInstance().getRedPacketEntityList());
+                if (!mShowRedFirst && mCurrentPosition == redPacketDataBean.getLocation()) {
+                    showRedPacket(redPacketDataBean);
                 }
             }
 
@@ -370,14 +370,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (null == AppHolder.getInstance().getRedPacketEntityList()
-                || null == AppHolder.getInstance().getRedPacketEntityList().getData()
-                || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
-                || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
-                || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+        RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
+                AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
+        );
+        if (null == redPacketDataBean || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
             return;
-        if (mIsBack && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
-            showRedPacket(AppHolder.getInstance().getRedPacketEntityList());
+        if (mIsBack && mCurrentPosition == redPacketDataBean.getLocation()) {
+            showRedPacket(redPacketDataBean);
             mIsBack = false;
         }
     }
@@ -385,18 +384,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void onStop() {
         super.onStop();
-        if (null == AppHolder.getInstance().getRedPacketEntityList()
-                || null == AppHolder.getInstance().getRedPacketEntityList().getData()
-                || AppHolder.getInstance().getRedPacketEntityList().getData().size() <= 0
-                || null == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls()
-                || AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getImgUrls().size() <= 0)
+        RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
+                AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
+        );
+        if (null == redPacketDataBean || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
             return;
-        if (!AppLifecycleUtil.isAppOnForeground(this)
-                && mCurrentPosition == AppHolder.getInstance().getRedPacketEntityList().getData().get(0).getLocation()) {
+        if (!AppLifecycleUtil.isAppOnForeground(this) && mCurrentPosition == redPacketDataBean.getLocation()) {
             //app 进入后台
             mIsBack = true;
         }
     }
+
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -534,24 +532,35 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //                    SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);
 //                    AppManager.getAppManager().clearStack();
 //                }
-                int serverConfig = 0;
-                if (serverConfig == 0) {
-                    ExitRetainDialog retainDialog = new ExitRetainDialog(this);
-                    retainDialog.show();
-                } else {
-                    int alreadyExitCount = PreferenceUtil.getPressBackExitAppCount();
-                    if ((alreadyExitCount + 1) % serverConfig == 0) {
+                RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
+                if (data != null) {
+                    int serverConfig = data.getTrigger();
+                    if (serverConfig == 0) {
                         ExitRetainDialog retainDialog = new ExitRetainDialog(this);
                         retainDialog.show();
                     } else {
-                        Intent home = new Intent(Intent.ACTION_MAIN);
-                        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        home.addCategory(Intent.CATEGORY_HOME);
-                        startActivity(home);
-                        //更新按返回键退出程序的次数
-                        PreferenceUtil.updatePressBackExitAppCount();
+                        int alreadyExitCount = PreferenceUtil.getPressBackExitAppCount();
+                        if ((alreadyExitCount + 1) % serverConfig == 0) {
+                            ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                            retainDialog.show();
+                        } else {
+                            //更新按返回键退出程序的次数
+                            PreferenceUtil.updatePressBackExitAppCount();
+                            Intent home = new Intent(Intent.ACTION_MAIN);
+                            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            home.addCategory(Intent.CATEGORY_HOME);
+                            startActivity(home);
+                        }
                     }
+                } else {
+                    //更新按返回键退出程序的次数
+                    PreferenceUtil.updatePressBackExitAppCount();
+                    Intent home = new Intent(Intent.ACTION_MAIN);
+                    home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    home.addCategory(Intent.CATEGORY_HOME);
+                    startActivity(home);
                 }
+
             }
         }
         StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
@@ -686,28 +695,30 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      *
      * @param redPacketEntity
      */
-    public void getRedPacketListSuccess(RedPacketEntity redPacketEntity) {
-        if (PreferenceUtil.isHaseUpdateVersion() || null == redPacketEntity || null == redPacketEntity.getData()
-                || redPacketEntity.getData().size() <= 0 || null == redPacketEntity.getData().get(0).getImgUrls()
-                || redPacketEntity.getData().get(0).getImgUrls().size() <= 0)
+    public void getRedPacketListSuccess(RedPacketEntity.DataBean redPacketEntity) {
+        if (PreferenceUtil.isHaseUpdateVersion() || null == redPacketEntity
+                || null == redPacketEntity.getImgUrls()
+                || redPacketEntity.getImgUrls().size() <= 0)
             return;
-        if (redPacketEntity.getData().get(0).getLocation() == 0
-                || redPacketEntity.getData().get(0).getLocation() == 1
-                || redPacketEntity.getData().get(0).getLocation() == 5) {
+        if (redPacketEntity.getLocation() == 0
+                || redPacketEntity.getLocation() == 1
+                || redPacketEntity.getLocation() == 5) {
+
             showRedPacket(redPacketEntity);
+
         }
     }
 
     /**
      * 展示红包
      */
-    private void showRedPacket(RedPacketEntity redPacketEntity) {
+    private void showRedPacket(RedPacketEntity.DataBean data) {
         if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
-        if (redPacketEntity.getData().get(0).getTrigger() == 0
-                || PreferenceUtil.getRedPacketShowCount() % redPacketEntity.getData().get(0).getTrigger() == 0) {
+        if (data.getTrigger() == 0
+                || PreferenceUtil.getRedPacketShowCount() % data.getTrigger() == 0) {
             mShowRedFirst = true;
             if (!isFinishing()) {
                 startActivity(new Intent(this, RedPacketHotActivity.class));

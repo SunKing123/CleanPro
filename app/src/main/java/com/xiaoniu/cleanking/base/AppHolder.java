@@ -4,6 +4,8 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -20,10 +22,10 @@ import java.util.Map;
  * 保存埋点来源
  */
 public class AppHolder {
-   // private static AppHolder appHolder;
+    // private static AppHolder appHolder;
 
     //广告配置内存缓存
-  //  public static Map<String, SwitchInfoList.DataBean> mAdsMap = CollectionUtils.createMap();
+    //  public static Map<String, SwitchInfoList.DataBean> mAdsMap = CollectionUtils.createMap();
 
     private AppHolder() {
     }
@@ -67,7 +69,6 @@ public class AppHolder {
     private String cleanFinishSourcePageId = "";
 
 
-
     public String getSourcePageId() {
         return sourcePageId;
     }
@@ -83,7 +84,6 @@ public class AppHolder {
     public String getOtherSourcePageId() {
         return otherSourcePageId;
     }
-
 
 
     public Map<String, InsertAdSwitchInfoList.DataBean> getInsertAdSwitchmap() {
@@ -111,7 +111,6 @@ public class AppHolder {
     }
 
 
-
     public void setBottomAdList(List<BottoomAdList.DataBean> switchInfoList) {
         this.mBottoomAdList = switchInfoList;
         MmkvUtil.setBottoomAdInfo(new Gson().toJson(mBottoomAdList));
@@ -123,15 +122,28 @@ public class AppHolder {
     }
 
 
-
-    public void setRedPacketEntityList(RedPacketEntity redPacketEntity) {
+    public void setPopupDataEntityList(RedPacketEntity redPacketEntity) {
         this.mRedPacketEntity = redPacketEntity;
     }
 
-    public RedPacketEntity getRedPacketEntityList() {
+    public RedPacketEntity getPopupDataEntity() {
         return mRedPacketEntity;
     }
 
+
+
+    public RedPacketEntity.DataBean getPopupDataFromListByType(RedPacketEntity redPacketEntity, @PopupWindowType String type) {
+        RedPacketEntity.DataBean dataBean = null;
+        if (redPacketEntity != null) {
+            for (RedPacketEntity.DataBean item : redPacketEntity.getData()) {
+                if (item.getPopUpType().equals(type)) {
+                    dataBean = item;
+                    break;
+                }
+            }
+        }
+        return dataBean;
+    }
 
 
     public void setIconsEntityList(IconsEntity iconsEntity) {
@@ -152,12 +164,13 @@ public class AppHolder {
     }
 
     /**
-     *  总开关检查
+     * 总开关检查
+     *
      * @param configKey
      * @param advertPosition
      * @return
      */
-    public boolean checkAdSwitch(String configKey,String advertPosition){
+    public boolean checkAdSwitch(String configKey, String advertPosition) {
         boolean isOpen = false;
         if (null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey) && !TextUtils.isEmpty(advertPosition)) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
@@ -166,16 +179,17 @@ public class AppHolder {
                 }
             }
         }
-       return isOpen;
+        return isOpen;
     }
 
 
     /**
-     *  总开关检查
+     * 总开关检查
+     *
      * @param configKey
      * @return
      */
-    public boolean checkAdSwitch(String configKey){
+    public boolean checkAdSwitch(String configKey) {
         boolean isOpen = false;
         if (null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey)) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
@@ -188,7 +202,8 @@ public class AppHolder {
     }
 
     /**
-     *  插屏开关Data
+     * 插屏开关Data
+     *
      * @param configKey
      * @return
      */
@@ -205,16 +220,17 @@ public class AppHolder {
 
 
     /**
-     *  插屏开关Data
+     * 插屏开关Data
+     *
      * @param configKey
      * @return
      */
-    public InsertAdSwitchInfoList.DataBean getInsertAdInfo(String configKey,String insertData) {
+    public InsertAdSwitchInfoList.DataBean getInsertAdInfo(String configKey, String insertData) {
         if (!TextUtils.isEmpty(insertData)) {
-            InsertAdSwitchInfoList dataBean = new Gson().fromJson(insertData,InsertAdSwitchInfoList.class);
-            if(null!=dataBean && dataBean.getData()!=null && dataBean.getData().size()>0){
+            InsertAdSwitchInfoList dataBean = new Gson().fromJson(insertData, InsertAdSwitchInfoList.class);
+            if (null != dataBean && dataBean.getData() != null && dataBean.getData().size() > 0) {
                 List<InsertAdSwitchInfoList.DataBean> dataBeans = dataBean.getData();
-                for(int i=0;i<dataBeans.size();i++){
+                for (int i = 0; i < dataBeans.size(); i++) {
                     InsertAdSwitchInfoList.DataBean posData = dataBeans.get(i);
                     if (null != posData && posData.getConfigKey().equals(configKey)) {
                         return posData;
@@ -224,7 +240,6 @@ public class AppHolder {
         }
         return null;
     }
-
 
 
 }

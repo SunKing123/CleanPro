@@ -30,6 +30,16 @@ public class RedPacketEntity extends BaseEntity {
         private int showType;
         private List<String> imgUrls;
         private List<String> jumpUrls;
+        //弹窗类型 红包弹窗、挽留弹窗
+        private String popUpType;
+
+        public String getPopUpType() {
+            return popUpType;
+        }
+
+        public void setPopUpType(String popUpType) {
+            this.popUpType = popUpType;
+        }
 
         public String getHtmlUrl() {
             return htmlUrl;
