@@ -63,7 +63,6 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
         if (cancel != null) {
             cancel.setOnClickListener(this);
         }
-
         initAdv();
     }
 
