@@ -795,6 +795,23 @@
           "adsAppName": "清理管家极速版"
         }
       ]
+    }, {
+      "productId": 1,
+      "adVersion": 5,
+      "adPosition": "homepage_ad_5",
+      "adStyle": "ZIXUANRAN_ZUOTU_YOUWEN",
+      "adRequestTimeOut": 0,
+      "isChange": 1,
+      "adsInfos": [
+        {
+          "adId": "1001214626959119",
+          "adUnion": "youlianghui",
+          "requestOrder": 2,
+          "requestType": 0,
+          "adsAppId": "1110047950",
+          "adsAppName": "清理管家极速版"
+        }
+      ]
     }
   ]
 }

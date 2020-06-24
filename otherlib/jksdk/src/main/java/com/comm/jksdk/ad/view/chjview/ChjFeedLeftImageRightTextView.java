@@ -3,12 +3,12 @@ package com.comm.jksdk.ad.view.chjview;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,71 +24,61 @@ import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.http.utils.LogUtils;
+import com.comm.jksdk.utils.AdsUtils;
 import com.comm.jksdk.utils.DisplayUtil;
+import com.qq.e.ads.nativ.NativeADEventListener;
+import com.qq.e.ads.nativ.NativeUnifiedADData;
+import com.qq.e.ads.nativ.widget.NativeAdContainer;
+import com.qq.e.comm.util.AdError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
-  *
-  * @ProjectName:    ${PROJECT_NAME}
-  * @Package:        ${PACKAGE_NAME}
-  * @ClassName:      ${NAME}
-  * @Description:     大图_带icon文字
-  * @Author:         fanhailong
-  * @CreateDate:     ${DATE} ${TIME}
-  * @UpdateUser:     更新者：
-  * @UpdateDate:     ${DATE} ${TIME}
-  * @UpdateRemark:   更新说明：
-  * @Version:        1.0
+ * Created by xinxiaolong on 2020/6/23.
+ * email：xinxiaolong123@foxmail.com
  */
+public class ChjFeedLeftImageRightTextView extends CHJAdView {
+    private ViewGroup adContainer;
+    private ImageView adImage;
+    private TextView adTitle;
+    private TextView adGlanceOver;
+    private TextView adLook;
+    private ImageView adLogo;
 
-
-public class ChjBigImgIcTvAdView extends CHJAdView {
-    // 广告实体数据
-    private TTFeedAd mNativeADData = null;
     private RequestOptions requestOptions;
-    private FrameLayout.LayoutParams adlogoParams;
 
-    RelativeLayout nativeAdContainer;
-    ImageView brandIconIm; //广告商图标
-    TextView adTitleTv; //广告的title
-    TextView adDescribeTv; //广告描述
-    ImageView adIm; //广告主体图片
-    ImageView adLogo;
-
-    public ChjBigImgIcTvAdView(Context context) {
+    public ChjFeedLeftImageRightTextView(Context context) {
         super(context);
     }
 
-
     @Override
     public int getLayoutId() {
-        return R.layout.chj_ad_big_ic_tv_layout;
+        return R.layout.chj_ad_feed_left_image_right_text_layout;
     }
 
     @Override
     public void initView() {
-
-        nativeAdContainer = findViewById(R.id.rl_ad_item_root);
-        brandIconIm = findViewById(R.id.brand_icon_im);
-        adTitleTv = findViewById(R.id.ad_title_tv);
-        adDescribeTv = findViewById(R.id.ad_describe_tv);
-        adIm = findViewById(R.id.ad_im);
-        adLogo = findViewById(R.id.ad_logo);
         if (mContext == null) {
             return;
         }
-        int adlogoWidth = DisplayUtil.dp2px(mContext, 30);
-        int adlogoHeight = DisplayUtil.dp2px(mContext, 12);
-        adlogoParams = new FrameLayout.LayoutParams(adlogoWidth, adlogoHeight);
-        adlogoParams.gravity = Gravity.BOTTOM;
-        adlogoParams.bottomMargin = DisplayUtil.dp2px(mContext, 8);
-        adlogoParams.leftMargin = (int) (getContext().getResources().getDimension(R.dimen.common_ad_img_width_98dp) - adlogoWidth);
+
+        adContainer = findViewById(R.id.rl_ad_item_root);
+        adImage = findViewById(R.id.ad_item_image);
+        adTitle = findViewById(R.id.ad_tv_title);
+        adGlanceOver = findViewById(R.id.ad_tv_glanceOver);
+        adLook = findViewById(R.id.ad_tv_look);
+        adLogo = findViewById(R.id.ad_logo);
+
+
         requestOptions = new RequestOptions()
                 .transforms(new RoundedCorners(DisplayUtil.dp2px(mContext, 3)))
                 .error(R.color.returncolor);//图片加载失败后，显示的图片
     }
+
 
     @Override
     public void parseAd(AdInfo adInfo) {
@@ -103,8 +93,8 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
      * @param adData
      */
     private void initAdData(TTFeedAd adData, AdInfo adInfo) {
-        if ( mContext == null) {
-            firstAdError(adInfo,1, "mContext 为空");
+        if (mContext == null) {
+            firstAdError(adInfo, 1, "mContext 为空");
             return;
         }
 
@@ -112,30 +102,35 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
             firstAdError(adInfo, 1, "返回结果不是大图");
             return;
         }
-        nativeAdContainer.setVisibility(VISIBLE);
 
-        bindData(nativeAdContainer,adData, adInfo);
-
+        bindData(adContainer, adData, adInfo);
     }
 
     private void bindData(View convertView, TTFeedAd ad, AdInfo adInfo) {
-        TTImage icon = ad.getIcon();
-        if (icon != null && icon.isValid()) {
-            Glide.with(mContext).load(icon.getImageUrl())
-                    .transition(new DrawableTransitionOptions().crossFade())
-                    .apply(requestOptions)
-                    .into(brandIconIm);
-        }
         adLogo.setImageBitmap(ad.getAdLogo());
-        adTitleTv.setText(ad.getTitle());
-        adDescribeTv.setText(ad.getDescription());
+        TTImage image = ad.getImageList().get(0);
+        if (image != null && image.isValid()) {
+            try {
+                Glide.with(mContext).load(image.getImageUrl())
+                        .transition(new DrawableTransitionOptions().crossFade())
+                        .apply(requestOptions)
+                        .into(adImage);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        adTitle.setText(ad.getDescription());
+        adGlanceOver.setText(AdsUtils.getRandomNumByDigit(6)+"人在浏览");
         //可以被点击的view, 也可以把convertView放进来意味item可被点击
         List<View> clickViewList = new ArrayList<>();
-        clickViewList.add(adIm);
-        clickViewList.add(nativeAdContainer);
+        clickViewList.add(adImage);
+        clickViewList.add(adLook);
+        clickViewList.add(adContainer);
         //触发创意广告的view（点击下载或拨打电话）
         List<View> creativeViewList = new ArrayList<>();
-        creativeViewList.add(nativeAdContainer);
+        creativeViewList.add(adContainer);
         //如果需要点击图文区域也能进行下载或者拨打电话动作，请将图文区域的view传入
 //            creativeViewList.add(convertView);
         //重要! 这个涉及到广告计费，必须正确调用。convertView必须使用ViewGroup。
@@ -165,18 +160,6 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
             }
         });
 
-        TTImage image = ad.getImageList().get(0);
-        if (image != null && image.isValid()) {
-            try {
-                Glide.with(mContext).load(image.getImageUrl())
-                        .transition(new DrawableTransitionOptions().crossFade())
-                        .apply(requestOptions)
-                        .into(adIm);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         switch (ad.getInteractionType()) {
             case TTAdConstant.INTERACTION_TYPE_DOWNLOAD:
@@ -184,27 +167,24 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
                 if (mContext instanceof Activity) {
                     ad.setActivityForDownloadApp((Activity) mContext);
                 }
-//                nativeAdContainer.setVisibility(View.VISIBLE);
+                adLook.setText("下载");
                 bindDownloadListener(ad);
                 //绑定下载状态控制器
                 bindDownLoadStatusController(ad);
                 break;
             case TTAdConstant.INTERACTION_TYPE_DIAL:
-//                nativeAdContainer.setVisibility(View.VISIBLE);
-//                tvDownload.setText("立即拨打");
             case TTAdConstant.INTERACTION_TYPE_LANDING_PAGE:
             case TTAdConstant.INTERACTION_TYPE_BROWSER:
-//                nativeAdContainer.setVisibility(View.VISIBLE);
-//                tvDownload.setText("查看详情");
+                adLook.setText("立即查看");
             default:
 //                nativeAdContainer.setVisibility(View.GONE);
 //                ToastUtils.setToastStrShort("交互类型异常");
         }
-
     }
-    private void bindDownLoadStatusController( final TTFeedAd ad) {
+
+    private void bindDownLoadStatusController(final TTFeedAd ad) {
         final DownloadStatusController controller = ad.getDownloadStatusController();
-        nativeAdContainer.setOnClickListener(new OnClickListener() {
+        adContainer.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (controller != null) {
@@ -214,16 +194,16 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
                 }
             }
         });
-
     }
 
-    private void bindDownloadListener( TTFeedAd ad) {
+    private void bindDownloadListener(TTFeedAd ad) {
         TTAppDownloadListener downloadListener = new TTAppDownloadListener() {
             @Override
             public void onIdle() {
                 if (!isValid()) {
                     return;
                 }
+                adLook.setText("下载");
             }
 
             @SuppressLint("SetTextI18n")
@@ -259,6 +239,7 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
                 if (!isValid()) {
                     return;
                 }
+                adLook.setText("下载");
             }
 
             @Override
@@ -266,6 +247,7 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
                 if (!isValid()) {
                     return;
                 }
+                adLook.setText("立即打开");
             }
 
             @Override
@@ -273,6 +255,7 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
                 if (!isValid()) {
                     return;
                 }
+                adLook.setText("立即安装");
             }
 
             @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -284,5 +267,6 @@ public class ChjBigImgIcTvAdView extends CHJAdView {
         ad.setDownloadListener(downloadListener); // 注册下载监听器
 
     }
+
 
 }

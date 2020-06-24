@@ -94,6 +94,11 @@ public class Constants {
          * 大图_带icon文字_激光按钮
          */
         String DATU_ICON_TEXT_FLICKER_BUTTON = "DATU_ICON_TEXT_FLICKER_BUTTON";
+
+        /**
+         * 信息流，左图右文
+         */
+        String ZIXUANRAN_ZUOTU_YOUWEN = "ZIXUANRAN_ZUOTU_YOUWEN";
     }
 
 

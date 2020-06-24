@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -50,7 +49,6 @@ import com.xiaoniu.cleanking.bean.MainTableItem;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NewsActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
@@ -91,7 +89,6 @@ import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -109,7 +106,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -145,7 +141,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     ImageView mImageFirstAd;
     @BindView(R.id.image_ad_bottom_second)
     ImageView mImageSecondAd;
-
 
     @BindView(R.id.recycleview)
     RecyclerView mRecyclerView;
@@ -444,8 +439,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewGame.setEnabled(true);
 
         if (mIsClickAdCenterDetail) {
-            initGeekSdkCenter();
+
         }
+
+        initGeekSdkCenter();
         //重新检查状态
         checkScanState();
     }
@@ -532,6 +529,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         });
     }
 
+
     private void showAd(View adView) {
         mTopAdFramelayout.removeAllViews();
         mTopAdFramelayout.addView(adView);
@@ -557,21 +555,21 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
      * 更多推荐上方广告 样式---大图_下载播放按钮_跑马灯
      */
     private void initGeekSdkCenter() {
-        boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_HOME_AD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
-        if (!isOpen) return;
+//        boolean isOpen = false;
+//        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+//                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+//            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+//                if (PositionId.KEY_AD_PAGE_HOME.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE4.equals(switchInfoList.getAdvertPosition())) {
+//                    isOpen = switchInfoList.isOpen();
+//                    break;
+//                }
+//            }
+//        }
+//        if (!isOpen) return;
         if (null == getActivity() || null == mCenterAdFramelayout) return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", "home_page", "home_page");
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadNativeTemplateAd(getActivity(), PositionId.AD_HOME_BOTTOM_MB
-                , Float.valueOf(DisplayUtil.px2dp(getActivity(), DisplayUtil.getScreenWidth(getActivity())) - 28)
+        adManager.loadAd(getActivity(), PositionId.AD_HOME_CENTER
                 , new AdListener() {
                     @Override
                     public void adSuccess(AdInfo info) {
@@ -1280,7 +1278,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         } else {
             showText01 = getString(R.string.recommend_count_hint, String.valueOf(mShowCount));
         }
-      //  SpannableString msp = new SpannableString(showText);
+        //  SpannableString msp = new SpannableString(showText);
         SpannableString msp01 = new SpannableString(showText01);
         msp01.setSpan(new AbsoluteSizeSpan(ScreenUtils.dpToPx(mContext, 17)), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         msp01.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, showText01.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
