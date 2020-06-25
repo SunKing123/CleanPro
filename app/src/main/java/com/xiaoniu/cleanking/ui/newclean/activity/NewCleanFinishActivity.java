@@ -1413,7 +1413,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                Log.e("advInfo",switchInfoList.getConfigKey()+"    "+switchInfoList.getAdvertPosition());
                 if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpen = switchInfoList.isOpen();
                     break;

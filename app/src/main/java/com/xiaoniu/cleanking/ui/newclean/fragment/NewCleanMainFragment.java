@@ -379,6 +379,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
     }
 
+
     /**
      * 互动式广告
      */
@@ -400,7 +401,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                     startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                             .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
                 }
-
             }
             mInteractionPoistion++;
         }
@@ -441,7 +441,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         //重新检查状态
         checkScanState();
     }
-
 
     public void setIsGotoSetting(boolean isGotoSetting) {
         this.isGotoSetting = isGotoSetting;

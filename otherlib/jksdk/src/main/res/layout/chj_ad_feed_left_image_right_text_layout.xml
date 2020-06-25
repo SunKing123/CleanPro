@@ -4,13 +4,14 @@
     xmlns:toos="http://schemas.android.com/tools"
     android:id="@+id/rl_ad_item_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+  >
 
     <ImageView
         android:id="@+id/ad_item_image"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginRight="5dp"
+        android:layout_height="80dp"
+        android:layout_marginRight="2dp"
         app:layout_constraintDimensionRatio="1.52:1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -30,21 +31,24 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:lines="2"
-        android:textSize="@dimen/sp_20"
+        android:textSize="17dp"
         app:layout_constraintLeft_toRightOf="@id/ad_item_image"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:textColor="#404040"
         toos:text="淘宝新势力，全场5折起男神传达新风尚" />
 
     <TextView
         android:id="@+id/ad_tv_glanceOver"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_15"
+        android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@+id/ad_item_image"
         app:layout_constraintLeft_toLeftOf="@id/ad_tv_title"
         app:layout_constraintRight_toRightOf="parent"
-        toos:text="18899人浏览" />
+        toos:text="18899人浏览"
+        android:alpha="0.4"
+        android:textColor="#404040"/>
 
     <TextView
         android:id="@+id/ad_tv_look"
@@ -53,8 +57,13 @@
         android:background="@drawable/ad_bg_shape_radio_white_12"
         android:text="立即查看"
         android:textColor="#06C581"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/ad_item_image"
         app:layout_constraintRight_toRightOf="parent"
-        android:padding="4dp"/>
+        android:paddingLeft="@dimen/dimen_11dp"
+        android:paddingTop="@dimen/dimen_5dp"
+        android:paddingRight="@dimen/dimen_11dp"
+        android:paddingBottom="@dimen/dimen_5dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

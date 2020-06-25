@@ -111,11 +111,14 @@
                 android:id="@+id/framelayout_center_ad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_18dp"
-                android:layout_marginRight="@dimen/dimen_18dp"
+                android:layout_marginLeft="@dimen/dimen_12dp"
+                android:layout_marginRight="@dimen/dimen_12dp"
                 android:layout_marginBottom="@dimen/dimen_16dp"
-                android:padding="@dimen/dimen_6dp"
-                android:background="@drawable/ad_container_white_bg"
+                android:paddingTop="@dimen/dp_18"
+                android:paddingBottom="@dimen/dp_18"
+                android:paddingLeft="@dimen/dimen_16dp"
+                android:paddingRight="@dimen/dimen_16dp"
+                android:background="@drawable/bg_recommend"
                 android:visibility="gone" />
 
             <TextView
