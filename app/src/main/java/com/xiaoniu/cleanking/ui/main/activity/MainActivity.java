@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.google.gson.Gson;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -38,6 +39,7 @@ import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
+import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
@@ -60,6 +62,7 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -511,62 +514,79 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
                 return true;
-            }/* else if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof NewCleanMainFragment) {
-                NewCleanMainFragment fragment = (NewCleanMainFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
-                fragment.onKeyBack();
-                return true;
-            }*/ else {
-//                long secondTime = System.currentTimeMillis();
-//                if (secondTime - firstTime > 1500) {
-//                    // 如果两次按键时间间隔大于800毫秒，则不退出
-//                    Toast.makeText(getApplicationContext(), R.string.press_exit_again, Toast.LENGTH_SHORT).show();
-//                    // 更新firstTime
-//                    firstTime = secondTime;
-//                    Intent intent = new Intent();
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-//                    return true;
-//                } else {
-//
-//                    //如果审核满足答题条件时自动跳转答题页面，返回则不跳
-//                    SPUtil.setInt(MainActivity.this, "turnask", 0);
-//                    SPUtil.setBoolean(MainActivity.this, "firstShowHome", false);
-//                    AppManager.getAppManager().clearStack();
-//                }
+            } else {
+
+
                 RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
+
+              //  LogUtils.e("=======server data:" + new Gson().toJson(data));
                 if (data != null) {
-                    int serverConfig = data.getTrigger();
-                    if (serverConfig == 0) {
-                        ExitRetainDialog retainDialog = new ExitRetainDialog(this);
-                        retainDialog.show();
-                    } else {
-                        int alreadyExitCount = PreferenceUtil.getPressBackExitAppCount();
-                        if ((alreadyExitCount + 1) % serverConfig == 0) {
-                            ExitRetainDialog retainDialog = new ExitRetainDialog(this);
-                            retainDialog.show();
+                    //判断有没有超过当日限定的次数,小于次数过时行判断，大于次数直接退出
+                    ExitRetainEntity alreadyExit = PreferenceUtil.getPressBackExitAppCount();
+
+                  //  LogUtils.e("=======alreadyExit:" + new Gson().toJson(alreadyExit));
+
+                    long currentTime = System.currentTimeMillis();
+                    if (DateUtils.isSameDay(currentTime, alreadyExit.getLastTime())) {
+
+                        //当dayLimit为0的时候不判断最大次数这个条件
+                        if (data.getDailyLimit() > 0 && alreadyExit.getCount() > data.getDailyLimit()) {
+                          //  LogUtils.e("=======alreadyExit:是同一天，但是已经超过了最大次数");
+
+                            //如果已经超过当天的次数，则应该直接退出并更新当天的次数
+                            goHomeAndChangeBackCount(true);
                         } else {
-                            //更新按返回键退出程序的次数
-                            PreferenceUtil.updatePressBackExitAppCount();
-                            Intent home = new Intent(Intent.ACTION_MAIN);
-                            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            home.addCategory(Intent.CATEGORY_HOME);
-                            startActivity(home);
+
+                          //  LogUtils.e("=======alreadyExit:是同一天，没有超过最大次数");
+
+                            int serverConfig = data.getTrigger();
+                            if (serverConfig == 0) {
+                                ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                                retainDialog.show();
+                                return true;
+                            } else {
+                                if ((alreadyExit.getCount() + 1) % serverConfig == 0) {
+                                  //  LogUtils.e("=======是倍数,弹框返回");
+                                    ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                                    retainDialog.show();
+                                    return true;
+                                } else {
+                                  //  LogUtils.e("=======不是倍数，不弹，直接返回");
+                                    //更新按返回键退出程序的次数
+                                    goHomeAndChangeBackCount(true);
+                                }
+                            }
                         }
+                    } else {
+                       // LogUtils.e("=======不是同一天弹，直接返回");
+                        //不是同一天的话重新统计次数
+                        goHomeAndChangeBackCount(false);
                     }
+
                 } else {
-                    //更新按返回键退出程序的次数
-                    PreferenceUtil.updatePressBackExitAppCount();
-                    Intent home = new Intent(Intent.ACTION_MAIN);
-                    home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    home.addCategory(Intent.CATEGORY_HOME);
-                    startActivity(home);
+                    ///LogUtils.e("=======服务器配置为空直接返回");
+                    //服务器的配置为空
+                    goHomeAndChangeBackCount(true);
                 }
 
+
             }
+            StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         }
-        StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
     }
 
+    private void goHomeAndChangeBackCount(boolean isOneDay) {
+        if (isOneDay) {
+            PreferenceUtil.updatePressBackExitAppCount();
+        } else {
+            PreferenceUtil.resetPressBackExitAppCount();
+        }
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        home.addCategory(Intent.CATEGORY_HOME);
+        startActivity(home);
+    }
 
     @SuppressLint("MissingSuperCall")
     @Override
@@ -583,6 +603,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     public interface OnKeyBackListener {
         void onKeyBack();
+
     }
 
     @Override

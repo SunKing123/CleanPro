@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
+import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
@@ -1568,15 +1569,32 @@ public class PreferenceUtil {
     //更新按返回键退出程序的次数
     public static void updatePressBackExitAppCount() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        int count = getPressBackExitAppCount();
+        ExitRetainEntity retainEntity = getPressBackExitAppCount();
+        retainEntity.setLastTime(System.currentTimeMillis());
+        retainEntity.setCount(retainEntity.getCount() + 1);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, count + 1).apply();
+        editor.putString(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, new Gson().toJson(retainEntity)).apply();
+    }
+
+    //重置按返回键退出程序的次数
+    public static void resetPressBackExitAppCount() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        ExitRetainEntity retainEntity = new ExitRetainEntity(1, System.currentTimeMillis());
+        editor.putString(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, new Gson().toJson(retainEntity)).apply();
     }
 
     //获取按返回键退出程序的次数
-    public static int getPressBackExitAppCount() {
+    public static ExitRetainEntity getPressBackExitAppCount() {
+        ExitRetainEntity retainEntity;
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, 0);
+        String json = sharedPreferences.getString(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, "");
+        if (!TextUtils.isEmpty(json)) {
+            retainEntity = new Gson().fromJson(json, ExitRetainEntity.class);
+        } else {
+            retainEntity = new ExitRetainEntity(0, System.currentTimeMillis());
+        }
+        return retainEntity;
     }
 
     //保存最近一次操作记录_map值

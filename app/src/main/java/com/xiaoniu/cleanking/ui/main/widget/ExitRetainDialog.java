@@ -102,6 +102,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
             case R.id.btn_exit:
                 //更新按返回键退出程序的次数
                 dismiss();
+                //只要弹出这个窗口带表当日的弹框次数一定没有超过限制，因此只用更新当日次数即可，不用判断别的逻辑
                 PreferenceUtil.updatePressBackExitAppCount();
                 Intent home = new Intent(Intent.ACTION_MAIN);
                 home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -33,6 +33,17 @@ public class RedPacketEntity extends BaseEntity {
         //弹窗类型 红包弹窗、挽留弹窗
         private String popUpType;
 
+        //挽留弹窗每日限定次数
+        private int dailyLimit;
+
+        public int getDailyLimit() {
+            return dailyLimit;
+        }
+
+        public void setDailyLimit(int dailyLimit) {
+            this.dailyLimit = dailyLimit;
+        }
+
         public String getPopUpType() {
             return popUpType;
         }
