@@ -122,7 +122,7 @@ public class AppHolder {
     }
 
 
-    public void setPopupDataEntityList(RedPacketEntity redPacketEntity) {
+    public void setPopupDataEntity(RedPacketEntity redPacketEntity) {
         this.mRedPacketEntity = redPacketEntity;
     }
 

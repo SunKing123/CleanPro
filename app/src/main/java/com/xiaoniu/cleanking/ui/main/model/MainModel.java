@@ -166,7 +166,7 @@ public class MainModel extends BaseModel {
      *
      * @param commonSubscriber
      */
-    public void getRedPacketList(Common4Subscriber<RedPacketEntity> commonSubscriber) {
+    public void getRedPacketListFromServer(Common4Subscriber<RedPacketEntity> commonSubscriber) {
         mService.getRedPacketList().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 

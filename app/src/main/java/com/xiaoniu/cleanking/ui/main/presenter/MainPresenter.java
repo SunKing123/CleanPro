@@ -531,29 +531,15 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
-        mModel.getRedPacketList(new Common4Subscriber<RedPacketEntity>() {
-            @Override
-            public void showExtraOp(String code, String message) {
 
-            }
 
-            @Override
-            public void getData(RedPacketEntity pushSettingList) {
-                AppHolder.getInstance().setPopupDataEntityList(pushSettingList);
-                RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(pushSettingList, PopupWindowType.POPUP_RED_PACKET);
-                mView.getRedPacketListSuccess(data);
-            }
+        RedPacketEntity pushSettingList = AppHolder.getInstance().getPopupDataEntity();
+        RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(pushSettingList, PopupWindowType.POPUP_RED_PACKET);
+        if (data != null) {
+            mView.getRedPacketListSuccess(data);
+        }
 
-            @Override
-            public void showExtraOp(String message) {
 
-            }
-
-            @Override
-            public void netConnectError() {
-
-            }
-        });
     }
 
     /**
@@ -918,6 +904,35 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             }
         });
+    }
+
+    /***
+     * 获取弹窗信息
+     */
+    public void getPopupData() {
+        mModel.getRedPacketListFromServer(new Common4Subscriber<RedPacketEntity>() {
+            @Override
+            public void showExtraOp(String code, String message) {
+
+            }
+
+            @Override
+            public void getData(RedPacketEntity pushSettingList) {
+                AppHolder.getInstance().setPopupDataEntity(pushSettingList);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+
+
     }
 
 

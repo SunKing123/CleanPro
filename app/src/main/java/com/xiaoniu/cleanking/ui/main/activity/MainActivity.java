@@ -241,6 +241,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
         //初始插屏广告开关
         mPresenter.getScreentSwitch();
+        //弹窗信息接口
+        mPresenter.getPopupData();
         //获取定位权限
         mPresenter.requestPhoneStatePermission();
 //        测试入口
