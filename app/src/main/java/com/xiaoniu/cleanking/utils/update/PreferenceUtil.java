@@ -1567,11 +1567,14 @@ public class PreferenceUtil {
     }
 
     //更新按返回键退出程序的次数
-    public static void updatePressBackExitAppCount() {
+    public static void updatePressBackExitAppCount(boolean isPop) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         ExitRetainEntity retainEntity = getPressBackExitAppCount();
         retainEntity.setLastTime(System.currentTimeMillis());
-        retainEntity.setCount(retainEntity.getCount() + 1);
+        retainEntity.setBackTotalCount(retainEntity.getBackTotalCount() + 1);
+        if (isPop) {
+            retainEntity.setPopupCount(retainEntity.getPopupCount() + 1);
+        }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, new Gson().toJson(retainEntity)).apply();
     }
@@ -1580,7 +1583,7 @@ public class PreferenceUtil {
     public static void resetPressBackExitAppCount() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        ExitRetainEntity retainEntity = new ExitRetainEntity(1, System.currentTimeMillis());
+        ExitRetainEntity retainEntity = new ExitRetainEntity(0, 1, System.currentTimeMillis());
         editor.putString(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, new Gson().toJson(retainEntity)).apply();
     }
 
@@ -1592,7 +1595,7 @@ public class PreferenceUtil {
         if (!TextUtils.isEmpty(json)) {
             retainEntity = new Gson().fromJson(json, ExitRetainEntity.class);
         } else {
-            retainEntity = new ExitRetainEntity(0, System.currentTimeMillis());
+            retainEntity = new ExitRetainEntity(0, 0, System.currentTimeMillis());
         }
         return retainEntity;
     }
