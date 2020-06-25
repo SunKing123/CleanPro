@@ -2,14 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/v_recommend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_8dp"
         android:background="@drawable/bg_finish_rem"
+        android:layout_marginRight="@dimen/dimen_18dp"
+        android:layout_marginLeft="@dimen/dimen_18dp"
+        android:layout_marginTop="@dimen/dimen_18dp"
         android:orientation="vertical"
         android:visibility="gone">
         <!--建议清理-->
@@ -517,8 +520,21 @@
                 android:textColor="@color/color_404040"
                 android:textSize="@dimen/dimen_12sp" />
         </RelativeLayout>
-
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/finish_framelayout_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_12dp"
+        android:layout_marginRight="@dimen/dimen_12dp"
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:paddingTop="@dimen/dimen_10dp"
+        android:paddingBottom="@dimen/dimen_10dp"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp"
+        android:background="@drawable/bg_recommend"
+        android:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/ad_container_pos02"
@@ -537,15 +553,5 @@
         android:layout_marginRight="@dimen/dimen_12dp"
         android:visibility="gone"/>
 
-    <FrameLayout
-        android:id="@+id/finish_framelayout_ad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_18dp"
-        android:layout_marginRight="@dimen/dimen_18dp"
-        android:layout_marginBottom="@dimen/dimen_16dp"
-        android:padding="@dimen/dimen_6dp"
-        android:background="@drawable/ad_container_white_bg"
-        />
 
 </LinearLayout>

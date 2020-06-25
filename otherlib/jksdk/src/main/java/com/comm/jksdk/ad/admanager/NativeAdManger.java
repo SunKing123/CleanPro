@@ -92,7 +92,6 @@ public class NativeAdManger implements AdManager {
 
     public NativeAdManger() {
     }
-
     /**
      * acitvity对象,优量汇开屏、视频广用到
      */
@@ -1561,6 +1560,7 @@ public class NativeAdManger implements AdManager {
             iad.destroy();
             iad = null;
         }
+        LogUtils.d(TAG, "zz--ylh--自渲染插屏广告请求中-   --adid-" + info.getAdId());
         iad = new UnifiedInterstitialAD(activity, info.getAdAppid(), UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
 
             public void onVideoCached() {
@@ -1570,9 +1570,9 @@ public class NativeAdManger implements AdManager {
             @Override
             public void onADReceive() {
                 //广告加载成功
-//                    if (iad != null) {
-//                        adSuccess(adInfo);
-//                    }
+                    if (iad != null) {
+                        LogUtils.d(TAG, "zz--ylh--自渲染插屏广告展示成功-   --adid-" + info.getAdId());
+                    }
                 showAd(iad);
             }
 
@@ -1580,6 +1580,7 @@ public class NativeAdManger implements AdManager {
             public void onNoAD(AdError adError) {
                 if (mAdListener != null) {
                     mAdListener.adError(info, 1, "没有广告");
+                    LogUtils.d(TAG, "zz--ylh--自渲染插屏广告展示失败-   --adid-" + info.getAdId()+"  "+adError!=null?adError.getErrorMsg():"");
                 }
             }
 
