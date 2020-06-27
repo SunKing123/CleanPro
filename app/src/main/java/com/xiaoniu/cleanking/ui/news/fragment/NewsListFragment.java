@@ -233,8 +233,8 @@ public class NewsListFragment extends BaseFragment {
     public ArrayList<NewsItemInfo> insertNewsAd(ArrayList<NewsItemInfo> newsItemInfos){
         if (NetworkUtils.isNetConnected()) {
             int showRate = 3;   //间隔几条展示；
-            if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
-                Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+            if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
+                Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
                 if(null != map.get("page_news_screen") ){
                     InsertAdSwitchInfoList.DataBean  dataBean=map.get("page_news_screen");
                     if(dataBean.isOpen()){

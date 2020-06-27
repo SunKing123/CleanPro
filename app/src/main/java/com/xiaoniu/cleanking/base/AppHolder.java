@@ -54,7 +54,7 @@ public class AppHolder {
     private SwitchInfoList switchInfoList;
 
     //插屏广告
-    private Map<String, InsertAdSwitchInfoList.DataBean> insertAdSwitchmap = new HashMap<>();
+    private Map<String, InsertAdSwitchInfoList.DataBean> insertAdSwitchMap = new HashMap<>();
 
     //兜底广告
     private List<BottoomAdList.DataBean> mBottoomAdList;
@@ -86,15 +86,15 @@ public class AppHolder {
     }
 
 
-    public Map<String, InsertAdSwitchInfoList.DataBean> getInsertAdSwitchmap() {
-        return insertAdSwitchmap;
+    public Map<String, InsertAdSwitchInfoList.DataBean> getInsertAdSwitchMap() {
+        return insertAdSwitchMap;
     }
 
     public void setInsertAdSwitchInfoList(InsertAdSwitchInfoList insertAdSwitchInfoList) {
         //开关数据Map存储
-        insertAdSwitchmap.clear();
+        insertAdSwitchMap.clear();
         for (InsertAdSwitchInfoList.DataBean post : insertAdSwitchInfoList.getData()) {
-            insertAdSwitchmap.put(post.getConfigKey(), post);
+            insertAdSwitchMap.put(post.getConfigKey(), post);
         }
         MmkvUtil.setInsertSwitchInfo(new Gson().toJson(insertAdSwitchInfoList));
     }
@@ -207,11 +207,10 @@ public class AppHolder {
      * @return
      */
     public InsertAdSwitchInfoList.DataBean getInsertAdInfo(String configKey) {
-        if (null != getInsertAdSwitchmap()) {
-            Map<String, InsertAdSwitchInfoList.DataBean> map = getInsertAdSwitchmap();
+        if (null != getInsertAdSwitchMap()) {
+            Map<String, InsertAdSwitchInfoList.DataBean> map = getInsertAdSwitchMap();
             if (null != map.get(configKey)) {
-                InsertAdSwitchInfoList.DataBean dataBean = map.get(configKey);
-                return dataBean;
+                return map.get(configKey);
             }
         }
         return null;

@@ -380,7 +380,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 if (AppLifecycleUtil.isAppOnForeground(application)) {
                     MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
                 }
-                if (isMainProcess(application)){
+                if (isMainProcess(application)) {
                     bindLocalPushService(application, currentTimestamp);
                 }
 
@@ -397,7 +397,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
                 if (AppLifecycleUtil.isAppOnForeground(application)) {
                     MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
                 }
-                if (isMainProcess(application)){
+                if (isMainProcess(application)) {
                     bindLocalPushService(application, currentTimestamp);
                 }
             }
@@ -476,8 +476,8 @@ public class ApplicationDelegate implements IApplicationDelegate {
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
-                        if (PositionId.HOT_CODE.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen() && !PreferenceUtil.isShowAD()
-                                && PreferenceUtil.getHomeBackTime(switchInfo.getHotStartInterval())) {
+                        if (PositionId.HOT_CODE.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen() && !PreferenceUtil.isShowAD() &&
+                                PreferenceUtil.getHomeBackTime(switchInfo.getHotStartInterval())) {
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);

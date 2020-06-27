@@ -37,7 +37,6 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -85,30 +84,28 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
                 AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
         );
-        if (redPacketDataBean==null||null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
+        if (redPacketDataBean == null || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
             return;
         switch (redPacketDataBean.getLocation()) {
             case 5:
-                if (null != AppHolder.getInstance().getInsertAdSwitchmap() && AppHolder.getInstance().getInsertAdSwitchmap().size() >= 0) {
-                    Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
-                    if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
-                        InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
-                        if (dataBean.isOpen()) {//内部插屏广告
+                if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
+                    InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdSwitchMap().get(PositionId.KEY_NEIBU_SCREEN);
+                    if (null != dataBean && dataBean.isOpen()) {//内部插屏广告
                            /* if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
                                 PreferenceUtil.saveScreenInsideTime();
                                 startActivity(new Intent(this, ScreenInsideActivity.class));
                                 return;
                             }*/
-                            if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
-                                List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
-                                int startCount = PreferenceUtil.getColdAndHotStartCount();
-                                if (internalList.contains(String.valueOf(startCount))) {
-                                    PreferenceUtil.saveScreenInsideTime();
-                                    startActivity(new Intent(this, ScreenInsideActivity.class));
-                                    return;
-                                }
+                        if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
+                            List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
+                            int startCount = PreferenceUtil.getColdAndHotStartCount();
+                            if (internalList.contains(String.valueOf(startCount))) {
+                                PreferenceUtil.saveScreenInsideTime();
+                                startActivity(new Intent(this, ScreenInsideActivity.class));
+                                return;
                             }
                         }
+
                     }
                 }
                 //所有页面展示红包

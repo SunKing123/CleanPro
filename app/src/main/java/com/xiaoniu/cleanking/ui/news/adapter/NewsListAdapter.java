@@ -90,8 +90,8 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             });
 
             int showRate = 3;   //间隔几条展示；
-            if (null != AppHolder.getInstance().getInsertAdSwitchmap()) {
-                Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchmap();
+            if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
+                Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
                 if (null != map.get("page_video_end_screen")) {
                     InsertAdSwitchInfoList.DataBean dataBean = map.get("page_video_end_screen");
                     if (dataBean.isOpen()) {

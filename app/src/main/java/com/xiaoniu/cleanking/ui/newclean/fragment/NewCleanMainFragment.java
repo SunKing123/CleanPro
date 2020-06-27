@@ -561,7 +561,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         if (!isOpen) return;
         if (null == getActivity() || null == mCenterAdFramelayout) return;
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", "home_page_left_picture_right_text ", "home_page_left_picture_right_text ");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(getActivity(), PositionId.AD_HOME_CENTER
                 , new AdListener() {
