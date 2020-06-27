@@ -70,6 +70,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
 
 
     public void initAdv() {
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1","", "", "all_ad_request", "retain_the_pop_up_window", "retain_the_pop_up_window");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(activity, PositionId.AD_RETAIN_THE_POP_UP_WINDOW, new AdListener() {
             @Override

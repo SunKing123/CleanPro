@@ -1424,6 +1424,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
         if (!isOpen) return;
         if (null == advContentView) return;
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "3", "", "", "all_ad_request", "success_page_bottom_ad", "success_page_bottom_ad");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.DRAW_FINISH_CODE
                 , new AdListener() {
