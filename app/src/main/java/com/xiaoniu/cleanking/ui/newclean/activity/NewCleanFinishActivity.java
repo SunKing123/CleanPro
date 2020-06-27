@@ -108,6 +108,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     String returnEventName = "";
     String sysReturnEventName = "";
     private boolean mIsFromHomeMain; //是否来自首页主功能区
+    boolean isOpenOne = false;
+    boolean isOpenTwo = false;
 
     FileQueryUtils fileQueryUtils;
     int processNum = 0;
@@ -198,8 +200,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (null != AppHolder.getInstance() && null != AppHolder.getInstance().getSwitchInfoList()
                 && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            boolean isOpenOne = false;
-            boolean isOpenTwo = false;
+
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
@@ -283,9 +284,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             }
 
-            if (isOpenOne) {
-                initPos01Ad();
-            }
+            initPos01Ad();
             if (isOpenTwo) {
                 initAd02();
             }
@@ -1104,6 +1103,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onResume();
         v_power.setEnabled(true);
         initBottomAdv();
+        initPos01Ad();
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
         } else {
@@ -1229,6 +1229,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     public void initPos01Ad() {
+        if (!isOpenOne) {
+           return;
+        }
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
 
