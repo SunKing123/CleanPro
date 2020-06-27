@@ -121,11 +121,12 @@ public class ApplicationDelegate implements IApplicationDelegate {
 //        LogUtils.i("GeekSdk--"+SystemUtils.getProcessName(application));
         initAdSdk(application);
         initJsBridge();
-        if (RomUtils.checkIsHuaWeiRom()) {
+        homeCatch(application);
+        /* if (RomUtils.checkIsHuaWeiRom()) {
             homeCatch(application);
         } else if (isMainProcess(application)) {
             homeCatchOtherDevice(application);
-        }
+        }*/
         initLifecycle(application);
         Logger.addLogAdapter(new AndroidLogAdapter() {
             @Override

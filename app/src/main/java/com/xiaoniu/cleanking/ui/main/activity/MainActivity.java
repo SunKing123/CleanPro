@@ -522,16 +522,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             } else {
 
 
+                LogUtils.e("============:"+new Gson().toJson(AppHolder.getInstance().getSwitchInfoList()));
+
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
 
 
+                        if (PositionId.KEY_PAGE_EXIT_RETAIN.equals(switchInfo.getConfigKey()) && switchInfo.isOpen()) {
 
-
-                        if (PositionId.KEY_PAGE_EXIT_RETAIN.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen()) {
-
-                           // LogUtils.e("===========open config:"+new Gson().toJson(switchInfo));
+                          //  LogUtils.e("===========open config:"+new Gson().toJson(switchInfo));
 
                             RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
 
