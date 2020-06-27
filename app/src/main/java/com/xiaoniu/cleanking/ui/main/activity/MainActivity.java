@@ -42,8 +42,11 @@ import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
@@ -519,64 +522,80 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             } else {
 
 
-                RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
+                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                    for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
 
-              // LogUtils.e("=======server data:" + new Gson().toJson(data));
-                if (data != null) {
-                    //判断有没有超过当日限定的次数,小于次数过时行判断，大于次数直接退出
-                    ExitRetainEntity alreadyExit = PreferenceUtil.getPressBackExitAppCount();
 
-                  //  LogUtils.e("=======alreadyExit:" + new Gson().toJson(alreadyExit));
 
-                    long currentTime = System.currentTimeMillis();
-                    if (DateUtils.isSameDay(currentTime, alreadyExit.getLastTime())) {
 
-                        //当dayLimit为0的时候不判断最大次数这个条件
-                        if (data.getDailyLimit() > 0 && alreadyExit.getPopupCount()>= data.getDailyLimit()) {
-                          //  LogUtils.e("=======alreadyExit:是同一天，但是已经超过了最大次数");
+                        if (PositionId.KEY_PAGE_EXIT_RETAIN.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen()) {
 
-                            //如果已经超过当天的次数，则应该直接退出并更新当天的次数
-                            goHomeAndChangeBackCount(true);
-                        } else {
+                           // LogUtils.e("===========open config:"+new Gson().toJson(switchInfo));
 
-                         //   LogUtils.e("=======alreadyExit:是同一天，没有超过最大次数");
+                            RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
 
-                            int serverConfig = data.getTrigger();
-                            if (serverConfig == 0) {
-                                ExitRetainDialog retainDialog = new ExitRetainDialog(this);
-                                retainDialog.show();
-                                return true;
-                            } else {
-                                if ((alreadyExit.getBackTotalCount()+ 1) % serverConfig == 0) {
-                                  //  LogUtils.e("=======是倍数,弹框返回");
-                                    ExitRetainDialog retainDialog = new ExitRetainDialog(this);
-                                    retainDialog.show();
-                                    return true;
+                           // LogUtils.e("=======server data:" + new Gson().toJson(data));
+                            if (data != null) {
+                                //判断有没有超过当日限定的次数,小于次数过时行判断，大于次数直接退出
+                                ExitRetainEntity alreadyExit = PreferenceUtil.getPressBackExitAppCount();
+
+                               // LogUtils.e("=======alreadyExit:" + new Gson().toJson(alreadyExit));
+
+                                long currentTime = System.currentTimeMillis();
+                                if (DateUtils.isSameDay(currentTime, alreadyExit.getLastTime())) {
+
+                                    //当dayLimit为0的时候不判断最大次数这个条件
+                                    if (data.getDailyLimit() > 0 && alreadyExit.getPopupCount() >= data.getDailyLimit()) {
+                                       // LogUtils.e("=======alreadyExit:是同一天，但是已经超过了最大次数");
+
+                                        //如果已经超过当天的次数，则应该直接退出并更新当天的次数
+                                        goHomeAndChangeBackCount(true);
+                                    } else {
+
+                                       // LogUtils.e("=======alreadyExit:是同一天，没有超过最大次数");
+
+                                        int serverConfig = data.getTrigger();
+                                        if (serverConfig == 0) {
+                                            ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                                            retainDialog.show();
+                                            return true;
+                                        } else {
+                                            if ((alreadyExit.getBackTotalCount() + 1) % serverConfig == 0) {
+                                                //  LogUtils.e("=======是倍数,弹框返回");
+                                                ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                                                retainDialog.show();
+                                                return true;
+                                            } else {
+                                                //   LogUtils.e("=======不是倍数，不弹，直接返回");
+                                                //更新按返回键退出程序的次数
+                                                goHomeAndChangeBackCount(true);
+                                            }
+                                        }
+                                    }
                                 } else {
-                                 //   LogUtils.e("=======不是倍数，不弹，直接返回");
-                                    //更新按返回键退出程序的次数
-                                    goHomeAndChangeBackCount(true);
+                                    // LogUtils.e("=======不是同一天弹，直接返回,同时重置次数");
+                                    //不是同一天的话重新统计次数
+                                    goHomeAndChangeBackCount(false);
                                 }
+
+                            } else {
+                               // LogUtils.e("=======服务器配置为空直接返回");
+                                //服务器的配置为空
+                                goHomeAndChangeBackCount(true);
                             }
+
+
                         }
-                    } else {
-                      // LogUtils.e("=======不是同一天弹，直接返回");
-                        //不是同一天的话重新统计次数
-                        goHomeAndChangeBackCount(false);
                     }
-
-                } else {
-                 //   LogUtils.e("=======服务器配置为空直接返回");
-                    //服务器的配置为空
-                    goHomeAndChangeBackCount(true);
                 }
-
 
             }
             StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         }
         return super.onKeyDown(keyCode, event);
     }
+
 
     private void goHomeAndChangeBackCount(boolean isOneDay) {
         if (isOneDay) {

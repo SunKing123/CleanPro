@@ -71,6 +71,8 @@ public class PositionId {
     public static final String KEY_PAGE_ACCELERATE = "page_accelerate";
     public static final String KEY_PAGE_MINE = "page_mine";
     public static final String KEY_PAGE_HOME_MORE_REWARD_VIDEO = "page_home_more_reward_video";   //首页更多列表第一个激励视频开关
+    public static final String KEY_PAGE_EXIT_RETAIN = "page_exit_retain_advinfo";//挽留弹窗界面广告
+
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";

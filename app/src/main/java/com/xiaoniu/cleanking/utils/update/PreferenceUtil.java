@@ -1583,7 +1583,7 @@ public class PreferenceUtil {
     public static void resetPressBackExitAppCount() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        ExitRetainEntity retainEntity = new ExitRetainEntity(0, 1, System.currentTimeMillis());
+        ExitRetainEntity retainEntity = new ExitRetainEntity(1, 0, System.currentTimeMillis());
         editor.putString(SpCacheConfig.KEY_EXIT_RETAIN_DIALOG_COUNT, new Gson().toJson(retainEntity)).apply();
     }
 
