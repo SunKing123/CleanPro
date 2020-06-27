@@ -98,6 +98,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
                 if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "retain_the_pop_up_window", "retain_the_pop_up_window");
                 }
             }
         });

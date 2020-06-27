@@ -72,6 +72,7 @@ import java.util.Random;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import cn.jzvd.Jzvd;
 
 import static android.view.View.VISIBLE;
@@ -100,7 +101,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private ViewGroup advContentView;
     private int mShowCount; //推荐显示的数量
     private int mRamScale; //所有应用所占内存大小
-    private boolean advBottomClicked;
     public static String sourcePage = "";
     public static String currentPage = "";
     String createEventCode = "";
@@ -159,7 +159,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
-        advContentView=headerTool.findViewById(R.id.finish_framelayout_ad);
+        advContentView = headerTool.findViewById(R.id.finish_framelayout_ad);
         ad_container_pos02 = headerTool.findViewById(R.id.ad_container_pos02);
         error_ad_iv2 = headerTool.findViewById(R.id.error_ad_iv2);
         mRecommendV = headerTool.findViewById(R.id.v_recommend);
@@ -1427,8 +1427,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     @Override
                     public void adSuccess(AdInfo info) {
                         if (null != info) {
-                            Log.d(TAG, "adSuccess--home--center =" + info.getAdSource());
-                            StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                            StatisticsUtils.customADRequest("ad_request", "广告请求", "3", info.getAdId(), info.getAdSource(), "success", "success_page_bottom_ad", "success_page_bottom_ad");
                             if (null != advContentView && null != info.getAdView()) {
                                 advContentView.setVisibility(VISIBLE);
                                 advContentView.removeAllViews();
@@ -1440,43 +1439,30 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     @Override
                     public void adExposed(AdInfo info) {
                         if (null == info) return;
-                        Log.d(TAG, "adExposed--home--center");
-                        advBottomClicked = true;
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", " ");
+                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "3", info.getAdId(), info.getAdSource(), "success_page_bottom_ad", "success_page_bottom_ad", info.getAdTitle());
                     }
 
                     @Override
                     public void adClicked(AdInfo info) {
-                        Log.d(TAG, "adClicked--home--center");
                         if (null == info) return;
-                        if (advBottomClicked) {
-                            StatisticsUtils.clickAD("ad_click", "网络加速激励视频结束页下载点击", "2", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
-                        } else {
-                            StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-                        }
-                        if (info.getAdClickType() == 2) { //2=详情
-                            advBottomClicked = true;
-                        } else {
-                            advBottomClicked = false;
-                        }
+                        StatisticsUtils.clickAD("ad_click", "广告点击", "3", info.getAdId(), info.getAdSource(), "success_page_bottom_ad", "success_page_bottom_ad", info.getAdTitle());
+
                     }
 
                     @Override
                     public void adClose(AdInfo info) {
-                        LogUtils.e("AdInfo:" + new Gson().toJson(info));
                         if (null == info) return;
                         advContentView.setVisibility(View.GONE);
-                        StatisticsUtils.clickAD("close_click", "网络加速激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "network_acceleration_video_end_page", info.getAdTitle());
                     }
 
                     @Override
                     public void adError(AdInfo info, int errorCode, String errorMsg) {
                         if (null == info) return;
-                        Log.d(TAG, "adError--home--center =" + errorCode + "---" + errorMsg + info.toString());
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+                        StatisticsUtils.customADRequest("ad_request", "广告请求", "3", info.getAdId(), info.getAdSource(), "fail", "success_page_bottom_ad", "success_page_bottom_ad");
                     }
                 });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
