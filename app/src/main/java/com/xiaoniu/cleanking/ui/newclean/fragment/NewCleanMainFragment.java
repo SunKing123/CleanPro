@@ -189,6 +189,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     Rotate3D anim;
 
+    boolean isFirst=true;
+
     @Override
     protected void initView() {
         rxPermissions = new RxPermissions(requireActivity());
@@ -410,6 +412,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     @Override
     public void onResume() {
         super.onResume();
+
         LogUtils.i("onResum()");
         if (isGotoSetting) {
             isGotoSetting = false;
@@ -436,10 +439,13 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
 
-        initGeekSdkCenter();
-
         //重新检查状态
         checkScanState();
+
+        if(isVisible()||isFirst){
+            isFirst=false;
+            initGeekSdkCenter();
+        }
     }
 
     public void setIsGotoSetting(boolean isGotoSetting) {
@@ -546,7 +552,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 更多推荐上方广告 样式---大图_下载播放按钮_跑马灯
+     * 首页更多推荐头部广告
      */
     private void initGeekSdkCenter() {
         boolean isOpen = false;
@@ -561,7 +567,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
         if (!isOpen) return;
         if (null == getActivity() || null == mCenterAdFramelayout) return;
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "2","", "", "all_ad_request", "home_page_left_picture_right_text", "home_page_left_picture_right_text");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", "", "", "all_ad_request", "home_page_left_picture_right_text", "home_page_left_picture_right_text");
         AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(getActivity(), PositionId.AD_HOME_CENTER
                 , new AdListener() {
@@ -1223,7 +1229,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void showHomeLottieView() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
-        textLayout.setMargins(0, 0 - Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(), 0, 0);
+        textLayout.setMargins(0, 0 - Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
         view_lottie_top.setLayoutParams(textLayout);
 //        showTextView();
     }
