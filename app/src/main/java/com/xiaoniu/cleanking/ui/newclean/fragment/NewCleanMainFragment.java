@@ -189,7 +189,12 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     Rotate3D anim;
 
-    boolean isFirst=true;
+    boolean isFirst = true;
+
+
+    public void setOnHomeTabClickListener(View.OnClickListener clickListener) {
+
+    }
 
     @Override
     protected void initView() {
@@ -277,7 +282,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 //        shortcutInfoIntent.setAction(Intent.ACTION_VIEW);
 //        QuickUtils.getInstant(getActivity()).addShortcut( getString(R.string.app_quick_name), AppUtils.getAppIcon(getActivity(),getActivity().getPackageName()),shortcutInfoIntent);
     }
-
 
     /**
      * 权限埋点上报
@@ -442,8 +446,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         //重新检查状态
         checkScanState();
 
-        if(isVisible()||isFirst){
-            isFirst=false;
+        if (isVisible() || isFirst) {
+            isFirst = false;
             initGeekSdkCenter();
         }
     }
@@ -1854,5 +1858,17 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             });
         }
     }
+
+    public View.OnClickListener getOnHomeTabClickListener() {
+        return onClickListener;
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            initGeekSdkCenter();
+        }
+    };
+
 
 }

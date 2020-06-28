@@ -408,7 +408,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
 
             @Override
             public void onFeedAdLoad(List<TTFeedAd> list) {
-                LogUtils.d(TAG, "zz--chj---onADLoaded->请求穿山甲成功");
+                LogUtils.d(TAG, "zz--chj---onADLoaded->请求穿山甲成功     "+adInfo.getAdId());
                 if (CollectionUtils.isEmpty(list)) {
                     LogUtils.d(TAG, "zz--chj---onADLoaded->返回物料為空");
                     if (listener != null) {
@@ -433,7 +433,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
                     adInfo.setAdClickType(2);
                 }
                 adInfo.setTtFeedAd(ttFeedAd);
-                LogUtils.d(TAG, "zz--chj---onADLoaded->success");
+                LogUtils.d(TAG, "zz--chj---onADLoaded->success     "+adInfo.getAdId());
                 if (listener != null) {
                     listener.adSuccess(adInfo);
                 }

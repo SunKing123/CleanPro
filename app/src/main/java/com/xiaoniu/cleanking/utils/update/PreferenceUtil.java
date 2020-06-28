@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
@@ -1394,18 +1395,27 @@ public class PreferenceUtil {
      *
      * @return
      */
-    public static void saveColdAndHotStartCount(int count) {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SpCacheConfig.COLD_AND_HOT_START_COUNT, count).apply();
+    public static void saveColdAndHotStartCount(InsideAdEntity entity) {
+        if (entity != null) {
+            SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SpCacheConfig.COLD_AND_HOT_START_COUNT, new Gson().toJson(entity)).apply();
+        }
     }
 
     /**
      * 获取冷、热启动的次数
      */
-    public static int getColdAndHotStartCount() {
+    public static InsideAdEntity getColdAndHotStartCount() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SpCacheConfig.COLD_AND_HOT_START_COUNT, 0);
+        String json = sharedPreferences.getString(SpCacheConfig.COLD_AND_HOT_START_COUNT, "");
+        InsideAdEntity entity;
+        if (!TextUtils.isEmpty(json)) {
+            entity = new Gson().fromJson(json, InsideAdEntity.class);
+        } else {
+            entity = new InsideAdEntity(System.currentTimeMillis(), 0);
+        }
+        return entity;
     }
 
     /**

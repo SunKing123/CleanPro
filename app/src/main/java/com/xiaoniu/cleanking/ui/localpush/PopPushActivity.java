@@ -68,17 +68,18 @@ public class PopPushActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pop_layout);
     }
 
+
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onPostResume() {
+        super.onPostResume();
         if (!isFinishing()) {
-            mHandle.postDelayed(this::showPopWindow, 1000);
+            mHandle.postDelayed(this::showPopWindow, 500);
             mHandle.postDelayed(() -> {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                     finish();
                 }
-            }, 6000);
+            }, 5500);
         }
     }
 
@@ -110,7 +111,11 @@ public class PopPushActivity extends AppCompatActivity {
         }
 
 
-        mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
+        try {
+            mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         LocalPushConfigModel.Item item = (LocalPushConfigModel.Item) getIntent().getSerializableExtra("config");

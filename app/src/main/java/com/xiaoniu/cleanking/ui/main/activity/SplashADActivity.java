@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
@@ -48,6 +49,7 @@ import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
+import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
@@ -133,7 +135,16 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         }
         /*保存冷、热启动的次数*/
-        PreferenceUtil.saveColdAndHotStartCount(PreferenceUtil.getColdAndHotStartCount() + 1);
+        /*保存冷、热启动的次数*/
+        InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
+        if (DateUtils.isSameDay(inside.getTime(), System.currentTimeMillis())) {
+            inside.setCount(inside.getCount() + 1);
+        } else {
+            inside.setCount(1);
+        }
+        inside.setTime(System.currentTimeMillis());
+        PreferenceUtil.saveColdAndHotStartCount(inside);
+
         if (!NetworkUtils.isNetConnected()) {
             if (!PreferenceUtil.isNotFirstOpenApp()) {
                 mStartView.setVisibility(View.VISIBLE);

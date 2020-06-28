@@ -41,6 +41,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
@@ -507,6 +508,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
             if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
+
+               // LogUtils.e("==========dataBean:" + new Gson().toJson(dataBean));
+
                 if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
                     /*if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
                         PreferenceUtil.saveScreenInsideTime();
@@ -515,12 +519,20 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }*/
                     if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
                         List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
-                        int startCount = PreferenceUtil.getColdAndHotStartCount();
+
+                        InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
+
+                       // LogUtils.e("==========inside:" + new Gson().toJson(inside));
+
+
+                        int startCount = inside.getCount();
                         if (internalList.contains(String.valueOf(startCount))) {
                             PreferenceUtil.saveScreenInsideTime();
                             mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
                             return;
                         }
+
+
                     }
                 }
             }

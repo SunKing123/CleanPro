@@ -34,7 +34,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/iv_dun"
                 android:textColor="@color/white"
-                android:textSize="69sp" />
+                android:textSize="40sp" />
 
             <LinearLayout
                 android:id="@+id/layout_right_content"
@@ -51,14 +51,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dimen_5dp"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_20sp" />
+                    android:textSize="@dimen/dimen_16dp" />
 
                 <TextView
                     android:id="@+id/tv_ql"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
 
