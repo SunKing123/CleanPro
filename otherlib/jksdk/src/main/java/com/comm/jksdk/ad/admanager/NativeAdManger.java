@@ -1557,14 +1557,13 @@ public class NativeAdManger implements AdManager {
      */
     private void showYlhInsertScreen(Activity activity, AdInfo info) {
 //        UnifiedInterstitialAD iad = null;
-        String UNIFIED_INTERSTITIAL_ID_LARGE_SMALL = "3040652898151811";// 大小规格
         if (iad != null) {
             iad.close();
             iad.destroy();
             iad = null;
         }
         LogUtils.d(TAG, "zz--ylh--自渲染插屏广告请求中-   --adid-" + info.getAdId());
-        iad = new UnifiedInterstitialAD(activity, info.getAdAppid(), UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
+        iad = new UnifiedInterstitialAD(activity, info.getAdId(), new UnifiedInterstitialADListener() {
 
             public void onVideoCached() {
 
