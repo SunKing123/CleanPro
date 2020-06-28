@@ -70,13 +70,12 @@ public class PopPushActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pop_layout);
     }
 
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
         if (!isFinishing()) {
             getWindow().getDecorView().postDelayed(this::showPopWindow, 500);
-            mHandle.postDelayed(() -> {
+            getWindow().getDecorView().postDelayed(() -> {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                     finish();
