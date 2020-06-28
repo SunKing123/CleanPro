@@ -86,7 +86,7 @@ public class ChjBigImgIcTvBtAdView extends CHJAdView {
         adlogoParams = new FrameLayout.LayoutParams(adlogoWidth, adlogoHeight);
         adlogoParams.gravity = Gravity.BOTTOM;
         adlogoParams.bottomMargin = DisplayUtil.dp2px(mContext, 8);
-        adlogoParams.leftMargin = (int) (getContext().getResources().getDimension(R.dimen.common_ad_img_width_98dp) - adlogoWidth);
+        adlogoParams.leftMargin = (int) (getContext().getResources().getDimension(R.dimen.common_ad_img_width_128dp) - adlogoWidth);
         requestOptions = new RequestOptions()
                 .transforms(new RoundedCorners(DisplayUtil.dp2px(mContext, 3)))
                 .error(R.color.returncolor);//图片加载失败后，显示的图片

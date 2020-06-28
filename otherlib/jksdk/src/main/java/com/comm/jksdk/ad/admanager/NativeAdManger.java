@@ -92,6 +92,7 @@ public class NativeAdManger implements AdManager {
 
     public NativeAdManger() {
     }
+
     /**
      * acitvity对象,优量汇开屏、视频广用到
      */
@@ -1570,9 +1571,12 @@ public class NativeAdManger implements AdManager {
             @Override
             public void onADReceive() {
                 //广告加载成功
-                    if (iad != null) {
-                        LogUtils.d(TAG, "zz--ylh--自渲染插屏广告展示成功-   --adid-" + info.getAdId());
-                    }
+                if (iad != null) {
+                    LogUtils.d(TAG, "zz--ylh--自渲染插屏广告展示成功-   --adid-" + info.getAdId());
+                }
+                if (activity.isFinishing()) {
+                    return;
+                }
                 showAd(iad);
             }
 
@@ -1580,7 +1584,7 @@ public class NativeAdManger implements AdManager {
             public void onNoAD(AdError adError) {
                 if (mAdListener != null) {
                     mAdListener.adError(info, 1, "没有广告");
-                    LogUtils.d(TAG, "zz--ylh--自渲染插屏广告展示失败-   --adid-" + info.getAdId()+"  "+adError!=null?adError.getErrorMsg():"");
+                    LogUtils.d(TAG, "zz--ylh--自渲染插屏广告展示失败-   --adid-" + info.getAdId() + "  " + adError != null ? adError.getErrorMsg() : "");
                 }
             }
 

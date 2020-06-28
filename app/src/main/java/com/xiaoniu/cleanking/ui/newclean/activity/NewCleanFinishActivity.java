@@ -631,8 +631,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onResumeFragments();
     }
 
-    int showToolMacCount = 2;
-
     /**
      * 是否显示推荐功能项
      */
@@ -640,15 +638,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mShowCount = 0;
         mRecommendV.setVisibility(View.VISIBLE);
         if (!getString(R.string.tool_suggest_clean).contains(mTitle) && !PreferenceUtil.isCleanAllUsed()) {
-
-            if (mShowCount >= showToolMacCount) return;
             mShowCount++;
             v_clean_all.setVisibility(View.VISIBLE);
             line_clean_all.setVisibility(View.VISIBLE);
         }
         if (!getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            if (mShowCount >= showToolMacCount) return;
-
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;
                 v_quicken.setVisibility(View.VISIBLE);
@@ -662,21 +656,18 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
         }
         if (!getString(R.string.tool_super_power_saving).contains(mTitle)) {
-
-            if (mShowCount >= showToolMacCount) return;
-
             if (!PermissionUtils.isUsageAccessAllowed(this)) {
                 mShowCount++;
                 v_power.setVisibility(View.VISIBLE);
-                if (mShowCount < showToolMacCount) {
+                if (mShowCount < 3) {
                     line_power.setVisibility(View.VISIBLE);
                 }
             } else if (!PreferenceUtil.isCleanPowerUsed()) {
                 // 超强省电间隔时间至少3分钟 否则隐藏
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O || processNum > 0) {
                     mShowCount++;
-                    if (mShowCount < showToolMacCount) {
-                        v_power.setVisibility(View.VISIBLE);
+                    v_power.setVisibility(View.VISIBLE);
+                    if (mShowCount < 3) {
                         line_power.setVisibility(View.VISIBLE);
                     }
                 }
@@ -684,20 +675,20 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         if (!getString(R.string.tool_notification_clean).contains(mTitle)) {
-            if (mShowCount >= showToolMacCount) return;
+            if (mShowCount >= 3) return;
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 // 通知栏清理间隔时间至少3分钟 否则隐藏
                 mShowCount++;
-                if (mShowCount < showToolMacCount) {
-                    v_notification.setVisibility(View.VISIBLE);
+                v_notification.setVisibility(View.VISIBLE);
+                if (mShowCount < 3) {
                     line_notification.setVisibility(View.VISIBLE);
                 }
             } else if (!PreferenceUtil.isCleanNotifyUsed()) {
                 if (NotifyUtils.isNotificationListenerEnabled() && NotifyCleanManager.getInstance().getAllNotifications().size() > 0) {
                     // 通知栏清理间隔时间至少3分钟 否则隐藏
                     mShowCount++;
-                    if (mShowCount < showToolMacCount) {
-                        v_notification.setVisibility(View.VISIBLE);
+                    v_notification.setVisibility(View.VISIBLE);
+                    if (mShowCount < 3) {
                         line_notification.setVisibility(View.VISIBLE);
                     }
                 }
@@ -706,32 +697,32 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (!getString(R.string.tool_chat_clear).contains(mTitle)) {
             if (!PreferenceUtil.isCleanWechatUsed()) {
                 // 微信清理间隔时间至少3分钟 否则隐藏功能项
-                if (mShowCount >= showToolMacCount) return;
+                if (mShowCount >= 3) return;
                 mShowCount++;
                 v_wechat.setVisibility(View.VISIBLE);
-                if (mShowCount < showToolMacCount) {
+                if (mShowCount < 3) {
                     line_wechat.setVisibility(View.VISIBLE);
                 }
             }
         }
         if (!getString(R.string.game_quicken).contains(mTitle) && !PreferenceUtil.isCleanGameUsed()) {
-            if (mShowCount >= showToolMacCount) return;
+            if (mShowCount >= 3) return;
             mShowCount++;
             v_game.setVisibility(View.VISIBLE);
-            if (mShowCount >= showToolMacCount) return;
+            if (mShowCount >= 3) return;
             line_game.setVisibility(View.VISIBLE);
         }
         if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && !PreferenceUtil.isCleanCoolUsed()) {
             // 手机降温间隔时间至少3分钟 否则隐藏
-            if (mShowCount >= showToolMacCount) return;
+            if (mShowCount >= 3) return;
             mShowCount++;
             v_cool.setVisibility(View.VISIBLE);
-            if (mShowCount >= showToolMacCount) return;
+            if (mShowCount >= 3) return;
             line_cool.setVisibility(View.VISIBLE);
         }
 
         //文件清理
-        if (mShowCount >= showToolMacCount) return;
+        if (mShowCount >= 3) return;
         mShowCount++;
         v_file.setVisibility(View.VISIBLE);
     }
