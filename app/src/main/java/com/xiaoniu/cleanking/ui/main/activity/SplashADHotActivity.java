@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
@@ -30,6 +31,7 @@ import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -98,7 +100,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                             }*/
                         if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
                             List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
-                            int startCount = PreferenceUtil.getColdAndHotStartCount();
+                            InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
+                            int startCount = inside.getCount();
                             if (internalList.contains(String.valueOf(startCount))) {
                                 PreferenceUtil.saveScreenInsideTime();
                                 startActivity(new Intent(this, ScreenInsideActivity.class));
@@ -127,7 +130,15 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         }
         /*保存冷、热启动的次数*/
-        PreferenceUtil.saveColdAndHotStartCount(PreferenceUtil.getColdAndHotStartCount() + 1);
+        InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
+        if (DateUtils.isSameDay(inside.getTime(), System.currentTimeMillis())) {
+            inside.setCount(inside.getCount() + 1);
+        } else {
+            inside.setCount(1);
+        }
+        inside.setTime(System.currentTimeMillis());
+        PreferenceUtil.saveColdAndHotStartCount(inside);
+
         container = this.findViewById(R.id.splash_container);
         skipView = findViewById(R.id.skip_view);
         initGeekSdkAD();

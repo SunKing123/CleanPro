@@ -528,11 +528,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                             dataBean = switchInfo;
                         }
                     }
-                   // LogUtils.e("========dataBen:"+new Gson().toJson(dataBean));
+                    // LogUtils.e("========dataBen:"+new Gson().toJson(dataBean));
                     if (dataBean != null && dataBean.isOpen()) {
-                        //  LogUtils.e("===========open config:"+new Gson().toJson(switchInfo));
                         RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
-                        // LogUtils.e("=======server data:" + new Gson().toJson(data));
+                        //LogUtils.e("=======server data:" + new Gson().toJson(data));
                         if (data != null) {
                             //判断有没有超过当日限定的次数,小于次数过时行判断，大于次数直接退出
                             ExitRetainEntity alreadyExit = PreferenceUtil.getPressBackExitAppCount();
@@ -543,7 +542,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                                 if (data.getDailyLimit() > 0 && alreadyExit.getPopupCount() >= data.getDailyLimit()) {
                                     // LogUtils.e("=======alreadyExit:是同一天，但是已经超过了最大次数");
                                     //如果已经超过当天的次数，则应该直接退出并更新当天的次数
-                                    goHomeAndChangeBackCount(true);
+                                    changeBackCountAndGoHome(true);
                                 } else {
                                     // LogUtils.e("=======alreadyExit:是同一天，没有超过最大次数");
                                     int serverConfig = data.getTrigger();
@@ -560,36 +559,30 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                                         } else {
                                             //   LogUtils.e("=======不是倍数，不弹，直接返回");
                                             //更新按返回键退出程序的次数
-                                            goHomeAndChangeBackCount(true);
+                                            changeBackCountAndGoHome(true);
                                         }
                                     }
                                 }
                             } else {
                                 // LogUtils.e("=======不是同一天弹，直接返回,同时重置次数");
                                 //不是同一天的话重新统计次数
-                                goHomeAndChangeBackCount(false);
+                                changeBackCountAndGoHome(false);
                             }
 
                         } else {
                             // LogUtils.e("=======服务器配置为空直接返回");
                             //服务器的配置为空
-                            goHomeAndChangeBackCount(true);
+                            changeBackCountAndGoHome(true);
                         }
 
 
                     } else {
-                        Intent home = new Intent(Intent.ACTION_MAIN);
-                        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        home.addCategory(Intent.CATEGORY_HOME);
-                        startActivity(home);
+                        goHome();
                     }
 
 
                 } else {
-                    Intent home = new Intent(Intent.ACTION_MAIN);
-                    home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    home.addCategory(Intent.CATEGORY_HOME);
-                    startActivity(home);
+                    goHome();
                 }
 
             }
@@ -599,12 +592,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
-    private void goHomeAndChangeBackCount(boolean isOneDay) {
+    private void changeBackCountAndGoHome(boolean isOneDay) {
         if (isOneDay) {
             PreferenceUtil.updatePressBackExitAppCount(false);
         } else {
             PreferenceUtil.resetPressBackExitAppCount();
         }
+        goHome();
+    }
+
+    private void goHome() {
         Intent home = new Intent(Intent.ACTION_MAIN);
         home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         home.addCategory(Intent.CATEGORY_HOME);
