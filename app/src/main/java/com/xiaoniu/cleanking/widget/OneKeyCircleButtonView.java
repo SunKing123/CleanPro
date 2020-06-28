@@ -95,19 +95,19 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void setViewLayoutParms() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieYellow.getLayoutParams();
-        layoutParams.height = Float.valueOf(screenWidth * 1.2f).intValue();
-        layoutParams.width = Float.valueOf(screenWidth * 1.2f).intValue();
+        layoutParams.height = Float.valueOf(screenWidth ).intValue();
+        layoutParams.width = Float.valueOf(screenWidth ).intValue();
         viewLottieYellow.setLayoutParams(layoutParams);
         viewLottieRed.setLayoutParams(layoutParams);
         viewLottieGreen.setLayoutParams(layoutParams);
 
         RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) ivCenter.getLayoutParams();
-        imglayoutParams.height = Float.valueOf(screenWidth * 0.497f * 1.2f).intValue();
-        imglayoutParams.width = Float.valueOf(screenWidth * 0.497f * 1.2f).intValue();
+        imglayoutParams.height = Float.valueOf(screenWidth * 0.497f).intValue();
+        imglayoutParams.width = Float.valueOf(screenWidth * 0.497f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
 
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
-        textLayout.height = Float.valueOf(screenWidth * 0.1f * 1.2f).intValue();
+        textLayout.height = Float.valueOf(screenWidth * 0.1f).intValue();
         linear_text_tag.setLayoutParams(textLayout);
         linear_text_tag.setVisibility(VISIBLE);
 
