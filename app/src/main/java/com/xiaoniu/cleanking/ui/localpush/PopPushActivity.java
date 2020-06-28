@@ -112,7 +112,9 @@ public class PopPushActivity extends AppCompatActivity {
 
 
         try {
-            mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
+            if (getWindow() != null) {
+                mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
