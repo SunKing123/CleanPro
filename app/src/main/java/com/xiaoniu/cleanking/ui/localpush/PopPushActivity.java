@@ -38,7 +38,6 @@ public class PopPushActivity extends AppCompatActivity {
 
     String urlSchema;
 
-    private Handler mHandle = new Handler();
     PopupWindow mPopupWindow;
 
   /*  @Override
@@ -73,7 +72,7 @@ public class PopPushActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (!isFinishing()) {
+        if (!isFinishing() && getWindow() != null) {
             getWindow().getDecorView().postDelayed(this::showPopWindow, 500);
             getWindow().getDecorView().postDelayed(() -> {
                 if (mPopupWindow != null) {
@@ -117,6 +116,7 @@ public class PopPushActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return;
         }
 
         LocalPushConfigModel.Item item = (LocalPushConfigModel.Item) getIntent().getSerializableExtra("config");
