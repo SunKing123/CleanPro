@@ -88,7 +88,7 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
         NativeUnifiedAD mAdManager = new NativeUnifiedAD(activity, adInfo.getAdAppid(), adInfo.getAdId(), new NativeADUnifiedListener() {
             @Override
             public void onNoAD(AdError adError) {
-                LogUtils.d(TAG, "zz--ylh--onError()--code-" + adError.getErrorCode() + "---message-" + adError.getErrorMsg() + "---adid-" + adInfo.getAdId());
+                LogUtils.d(TAG, "zz--ylh--onADLoaded" +"优量汇请求成功！");
                 if (listener != null) {
                     listener.adError(adInfo, adError.getErrorCode(), adError.getErrorMsg());
                 }
@@ -96,8 +96,10 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
 
             @Override
             public void onADLoaded(List<NativeUnifiedADData> list) {
+                LogUtils.d(TAG, "zz--ylh--success()优量汇广告请求成功！--code-"+"---adid-" + adInfo.getAdId());
+
                 if (CollectionUtils.isEmpty(list)) {
-                    LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + adInfo.getAdId());
+                    LogUtils.d(TAG, "zz--ylh--error()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + adInfo.getAdId());
                     if (listener != null) {
                         listener.adError(adInfo, 1, "广告数据为空");
                     }
@@ -116,7 +118,7 @@ public class YlhSdkRequestManager extends SdkRequestManager implements NativeADU
                     adInfo.setAdClickType(2);
                 }
                 adInfo.setNativeUnifiedADData(nativeUnifiedADData);
-                LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + adInfo.getAdId());
+                LogUtils.d(TAG, "zz--ylh--success()--code-"+"---adid-" + adInfo.getAdId());
                 if (listener != null) {
                     listener.adSuccess(adInfo);
                 }
