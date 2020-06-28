@@ -6,9 +6,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
@@ -36,7 +38,6 @@ public class PopPushActivity extends AppCompatActivity {
 
     String urlSchema;
 
-    private Handler mHandle = new Handler();
     PopupWindow mPopupWindow;
 
   /*  @Override
@@ -47,6 +48,8 @@ public class PopPushActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
     }*/
 
+
+    private View mView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,15 +69,15 @@ public class PopPushActivity extends AppCompatActivity {
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         );
         setContentView(R.layout.activity_pop_layout);
+        mView = findViewById(R.id.content);
     }
-
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (!isFinishing()) {
-            mHandle.postDelayed(this::showPopWindow, 500);
-            mHandle.postDelayed(() -> {
+        if (!isFinishing() && mView != null) {
+            mView.postDelayed(this::showPopWindow, 500);
+            mView.postDelayed(() -> {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                     finish();
@@ -110,16 +113,16 @@ public class PopPushActivity extends AppCompatActivity {
             }
         }
 
-
         try {
-            mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
+            if (getWindow() != null) {
+                mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            return;
         }
 
-
         LocalPushConfigModel.Item item = (LocalPushConfigModel.Item) getIntent().getSerializableExtra("config");
-
 
         AppCompatImageView icon = mView.findViewById(R.id.logo);
         if (!TextUtils.isEmpty(item.getIconUrl())) {

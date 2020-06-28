@@ -446,7 +446,7 @@
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style_2"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
         <activity
@@ -636,47 +636,47 @@
             android:name="com.xiaoniu.cleanking.app.ApplicationDelegate"
             android:value="IModuleConfig" />
 
-    <!--    <meta-data
-            android:name="JPUSH_CHANNEL"
-            android:value="geek_push" />
+        <!--    <meta-data
+                android:name="JPUSH_CHANNEL"
+                android:value="geek_push" />
 
-        <meta-data
-            android:name="JPUSH_APPKEY"
-            android:value="fc9c656366bf05b8e450e719" />
+            <meta-data
+                android:name="JPUSH_APPKEY"
+                android:value="fc9c656366bf05b8e450e719" />
 
-        <meta-data
-            android:name="XIAOMI_APPKEY"
-            android:value="MI-5531807057088" />
-        <meta-data
-            android:name="XIAOMI_APPID"
-            android:value="MI-2882303761518070088" /> &lt;!&ndash; 极光推送 &ndash;&gt;
-        <meta-data
-            android:name="com.huawei.hms.client.appid"
-            android:value="100946605" /> &lt;!&ndash; 极光推送静态注册 &ndash;&gt;
-        <meta-data
-            android:name="MEIZU_APPKEY"
-            android:value="MZ-704651545da347cc8194d1aec4763002" />
-        <meta-data
-            android:name="MEIZU_APPID"
-            android:value="MZ-124077" /> &lt;!&ndash; ###########################厂商平台key开始############################# &ndash;&gt;
-        &lt;!&ndash; 小米开始 &ndash;&gt;
-        <meta-data
-            android:name="OPPO_APPKEY"
-            android:value="OP-9ff701f1ab004d92ae02fc11a514edd5" />
-        <meta-data
-            android:name="OPPO_APPID"
-            android:value="OP-30143914" /> &lt;!&ndash; 小米结束 &ndash;&gt;
-        &lt;!&ndash; huawei start &ndash;&gt;
-        <meta-data
-            android:name="OPPO_APPSECRET"
-            android:value="OP-1cbb7b63c94540179bbbeb7b35e9bf9b" /> &lt;!&ndash; huawei end &ndash;&gt;
-        &lt;!&ndash; meizu start &ndash;&gt;
-        <meta-data
-            android:name="com.vivo.push.api_key"
-            android:value="031981ca-ef35-4cd3-a24d-6e46183de8f7" />
-        <meta-data
-            android:name="com.vivo.push.app_id"
-            android:value="15374" />  meizhu end -->
+            <meta-data
+                android:name="XIAOMI_APPKEY"
+                android:value="MI-5531807057088" />
+            <meta-data
+                android:name="XIAOMI_APPID"
+                android:value="MI-2882303761518070088" /> &lt;!&ndash; 极光推送 &ndash;&gt;
+            <meta-data
+                android:name="com.huawei.hms.client.appid"
+                android:value="100946605" /> &lt;!&ndash; 极光推送静态注册 &ndash;&gt;
+            <meta-data
+                android:name="MEIZU_APPKEY"
+                android:value="MZ-704651545da347cc8194d1aec4763002" />
+            <meta-data
+                android:name="MEIZU_APPID"
+                android:value="MZ-124077" /> &lt;!&ndash; ###########################厂商平台key开始############################# &ndash;&gt;
+            &lt;!&ndash; 小米开始 &ndash;&gt;
+            <meta-data
+                android:name="OPPO_APPKEY"
+                android:value="OP-9ff701f1ab004d92ae02fc11a514edd5" />
+            <meta-data
+                android:name="OPPO_APPID"
+                android:value="OP-30143914" /> &lt;!&ndash; 小米结束 &ndash;&gt;
+            &lt;!&ndash; huawei start &ndash;&gt;
+            <meta-data
+                android:name="OPPO_APPSECRET"
+                android:value="OP-1cbb7b63c94540179bbbeb7b35e9bf9b" /> &lt;!&ndash; huawei end &ndash;&gt;
+            &lt;!&ndash; meizu start &ndash;&gt;
+            <meta-data
+                android:name="com.vivo.push.api_key"
+                android:value="031981ca-ef35-4cd3-a24d-6e46183de8f7" />
+            <meta-data
+                android:name="com.vivo.push.app_id"
+                android:value="15374" />  meizhu end -->
         <!-- oppo start -->
         <meta-data
             android:name="Geek_JPush_106"
@@ -687,10 +687,10 @@
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
             android:value="1e37f31fbf" />
-<!--        &lt;!&ndash; 渠道商编号 &ndash;&gt;-->
-<!--        <meta-data-->
-<!--            android:name="BaiduMobAd_CHANNEL"-->
-<!--            android:value="Baidu Market" />-->
+        <!--        &lt;!&ndash; 渠道商编号 &ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="BaiduMobAd_CHANNEL"-->
+        <!--            android:value="Baidu Market" />-->
         <!-- 是否开启错误日志统计，默认为false -->
         <meta-data
             android:name="BaiduMobAd_EXCEPTION_LOG"
@@ -702,7 +702,9 @@
             android:value="false" />
 
         <!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
-        <meta-data android:name="BaiduMobAd_SEND_STRATEGY" android:value="APP_START" />
+        <meta-data
+            android:name="BaiduMobAd_SEND_STRATEGY"
+            android:value="APP_START" />
 
 
         <!-- 是否获取基站位置信息 ,默认为true -->
@@ -741,8 +743,11 @@
             </intent-filter>
         </receiver> <!-- oppo end -->
 
+        <meta-data
+            android:name="Geek_JPush_106"
+            android:value="com.geek.push.jpush.JPushClient" />
 
-        <service android:name=".ui.localpush.LocalPushService"/>
+        <service android:name=".ui.localpush.LocalPushService" />
         <!-- vivo start -->
         <service android:name=".ui.notifition.NotificationService" />
         <service android:name=".ui.usercenter.service.FloatingImageDisplayService" /> <!-- vivo end -->
@@ -791,6 +796,7 @@
                 <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
+
         <provider
             android:name=".keeplive.pro_sp.SharedPreferenceProvider"
             android:authorities="${applicationId}.preference"
