@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_finish_rem"
-        android:layout_marginRight="@dimen/dimen_18dp"
-        android:layout_marginLeft="@dimen/dimen_18dp"
-        android:layout_marginTop="@dimen/dimen_18dp"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_12"
         android:orientation="vertical"
         android:visibility="gone">
         <!--建议清理-->
