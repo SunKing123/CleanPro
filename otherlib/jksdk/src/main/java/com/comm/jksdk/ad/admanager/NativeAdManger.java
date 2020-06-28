@@ -1,5 +1,6 @@
 package com.comm.jksdk.ad.admanager;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -1260,8 +1261,8 @@ public class NativeAdManger implements AdManager {
                 nativeExpressADView = list.get(0);
                 if (null == nativeExpressADView) {
                     LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_EMPTY + "---message-" + CodeFactory.getError(CodeFactory.ERROR_EMPTY) + "---adid-" + info.getAdId());
-                    if (mAdListener != null) {
-                        mAdListener.adError(info, CodeFactory.ERROR_EMPTY, CodeFactory.getError(CodeFactory.ERROR_EMPTY));
+                    if (mFirstAdListener != null) {
+                        mFirstAdListener.firstAdError(info, CodeFactory.ERROR_EMPTY, CodeFactory.getError(CodeFactory.ERROR_EMPTY));
                     }
                     return;
                 }
@@ -1319,8 +1320,8 @@ public class NativeAdManger implements AdManager {
             @Override
             public void onRenderFail(NativeExpressADView nativeExpressADView) {
                 LogUtils.d(TAG, "zz--ylh--onError()--code-" + CodeFactory.ERROR_RENDER_FAIL + "---message-" + CodeFactory.getError(CodeFactory.ERROR_RENDER_FAIL) + "---adid-" + info.getAdId());
-                if (mAdListener != null) {
-                    mAdListener.adError(info, CodeFactory.ERROR_RENDER_FAIL, CodeFactory.getError(CodeFactory.ERROR_RENDER_FAIL));
+                if (mFirstAdListener != null) {
+                    mFirstAdListener.firstAdError(info, CodeFactory.ERROR_RENDER_FAIL, CodeFactory.getError(CodeFactory.ERROR_RENDER_FAIL));
                 }
             }
 
@@ -1371,8 +1372,8 @@ public class NativeAdManger implements AdManager {
             @Override
             public void onNoAD(AdError adError) {
                 LogUtils.d(TAG, "zz--ylh--onError()--code-" + adError.getErrorCode() + "---message-" + adError.getErrorMsg() + "---adid-" + info.getAdId());
-                if (mAdListener != null) {
-                    mAdListener.adError(info, adError.getErrorCode(), adError.getErrorMsg());
+                if (mFirstAdListener != null) {
+                    mFirstAdListener.firstAdError(info, adError.getErrorCode(), adError.getErrorMsg());
                 }
             }
         }); // 这里的Context必须为Activity
@@ -1465,6 +1466,7 @@ public class NativeAdManger implements AdManager {
      * @param activity
      * @param info
      */
+    @SuppressLint("SourceLockedOrientationActivity")
     private void showYlhRewardVideo(Activity activity, AdInfo info) {
         String REWARD_VIDEO_AD_POS_ID_UNSUPPORT_H = "5040942242835423";//不支持竖版出横版视频
         int orientation = 1;

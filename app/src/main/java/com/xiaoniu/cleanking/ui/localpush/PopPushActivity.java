@@ -6,9 +6,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
@@ -68,13 +70,12 @@ public class PopPushActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pop_layout);
     }
 
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
         if (!isFinishing()) {
-            mHandle.postDelayed(this::showPopWindow, 500);
-            mHandle.postDelayed(() -> {
+            getWindow().getDecorView().postDelayed(this::showPopWindow, 500);
+            getWindow().getDecorView().postDelayed(() -> {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                     finish();
@@ -110,7 +111,6 @@ public class PopPushActivity extends AppCompatActivity {
             }
         }
 
-
         try {
             if (getWindow() != null) {
                 mPopupWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, y);
@@ -119,9 +119,7 @@ public class PopPushActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         LocalPushConfigModel.Item item = (LocalPushConfigModel.Item) getIntent().getSerializableExtra("config");
-
 
         AppCompatImageView icon = mView.findViewById(R.id.logo);
         if (!TextUtils.isEmpty(item.getIconUrl())) {
