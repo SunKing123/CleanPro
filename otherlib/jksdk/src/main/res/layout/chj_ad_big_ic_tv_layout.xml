@@ -50,7 +50,7 @@
                 android:id="@+id/ad_im"
                 android:layout_width="match_parent"
                 android:layout_height="171dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="fitXY" />
             <RelativeLayout
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="@dimen/dimen_8dp"

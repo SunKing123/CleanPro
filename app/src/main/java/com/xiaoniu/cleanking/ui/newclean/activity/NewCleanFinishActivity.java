@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -23,6 +24,7 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.jess.arms.utils.DeviceUtils;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.RouteConstants;
@@ -1235,8 +1237,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
                     Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
                     if (info.getAdView() != null && null != ad_container_pos01) {
+                        View adView = info.getAdView();
                         ad_container_pos01.removeAllViews();
-                        ad_container_pos01.addView(info.getAdView());
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(0, (int) DeviceUtils.dpToPixel(NewCleanFinishActivity.this, 12), 0, (int) DeviceUtils.dpToPixel(NewCleanFinishActivity.this, 12));
+                        adView.setLayoutParams(params);
+                        adView.setBackground(getResources().getDrawable(R.drawable.bg_btn_white12));
+                        ad_container_pos01.addView(adView);
                     }
                 }
             }
