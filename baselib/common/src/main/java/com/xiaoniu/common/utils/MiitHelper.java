@@ -10,7 +10,6 @@ import com.bun.miitmdid.core.IIdentifierListener;
 import com.bun.miitmdid.core.MdidSdk;
 import com.bun.miitmdid.core.MdidSdkHelper;
 import com.bun.miitmdid.supplier.IdSupplier;
-import com.just.agentweb.LogUtils;
 
 /**
  * Created by zheng on 2019/8/22.
