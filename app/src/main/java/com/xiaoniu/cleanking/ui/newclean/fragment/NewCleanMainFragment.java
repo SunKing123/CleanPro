@@ -1229,7 +1229,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     private void showHomeLottieView() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
-        textLayout.setMargins(0, 0 - Float.valueOf(screenWidth * 0.1f * 1.2f).intValue(), 0, 0);
+        textLayout.setMargins(0, 0 - Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
         view_lottie_top.setLayoutParams(textLayout);
 //        showTextView();
     }
