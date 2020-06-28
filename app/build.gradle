@@ -46,7 +46,7 @@ android {
 
                 HUAWEI_APPID  : "101367013",//华为平台注册的appid 
 
-                MEIZU_APPKEY  : "MZ‐fcd1dd73145b4b429c8e661dcafbaa15",//魅族平台注册的appkey 
+                MEIZU_APPKEY  : "MZ‐d330d8d5532042f99b53dc14af063ad3",//魅族平台注册的appkey 
                 MEIZU_APPID   : "MZ‐131890",//魅族平台注册的appid 
 
                 OPPO_APPKEY   : "OP‐4edda132eefb429a93775c7c86903c7b",// OPPO平台注册的appkey
