@@ -530,9 +530,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     }
                     // LogUtils.e("========dataBen:"+new Gson().toJson(dataBean));
                     if (dataBean != null && dataBean.isOpen()) {
-                        //  LogUtils.e("===========open config:"+new Gson().toJson(switchInfo));
                         RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
-                        // LogUtils.e("=======server data:" + new Gson().toJson(data));
+                        //LogUtils.e("=======server data:" + new Gson().toJson(data));
                         if (data != null) {
                             //判断有没有超过当日限定的次数,小于次数过时行判断，大于次数直接退出
                             ExitRetainEntity alreadyExit = PreferenceUtil.getPressBackExitAppCount();
