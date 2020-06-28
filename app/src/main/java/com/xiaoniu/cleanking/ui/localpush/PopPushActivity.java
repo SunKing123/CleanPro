@@ -49,6 +49,8 @@ public class PopPushActivity extends AppCompatActivity {
     }*/
 
 
+    private View mView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,14 +69,15 @@ public class PopPushActivity extends AppCompatActivity {
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         );
         setContentView(R.layout.activity_pop_layout);
+        mView = findViewById(R.id.content);
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if (!isFinishing() && getWindow() != null) {
-            getWindow().getDecorView().postDelayed(this::showPopWindow, 500);
-            getWindow().getDecorView().postDelayed(() -> {
+        if (!isFinishing() && mView != null) {
+            mView.postDelayed(this::showPopWindow, 500);
+            mView.postDelayed(() -> {
                 if (mPopupWindow != null) {
                     mPopupWindow.dismiss();
                     finish();
