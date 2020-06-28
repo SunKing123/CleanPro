@@ -239,6 +239,7 @@
 
     <dimen name="common_ad_item_height_82dp">82dp</dimen>
     <dimen name="common_ad_img_width_98dp">98dp</dimen>
+    <dimen name="common_ad_img_width_128dp">128dp</dimen>
     <dimen name="common_ad_img_height_66dp">66dp</dimen>
     <dimen name="common_ad_img_width_40dp">32dp</dimen>
 </resources>

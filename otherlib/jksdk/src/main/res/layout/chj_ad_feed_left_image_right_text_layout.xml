@@ -10,8 +10,8 @@
     <ImageView
         android:id="@+id/ad_item_image"
         android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:layout_marginRight="2dp"
+        android:layout_height="70dp"
+        android:layout_marginRight="12dp"
         app:layout_constraintDimensionRatio="1.52:1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -27,11 +27,22 @@
         app:layout_constraintLeft_toLeftOf="@id/ad_item_image" />
 
     <TextView
+        android:text="广告"
+        android:textColor="#ffffff"
+        app:layout_constraintLeft_toRightOf="@+id/ad_logo"
+        app:layout_constraintBottom_toBottomOf="@+id/ad_logo"
+        app:layout_constraintTop_toTopOf="@+id/ad_logo"
+        android:textSize="@dimen/dimen_9dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
         android:id="@+id/ad_tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:lines="2"
-        android:textSize="17dp"
+        android:textSize="16dp"
+        android:maxLength="15"
+        android:ellipsize="end"
         app:layout_constraintLeft_toRightOf="@id/ad_item_image"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +53,7 @@
         android:id="@+id/ad_tv_glanceOver"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
+        android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/ad_item_image"
         app:layout_constraintLeft_toLeftOf="@id/ad_tv_title"
         app:layout_constraintRight_toRightOf="parent"
