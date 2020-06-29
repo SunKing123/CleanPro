@@ -609,3 +609,13 @@
 -keep public class com.apkfuns.jsbridge.**{*;}
 -keep class * extends com.apkfuns.jsbridge.module.JsModule{*;}
 -keep class com.xiaoniu.asmhelp.bean.** { *; }
+
+
+-ignorewarning
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keepattributes Signature
+-keep class com.hianalytics.android.**{*;}
+-keep class com.huawei.updatesdk.**{*;}
+-keep class com.huawei.hms.**{*;}
