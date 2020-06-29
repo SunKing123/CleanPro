@@ -69,6 +69,7 @@ import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.MiitHelper;
 import com.xiaoniu.common.utils.SystemUtils;
+import com.xiaoniu.payshare.PayShareApplication;
 import com.xiaoniu.statistic.Configuration;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -93,11 +94,14 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     @Override
     public void onCreate(Application application) {
-
-        PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
-        PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
-        PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
-        UMShareAPI.get(application);
+        PayShareApplication.getInstance().initPayShare(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "")
+                .setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2")
+                .setQQZone("1109516379", "SJUCaQdURyRd8Dfi")
+                .setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b","http://xiaoniu.com");
+//        PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
+//        PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
+//        PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
+//        UMShareAPI.get(application);
         initInjector(application);
 
         //初始化sdk
@@ -108,7 +112,7 @@ public class ApplicationDelegate implements IApplicationDelegate {
             ARouter.openDebug();   // Turn on debugging mode (If you are running in InstantRun mode, you must turn on debug mode! Online version needs to be closed, otherwise there is a security risk)
         }
         ARouter.init(application);
-        UMConfigure.init(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
+//        UMConfigure.init(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
         setErrorHander();

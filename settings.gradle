@@ -1,3 +1,4 @@
+include ':payshare'
 include ':app',
         ':otherlib:takephoto_library',
         ':baselib:common',

@@ -296,6 +296,7 @@ dependencies {
 //    implementation 'com.google.dagger:dagger:2.11'
 
     implementation rootProject.ext.dependencies["butterknife"]
+    implementation project(path: ':payshare')
     annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
 
     implementation rootProject.ext.dependencies["amap"]

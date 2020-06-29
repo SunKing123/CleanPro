@@ -3,6 +3,7 @@ package com.xiaoniu.common.utils;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -48,21 +49,21 @@ public class ToastUtils {
         showToast(ContextUtils.getContext().getResources().getText(strResId), Toast.LENGTH_LONG, Gravity.CENTER);
     }
 
+    private static Toast toast;
     private static void showToast(final CharSequence content, final int duration, final int gravity) {
         if (TextUtils.isEmpty(content) || ContextUtils.getContext() == null)
             return;
-
-        sHandler.post(new Runnable() {
+        if (toast == null) {
+            toast = Toast.makeText(ContextUtils.getContext(), content, duration);
+        }
+        toast.cancel();
+        toast.setText(content);
+        toast.setDuration(duration);
+        sHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Toast toast = Toast.makeText(ContextUtils.getContext(), content, duration);
-//                    toast.setGravity(gravity, 0, 0);
                     toast.show();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
             }
-        });
+        }, 50);
     }
 }
