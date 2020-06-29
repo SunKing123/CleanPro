@@ -86,7 +86,6 @@ dependencies {
 //
     implementation 'cn.jiguang.sdk.plugin:vivo:3.6.0'//此版本插件仅支持JPushSDK3.2.0及以上版本 
 
-    implementation 'com.huawei.hms:push:3.0.3.301'
+
 }
 
-apply plugin: 'com.huawei.agconnect'
