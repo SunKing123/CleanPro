@@ -8,7 +8,9 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -1627,8 +1629,19 @@ public class NativeAdManger implements AdManager {
     }
 
     private void showAd(UnifiedInterstitialAD iad) {
-        if (iad != null) {
-            iad.showAsPopupWindow();
+        try {
+            new Handler().postDelayed(new Runnable(){
+
+                public void run() {
+                    if (iad != null) {
+                        iad.showAsPopupWindow();
+                    }
+                }
+
+            }, 200);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 }

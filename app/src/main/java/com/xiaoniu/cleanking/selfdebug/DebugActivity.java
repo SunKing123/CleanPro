@@ -21,6 +21,10 @@ import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
+import com.comm.jksdk.bean.ConfigBean;
+import com.comm.jksdk.config.AdsConfig;
+import com.comm.jksdk.utils.JsonUtils;
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -35,8 +39,10 @@ import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -306,51 +312,96 @@ public class DebugActivity extends BaseActivity {
     //获取广告配置
     public void gotoPop(View view) {
 //        startPop(this);
+//        AdManager adManager = GeekAdSdk.getAdsManger();
+//
+//        adManager.loadSplashAd(this, PositionId.AD_POSITION_COLD_KP, new AdListener() { //暂时这样
+//            @Override
+//            public void adSuccess(AdInfo info) {
+//                if (null != info) {
+//                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
+//                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+//                    if (null != frame_layout && null != info.getAdView()) {
+//                        frame_layout.setVisibility(VISIBLE);
+//                        frame_layout.removeAllViews();
+//                        frame_layout.addView(info.getAdView());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void adExposed(AdInfo info) {
+//                if (null == info) return;
+//                Log.d(TAG, "adExposed---home--top");
+//
+//                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+//            }
+//
+//            @Override
+//            public void adClicked(AdInfo info) {
+//                Log.d(TAG, "adClicked---home--top");
+//                if (null == info) return;
+//
+//            }
+//
+//            @Override
+//            public void adClose(AdInfo info) {
+//                if (null == info) return;
+//
+//                frame_layout.setVisibility(View.GONE);
+//                frame_layout.removeAllViews();
+////                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+//            }
+//
+//            @Override
+//            public void adError(AdInfo info, int errorCode, String errorMsg) {
+//                if (null == info) return;
+//                Log.d(TAG, "adError---home--top=" + info.toString());
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+//            }
+//        });
+
+        String cFileName = "ad_config_gj_1.4.5_c1.json";
+        ConfigBean assetConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(DebugActivity.this, cFileName),ConfigBean.class);
+        AdsConfig.setAdsInfoslist(assetConfig);
         AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadSplashAd(this, PositionId.AD_POSITION_COLD_KP, new AdListener() { //暂时这样
+        adManager.loadCustomInsertScreenAd(this, PositionId.AD_CLEAN_FINISH_POSITION_CP_AD_2, 3, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                    if (null != frame_layout && null != info.getAdView()) {
-
-                        frame_layout.setVisibility(VISIBLE);
-                        frame_layout.removeAllViews();
-                        frame_layout.addView(info.getAdView());
-                    }
-                }
+                if (null == info) return;
+                Log.d(TAG, "-----adSuccess 完成页返回插屏-----=" + info.toString());
+                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "success", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
 
             @Override
             public void adExposed(AdInfo info) {
+                Log.d(TAG, "-----adExposed 完成页返回插屏-----");
+                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
-                Log.d(TAG, "adExposed---home--top");
-          
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
             @Override
             public void adClicked(AdInfo info) {
-                Log.d(TAG, "adClicked---home--top");
+                Log.d(TAG, "-----adClicked 完成页返回插屏-----");
                 if (null == info) return;
-
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
             @Override
             public void adClose(AdInfo info) {
+                Log.d(TAG, "adClose 完成页返回插屏---");
+                PreferenceUtil.saveShowAD(false);
+                finish();
                 if (null == info) return;
-
-                frame_layout.setVisibility(View.GONE);
-                frame_layout.removeAllViews();
-//                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+                StatisticsUtils.clickAD("ad_click", "关闭点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
 
             @Override
             public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "-----adError 完成页返回插屏-----");
+                finish();
                 if (null == info) return;
-                Log.d(TAG, "adError---home--top=" + info.toString());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
             }
         });
     }
