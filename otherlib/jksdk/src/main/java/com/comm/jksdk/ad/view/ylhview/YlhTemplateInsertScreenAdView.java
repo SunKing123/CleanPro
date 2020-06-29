@@ -2,6 +2,7 @@ package com.comm.jksdk.ad.view.ylhview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 
 import com.comm.jksdk.R;
 import com.comm.jksdk.ad.entity.AdInfo;
@@ -60,7 +61,7 @@ public class YlhTemplateInsertScreenAdView extends YlhAdView {
             iad = null;
         }
         if (iad == null) {
-            iad = new UnifiedInterstitialAD(activity, appId, UNIFIED_INTERSTITIAL_ID_LARGE_SMALL, new UnifiedInterstitialADListener() {
+            iad = new UnifiedInterstitialAD(activity,adInfo.getAdId(), new UnifiedInterstitialADListener() {
 
                 public void  onVideoCached(){
 
@@ -70,7 +71,19 @@ public class YlhTemplateInsertScreenAdView extends YlhAdView {
                     //广告加载成功
                     if (iad != null) {
                         adSuccess(adInfo);
-                        iad.showAsPopupWindow();
+                        try {
+                            new Handler().postDelayed(new Runnable(){
+
+                                public void run() {
+                                    iad.showAsPopupWindow();
+                                }
+
+                            }, 200);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
                 }
 
