@@ -85,5 +85,7 @@ dependencies {
     implementation'cn.jiguang.sdk.plugin:oppo:3.6.0'//此版本插件仅支持JPushSDK3.1.8及以上版本 
 //
     implementation 'cn.jiguang.sdk.plugin:vivo:3.6.0'//此版本插件仅支持JPushSDK3.2.0及以上版本 
+
+
 }
 

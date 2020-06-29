@@ -747,6 +747,14 @@
             android:name="Geek_JPush_106"
             android:value="com.geek.push.jpush.JPushClient" />
 
+        <service
+            android:name="cn.jpush.android.service.PluginHuaweiPlatformsService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <service android:name=".ui.localpush.LocalPushService" />
         <!-- vivo start -->
         <service android:name=".ui.notifition.NotificationService" />

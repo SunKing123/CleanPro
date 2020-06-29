@@ -121,7 +121,7 @@ public class ChjFeedLeftImageRightTextView extends CHJAdView {
             }
         }
 
-        adTitle.setText(ad.getDescription());
+        adTitle.setText(AdsUtils.cropContent(19,ad.getDescription()));
         adGlanceOver.setText(AdsUtils.getRandomNumByDigit(6)+"人在浏览");
         //可以被点击的view, 也可以把convertView放进来意味item可被点击
         List<View> clickViewList = new ArrayList<>();

@@ -16,6 +16,7 @@ buildscript {
             url 'http://pre.xnshandai.net/nexus/content/repositories/niudata'
         }
         jcenter()
+        maven {url 'http://developer.huawei.com/repo/'}
     }
     dependencies {
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.0.0'
@@ -46,6 +47,8 @@ buildscript {
 //        classpath "com.didiglobal.booster:booster-transform-finalizer-watchdog-daemon:$booster_version"
         /*检查覆盖安装导致的 Resources 和 Assets 未加载的 Bug*/
         classpath "com.didiglobal.booster:booster-transform-res-check:$booster_version"
+
+        classpath 'com.huawei.agconnect:agcp:1.0.0.300'
     }
 }
 
@@ -61,6 +64,7 @@ allprojects {
             url 'http://pre.xnshandai.net/nexus/content/repositories/niudata'
         }
         jcenter()
+        maven {url 'http://developer.huawei.com/repo/'}
     }
 }
 

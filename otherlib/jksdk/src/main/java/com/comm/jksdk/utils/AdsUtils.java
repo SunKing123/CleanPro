@@ -53,4 +53,16 @@ public class AdsUtils {
         }
         return temp;
     }
+
+
+    public static String cropContent(int maxLength,String content){
+        if(content==null){
+            return "";
+        }
+        if(content.length()<=maxLength){
+            return content;
+        }
+        return content.substring(0,maxLength)+"...";
+    }
+
 }
