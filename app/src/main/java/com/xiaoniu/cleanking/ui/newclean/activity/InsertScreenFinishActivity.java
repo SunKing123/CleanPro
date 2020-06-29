@@ -44,7 +44,7 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
     @Override
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
-        loadGeekSdk();
+
         findViewById(R.id.linear_finish_screen).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +52,15 @@ public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishP
             }
         });
     }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (!isFinishing()) {
+            loadGeekSdk();
+        }
+    }
+
 
     /**
      * 获取插屏广告并加载
