@@ -663,7 +663,7 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             return;
         for (int i = 0; i < mAllList.size(); i++) {
             for (int j = 0; j < mSelectNameList.size(); j++) {
-                if (mAllList.get(i).getAppName().equals(mSelectNameList.get(j))) {
+                if (i < mAllList.size() && j < mSelectNameList.size() && mAllList.get(i).getAppName().equals(mSelectNameList.get(j))) {
                     mAllList.remove(i);
                 }
             }
