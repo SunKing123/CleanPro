@@ -135,6 +135,7 @@ public class AppApplication extends BaseApplication {
             if (manufacturer != null && manufacturer.length() > 0) {
                 String phone_type = manufacturer.toLowerCase();
                 switch (phone_type) {
+                    case "huawei":
                     case "oppo":
                     case "xiaomi":
                         Class clazz = Class.forName("java.lang.Daemons$FinalizerWatchdogDaemon");

@@ -108,12 +108,15 @@ public class VirusKillTwoFragment extends SimpleFragment {
         VirusKillStatus.code = SCAN;
         timer = new CountDownTimer(5000, 50) {
             public void onTick(long millisUntilFinished) {
-                long pro = (100 - millisUntilFinished / 50);
-                if (pro >= 66) {
-                    txtTips.setText(getString(R.string.vircuskill_fg_two_tip_two));
+                if (null != txtTips && null != txtPro && null != progressBar) {
+                    long pro = (100 - millisUntilFinished / 50);
+                    if (pro >= 66) {
+                        txtTips.setText(getString(R.string.vircuskill_fg_two_tip_two));
+                    }
+                    txtPro.setText(String.valueOf(pro));
+                    progressBar.setProgress((int) pro);
                 }
-                txtPro.setText(String.valueOf(pro));
-                progressBar.setProgress((int) pro);
+
             }
 
             public void onFinish() {
