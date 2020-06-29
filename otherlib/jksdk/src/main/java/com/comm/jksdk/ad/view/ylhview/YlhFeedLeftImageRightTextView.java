@@ -101,7 +101,7 @@ public class YlhFeedLeftImageRightTextView extends YlhAdView {
             e.printStackTrace();
         }
 
-        adTitle.setText(ad.getDesc());
+        adTitle.setText(AdsUtils.cropContent(19,ad.getDesc()));
         adGlanceOver.setText(AdsUtils.getRandomNumByDigit(6) + "人在浏览");
         adLook.setText("立即查看");
         List<View> clickableViews = new ArrayList<>();
@@ -138,6 +138,7 @@ public class YlhFeedLeftImageRightTextView extends YlhAdView {
             }
         });
     }
+
 
     public void updateAdAction(TextView button, NativeUnifiedADData ad) {
         if (!ad.isAppAd()) {
