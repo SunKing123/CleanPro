@@ -263,12 +263,16 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void saveCacheFiles() {
 
         Observable.create((ObservableOnSubscribe<String>) emitter -> {
-            //storage/emulated/0  内置SD卡路径下
-            final String path = Environment.getExternalStorageDirectory().getPath();
-            //scanMusicFile(path);
-            scanAllFile(path);
-            queryAllMusic();
-            emitter.onNext("");
+            try {
+                //storage/emulated/0  内置SD卡路径下
+                final String path = Environment.getExternalStorageDirectory().getPath();
+                //scanMusicFile(path);
+                scanAllFile(path);
+                queryAllMusic();
+                emitter.onNext("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
