@@ -121,7 +121,7 @@ public class CsjSdkRequestManager extends SdkRequestManager {
                     return;
                 }
                 info.setTtNativeExpressAd(ttNativeAd);
-                LogUtils.d(TAG, "zz--chj--success()--code-" + CodeFactory.SUCCESS + "---message-" + CodeFactory.getError(CodeFactory.SUCCESS) + "---adid-" + info.getAdId());
+                LogUtils.d(TAG, "zz--chj--信息模板广告：success()--code-" + CodeFactory.SUCCESS + "---message-" + CodeFactory.getError(CodeFactory.SUCCESS) + "---adid-" + info.getAdId());
                 if (listener != null) {
                     listener.adSuccess(info);
                 }
