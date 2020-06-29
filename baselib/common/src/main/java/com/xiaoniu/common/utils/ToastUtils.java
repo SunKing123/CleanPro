@@ -50,6 +50,7 @@ public class ToastUtils {
     }
 
     private static Toast toast;
+
     private static void showToast(final CharSequence content, final int duration, final int gravity) {
         if (TextUtils.isEmpty(content) || ContextUtils.getContext() == null)
             return;
@@ -62,7 +63,9 @@ public class ToastUtils {
         sHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (toast != null) {
                     toast.show();
+                }
             }
         }, 50);
     }
