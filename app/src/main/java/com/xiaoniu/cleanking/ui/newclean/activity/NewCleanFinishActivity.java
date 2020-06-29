@@ -285,8 +285,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     }
                 }
             }
+            if (isOpenOne) {
+                initPos01Ad();
+            }
 
-            initPos01Ad();
             if (isOpenTwo) {
                 initAd02();
             }
@@ -1096,7 +1098,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         super.onResume();
         v_power.setEnabled(true);
         initBottomAdv();
-        initPos01Ad();
+
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
         } else {
@@ -1264,6 +1266,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 if (null == info) return;
                 Log.d(TAG, "adClicked1");
                 StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
+                initPos01Ad();
             }
 
             @Override
