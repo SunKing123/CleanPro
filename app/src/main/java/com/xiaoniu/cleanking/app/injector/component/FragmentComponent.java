@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.app.injector.component;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.xiaoniu.cleanking.app.injector.PerFragment;
 import com.xiaoniu.cleanking.app.injector.module.FragmentModule;
+import com.xiaoniu.cleanking.ui.main.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.QQImgFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.QQVideoFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
@@ -55,4 +56,6 @@ public interface FragmentComponent {
     void inject(QQImgFragment qqImgFragment);
 
     void inject(QQVideoFragment qqVideoFragment);
+
+    void inject(MineFragment mineFragment);
 }
