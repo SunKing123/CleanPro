@@ -46,7 +46,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp">
 
             <RelativeLayout
                 android:id="@+id/layout_clean_top"
@@ -72,7 +74,37 @@
                     android:background="@drawable/ad_container_white_bg"
                     android:visibility="gone" />
             </RelativeLayout>
+
+
+            <com.xiaoniu.cleanking.widget.ClearCardView
+                android:id="@+id/clear_card_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10" />
+
+            <com.xiaoniu.cleanking.widget.ClearCardView
+                android:id="@+id/clear_card_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10" />
+
+            <FrameLayout
+                android:id="@+id/ffff"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_100dp"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@color/colorAccent" />
+
+            <com.xiaoniu.cleanking.widget.ClearCardView
+                android:id="@+id/clear_card_sound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10" />
+
+
         </LinearLayout>
+
+
     </androidx.core.widget.NestedScrollView>
 
 
