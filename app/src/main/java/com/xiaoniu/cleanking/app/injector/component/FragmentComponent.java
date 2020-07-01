@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.app.injector.component;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.xiaoniu.cleanking.app.injector.PerFragment;
 import com.xiaoniu.cleanking.app.injector.module.FragmentModule;
+import com.xiaoniu.cleanking.ui.main.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.QQImgFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.QQVideoFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
@@ -14,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.WXVideoChatFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.WXVideoSaveListFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.CleanFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.tool.wechat.fragment.WXFileFragment;
 
@@ -31,6 +33,8 @@ public interface FragmentComponent {
 //    void inject(CleanMainFragment cleanMainFragment);
 
     void inject(NewCleanMainFragment newCleanMainFragment);
+
+    void inject(NewPlusCleanMainFragment newPlusCleanMainFragment);
 
     void inject(ScanFragment scanFragment);
 
@@ -55,4 +59,6 @@ public interface FragmentComponent {
     void inject(QQImgFragment qqImgFragment);
 
     void inject(QQVideoFragment qqVideoFragment);
+
+    void inject(MineFragment mineFragment);
 }

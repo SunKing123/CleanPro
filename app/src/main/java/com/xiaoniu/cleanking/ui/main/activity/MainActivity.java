@@ -46,14 +46,17 @@ import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
@@ -129,7 +132,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private boolean mShowRedFirst; //红包是否已经展示
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
-    private NewCleanMainFragment mainFragment;
+    private NewPlusCleanMainFragment mainFragment;
     private final String TAG = "GeekSdk";
 //    private MyHandler mHandler = new MyHandler(this);
 
@@ -183,7 +186,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 mCurrentPosition = position + 1;
                 showHideFragment(position, prePosition);
 
-                if(mainFragment!=null&&mCurrentPosition==1){
+                if (mainFragment != null && mCurrentPosition == 1) {
                     mainFragment.getOnHomeTabClickListener().onClick(null);
                 }
                 //如果没有选中头条，开始10分钟记时
@@ -411,32 +414,32 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void initFragments() {
-
         MeFragment mineFragment = MeFragment.getIntance();
-        mainFragment = new NewCleanMainFragment();
+        mainFragment = new NewPlusCleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
-        ToolFragment toolFragment = new ToolFragment();
+        YuLeFragment secondFragment = YuLeFragment.getInstance();
+        MineFragment fourFragment = MineFragment.getInstance();
         upQuotaFragment = NewsFragment.getNewsFragment("");
         mFragments.add(mainFragment);
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "1")) {
-            mFragments.add(toolFragment);
+            mFragments.add(secondFragment);
             mFragments.add(upQuotaFragment);
 //            enableOtherComponent();
         }
-        mFragments.add(mineFragment);
+        mFragments.add(fourFragment);
 
         mManager.beginTransaction()
                 .add(R.id.frame_layout, mainFragment)
-                .add(R.id.frame_layout, toolFragment)
+                .add(R.id.frame_layout, secondFragment)
                 .add(R.id.frame_layout, upQuotaFragment)
-                .add(R.id.frame_layout, mineFragment)
+                .add(R.id.frame_layout, fourFragment)
                 .hide(mainFragment)
-                .hide(toolFragment)
+                .hide(secondFragment)
                 .hide(upQuotaFragment)
-                .hide(mineFragment)
+                .hide(fourFragment)
                 .commitAllowingStateLoss();
 
     }

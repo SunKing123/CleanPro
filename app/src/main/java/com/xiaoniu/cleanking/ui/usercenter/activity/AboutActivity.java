@@ -67,6 +67,7 @@ public class AboutActivity extends BaseActivity<AboutPresenter> {
         //检测版本更新
         mPresenter.queryAppVersion(1, () -> {
         });
+        line_version.setVisibility(View.GONE);
         line_version.setOnClickListener(v -> {
             StatisticsUtils.trackClick("Check_for_updates_click", "检查更新", "mine_page", "about_page");
             if (tv_newversion.getVisibility() == View.VISIBLE) {
