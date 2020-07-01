@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
@@ -129,6 +132,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
+    private boolean mIsFirstShowTopAd=false; //是否第一次展示头图广告
+    private boolean mIsTopAdExposed; //广告是否曝光
 
 
     @Override
@@ -318,15 +323,88 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //完成页返回通知
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
-
+        loadGeekSdkTop();
     }
 
 
     /*
      *********************************************************************************************************************************************************
-     ************************************************************animation operation**************************************************************************
+     ************************************************************top adv and animation operation**************************************************************************
      *********************************************************************************************************************************************************
      */
+
+    /**
+     * 顶部一键清理完成切换的头部广告
+     */
+    private void loadGeekSdkTop() {
+        boolean isOpen = false;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_HOME_AD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+        if (!isOpen) return;
+        if (!mIsFirstShowTopAd) {
+            StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
+            mIsFirstShowTopAd = true;
+        }//
+        if (null == getActivity() || null == mTopAdFrameLayout) return;
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page");
+        AdManager adManager = GeekAdSdk.getAdsManger();
+        adManager.loadAd(getActivity(), PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
+            @Override
+            public void adSuccess(AdInfo info) {
+                if (null != info) {
+                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
+                    if (null != mTopAdFrameLayout && null != info.getAdView()) {
+                        //   view_lottie_top.setVisibility(View.GONE);
+                        showAd(info.getAdView());
+                    }
+                }
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                if (null == info) return;
+                Log.d(TAG, "adExposed---home--top");
+                mIsTopAdExposed = true;
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "adClicked---home--top");
+                if (null == info) return;
+                if (mIsTopAdExposed) {
+                    StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
+                } else {
+                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
+                }
+                if (info.getAdClickType() == 2) { //2=详情
+                    loadGeekSdkTop();
+                } else {
+
+                }
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                if (null == info) return;
+                closeAd();
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                if (null == info) return;
+                Log.d(TAG, "adError---home--top=" + info.toString());
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
+            }
+        });
+    }
 
     private void showAd(View adView) {
         mTopAdFrameLayout.removeAllViews();
