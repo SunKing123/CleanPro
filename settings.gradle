@@ -1,7 +1,7 @@
 include ':payshare'
 include ':app',
         ':otherlib:takephoto_library',
-        ':baselib:common',
+        ':common',
         ':otherlib:videoplayer',
         ':otherlib:asmhelp',
         ':otherlib:xrecyclerview',
