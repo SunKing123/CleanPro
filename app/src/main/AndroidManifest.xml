@@ -400,7 +400,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".app.arm.ArmVirusKillActivity"
+            android:name=".ui.viruskill.ArmVirusKillActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
@@ -422,6 +422,10 @@
             android:theme="@style/activityBgTranslucent" />
         <activity
             android:name=".ui.newclean.activity.ScreenFinishBeforActivity"
+            android:exported="true"
+            android:theme="@style/activityBgTranslucent" />
+        <activity
+            android:name=".ui.newclean.activity.GoldCoinSuccessActivity"
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
 

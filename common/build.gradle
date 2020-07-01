@@ -17,6 +17,13 @@ android {
                 arguments = [AROUTER_MODULE_NAME    : project.getName()]
             }
         }
+
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to check for errors in release builds,
+            // but continue the build even when errors are found:
+            abortOnError false
+        }
     }
 
     buildTypes {
@@ -45,45 +52,8 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api rootProject.ext.dependencies["support"]["appcompat-v7"]
-    api rootProject.ext.dependencies["support"]["support-v4"]
-    api rootProject.ext.dependencies["support"]["percent"]
-    api rootProject.ext.dependencies["support"]["design"]
-    api rootProject.ext.dependencies["support"]["recyclerview-v7"]
-    api rootProject.ext.dependencies["support"]["cardview-v7"]
-    api rootProject.ext.dependencies["support"]["dynamic-animation"]
-
-
-    api rootProject.ext.dependencies["gson"]
-    api rootProject.ext.dependencies["eventbus"]
-    api rootProject.ext.dependencies["multidex"]
-    api rootProject.ext.dependencies["annotation"]
-
-
-    api rootProject.ext.dependencies["retrofit2"]["retrofit"]
-    api rootProject.ext.dependencies["retrofit2"]["converter-gson"]
-    api rootProject.ext.dependencies["retrofit2"]["adapter-rxjava2"]
-
-    api rootProject.ext.dependencies["rxandroid"]
-    api rootProject.ext.dependencies["rxjava"]
-
-    api rootProject.ext.dependencies["okhttp"]
-    api rootProject.ext.dependencies["interceptor"]
-
-    api rootProject.ext.dependencies["tablayout"]
-    api rootProject.ext.dependencies["rxpermissions"]
-
-    api rootProject.ext.dependencies["rxlifecycle"]
-    api rootProject.ext.dependencies["rxlifecycle-components"]
-
-    api rootProject.ext.dependencies["glide"]
-
-//    api (rootProject.ext.dependencies["tinker-android-lib"]) { changing = true }
-//    annotationProcessor (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
-//    api (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
-
     api  rootProject.ext.dependencies["fastjson"]
-    api  rootProject.ext.dependencies["constraint-layout"]
+
     api rootProject.ext.dependencies["oss-android-sdk"]
     api rootProject.ext.dependencies["PhotoView"]
 
@@ -95,9 +65,6 @@ dependencies {
     //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
     // sdk版本分发布版 1.x.x 和 测试版 1.x.x-alpha
     api (rootProject.ext.dependencies["NiuData"]) { changing = true }
-
-    api rootProject.ext.dependencies["arouter"]
-    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
     api rootProject.ext.dependencies["android-processes"]
     api rootProject.ext.dependencies["BaseRecyclerViewAdapterHelper"]
@@ -113,7 +80,7 @@ dependencies {
 
     api rootProject.ext.dependencies["kotlin-stdlib-jdk7"]
     api rootProject.ext.dependencies["kotlin-reflect"]
-    api rootProject.ext.dependencies["mmkv"]
+
 
     api project(path: ':otherlib:takephoto_library')
 
@@ -122,9 +89,9 @@ dependencies {
     api 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50'
     api 'org.jetbrains.kotlin:kotlin-reflect:1.3.50'
 
-
     //oaid  sdk
     api files('libs\\miit_mdid_1.0.9.aar')
 
     api project(':geekWebpage')
+    api project(':arms')
 }

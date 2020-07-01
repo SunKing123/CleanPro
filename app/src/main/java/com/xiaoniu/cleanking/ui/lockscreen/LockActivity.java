@@ -28,7 +28,7 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.arm.ArmVirusKillActivity;
+import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;

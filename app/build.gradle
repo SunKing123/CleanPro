@@ -225,9 +225,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
 
-//    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-//    implementation 'com.google.dagger:dagger:2.11'
-
     implementation rootProject.ext.dependencies["butterknife"]
 
     annotationProcessor rootProject.ext.dependencies["butterknife-compiler"]
@@ -237,10 +234,6 @@ dependencies {
 
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
     implementation rootProject.ext.dependencies["rxerrorhandler"]
-
-
-    api rootProject.ext.dependencies["arouter"]
-    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
     implementation "androidx.room:room-runtime:2.2.0"
     annotationProcessor "androidx.room:room-compiler:2.2.0"
@@ -270,13 +263,10 @@ dependencies {
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     implementation "org.jetbrains.anko:anko:0.10.8"
 
-    implementation project(':arms')
-
     api rootProject.ext.dependencies["dagger2"]
     annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
 
     implementation 'com.jzp:rotate3D:1.0.0'
-
     implementation 'com.huawei.hms:push:3.0.3.301'
 }
 apply plugin: 'com.huawei.agconnect'
