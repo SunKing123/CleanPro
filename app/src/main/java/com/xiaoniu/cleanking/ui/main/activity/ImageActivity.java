@@ -1,7 +1,11 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 清理图片
@@ -57,6 +68,68 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         activityComponent.inject(this);
     }
 
+    private Disposable mDisposable;
+
+    public void getPhotos(Activity mActivity) {
+        Observable.create((ObservableOnSubscribe<List<FileEntity>>) e -> {
+            List<FileEntity> mediaBeen = new ArrayList<>();
+            Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            String[] projImage = {MediaStore.Images.Media._ID
+                    , MediaStore.Images.Media.DATA
+                    , MediaStore.Images.Media.SIZE
+                    , MediaStore.Images.Media.DISPLAY_NAME};
+            Cursor mCursor = null;
+            try {
+                mCursor = mActivity.getContentResolver().query(mImageUri,
+                        projImage,
+                        MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
+                        new String[]{"image/jpeg", "image/png"},
+                        MediaStore.Images.Media.DATE_MODIFIED + " desc");
+            } catch (Throwable t) {
+            }
+
+            if (mCursor != null) {
+                while (mCursor.moveToNext()) {
+                    // 获取图片的路径
+                    String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                    int size = mCursor.getInt(mCursor.getColumnIndex(MediaStore.Images.Media.SIZE));
+                    String displayName = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                    //用于展示相册初始化界面
+                    mediaBeen.add(new FileEntity(size + "", path));
+                }
+                mCursor.close();
+            }
+
+            e.onNext(mediaBeen);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<FileEntity>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(List<FileEntity> fileEntities) {
+                        for (FileEntity fileEntity : fileEntities) {
+                            fileEntity.setIsSelect(false);
+                        }
+                        CleanAllFileScanUtil.clean_image_list = fileEntities;
+                        getImageList();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mDisposable.dispose();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mDisposable.dispose();
+                    }
+                });
+    }
+
 
     @Override
     public void initView() {
@@ -67,7 +140,8 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         }
         tv_delete.setSelected(false);
         cb_checkall.setSelected(false);
-        getImageList();
+        // getImageList();
+        getPhotos(this);
         cb_checkall.setOnClickListener(v -> {
             if (!recycle_view.isComputingLayout()) {
                 cb_checkall.setSelected(!cb_checkall.isSelected());
@@ -90,7 +164,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
         });
         //删除图片
         tv_delete.setOnClickListener(v -> {
-            if (!tv_delete.isSelected()||imageAdapter==null)
+            if (!tv_delete.isSelected() || imageAdapter == null)
                 return;
             List<FileEntity> listF = new ArrayList<>();
             List<FileEntity> listData = imageAdapter.getListImage();
@@ -234,5 +308,8 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
     }
 }

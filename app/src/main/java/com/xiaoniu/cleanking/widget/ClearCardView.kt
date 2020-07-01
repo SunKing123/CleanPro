@@ -30,6 +30,7 @@ class ClearCardView(context: Context, attributeSet: AttributeSet) : LinearLayout
         mItemView3 = mView.findViewById(R.id.item_3)
         mItemView4 = mView.findViewById(R.id.item_4)
         mItemView5 = mView.findViewById(R.id.item_5)
+        mButton = mView.findViewById(R.id.button)
     }
 
 
