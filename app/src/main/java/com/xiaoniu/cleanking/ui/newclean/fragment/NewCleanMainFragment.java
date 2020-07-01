@@ -352,7 +352,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
-
         //互动式广告展示逻辑;
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > mInteractionList.size() - 1) {

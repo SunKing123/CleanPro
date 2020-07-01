@@ -347,8 +347,6 @@ dependencies {
     implementation 'com.jzp:rotate3D:1.0.0'
 
     implementation 'com.huawei.hms:push:3.0.3.301'
-
-
 }
 apply plugin: 'com.huawei.agconnect'
 

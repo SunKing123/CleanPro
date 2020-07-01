@@ -1,30 +1,44 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.comm.jksdk.GeekAdSdk;
+import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.arm.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
-import com.xiaoniu.cleanking.ui.newclean.presenter.NewCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
-import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.LinkedHashMap;
@@ -38,8 +52,28 @@ import butterknife.BindView;
  */
 public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> {
 
+    private static final String TAG = "GeekSdk";
+
     @BindView(R.id.view_lottie_top)
     OneKeyCircleButtonView view_lottie_top;
+    @BindView(R.id.home_main_table)
+    HomeMainTableView homeMainTableView;
+
+    boolean isSpeedAdvOpen = false;
+    boolean isSpeedAdvOpenThree = false;
+    boolean hasInitSpeedAdvOnOff = false;
+
+
+    boolean isElectricAdvOpen = false;
+    boolean isElectricAdvOpenThree = false;
+    boolean hasInitElectricAdvOnOff = false;
+
+
+    private int mNotifySize; //通知条数
+    private int mPowerSize; //耗电应用数
+    private int mRamScale; //使用内存占总RAM的比例
+
+    private AdManager mAdManager;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -58,7 +92,28 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     @Override
     protected void initView() {
+        mAdManager = GeekAdSdk.getAdsManger();
         showHomeLottieView();
+        initEvent();
+    }
+
+    private void initEvent() {
+        homeMainTableView.setOnItemClickListener(new HomeMainTableView.OnItemClick() {
+            @Override
+            public void onClick(int item) {
+                switch (item) {
+                    case HomeMainTableView.ITEM_ONE_KEY:
+                        onOneKeySpeedClick();
+                        break;
+                    case HomeMainTableView.ITEM_KILL_VIRUS:
+                        onKillVirusClick();
+                        break;
+                    case HomeMainTableView.ITEM_ELECTRIC:
+                        onElectricClick();
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -69,7 +124,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /*********************************************************************************************************************************************************
      *********************************************************************************************************************************************************
-     ************************************************************头部清理按钮代码块 start********************************************************************************
+     ************************************************************head oneKey clean start*********************************************************************
      *********************************************************************************************************************************************************
      */
 
@@ -162,9 +217,156 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /*********************************************************************************************************************************************************
      *********************************************************************************************************************************************************
-     ************************************************************头部清理按钮代码块 end********************************************************************************
+     ************************************************************head oneKey clean end************************************************************************
      *********************************************************************************************************************************************************
      */
+
+
+    /*********************************************************************************************************************************************************
+     *********************************************************************************************************************************************************
+     ************************************************************head oneKey speed start************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+    //click one key speed
+    public void onOneKeySpeedClick() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
+        StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+
+        //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+        if (!PreferenceUtil.getCleanTime()) {
+            initSpeedAdvOnOffInfo();
+            EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+            if (isSpeedAdvOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isSpeedAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
+            startActivity(PhoneAccessActivity.class, bundle);
+        }
+    }
+
+    private void initSpeedAdvOnOffInfo() {
+        if (hasInitSpeedAdvOnOff) {
+            return;
+        }
+        hasInitSpeedAdvOnOff = true;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                    isSpeedAdvOpenThree = switchInfoList.isOpen();
+                }
+                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isSpeedAdvOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+    }
+
+    /*********************************************************************************************************************************************************
+     *********************************************************************************************************************************************************
+     ************************************************************oneKey speed end*****************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+
+    /* *********************************************************************************************************************************************************
+     * *********************************************************************************************************************************************************
+     * **********************************************************kill virus start*******************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+    //click kill virus
+    private void onKillVirusClick() {
+        StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
+        startKillVirusActivity();
+
+    }
+
+    //start kill virus page
+    private void startKillVirusActivity() {
+        if (PreferenceUtil.getVirusKillTime()) {
+            startActivity(ArmVirusKillActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            intent.putExtra("title", "病毒查杀");
+            intent.putExtra("main", false);
+            startActivity(intent);
+        }
+    }
+
+    /* *********************************************************************************************************************************************************
+     * *********************************************************************************************************************************************************
+     * **********************************************************kill virus end*********************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+
+    /* *********************************************************************************************************************************************************
+     * *********************************************************************************************************************************************************
+     * **********************************************************electric start*********************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+
+    public void onElectricClick() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
+        StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
+        if (PreferenceUtil.getPowerCleanTime()) {
+            startActivity(PhoneSuperPowerActivity.class);
+        } else {
+            initElectricAdvOnOffInfo();
+            if (isElectricAdvOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_super_power_saving));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isElectricAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_super_power_saving));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_super_power_saving));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        }
+    }
+
+    private void initElectricAdvOnOffInfo() {
+        if (hasInitElectricAdvOnOff) {
+            return;
+        }
+        hasInitElectricAdvOnOff = true;
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                    isElectricAdvOpenThree = switchInfoList.isOpen();
+                }
+                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isElectricAdvOpen = switchInfoList.isOpen();
+                }
+            }
+        }
+    }
 
     public View.OnClickListener getOnHomeTabClickListener() {
         return onClickListener;
