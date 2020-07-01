@@ -183,5 +183,31 @@
         android:layout_marginLeft="@dimen/dimen_16dp"
         android:layout_marginRight="@dimen/dimen_16dp"
         android:background="@color/color_EDEDED" />
+    <LinearLayout
+        android:id="@+id/ll_exit_login"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_56dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="退出登录"
+            android:textColor="@color/color_FC555B"
+            android:textSize="@dimen/dimen_16sp" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="@dimen/dimen_16dp"
+        android:layout_marginRight="@dimen/dimen_16dp"
+        android:background="@color/color_EDEDED" />
 
 </LinearLayout>
