@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.ui.viruskill;
 
 /**
  * Created by xinxiaolong on 2020/6/12.

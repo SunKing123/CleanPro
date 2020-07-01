@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.ui.viruskill.presenter;
 
 import android.app.Application;
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.AppManager;
 import com.jess.arms.mvp.BasePresenter;
+import com.xiaoniu.cleanking.bean.VirusKillBean;
+import com.xiaoniu.cleanking.ui.viruskill.contract.VirusKillContract;
 
 import java.util.List;
 

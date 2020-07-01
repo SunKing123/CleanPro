@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.ui.viruskill;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,10 +32,12 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.viruskill.contract.VirusKillContract;
+import com.xiaoniu.cleanking.ui.viruskill.di.component.DaggerVircusKillComponent;
+import com.xiaoniu.cleanking.ui.viruskill.presenter.VirusKillPresenter;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +47,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.COMPLETE;
-import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.PAGE_VIEW;
-import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.SCAN;
+import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.COMPLETE;
+import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.PAGE_VIEW;
+import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.SCAN;
 
 
 /**

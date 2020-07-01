@@ -400,7 +400,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".app.arm.ArmVirusKillActivity"
+            android:name=".ui.viruskill.ArmVirusKillActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"

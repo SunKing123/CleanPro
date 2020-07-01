@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.ui.viruskill;
 
 import android.animation.Animator;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
+import com.jess.arms.base.SimpleFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.widget.LeiDaView;
 import com.xiaoniu.cleanking.R;
@@ -35,8 +36,8 @@ import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 import static android.view.View.VISIBLE;
-import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.COMPLETE;
-import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.SCAN;
+import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.COMPLETE;
+import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.SCAN;
 
 /**
  * Author: lvdongdong

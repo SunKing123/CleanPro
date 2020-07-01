@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.ui.viruskill.adapter;
 
 import android.view.View;
 
@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import com.jess.arms.base.BaseHolder;
 import com.jess.arms.base.DefaultAdapter;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.bean.User;
 
 import java.util.List;
 
