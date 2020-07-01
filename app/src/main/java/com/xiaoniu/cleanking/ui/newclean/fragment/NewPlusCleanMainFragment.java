@@ -1,17 +1,29 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.jzp.rotate3d.Rotate3D;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -29,14 +41,17 @@ import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
@@ -53,6 +68,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by xinxiaolong on 2020/6/30.
@@ -71,6 +90,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.layout_clean_top)
     RelativeLayout layoutCleanTop;
 
+    @BindView(R.id.clear_card_video)
+    ClearCardView clearVideoLayout;
+    @BindView(R.id.clear_card_image)
+    ClearCardView clearImageLayout;
+    @BindView(R.id.clear_card_sound)
+    ClearCardView clearSoundLayout;
+
+    @BindView(R.id.ffff)
+    FrameLayout frameLayout;
+
     //one key speed adv onOff info
     boolean isSpeedAdvOpen = false;
     boolean isSpeedAdvOpenThree = false;
@@ -84,19 +113,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
+    private RxPermissions rxPermissions;
 
     private AdManager mAdManager;
     private Rotate3D anim;
+    private AlertDialog dlg;
+    private CompositeDisposable compositeDisposable;
 
-    @BindView(R.id.clear_card_video)
-    ClearCardView clearVideoLayout;
-    @BindView(R.id.clear_card_image)
-    ClearCardView clearImageLayout;
-    @BindView(R.id.clear_card_sound)
-    ClearCardView clearSoundLayout;
+    private boolean isDenied = false;
 
-    @BindView(R.id.ffff)
-    FrameLayout frameLayout;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -117,6 +142,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     protected void initView() {
         EventBus.getDefault().register(this);
         mAdManager = GeekAdSdk.getAdsManger();
+        rxPermissions = new RxPermissions(requireActivity());
+        compositeDisposable = new CompositeDisposable();
         showHomeLottieView();
         initClearItemCard();
         refreshHomeMainTableView();
@@ -204,12 +231,34 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
     }
 
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************activity lifecycle*****************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
     @Override
     public void onResume() {
         super.onResume();
         checkScanState();
+        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
+        mPowerSize = new FileQueryUtils().getRunningProcess().size();
+
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************eventBus notify******************************************************************************
+     *********************************************************************************************************************************************************
+     */
 
     //功能使用完成通知
     @Subscribe
@@ -244,10 +293,22 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         //热启动后重新检测权限
         isDenied = false;
-
         refreshHomeMainTableView();
     }
 
+
+    //完成页返回通知
+    @Subscribe
+    public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
+
+    }
+
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************animation operation**************************************************************************
+     *********************************************************************************************************************************************************
+     */
 
     private void showAd(View adView) {
         mTopAdFrameLayout.removeAllViews();
@@ -268,13 +329,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
             }, 500);
         }
-    }
-
-
-    //完成页返回通知
-    @Subscribe
-    public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
-
     }
 
 
@@ -327,8 +381,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             view_lottie_top.setTotalSize(totalSize);
     }
 
-    private boolean isDenied = false;
-
     public void permissionDenied() {//授权被拒绝
         if (null != view_lottie_top)
             view_lottie_top.setNoSize();
@@ -371,12 +423,123 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-    /*
-     *********************************************************************************************************************************************************
-     ************************************************************head oneKey clean end************************************************************************
-     *********************************************************************************************************************************************************
-     */
 
+
+    /**
+     * 点击立即清理
+     */
+    @OnClick(R.id.iv_center)
+    public void nowClean() {
+        StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
+        if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
+            if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                //读取扫描缓存
+                startActivity(NowCleanActivity.class);
+            } else {    //scanState ==0: 扫描中
+                checkStoragePermission();
+            }
+        } else {
+            String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+            CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+            if (null != countEntity && getActivity() != null && this.isAdded()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
+                bundle.putString("num", countEntity.getTotalSize());
+                bundle.putString("unit", countEntity.getUnit());
+                Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            } else {
+                //判断扫描缓存；
+                if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                    //读取扫描缓存
+                    startActivity(NowCleanActivity.class);
+                } else {                //scanState ==0: 扫描中
+                    checkStoragePermission();
+                }
+            }
+        }
+
+    }
+
+
+    /**
+     * 检查文件存贮权限
+     */
+    private void checkStoragePermission() {
+        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        Disposable disposable = rxPermissions.request(permissions)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        mPresenter.stopScanning();
+                        startActivity(NowCleanActivity.class);
+                    } else {
+                        if (hasPermissionDeniedForever()) {  //点击拒绝
+                            startActivity(NowCleanActivity.class);
+                        } else {                            //点击永久拒绝
+                            showPermissionDialog();
+                        }
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    public void showPermissionDialog() {
+        dlg = new AlertDialog.Builder(requireContext()).create();
+        if (requireActivity().isFinishing()) {
+            return;
+        }
+        dlg.show();
+        Window window = dlg.getWindow();
+        if (window != null) {
+            window.setContentView(R.layout.alite_redp_send_dialog);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            //这里设置居中
+            lp.gravity = Gravity.CENTER;
+            window.setAttributes(lp);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView btnOk = window.findViewById(R.id.btnOk);
+
+            TextView btnCancle = window.findViewById(R.id.btnCancle);
+            TextView tipTxt = window.findViewById(R.id.tipTxt);
+            TextView content = window.findViewById(R.id.content);
+            btnCancle.setText("取消");
+            btnOk.setText("去设置");
+            tipTxt.setText("提示!");
+            content.setText("清理功能无法使用，请先开启文件读写权限。");
+            btnOk.setOnClickListener(v -> {
+                dlg.dismiss();
+                goSetting();
+            });
+            btnCancle.setOnClickListener(v -> {
+                dlg.dismiss();
+            });
+        }
+    }
+
+
+    public void goSetting() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + requireActivity().getPackageName()));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {
+            requireActivity().startActivity(intent);
+        }
+    }
+
+    /**
+     * 是否有权限被永久拒绝
+     */
+    private boolean hasPermissionDeniedForever() {
+        boolean hasDeniedForever = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                hasDeniedForever = true;
+            }
+        }
+        return hasDeniedForever;
+    }
 
     /*
      *********************************************************************************************************************************************************
@@ -433,11 +596,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-    /*
-     *********************************************************************************************************************************************************
-     ************************************************************oneKey speed end*****************************************************************************
-     *********************************************************************************************************************************************************
-     */
 
 
     /*
@@ -463,12 +621,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             startActivity(intent);
         }
     }
-
-    /*
-     * *********************************************************************************************************************************************************
-     * **********************************************************kill virus end*********************************************************************************
-     * *********************************************************************************************************************************************************
-     */
 
 
     /*
@@ -521,9 +673,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             }
         }
     }
+
+
     /*
      * *********************************************************************************************************************************************************
-     * ********************************************************** electric end *********************************************************************************
+     * ********************************************************** others *********************************************************************************
      * *********************************************************************************************************************************************************
      */
 
@@ -537,10 +691,4 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //initGeekSdkCenter();
         }
     };
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
 }

@@ -108,8 +108,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10" />
 
->>>>>>> 7d48d77d49db5be0a88c52694f03aa7d37afe379
-
         </LinearLayout>
 
 
