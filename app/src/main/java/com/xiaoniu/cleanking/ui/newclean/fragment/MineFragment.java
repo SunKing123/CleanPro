@@ -1,10 +1,8 @@
-package com.xiaoniu.cleanking.ui.main.fragment;
+package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
 import com.comm.jksdk.GeekAdSdk;
@@ -20,7 +18,9 @@ import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.presenter.MinePresenter;
+import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
+import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -91,6 +91,14 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 break;
             case R.id.head_img_iv:
             case R.id.phone_num_tv:
+                GoldCoinBean goldCoinBean = new GoldCoinBean();
+                goldCoinBean.context = getContext();
+                goldCoinBean.obtainCoinCount = 10;
+                goldCoinBean.totalCoinCount = 135;
+                goldCoinBean.dialogType = 3;
+                goldCoinBean.adId = "";
+                goldCoinBean.videoSource = 12;
+                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
                 ToastUtils.showShort("用户信息");
                 break;
             case R.id.iv_inter_ad:

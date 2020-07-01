@@ -2,7 +2,10 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.os.Handler;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+
+import androidx.cardview.widget.CardView;
 
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
@@ -22,6 +25,7 @@ import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.AppUtils;
 
@@ -41,6 +45,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.view_lottie_top)
     OneKeyCircleButtonView view_lottie_top;
 
+     @BindView(R.id.clear_card_video)
+     ClearCardView clearVideoLayout;
+     @BindView(R.id.clear_card_image)
+     ClearCardView clearImageLayout;
+     @BindView(R.id.clear_card_sound)
+     ClearCardView clearSoundLayout;
+
+    @BindView(R.id.ffff)
+    FrameLayout frameLayout;
+
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
         fragmentComponent.inject(this);
@@ -59,6 +73,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     protected void initView() {
         showHomeLottieView();
+        initClearItemCard();
     }
 
     @Override
@@ -159,6 +174,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
     }
+
     /*********************************************************************************************************************************************************
      *********************************************************************************************************************************************************
      ************************************************************头部清理按钮代码块 end********************************************************************************
@@ -176,5 +192,30 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     };
 
+
+    private void initClearItemCard() {
+
+        clearVideoLayout.setLeftTitle("视频文件");
+        clearVideoLayout.setLeftIcon(R.mipmap.clear_icon_video);
+        clearVideoLayout.setCommonItemImageRes(R.mipmap.clear_item_video);
+        clearVideoLayout.setOnClickListener(view -> {
+
+        });
+
+        clearImageLayout.setLeftTitle("图片");
+        clearImageLayout.setLeftIcon(R.mipmap.clear_icon_img);
+        clearImageLayout.setCommonItemImageRes(R.mipmap.clear_item_img);
+        clearImageLayout.setOnClickListener(view -> {
+
+        });
+
+        clearSoundLayout.setLeftTitle("音频文件");
+        clearSoundLayout.setLeftIcon(R.mipmap.clear_icon_sound);
+        clearSoundLayout.setCommonItemImageRes(R.mipmap.clear_item_sound);
+        clearSoundLayout.setOnClickListener(view -> {
+
+        });
+
+    }
 
 }

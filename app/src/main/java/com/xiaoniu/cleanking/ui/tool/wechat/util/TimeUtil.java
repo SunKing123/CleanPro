@@ -29,11 +29,6 @@ public class TimeUtil {
     }
 
 
-
-
-
-
-
     public static boolean isTimeToshow(String str) {
         if (PrefsCleanUtil.getInstance().getInt(str, 0) != Calendar.getInstance().get(6)) {
             return true;
@@ -128,6 +123,7 @@ public class TimeUtil {
         }
         return false;
     }
+
     //是否是半年内
     public static boolean IsInHalfYear(String day) throws ParseException {
 
@@ -150,11 +146,23 @@ public class TimeUtil {
         return false;
     }
 
+    //保留2位小数 不四舍五入  传 12.3566 = 12.35
+    public static String getNum(float calculate) {
+        String str = String.valueOf(calculate);
+        try {
+            str = str.substring(0, str.indexOf(".")) + str.substring(str.indexOf("."), str.indexOf(".") + 3);
+        } catch (Exception e) {
+            str = String.format("%.2f", calculate);
+        }
+        return str;
+    }
+
     public static SimpleDateFormat getDateFormat() {
         if (null == DateLocal.get()) {
             DateLocal.set(new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA));
         }
         return DateLocal.get();
     }
+
     private static ThreadLocal<SimpleDateFormat> DateLocal = new ThreadLocal<SimpleDateFormat>();
 }

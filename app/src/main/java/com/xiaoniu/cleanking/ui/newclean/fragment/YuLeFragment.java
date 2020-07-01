@@ -1,16 +1,18 @@
-package com.xiaoniu.cleanking.ui.main.fragment;
+package com.xiaoniu.cleanking.ui.newclean.fragment;
 
+import android.graphics.Bitmap;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import androidx.databinding.DataBindingUtil;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.WebChromeClient;
+import com.just.agentweb.WebViewClient;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
-import com.xiaoniu.statistic.NiuDataAPI;
 
 /**
  * Created by zhaoyingtao
@@ -19,9 +21,11 @@ import com.xiaoniu.statistic.NiuDataAPI;
  */
 public class YuLeFragment extends SimpleFragment {
     FragmentYuleBinding mBinding;
+
     public static YuLeFragment getInstance() {
         return new YuLeFragment();
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_yule;
@@ -34,11 +38,15 @@ public class YuLeFragment extends SimpleFragment {
         mBinding = DataBindingUtil.bind(getView());
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mBinding.webFragment, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
-                .useDefaultIndicator()
+//                .useDefaultIndicator()
+                .closeIndicator()
+                .setWebChromeClient(mWebChromeClient)
+                .setWebViewClient(mWebViewClient)
                 .createAgentWeb()
                 .ready()
                 .go("https://www.baidu.com/");
     }
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -47,11 +55,11 @@ public class YuLeFragment extends SimpleFragment {
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
         }
     }
+
     @Override
     public void onPause() {
         mAgentWeb.getWebLifeCycle().onPause();
         super.onPause();
-
     }
 
     @Override
@@ -65,4 +73,23 @@ public class YuLeFragment extends SimpleFragment {
         mAgentWeb.getWebLifeCycle().onDestroy();
         super.onDestroyView();
     }
+
+    private WebViewClient mWebViewClient = new WebViewClient() {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            //do you  work
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+//            mAgentWeb.getIndicatorController().offerIndicator().hide();//失效
+        }
+    };
+    private WebChromeClient mWebChromeClient = new WebChromeClient() {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            //do you work
+        }
+    };
 }
