@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.main.presenter;
+package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 
 import android.app.Activity;
@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
-import com.xiaoniu.cleanking.ui.main.fragment.MineFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewMineModel;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
