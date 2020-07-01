@@ -22,7 +22,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;

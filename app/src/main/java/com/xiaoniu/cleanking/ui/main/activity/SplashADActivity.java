@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
@@ -204,11 +205,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     public void getAuditSwitch(AuditSwitch auditSwitch) {
         if (auditSwitch == null) {
             //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
-            SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
-            MmkvUtil.saveString(AppApplication.AuditSwitch, "1");
+            SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "1");
+            MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "1");
         } else {
-            SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, auditSwitch.getData());
-            MmkvUtil.saveString(AppApplication.AuditSwitch, auditSwitch.getData());
+            SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, auditSwitch.getData());
+            MmkvUtil.saveString(SpCacheConfig.AuditSwitch, auditSwitch.getData());
         }
         if (!PreferenceUtil.isNotFirstOpenApp()) {
             mStartView.setVisibility(View.VISIBLE);
@@ -309,7 +310,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      */
     public void getSwitchInfoListFail() {
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            SPUtil.setString(SplashADActivity.this, AppApplication.AuditSwitch, "1");
+            SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
         });
@@ -413,7 +414,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             mPresenter.getAuditSwitch();
         } else { //小于10分钟不获取开关直接请求广告
             //        状态（0=隐藏，1=显示）
-            String auditSwitch = SPUtil.getString(this, AppApplication.AuditSwitch, "1");
+            String auditSwitch = SPUtil.getString(this, SpCacheConfig.AuditSwitch, "1");
             if (auditSwitch.equals("0")) {
                 mStartView.setVisibility(View.GONE);
                 mContentView.setVisibility(View.VISIBLE);

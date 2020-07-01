@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.app;
+package com.xiaoniu.cleanking.constant;
 
 /**
  * ARouter路由地址常量

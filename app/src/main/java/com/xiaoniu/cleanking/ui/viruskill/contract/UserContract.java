@@ -30,10 +30,6 @@ import io.reactivex.Observable;
  * ================================================
  * 展示 Contract 的用法
  *
- * @see <a href="https://github.com/JessYanCoding/MVPArms/wiki#2.4.1">Contract wiki 官方文档</a>
- * Created by JessYan on 09/04/2016 10:47
- * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
- * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
 public interface UserContract {

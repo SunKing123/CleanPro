@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.xiaoniu.cleanking.app.ApplicationDelegate;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.DaggerFragmentComponent;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.app.injector.module.FragmentModule;
@@ -27,7 +27,7 @@ public abstract class LazyFragment<T extends BasePresenter> extends SimpleFragme
 
     private void initInjector() {
         FragmentComponent fragmentComponent = DaggerFragmentComponent.builder()
-                .appComponent(ApplicationDelegate.getAppComponent())
+                .appComponent(AppLifecyclesImpl.getAppComponent())
                 .fragmentModule(new FragmentModule(this))
                 .build();
 

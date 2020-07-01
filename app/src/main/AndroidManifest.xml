@@ -636,9 +636,14 @@
             android:name="PARTNER_CODE"
             android:value="hlxx" />
 
+<!--        <meta-data-->
+<!--            android:name="com.xiaoniu.cleanking.app.AppLifecyclesImpl"-->
+<!--            android:value="IModuleConfig" />-->
+
+
         <meta-data
-            android:name="com.xiaoniu.cleanking.app.ApplicationDelegate"
-            android:value="IModuleConfig" />
+            android:name="com.xiaoniu.cleanking.app.GlobalConfiguration"
+            android:value="ConfigModule" />
 
         <!--    <meta-data
                 android:name="JPUSH_CHANNEL"

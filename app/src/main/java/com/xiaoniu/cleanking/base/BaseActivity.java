@@ -3,7 +3,7 @@ package com.xiaoniu.cleanking.base;
 
 import android.text.TextUtils;
 
-import com.xiaoniu.cleanking.app.ApplicationDelegate;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.component.DaggerActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ActivityModule;
@@ -29,7 +29,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SimpleActivi
 
     private void initInjector() {
         ActivityComponent activityComponent = DaggerActivityComponent.builder()
-                .appComponent(ApplicationDelegate.getAppComponent())
+                .appComponent(AppLifecyclesImpl.getAppComponent())
                 .activityModule(new ActivityModule(this))
                 .build();
 

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 
@@ -341,7 +342,7 @@ public class SPUtil {
     public static boolean isInAudit() {
         boolean isInAudit = false;
         //        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(AppApplication.getInstance(), AppApplication.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(AppApplication.getInstance(), SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "1")) {
             isInAudit = false;
         } else {

@@ -97,25 +97,6 @@ android {
     }
 
     buildTypes {
-        /*生产环境Debug模式*/
-        releasedebug {
-            buildConfigField "String", "API_APPID", "\"1115553177840652300\""
-            buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
-            buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
-            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/weatapi/\""
-            buildConfigField "String", "PUSH_TAG", "\"product\""
-            buildConfigField "String", "SYSTEM_EN", "\"prod\""
-            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
-            buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
-            buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
-            buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
-            minifyEnabled false
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable = true
-            jniDebuggable = true
-            renderscriptDebuggable = true
-        }
 
         dev {
             versionNameSuffix "_dev"
@@ -134,6 +115,7 @@ android {
             debuggable = true
             jniDebuggable = true
             renderscriptDebuggable = true
+            multiDexKeepProguard file('multidex-config.pro')
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
@@ -155,6 +137,7 @@ android {
             minifyEnabled false
             debuggable true
             signingConfig signingConfigs.release
+            multiDexKeepProguard file('multidex-config.pro')
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
 
@@ -174,8 +157,30 @@ android {
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
             minifyEnabled false
             signingConfig signingConfigs.release
+            multiDexKeepProguard file('multidex-config.pro')
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
+        }
+
+        /*生产环境Debug模式*/
+        releasedebug {
+            buildConfigField "String", "API_APPID", "\"1115553177840652300\""
+            buildConfigField "String", "API_APPSECRET", "\"f8e28aa6525f4bd79c9920e2540d531e\""
+            buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "PUSH_TAG", "\"product\""
+            buildConfigField "String", "SYSTEM_EN", "\"prod\""
+            buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
+            buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
+            buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
+            buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            debuggable = true
+            jniDebuggable = true
+            renderscriptDebuggable = true
+            multiDexKeepProguard file('multidex-config.pro')
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
     }

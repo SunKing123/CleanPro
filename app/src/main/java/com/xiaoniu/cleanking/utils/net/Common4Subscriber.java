@@ -1,6 +1,6 @@
 package com.xiaoniu.cleanking.utils.net;
 
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.base.BaseEntity;
 
 /**

@@ -12,7 +12,7 @@
 //
 //import com.xiaoniu.cleanking.AppConstants;
 //import com.xiaoniu.cleanking.R;
-//import com.xiaoniu.cleanking.app.Constant;
+//import com.xiaoniu.cleanking.constant.Constant;
 //import com.xiaoniu.cleanking.base.SimpleActivity;
 //import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 //import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;

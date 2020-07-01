@@ -37,8 +37,8 @@ import com.jzp.rotate3d.Rotate3D;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.ApplicationDelegate;
-import com.xiaoniu.cleanking.app.RouteConstants;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
+import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -265,7 +265,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         }
 
         //状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(getActivity(), AppApplication.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(getActivity(), SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             viewNews.setVisibility(View.GONE);
         } else {
@@ -1622,10 +1622,10 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
 //                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
                 try {
-                    if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao())
+                    if (null == AppLifecyclesImpl.getAppDatabase() || null == AppLifecyclesImpl.getAppDatabase().homeRecommendDao())
                         return;
-                    ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
-                    ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
+                    AppLifecyclesImpl.getAppDatabase().homeRecommendDao().deleteAll();
+                    AppLifecyclesImpl.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1644,15 +1644,15 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             mNoNetView.setVisibility(VISIBLE);
             return;
         }
-        if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao()
-                || null == ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll() || ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll().size() <= 0)
+        if (null == AppLifecyclesImpl.getAppDatabase() || null == AppLifecyclesImpl.getAppDatabase().homeRecommendDao()
+                || null == AppLifecyclesImpl.getAppDatabase().homeRecommendDao().getAll() || AppLifecyclesImpl.getAppDatabase().homeRecommendDao().getAll().size() <= 0)
             return;
         Observable<List<HomeRecommendListEntity>> observable = Observable.create(new ObservableOnSubscribe<List<HomeRecommendListEntity>>() {
             @Override
             public void subscribe(ObservableEmitter<List<HomeRecommendListEntity>> emitter) throws Exception {
 //                Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
                 try {
-                    emitter.onNext(ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll());
+                    emitter.onNext(AppLifecyclesImpl.getAppDatabase().homeRecommendDao().getAll());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

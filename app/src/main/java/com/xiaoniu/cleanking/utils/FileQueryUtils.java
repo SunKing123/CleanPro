@@ -16,21 +16,18 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
-import com.jess.arms.base.delegate.AppDelegate;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.ApplicationDelegate;
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.bean.ApkFileInfo;
 import com.xiaoniu.cleanking.bean.path.AppPath;
 import com.xiaoniu.cleanking.bean.path.UninstallList;
 import com.xiaoniu.cleanking.bean.path.UselessApk;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoClean;
 import com.xiaoniu.cleanking.ui.main.bean.AppMemoryInfo;
 import com.xiaoniu.cleanking.ui.main.bean.FilePathInfoClean;
@@ -250,7 +247,7 @@ public class FileQueryUtils {
             //包名去重列表
             List<String> packNameList = new ArrayList<>();
             try {
-                List<String> dbList =  ApplicationDelegate.getAppPathDatabase().uninstallListDao().getUninstallList();
+                List<String> dbList =  AppLifecyclesImpl.getAppPathDatabase().uninstallListDao().getUninstallList();
                 if(!CollectionUtils.isEmpty(dbList)){
                     packNameList.addAll(dbList);
                 }
@@ -270,7 +267,7 @@ public class FileQueryUtils {
                 //根据包名筛选的——未安装应用路径列表
                 List<UninstallList> uninstallLists = new ArrayList<>();
                 try {
-                    List<UninstallList> dbList = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getPathList(packageName);
+                    List<UninstallList> dbList = AppLifecyclesImpl.getAppPathDatabase().uninstallListDao().getPathList(packageName);
                     if(!CollectionUtils.isEmpty(dbList)){
                         uninstallLists.addAll(dbList);
                     }
@@ -654,7 +651,7 @@ public class FileQueryUtils {
             //开始扫描clean_db文件中路径
             List<AppPath> pathList = new ArrayList<>();
             try {
-                List<AppPath> dblist = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getPathList(applicationInfo.packageName);
+                List<AppPath> dblist = AppLifecyclesImpl.getAppPathDatabase().cleanPathDao().getPathList(applicationInfo.packageName);
                 if(!CollectionUtils.isEmpty(dblist)){
                     pathList.addAll(dblist);
                 }
@@ -1505,7 +1502,7 @@ public class FileQueryUtils {
         try {
             List<UselessApk> apks = new ArrayList<>();
 
-            List<UselessApk> dbList = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
+            List<UselessApk> dbList = AppLifecyclesImpl.getAppPathDatabase().uselessApkDao().getAll();
             if(!CollectionUtils.isEmpty(dbList)){
                 apks.addAll(dbList);
             }

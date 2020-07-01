@@ -178,5 +178,7 @@ public class SpCacheConfig {
 
     public static final String MKV_KEY_HOME_CLEANED_DATA = "mkv_key_home_cleaned_data";
 
+    public final static String AuditSwitch = "AuditSwitch";
+
 
 }

@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 
@@ -60,7 +61,7 @@ public class BottomBarTab extends FrameLayout {
     private void init(Context context, int icon, String iconString, CharSequence title, int orderNum) {
         mContext = context;
         //        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(getContext(), AppApplication.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(getContext(), SpCacheConfig.AuditSwitch, "1");
 
         if (null == AppHolder.getInstance().getIconsEntityList()
                 || null == AppHolder.getInstance().getIconsEntityList().getData()

@@ -143,7 +143,9 @@
             android:exported="false" />
         <!-- 穿山甲 end -->
 
-
+        <meta-data
+            android:name="com.xiaoniu.common.base.CommonConfiguration"
+            android:value="ConfigModule" />
     </application>
 
 </manifest>
