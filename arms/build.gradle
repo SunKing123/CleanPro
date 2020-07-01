@@ -15,6 +15,19 @@ android {
 
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
 
+        /*解决ARouter::Compiler >>> No module name编译报错*/
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME    : project.getName()]
+            }
+        }
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to check for errors in release builds,
+            // but continue the build even when errors are found:
+            abortOnError false
+        }
+
     }
 
     buildTypes {
@@ -40,8 +53,50 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+
+    api rootProject.ext.dependencies["support"]["appcompat-v7"]
+    api rootProject.ext.dependencies["support"]["support-v4"]
+    api rootProject.ext.dependencies["support"]["percent"]
+    api rootProject.ext.dependencies["support"]["design"]
+    api rootProject.ext.dependencies["support"]["recyclerview-v7"]
+    api rootProject.ext.dependencies["support"]["cardview-v7"]
+    api rootProject.ext.dependencies["support"]["dynamic-animation"]
+    api rootProject.ext.dependencies["constraint-layout"]
+
+
+    api rootProject.ext.dependencies["gson"]
+    api rootProject.ext.dependencies["eventbus"]
+    api rootProject.ext.dependencies["androideventbus"]
+
+    api rootProject.ext.dependencies["multidex"]
+    api rootProject.ext.dependencies["annotation"]
+
+
+    api rootProject.ext.dependencies["retrofit2"]["retrofit"]
+    api rootProject.ext.dependencies["retrofit2"]["converter-gson"]
+    api rootProject.ext.dependencies["retrofit2"]["adapter-rxjava2"]
+
+
+    api rootProject.ext.dependencies["rxandroid"]
+    api rootProject.ext.dependencies["rxjava"]
+
+    api rootProject.ext.dependencies["okhttp"]
+    api rootProject.ext.dependencies["interceptor"]
+
+    api rootProject.ext.dependencies["tablayout"]
+    api rootProject.ext.dependencies["rxpermissions"]
+
+    api rootProject.ext.dependencies["rxlifecycle"]
+    api rootProject.ext.dependencies["rxlifecycle-components"]
+
+    api rootProject.ext.dependencies["glide"]
+
+    api rootProject.ext.dependencies["arouter"]
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+
+    api rootProject.ext.dependencies["mmkv"]
+
     api rootProject.ext.dependencies["fragmentationx"]
-    implementation project(':common')
 
     api (rootProject.ext.dependencies["dagger2"]){
         exclude group: 'javax.annotation'

@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.ui.viruskill.model;
 
 
 
 import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.ArmBaseModel;
+import com.xiaoniu.cleanking.bean.User;
+import com.xiaoniu.cleanking.ui.viruskill.contract.UserContract;
 
 import java.util.List;
 

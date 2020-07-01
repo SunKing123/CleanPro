@@ -9,7 +9,6 @@ import com.jess.arms.integration.cache.CacheType;
 import com.jess.arms.integration.lifecycle.ActivityLifecycleable;
 import com.jess.arms.utils.ArmsUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.umeng.analytics.MobclickAgent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -76,13 +75,11 @@ public abstract class SimpleActivity extends SupportActivity implements IActivit
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
     }
 
 

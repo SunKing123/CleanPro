@@ -42,7 +42,8 @@ ext {
             ],
 
             "gson"                         : "com.google.code.gson:gson:2.8.2",
-            "eventbus"                     : "org.greenrobot:eventbus:3.0.0",
+            "eventbus"                     : "org.greenrobot:eventbus:3.1.1",
+            "androideventbus"          : "org.simple:androideventbus:1.0.5.1",
             "multidex"                     : "androidx.multidex:multidex:2.0.0",
             "annotation"                   : "org.glassfish:javax.annotation:10.0-b28",
 

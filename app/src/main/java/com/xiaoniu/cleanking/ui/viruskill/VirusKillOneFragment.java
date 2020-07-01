@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.ui.viruskill;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.jess.arms.base.SimpleFragment;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.widget.LeiDaView;
 import com.jess.arms.widget.RotationLoadingView;
@@ -27,7 +28,7 @@ import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
 
 import butterknife.BindView;
 
-import static com.xiaoniu.cleanking.app.arm.VirusKillStatus.PAGE_VIEW;
+import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.PAGE_VIEW;
 
 /**
  * Author: lvdongdong

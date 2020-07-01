@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xiaoniu.cleanking.app.arm;
+package com.xiaoniu.cleanking.bean;
 
 /**
  * ================================================
@@ -24,12 +24,12 @@ package com.xiaoniu.cleanking.app.arm;
  * <a href="https://github.com/JessYanCoding">Follow me</a>
  * ================================================
  */
-public class User {
+public class VirusKillBean {
     private final int id;
     private final String login;
     private final String avatar_url;
 
-    public User(int id, String login, String avatar_url) {
+    public VirusKillBean(int id, String login, String avatar_url) {
         this.id = id;
         this.login = login;
         this.avatar_url = avatar_url;
