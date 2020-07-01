@@ -1,4 +1,4 @@
-package com.xiaoniu.master.cleanking.interfaces;
+package com.xiaoniu.cleanking.ui.viruskill;
 
 public interface FragmentCallBack {
     void checkFragment();

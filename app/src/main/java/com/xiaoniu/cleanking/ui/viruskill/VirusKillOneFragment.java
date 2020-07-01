@@ -24,7 +24,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
 
 import butterknife.BindView;
 

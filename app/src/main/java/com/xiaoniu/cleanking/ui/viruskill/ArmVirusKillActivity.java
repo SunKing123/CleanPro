@@ -38,7 +38,6 @@ import com.xiaoniu.cleanking.ui.viruskill.presenter.VirusKillPresenter;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xiaoniu.master.cleanking.interfaces.FragmentCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
