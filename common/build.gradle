@@ -33,9 +33,6 @@ android {
         }
 
         debug{}
-        preprod{}
-        devdebug{}
-        btestdebug{}
         releasedebug{}
     }
 

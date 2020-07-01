@@ -22,10 +22,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{}
-        preprod{}
         dev{}
-        devdebug{}
-        btestdebug{}
         releasedebug{}
     }
 
@@ -40,7 +37,7 @@ dependencies {
     implementation'com.githang:status-bar-compat:0.7'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
     implementation 'com.zhaozhibo.guideview:guideview:1.0.6'
-    implementation project(':baselib:common')
+    implementation project(':common')
 //    implementation (rootProject.ext.dependencies["tinker-android-lib"]) { changing = true }
 //    annotationProcessor (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }
 //    implementation (rootProject.ext.dependencies["tinker-android-anno"]) { changing = true }

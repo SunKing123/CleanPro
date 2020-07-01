@@ -424,6 +424,10 @@
             android:name=".ui.newclean.activity.ScreenFinishBeforActivity"
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
+        <activity
+            android:name=".ui.newclean.activity.GoldCoinSuccessActivity"
+            android:exported="true"
+            android:theme="@style/activityBgTranslucent" />
 
         <activity
             android:name=".ui.lockscreen.LockActivity"
