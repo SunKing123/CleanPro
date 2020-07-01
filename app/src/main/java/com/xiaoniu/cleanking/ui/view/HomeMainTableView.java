@@ -126,7 +126,6 @@ public class HomeMainTableView extends ConstraintLayout {
         tvOneKey.setText(text);
     }
 
-
     /*************************************************************************************************************************************************************************
      ************************************************************************************************************************************************************************
      ********************************************************************killVirus style********************************************************************************
@@ -137,11 +136,11 @@ public class HomeMainTableView extends ConstraintLayout {
         int unusedDays = PreferenceUtil.getUnusedVirusKillDays();
         if (unusedDays > 1) {
             String tColor=unusedDays+"天";
-            SpannableString text = inertColorText(tColor+"为杀毒", 0, tColor.length(), Color.RED);
+            SpannableString text = inertColorText(tColor+"未杀毒", 0, tColor.length(), Color.RED);
             tvKillVirus.setText(text);
         } else {
             String tColor="可能有风险";
-            SpannableString text = inertColorText(tColor+"为杀毒", 0, tColor.length(), Color.RED);
+            SpannableString text = inertColorText(tColor, 0, tColor.length(), Color.RED);
             tvKillVirus.setText(text);
         }
     }
@@ -149,7 +148,7 @@ public class HomeMainTableView extends ConstraintLayout {
     //病毒查杀已使用风格
     public void killVirusUsedStyle() {
         String tColor="防御保护已开启";
-        SpannableString text = inertColorText(tColor+"为杀毒", 0, tColor.length(), Color.GREEN);
+        SpannableString text = inertColorText(tColor, 0, tColor.length(), Color.GREEN);
         tvKillVirus.setText(text);
     }
 
@@ -171,7 +170,7 @@ public class HomeMainTableView extends ConstraintLayout {
         String tColor =getRandomOptimizeElectricNum();
         String head="延长时间";
         SpannableString text = inertColorText(head+tColor+"分钟", head.length(), head.length()+tColor.length(), Color.GREEN);
-
+        tvElectric.setText(text);
     }
 
     //get random optimize electric num by electric value
@@ -208,17 +207,11 @@ public class HomeMainTableView extends ConstraintLayout {
         this.onItemClick = onItemClick;
     }
 
-
-
     public SpannableString inertColorText(String content, int startColorIndex, int endColorIndex, int color) {
         SpannableString spanString = new SpannableString(content);
         ForegroundColorSpan span = new ForegroundColorSpan(color);
         spanString.setSpan(span, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         return spanString;
-    }
-
-    private String getString(@StringRes int resId) {
-        return getResources().getString(resId).toString();
     }
 
     @NonNull

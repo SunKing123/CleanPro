@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
@@ -366,6 +367,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         if (PreferenceUtil.getPowerCleanTime()) {
             PreferenceUtil.savePowerCleanTime();
         }
+
+        EventBus.getDefault().post(new FunctionCompleteEvent( getString(R.string.tool_super_power_saving)));
+
         LocalPushUtils.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_POWER_SAVING);
         PreferenceUtil.saveCleanPowerUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());

@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
+import com.jzp.rotate3d.Rotate3D;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.arm.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -24,19 +26,24 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -58,22 +65,27 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     OneKeyCircleButtonView view_lottie_top;
     @BindView(R.id.home_main_table)
     HomeMainTableView homeMainTableView;
+    @BindView(R.id.framelayout_top_ad)
+    FrameLayout mTopAdFrameLayout;
+    @BindView(R.id.layout_clean_top)
+    RelativeLayout layoutCleanTop;
 
+    //one key speed adv onOff info
     boolean isSpeedAdvOpen = false;
     boolean isSpeedAdvOpenThree = false;
     boolean hasInitSpeedAdvOnOff = false;
 
-
+    //electric adv onOff info
     boolean isElectricAdvOpen = false;
     boolean isElectricAdvOpenThree = false;
     boolean hasInitElectricAdvOnOff = false;
-
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale; //使用内存占总RAM的比例
 
     private AdManager mAdManager;
+    private Rotate3D anim;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -92,9 +104,50 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
         mAdManager = GeekAdSdk.getAdsManger();
         showHomeLottieView();
+        refreshHomeMainTableView();
         initEvent();
+        checkAndUploadPoint();
+
+        anim = new Rotate3D.Builder(getActivity())
+                .setParentView(layoutCleanTop)
+                .setPositiveView(view_lottie_top)
+                .setNegativeView(mTopAdFrameLayout)
+                .create();
+
+
+    }
+
+    /**
+     * 权限埋点上报
+     */
+    private void checkAndUploadPoint() {
+        //SD卡读写权限是否打开埋点上报
+        String storagePrmStatus = AppUtils.checkStoragePermission(getActivity()) ? "open" : "close";
+        StatisticsUtils.customCheckPermission(Points.STORAGE_PERMISSION_EVENT_CODE, Points.STORAGE_PERMISSION_EVENT_NAME, storagePrmStatus, "", "home_page");
+        //读取手机状态权限是否打开埋点上报
+        String phoneStatePrmStatus = AppUtils.checkPhoneStatePermission(getActivity()) ? "open" : "close";
+        StatisticsUtils.customCheckPermission(Points.DEVICE_IDENTIFICATION_EVENT_CODE, Points.DEVICE_IDENTIFICATION_EVENT_NAME, phoneStatePrmStatus, "", "home_page");
+    }
+
+    private void refreshHomeMainTableView() {
+        if (PreferenceUtil.getCleanTime()) {
+            homeMainTableView.oneKeySpeedUnusedStyle();
+        } else {
+            homeMainTableView.oneKeySpeedUsedStyle();
+        }
+        if (PreferenceUtil.getVirusKillTime()) {
+            homeMainTableView.killVirusUnusedStyle();
+        } else {
+            homeMainTableView.killVirusUsedStyle();
+        }
+        if (PreferenceUtil.getPowerCleanTime()) {
+            homeMainTableView.electricUnusedStyle();
+        } else {
+            homeMainTableView.electricUsedStyle();
+        }
     }
 
     private void initEvent() {
@@ -120,9 +173,78 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onResume() {
         super.onResume();
         checkScanState();
+        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
     }
 
-    /*********************************************************************************************************************************************************
+    //功能使用完成通知
+    @Subscribe
+    public void fromFunctionCompleteEvent(FunctionCompleteEvent event) {
+        if (event == null || event.getTitle() == null) {
+            return;
+        }
+        switch (event.getTitle()) {
+            case "一键加速":
+                homeMainTableView.oneKeySpeedUsedStyle();
+                break;
+            case "通知栏清理":
+
+                break;
+            case "超强省电":
+                homeMainTableView.electricUsedStyle();
+                break;
+            case "病毒查杀":
+                homeMainTableView.killVirusUsedStyle();
+                break;
+        }
+    }
+
+    /**
+     * 热启动回调
+     *
+     */
+    @Subscribe
+    public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
+        if (null == mTopAdFrameLayout || null == view_lottie_top) return;
+        if (lifecycEvent.isActivity()) {
+            closeAd();
+        }
+        //热启动后重新检测权限
+        isDenied = false;
+
+        refreshHomeMainTableView();
+    }
+
+
+    private void showAd(View adView) {
+        mTopAdFrameLayout.removeAllViews();
+        mTopAdFrameLayout.addView(adView);
+        if (!anim.isOpen()) {
+            anim.transform();
+        }
+    }
+
+    private void closeAd() {
+        if (anim.isOpen()) {
+            anim.transform();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mTopAdFrameLayout != null)
+                        mTopAdFrameLayout.removeAllViews();
+                }
+            }, 500);
+        }
+    }
+
+
+    //完成页返回通知
+    @Subscribe
+    public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
+
+    }
+
+
+    /*
      *********************************************************************************************************************************************************
      ************************************************************head oneKey clean start*********************************************************************
      *********************************************************************************************************************************************************
@@ -215,16 +337,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-    /*********************************************************************************************************************************************************
+    /*
      *********************************************************************************************************************************************************
      ************************************************************head oneKey clean end************************************************************************
      *********************************************************************************************************************************************************
      */
 
 
-    /*********************************************************************************************************************************************************
+    /*
      *********************************************************************************************************************************************************
-     ************************************************************head oneKey speed start************************************************************************
+     ************************************************************oneKey speed start************************************************************************
      *********************************************************************************************************************************************************
      */
 
@@ -233,7 +355,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
-
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
             initSpeedAdvOnOffInfo();
@@ -278,14 +399,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-    /*********************************************************************************************************************************************************
+    /*
      *********************************************************************************************************************************************************
      ************************************************************oneKey speed end*****************************************************************************
      *********************************************************************************************************************************************************
      */
 
 
-    /* *********************************************************************************************************************************************************
+    /*
      * *********************************************************************************************************************************************************
      * **********************************************************kill virus start*******************************************************************************
      * *********************************************************************************************************************************************************
@@ -295,7 +416,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private void onKillVirusClick() {
         StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
         startKillVirusActivity();
-
     }
 
     //start kill virus page
@@ -310,14 +430,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-    /* *********************************************************************************************************************************************************
+    /*
      * *********************************************************************************************************************************************************
      * **********************************************************kill virus end*********************************************************************************
      * *********************************************************************************************************************************************************
      */
 
 
-    /* *********************************************************************************************************************************************************
+    /*
      * *********************************************************************************************************************************************************
      * **********************************************************electric start*********************************************************************************
      * *********************************************************************************************************************************************************
@@ -367,6 +487,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             }
         }
     }
+    /*
+     * *********************************************************************************************************************************************************
+     * ********************************************************** electric end *********************************************************************************
+     * *********************************************************************************************************************************************************
+     */
 
     public View.OnClickListener getOnHomeTabClickListener() {
         return onClickListener;
@@ -379,5 +504,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     };
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

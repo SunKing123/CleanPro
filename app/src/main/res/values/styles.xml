@@ -338,15 +338,14 @@
     <style name="home_main_table_icon_tv_title">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">21dp</item>
+        <item name="android:textSize">19dp</item>
         <item name="android:layout_centerHorizontal">true</item>
+        <item name="text_color">@color/black</item>
     </style>
 
-    <style name="home_main_table_icon_tv_content" >
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">16dp</item>
-        <item name="android:layout_centerHorizontal">true</item>
+    <style name="home_main_table_icon_tv_content" parent="home_main_table_icon_tv_title">
+        <item name="android:textSize">14dp</item>
+        <item name="android:layout_marginTop">2dp</item>
     </style>
 
 </resources>
