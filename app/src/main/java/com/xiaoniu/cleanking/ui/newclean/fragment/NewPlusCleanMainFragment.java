@@ -31,7 +31,12 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
+import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -50,9 +55,12 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
+import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
+import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -60,11 +68,11 @@ import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -160,25 +168,35 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void initClearItemCard() {
-        clearVideoLayout.setLeftTitle("视频文件");
-        clearVideoLayout.setLeftIcon(R.mipmap.clear_icon_video);
-        clearVideoLayout.setCommonItemImageRes(R.mipmap.clear_item_video);
-        clearVideoLayout.setOnClickListener(view -> {
-
-        });
-
-        clearImageLayout.setLeftTitle("图片");
-        clearImageLayout.setLeftIcon(R.mipmap.clear_icon_img);
-        clearImageLayout.setCommonItemImageRes(R.mipmap.clear_item_img);
-        clearImageLayout.setOnClickListener(view -> {
-
-        });
-
         clearSoundLayout.setLeftTitle("音频文件");
         clearSoundLayout.setLeftIcon(R.mipmap.clear_icon_sound);
         clearSoundLayout.setCommonItemImageRes(R.mipmap.clear_item_sound);
         clearSoundLayout.setOnClickListener(view -> {
 
+        });
+
+        clearVideoLayout.setLeftTitle("视频文件");
+        clearVideoLayout.setLeftIcon(R.mipmap.clear_icon_video);
+        clearVideoLayout.setCommonItemImageRes(R.mipmap.clear_item_video);
+        clearVideoLayout.getButton().setOnClickListener(view -> {
+            //跳转到视频清理
+            startActivity(new Intent(getActivity(), CleanVideoManageActivity.class));
+        });
+
+        clearImageLayout.setLeftTitle("图片");
+        clearImageLayout.setLeftIcon(R.mipmap.clear_icon_img);
+        clearImageLayout.setCommonItemImageRes(R.mipmap.clear_item_img);
+        clearImageLayout.getButton().setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), ImageActivity.class);
+            startActivity(intent);
+        });
+
+        clearSoundLayout.setLeftTitle("音频文件");
+        clearSoundLayout.setLeftIcon(R.mipmap.clear_icon_sound);
+        clearSoundLayout.setCommonItemImageRes(R.mipmap.clear_item_sound);
+        clearSoundLayout.getButton().setOnClickListener(view -> {
+            //跳转到音乐清理
+            startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));
         });
     }
 
@@ -628,7 +646,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * **********************************************************electric start*********************************************************************************
      * *********************************************************************************************************************************************************
      */
-
 
     public void onElectricClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
