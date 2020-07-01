@@ -95,7 +95,7 @@
                 android:layout_marginLeft="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_16dp"
                 android:layout_marginRight="@dimen/dimen_16dp"
-                android:visibility="gone" />
+                 />
 
             <ImageView
                 android:id="@+id/image_ad_bottom_second"
