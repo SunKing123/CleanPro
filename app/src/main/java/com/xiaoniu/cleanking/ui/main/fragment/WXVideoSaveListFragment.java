@@ -17,7 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.ui.main.activity.PreviewImageActivity;

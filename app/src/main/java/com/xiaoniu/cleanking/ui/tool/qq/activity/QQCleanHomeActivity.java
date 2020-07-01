@@ -20,7 +20,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;

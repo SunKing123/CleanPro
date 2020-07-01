@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 JessYan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
@@ -13,22 +28,22 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
+import com.baidu.mobstat.StatService;
 import com.bun.miitmdid.core.JLibrary;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
+import com.hellogeek.permission.Integrate.Permission;
+import com.hellogeek.permission.Integrate.PermissionIntegrate;
+import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
+import com.jess.arms.base.delegate.AppLifecycles;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.mmkv.MMKV;
 import com.umeng.commonsdk.UMConfigure;
-import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.AppComponent;
@@ -36,6 +51,7 @@ import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
@@ -64,7 +80,6 @@ import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.base.IApplicationDelegate;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.MiitHelper;
@@ -79,21 +94,40 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.multidex.MultiDex;
+import androidx.room.Room;
+import butterknife.ButterKnife;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
+import timber.log.Timber;
 
 /**
- * Created by admin on 2017/6/8.
+ * ================================================
+ * 展示 {@link AppLifecycles} 的用法
+ * ================================================
  */
-
-public class ApplicationDelegate implements IApplicationDelegate {
+public class AppLifecyclesImpl implements AppLifecycles {
 
     private static AppDataBase mAppDatabase;
     private static AppPathDataBase mAppPathDataBase;
     private static Handler sHandler = new Handler(Looper.getMainLooper());
+    private static AppComponent mAppComponent;
 
     @Override
-    public void onCreate(Application application) {
+    public void attachBaseContext(@NonNull Context base) {
+        //这里比 onCreate 先执行,常用于 MultiDex 初始化,插件化框架的初始化
+        MultiDex.install(base);
+
+
+    }
+
+    @Override
+    public void onCreate(@NonNull Application application) {
+        ContextUtils.initApplication(application);
+        logConfig();
         PayShareApplication.getInstance().initPayShare(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "")
                 .setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2")
                 .setQQZone("1109516379", "SJUCaQdURyRd8Dfi")
@@ -140,10 +174,14 @@ public class ApplicationDelegate implements IApplicationDelegate {
         });
         String rootDir = MMKV.initialize(application);
 
+        initBaiduSdk(application);
+        initPermission(application);
+
     }
 
 
-    private static AppComponent mAppComponent;
+
+
 
     private void initInjector(Application application) {
         mAppComponent = DaggerAppComponent.builder()
@@ -154,6 +192,30 @@ public class ApplicationDelegate implements IApplicationDelegate {
 
     }
 
+
+
+    public void initBaiduSdk(Application application){
+        //接入百度统计sdk
+        StatService.setAppChannel(application, ChannelUtil.getChannel(), true);
+        StatService.autoTrace(application);
+
+
+
+    }
+
+
+    public void initPermission(Application application){
+        //权限相关初始化
+        PermissionIntegrate.getInstance(application)
+                .setPermissionList(Permission.SUSPENDEDTOAST, Permission.SELFSTARTING,
+                        Permission.NOTIFICATIONREAD, Permission.PACKAGEUSAGESTATS)
+                .setPermissionRecordCallback(new PermissionRecordCallback() {
+                    @Override
+                    public void usagePermissionRecord(int usageType, String currentPage, String sourcePage, String eventCode, String eventName, Map<String, String> extraMap) {
+
+                    }
+                });
+    }
 
     //商业sdk初始化
     public void initAdSdk(Application application) {
@@ -230,20 +292,9 @@ public class ApplicationDelegate implements IApplicationDelegate {
     }
 
     @Override
-    public void onTerminate() {
-
+    public void onTerminate(@NonNull Application application) {
+        // Do nothing because of nothing
     }
-
-    @Override
-    public void onLowMemory() {
-
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-
-    }
-
 
     //埋点初始化
     public void initNiuData(Application application) {
@@ -532,4 +583,21 @@ public class ApplicationDelegate implements IApplicationDelegate {
         return processName.equals(application.getPackageName());
     }
 
+    public void logConfig(){
+        if (BuildConfig.DEBUG) {//Timber初始化
+            //Timber 是一个日志框架容器,外部使用统一的Api,内部可以动态的切换成任何日志框架(打印策略)进行日志打印
+            //并且支持添加多个日志框架(打印策略),做到外部调用一次 CoolingApi,内部却可以做到同时使用多个策略
+            //比如添加三个策略,一个打印日志,一个将日志保存本地,一个将日志上传服务器
+            Timber.plant(new Timber.DebugTree());
+            // 如果你想将框架切换为 Logger 来打印日志,请使用下面的代码,如想切换为其他日志框架请根据下面的方式扩展
+////                    Logger.addLogAdapter(new AndroidLogAdapter());
+//                    Timber.plant(new Timber.DebugTree() {
+//                        @Override
+//                        protected void log(int priority, String tag, String message, Throwable t) {
+//                            Logger.log(priority, tag, message, t);
+//                        }
+//                    });
+            ButterKnife.setDebug(true);
+        }
+    }
 }

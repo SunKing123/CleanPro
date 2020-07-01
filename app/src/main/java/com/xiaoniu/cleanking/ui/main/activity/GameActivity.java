@@ -25,7 +25,7 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.ApplicationDelegate;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -226,13 +226,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
 
         try {
             //展示之前加速过的应用
-            if (null != ApplicationDelegate.getAppDatabase() && null != ApplicationDelegate.getAppDatabase().gameSelectDao()
-                    && null != ApplicationDelegate.getAppDatabase().gameSelectDao().getAll()
-                    && ApplicationDelegate.getAppDatabase().gameSelectDao().getAll().size() > 0) {
+            if (null != AppLifecyclesImpl.getAppDatabase() && null != AppLifecyclesImpl.getAppDatabase().gameSelectDao()
+                    && null != AppLifecyclesImpl.getAppDatabase().gameSelectDao().getAll()
+                    && AppLifecyclesImpl.getAppDatabase().gameSelectDao().getAll().size() > 0) {
                 Observable<List<GameSelectEntity>> observable = Observable.create(new ObservableOnSubscribe<List<GameSelectEntity>>() {
                     @Override
                     public void subscribe(ObservableEmitter<List<GameSelectEntity>> emitter) throws Exception {
-                        emitter.onNext(ApplicationDelegate.getAppDatabase().gameSelectDao().getAll());
+                        emitter.onNext(AppLifecyclesImpl.getAppDatabase().gameSelectDao().getAll());
                     }
                 });
                 Consumer<List<GameSelectEntity>> consumer = new Consumer<List<GameSelectEntity>>() {
@@ -494,8 +494,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
             public void subscribe(ObservableEmitter<String> emitter) throws Exception {
                 //Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
                 try {
-                    ApplicationDelegate.getAppDatabase().gameSelectDao().deleteAll();
-                    ApplicationDelegate.getAppDatabase().gameSelectDao().insertAll(selectSaveList);
+                    AppLifecyclesImpl.getAppDatabase().gameSelectDao().deleteAll();
+                    AppLifecyclesImpl.getAppDatabase().gameSelectDao().insertAll(selectSaveList);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

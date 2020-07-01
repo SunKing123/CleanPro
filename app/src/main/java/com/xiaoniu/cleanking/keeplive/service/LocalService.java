@@ -36,7 +36,7 @@ import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.bean.AppPackageNameList;
 import com.xiaoniu.cleanking.bean.AppPackageNameListDB;
@@ -71,7 +71,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.xiaoniu.cleanking.app.Constant.SCAN_SPACE_LONG;
+import static com.xiaoniu.cleanking.constant.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
 
@@ -201,7 +201,7 @@ public final class LocalService extends Service {
             Log.i("HideForegroundService--", e.getMessage());
         }
         if (!isExeTask || System.currentTimeMillis() - runTime > 15 * 1000) {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
             if (TextUtils.equals(auditSwitch, "1")) {
@@ -219,7 +219,7 @@ public final class LocalService extends Service {
                 }
             }
         }
-        String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
         //过审开关打开状态
         //!PreferenceUtil.isShowAD()广告展示状态
         if (TextUtils.equals(auditSwitch, "1")) {
@@ -533,7 +533,7 @@ public final class LocalService extends Service {
     //全局跳转锁屏页面
     public void startActivity(Context context) {
         try {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
             boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
             if (TextUtils.equals(auditSwitch, "1") && lock_sw) { //过审开关打开状态
                 Intent screenIntent = new Intent();
@@ -552,7 +552,7 @@ public final class LocalService extends Service {
     //全局跳转全屏插屏页面
     public void startFullInsertAd(Context context) {
         try {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), AppApplication.AuditSwitch, "1");
+            String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
 
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态

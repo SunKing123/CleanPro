@@ -25,7 +25,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;

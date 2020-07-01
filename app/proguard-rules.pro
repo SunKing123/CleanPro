@@ -591,7 +591,7 @@
 -keep class com.xiaoniu.common.base.** { *; }
 -keep class com.xiaoniu.common.http.** { *; }
 #-keep class com.xiaoniu.common.widget.** { *; }
--keep public class * extends com.xiaoniu.common.base.IApplicationDelegate
+-keep public class * extends com.xiaoniu.common.base.IAppLifecyclesImpl
 #mdid获取sdk
 -keep class com.bun.miitmdid.core.** {*;}
 

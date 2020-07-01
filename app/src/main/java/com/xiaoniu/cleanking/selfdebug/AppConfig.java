@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.app;
+package com.xiaoniu.cleanking.selfdebug;
 
 import android.app.Activity;
 import android.content.Context;

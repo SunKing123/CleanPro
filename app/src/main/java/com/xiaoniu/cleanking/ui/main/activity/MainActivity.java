@@ -24,7 +24,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.RouteConstants;
+import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -42,6 +42,7 @@ import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
@@ -54,7 +55,6 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
@@ -160,9 +160,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void initView() {
-//        List<UninstallList> uselessApks = ApplicationDelegate.getAppPathDatabase().uninstallListDao().getAll();
-//        List<AppPath> appPaths = ApplicationDelegate.getAppPathDatabase().cleanPathDao().getAll();
-//        List<UselessApk> uselessApks1 = ApplicationDelegate.getAppPathDatabase().uselessApkDao().getAll();
+//        List<UninstallList> uselessApks = AppLifecyclesImpl.getAppPathDatabase().uninstallListDao().getAll();
+//        List<AppPath> appPaths = AppLifecyclesImpl.getAppPathDatabase().cleanPathDao().getAll();
+//        List<UselessApk> uselessApks1 = AppLifecyclesImpl.getAppPathDatabase().uselessApkDao().getAll();
 //        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
 //        LogUtils.i("zz-----path----"+appPaths.get(0).getFile_path()+"----"+ AESUtils01.decrypt(appPaths.get(0).getFile_path(),"E3A37D84081C89D9787D0B8546BA8BA5"));
 //        LogUtils.i("zz-----path----"+uselessApks1.get(1).getFilePath()+"----"+ AESUtils01.decrypt(uselessApks1.get(1).getFilePath(),"E3A37D84081C89D9787D0B8546BA8BA5"));
@@ -422,7 +422,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         upQuotaFragment = NewsFragment.getNewsFragment("");
         mFragments.add(mainFragment);
         //        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "1")) {
             mFragments.add(secondFragment);
             mFragments.add(upQuotaFragment);
@@ -778,7 +778,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (null == iconsEntity || null == iconsEntity.getData() || iconsEntity.getData().size() <= 0)
             return;
         mBottomBar.removeAllTabs();
-        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
@@ -814,7 +814,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      */
     public void getIconListFail() {
         //        状态（0=隐藏，1=显示）
-        String auditSwitch = SPUtil.getString(MainActivity.this, AppApplication.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.clean_normal, "", getString(R.string.clean), 0))

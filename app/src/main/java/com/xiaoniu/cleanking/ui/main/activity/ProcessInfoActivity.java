@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.RouteConstants;
+import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessInfoAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;

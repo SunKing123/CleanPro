@@ -3,7 +3,7 @@ package com.xiaoniu.cleanking.base;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 

@@ -88,7 +88,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
     //全局跳转全屏插屏页面
     public void startFullInsertAd(Context context) {
         try {
-            String auditSwitch = SPUtil.getString(context, AppApplication.AuditSwitch, "1");
+            String auditSwitch = SPUtil.getString(context, SpCacheConfig.AuditSwitch, "1");
             //过审开关打开状态
             //!PreferenceUtil.isShowAD()广告展示状态
 //            Logger.i("zz---"+(TextUtils.equals(auditSwitch, "1")?"1":"0") + (!ActivityCollector.isActivityExist(PopLayerActivity.class)?"1":"0") + (!ActivityCollector.isActivityExist(LockActivity.class)?"1":0) + (!PreferenceUtil.isShowAD()?"1":"0"));

@@ -25,7 +25,7 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppConfig;
+import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;

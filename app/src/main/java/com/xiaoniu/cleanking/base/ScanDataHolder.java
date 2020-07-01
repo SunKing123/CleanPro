@@ -1,18 +1,12 @@
 package com.xiaoniu.cleanking.base;
 
-import com.comm.jksdk.utils.MmkvUtil;
-import com.xiaoniu.cleanking.app.Constant;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
-import com.xiaoniu.cleanking.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
-import javax.inject.Singleton;
 
 /**
  * @author zhengzhihao

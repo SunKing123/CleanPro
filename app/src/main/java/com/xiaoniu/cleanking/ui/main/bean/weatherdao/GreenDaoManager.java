@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.xiaoniu.cleanking.app.Constant;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.bean.AppPackageNameListDB;
 import com.xiaoniu.cleanking.bean.weatherdao.AppPackageNameListDBDao;
 import com.xiaoniu.cleanking.bean.weatherdao.DaoMaster;
