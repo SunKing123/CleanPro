@@ -88,8 +88,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         }
                     }
                 }
-                //todo
-               // mView.getInteractionSwitchSuccess(switchInfoList);
+                mView.getInteractionSwitchSuccess(switchInfoList);
             }
 
             @Override

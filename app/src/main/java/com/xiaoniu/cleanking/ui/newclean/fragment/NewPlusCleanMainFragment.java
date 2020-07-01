@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -32,14 +33,14 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
+import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
-import com.xiaoniu.cleanking.ui.main.bean.FileEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -56,14 +57,13 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
-import com.xiaoniu.cleanking.ui.news.adapter.HomeRecommendAdapter;
-import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -75,7 +75,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -110,6 +109,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     @BindView(R.id.ffff)
     FrameLayout frameLayout;
+
+    @BindView(R.id.image_interactive)
+    HomeInteractiveView imageInteractive;
 
     //one key speed adv onOff info
     boolean isSpeedAdvOpen = false;
@@ -157,6 +159,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mAdManager = GeekAdSdk.getAdsManger();
         rxPermissions = new RxPermissions(requireActivity());
         compositeDisposable = new CompositeDisposable();
+        mPresenter.getInteractionSwitch();
+
         showHomeLottieView();
         initClearItemCard();
         refreshHomeMainTableView();
@@ -170,6 +174,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 .create();
 
 
+        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
+            @Override
+            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+                imageInteractive.loadNextDrawable();
+                if(data!=null)
+                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                        .putExtra(ExtraConstant.WEB_URL,data.getLinkUrl()));
+            }
+        });
     }
 
     private void initClearItemCard() {
@@ -266,6 +281,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkScanState();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
+        imageInteractive.loadNextDrawable();
 
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
     }
@@ -353,8 +369,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }//
         if (null == getActivity() || null == mTopAdFrameLayout) return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page");
-        AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(getActivity(), PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
+        mAdManager.loadAd(getActivity(), PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
@@ -769,10 +784,26 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
+    /**
+     * 获取互动式广告成功
+     *
+     * @param switchInfoList
+     */
+    public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
+        if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
+            return;
+        if (switchInfoList.getData().get(0).isOpen()) {
+            imageInteractive.setDataList(switchInfoList.getData().get(0).getSwitchActiveLineDTOList());
+            imageInteractive.loadNextDrawable();
+        } else {
+            imageInteractive.setVisibility(View.GONE);
+        }
+    }
+
 
     /*
      * *********************************************************************************************************************************************************
-     * ********************************************************** others *********************************************************************************
+     * ********************************************************** others ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
 
