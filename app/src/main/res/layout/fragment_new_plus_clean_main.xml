@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_fff7f8fa"
+    android:orientation="vertical"
+    android:visibility="visible">
+
+    <RelativeLayout
+        android:id="@+id/v_top"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingLeft="@dimen/dimen_16dp"
+        android:paddingRight="@dimen/dimen_16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/app_name"
+            android:textColor="@color/color_333333"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/iv_interaction"
+            android:layout_width="@dimen/dimen_45dp"
+            android:layout_height="@dimen/dimen_45dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dimen_10dp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <!--完成动画-->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/v_top"
+        android:fadingEdgeLength="@dimen/dimen_0dp"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_clean_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
+                    android:id="@+id/view_lottie_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="300dp">
+
+                </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
+
+                <FrameLayout
+                    android:id="@+id/framelayout_top_ad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_18dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="@dimen/dimen_18dp"
+                    android:layout_marginBottom="35dp"
+                    android:background="@drawable/ad_container_white_bg"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

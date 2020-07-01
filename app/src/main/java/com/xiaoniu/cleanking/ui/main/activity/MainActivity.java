@@ -56,6 +56,7 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
@@ -131,7 +132,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private boolean mShowRedFirst; //红包是否已经展示
     private BottomBarTab mBottomBarTab;
     private boolean isSelectTop = false;
-    private NewCleanMainFragment mainFragment;
+    private NewPlusCleanMainFragment mainFragment;
     private final String TAG = "GeekSdk";
 //    private MyHandler mHandler = new MyHandler(this);
 
@@ -413,10 +414,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void initFragments() {
-
-//        MeFragment mineFragment = MeFragment.getIntance();
-//        ToolFragment secondFragment = new ToolFragment();
-        mainFragment = new NewCleanMainFragment();
+        MeFragment mineFragment = MeFragment.getIntance();
+        mainFragment = new NewPlusCleanMainFragment();
         String url = ApiModule.SHOPPING_MALL;
 
         YuLeFragment secondFragment = YuLeFragment.getInstance();

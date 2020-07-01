@@ -127,6 +127,7 @@ import static android.view.View.VISIBLE;
 /**
  * 1.2.1 新版本清理主页
  */
+@Deprecated
 public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> implements HomeRecommendAdapter.onCheckListener {
 
     private long firstTime;
@@ -192,10 +193,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     boolean isFirst = true;
 
 
-    public void setOnHomeTabClickListener(View.OnClickListener clickListener) {
-
-    }
-
     @Override
     protected void initView() {
         rxPermissions = new RxPermissions(requireActivity());
@@ -223,6 +220,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mPresenter.getRecommendList();
         mPresenter.requestBottomAd();
         mPresenter.getInteractionSwitch();
+
         if (Build.VERSION.SDK_INT < 26) {
             mPresenter.getAccessListBelow();
         }
@@ -266,6 +264,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         }
+
         //状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(getActivity(), AppApplication.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
@@ -337,80 +336,8 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
 
-    private void initRecyclerView() {
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mRecommendAdapter = new HomeRecommendAdapter(getActivity());
-        mRecommendAdapter.setmOnCheckListener(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(mRecommendAdapter);
-        mNestedScrollView.smoothScrollTo(0, 0);
-        mRecyclerView.setFocusable(false);
-    }
-
-    /**
-     * 显示广告 position = 0 第一个 position = 1  第二个
-     *
-     * @param dataBean
-     */
-    public void showFirstAd(ImageAdEntity.DataBean dataBean, int position) {
-        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.BANNER);
-        if (position == 0) {
-            mImageFirstAd.setVisibility(VISIBLE);
-            ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
-            clickDownload(mImageFirstAd, dataBean.getDownloadUrl(), position);
-//            mTextBottomTitle.setVisibility(GONE);
-        } else if (position == 1) {
-            mImageSecondAd.setVisibility(VISIBLE);
-            ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
-            clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
-//            mTextBottomTitle.setVisibility(GONE);
-        }
-        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
-    }
-
-    /**
-     * 获取互动式广告成功
-     *
-     * @param switchInfoList
-     */
-    public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
-        if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
-            return;
-        if (switchInfoList.getData().get(0).isOpen()) {
-            mInteractionIv.setVisibility(VISIBLE);
-            mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
-            Glide.with(this).load(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl()).into(mInteractionIv);
-        } else {
-            mInteractionIv.setVisibility(View.GONE);
-        }
-    }
 
 
-    /**
-     * 互动式广告
-     */
-    @OnClick(R.id.iv_interaction)
-    public void interactionClick() {
-        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-
-        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-        if (null != mInteractionList && mInteractionList.size() > 0) {
-            if (mInteractionPoistion > mInteractionList.size() - 1) {
-                mInteractionPoistion = 0;
-            }
-
-            if (mInteractionList.size() == 1) {
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
-            } else {
-                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
-                }
-            }
-            mInteractionPoistion++;
-        }
-    }
 
 
     @Override
@@ -439,6 +366,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
                 }
             }
         }
+
         viewPhoneThin.setEnabled(true);
         viewNews.setEnabled(true);
         viewGame.setEnabled(true);
@@ -457,7 +385,7 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 顶部广告 样式---大图嵌套图片_01_跑马灯
+     * 顶部一键清理完成切换的头部广告
      */
     private void initGeekSdkTop() {
         boolean isOpen = false;
@@ -1206,28 +1134,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 点击下载app
-     *
-     * @param view
-     * @param downloadUrl
-     */
-    public void clickDownload(View view, String downloadUrl, int position) {
-        view.setOnClickListener(v -> {
-            //广告埋点
-            StatisticsUtils.trackClickAD("ad_click", "\"广告点击", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
-           /* Bundle bundle = new Bundle();
-            bundle.putString(Constant.URL, downloadUrl);
-            bundle.putBoolean(Constant.NoTitle, false);
-            startActivity(UserLoadH5Activity.class, bundle);*/
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            Uri content_url = Uri.parse(downloadUrl);
-            intent.setData(content_url);
-            startActivity(intent);
-        });
-    }
-
-    /**
      * 静止时动画
      */
     private void showHomeLottieView() {
@@ -1272,93 +1178,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
 
     }
 
-    /**
-     * 获取推荐列表成功
-     *
-     * @param entity
-     */
-    public void getRecommendListSuccess(HomeRecommendEntity entity) {
-        if (null == mRecommendAdapter || null == entity || null == entity.getData() || entity.getData().size() <= 0)
-            return;
-        PreferenceUtil.saveFirstHomeRecommend(false);
-        mRecyclerView.setVisibility(VISIBLE);
-        mNoNetView.setVisibility(View.GONE);
-        mRecommendAdapter.setData(entity.getData());
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-//                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
-                try {
-                    if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao())
-                        return;
-                    ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
-                    ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-    }
-
-    /**
-     * 获取推荐列表失败 取本地数据
-     */
-    public void getRecommendListFail() {
-        if (PreferenceUtil.isFirstHomeRecommend()) {
-            mRecyclerView.setVisibility(View.GONE);
-            mNoNetView.setVisibility(VISIBLE);
-            return;
-        }
-        if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao()
-                || null == ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll() || ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll().size() <= 0)
-            return;
-        Observable<List<HomeRecommendListEntity>> observable = Observable.create(new ObservableOnSubscribe<List<HomeRecommendListEntity>>() {
-            @Override
-            public void subscribe(ObservableEmitter<List<HomeRecommendListEntity>> emitter) throws Exception {
-//                Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
-                try {
-                    emitter.onNext(ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        Consumer<List<HomeRecommendListEntity>> consumer = new Consumer<List<HomeRecommendListEntity>>() {
-            @Override
-            public void accept(List<HomeRecommendListEntity> list) throws Exception {
-//                Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
-                try {
-                    if (null == mRecommendAdapter) return;
-                    mRecommendAdapter.setData(list);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        observable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer);
-    }
-
-    /**
-     * 更多推荐Item点击
-     *
-     * @param list
-     * @param pos
-     */
-    @Override
-    public void onCheck(List<HomeRecommendListEntity> list, int pos) {
-        if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos)
-            return;
-        if (pos == 0 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
-            loadMorePageFileGeekAd(list.get(pos));
-            return;
-        }
-        //点击流程
-        operationItemClick(list.get(pos));
-    }
 
     private void goFinishActivity() {
         boolean isOpen = false;
@@ -1630,112 +1449,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
     }
 
     /**
-     * 自运营根据配置linkType 做跳转;
-     */
-    public void operationItemClick(HomeRecommendListEntity entity) {
-        if (entity.getLinkType().equals("1")) {//应用内页面跳转
-//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
-            if (entity.getName().equals(getString(R.string.game_quicken))) { //游戏加速
-                StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                if (PreferenceUtil.getGameTime()) {
-                    SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
-                } else {
-                    goFinishActivity();
-                }
-                return;
-            } else if (entity.getName().equals(getString(R.string.tool_one_key_speed))) {
-                StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
-            }
-            SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
-        } else if (entity.getLinkType().equals("2")) {  //H5
-            startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                    .putExtra(ExtraConstant.WEB_URL, entity.getLinkUrl()));
-        } else if (entity.getLinkType().equals("3")) {  //deeplink
-            Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            Uri content_url = Uri.parse(entity.getLinkUrl());
-            intent.setData(content_url);
-            startActivity(intent);
-        }
-    }
-
-
-    /**
-     * 更多运营位列表 第一Item激励视频
-     */
-    private void loadMorePageFileGeekAd(HomeRecommendListEntity entity) {
-        if (null == getActivity() || null == mAdManager) return;
-        NiuDataAPI.onPageStart("home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
-        NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page_incentive_video_page");
-        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_HOME_PAGE_OPERATION_POSITION, "user123", 1, new VideoAdListener() {
-            @Override
-            public void onVideoResume(AdInfo info) {
-
-            }
-
-            @Override
-            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
-
-            }
-
-            @Override
-            public void onVideoComplete(AdInfo info) {
-                Log.d(TAG, "-----onVideoComplete-----");
-                //跳转自运营广告
-                // operationItemClick(entity);
-            }
-
-            @Override
-            public void adSuccess(AdInfo info) {
-                Log.d(TAG, "-----adSuccess-----");
-                if (null == info) return;
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page_incentive_video_page");
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                Log.d(TAG, "-----adExposed-----");
-                PreferenceUtil.saveShowAD(true);
-                if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "-----adClicked-----");
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                Log.d(TAG, "-----adClose-----");
-                PreferenceUtil.saveShowAD(false);
-                NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "view_page", "病毒查杀激励视频结束页浏览");
-                if (null != info) {
-                    StatisticsUtils.clickAD("close_click", "首页运营位激励视频页页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
-                }
-                //跳转自运营广告
-                operationItemClick(entity);
-//                startActivity(VirusKillActivity.class);
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "-----adError-----" + errorMsg);
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page_incentive_video_page");
-                }
-                //跳转自运营广告
-                operationItemClick(entity);
-            }
-        });
-    }
-
-
-    /**
      * 是否有权限被永久拒绝
      */
     private boolean hasPermissionDeniedForever() {
@@ -1869,6 +1582,316 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             initGeekSdkCenter();
         }
     };
+
+    /*************************************************************************************************************************************************************************
+     *************************************************************************************************************************************************************************
+     **********************************************************************可以不用参看的代码块逻辑***************************************************************************************
+     *************************************************************************************************************************************************************************
+     *************************************************************************************************************************************************************************
+     */
+
+
+    /*************************************************************************************************************************************************************************
+     *************************************************************************************************************************************************************************
+     **********************************************************************更多推荐代码块***************************************************************************************
+     *************************************************************************************************************************************************************************
+     */
+    private void initRecyclerView() {
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecommendAdapter = new HomeRecommendAdapter(getActivity());
+        mRecommendAdapter.setmOnCheckListener(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setAdapter(mRecommendAdapter);
+        mNestedScrollView.smoothScrollTo(0, 0);
+        mRecyclerView.setFocusable(false);
+    }
+
+    /**
+     * 获取推荐列表成功
+     *
+     * @param entity
+     */
+    public void getRecommendListSuccess(HomeRecommendEntity entity) {
+        if (null == mRecommendAdapter || null == entity || null == entity.getData() || entity.getData().size() <= 0)
+            return;
+        PreferenceUtil.saveFirstHomeRecommend(false);
+        mRecyclerView.setVisibility(VISIBLE);
+        mNoNetView.setVisibility(View.GONE);
+        mRecommendAdapter.setData(entity.getData());
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+//                Log.d("XiLei", "subscribe:" + Thread.currentThread().getName());
+                try {
+                    if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao())
+                        return;
+                    ApplicationDelegate.getAppDatabase().homeRecommendDao().deleteAll();
+                    ApplicationDelegate.getAppDatabase().homeRecommendDao().insertAll(entity.getData());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    /**
+     * 获取推荐列表失败 取本地数据
+     */
+    public void getRecommendListFail() {
+        if (PreferenceUtil.isFirstHomeRecommend()) {
+            mRecyclerView.setVisibility(View.GONE);
+            mNoNetView.setVisibility(VISIBLE);
+            return;
+        }
+        if (null == ApplicationDelegate.getAppDatabase() || null == ApplicationDelegate.getAppDatabase().homeRecommendDao()
+                || null == ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll() || ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll().size() <= 0)
+            return;
+        Observable<List<HomeRecommendListEntity>> observable = Observable.create(new ObservableOnSubscribe<List<HomeRecommendListEntity>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<HomeRecommendListEntity>> emitter) throws Exception {
+//                Log.d("XiLei", "subscribe2222:" + Thread.currentThread().getName());
+                try {
+                    emitter.onNext(ApplicationDelegate.getAppDatabase().homeRecommendDao().getAll());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Consumer<List<HomeRecommendListEntity>> consumer = new Consumer<List<HomeRecommendListEntity>>() {
+            @Override
+            public void accept(List<HomeRecommendListEntity> list) throws Exception {
+//                Log.d("XiLei", "accept:" + list.size() + ":" + Thread.currentThread().getName());
+                try {
+                    if (null == mRecommendAdapter) return;
+                    mRecommendAdapter.setData(list);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer);
+    }
+
+    /**
+     * 更多推荐Item点击
+     *
+     * @param list
+     * @param pos
+     */
+    @Override
+    public void onCheck(List<HomeRecommendListEntity> list, int pos) {
+        if (null == getActivity() || null == list || list.size() <= 0 || (list.size() - 1) < pos)
+            return;
+        if (pos == 0 && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_HOME_MORE_REWARD_VIDEO)) {   //第一个点击特殊处理; 添加激励视频广告位置，如果打开先跳转激励视频
+            loadMorePageFileGeekAd(list.get(pos));
+            return;
+        }
+        //点击流程
+        operationItemClick(list.get(pos));
+    }
+
+    /**
+     * 更多运营位列表 第一Item激励视频
+     */
+    private void loadMorePageFileGeekAd(HomeRecommendListEntity entity) {
+        if (null == getActivity() || null == mAdManager) return;
+        NiuDataAPI.onPageStart("home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
+        NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "home_page_incentive_video_page_view_page", "首页运营位激励视频页浏览");
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page_incentive_video_page");
+        mAdManager.loadRewardVideoAd(getActivity(), PositionId.AD_HOME_PAGE_OPERATION_POSITION, "user123", 1, new VideoAdListener() {
+            @Override
+            public void onVideoResume(AdInfo info) {
+
+            }
+
+            @Override
+            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
+
+            }
+
+            @Override
+            public void onVideoComplete(AdInfo info) {
+                Log.d(TAG, "-----onVideoComplete-----");
+                //跳转自运营广告
+                // operationItemClick(entity);
+            }
+
+            @Override
+            public void adSuccess(AdInfo info) {
+                Log.d(TAG, "-----adSuccess-----");
+                if (null == info) return;
+                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page_incentive_video_page");
+            }
+
+            @Override
+            public void adExposed(AdInfo info) {
+                Log.d(TAG, "-----adExposed-----");
+                PreferenceUtil.saveShowAD(true);
+                if (null == info) return;
+                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
+            }
+
+            @Override
+            public void adClicked(AdInfo info) {
+                Log.d(TAG, "-----adClicked-----");
+                if (null == info) return;
+                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
+            }
+
+            @Override
+            public void adClose(AdInfo info) {
+                Log.d(TAG, "-----adClose-----");
+                PreferenceUtil.saveShowAD(false);
+                NiuDataAPIUtil.onPageEnd("home_page", "home_page_incentive_video_page", "view_page", "病毒查杀激励视频结束页浏览");
+                if (null != info) {
+                    StatisticsUtils.clickAD("close_click", "首页运营位激励视频页页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page_incentive_video_page", " ");
+                }
+                //跳转自运营广告
+                operationItemClick(entity);
+//                startActivity(VirusKillActivity.class);
+            }
+
+            @Override
+            public void adError(AdInfo info, int errorCode, String errorMsg) {
+                Log.d(TAG, "-----adError-----" + errorMsg);
+                if (null != info) {
+                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page_incentive_video_page");
+                }
+                //跳转自运营广告
+                operationItemClick(entity);
+            }
+        });
+    }
+
+    /**
+     * 自运营根据配置linkType 做跳转;
+     */
+    public void operationItemClick(HomeRecommendListEntity entity) {
+        if (entity.getLinkType().equals("1")) {//应用内页面跳转
+//            ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+            if (entity.getName().equals(getString(R.string.game_quicken))) { //游戏加速
+                StatisticsUtils.trackClick("gameboost_click", "游戏加速点击", "home_page", "home_page");
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                if (PreferenceUtil.getGameTime()) {
+                    SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
+                } else {
+                    goFinishActivity();
+                }
+                return;
+            } else if (entity.getName().equals(getString(R.string.tool_one_key_speed))) {
+                StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+            }
+            SchemeProxy.openScheme(getActivity(), entity.getLinkUrl());
+        } else if (entity.getLinkType().equals("2")) {  //H5
+            startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                    .putExtra(ExtraConstant.WEB_URL, entity.getLinkUrl()));
+        } else if (entity.getLinkType().equals("3")) {  //deeplink
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri content_url = Uri.parse(entity.getLinkUrl());
+            intent.setData(content_url);
+            startActivity(intent);
+        }
+    }
+
+    /*************************************************************************************************************************************************************************
+     *************************************************************************************************************************************************************************
+     **********************************************************************广告逻辑块***************************************************************************************
+     *************************************************************************************************************************************************************************
+     */
+
+
+    /**
+     * 显示广告 position = 0 第一个 position = 1  第二个
+     *
+     * @param dataBean
+     */
+    public void showFirstAd(ImageAdEntity.DataBean dataBean, int position) {
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.BANNER);
+        if (position == 0) {
+            mImageFirstAd.setVisibility(VISIBLE);
+            ImageUtil.display(dataBean.getImageUrl(), mImageFirstAd);
+            clickDownload(mImageFirstAd, dataBean.getDownloadUrl(), position);
+//            mTextBottomTitle.setVisibility(GONE);
+        } else if (position == 1) {
+            mImageSecondAd.setVisibility(VISIBLE);
+            ImageUtil.display(dataBean.getImageUrl(), mImageSecondAd);
+            clickDownload(mImageSecondAd, dataBean.getDownloadUrl(), position);
+//            mTextBottomTitle.setVisibility(GONE);
+        }
+        StatisticsUtils.trackClickAD("ad_show", "\"广告展示曝光", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
+    }
+
+    /**
+     * 点击下载app
+     *
+     * @param view
+     * @param downloadUrl
+     */
+    public void clickDownload(View view, String downloadUrl, int position) {
+        view.setOnClickListener(v -> {
+            //广告埋点
+            StatisticsUtils.trackClickAD("ad_click", "\"广告点击", AppHolder.getInstance().getSourcePageId(), "home_page_clean_up_page", String.valueOf(position));
+           /* Bundle bundle = new Bundle();
+            bundle.putString(Constant.URL, downloadUrl);
+            bundle.putBoolean(Constant.NoTitle, false);
+            startActivity(UserLoadH5Activity.class, bundle);*/
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri content_url = Uri.parse(downloadUrl);
+            intent.setData(content_url);
+            startActivity(intent);
+        });
+    }
+
+
+    /**
+     * 获取互动式广告成功
+     *
+     * @param switchInfoList
+     */
+    public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
+        if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
+            return;
+        if (switchInfoList.getData().get(0).isOpen()) {
+            mInteractionIv.setVisibility(VISIBLE);
+            mInteractionList = switchInfoList.getData().get(0).getSwitchActiveLineDTOList();
+            Glide.with(this).load(switchInfoList.getData().get(0).getSwitchActiveLineDTOList().get(0).getImgUrl()).into(mInteractionIv);
+        } else {
+            mInteractionIv.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 互动式广告 点击切换逻辑
+     */
+    @OnClick(R.id.iv_interaction)
+    public void interactionClick() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+
+        StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+        if (null != mInteractionList && mInteractionList.size() > 0) {
+            if (mInteractionPoistion > mInteractionList.size() - 1) {
+                mInteractionPoistion = 0;
+            }
+
+            if (mInteractionList.size() == 1) {
+                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
+            } else {
+                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
+                }
+            }
+            mInteractionPoistion++;
+        }
+    }
+
 
 
 }
