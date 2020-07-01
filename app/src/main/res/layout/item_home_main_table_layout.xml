@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_oneKey"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1.06"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/card_virus"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_oneKey"
+                style="@style/home_main_table_icon_image"
+                android:src="@drawable/icon_home_one_key" />
+
+            <TextView
+                android:id="@+id/tv_oneKeyTitle"
+                style="@style/home_main_table_icon_tv_title"
+                android:layout_below="@id/image_oneKey"
+                android:text="一键加速" />
+
+            <TextView
+                android:id="@+id/tv_oneKeyContent"
+                style="@style/home_main_table_icon_tv_content"
+                android:layout_below="@id/tv_oneKeyTitle"
+                android:text="内存占比85%" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_virus"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toBottomOf="@id/card_oneKey"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/card_oneKey"
+        app:layout_constraintRight_toLeftOf="@+id/card_electric"
+        app:layout_constraintTop_toTopOf="@id/card_oneKey">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_virus"
+                style="@style/home_main_table_icon_image"
+                android:src="@drawable/icon_home_kill_virus" />
+
+            <TextView
+                android:id="@+id/tv_virusTitle"
+                style="@style/home_main_table_icon_tv_title"
+                android:layout_below="@id/image_virus"
+                android:text="病毒查杀" />
+
+            <TextView
+                android:id="@+id/tv_virusContent"
+                style="@style/home_main_table_icon_tv_content"
+                android:layout_below="@id/tv_virusTitle"
+                android:text="内存占比85%" />
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_electric"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toBottomOf="@id/card_oneKey"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/card_virus"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/card_oneKey">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_electric"
+                style="@style/home_main_table_icon_image"
+                android:src="@drawable/icon_home_electric" />
+
+            <TextView
+                android:id="@+id/tv_electricTitle"
+                style="@style/home_main_table_icon_tv_title"
+                android:layout_below="@id/image_electric"
+                android:text="超强省电" />
+
+            <TextView
+                android:id="@+id/tv_electricContent"
+                style="@style/home_main_table_icon_tv_content"
+                android:layout_below="@id/tv_electricTitle"
+                android:text="10个应用在耗电" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</merge>

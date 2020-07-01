@@ -351,7 +351,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
 
-
         //互动式广告展示逻辑;
         if (null != mInteractionList && mInteractionList.size() > 0) {
             if (mInteractionPoistion > mInteractionList.size() - 1) {
@@ -546,7 +545,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
     }
 
-
     /**
      * 清理完成回调
      *
@@ -559,7 +557,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
         if (getString(R.string.tool_one_key_speed).contains(event.getTitle())) { //一键加速
 //            mShowCount--;
             mainTableView.accStorageLowStyle(getActivity());
-
             //通知栏清理
             if (!NotifyUtils.isNotificationListenerEnabled()) {
                 mShowCount++;
@@ -603,7 +600,6 @@ public class NewCleanMainFragment extends BaseFragment<NewCleanMainPresenter> im
             } else if (!PreferenceUtil.isCleanJiaSuUsed() && PreferenceUtil.getCleanTime()) {
                 mShowCount++;
                 mainTableView.accStorageHighStyle(getActivity());
-
             }
 
             //超强省电

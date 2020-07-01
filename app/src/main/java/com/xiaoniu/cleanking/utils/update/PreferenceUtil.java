@@ -442,6 +442,22 @@ public class PreferenceUtil {
     }
 
     /**
+     * get unused the virus kill function days
+     * @return
+     */
+    public static int getUnusedVirusKillDays(){
+        Calendar now = Calendar.getInstance();
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
+        Calendar last = Calendar.getInstance();
+        last.setTimeInMillis(time);
+
+        int nowDayOfYear = now.get(Calendar.DAY_OF_YEAR);
+        int lastDayOfYear = last.get(Calendar.DAY_OF_YEAR);
+
+        return nowDayOfYear - lastDayOfYear;
+    }
+    /**
      * 保存垃圾清理是否已使用
      */
     public static void saveCleanAllUsed(boolean isUsed) {
