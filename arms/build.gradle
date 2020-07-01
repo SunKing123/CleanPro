@@ -23,10 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{}
-        preprod{}
         dev{}
-        devdebug{}
-        btestdebug{}
         releasedebug{}
     }
 
@@ -44,7 +41,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     api rootProject.ext.dependencies["fragmentationx"]
-    implementation project(':baselib:common')
+    implementation project(':common')
 
     api (rootProject.ext.dependencies["dagger2"]){
         exclude group: 'javax.annotation'
