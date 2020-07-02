@@ -137,7 +137,10 @@
     <color name="color_ffe53238">#ffe53238</color>
     <color name="color_fff7f8fa">#fff7f8fa</color>
 
-
-
+    <color name="home_title">#40414B</color>
+    <color name="home_content">#888888</color>
+    <color name="home_content_green">#ff06c581</color>
+    <color name="home_content_red">#FF2028</color>
+    <color name="home_content_yellow">#FFAC01</color>
 
 </resources>

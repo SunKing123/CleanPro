@@ -29,7 +29,8 @@
             <ImageView
                 android:id="@+id/image_oneKey"
                 style="@style/home_main_table_icon_image"
-                android:src="@drawable/icon_home_one_key" />
+                android:src="@drawable/icon_home_one_key"
+                />
 
             <TextView
                 android:id="@+id/tv_oneKeyTitle"
