@@ -154,7 +154,7 @@ public class HomeMainTableView extends ConstraintLayout {
     //病毒查杀未使用风格
     public void killVirusUnusedStyle() {
         int unusedDays = PreferenceUtil.getUnusedVirusKillDays();
-        if (unusedDays > 1) {
+        if (unusedDays >= 1) {
             String tColor = unusedDays + "天";
             SpannableString text = AndroidUtil.inertColorText(tColor + "未杀毒", 0, tColor.length(), getRedColor());
             tvKillVirus.setText(text);
