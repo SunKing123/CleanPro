@@ -89,6 +89,9 @@ import com.xiaoniu.statistic.Configuration;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
+import com.xnad.sdk.MidasAdSdk;
+import com.xnad.sdk.ad.entity.ScreenOrientation;
+import com.xnad.sdk.config.AdConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -152,7 +155,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
         setErrorHander();
         initRoom(application);
         initNiuData(application);
-        initOaid(application);
+        //todo
+//        initOaid(application);
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
 //        TTAdManagerHolder.init(application);
@@ -229,6 +233,29 @@ public class AppLifecyclesImpl implements AppLifecycles {
         }
         ContextUtils.initAdBid(GeekAdSdk.getBid());
     }
+
+
+   /* public void initMidas(Application application){
+//        //初始化广告SDK
+//       MidasAdSdk.init((Application) context.getApplicationContext(), configBuild);
+        AdConfig configBuild = new AdConfig.Build()
+                .setAppId(InitParams.APP_ID)//应用ID
+                .setProductId(InitParams.PRODUCT_ID)//大数据业务线ID
+                .setChannel(InitParams.CHANNEL)//渠道名
+                .setServerUrl(InitParams.DATA_PROBE_SERVER_URL)//业务埋点地址
+                .setBusinessUrl(InitParams.DATA_PROBE_BUSINESS_URL)//商业变现埋点地址
+                .setIsFormal(InitParams.IS_FORMAL)//是否是正式环境 true 线上环境
+                .setScreenOrientation(ScreenOrientation.VERTICAL)//设置屏幕方向
+                .setCsjAppId(Constant.CSJ_AD_ID)//穿山甲appId
+                .set
+                .setNeedInitCsj(true)//如果外部已经初始化了穿山甲，可以填写false
+                .setNeedInitYlh(true)//如果外部已经初始化了穿山甲，可以填写false
+                .setInmoBiAppId("7f8d97e6b5684c5c9e6f8bd7259c811d")//预初始化inmobi
+                .build();
+        //初始化广告SDK
+        MidasAdSdk.init(application, configBuild);
+
+    }*/
 
     /**
      * js回调
@@ -334,7 +361,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
                         @Override
                         public void OnIdsAvalid(@NonNull String mOaid) {
                             oaId = mOaid;
-                            NiuDataAPI.setOaid(oaId);
+                            //todo
+//                            NiuDataAPI.setOaid(oaId);
                             NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
                                 //添加到默认事件
                                 @Override

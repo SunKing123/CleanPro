@@ -9,6 +9,10 @@ buildscript {
     repositories {
         google()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url "https://dl.bintray.com/sunjiangrong/maven" }
+        maven {url 'http://pre.xnshandai.net/nexus/content/repositories/niudata'}
 //        maven { url "https://maven.google.com" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         //添加 牛数 maven 库地址
@@ -56,6 +60,10 @@ allprojects {
     repositories {
         google()
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url "https://dl.bintray.com/sunjiangrong/maven" }
+        maven {url 'http://pre.xnshandai.net/nexus/content/repositories/niudata'}
 //        maven { url "https://maven.google.com" }
         maven { url 'https://dl.bintray.com/umsdk/release' }
         maven { url "https://jitpack.io" }

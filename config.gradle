@@ -72,7 +72,6 @@ ext {
             "channel"                      : "com.leon.channel:helper:2.0.1",
             "umsdk"                        : "com.umeng.umsdk:analytics:8.0.0",
             "filedownloader"               : "com.liulishuo.filedownloader:library:1.7.2",
-            "NiuData"                      : "com.xiaoniu.statistic:NiuData:1.2.3",
 
             "arouter"                      : "com.alibaba:arouter-api:1.4.1",
             "arouter-compiler"             : "com.alibaba:arouter-compiler:latest.release",
