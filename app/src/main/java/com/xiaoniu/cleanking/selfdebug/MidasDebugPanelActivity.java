@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.airbnb.lottie.L;
 import com.bytedance.embedapplog.AppLog;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -32,12 +33,15 @@ public class MidasDebugPanelActivity extends BaseActivity implements View.OnClic
     private FrameLayout fragmentSplashType;
     private Button bannerType;
     private FrameLayout fragmentBannerType;
+    private Button feedVideoType;
+    private FrameLayout fragmentFeedVideoType;
     private Button insertType;
     private FrameLayout fragmentInsertType;
     private Button rewardType;
     private FrameLayout fragmentRewardType;
     private Button nativeTemplateType;
     private FrameLayout fragmentTemplateType;
+
     @Override
     public void inject(ActivityComponent activityComponent) {
 
@@ -56,10 +60,14 @@ public class MidasDebugPanelActivity extends BaseActivity implements View.OnClic
     @Override
     protected void initView() {
 
+
+
         splashType = (Button) findViewById(R.id.splash_type);
         fragmentSplashType = (FrameLayout) findViewById(R.id.fragment_splash_type);
         bannerType = (Button) findViewById(R.id.banner_type);
         fragmentBannerType = (FrameLayout) findViewById(R.id.fragment_banner_type);
+        feedVideoType = (Button) findViewById(R.id.feed_video_type);
+        fragmentFeedVideoType = (FrameLayout) findViewById(R.id.fragment_feed_video_type);
         insertType = (Button) findViewById(R.id.insert_type);
         fragmentInsertType = (FrameLayout) findViewById(R.id.fragment_insert_type);
         rewardType = (Button) findViewById(R.id.reward_type);
@@ -67,27 +75,61 @@ public class MidasDebugPanelActivity extends BaseActivity implements View.OnClic
         nativeTemplateType = (Button) findViewById(R.id.native_template_type);
         fragmentTemplateType = (FrameLayout) findViewById(R.id.fragment_template_type);
 
+
         splashType.setOnClickListener(this);
         bannerType.setOnClickListener(this);
         insertType.setOnClickListener(this);
         rewardType.setOnClickListener(this);
         nativeTemplateType.setOnClickListener(this);
+        feedVideoType.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
+        AdParameter adParameter;
         switch (v.getId()){
             case R.id.splash_type:
                 //加载展示广告
                 //上下文、广告位置ID
-                AdParameter adParameter = new AdParameter.Builder(this,"adpos_9193403301")
+                adParameter = new AdParameter.Builder(this,"adpos_9193403301")
                         //设置填充父布局
                         .setViewContainer(fragmentSplashType)
                         .build();
                 MidasAdSdk.getAdsManger().loadAd(adParameter,mAbsAdCallBack);
-
                 break;
+            case R.id.insert_type:
+                adParameter = new AdParameter.Builder(this,"adpos_1938682621")
+                        //设置填充父布局
+                        .setViewContainer(fragmentInsertType)
+                        .build();
+                MidasAdSdk.getAdsManger().loadAd(adParameter,mAbsAdCallBack);
+                break;
+
+            case R.id.reward_type:
+                adParameter = new AdParameter.Builder(this,"adpos_2188815441")
+                        //设置填充父布局
+                        .setViewContainer(fragmentRewardType)
+                        .build();
+                MidasAdSdk.getAdsManger().loadAd(adParameter,mAbsAdCallBack);
+                break;
+
+            case R.id.banner_type:
+                adParameter = new AdParameter.Builder(this,"adpos_2021709551")
+                        //设置填充父布局
+                        .setViewContainer(fragmentBannerType)
+                        .build();
+                MidasAdSdk.getAdsManger().loadAd(adParameter,mAbsAdCallBack);
+                break;
+            case R.id.feed_video_type:
+                adParameter = new AdParameter.Builder(this,"adpos_8829543351")
+                        //设置填充父布局
+                        .setViewContainer(fragmentFeedVideoType)
+                        .build();
+                MidasAdSdk.getAdsManger().loadAd(adParameter,mAbsAdCallBack);
+                break;
+
+
         }
 
     }

@@ -25,7 +25,7 @@
             <FrameLayout
                 android:id="@+id/fragment_splash_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="300dp">
 
             </FrameLayout>
 
@@ -33,13 +33,26 @@
                 android:id="@+id/banner_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:text="banner"
+                android:text="模板信息流大图"
                 android:textSize="16sp"/>
             <FrameLayout
                 android:id="@+id/fragment_banner_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="200dp">
+
+            </FrameLayout>
+
+
+            <Button
+                android:id="@+id/feed_video_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="模板信息流视频"
+                android:textSize="16sp"/>
+            <FrameLayout
+                android:id="@+id/fragment_feed_video_type"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
 
             </FrameLayout>
             <Button
@@ -52,7 +65,7 @@
             <FrameLayout
                 android:id="@+id/fragment_insert_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="200dp">
 
             </FrameLayout>
             <!--<Button
@@ -78,20 +91,21 @@
             <FrameLayout
                 android:id="@+id/fragment_reward_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="200dp">
 
             </FrameLayout>
             <Button
                 android:id="@+id/native_template_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
 
                 android:text="原生模板"
                 android:textSize="16sp"/>
             <FrameLayout
                 android:id="@+id/fragment_template_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="200dp">
 
             </FrameLayout>
 
