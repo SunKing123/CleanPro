@@ -179,7 +179,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
                 AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
                 StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                imageInteractive.loadNextDrawable();
                 if(data!=null)
                 startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
                         .putExtra(ExtraConstant.WEB_URL,data.getLinkUrl()));
