@@ -382,8 +382,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                         @Override
                         public void OnIdsAvalid(@NonNull String mOaid) {
                             oaId = mOaid;
-                            //todo
-//                            NiuDataAPI.setOaid(oaId);
+                            NiuDataAPI.setOaid(oaId);
                             NiuDataAPI.setTrackEventCallback(new NiuDataTrackEventCallBack() {
                                 //添加到默认事件
                                 @Override
