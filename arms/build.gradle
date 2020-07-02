@@ -63,7 +63,6 @@ dependencies {
     api rootProject.ext.dependencies["support"]["dynamic-animation"]
     api rootProject.ext.dependencies["constraint-layout"]
 
-
     api rootProject.ext.dependencies["gson"]
     api rootProject.ext.dependencies["eventbus"]
     api rootProject.ext.dependencies["androideventbus"]
@@ -71,11 +70,9 @@ dependencies {
     api rootProject.ext.dependencies["multidex"]
     api rootProject.ext.dependencies["annotation"]
 
-
     api rootProject.ext.dependencies["retrofit2"]["retrofit"]
     api rootProject.ext.dependencies["retrofit2"]["converter-gson"]
     api rootProject.ext.dependencies["retrofit2"]["adapter-rxjava2"]
-
 
     api rootProject.ext.dependencies["rxandroid"]
     api rootProject.ext.dependencies["rxjava"]
@@ -90,9 +87,6 @@ dependencies {
     api rootProject.ext.dependencies["rxlifecycle-components"]
 
     api rootProject.ext.dependencies["glide"]
-
-    api rootProject.ext.dependencies["arouter"]
-    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
     api rootProject.ext.dependencies["mmkv"]
 
@@ -127,4 +121,5 @@ dependencies {
 
     compileOnly rootProject.ext.dependencies["autolayout"]
 
+    api rootProject.ext.dependencies["arouter"]
 }

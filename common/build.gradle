@@ -83,7 +83,6 @@ dependencies {
     api rootProject.ext.dependencies["kotlin-stdlib-jdk7"]
     api rootProject.ext.dependencies["kotlin-reflect"]
 
-
     api project(path: ':otherlib:takephoto_library')
 
     api project(':otherlib:videoplayer')
@@ -96,4 +95,7 @@ dependencies {
 
     api project(':geekWebpage')
     api project(':arms')
+
+    annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+
 }
