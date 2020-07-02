@@ -451,6 +451,13 @@
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
 
+
+        <activity
+            android:name=".selfdebug.MidasDebugPanelActivity"
+            android:exported="true"
+            android:theme="@style/activityBgTranslucent" />
+
+
         <activity
             android:name=".ui.lockscreen.LockActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
