@@ -3,12 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    >
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_oneKey"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="5dp"
@@ -16,7 +17,6 @@
         app:cardCornerRadius="10dp"
         app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="1:1.06"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/card_virus"
@@ -29,7 +29,8 @@
             <ImageView
                 android:id="@+id/image_oneKey"
                 style="@style/home_main_table_icon_image"
-                android:src="@drawable/icon_home_one_key" />
+                android:src="@drawable/icon_home_one_key"
+                />
 
             <TextView
                 android:id="@+id/tv_oneKeyTitle"
@@ -52,9 +53,10 @@
         android:layout_height="0dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="6dp"
-        app:layout_constraintBottom_toBottomOf="@id/card_oneKey"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/card_oneKey"
         app:layout_constraintRight_toLeftOf="@+id/card_electric"
@@ -92,8 +94,9 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         app:cardCornerRadius="10dp"
+        android:layout_marginBottom="15dp"
         app:cardElevation="6dp"
-        app:layout_constraintBottom_toBottomOf="@id/card_oneKey"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/card_virus"
         app:layout_constraintRight_toRightOf="parent"

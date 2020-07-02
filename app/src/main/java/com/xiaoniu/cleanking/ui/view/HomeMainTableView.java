@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -31,6 +32,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import org.greenrobot.eventbus.EventBus;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -103,21 +105,22 @@ public class HomeMainTableView extends ConstraintLayout {
             onItemClick.onClick(item);
         }
     }
-    /*************************************************************************************************************************************************************************
+
+    /*
      ************************************************************************************************************************************************************************
-     ********************************************************************oneKeySpeed style********************************************************************************
+     ********************************************************************oneKeySpeed style***********************************************************************************
      ************************************************************************************************************************************************************************
      */
     //一键加速未使用风格
     public void oneKeySpeedUnusedStyle() {
         String tColor = NumberUtils.mathRandom(70, 85) + "%";
-        setOneKeyText(tColor, Color.RED);
+        setOneKeyText(tColor, getRedColor());
     }
 
     //一键加速已使用风格
     public void oneKeySpeedUsedStyle() {
         String tColor = NumberUtils.mathRandom(15, 35) + "%";
-        setOneKeyText(tColor, Color.GREEN);
+        setOneKeyText(tColor, getGreenColor());
     }
 
     private void setOneKeyText(String tColor, int color) {
@@ -126,9 +129,9 @@ public class HomeMainTableView extends ConstraintLayout {
         tvOneKey.setText(text);
     }
 
-    /*************************************************************************************************************************************************************************
+    /*
      ************************************************************************************************************************************************************************
-     ********************************************************************killVirus style********************************************************************************
+     ********************************************************************killVirus style*************************************************************************************
      ************************************************************************************************************************************************************************
      */
     //病毒查杀未使用风格
@@ -136,11 +139,11 @@ public class HomeMainTableView extends ConstraintLayout {
         int unusedDays = PreferenceUtil.getUnusedVirusKillDays();
         if (unusedDays > 1) {
             String tColor=unusedDays+"天";
-            SpannableString text = inertColorText(tColor+"未杀毒", 0, tColor.length(), Color.RED);
+            SpannableString text = inertColorText(tColor+"未杀毒", 0, tColor.length(), getRedColor());
             tvKillVirus.setText(text);
         } else {
             String tColor="可能有风险";
-            SpannableString text = inertColorText(tColor, 0, tColor.length(), Color.RED);
+            SpannableString text = inertColorText(tColor, 0, tColor.length(), getRedColor());
             tvKillVirus.setText(text);
         }
     }
@@ -148,28 +151,29 @@ public class HomeMainTableView extends ConstraintLayout {
     //病毒查杀已使用风格
     public void killVirusUsedStyle() {
         String tColor="防御保护已开启";
-        SpannableString text = inertColorText(tColor, 0, tColor.length(), Color.GREEN);
+        SpannableString text = inertColorText(tColor, 0, tColor.length(), getGreenColor());
         tvKillVirus.setText(text);
     }
 
-    /*************************************************************************************************************************************************************************
+    /*
      ************************************************************************************************************************************************************************
-     ********************************************************************electric style********************************************************************************
+     ********************************************************************electric style**************************************************************************************
      ************************************************************************************************************************************************************************
      */
 
     //unused electric style
     public void electricUnusedStyle() {
         String tColor = NumberUtils.mathRandom(5, 15) + "个";
-        SpannableString text = inertColorText(tColor+"应用正在耗电", 0, tColor.length(), Color.RED);
+        SpannableString text = inertColorText(tColor+"应用正在耗电", 0, tColor.length(), getRedColor());
         tvElectric.setText(text);
     }
+
 
     //used electric style
     public void electricUsedStyle() {
         String tColor =getRandomOptimizeElectricNum();
         String head="延长时间";
-        SpannableString text = inertColorText(head+tColor+"分钟", head.length(), head.length()+tColor.length(), Color.GREEN);
+        SpannableString text = inertColorText(head+tColor+"分钟", head.length(), head.length()+tColor.length(), getGreenColor());
         tvElectric.setText(text);
     }
 
@@ -217,5 +221,13 @@ public class HomeMainTableView extends ConstraintLayout {
     @NonNull
     public final String getString(@StringRes int resId, Object... formatArgs) {
         return getResources().getString(resId, formatArgs);
+    }
+
+    public int getRedColor(){
+        return getContext().getResources().getColor(R.color.home_content_red);
+    }
+
+    public int getGreenColor(){
+        return getContext().getResources().getColor(R.color.home_content_green);
     }
 }
