@@ -83,6 +83,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <com.xiaoniu.cleanking.ui.view.HomeToolTableView
+                android:id="@+id/home_tool_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
                 android:layout_width="match_parent"

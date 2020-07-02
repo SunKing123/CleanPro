@@ -1782,6 +1782,4 @@ public class PreferenceUtil {
         return sharedPreferences.getBoolean(SpCacheConfig.IS_NOTIFICATION_ENABLED, true);
 
     }
-
-
 }

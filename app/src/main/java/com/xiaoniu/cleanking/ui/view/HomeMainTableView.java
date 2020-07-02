@@ -41,9 +41,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
  * email：xinxiaolong123@foxmail.com
  */
 public class HomeMainTableView extends ConstraintLayout {
-    public static final int ITEM_ONE_KEY=1;
-    public static final int ITEM_KILL_VIRUS=2;
-    public static final int ITEM_ELECTRIC=3;
+    public static final int ITEM_ONE_KEY = 1;
+    public static final int ITEM_KILL_VIRUS = 2;
+    public static final int ITEM_ELECTRIC = 3;
 
     ViewGroup oneKey;
     ViewGroup killVirus;
@@ -52,7 +52,6 @@ public class HomeMainTableView extends ConstraintLayout {
     TextView tvOneKey;
     TextView tvKillVirus;
     TextView tvElectric;
-
 
 
     public HomeMainTableView(Context context) {
@@ -100,8 +99,26 @@ public class HomeMainTableView extends ConstraintLayout {
         });
     }
 
-    private void triggerClick(int item){
-        if(onItemClick!=null){
+    public void initViewState() {
+        if (PreferenceUtil.getCleanTime()) {
+            oneKeySpeedUnusedStyle();
+        } else {
+            oneKeySpeedUsedStyle();
+        }
+        if (PreferenceUtil.getVirusKillTime()) {
+            killVirusUnusedStyle();
+        } else {
+            killVirusUsedStyle();
+        }
+        if (PreferenceUtil.getPowerCleanTime()) {
+            electricUnusedStyle();
+        } else {
+            electricUsedStyle();
+        }
+    }
+
+    private void triggerClick(int item) {
+        if (onItemClick != null) {
             onItemClick.onClick(item);
         }
     }
@@ -125,7 +142,7 @@ public class HomeMainTableView extends ConstraintLayout {
 
     private void setOneKeyText(String tColor, int color) {
         String tHead = "内存占用";
-        SpannableString text = inertColorText(tHead + tColor, tHead.length(), tHead.length() + tColor.length(), color);
+        SpannableString text = AndroidUtil.inertColorText(tHead + tColor, tHead.length(), tHead.length() + tColor.length(), color);
         tvOneKey.setText(text);
     }
 
@@ -138,20 +155,20 @@ public class HomeMainTableView extends ConstraintLayout {
     public void killVirusUnusedStyle() {
         int unusedDays = PreferenceUtil.getUnusedVirusKillDays();
         if (unusedDays > 1) {
-            String tColor=unusedDays+"天";
-            SpannableString text = inertColorText(tColor+"未杀毒", 0, tColor.length(), getRedColor());
+            String tColor = unusedDays + "天";
+            SpannableString text = AndroidUtil.inertColorText(tColor + "未杀毒", 0, tColor.length(), getRedColor());
             tvKillVirus.setText(text);
         } else {
-            String tColor="可能有风险";
-            SpannableString text = inertColorText(tColor, 0, tColor.length(), getRedColor());
+            String tColor = "可能有风险";
+            SpannableString text = AndroidUtil.inertColorText(tColor, 0, tColor.length(), getRedColor());
             tvKillVirus.setText(text);
         }
     }
 
     //病毒查杀已使用风格
     public void killVirusUsedStyle() {
-        String tColor="防御保护已开启";
-        SpannableString text = inertColorText(tColor, 0, tColor.length(), getGreenColor());
+        String tColor = "防御保护已开启";
+        SpannableString text = AndroidUtil.inertColorText(tColor, 0, tColor.length(), getGreenColor());
         tvKillVirus.setText(text);
     }
 
@@ -164,33 +181,33 @@ public class HomeMainTableView extends ConstraintLayout {
     //unused electric style
     public void electricUnusedStyle() {
         String tColor = NumberUtils.mathRandom(5, 15) + "个";
-        SpannableString text = inertColorText(tColor+"应用正在耗电", 0, tColor.length(), getRedColor());
+        SpannableString text = AndroidUtil.inertColorText(tColor + "应用正在耗电", 0, tColor.length(), getRedColor());
         tvElectric.setText(text);
     }
 
 
     //used electric style
     public void electricUsedStyle() {
-        String tColor =getRandomOptimizeElectricNum();
-        String head="延长时间";
-        SpannableString text = inertColorText(head+tColor+"分钟", head.length(), head.length()+tColor.length(), getGreenColor());
+        String tColor = getRandomOptimizeElectricNum();
+        String head = "延长时间";
+        SpannableString text = AndroidUtil.inertColorText(head + tColor + "分钟", head.length(), head.length() + tColor.length(), getGreenColor());
         tvElectric.setText(text);
     }
 
     //get random optimize electric num by electric value
-    private String getRandomOptimizeElectricNum(){
-        int electric= AndroidUtil.getElectricityNum(getContext());
-        String num="";
-        if(electric>=70){
-            num= NumberUtils.mathRandom(30, 60);
-        }else if(electric>=50){
-            num= NumberUtils.mathRandom(20, 50);
-        }else if(electric>=20){
-            num= NumberUtils.mathRandom(10, 45);
-        }else if(electric>=10){
-            num= NumberUtils.mathRandom(10, 30);
-        }else {
-            num= NumberUtils.mathRandom(5, 15);
+    private String getRandomOptimizeElectricNum() {
+        int electric = AndroidUtil.getElectricityNum(getContext());
+        String num = "";
+        if (electric >= 70) {
+            num = NumberUtils.mathRandom(30, 60);
+        } else if (electric >= 50) {
+            num = NumberUtils.mathRandom(20, 50);
+        } else if (electric >= 20) {
+            num = NumberUtils.mathRandom(10, 45);
+        } else if (electric >= 10) {
+            num = NumberUtils.mathRandom(10, 30);
+        } else {
+            num = NumberUtils.mathRandom(5, 15);
         }
         return num;
     }
@@ -201,7 +218,7 @@ public class HomeMainTableView extends ConstraintLayout {
      * ******************************************************item view click listener**********************************************
      * ****************************************************************************************************************************
      */
-   OnItemClick onItemClick;
+    OnItemClick onItemClick;
 
     public interface OnItemClick {
         void onClick(int item);
@@ -211,23 +228,16 @@ public class HomeMainTableView extends ConstraintLayout {
         this.onItemClick = onItemClick;
     }
 
-    public SpannableString inertColorText(String content, int startColorIndex, int endColorIndex, int color) {
-        SpannableString spanString = new SpannableString(content);
-        ForegroundColorSpan span = new ForegroundColorSpan(color);
-        spanString.setSpan(span, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        return spanString;
-    }
-
     @NonNull
     public final String getString(@StringRes int resId, Object... formatArgs) {
         return getResources().getString(resId, formatArgs);
     }
 
-    public int getRedColor(){
+    public int getRedColor() {
         return getContext().getResources().getColor(R.color.home_content_red);
     }
 
-    public int getGreenColor(){
+    public int getGreenColor() {
         return getContext().getResources().getColor(R.color.home_content_green);
     }
 }

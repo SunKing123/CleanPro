@@ -59,6 +59,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
+import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -95,6 +96,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     OneKeyCircleButtonView view_lottie_top;
     @BindView(R.id.home_main_table)
     HomeMainTableView homeMainTableView;
+    @BindView(R.id.home_tool_table)
+    HomeToolTableView homeToolTableView;
     @BindView(R.id.framelayout_top_ad)
     FrameLayout mTopAdFrameLayout;
     @BindView(R.id.layout_clean_top)
@@ -163,7 +166,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         showHomeLottieView();
         initClearItemCard();
-        refreshHomeMainTableView();
+        homeMainTableView.initViewState();
+        homeToolTableView.initViewState();
         initEvent();
         checkAndUploadPoint();
 
@@ -230,25 +234,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         String phoneStatePrmStatus = AppUtils.checkPhoneStatePermission(getActivity()) ? "open" : "close";
         StatisticsUtils.customCheckPermission(Points.DEVICE_IDENTIFICATION_EVENT_CODE, Points.DEVICE_IDENTIFICATION_EVENT_NAME, phoneStatePrmStatus, "", "home_page");
     }
-
-    private void refreshHomeMainTableView() {
-        if (PreferenceUtil.getCleanTime()) {
-            homeMainTableView.oneKeySpeedUnusedStyle();
-        } else {
-            homeMainTableView.oneKeySpeedUsedStyle();
-        }
-        if (PreferenceUtil.getVirusKillTime()) {
-            homeMainTableView.killVirusUnusedStyle();
-        } else {
-            homeMainTableView.killVirusUsedStyle();
-        }
-        if (PreferenceUtil.getPowerCleanTime()) {
-            homeMainTableView.electricUnusedStyle();
-        } else {
-            homeMainTableView.electricUsedStyle();
-        }
-    }
-
+   
     private void initEvent() {
         homeMainTableView.setOnItemClickListener(new HomeMainTableView.OnItemClick() {
             @Override
@@ -331,7 +317,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         //热启动后重新检测权限
         isDenied = false;
-        refreshHomeMainTableView();
+        homeMainTableView.initViewState();
+        homeToolTableView.initViewState();
     }
 
 
