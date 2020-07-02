@@ -213,6 +213,6 @@ public class HomeToolTableView extends LinearLayout {
     }
 
     public int getNormalColor() {
-        return getContext().getResources().getColor(R.color.home_content_yellow);
+        return getContext().getResources().getColor(R.color.home_content);
     }
 }

@@ -19,11 +19,14 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.NetWorkPresenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NetWorkSpeedUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatusBarUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
 
@@ -114,6 +117,8 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
 
                 PreferenceUtil.saveSpeedNetworkTime();
                 PreferenceUtil.saveSpeedNetworkValue(speed);
+                EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.network_quicken)));
+
                 finish();
             }
 

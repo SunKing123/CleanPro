@@ -339,7 +339,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case "手机降温":
                 homeToolTableView.coolingUsedStyle();
                 break;
-            case "微信清理":
+            case "微信专清":
                 homeToolTableView.wxCleanUsedStyle();
                 break;
             case "网络加速":
@@ -746,7 +746,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
 
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
-        if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
+        if (PreferenceUtil.getNotificationCleanTime() ) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             initThreeAdvOnOffInfo();
