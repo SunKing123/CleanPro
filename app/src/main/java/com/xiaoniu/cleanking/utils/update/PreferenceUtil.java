@@ -446,16 +446,17 @@ public class PreferenceUtil {
      * @return
      */
     public static int getUnusedVirusKillDays(){
-        Calendar now = Calendar.getInstance();
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
-        Calendar last = Calendar.getInstance();
-        last.setTimeInMillis(time);
+        long nowTime=System.currentTimeMillis();
 
-        int nowDayOfYear = now.get(Calendar.DAY_OF_YEAR);
-        int lastDayOfYear = last.get(Calendar.DAY_OF_YEAR);
+        long sec=(nowTime-time)/1000;
+        long min=sec/60;
+        long diffH=min/60;
+        int day=(int)diffH/24;
 
-        return nowDayOfYear - lastDayOfYear;
+        return day;
     }
     /**
      * 保存垃圾清理是否已使用
