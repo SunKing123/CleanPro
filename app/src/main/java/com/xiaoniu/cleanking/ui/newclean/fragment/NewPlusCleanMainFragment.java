@@ -104,8 +104,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     HomeMainTableView homeMainTableView;
     @BindView(R.id.home_tool_table)
     HomeToolTableView homeToolTableView;
-    @BindView(R.id.framelayout_top_ad)
-    FrameLayout mTopAdFrameLayout;
     @BindView(R.id.layout_clean_top)
     RelativeLayout layoutCleanTop;
 
@@ -122,15 +120,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
 
-    //one key speed adv onOff info
-    boolean isSpeedAdvOpen = false;
-    boolean isSpeedAdvOpenThree = false;
-    boolean hasInitSpeedAdvOnOff = false;
-
-    //electric adv onOff info
-    boolean isElectricAdvOpen = false;
-    boolean isElectricAdvOpenThree = false;
-    boolean hasInitElectricAdvOnOff = false;
+    private boolean isThreeAdvOpen = false;
+    private boolean hasInitThreeAdvOnOff = false;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -169,31 +160,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         rxPermissions = new RxPermissions(requireActivity());
         compositeDisposable = new CompositeDisposable();
         mPresenter.getInteractionSwitch();
-
-        showHomeLottieView();
-        initClearItemCard();
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
+
         initEvent();
+        showHomeLottieView();
+        initClearItemCard();
         checkAndUploadPoint();
 
-        anim = new Rotate3D.Builder(getActivity())
-                .setParentView(layoutCleanTop)
-                .setPositiveView(view_lottie_top)
-                .setNegativeView(mTopAdFrameLayout)
-                .create();
-
-
-        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
-            @Override
-            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                if (data != null)
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-            }
-        });
     }
 
     private void initClearItemCard() {
@@ -242,6 +216,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void initEvent() {
+
+        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
+            @Override
+            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+                if (data != null)
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
+            }
+        });
+
         homeMainTableView.setOnItemClickListener(new HomeMainTableView.OnItemClick() {
             @Override
             public void onClick(int item) {
@@ -296,7 +282,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
-
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
     }
 
@@ -349,9 +334,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Subscribe
     public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
-        if (null == mTopAdFrameLayout || null == view_lottie_top) return;
+        if (null == view_lottie_top) return;
         if (lifecycEvent.isActivity()) {
-            closeAd();
+
         }
         //热启动后重新检测权限
         isDenied = false;
@@ -363,108 +348,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //完成页返回通知
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
-        loadGeekSdkTop();
+
+
     }
 
-
-    /*
-     *********************************************************************************************************************************************************
-     ************************************************************top adv and animation operation**************************************************************
-     *********************************************************************************************************************************************************
-     */
-
-    /**
-     * 顶部一键清理完成切换的头部广告
-     */
-    private void loadGeekSdkTop() {
-        boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_HOME_AD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
-        if (!isOpen) return;
-        if (!mIsFirstShowTopAd) {
-            StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
-            mIsFirstShowTopAd = true;
-        }//
-        if (null == getActivity() || null == mTopAdFrameLayout) return;
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page");
-        mAdManager.loadAd(getActivity(), PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                    if (null != mTopAdFrameLayout && null != info.getAdView()) {
-                        //   view_lottie_top.setVisibility(View.GONE);
-                        showAd(info.getAdView());
-                    }
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "adExposed---home--top");
-                mIsTopAdExposed = true;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "adClicked---home--top");
-                if (null == info) return;
-                if (mIsTopAdExposed) {
-                    StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-                } else {
-                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-                }
-                if (info.getAdClickType() == 2) { //2=详情
-                    loadGeekSdkTop();
-                } else {
-
-                }
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                if (null == info) return;
-                closeAd();
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if (null == info) return;
-                Log.d(TAG, "adError---home--top=" + info.toString());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
-            }
-        });
-    }
-
-    private void showAd(View adView) {
-        mTopAdFrameLayout.removeAllViews();
-        mTopAdFrameLayout.addView(adView);
-        if (!anim.isOpen()) {
-            anim.transform();
-        }
-    }
-
-    private void closeAd() {
-        if (anim.isOpen()) {
-            anim.transform();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mTopAdFrameLayout != null)
-                        mTopAdFrameLayout.removeAllViews();
-                }
-            }, 500);
-        }
-    }
 
 
     /*
@@ -688,13 +575,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
-            initSpeedAdvOnOffInfo();
+            initThreeAdvOnOffInfo();
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isSpeedAdvOpenThree) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_one_key_speed));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else if (isSpeedAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -712,19 +595,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-    private void initSpeedAdvOnOffInfo() {
-        if (hasInitSpeedAdvOnOff) {
+    private void initThreeAdvOnOffInfo() {
+        if (hasInitThreeAdvOnOff) {
             return;
         }
-        hasInitSpeedAdvOnOff = true;
+        hasInitThreeAdvOnOff = true;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
-                    isSpeedAdvOpenThree = switchInfoList.isOpen();
-                }
-                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isSpeedAdvOpen = switchInfoList.isOpen();
+                if (PositionId.KEY_HOME_ADV.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isThreeAdvOpen = switchInfoList.isOpen();
                 }
             }
         }
@@ -770,12 +650,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            initElectricAdvOnOffInfo();
-            if (isElectricAdvOpenThree) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_super_power_saving));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else if (isElectricAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -785,24 +661,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
                 startActivity(NewCleanFinishActivity.class, bundle);
-            }
-        }
-    }
-
-    private void initElectricAdvOnOffInfo() {
-        if (hasInitElectricAdvOnOff) {
-            return;
-        }
-        hasInitElectricAdvOnOff = true;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
-                    isElectricAdvOpenThree = switchInfoList.isOpen();
-                }
-                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isElectricAdvOpen = switchInfoList.isOpen();
-                }
             }
         }
     }
@@ -846,25 +704,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
         } else {
-            boolean isOpen = false;
-            boolean mIsOpenThree = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
-                        mIsOpenThree = switchInfoList.isOpen();
-                    }
-                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-            if (mIsOpenThree) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_chat_clear));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -892,25 +733,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
-            boolean isOpen = false;
-            boolean mIsOpenThree = false;
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
-                        mIsOpenThree = switchInfoList.isOpen();
-                    }
-                    if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-
-            if (mIsOpenThree) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_notification_clean));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_notification_clean));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -930,6 +754,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * **********************************************************cooling start**********************************************************************************
      * *********************************************************************************************************************************************************
      */
+
     public void onCoolingClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
@@ -937,25 +762,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
-            boolean isOpen = false;
-            boolean mIsOpenThree = false;
-            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
-                        mIsOpenThree = switchInfoList.isOpen();
-                    }
-                    if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                        isOpen = switchInfoList.isOpen();
-                    }
-                }
-            }
-            if (mIsOpenThree) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);

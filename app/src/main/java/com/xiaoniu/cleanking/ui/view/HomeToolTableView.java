@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,7 +29,7 @@ public class HomeToolTableView extends LinearLayout {
     public static final int ITEM_NETWORK = 4;
     public static final int ITEM_FOLDER = 5;
 
-    ViewGroup wxClean;
+    Button wxBtn;
     TextView tvWxContent;
     HomeToolTableItemView itemTemperature;
     HomeToolTableItemView itemNotify;
@@ -50,15 +51,14 @@ public class HomeToolTableView extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.item_home_tool_table_layout, this);
-        wxClean = findViewById(R.id.wx_clean);
+        wxBtn = findViewById(R.id.btn_wx_clean);
         tvWxContent = findViewById(R.id.tv_wx_content);
         itemTemperature = findViewById(R.id.item_temperature);
         itemNotify = findViewById(R.id.item_notify);
         itemNetwork = findViewById(R.id.item_network);
         itemFolder = findViewById(R.id.item_folder);
 
-
-        wxClean.setOnClickListener(new OnClickListener() {
+        wxBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 triggerClick(ITEM_WX);

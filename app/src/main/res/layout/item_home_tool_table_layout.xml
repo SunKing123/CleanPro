@@ -56,7 +56,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_wx_title" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button"
+            android:id="@+id/btn_wx_clean"
             style="@style/home_button"
             android:text="立即清理"
             app:layout_constraintBottom_toBottomOf="parent"
