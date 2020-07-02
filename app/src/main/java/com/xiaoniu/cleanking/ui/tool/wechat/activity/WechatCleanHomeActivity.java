@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
 import com.xiaoniu.cleanking.ui.tool.wechat.presenter.WechatCleanHomePresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
@@ -204,6 +205,7 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                 PreferenceUtil.saveCleanWechatUsed(true);
                 AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+
                 startActivity(new Intent(this, ScreenFinishBeforActivity.class)
                         .putExtra(ExtraConstant.TITLE, getString(R.string.tool_chat_clear)));
                 finish();
@@ -212,6 +214,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                 mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());
 
             }
+
+            EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_chat_clear)));
             //保存微信专清清理时间
             PreferenceUtil.saveWeChatCleanTime();
         } else if (ids == R.id.tv_select) {
