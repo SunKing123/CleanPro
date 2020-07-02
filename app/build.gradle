@@ -136,8 +136,8 @@ android {
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
-            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://realisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
-            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'true'
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
             minifyEnabled false
             debuggable true
             signingConfig signingConfigs.release
@@ -159,6 +159,8 @@ android {
             buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://realisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'true'
             minifyEnabled false
             signingConfig signingConfigs.release
             multiDexKeepProguard file('multidex-config.pro')
