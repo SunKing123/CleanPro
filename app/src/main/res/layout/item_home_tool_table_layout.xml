@@ -68,7 +68,8 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="2">
+        android:columnCount="2"
+      >
 
         <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
             android:id="@+id/item_temperature"

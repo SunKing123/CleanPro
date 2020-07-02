@@ -30,7 +30,7 @@
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="手机温度已经高达40"
+        android:text="温度高达38"
         app:layout_constraintLeft_toLeftOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         app:layout_constraintBottom_toBottomOf="parent"
