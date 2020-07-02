@@ -110,6 +110,8 @@ android {
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
             minifyEnabled false
             signingConfig signingConfigs.release
             debuggable = true
@@ -134,6 +136,8 @@ android {
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://realisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'true'
             minifyEnabled false
             debuggable true
             signingConfig signingConfigs.release
@@ -264,7 +268,7 @@ dependencies {
   //  implementation files('libs\\push-core.aar')
   //  implementation files('libs\\push-jpush.aar')
     implementation project(':permission')
-    implementation project(':otherlib:jksdk')
+
 
     //百度统计sdk
     implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
@@ -279,37 +283,23 @@ dependencies {
     implementation 'com.jzp:rotate3D:1.0.0'
     implementation 'com.huawei.hms:push:3.0.3.301'
 
+
+
+    api project(':otherlib:jksdk')
+
     /*--------------Midas接入--------------*/
-    //牛数sdk
-    implementation ('com.xiaoniu.statistic:NiuData:1.2.5.4'){changing = true}
-    //穿山甲sdk
-//    implementation(name: 'open_ad_sdk', ext: 'aar')//todo_jssdk配置
 
-
-//    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6' //todo_common配置
-
-
-    //优量汇sdk
-//    implementation(name: 'GDTSDK.unionNormal.4.211.1081', ext: 'aar') //todo_jssdk配置
-
-    //TopMob sdk
-//    implementation(name: 'meishu_sdk', ext: 'aar')//todo_jssdk配置
-    implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
-
-
-//    implementation(name: 'msa_mdid_1.0.13', ext: 'aar')  //todo_jssdk配置
+//    implementation 'com.googlecode.android-query:android-query:0.25.9'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
     implementation 'com.github.razerdp:BasePopup:2.2.1'
     implementation 'com.squareup.okhttp3:okhttp:3.12.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.googlecode.android-query:android-query:0.25.9'
-//    implementation(name: 'MidasSDK_1.3.3_support', ext: 'aar') //todo_jssdk配置
     implementation 'com.github.bumptech.glide:glide:4.9.0'
-
-    //MobVista广告SDK   项目androidX，使用13.0.31
     implementation 'com.mintegral.msdk:videojs:13.0.31'
     implementation 'com.mintegral.msdk:mtgjscommon:13.0.31'
     implementation 'com.mintegral.msdk:playercommon:13.0.31'
-    implementation 'com.mintegral.msdk:reward:10.2.11'
+    implementation 'com.mintegral.msdk:reward:13.0.31'
     implementation 'com.mintegral.msdk:videocommon:13.0.31'
     implementation 'com.mintegral.msdk:optimizedata:13.0.31'
     implementation 'com.mintegral.msdk:common:13.0.31'
@@ -320,15 +310,10 @@ dependencies {
     implementation 'com.mintegral.msdk:mtgbanner:13.0.31'
     implementation 'com.mintegral.msdk:interstitial:13.0.31'
 
-    //InMoBiSDK AndroidX
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.0'
-    //快手
-//    implementation (name: 'ks_adsdk-2.6.6.1', ext: 'aar')//todo_jssdk配置
-
-
 
 }
 apply plugin: 'com.huawei.agconnect'

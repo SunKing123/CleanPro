@@ -28,22 +28,21 @@ android {
         releasedebug{}
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
-//uploadArchives {
-//    repositories.mavenDeployer{
-//        repository(url:"file:/home/pen/develop/other/")
-//        // 唯一标识
-//        pom.groupId = "com.comm.jksdk"
-//        // 项目名称
-//        pom.artifactId = "jksdk"
-//        // 版本号
-//        pom.version = "1.1"
-//    }
-//}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
@@ -67,37 +66,9 @@ dependencies {
     implementation 'me.jessyan:retrofit-url-manager:1.4.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation files('libs/android-query-full.0.26.7.jar')
     implementation 'com.tencent:mmkv:1.0.23'
     implementation 'com.airbnb.android:lottie:3.1.0'
-//    implementation 'com.novoda:bintray-release:0.2.7'
+
 }
 
-//publishing {
-//    publications {
-//        maven(MavenPublication) {
-//            groupId 'com.comm.jksdk'
-//            artifactId 'GeekSdk'
-//            version '1.1.0'
-//            artifact "$buildDir/outputs/aar/jksdk-release.aar"
-//            pom.withXml {
-//                def dependenciesNode = asNode().appendNode('dependencies')
-//                configurations .implementation.allDependencies.each { dependency ->
-//                    if (!"unspecified".equals(dependenciesNode.name)) {
-//                        def dependencyNode = dependenciesNode.appendNode('dependency')
-//                        dependencyNode.appendNode('groupId', dependency.group)
-//                        dependencyNode.appendNode('artifactId', dependency.name)
-//                        dependencyNode.appendNode('version', dependency.version)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    repositories {
-//        maven {
-//            url "$buildDir/repo"
-//        }
-//    }
-//}
 

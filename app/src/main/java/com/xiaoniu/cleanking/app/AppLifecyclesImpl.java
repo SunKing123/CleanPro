@@ -16,6 +16,7 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -97,6 +98,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -154,7 +156,17 @@ public class AppLifecyclesImpl implements AppLifecycles {
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
         setErrorHander();
         initRoom(application);
-        initNiuData(application);
+//        initNiuData(application);
+
+
+
+        String processName = getProcessName(application);
+        if (processName.equals(application.getPackageName())) {
+            //商业化初始化
+            initMidas(application);
+        }
+
+
         //todo
 //        initOaid(application);
         //穿山甲SDK初始化
@@ -235,27 +247,36 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
 
-   /* public void initMidas(Application application){
+    public void initMidas(Application application){
 //        //初始化广告SDK
-//       MidasAdSdk.init((Application) context.getApplicationContext(), configBuild);
         AdConfig configBuild = new AdConfig.Build()
-                .setAppId(InitParams.APP_ID)//应用ID
-                .setProductId(InitParams.PRODUCT_ID)//大数据业务线ID
-                .setChannel(InitParams.CHANNEL)//渠道名
-                .setServerUrl(InitParams.DATA_PROBE_SERVER_URL)//业务埋点地址
-                .setBusinessUrl(InitParams.DATA_PROBE_BUSINESS_URL)//商业变现埋点地址
-                .setIsFormal(InitParams.IS_FORMAL)//是否是正式环境 true 线上环境
+                .setAppId("181001")//应用ID
+                .setProductId("181")//大数据业务线ID
+                .setChannel(ChannelUtil.getChannel())//渠道名
+                .setServerUrl(BuildConfig.BIGDATA_MD)//业务埋点地址
+                .setBusinessUrl(BuildConfig.MIDAS_NIU_DATA_SERVER_URL)//商业变现埋点地址
+                .setIsFormal(BuildConfig.MIDAS_IS_FORMAL)//是否是正式环境 true 线上环境
                 .setScreenOrientation(ScreenOrientation.VERTICAL)//设置屏幕方向
                 .setCsjAppId(Constant.CSJ_AD_ID)//穿山甲appId
-                .set
+                .setYlhAppId(Constant.YLH_AD_ID)//优量汇appId
                 .setNeedInitCsj(true)//如果外部已经初始化了穿山甲，可以填写false
-                .setNeedInitYlh(true)//如果外部已经初始化了穿山甲，可以填写false
+                .setNeedInitYlh(true)//如果外部已经初始化了优量汇，可以填写false
                 .setInmoBiAppId("7f8d97e6b5684c5c9e6f8bd7259c811d")//预初始化inmobi
                 .build();
         //初始化广告SDK
         MidasAdSdk.init(application, configBuild);
 
-    }*/
+
+        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
+            @Override
+            public void onHeartbeatStart(JSONObject eventProperties) {
+                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
+                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
+            }
+        });
+
+        initOaid(application);
+    }
 
     /**
      * js回调
@@ -324,27 +345,27 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
     //埋点初始化
-    public void initNiuData(Application application) {
-        //测试环境
-        NiuDataAPI.init(application, new Configuration()
-                //切换到sdk默认的测试环境地址
-                .serverUrl(BuildConfig.BIGDATA_MD)
-                .setHeartbeatUrl(BuildConfig.BIGDATA_MD)
-                //打开sdk日志信息
-                .logOpen()
-                .setHeartbeatInterval(5000)
-                .channel(ChannelUtil.getChannel())
-        );
-
-        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
-            @Override
-            public void onHeartbeatStart(JSONObject eventProperties) {
-                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
-                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
-            }
-        });
-
-    }
+//    public void initNiuData(Application application) {
+//        //测试环境
+//        NiuDataAPI.init(application, new Configuration()
+//                //切换到sdk默认的测试环境地址
+//                .serverUrl(BuildConfig.BIGDATA_MD)
+//                .setHeartbeatUrl(BuildConfig.BIGDATA_MD)
+//                //打开sdk日志信息
+//                .logOpen()
+//                .setHeartbeatInterval(5000)
+//                .channel(ChannelUtil.getChannel())
+//        );
+//
+//        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
+//            @Override
+//            public void onHeartbeatStart(JSONObject eventProperties) {
+//                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
+//                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
+//            }
+//        });
+//
+//    }
 
     private String oaId = "";
 
@@ -628,4 +649,28 @@ public class AppLifecyclesImpl implements AppLifecycles {
             ButterKnife.setDebug(true);
         }
     }
+
+
+    /**
+     * 获取当前进程名称
+     *
+     * @param context
+     * @return
+     */
+    private String getProcessName(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
+        if (runningApps == null) {
+            return "";
+        }
+        for (ActivityManager.RunningAppProcessInfo proInfo : runningApps) {
+            if (proInfo.pid == android.os.Process.myPid()) {
+                if (proInfo.processName != null) {
+                    return proInfo.processName;
+                }
+            }
+        }
+        return "";
+    }
+
 }
