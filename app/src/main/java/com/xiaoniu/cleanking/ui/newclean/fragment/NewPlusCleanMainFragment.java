@@ -19,7 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -33,7 +32,9 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
+import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
+import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
@@ -57,10 +58,13 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -71,6 +75,7 @@ import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -259,16 +264,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             public void onClick(int item) {
                 switch (item) {
                     case HomeToolTableView.ITEM_WX:
-                        onOneKeySpeedClick();
+                        onCleanWxClick();
                         break;
                     case HomeToolTableView.ITEM_TEMPERATURE:
-                        onOneKeySpeedClick();
+                        onCoolingClick();
                         break;
                     case HomeToolTableView.ITEM_NOTIFY:
-                        onOneKeySpeedClick();
+                        onCleanNotifyClick();
                         break;
                     case HomeToolTableView.ITEM_NETWORK:
-                        onOneKeySpeedClick();
+                        onNetworkSpeedClick();
                         break;
                     case HomeToolTableView.ITEM_FOLDER:
                         onOneKeySpeedClick();
@@ -815,6 +820,170 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             imageInteractive.loadNextDrawable();
         } else {
             imageInteractive.setVisibility(View.GONE);
+        }
+    }
+
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************wxClean start**********************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+    /**
+     * 微信专清
+     */
+    public void onCleanWxClick() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
+        StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_chat);
+            return;
+        }
+        if (PreferenceUtil.getWeChatCleanTime()) {
+            // 每次清理间隔 至少3秒
+            startActivity(WechatCleanHomeActivity.class);
+        } else {
+            boolean isOpen = false;
+            boolean mIsOpenThree = false;
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
+                    if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
+                }
+            }
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        }
+    }
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************notifyClean start******************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    public void onCleanNotifyClick() {
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+
+        StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+        if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
+            NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
+        } else {
+            boolean isOpen = false;
+            boolean mIsOpenThree = false;
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
+                    if (PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
+                }
+            }
+
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        }
+    }
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************cooling start**********************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    public void onCoolingClick() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+        StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+
+        if (PreferenceUtil.getCoolingCleanTime()) {
+            startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+        } else {
+            boolean isOpen = false;
+            boolean mIsOpenThree = false;
+            //solve umeng error --> SwitchInfoList.getData()' on a null object reference
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
+                        mIsOpenThree = switchInfoList.isOpen();
+                    }
+                    if (PositionId.KEY_COOL.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                        isOpen = switchInfoList.isOpen();
+                    }
+                }
+            }
+            if (mIsOpenThree) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        }
+    }
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************network  speed start***************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    private void onNetworkSpeedClick() {
+        if (PreferenceUtil.getSpeedNetWorkTime()) {
+            startActivity(NetWorkActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            String num = PreferenceUtil.getSpeedNetworkValue();
+            intent.putExtra("title", "网络加速");
+            intent.putExtra("main", false);
+            intent.putExtra("num", num);
+            startActivity(intent);
         }
     }
 
