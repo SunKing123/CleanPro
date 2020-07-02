@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
@@ -27,16 +26,15 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
-import com.xiaoniu.cleanking.ui.main.activity.ScreenInsideActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -124,12 +122,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             @Override
             public void showExtraOp(String code, String message) {
                 Toast.makeText(mActivity, message, Toast.LENGTH_SHORT).show();
-                getRedPacketList();
+                checkAdviceOrRedPacketDialog();
             }
 
             @Override
             public void showExtraOp(String message) {
-                getRedPacketList();
+                checkAdviceOrRedPacketDialog();
             }
 
             @Override
@@ -364,7 +362,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 }
             }
         }
-        getRedPacketList();
+        checkAdviceOrRedPacketDialog();
     }
 
     /*
@@ -504,35 +502,21 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
     /**
-     * 红包
+     * 判断广告弹窗和红包弹窗
      */
-    public void getRedPacketList() {
+    public void checkAdviceOrRedPacketDialog() {
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
             Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
             if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
-
-               // LogUtils.e("==========dataBean:" + new Gson().toJson(dataBean));
-
                 if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
-                    /*if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
-                        PreferenceUtil.saveScreenInsideTime();
-                        mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
-                        return;
-                    }*/
                     if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
                         List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
-
                         InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
-
-                       // LogUtils.e("==========inside:" + new Gson().toJson(inside));
-
-
                         int startCount = inside.getCount();
                         if (internalList.contains(String.valueOf(startCount))) {
-                            PreferenceUtil.saveScreenInsideTime();
-                            mActivity.startActivity(new Intent(mActivity, ScreenInsideActivity.class));
+                            mView.showInsideScreenDialog();
                             return;
                         }
 
@@ -545,14 +529,11 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
-
-
         RedPacketEntity pushSettingList = AppHolder.getInstance().getPopupDataEntity();
         RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(pushSettingList, PopupWindowType.POPUP_RED_PACKET);
         if (data != null) {
             mView.getRedPacketListSuccess(data);
         }
-
 
     }
 
@@ -949,6 +930,29 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     }
 
+    /**
+     * 进入应用时的弹窗
+     */
+    public void checkAdviceDialog() {
+        if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
+            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
+            if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
+                InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
+                if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
+                    if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
+                        List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
+                        InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
+                        int startCount = inside.getCount();
+                        if (internalList.contains(String.valueOf(startCount))) {
+                            mView.showInsideScreenDialog();
+                        }
+
+
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * 埋点事件

@@ -68,7 +68,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     }
 
     public void jumpActivity() {
-        showRedPacket();
+        //热启动的时候去掉内部插屏和红包相关判断
+        // showRedPacket();
         finish();
     }
 

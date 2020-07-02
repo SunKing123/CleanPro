@@ -71,6 +71,7 @@ import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -107,9 +108,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.clear_card_sound)
     ClearCardView clearSoundLayout;
 
-    @BindView(R.id.ffff)
-    FrameLayout frameLayout;
+    @BindView(R.id.ad_two)
+    FrameLayout adLayoutTwo;
 
+    @BindView(R.id.ad_one)
+    FrameLayout adLayoutOne;
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
 
@@ -134,7 +137,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
-    private boolean mIsFirstShowTopAd=false; //是否第一次展示头图广告
+    private boolean mIsFirstShowTopAd = false; //是否第一次展示头图广告
     private boolean mIsTopAdExposed; //广告是否曝光
 
 
@@ -179,9 +182,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
                 AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
                 StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                if(data!=null)
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL,data.getLinkUrl()));
+                if (data != null)
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
             }
         });
     }
@@ -532,7 +535,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
     }
-
 
 
     /**

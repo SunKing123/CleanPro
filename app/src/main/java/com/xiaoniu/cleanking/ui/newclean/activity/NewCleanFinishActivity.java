@@ -6,12 +6,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
@@ -25,10 +30,10 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.jess.arms.utils.DeviceUtils;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
@@ -40,8 +45,11 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.dialog.AdviceDialog;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishPresenter;
+import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.news.adapter.NewsListAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -66,10 +74,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import cn.jzvd.Jzvd;
 
@@ -431,6 +435,20 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
+
+    private void showInsideScreenDialog() {
+        AdviceDialog adviceDialog = new AdviceDialog(this);
+        adviceDialog.show();
+    }
+
+    private void showGetGoldCoinDialog() {
+        GoldCoinBean bean = new GoldCoinBean();
+        bean.dialogType = 3;
+        bean.obtainCoinCount=20;
+        bean.context=this;
+        GoldCoinDialog.showGoldCoinDialog(bean);
+    }
+
     /**
      * 拉取插屏广告开关成功
      *
@@ -438,6 +456,23 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      */
     public void getScreentSwitchSuccess(InsertAdSwitchInfoList list) {
         for (InsertAdSwitchInfoList.DataBean switchInfoList : list.getData()) {
+
+
+            //判断内部插屏广告是否打开
+            if (PositionId.KEY_NEIBU_SCREEN.equals(switchInfoList.getConfigKey())) {
+                if (switchInfoList.isOpen()) {
+                    //显示内部插屏广告
+                    //showInsideScreenDialog();
+                    showGetGoldCoinDialog();
+                } else {
+                    //判断金币领取弹窗是不听歌开
+                    //if()
+                    showGetGoldCoinDialog();
+                }
+
+            }
+
+
             if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
                 isScreenSwitchOpen = switchInfoList.isOpen();
                 mScreenShowCount = switchInfoList.getShowRate();
@@ -1221,7 +1256,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     public void initPos01Ad() {
         if (!isOpenOne) {
-           return;
+            return;
         }
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdManager adManager = GeekAdSdk.getAdsManger();
@@ -1479,4 +1514,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            EventBus.getDefault().postSticky(new FromHomeCleanFinishEvent(mTitle));
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
