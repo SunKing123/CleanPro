@@ -329,8 +329,8 @@
     </style>
 
     <style name="home_main_table_icon_image">
-        <item name="android:layout_width">58dp</item>
-        <item name="android:layout_height">58dp</item>
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_centerHorizontal">true</item>
     </style>
@@ -338,7 +338,7 @@
     <style name="home_main_table_icon_tv_title">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">19dp</item>
+        <item name="android:textSize">18dp</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textColor">@color/home_title</item>
     </style>
@@ -346,7 +346,18 @@
     <style name="home_main_table_icon_tv_content" parent="home_main_table_icon_tv_title">
         <item name="android:textSize">14dp</item>
         <item name="android:layout_marginTop">3dp</item>
+        <item name="android:paddingBottom">10dp</item>
         <item name="android:textColor">@color/home_content</item>
+    </style>
+
+    <style name="home_button">
+        <item name="android:layout_width">98dp</item>
+        <item name="android:layout_height">31dp</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/dimen_14sp</item>
+        <item name="android:background">@drawable/clear_btn_bg</item>
+
     </style>
 
 </resources>

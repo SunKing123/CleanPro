@@ -2,7 +2,10 @@ package com.xiaoniu.cleanking.ui.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.widget.LinearLayout;
+
+import com.xiaoniu.cleanking.R;
 
 import androidx.annotation.Nullable;
 
@@ -28,5 +31,9 @@ public class HomeToolTableView extends LinearLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    private void init(Context context) {
+        LayoutInflater.from(context).inflate(R.layout.item_home_tool_table_layout, this);
+
+    }
 
 }
