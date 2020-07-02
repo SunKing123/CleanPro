@@ -134,5 +134,7 @@ public class PositionId {
 
     public static final String LOCK_INTERACTIVE = "lock_interactive";//锁屏互动式广告
 
+    public static final String KEY_HOME_ADV = "key_home_adv";
+
 
 }

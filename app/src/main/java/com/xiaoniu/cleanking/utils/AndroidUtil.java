@@ -9,8 +9,11 @@ import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.text.InputFilter;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
@@ -313,4 +316,12 @@ public class AndroidUtil {
         }
         return new ArrayList<>(list.subList(0, count));
     }
+
+    public static SpannableString inertColorText(String content, int startColorIndex, int endColorIndex, int color) {
+        SpannableString spanString = new SpannableString(content);
+        ForegroundColorSpan span = new ForegroundColorSpan(color);
+        spanString.setSpan(span, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        return spanString;
+    }
+
 }

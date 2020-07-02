@@ -19,7 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
@@ -33,7 +32,9 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
+import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
+import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
@@ -57,9 +58,13 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
+import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -70,6 +75,7 @@ import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -96,8 +102,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     OneKeyCircleButtonView view_lottie_top;
     @BindView(R.id.home_main_table)
     HomeMainTableView homeMainTableView;
-    @BindView(R.id.framelayout_top_ad)
-    FrameLayout mTopAdFrameLayout;
+    @BindView(R.id.home_tool_table)
+    HomeToolTableView homeToolTableView;
     @BindView(R.id.layout_clean_top)
     RelativeLayout layoutCleanTop;
 
@@ -116,15 +122,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
 
-    //one key speed adv onOff info
-    boolean isSpeedAdvOpen = false;
-    boolean isSpeedAdvOpenThree = false;
-    boolean hasInitSpeedAdvOnOff = false;
-
-    //electric adv onOff info
-    boolean isElectricAdvOpen = false;
-    boolean isElectricAdvOpenThree = false;
-    boolean hasInitElectricAdvOnOff = false;
+    private boolean isThreeAdvOpen = false;
+    private boolean hasInitThreeAdvOnOff = false;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -163,11 +162,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         rxPermissions = new RxPermissions(requireActivity());
         compositeDisposable = new CompositeDisposable();
         mPresenter.getInteractionSwitch();
+        homeMainTableView.initViewState();
+        homeToolTableView.initViewState();
 
+        initEvent();
         showHomeLottieView();
         initClearItemCard();
-        refreshHomeMainTableView();
-        initEvent();
         checkAndUploadPoint();
 
         anim = new Rotate3D.Builder(getActivity())
@@ -234,25 +234,19 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customCheckPermission(Points.DEVICE_IDENTIFICATION_EVENT_CODE, Points.DEVICE_IDENTIFICATION_EVENT_NAME, phoneStatePrmStatus, "", "home_page");
     }
 
-    private void refreshHomeMainTableView() {
-        if (PreferenceUtil.getCleanTime()) {
-            homeMainTableView.oneKeySpeedUnusedStyle();
-        } else {
-            homeMainTableView.oneKeySpeedUsedStyle();
-        }
-        if (PreferenceUtil.getVirusKillTime()) {
-            homeMainTableView.killVirusUnusedStyle();
-        } else {
-            homeMainTableView.killVirusUsedStyle();
-        }
-        if (PreferenceUtil.getPowerCleanTime()) {
-            homeMainTableView.electricUnusedStyle();
-        } else {
-            homeMainTableView.electricUsedStyle();
-        }
-    }
-
     private void initEvent() {
+
+        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
+            @Override
+            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+                if (data != null)
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
+            }
+        });
+
         homeMainTableView.setOnItemClickListener(new HomeMainTableView.OnItemClick() {
             @Override
             public void onClick(int item) {
@@ -265,6 +259,29 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         break;
                     case HomeMainTableView.ITEM_ELECTRIC:
                         onElectricClick();
+                        break;
+                }
+            }
+        });
+
+        homeToolTableView.setOnItemClickListener(new HomeToolTableView.OnItemClick() {
+            @Override
+            public void onClick(int item) {
+                switch (item) {
+                    case HomeToolTableView.ITEM_WX:
+                        onCleanWxClick();
+                        break;
+                    case HomeToolTableView.ITEM_TEMPERATURE:
+                        onCoolingClick();
+                        break;
+                    case HomeToolTableView.ITEM_NOTIFY:
+                        onCleanNotifyClick();
+                        break;
+                    case HomeToolTableView.ITEM_NETWORK:
+                        onNetworkSpeedClick();
+                        break;
+                    case HomeToolTableView.ITEM_FOLDER:
+                        onOneKeySpeedClick();
                         break;
                 }
             }
@@ -284,7 +301,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
-
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
     }
 
@@ -311,14 +327,23 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case "一键加速":
                 homeMainTableView.oneKeySpeedUsedStyle();
                 break;
-            case "通知栏清理":
-
-                break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();
                 break;
             case "病毒查杀":
                 homeMainTableView.killVirusUsedStyle();
+                break;
+            case "通知栏清理":
+                homeToolTableView.notifyUsedStyle();
+                break;
+            case "手机降温":
+                homeToolTableView.coolingUsedStyle();
+                break;
+            case "微信清理":
+                homeToolTableView.wxCleanUsedStyle();
+                break;
+            case "网络加速":
+
                 break;
         }
     }
@@ -328,121 +353,23 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Subscribe
     public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
-        if (null == mTopAdFrameLayout || null == view_lottie_top) return;
+        if (null == view_lottie_top) return;
         if (lifecycEvent.isActivity()) {
-            closeAd();
+
         }
         //热启动后重新检测权限
         isDenied = false;
-        refreshHomeMainTableView();
+        homeMainTableView.initViewState();
+        homeToolTableView.initViewState();
     }
-
 
     //完成页返回通知
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
-        loadGeekSdkTop();
+
+
     }
 
-
-    /*
-     *********************************************************************************************************************************************************
-     ************************************************************top adv and animation operation**************************************************************************
-     *********************************************************************************************************************************************************
-     */
-
-    /**
-     * 顶部一键清理完成切换的头部广告
-     */
-    private void loadGeekSdkTop() {
-        boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_HOME_AD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
-        }
-        if (!isOpen) return;
-        if (!mIsFirstShowTopAd) {
-            StatisticsUtils.customTrackEvent("ad_vue_custom", "首页头图广告vue创建", "home_page", "home_page");
-            mIsFirstShowTopAd = true;
-        }//
-        if (null == getActivity() || null == mTopAdFrameLayout) return;
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "home_page", "home_page");
-        mAdManager.loadAd(getActivity(), PositionId.AD_HOME_TOP, new AdListener() { //暂时这样
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-                    if (null != mTopAdFrameLayout && null != info.getAdView()) {
-                        //   view_lottie_top.setVisibility(View.GONE);
-                        showAd(info.getAdView());
-                    }
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "adExposed---home--top");
-                mIsTopAdExposed = true;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "adClicked---home--top");
-                if (null == info) return;
-                if (mIsTopAdExposed) {
-                    StatisticsUtils.clickAD("ad_click", "病毒查杀激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-                } else {
-                    StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-                }
-                if (info.getAdClickType() == 2) { //2=详情
-                    loadGeekSdkTop();
-                } else {
-
-                }
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                if (null == info) return;
-                closeAd();
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if (null == info) return;
-                Log.d(TAG, "adError---home--top=" + info.toString());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
-            }
-        });
-    }
-
-    private void showAd(View adView) {
-        mTopAdFrameLayout.removeAllViews();
-        mTopAdFrameLayout.addView(adView);
-        if (!anim.isOpen()) {
-            anim.transform();
-        }
-    }
-
-    private void closeAd() {
-        if (anim.isOpen()) {
-            anim.transform();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mTopAdFrameLayout != null)
-                        mTopAdFrameLayout.removeAllViews();
-                }
-            }, 500);
-        }
-    }
 
 
     /*
@@ -451,9 +378,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      *********************************************************************************************************************************************************
      */
 
-    /**
-     * 静止时动画
-     */
     private void showHomeLottieView() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
@@ -535,6 +459,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
     }
+
 
 
     /**
@@ -666,13 +591,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
-            initSpeedAdvOnOffInfo();
+            initThreeAdvOnOffInfo();
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isSpeedAdvOpenThree) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_one_key_speed));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else if (isSpeedAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -690,19 +611,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-    private void initSpeedAdvOnOffInfo() {
-        if (hasInitSpeedAdvOnOff) {
+    private void initThreeAdvOnOffInfo() {
+        if (hasInitThreeAdvOnOff) {
             return;
         }
-        hasInitSpeedAdvOnOff = true;
+        hasInitThreeAdvOnOff = true;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
-                    isSpeedAdvOpenThree = switchInfoList.isOpen();
-                }
-                if (PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isSpeedAdvOpen = switchInfoList.isOpen();
+                if (PositionId.KEY_HOME_ADV.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isThreeAdvOpen = switchInfoList.isOpen();
                 }
             }
         }
@@ -748,12 +666,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            initElectricAdvOnOffInfo();
-            if (isElectricAdvOpenThree) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_super_power_saving));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else if (isElectricAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
                 Bundle bundle = new Bundle();
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 startActivity(CleanFinishAdvertisementActivity.class, bundle);
@@ -763,24 +677,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
                 startActivity(NewCleanFinishActivity.class, bundle);
-            }
-        }
-    }
-
-    private void initElectricAdvOnOffInfo() {
-        if (hasInitElectricAdvOnOff) {
-            return;
-        }
-        hasInitElectricAdvOnOff = true;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_FINISH_SWITCH.equals(switchInfoList.getConfigKey())) {
-                    isElectricAdvOpenThree = switchInfoList.isOpen();
-                }
-                if (PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isElectricAdvOpen = switchInfoList.isOpen();
-                }
             }
         }
     }
@@ -798,6 +694,120 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             imageInteractive.loadNextDrawable();
         } else {
             imageInteractive.setVisibility(View.GONE);
+        }
+    }
+
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************wxClean start**********************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+    /**
+     * 微信专清
+     */
+    public void onCleanWxClick() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+        AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
+        StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+            ToastUtils.showShort(R.string.tool_no_install_chat);
+            return;
+        }
+        if (PreferenceUtil.getWeChatCleanTime()) {
+            // 每次清理间隔 至少3秒
+            startActivity(WechatCleanHomeActivity.class);
+        } else {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_chat_clear));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        }
+    }
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************notifyClean start******************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    public void onCleanNotifyClick() {
+//        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+
+        StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+        if (!NotifyUtils.isNotificationListenerEnabled() || PreferenceUtil.getNotificationCleanTime() || mNotifySize > 0) {
+            NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
+        } else {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_notification_clean));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        }
+    }
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************cooling start**********************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+    public void onCoolingClick() {
+        AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+        StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+
+        if (PreferenceUtil.getCoolingCleanTime()) {
+            startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
+        } else {
+            initThreeAdvOnOffInfo();
+            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                startActivity(CleanFinishAdvertisementActivity.class, bundle);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                bundle.putString("num", "");
+                bundle.putString("unit", "");
+                startActivity(NewCleanFinishActivity.class, bundle);
+            }
+        }
+    }
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************network  speed start***************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    private void onNetworkSpeedClick() {
+        if (PreferenceUtil.getSpeedNetWorkTime()) {
+            startActivity(NetWorkActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            String num = PreferenceUtil.getSpeedNetworkValue();
+            intent.putExtra("title", "网络加速");
+            intent.putExtra("main", false);
+            intent.putExtra("num", num);
+            startActivity(intent);
         }
     }
 

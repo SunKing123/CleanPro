@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -34,6 +35,8 @@ import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.selfdebug.AppConfig;
+import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -254,13 +257,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //检查广告弹窗
         mPresenter.checkAdviceDialog();
 //        测试入口
-//        if (BuildConfig.BUILD_TYPE.contains("dev") || BuildConfig.BUILD_TYPE.contains("btestdeug")) {
-//            AppConfig.showDebugWindow(mContext);
-//        }
 
-//        if (BuildConfig.DEBUG) {
-////            AppConfig.showDebugWindow(mContext);
-////        }
+        if (BuildConfig.DEBUG) {
+            AppConfig.showDebugWindow(mContext);
+        }
     }
 
 

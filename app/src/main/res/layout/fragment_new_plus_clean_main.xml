@@ -65,22 +65,17 @@
 
                 </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
 
-                <FrameLayout
-                    android:id="@+id/framelayout_top_ad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_18dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="@dimen/dimen_18dp"
-                    android:layout_marginBottom="35dp"
-                    android:background="@drawable/ad_container_white_bg"
-                    android:visibility="gone" />
             </RelativeLayout>
 
             <com.xiaoniu.cleanking.ui.view.HomeMainTableView
                 android:id="@+id/home_main_table"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <com.xiaoniu.cleanking.ui.view.HomeToolTableView
+                android:id="@+id/home_tool_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <FrameLayout
                 android:id="@+id/ad_one"

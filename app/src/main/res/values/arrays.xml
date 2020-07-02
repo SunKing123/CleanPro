@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="small_ad_anim">
+        <item>@drawable/iv_ad_circle_anim1</item>
+        <!--<item>@drawable/iv_ad_circle_anim2</item>-->
+        <item>@drawable/iv_ad_circle_anim3</item>
+        <!--<item>@drawable/iv_ad_circle_anim4</item>-->
+        <item>@drawable/iv_ad_circle_anim5</item>
+        <!--<item>@drawable/iv_ad_circle_anim6</item>-->
+        <item>@drawable/iv_ad_circle_anim7</item>
+        <!--<item>@drawable/iv_ad_circle_anim8</item>-->
+        <item>@drawable/iv_ad_circle_anim9</item>
+        <!--<item>@drawable/iv_ad_circle_anim10</item>-->
+        <item>@drawable/iv_ad_circle_anim11</item>
+        <!--<item>@drawable/iv_ad_circle_anim12</item>-->
+        <item>@drawable/iv_ad_circle_anim13</item>
+        <!--<item>@drawable/iv_ad_circle_anim14</item>-->
+        <item>@drawable/iv_ad_circle_anim15</item>
+        <!--<item>@drawable/iv_ad_circle_anim16</item>-->
+        <item>@drawable/iv_ad_circle_anim17</item>
+        <!--<item>@drawable/iv_ad_circle_anim18</item>-->
+        <item>@drawable/iv_ad_circle_anim19</item>
+        <!--<item>@drawable/iv_ad_circle_anim20</item>-->
+        <item>@drawable/iv_ad_circle_anim21</item>
+        <!--<item>@drawable/iv_ad_circle_anim22</item>-->
+        <item>@drawable/iv_ad_circle_anim23</item>
+        <!--<item>@drawable/iv_ad_circle_anim24</item>-->
+        <item>@drawable/iv_ad_circle_anim25</item>
+        <!--<item>@drawable/iv_ad_circle_anim26</item>-->
+        <item>@drawable/iv_ad_circle_anim27</item>
+        <!--<item>@drawable/iv_ad_circle_anim28</item>-->
+        <item>@drawable/iv_ad_circle_anim29</item>
+        <!--<item>@drawable/iv_ad_circle_anim30</item>-->
+        <item>@drawable/iv_ad_circle_anim31</item>
+        <!--<item>@drawable/iv_ad_circle_anim32</item>-->
+        <item>@drawable/iv_ad_circle_anim33</item>
+        <!--<item>@drawable/iv_ad_circle_anim34</item>-->
+        <item>@drawable/iv_ad_circle_anim35</item>
+    </string-array>
+
+
+    <array name="array_male">
+        <item>男</item>
+        <item>女</item>
+    </array>
+</resources>

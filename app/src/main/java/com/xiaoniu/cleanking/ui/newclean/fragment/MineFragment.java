@@ -15,6 +15,8 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
+import com.xiaoniu.cleanking.ui.login.activity.BindPhoneActivity;
+import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -57,6 +59,7 @@ public class MineFragment extends BaseFragment<MinePresenter> {
     @Override
     protected void initView() {
         mBinding = DataBindingUtil.bind(getView());
+        mBinding.phoneNumTv.setText("未登录请登录");
     }
 
     FragmentMineBinding mBinding;
@@ -91,15 +94,17 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 break;
             case R.id.head_img_iv:
             case R.id.phone_num_tv:
-                GoldCoinBean goldCoinBean = new GoldCoinBean();
-                goldCoinBean.context = getContext();
-                goldCoinBean.obtainCoinCount = 10;
-                goldCoinBean.totalCoinCount = 135;
-                goldCoinBean.dialogType = 3;
-                goldCoinBean.adId = "";
-                goldCoinBean.videoSource = 12;
-                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
-                ToastUtils.showShort("用户信息");
+                startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
+//                GoldCoinBean goldCoinBean = new GoldCoinBean();
+//                goldCoinBean.context = getContext();
+//                goldCoinBean.obtainCoinCount = 10;
+//                goldCoinBean.totalCoinCount = 135;
+//                goldCoinBean.dialogType = 2;
+//                goldCoinBean.adId = "";
+//                goldCoinBean.isDouble = true;
+//                goldCoinBean.videoSource = 12;
+//                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
+//                ToastUtils.showShort("用户信息");
                 break;
             case R.id.iv_inter_ad:
                 ToastUtils.showShort("插入广告");

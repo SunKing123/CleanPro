@@ -18,16 +18,26 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label">
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/gdt_inmobi_file_path" />
+        </provider>
 
-        <!-- <provider
-             android:name="androidx.core.content.FileProvider"
-             android:authorities="${applicationId}.fileprovider"
-             android:exported="false"
-             android:grantUriPermissions="true">
-             <meta-data
-                 android:name="android.support.FILE_PROVIDER_PATHS"
-                 android:resource="@xml/gdt_file_path" />
-         </provider>-->
+        <provider
+            android:name="com.meishu.sdk.core.service.MeishuFileProvider"
+            android:authorities="${applicationId}.MeishuFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/meishu_file_path" />
+        </provider>
+
         <provider
             android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
             android:authorities="${applicationId}.TTFileProvider"
@@ -37,12 +47,24 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
-
         <provider
             android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
             android:authorities="${applicationId}.TTMultiProvider"
             android:exported="false" />
+
+        <provider
+            android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
+            android:authorities="${applicationId}.mtgFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/mtg_provider_paths"/>
+        </provider>
+
+
+
+
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
@@ -428,6 +450,22 @@
             android:name=".ui.newclean.activity.GoldCoinSuccessActivity"
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
+        <activity
+            android:name=".ui.login.activity.LoginWeiChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.activity.BindPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.activity.BindPhoneManualActivity"
+            android:screenOrientation="portrait" />
+
+
+        <activity
+            android:name=".selfdebug.MidasDebugPanelActivity"
+            android:exported="true"
+            android:theme="@style/activityBgTranslucent" />
+
 
         <activity
             android:name=".ui.lockscreen.LockActivity"
@@ -636,9 +674,9 @@
             android:name="PARTNER_CODE"
             android:value="hlxx" />
 
-<!--        <meta-data-->
-<!--            android:name="com.xiaoniu.cleanking.app.AppLifecyclesImpl"-->
-<!--            android:value="IModuleConfig" />-->
+        <!--        <meta-data-->
+        <!--            android:name="com.xiaoniu.cleanking.app.AppLifecyclesImpl"-->
+        <!--            android:value="IModuleConfig" />-->
 
 
         <meta-data
@@ -730,6 +768,10 @@
         <meta-data
             android:name="BaiduMobAd_WIFI_LOCATION"
             android:value="true" />
+
+
+
+
 
 
         <provider
@@ -838,7 +880,7 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy" />
+    <uses-sdk tools:overrideLibrary="com.example.fixedfloatwindow, com.juxinli.normandy,com.xnad.sdk" />
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -846,12 +888,18 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--最好能提供的权限-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 如果有视频相关的广告且使用textureView播放，请务必添加，否则黑屏 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
 
     <!--    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"-->
     <!--        />-->

@@ -147,11 +147,14 @@
                     android:textSize="@dimen/dimen_16sp" />
 
                 <TextView
+                    android:id="@+id/tv_goto_midas"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dimen_50dp"
                     android:layout_weight="1"
                     android:background="@color/color_89E00F"
                     android:gravity="center"
+                    android:text="midas_debug"
+                    android:onClick="goto_midas"
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_16sp" />
 
