@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.SpannableString;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +21,12 @@ import androidx.annotation.Nullable;
  * email：xinxiaolong123@foxmail.com
  */
 public class HomeToolTableView extends LinearLayout {
+
+    public static final int ITEM_WX = 1;
+    public static final int ITEM_TEMPERATURE = 2;
+    public static final int ITEM_NOTIFY = 3;
+    public static final int ITEM_NETWORK = 4;
+    public static final int ITEM_FOLDER = 5;
 
     ViewGroup wxClean;
     TextView tvWxContent;
@@ -41,10 +48,6 @@ public class HomeToolTableView extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public HomeToolTableView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.item_home_tool_table_layout, this);
         wxClean = findViewById(R.id.wx_clean);
@@ -53,10 +56,49 @@ public class HomeToolTableView extends LinearLayout {
         itemNotify = findViewById(R.id.item_notify);
         itemNetwork = findViewById(R.id.item_network);
         itemFolder = findViewById(R.id.item_folder);
+
+
+        wxClean.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                triggerClick(ITEM_WX);
+            }
+        });
+        itemTemperature.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                triggerClick(ITEM_TEMPERATURE);
+            }
+        });
+        itemNotify.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                triggerClick(ITEM_NOTIFY);
+            }
+        });
+        itemNetwork.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                triggerClick(ITEM_NETWORK);
+            }
+        });
+        itemFolder.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                triggerClick(ITEM_FOLDER);
+            }
+        });
     }
 
-    public void initViewState() {
 
+    private void triggerClick(int item) {
+        if (onItemClick != null) {
+            onItemClick.onClick(item);
+        }
+    }
+
+
+    public void initViewState() {
         //wx
         if (PreferenceUtil.getWeChatCleanTime()) {
             wxCleanUnusedStyle();
@@ -139,6 +181,22 @@ public class HomeToolTableView extends LinearLayout {
     public void notifyUsedStyle() {
         itemNotify.setContentColor(getNormalColor());
         itemNotify.setContent("开启防骚扰模式");
+    }
+
+
+    /**
+     * ****************************************************************************************************************************
+     * ******************************************************item view click listener**********************************************
+     * ****************************************************************************************************************************
+     */
+    OnItemClick onItemClick;
+
+    public interface OnItemClick {
+        void onClick(int item);
+    }
+
+    public void setOnItemClickListener(OnItemClick onItemClick) {
+        this.onItemClick = onItemClick;
     }
 
 
