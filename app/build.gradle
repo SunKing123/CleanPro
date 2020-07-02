@@ -21,7 +21,7 @@ android {
         flavorDimensions "environment"
         ndk {
             //选择要添加的对应cpu类型的.so库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86'//, 'arm64-v8a'
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'arm64-v8a'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
         javaCompileOptions {
@@ -110,6 +110,8 @@ android {
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
             minifyEnabled false
             signingConfig signingConfigs.release
             debuggable = true
@@ -134,6 +136,8 @@ android {
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
             minifyEnabled false
             debuggable true
             signingConfig signingConfigs.release
@@ -155,6 +159,8 @@ android {
             buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://realisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'true'
             minifyEnabled false
             signingConfig signingConfigs.release
             multiDexKeepProguard file('multidex-config.pro')
@@ -204,6 +210,11 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 
     android.applicationVariants.all { variant ->
@@ -259,7 +270,7 @@ dependencies {
   //  implementation files('libs\\push-core.aar')
   //  implementation files('libs\\push-jpush.aar')
     implementation project(':permission')
-    implementation project(':otherlib:jksdk')
+
 
     //百度统计sdk
     implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
@@ -275,6 +286,39 @@ dependencies {
     implementation 'com.huawei.hms:push:3.0.3.301'
 
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
+
+
+
+
+    api project(':otherlib:jksdk')
+
+    /*--------------Midas接入--------------*/
+
+//    implementation 'com.googlecode.android-query:android-query:0.25.9'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
+    implementation 'com.github.razerdp:BasePopup:2.2.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.googlecode.android-query:android-query:0.25.9'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.mintegral.msdk:videojs:13.0.31'
+    implementation 'com.mintegral.msdk:mtgjscommon:13.0.31'
+    implementation 'com.mintegral.msdk:playercommon:13.0.31'
+    implementation 'com.mintegral.msdk:reward:13.0.31'
+    implementation 'com.mintegral.msdk:videocommon:13.0.31'
+    implementation 'com.mintegral.msdk:optimizedata:13.0.31'
+    implementation 'com.mintegral.msdk:common:13.0.31'
+    implementation 'com.mintegral.msdk:mtgdownloads:13.0.31'
+    implementation 'com.mintegral.msdk:interstitialvideo:13.0.31'
+    implementation 'com.mintegral.msdk:mtgnative:13.0.31'
+    implementation 'com.mintegral.msdk:nativeex:13.0.31'
+    implementation 'com.mintegral.msdk:mtgbanner:13.0.31'
+    implementation 'com.mintegral.msdk:interstitial:13.0.31'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.0'
 
 }
 apply plugin: 'com.huawei.agconnect'

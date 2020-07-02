@@ -103,6 +103,9 @@ public class DebugActivity extends BaseActivity {
     }
 
 
+    public void goto_midas(View view) {
+        startActivity(new Intent(this,MidasDebugPanelActivity.class));
+    }
 
     public void playLottie(View view){
 //        oneKeyCircleButtonView.startLottie();

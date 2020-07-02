@@ -6,10 +6,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.bun.miitmdid.core.ErrorCode;
-import com.bun.miitmdid.core.IIdentifierListener;
 import com.bun.miitmdid.core.MdidSdk;
 import com.bun.miitmdid.core.MdidSdkHelper;
-import com.bun.miitmdid.supplier.IdSupplier;
+import com.bun.supplier.IIdentifierListener;
+import com.bun.supplier.IdSupplier;
 
 /**
  * Created by zheng on 2019/8/22.
@@ -80,7 +80,7 @@ public class MiitHelper implements IIdentifierListener {
         builder.append("AAID: ").append(aaid).append("\n");
         String idstext=builder.toString();*/
 //        LogUtils.i("zzz","----"+idstext);
-        _supplier.shutDown();
+//        _supplier.shutDown();
         if(_listener!=null){
             _listener.OnIdsAvalid(oaid);
         }
