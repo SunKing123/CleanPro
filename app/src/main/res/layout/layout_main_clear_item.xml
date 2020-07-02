@@ -1,96 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.xiaoniu.cleanking.widget.ShadowViewCard xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_189dp"
-    android:background="@color/white"
-    android:orientation="vertical">
+    app:shadowRound="6dp"
+    android:layout_height="@dimen/dimen_189dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:drawableStart="@mipmap/clear_icon_sound"
-        android:gravity="center"
-        android:textColor="@color/color_323232"
-        android:textSize="@dimen/sp_16"
-        tools:text="音频文件" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12.5dp"
-        android:layout_marginTop="@dimen/dimen_16dp"
-        android:layout_marginEnd="12.5dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/item_1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/clear_item_bg"
-            android:src="@mipmap/clear_item_video"
-            app:layout_constraintEnd_toStartOf="@+id/item_2"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:drawableStart="@mipmap/clear_icon_sound"
+            android:gravity="center"
+            android:textColor="@color/color_323232"
+            android:textSize="@dimen/sp_16"
+            tools:text="音频文件" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/item_2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/clear_item_bg"
-            android:src="@mipmap/clear_item_img"
-            app:layout_constraintEnd_toStartOf="@+id/item_3"
-            app:layout_constraintStart_toEndOf="@+id/item_1"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12.5dp"
+            android:layout_marginTop="@dimen/dimen_16dp"
+            android:layout_marginEnd="12.5dp"
+            android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/item_3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/clear_item_bg"
-            app:layout_constraintEnd_toStartOf="@+id/item_4"
-            app:layout_constraintStart_toEndOf="@+id/item_2"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/item_1"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/clear_item_bg"
+                android:src="@mipmap/clear_item_video"
+                app:layout_constraintEnd_toStartOf="@+id/item_2"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/item_4"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/clear_item_bg"
-            app:layout_constraintEnd_toStartOf="@+id/item_5"
-            app:layout_constraintStart_toEndOf="@+id/item_3"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/item_2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/clear_item_bg"
+                android:src="@mipmap/clear_item_img"
+                app:layout_constraintEnd_toStartOf="@+id/item_3"
+                app:layout_constraintStart_toEndOf="@+id/item_1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/item_3"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/clear_item_bg"
+                app:layout_constraintEnd_toStartOf="@+id/item_4"
+                app:layout_constraintStart_toEndOf="@+id/item_2"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/item_4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/clear_item_bg"
+                app:layout_constraintEnd_toStartOf="@+id/item_5"
+                app:layout_constraintStart_toEndOf="@+id/item_3"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/item_5"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/clear_item_bg"
-            android:src="@mipmap/clear_item_video"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/item_4"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/item_5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/clear_item_bg"
+                android:src="@mipmap/clear_item_video"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/item_4"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
-        android:layout_width="98dp"
-        android:layout_height="31dp"
-        android:layout_gravity="end"
-        android:layout_marginTop="24.5dp"
-        android:layout_marginEnd="12.5dp"
-        android:background="@drawable/clear_btn_bg"
-        android:text="@string/look_and_search"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dimen_14sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button"
+            android:layout_width="98dp"
+            android:layout_height="31dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="24.5dp"
+            android:layout_marginEnd="12.5dp"
+            android:background="@drawable/clear_btn_bg"
+            android:text="@string/look_and_search"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
 
-</LinearLayout>
+    </LinearLayout>
+</com.xiaoniu.cleanking.widget.ShadowViewCard>

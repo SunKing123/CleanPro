@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_fff7f8fa"
+    android:background="@color/color_F7F8FA"
     android:orientation="vertical"
     android:visibility="visible">
 
