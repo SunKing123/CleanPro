@@ -1,17 +1,11 @@
 package com.xiaoniu.cleanking.ui.newclean.dialog;
 
-import android.animation.AnimatorSet;
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +18,9 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.BaseDialog;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
+import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
+import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
+import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
 
 /**
  * Created by zhaoyingtao
@@ -31,6 +28,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
  * Describe:
  */
 public class GoldCoinDialog {
+
     public static void showGoldCoinDialog(GoldCoinBean coinBean) {
         if (coinBean == null || coinBean.obtainCoinCount < 0) {
             return;
@@ -78,6 +76,7 @@ public class GoldCoinDialog {
         iv_top_three.setVisibility(View.GONE);
         ll_my_coin.setVisibility(View.GONE);
         LinearLayout.MarginLayoutParams layoutParams = (LinearLayout.MarginLayoutParams) ll_top_content.getLayoutParams();
+        //dialog的类型 1 转圈  2 撒花 3 清理金币奖励 默认是1
         if (coinBean.dialogType == 2) {
             rl_type_two.setVisibility(View.VISIBLE);
             layoutParams.topMargin = DisplayUtil.dip2px(coinBean.context, 65);
@@ -101,7 +100,11 @@ public class GoldCoinDialog {
             adLookTime.setVisibility(View.VISIBLE);
             tv_coin_str.setText("恭喜获得");
             totalCoin = coinBean.obtainCoinCount;
-            playRotateAnim(ivAnim);
+            AnimationRotateUtils.getInstance().playRotateAnim(ivAnim, 10000);
+        }
+        if (coinBean.isDouble) {
+            CoinDoubleRL.setVisibility(View.VISIBLE);
+            AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
         }
         obtainCoinCountTv.setText(String.valueOf(totalCoin));
         if (coinBean.totalCoinCount > 99) {
@@ -111,31 +114,35 @@ public class GoldCoinDialog {
         } else {
             totalCoinCountTv.setText(Html.fromHtml(coinBean.totalCoinCount + "≈<font color=#febf28>" + 0.00 + "元</font>"));
         }
-        countDownTimeViewDelay(1000, 3, adLookTime, closeDlg);
-        CoinDoubleRL.setVisibility(View.VISIBLE);
         dialog.show();
+        countDownTimeViewDelay(3, adLookTime, closeDlg);
+        //边上跑的动画
+        AnimationsContainer.FrameseAnim animaDra = null;
+        animaDra = AnimationsContainer.getInstance(R.array.small_ad_anim, 80).createAnim(mLlAdAnim);
+        animaDra.start();
         closeDlg.setOnClickListener(view -> {
             dialog.dismiss();
+        });
+
+    }
+
+    //倒计时展示  msc 秒数
+    private static void countDownTimeViewDelay(int msc, TextView adLookTime, View closeDlg) {
+        if (adLookTime != null) {
+            adLookTime.setVisibility(View.GONE);
+        }
+        new Handler().post(() -> {
+            if (adLookTime != null && closeDlg != null) {
+                countDownTimeView(msc, adLookTime, closeDlg);
+            }
+
         });
     }
 
     //倒计时展示  msc 秒数
-    private static void countDownTimeViewDelay(int delayTime,
-                                               int msc, TextView adLookTime, View closeDlg) {
-        if (adLookTime != null) {
-            adLookTime.setVisibility(View.GONE);
-        }
-        new Handler().postDelayed(() -> {
-            if (adLookTime != null && closeDlg != null) {
-                adLookTime.setVisibility(View.VISIBLE);
-                countDownTimeView(msc, adLookTime, closeDlg);
-            }
-
-        }, delayTime);
-    }
-
-    //倒计时展示  msc 秒数
     private static void countDownTimeView(int msc, TextView adLookTime, View closeDlg) {
+        adLookTime.setVisibility(View.VISIBLE);
+        adLookTime.setText(msc + "");
         new CountDownTimer(msc * 1000, 1000) {
 
             @Override
@@ -151,19 +158,4 @@ public class GoldCoinDialog {
         }.start();
     }
 
-    public static void playRotateAnim(View ivAnim) {
-        Animation animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        animation.setDuration(10000);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.setRepeatCount(-1);//动画的反复次数
-        animation.setFillAfter(true);//设置为true，动画转化结束后被应用
-        ivAnim.startAnimation(animation);//開始动画
-//        animation.setAnimationListener(new AnimationListenerAdapter() {
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                super.onAnimationEnd(animation);
-//                playRotateAnim(ivAnim);
-//            }
-//        });
-    }
 }

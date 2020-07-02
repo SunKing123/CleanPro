@@ -57,6 +57,7 @@ public class MineFragment extends BaseFragment<MinePresenter> {
     @Override
     protected void initView() {
         mBinding = DataBindingUtil.bind(getView());
+        mBinding.phoneNumTv.setText("未登录请登录");
     }
 
     FragmentMineBinding mBinding;
@@ -95,11 +96,12 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 goldCoinBean.context = getContext();
                 goldCoinBean.obtainCoinCount = 10;
                 goldCoinBean.totalCoinCount = 135;
-                goldCoinBean.dialogType = 3;
+                goldCoinBean.dialogType = 2;
                 goldCoinBean.adId = "";
+                goldCoinBean.isDouble = true;
                 goldCoinBean.videoSource = 12;
                 GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
-                ToastUtils.showShort("用户信息");
+//                ToastUtils.showShort("用户信息");
                 break;
             case R.id.iv_inter_ad:
                 ToastUtils.showShort("插入广告");

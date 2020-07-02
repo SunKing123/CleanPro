@@ -330,8 +330,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_15sp"
                     android:textStyle="bold"
-                    tools:text="点击下载"
-                    tools:visibility="visible" />
+                    android:visibility="gone"/>
             </LinearLayout>
         </com.qq.e.ads.nativ.widget.NativeAdContainer>
 
