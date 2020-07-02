@@ -294,14 +294,23 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case "一键加速":
                 homeMainTableView.oneKeySpeedUsedStyle();
                 break;
-            case "通知栏清理":
-
-                break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();
                 break;
             case "病毒查杀":
                 homeMainTableView.killVirusUsedStyle();
+                break;
+            case "通知栏清理":
+                homeToolTableView.notifyUsedStyle();
+                break;
+            case "手机降温":
+                homeToolTableView.coolingUsedStyle();
+                break;
+            case "微信清理":
+                homeToolTableView.wxCleanUsedStyle();
+                break;
+            case "网络加速":
+
                 break;
         }
     }

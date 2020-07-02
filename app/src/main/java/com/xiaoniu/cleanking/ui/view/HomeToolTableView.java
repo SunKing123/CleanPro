@@ -57,6 +57,12 @@ public class HomeToolTableView extends LinearLayout {
 
     public void initViewState() {
 
+        //wx
+        if (PreferenceUtil.getWeChatCleanTime()) {
+            wxCleanUnusedStyle();
+        } else {
+            wxCleanUsedStyle();
+        }
 
         //cooling
         itemTemperature.setIcon(R.drawable.icon_home_temperature);
@@ -66,7 +72,6 @@ public class HomeToolTableView extends LinearLayout {
         } else {
             coolingUsedStyle();
         }
-
 
         //notify
         itemNotify.setTitle("通知栏清理");
