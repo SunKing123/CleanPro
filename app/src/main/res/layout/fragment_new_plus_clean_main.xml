@@ -73,9 +73,8 @@
             <FrameLayout
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_100dp"
-                android:layout_marginTop="@dimen/dp_5"
-                android:background="@color/colorAccent" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.ui.view.HomeToolTableView
                 android:id="@+id/home_tool_table"
@@ -85,8 +84,8 @@
             <FrameLayout
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_100dp"
-                android:layout_marginTop="@dimen/dp_5"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
@@ -103,7 +102,7 @@
             <FrameLayout
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
