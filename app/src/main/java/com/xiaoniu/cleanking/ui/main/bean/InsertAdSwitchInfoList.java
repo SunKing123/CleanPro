@@ -86,5 +86,9 @@ public class InsertAdSwitchInfoList extends BaseEntity {
         public String getAdvertId() {
             return advertId;
         }
+
+        public void setAdvertId(String advertId) {
+            this.advertId = advertId;
+        }
     }
 }

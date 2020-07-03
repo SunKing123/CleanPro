@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -22,12 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
-import com.jzp.rotate3d.Rotate3D;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -37,12 +33,12 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
-import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -61,7 +57,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
-import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
@@ -117,9 +112,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.clear_card_sound)
     ClearCardView clearSoundLayout;
 
-    @BindView(R.id.ffff)
-    FrameLayout frameLayout;
+    @BindView(R.id.ad_two)
+    FrameLayout adLayoutTwo;
 
+    @BindView(R.id.ad_one)
+    FrameLayout adLayoutOne;
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
 
@@ -132,7 +129,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private RxPermissions rxPermissions;
 
     private AdManager mAdManager;
-    private Rotate3D anim;
     private AlertDialog dlg;
     private CompositeDisposable compositeDisposable;
 
@@ -443,6 +439,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
     }
+
 
 
     /**

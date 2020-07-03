@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.main.widget;
+package com.xiaoniu.cleanking.ui.main.dialog;
 
 import android.app.Activity;
 import android.content.Intent;
