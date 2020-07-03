@@ -36,7 +36,6 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.selfdebug.AppConfig;
-import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -44,7 +43,6 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.dialog.AdviceDialog;
 import com.xiaoniu.cleanking.ui.main.dialog.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
@@ -62,7 +60,6 @@ import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
@@ -254,8 +251,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.getPopupData();
         //获取定位权限
         mPresenter.requestPhoneStatePermission();
-        //检查广告弹窗
-        mPresenter.checkAdviceDialog();
+
 //        测试入口
 
         if (BuildConfig.DEBUG) {
@@ -279,10 +275,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-    public void showInsideScreenDialog() {
-        AdviceDialog adviceDialog = new AdviceDialog(this);
-        adviceDialog.show();
-    }
 
     private void checkReadPermission() {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
@@ -652,8 +644,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     //清理完成页返回弹出广告
     @Subscribe
     public void onEventScan(FromHomeCleanFinishEvent backMainEvent) {
-        LogUtils.e("=====收到了返回通知");
-        showInsideScreenDialog();
+        mPresenter.showInsideScreenDialog();
     }
 
 

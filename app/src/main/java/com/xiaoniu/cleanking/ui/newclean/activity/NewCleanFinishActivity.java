@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1515,11 +1514,4 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            EventBus.getDefault().postSticky(new FromHomeCleanFinishEvent(mTitle));
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

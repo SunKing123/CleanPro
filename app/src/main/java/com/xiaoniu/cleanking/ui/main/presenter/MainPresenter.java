@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -69,6 +70,10 @@ import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.MidasAdSdk;
+import com.xnad.sdk.ad.entity.AdInfo;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.config.AdParameter;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -102,6 +107,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     NoClearSPHelper mPreferencesHelper;
     private AMapLocationClient mLocationClient = null;
     private AMapLocationClientOption mLocationOption = null;
+    AdParameter mAdParameter;
 
     @Inject
     public MainPresenter(RxAppCompatActivity activity) {
@@ -502,6 +508,35 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
+    //显示内部插屏广告
+    public void showInsideScreenDialog() {
+        if (mActivity == null) {
+            return;
+        }
+        ViewGroup viewGroup = (ViewGroup) mActivity.getWindow().getDecorView();
+        mAdParameter = new AdParameter.Builder(mActivity, "adpos_1938682621")
+                //设置填充父布局
+                .setViewContainer(viewGroup)
+                .build();
+        MidasAdSdk.getAdsManger().loadAd(mAdParameter, new AbsAdCallBack() {
+            @Override
+            public void onAdShow(AdInfo adInfo) {
+                super.onAdShow(adInfo);
+                LogUtils.e("====首页内部插屏广告展出======");
+            }
+
+            @Override
+            public void onAdClicked(AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+            }
+
+            @Override
+            public void onAdClose(AdInfo adInfo) {
+                super.onAdClose(adInfo);
+            }
+        });
+    }
+
     /**
      * 判断广告弹窗和红包弹窗
      */
@@ -511,13 +546,15 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
             if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
                 InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
+                LogUtils.e("======databean:" + new Gson().toJson(dataBean));
                 if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
                     if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
                         List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
                         InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
                         int startCount = inside.getCount();
+                        LogUtils.e("=======count:" + startCount);
                         if (internalList.contains(String.valueOf(startCount))) {
-                            mView.showInsideScreenDialog();
+                            showInsideScreenDialog();
                             return;
                         }
 
@@ -929,30 +966,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
 
 
-    }
-
-    /**
-     * 进入应用时的弹窗
-     */
-    public void checkAdviceDialog() {
-        if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
-            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
-            if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
-                InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
-                if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
-                    if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
-                        List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
-                        InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
-                        int startCount = inside.getCount();
-                        if (internalList.contains(String.valueOf(startCount))) {
-                            mView.showInsideScreenDialog();
-                        }
-
-
-                    }
-                }
-            }
-        }
     }
 
     /**
