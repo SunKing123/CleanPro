@@ -293,7 +293,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         onNetworkSpeedClick();
                         break;
                     case HomeToolTableView.ITEM_FOLDER:
-                        onOneKeySpeedClick();
+                        onCleanFolderClick();
                         break;
                 }
             }
@@ -692,6 +692,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
+    }
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************folder clean start*****************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+    public void onCleanFolderClick() {
+        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "acceleration_page");
+        startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
 
     /**
