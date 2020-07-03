@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.BaseDialog;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
+import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
@@ -49,15 +50,7 @@ public class GoldCoinDialog {
         TextView totalCoinCountTv = dialog.findViewById(R.id.total_coin_count_tv);
         totalCoinCountTv.setTypeface(typ_RE);
         RelativeLayout CoinDoubleRL = dialog.findViewById(R.id.coin_double_rl);
-        ViewGroup rootView = dialog.findViewById(R.id.ad_root_view);
-        ImageView adIv = dialog.findViewById(R.id.ad_iv);
-        ImageView adIvLogo = dialog.findViewById(R.id.native_insert_ad_logo);
-        TextView adDesTv = dialog.findViewById(R.id.ad_title_tv);
-        TextView lookInfoTv = dialog.findViewById(R.id.look_info_tv);
         TextView tv_coin_str = dialog.findViewById(R.id.tv_coin_str);
-        TextView title = dialog.findViewById(R.id.title_tv);
-        TextView download_tv = dialog.findViewById(R.id.download_tv);
-        ImageView logo_iv = dialog.findViewById(R.id.ad_small_iv);
         ImageView mLlAdAnim = dialog.findViewById(R.id.ll_ad_anim);
         FrameLayout mRootRL = dialog.findViewById(R.id.root_fl);
         RelativeLayout ll_top = dialog.findViewById(R.id.ll_top);
@@ -75,6 +68,11 @@ public class GoldCoinDialog {
         tv_coin_str.setVisibility(View.GONE);
         iv_top_three.setVisibility(View.GONE);
         ll_my_coin.setVisibility(View.GONE);
+
+//        FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) mRootRL.getLayoutParams();
+//        layoutParams1.height = DimenUtils.dp2px(coinBean.context, 150);
+//        mRootRL.setLayoutParams(layoutParams1);
+
         LinearLayout.MarginLayoutParams layoutParams = (LinearLayout.MarginLayoutParams) ll_top_content.getLayoutParams();
         //dialog的类型 1 转圈  2 撒花 3 清理金币奖励 默认是1
         if (coinBean.dialogType == 2) {

@@ -1,7 +1,13 @@
 package com.xiaoniu.cleanking.ui.login.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -14,6 +20,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.login.contract.LoginWeiChatContract;
 import com.xiaoniu.cleanking.ui.login.di.component.DaggerLoginWeiChatComponent;
 import com.xiaoniu.cleanking.ui.login.presenter.LoginWeiChatPresenter;
@@ -24,7 +31,6 @@ import com.xiaoniu.payshare.AuthorizedLogin;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
@@ -42,6 +48,8 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     CommonTitleLayout titleLayout;
     @BindView(R.id.vx_login_ll)
     LinearLayout vxLoginLl;
+    @BindView(R.id.bottom_btn)
+    CheckBox bottomBtn;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -62,6 +70,37 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     public void initData(@Nullable Bundle savedInstanceState) {
         titleLayout.setLeftTitle("登录").setBgColor(R.color.common_white);
         initListener();
+        setXieYi();
+    }
+
+    private void setXieYi() {
+        bottomBtn.setChecked(true);
+        String string = "已同意《服务协议》和《隐私条款》";
+        SpannableString spannableString = new SpannableString(string);
+        spannableString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                SchemeProxy.openScheme(widget.getContext(), "需要协议地址");
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                ds.setColor(Color.parseColor("#5CD0FF"));
+            }
+        }, string.length() - 6, spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                SchemeProxy.openScheme(widget.getContext(), "需要协议地址");
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                ds.setColor(Color.parseColor("#5CD0FF"));
+            }
+        }, 3, 9, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        bottomBtn.setText(spannableString);
+        bottomBtn.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void initListener() {
@@ -118,10 +157,4 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

@@ -56,7 +56,7 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
-import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     BottomBar mBottomBar;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
-    private NewsFragment upQuotaFragment;
+//    private NewsFragment upQuotaFragment;
     private static final long DEFAULT_REFRESH_TIME = 10 * 60 * 1000L;
     /**
      * 定时扫面手机时间 1小时
@@ -419,7 +419,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         ToolFragment toolFragment = new ToolFragment();
         MineFragment fourFragment = MineFragment.getInstance();
-        upQuotaFragment = NewsFragment.getNewsFragment("");
+//        NewsFragment upQuotaFragment = NewsFragment.getNewsFragment("");
+        YuLeFragment upQuotaFragment = YuLeFragment.getInstance();
         mFragments.add(mainFragment);
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
