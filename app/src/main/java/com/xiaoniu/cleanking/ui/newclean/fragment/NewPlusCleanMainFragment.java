@@ -136,14 +136,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private int mRamScale; //使用内存占总RAM的比例
     private RxPermissions rxPermissions;
 
-    private AdManager mAdManager;
     private AlertDialog dlg;
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
-    private boolean mIsFirstShowTopAd = false; //是否第一次展示头图广告
-    private boolean mIsTopAdExposed; //广告是否曝光
-
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -163,7 +159,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-        mAdManager = GeekAdSdk.getAdsManger();
         rxPermissions = new RxPermissions(requireActivity());
         compositeDisposable = new CompositeDisposable();
         mPresenter.getInteractionSwitch();
@@ -204,7 +199,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
             }
         });
-
     }
 
     private void initClearItemCard() {
