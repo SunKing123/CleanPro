@@ -60,6 +60,7 @@ import com.xiaoniu.cleanking.keeplive.utils.HomeWatcher;
 import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
 import com.xiaoniu.cleanking.lifecyler.LifecycleHelper;
 import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
@@ -163,7 +164,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
         String processName = getProcessName(application);
         if (processName.equals(application.getPackageName())) {
             //商业化初始化
-            initMidas(application);
+            MidasRequesCenter.init(application);
+            initOaid(application);
         }
 
 
@@ -247,34 +249,9 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
 
     public void initMidas(Application application){
-//        //初始化广告SDK
-        AdConfig configBuild = new AdConfig.Build()
-                .setAppId("181001")//应用ID
-                .setProductId("181")//大数据业务线ID
-                .setChannel(ChannelUtil.getChannel())//渠道名
-                .setServerUrl(BuildConfig.BIGDATA_MD)//业务埋点地址
-                .setBusinessUrl(BuildConfig.MIDAS_NIU_DATA_SERVER_URL)//商业变现埋点地址
-                .setIsFormal(BuildConfig.MIDAS_IS_FORMAL)//是否是正式环境 true 线上环境
-                .setScreenOrientation(ScreenOrientation.VERTICAL)//设置屏幕方向
-                .setCsjAppId(Constant.CSJ_AD_ID)//穿山甲appId
-                .setYlhAppId(Constant.YLH_AD_ID)//优量汇appId
-                .setNeedInitCsj(true)//如果外部已经初始化了穿山甲，可以填写false
-                .setNeedInitYlh(true)//如果外部已经初始化了优量汇，可以填写false
-                .setInmoBiAppId("7f8d97e6b5684c5c9e6f8bd7259c811d")//预初始化inmobi
-                .build();
-        //初始化广告SDK
-        MidasAdSdk.init(application, configBuild);
 
 
-        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
-            @Override
-            public void onHeartbeatStart(JSONObject eventProperties) {
-                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
-                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
-            }
-        });
 
-        initOaid(application);
     }
 
     /**
