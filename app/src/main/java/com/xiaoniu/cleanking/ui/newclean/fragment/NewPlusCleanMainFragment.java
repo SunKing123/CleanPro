@@ -3,9 +3,11 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +30,7 @@ import com.google.gson.Gson;
 import com.jzp.rotate3d.Rotate3D;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -167,7 +170,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
-
     }
 
     private void initClearItemCard() {
@@ -315,7 +317,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeMainTableView.killVirusUsedStyle();
                 break;
             case "通知栏清理":
-                homeToolTableView.notifyUsedStyle();
+                homeToolTableView.postDelayed(()->{homeToolTableView.notifyUsedStyle();},2000);
                 break;
             case "手机降温":
                 homeToolTableView.coolingUsedStyle();
@@ -324,7 +326,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeToolTableView.wxCleanUsedStyle();
                 break;
             case "网络加速":
-                //文案一直显示“有效提高20%”
+                //文案一直显示“有效提高20%”,暂不做刷新
+
                 break;
         }
     }
@@ -476,7 +479,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
             }
         }
-
     }
 
 
