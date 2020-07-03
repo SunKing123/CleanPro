@@ -3,10 +3,12 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +29,7 @@ import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -355,7 +358,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeMainTableView.killVirusUsedStyle();
                 break;
             case "通知栏清理":
-                homeToolTableView.notifyUsedStyle();
+                homeToolTableView.postDelayed(()->{homeToolTableView.notifyUsedStyle();},2000);
                 break;
             case "手机降温":
                 homeToolTableView.coolingUsedStyle();
@@ -364,7 +367,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeToolTableView.wxCleanUsedStyle();
                 break;
             case "网络加速":
-                //文案一直显示“有效提高20%”
+                //文案一直显示“有效提高20%”,暂不做刷新
+
                 break;
         }
     }
@@ -482,6 +486,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
 
+
     /**
      * 点击立即清理
      */
@@ -516,7 +521,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
             }
         }
-
     }
 
 
@@ -766,7 +770,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
 
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
-        if (PreferenceUtil.getNotificationCleanTime()) {
+        if (PreferenceUtil.getNotificationCleanTime() ) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             initThreeAdvOnOffInfo();

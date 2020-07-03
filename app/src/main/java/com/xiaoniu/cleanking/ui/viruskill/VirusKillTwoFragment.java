@@ -66,7 +66,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
     FrameLayout flAnim;
     @BindView(R.id.flyTop)
     RelativeLayout flyTop;
-
+    
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_viruskill_two;
@@ -84,7 +84,6 @@ public class VirusKillTwoFragment extends SimpleFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initData(savedInstanceState);
     }
 
     @Override
