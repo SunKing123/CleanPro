@@ -127,7 +127,7 @@ public class HomeToolTableView extends LinearLayout {
         //network
         itemNetwork.setTitle("网络加速");
         itemNetwork.setIcon(R.drawable.icon_home_network);
-        itemNetwork.setContent("有效提高20%");
+        itemNetwork.setContent("有效提高20%网速");
 
         //folder
         itemFolder.setTitle("深度清理");
@@ -162,7 +162,7 @@ public class HomeToolTableView extends LinearLayout {
 
     public void coolingUsedStyle() {
         String tHead = "已成功降温";
-        String tColor = "36.5°";
+        String tColor = PreferenceUtil.getCleanCoolNum()+"°C";
         SpannableString text = AndroidUtil.inertColorText(tHead + tColor, tHead.length(), tHead.length() + tColor.length(), getGreenColor());
         itemTemperature.setContent(text);
     }

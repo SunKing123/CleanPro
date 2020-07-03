@@ -562,7 +562,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle)) {
                 //手机降温
                 mTvSize.setText("");
-                int tem = new Random().nextInt(3) + 1;
+                int tem = PreferenceUtil.getCleanCoolNum();
                 mTvGb.setText("成功降温" + tem + "°C");
                 mTvGb.setTextSize(20);
                 mTvQl.setText("60s后达到最佳降温效果");

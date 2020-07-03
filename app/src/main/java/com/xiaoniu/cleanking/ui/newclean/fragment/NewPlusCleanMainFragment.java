@@ -324,7 +324,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeToolTableView.wxCleanUsedStyle();
                 break;
             case "网络加速":
-
+                //文案一直显示“有效提高20%”
                 break;
         }
     }

@@ -447,10 +447,11 @@ public class PreferenceUtil {
      */
     public static int getUnusedVirusKillDays(){
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
         long nowTime=System.currentTimeMillis();
-
+        if(time==0){
+            return 0;
+        }
         long sec=(nowTime-time)/1000;
         long min=sec/60;
         long diffH=min/60;
@@ -740,7 +741,7 @@ public class PreferenceUtil {
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_NOTIFICATION_TIME, 0);
         if (System.currentTimeMillis() - time > 3 * 60 * 1000)
             return true;
-        return false;
+        return true;
     }
 
     /**
@@ -833,6 +834,23 @@ public class PreferenceUtil {
         return false;
     }
 
+
+    /**
+     * 保存手机降了多少温度
+     */
+    public static void saveCleanCoolNum(int num) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SpCacheConfig.SAVE_COOL_NUM, num).commit();
+    }
+
+    /**
+     * 保存手机降了多少温度
+     */
+    public static int getCleanCoolNum() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.SAVE_COOL_NUM,4);
+    }
     /**
      * 保存手机降温是否已使用
      */
