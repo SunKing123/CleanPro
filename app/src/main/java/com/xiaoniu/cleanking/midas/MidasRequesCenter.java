@@ -67,7 +67,7 @@ public class MidasRequesCenter {
      * @param adRequestParams
      * @param absAdCallBack
      */
-    public void requestAd(AdRequestParams adRequestParams, AbsAdCallBack absAdCallBack){
+    public static void requestAd(AdRequestParams adRequestParams, AbsAdCallBack absAdCallBack){
         //上下文、广告位置ID
         AdParameter adParameter = new AdParameter.Builder(adRequestParams.getActivity(),adRequestParams.getAdId())
                 //设置填充父布局
