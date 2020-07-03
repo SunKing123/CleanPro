@@ -32,6 +32,9 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.constant.Constant;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
@@ -513,28 +516,16 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mActivity == null) {
             return;
         }
-        ViewGroup viewGroup = (ViewGroup) mActivity.getWindow().getDecorView();
-        mAdParameter = new AdParameter.Builder(mActivity, "adpos_1938682621")
-                //设置填充父布局
-                .setViewContainer(viewGroup)
-                .build();
-        MidasAdSdk.getAdsManger().loadAd(mAdParameter, new AbsAdCallBack() {
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setActivity(mActivity).setAdId(MidasConstants.INSIDE_SCREEN_ID).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onAdShow(AdInfo adInfo) {
                 super.onAdShow(adInfo);
                 LogUtils.e("====首页内部插屏广告展出======");
             }
-
-            @Override
-            public void onAdClicked(AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-            }
-
-            @Override
-            public void onAdClose(AdInfo adInfo) {
-                super.onAdClose(adInfo);
-            }
         });
+
     }
 
     /**

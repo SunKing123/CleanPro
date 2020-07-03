@@ -16,6 +16,8 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
@@ -487,26 +489,11 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (viewGroup.getId() == R.id.ad_two) {
             mAdTwo = true;
         }
-        mAdParameter = new AdParameter.Builder(mView.getActivity(), adviceID)
-                //设置填充父布局
-                .setViewContainer(viewGroup)
-                .build();
-        MidasAdSdk.getAdsManger().loadAd(mAdParameter, new AbsAdCallBack() {
-            @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(adviceID).setActivity(mView.getActivity())
+                .setViewContainer(viewGroup).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
 
-            }
-
-            @Override
-            public void onAdClicked(AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-            }
-
-            @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-            }
         });
     }
 

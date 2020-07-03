@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
@@ -115,11 +116,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.clear_card_sound)
     ClearCardView clearSoundLayout;
 
-    @BindView(R.id.ad_two)
-    FrameLayout adLayoutTwo;
-
     @BindView(R.id.ad_one)
     FrameLayout adLayoutOne;
+    @BindView(R.id.ad_two)
+    FrameLayout adLayoutTwo;
+    @BindView(R.id.ad_three)
+    FrameLayout adLayoutThree;
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
 
@@ -194,19 +196,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 Rect scrollRect = new Rect();
                 nestedScrollView.getHitRect(scrollRect);
                 //子控件在可视范围内（至少有一个像素在可视范围内）
-                if (adLayoutOne.getLocalVisibleRect(scrollRect) && !mPresenter.getAdOneLoad()) {
-                    mPresenter.showAdviceLayout(adLayoutOne, "adpos_2021709551");
+                if (adLayoutTwo.getLocalVisibleRect(scrollRect) && !mPresenter.getAdOneLoad()) {
+                    mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
                 }
-                if (adLayoutTwo.getLocalVisibleRect(scrollRect)) {
-                    if (!mPresenter.getAdTwoLoad()) {
-                        LogUtils.e("=====能看见，第一交加载广告");
-                        mPresenter.showAdviceLayout(adLayoutTwo, "adpos_8829543351");
-                    } else {
-                        LogUtils.e("=====能看见，已经加载了广告");
-                    }
-
-                } else {
-                    LogUtils.e("======不能看见广告");
+                if (adLayoutThree.getLocalVisibleRect(scrollRect) && !mPresenter.getAdTwoLoad()) {
+                    mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
                 }
             }
         });
@@ -358,7 +352,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeMainTableView.killVirusUsedStyle();
                 break;
             case "通知栏清理":
-                homeToolTableView.postDelayed(()->{homeToolTableView.notifyUsedStyle();},2000);
+                homeToolTableView.postDelayed(() -> {
+                    homeToolTableView.notifyUsedStyle();
+                }, 2000);
                 break;
             case "手机降温":
                 homeToolTableView.coolingUsedStyle();
@@ -484,7 +480,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
     }
-
 
 
     /**
@@ -770,7 +765,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
 
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
-        if (PreferenceUtil.getNotificationCleanTime() ) {
+        if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             initThreeAdvOnOffInfo();
