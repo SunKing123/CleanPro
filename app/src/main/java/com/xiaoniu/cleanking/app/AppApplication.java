@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.util.Log;
 
 import androidx.multidex.MultiDex;
@@ -14,8 +15,10 @@ import com.hellogeek.permission.Integrate.Permission;
 import com.hellogeek.permission.Integrate.PermissionIntegrate;
 import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.jess.arms.base.BaseApplication;
+import com.xiaoniu.common.BuildConfig;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -39,6 +42,45 @@ public class AppApplication extends BaseApplication {
     public void onCreate() {
         sInstance = this;
         super.onCreate();
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                if (BuildConfig.DEBUG)
+                    Log.e("lifeCycle", "onActivityCreated()" + activity.getLocalClassName());
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                if (BuildConfig.DEBUG)
+                    Log.e("lifeCycle", "onActivityDestroyed()" + activity.getLocalClassName());
+            }
+        });
     }
 
     @Override
@@ -54,6 +96,7 @@ public class AppApplication extends BaseApplication {
     public static AppApplication getInstance() {
         return sInstance;
     }
+
     /**
      * bug修复
      * java.util.concurrent.TimeoutException: com.android.internal.os.BinderInternal$GcWatcher.finalize() timed out

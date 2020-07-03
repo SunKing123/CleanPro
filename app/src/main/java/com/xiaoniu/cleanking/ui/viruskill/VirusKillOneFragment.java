@@ -59,12 +59,6 @@ public class VirusKillOneFragment extends SimpleFragment {
     CountDownTimer timer;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initData(savedInstanceState);
-    }
-
-    @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         VirusKillStatus.code = PAGE_VIEW;
         StatisticsUtils.onPageStart(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME);

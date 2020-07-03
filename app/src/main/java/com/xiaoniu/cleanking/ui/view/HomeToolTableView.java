@@ -1,8 +1,12 @@
 package com.xiaoniu.cleanking.ui.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.text.SpannableString;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -29,12 +34,15 @@ public class HomeToolTableView extends LinearLayout {
     public static final int ITEM_NETWORK = 4;
     public static final int ITEM_FOLDER = 5;
 
-    Button wxBtn;
-    TextView tvWxContent;
-    HomeToolTableItemView itemTemperature;
-    HomeToolTableItemView itemNotify;
-    HomeToolTableItemView itemNetwork;
-    HomeToolTableItemView itemFolder;
+    private Button wxBtn;
+    private TextView tvWxContent;
+    private HomeToolTableItemView itemTemperature;
+    private HomeToolTableItemView itemNotify;
+    private HomeToolTableItemView itemNetwork;
+    private HomeToolTableItemView itemFolder;
+
+    private IntentFilter iFilter;
+    private Intent batteryStatus;
 
     public HomeToolTableView(Context context) {
         super(context);
@@ -57,6 +65,9 @@ public class HomeToolTableView extends LinearLayout {
         itemNotify = findViewById(R.id.item_notify);
         itemNetwork = findViewById(R.id.item_network);
         itemFolder = findViewById(R.id.item_folder);
+
+        iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        batteryStatus = AppApplication.getInstance().registerReceiver(null, iFilter);
 
         wxBtn.setOnClickListener(new OnClickListener() {
             @Override
@@ -127,7 +138,7 @@ public class HomeToolTableView extends LinearLayout {
         //network
         itemNetwork.setTitle("网络加速");
         itemNetwork.setIcon(R.drawable.icon_home_network);
-        itemNetwork.setContent("有效提高20%");
+        itemNetwork.setContent("有效提高20%网速");
 
         //folder
         itemFolder.setTitle("深度清理");
@@ -155,14 +166,19 @@ public class HomeToolTableView extends LinearLayout {
      */
     public void coolingUnusedStyle() {
         String tHead = "温度已高达";
-        String tColor = "41°";
+        int temp=batteryStatus.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+        int random=NumberUtils.mathRandomInt(1, 6);
+        temp= temp / 10;
+        temp = temp > 0 ? temp : 30;
+        temp=temp+random;
+        String tColor = temp+"C°";
         SpannableString text = AndroidUtil.inertColorText(tHead + tColor, tHead.length(), tHead.length() + tColor.length(), getRedColor());
         itemTemperature.setContent(text);
     }
 
     public void coolingUsedStyle() {
         String tHead = "已成功降温";
-        String tColor = "36.5°";
+        String tColor = PreferenceUtil.getCleanCoolNum() + "°C";
         SpannableString text = AndroidUtil.inertColorText(tHead + tColor, tHead.length(), tHead.length() + tColor.length(), getGreenColor());
         itemTemperature.setContent(text);
     }
@@ -213,6 +229,6 @@ public class HomeToolTableView extends LinearLayout {
     }
 
     public int getNormalColor() {
-        return getContext().getResources().getColor(R.color.home_content_yellow);
+        return getContext().getResources().getColor(R.color.home_content);
     }
 }

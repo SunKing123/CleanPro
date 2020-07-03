@@ -24,8 +24,6 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -33,11 +31,11 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
+import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.selfdebug.AppConfig;
-import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -45,21 +43,22 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.dialog.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
-import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
-import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
-import com.xiaoniu.cleanking.ui.main.widget.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -252,6 +251,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.getPopupData();
         //获取定位权限
         mPresenter.requestPhoneStatePermission();
+
 //        测试入口
 
         if (BuildConfig.DEBUG) {
@@ -274,6 +274,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             isFirstCreate = false;
         }
     }
+
 
     private void checkReadPermission() {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
@@ -639,11 +640,19 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.saveCacheFiles();
     }
 
+
+    //清理完成页返回弹出广告
+    @Subscribe
+    public void onEventScan(FromHomeCleanFinishEvent backMainEvent) {
+        mPresenter.showInsideScreenDialog();
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-        RomUtils.onActivityResult(this, requestCode, resultCode, data);
+        // RomUtils.onActivityResult(this, requestCode, resultCode, data);
     }
 
     public boolean isBadgeViewShow() {
@@ -735,7 +744,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 获取红包成功
      *
-     * @param redPacketEntity
+     * @param redPacketEntity 红包相关数据
      */
     public void getRedPacketListSuccess(RedPacketEntity.DataBean redPacketEntity) {
         if (PreferenceUtil.isHaseUpdateVersion() || null == redPacketEntity
