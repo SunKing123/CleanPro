@@ -135,9 +135,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
-    private boolean mIsFirstShowTopAd = false; //是否第一次展示头图广告
-    private boolean mIsTopAdExposed; //广告是否曝光
-
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -197,7 +194,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
             }
         });
-
     }
 
 
