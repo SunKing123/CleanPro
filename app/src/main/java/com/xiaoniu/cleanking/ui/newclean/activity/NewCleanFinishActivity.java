@@ -44,7 +44,6 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.dialog.AdviceDialog;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanFinishPresenter;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
@@ -435,19 +434,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
 
-    private void showInsideScreenDialog() {
-        AdviceDialog adviceDialog = new AdviceDialog(this);
-        adviceDialog.show();
-    }
-
-    private void showGetGoldCoinDialog() {
-        GoldCoinBean bean = new GoldCoinBean();
-        bean.dialogType = 3;
-        bean.obtainCoinCount=20;
-        bean.context=this;
-        GoldCoinDialog.showGoldCoinDialog(bean);
-    }
-
     /**
      * 拉取插屏广告开关成功
      *
@@ -461,15 +447,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             if (PositionId.KEY_NEIBU_SCREEN.equals(switchInfoList.getConfigKey())) {
                 if (switchInfoList.isOpen()) {
                     //显示内部插屏广告
-                    //showInsideScreenDialog();
-                    showGetGoldCoinDialog();
-                } else {
-                    //判断金币领取弹窗是不听歌开
-                    //if()
-                    showGetGoldCoinDialog();
+                    mPresenter.showInsideScreenDialog();
                 }
-
             }
+            //判断金币领取弹窗是否打开
+            //mPresenter.showGetGoldCoinDialog();
 
 
             if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理

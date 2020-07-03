@@ -4,13 +4,21 @@ import android.annotation.SuppressLint;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.base.RxPresenter;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
+import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xnad.sdk.ad.entity.AdInfo;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 import java.util.ArrayList;
 
@@ -98,5 +106,31 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 //                    mView.cancelLoadingDialog();
                     mView.getAccessListBelow(strings);
                 });
+    }
+
+
+    //显示内部插屏广告
+    public void showInsideScreenDialog() {
+        if (mActivity == null) {
+            return;
+        }
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setActivity(mActivity).setAdId(MidasConstants.FINISH_SCREEN_ID).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdShow(AdInfo adInfo) {
+                super.onAdShow(adInfo);
+                LogUtils.e("====完成页内部插屏广告展出======");
+            }
+        });
+    }
+
+    //金币领取广告弹窗
+    public void showGetGoldCoinDialog() {
+        GoldCoinBean bean = new GoldCoinBean();
+        bean.dialogType = 3;
+        bean.obtainCoinCount=20;
+        bean.context=mActivity;
+        GoldCoinDialog.showGoldCoinDialog(bean);
     }
 }

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
@@ -468,32 +469,51 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     }
 
-    private boolean mAdOne, mAdTwo;
-
-    public boolean getAdOneLoad() {
-        return mAdOne;
-    }
+    private boolean mAdTwo, mAdThree;
 
     public boolean getAdTwoLoad() {
         return mAdTwo;
     }
 
+    public boolean getAdThreeLoad() {
+        return mAdThree;
+    }
+
+    private boolean mAdTwoShow, mAdThreeShow;
+
+    public boolean getAdTwoShow() {
+        return mAdTwoShow;
+    }
+
+    public boolean getAdThreeShow() {
+        return mAdThreeShow;
+    }
 
     public void showAdviceLayout(ViewGroup viewGroup, String adviceID) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
-        if (viewGroup.getId() == R.id.ad_one) {
-            mAdOne = true;
-        }
         if (viewGroup.getId() == R.id.ad_two) {
             mAdTwo = true;
+        }
+        if (viewGroup.getId() == R.id.ad_three) {
+            mAdThree = true;
         }
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-
+            @Override
+            public void onAdShow(AdInfo adInfo) {
+                super.onAdShow(adInfo);
+                viewGroup.setVisibility(View.VISIBLE);
+                if (viewGroup.getId() == R.id.ad_two) {
+                    mAdTwoShow = true;
+                }
+                if (viewGroup.getId() == R.id.ad_three) {
+                    mAdThreeShow = true;
+                }
+            }
         });
     }
 
