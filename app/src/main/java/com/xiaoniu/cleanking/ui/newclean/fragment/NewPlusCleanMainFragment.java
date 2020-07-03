@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -17,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.widget.NestedScrollView;
 
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.ad.listener.AdManager;
@@ -117,6 +120,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
 
+    @BindView(R.id.layout_scroll)
+    NestedScrollView mScrollView;
+
     private boolean isThreeAdvOpen = false;
     private boolean hasInitThreeAdvOnOff = false;
 
@@ -163,7 +169,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
-
+        checkScroll();
 
 
         imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
@@ -176,6 +182,32 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                             .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
             }
         });
+    }
+
+    private void checkScroll() {
+        mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Rect scrollRect = new Rect();
+                nestedScrollView.getHitRect(scrollRect);
+                //子控件在可视范围内（至少有一个像素在可视范围内）
+                if (adLayoutOne.getLocalVisibleRect(scrollRect) && !mPresenter.getAdOneLoad()) {
+                    mPresenter.showAdviceLayout(adLayoutOne, "adpos_2021709551");
+                }
+                if (adLayoutTwo.getLocalVisibleRect(scrollRect)) {
+                    if (!mPresenter.getAdTwoLoad()) {
+                        LogUtils.e("=====能看见，第一交加载广告");
+                        mPresenter.showAdviceLayout(adLayoutTwo, "adpos_8829543351");
+                    } else {
+                        LogUtils.e("=====能看见，已经加载了广告");
+                    }
+
+                } else {
+                    LogUtils.e("======不能看见广告");
+                }
+            }
+        });
+
     }
 
     private void initClearItemCard() {
@@ -448,7 +480,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
     }
-
 
 
     /**
@@ -735,7 +766,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
 
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
-        if (PreferenceUtil.getNotificationCleanTime() ) {
+        if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             initThreeAdvOnOffInfo();

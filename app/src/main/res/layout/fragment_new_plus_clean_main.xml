@@ -81,8 +81,7 @@
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_100dp"
-                android:layout_marginTop="@dimen/dp_5"
-                android:background="@color/colorAccent" />
+                android:layout_marginTop="@dimen/dp_5"/>
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
@@ -100,8 +99,7 @@
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_100dp"
-                android:layout_marginTop="@dimen/dp_5"
-                android:background="@color/colorAccent" />
+                android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"

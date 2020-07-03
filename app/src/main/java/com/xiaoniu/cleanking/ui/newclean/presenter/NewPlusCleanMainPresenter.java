@@ -7,10 +7,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
@@ -34,6 +36,10 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xnad.sdk.MidasAdSdk;
+import com.xnad.sdk.ad.entity.AdInfo;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.config.AdParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +61,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private AdParameter mAdParameter;
 
     @Inject
     public NewPlusCleanMainPresenter() {
@@ -138,7 +145,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                     if (mView == null) return;
 //                    mView.cancelLoadingDialog();
                     try {
-                       // mView.getAccessListBelow(strings);
+                        // mView.getAccessListBelow(strings);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -458,4 +465,50 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 ScanningResultType.MEMORY_JUNK.getType()));
 
     }
+
+    private boolean mAdOne, mAdTwo;
+
+    public boolean getAdOneLoad() {
+        return mAdOne;
+    }
+
+    public boolean getAdTwoLoad() {
+        return mAdTwo;
+    }
+
+
+    public void showAdviceLayout(ViewGroup viewGroup, String adviceID) {
+        if (viewGroup == null || mView == null || mView.getActivity() == null) {
+            return;
+        }
+        if (viewGroup.getId() == R.id.ad_one) {
+            mAdOne = true;
+        }
+        if (viewGroup.getId() == R.id.ad_two) {
+            mAdTwo = true;
+        }
+        mAdParameter = new AdParameter.Builder(mView.getActivity(), adviceID)
+                //设置填充父布局
+                .setViewContainer(viewGroup)
+                .build();
+        MidasAdSdk.getAdsManger().loadAd(mAdParameter, new AbsAdCallBack() {
+            @Override
+            public void onAdShow(AdInfo adInfo) {
+                super.onAdShow(adInfo);
+
+            }
+
+            @Override
+            public void onAdClicked(AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+            }
+        });
+    }
+
+
 }
