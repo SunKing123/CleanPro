@@ -17,9 +17,13 @@ import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 /**
  * 锁屏退出dialog<p>
@@ -70,8 +74,13 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
 
 
     public void initAdv() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1","", "", "all_ad_request", "retain_the_pop_up_window", "retain_the_pop_up_window");
-        AdManager adManager = GeekAdSdk.getAdsManger();
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "all_ad_request", "retain_the_pop_up_window", "retain_the_pop_up_window");
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.EXIT_RETAIN_ID)
+                .setActivity(activity).setViewContainer(container).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+        });
+
+       /* AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(activity, PositionId.AD_RETAIN_THE_POP_UP_WINDOW, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -102,7 +111,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
                     StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "retain_the_pop_up_window", "retain_the_pop_up_window");
                 }
             }
-        });
+        });*/
     }
 
     @Override

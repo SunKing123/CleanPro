@@ -83,8 +83,9 @@
 
             <FrameLayout
                 android:id="@+id/ad_two"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
@@ -102,7 +103,8 @@
             <FrameLayout
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_height="@dimen/dp_10"
                 android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView

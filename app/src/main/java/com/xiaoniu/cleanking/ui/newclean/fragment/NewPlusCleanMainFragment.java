@@ -3,12 +3,10 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,13 +21,10 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -191,15 +186,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 Rect scrollRect = new Rect();
                 nestedScrollView.getHitRect(scrollRect);
                 //子控件在可视范围内（至少有一个像素在可视范围内）
-                if (adLayoutTwo.getLocalVisibleRect(scrollRect) && !mPresenter.getAdOneLoad()) {
+                if (adLayoutTwo.getLocalVisibleRect(scrollRect) && !mPresenter.getAdTwoLoad()) {
                     mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
                 }
-                if (adLayoutThree.getLocalVisibleRect(scrollRect) && !mPresenter.getAdTwoLoad()) {
+                if (adLayoutThree.getLocalVisibleRect(scrollRect) && !mPresenter.getAdThreeLoad()) {
                     mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
                 }
             }
         });
     }
+
 
     private void initClearItemCard() {
         clearSoundLayout.setLeftTitle("音频文件");
@@ -232,6 +228,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //跳转到音乐清理
             startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));
         });
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
     }
 
     /**
@@ -314,7 +317,25 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
+        //刷新广告
+        refreshAdvice();
     }
+
+    private void refreshAdvice() {
+        Rect scrollRect = new Rect();
+        mScrollView.getHitRect(scrollRect);
+        //子控件在可视范围内（至少有一个像素在可视范围内）
+        if (adLayoutTwo.getLocalVisibleRect(scrollRect)&&mPresenter.getAdTwoShow()) {
+            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
+        }
+        if (adLayoutThree.getLocalVisibleRect(scrollRect)&&mPresenter.getAdThreeShow()) {
+            LogUtils.e("======在可见区，刷新广告");
+            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
+        }else {
+            LogUtils.e("======不在可见区");
+        }
+    }
+
 
     @Override
     public void onDestroy() {
