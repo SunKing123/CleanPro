@@ -49,4 +49,13 @@ public class AnimationRotateUtils {
         ivAnim.startAnimation(animation);//開始动画
         return animation;
     }
+
+
+    //旋转的属性动画
+    public static ObjectAnimator setRotationAnimator(View view,float degree){
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view,"rotation",degree);
+        objectAnimator.setDuration(0);
+        objectAnimator.start();
+        return objectAnimator;
+    }
 }
