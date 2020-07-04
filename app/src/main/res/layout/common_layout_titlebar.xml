@@ -3,12 +3,12 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/color_4690FD"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_56dp"
-        android:background="@color/color_4690FD">
+        android:layout_height="@dimen/dimen_56dp">
 
         <ImageView
             android:id="@+id/img_back"

@@ -1,4 +1,4 @@
-package com.xiaoniu.common.utils;
+package com.xiaoniu.cleanking.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,6 +10,8 @@ import com.bun.miitmdid.core.MdidSdk;
 import com.bun.miitmdid.core.MdidSdkHelper;
 import com.bun.supplier.IIdentifierListener;
 import com.bun.supplier.IdSupplier;
+import com.jess.arms.base.App;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 
 /**
  * Created by zheng on 2019/8/22.
@@ -29,16 +31,16 @@ public class MiitHelper implements IIdentifierListener {
 //        int nres=DirectCall(cxt);
         long timee=System.currentTimeMillis();
         long offset=timee-timeb;
-        if(nres == ErrorCode.INIT_ERROR_DEVICE_NOSUPPORT){//不支持的设备
-
-        }else if( nres == ErrorCode.INIT_ERROR_LOAD_CONFIGFILE){//加载配置文件出错
-
-        }else if(nres == ErrorCode.INIT_ERROR_MANUFACTURER_NOSUPPORT){//不支持的设备厂商
-
-        }else if(nres == ErrorCode.INIT_ERROR_RESULT_DELAY){//获取接口是异步的，结果会在回调中返回，回调执行的回调可能在工作线程
-
+        if(nres == ErrorCode.INIT_ERROR_DEVICE_NOSUPPORT){//1008612 不支持的设备
+            AppLifecyclesImpl.setIsSupportOaid(false);
+        }else if( nres == ErrorCode.INIT_ERROR_LOAD_CONFIGFILE){//1008613 加载配置文件出错
+            AppLifecyclesImpl.setIsSupportOaid(false);
+        }else if(nres == ErrorCode.INIT_ERROR_MANUFACTURER_NOSUPPORT){//1008611 不支持的设备厂商
+            AppLifecyclesImpl.setIsSupportOaid(false);
+        }else if(nres == ErrorCode.INIT_ERROR_RESULT_DELAY){//1008614 获取接口是异步的，结果会在回调中返回，回调执行的回调可能在工作线程
+            AppLifecyclesImpl.setIsSupportOaid(false);
         }else if(nres == ErrorCode.INIT_HELPER_CALL_ERROR){//反射调用出错
-
+            AppLifecyclesImpl.setIsSupportOaid(false);
         }
 //        Log.d(getClass().getSimpleName(),"return value: "+String.valueOf(nres));
 

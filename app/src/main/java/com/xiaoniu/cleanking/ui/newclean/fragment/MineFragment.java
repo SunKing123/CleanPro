@@ -94,16 +94,16 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 break;
             case R.id.head_img_iv:
             case R.id.phone_num_tv:
-                startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
-//                GoldCoinBean goldCoinBean = new GoldCoinBean();
-//                goldCoinBean.context = getContext();
-//                goldCoinBean.obtainCoinCount = 10;
-//                goldCoinBean.totalCoinCount = 135;
-//                goldCoinBean.dialogType = 2;
-//                goldCoinBean.adId = "";
-//                goldCoinBean.isDouble = true;
-//                goldCoinBean.videoSource = 12;
-//                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
+//                startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
+                GoldCoinBean goldCoinBean = new GoldCoinBean();
+                goldCoinBean.context = getContext();
+                goldCoinBean.obtainCoinCount = 10;
+                goldCoinBean.totalCoinCount = 135;
+                goldCoinBean.dialogType = 3;
+                goldCoinBean.adId = "";
+                goldCoinBean.isDouble = true;
+                goldCoinBean.videoSource = 12;
+                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
 //                ToastUtils.showShort("用户信息");
                 break;
             case R.id.iv_inter_ad:

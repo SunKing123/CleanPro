@@ -40,6 +40,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     private LottieAnimationView viewLottieRed;
     private LottieAnimationView viewLottieYellow;
     private LottieAnimationView viewLottieGreen;
+    private RelativeLayout rel_bubble;
     private List<LottieAnimationView> lottieList;
     private TouchImageView ivCenter;
     private Map<Integer, LottiePathdata> lottiePathdataMap;
@@ -78,6 +79,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         viewLottieRed = (LottieAnimationView) v.findViewById(R.id.view_lottie_lower_red);
         viewLottieYellow = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_yellow);
         viewLottieGreen = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_green);
+        rel_bubble = (RelativeLayout)v.findViewById(R.id.rel_bubble);
         tv_file_total_size = (TextView) v.findViewById(R.id.tv_file_total_size);
         tv_file_total_tag = (TextView) v.findViewById(R.id.tv_file_total_tag);
         rel_container = (RelativeLayout) v.findViewById(R.id.rel_parent);
@@ -95,11 +97,12 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void setViewLayoutParms() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieYellow.getLayoutParams();
-        layoutParams.height = Float.valueOf(screenWidth ).intValue();
-        layoutParams.width = Float.valueOf(screenWidth ).intValue();
+        layoutParams.height = Float.valueOf(screenWidth).intValue();
+        layoutParams.width = Float.valueOf(screenWidth).intValue();
         viewLottieYellow.setLayoutParams(layoutParams);
         viewLottieRed.setLayoutParams(layoutParams);
         viewLottieGreen.setLayoutParams(layoutParams);
+        rel_bubble.setLayoutParams(layoutParams);
 
         RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) ivCenter.getLayoutParams();
         imglayoutParams.height = Float.valueOf(screenWidth * 0.497f).intValue();

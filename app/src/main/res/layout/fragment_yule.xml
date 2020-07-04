@@ -6,10 +6,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/webFragment"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="@dimen/dimen_20dp" />
+            android:layout_height="match_parent">
+
+            <com.xiaoniu.cleanking.widget.CustomWebViewLayout
+                android:id="@+id/webViewLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/webFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/dimen_20dp"
+                android:visibility="gone" />
+        </RelativeLayout>
     </LinearLayout>
 </layout>

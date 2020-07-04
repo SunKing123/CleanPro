@@ -65,4 +65,7 @@ public class SpConstants {
     public static final String OPERATOR_TOKEN = "operator_token";
     public static final String OPERATOR_IS_UPLOAD_IMEI = "operator_is_upload_imei";
     public static final String CLEAN_FINISH_TIME = "clean_finish_time";
+
+
+    public static final String WX_LOGIN_FLAG = "wx_login_flag";
 }

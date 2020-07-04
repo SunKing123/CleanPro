@@ -73,7 +73,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
-            android:drawablePadding="5dp"
+            android:button="@drawable/select_login_xieyi_btn"
+            android:drawablePadding="@dimen/dimen_10dp"
             android:gravity="center_vertical"
             android:textSize="12sp" />
     </RelativeLayout>

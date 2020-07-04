@@ -899,6 +899,8 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- 如果有视频相关的广告且使用textureView播放，请务必添加，否则黑屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!--数美sdk接入-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
 
     <!--    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"-->

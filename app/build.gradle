@@ -266,6 +266,9 @@ dependencies {
     implementation project(':otherlib:xrecyclerview')
     implementation project(':jpush')
 
+    //数美
+    implementation files('libs/smantifraud.aar')
+
     //推送
   //  implementation files('libs\\push-core.aar')
   //  implementation files('libs\\push-jpush.aar')

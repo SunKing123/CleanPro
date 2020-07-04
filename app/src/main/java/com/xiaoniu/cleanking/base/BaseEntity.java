@@ -10,4 +10,8 @@ public class BaseEntity implements Serializable {
 
     public String code;
     public String msg;
+
+    public String message;
+    public String time;
+
 }

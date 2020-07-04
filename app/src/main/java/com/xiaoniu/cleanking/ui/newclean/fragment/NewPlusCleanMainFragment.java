@@ -413,7 +413,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      ************************************************************head oneKey clean start*********************************************************************
      *********************************************************************************************************************************************************
      */
-
+//    @Deprecated
     private void showHomeLottieView() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
