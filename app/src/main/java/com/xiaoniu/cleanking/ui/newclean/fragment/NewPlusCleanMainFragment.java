@@ -3,11 +3,10 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,18 +19,18 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.listener.AdManager;
+import androidx.core.widget.NestedScrollView;
+
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
@@ -112,13 +111,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.clear_card_sound)
     ClearCardView clearSoundLayout;
 
-    @BindView(R.id.ad_two)
-    FrameLayout adLayoutTwo;
-
     @BindView(R.id.ad_one)
     FrameLayout adLayoutOne;
+    @BindView(R.id.ad_two)
+    FrameLayout adLayoutTwo;
+    @BindView(R.id.ad_three)
+    FrameLayout adLayoutThree;
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
+
+    @BindView(R.id.layout_scroll)
+    NestedScrollView mScrollView;
 
     private boolean isThreeAdvOpen = false;
     private boolean hasInitThreeAdvOnOff = false;
@@ -128,14 +131,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private int mRamScale; //使用内存占总RAM的比例
     private RxPermissions rxPermissions;
 
-    private AdManager mAdManager;
     private AlertDialog dlg;
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
-    private boolean mIsFirstShowTopAd = false; //是否第一次展示头图广告
-    private boolean mIsTopAdExposed; //广告是否曝光
-
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -155,7 +154,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-        mAdManager = GeekAdSdk.getAdsManger();
         rxPermissions = new RxPermissions(requireActivity());
         compositeDisposable = new CompositeDisposable();
         mPresenter.getInteractionSwitch();
@@ -166,7 +164,38 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
+        checkScroll();
+
+
+        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
+            @Override
+            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+                if (data != null)
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
+            }
+        });
     }
+
+    private void checkScroll() {
+        mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Rect scrollRect = new Rect();
+                nestedScrollView.getHitRect(scrollRect);
+                //子控件在可视范围内（至少有一个像素在可视范围内）
+                if (adLayoutTwo.getLocalVisibleRect(scrollRect) && !mPresenter.getAdTwoLoad()) {
+                    mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
+                }
+                if (adLayoutThree.getLocalVisibleRect(scrollRect) && !mPresenter.getAdThreeLoad()) {
+                    mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
+                }
+            }
+        });
+    }
+
 
     private void initClearItemCard() {
         clearSoundLayout.setLeftTitle("音频文件");
@@ -199,6 +228,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //跳转到音乐清理
             startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));
         });
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
     }
 
     /**
@@ -281,7 +317,25 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
+        //刷新广告
+        refreshAdvice();
     }
+
+    private void refreshAdvice() {
+        Rect scrollRect = new Rect();
+        mScrollView.getHitRect(scrollRect);
+        //子控件在可视范围内（至少有一个像素在可视范围内）
+        if (adLayoutTwo.getLocalVisibleRect(scrollRect)&&mPresenter.getAdTwoShow()) {
+            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
+        }
+        if (adLayoutThree.getLocalVisibleRect(scrollRect)&&mPresenter.getAdThreeShow()) {
+            LogUtils.e("======在可见区，刷新广告");
+            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
+        }else {
+            LogUtils.e("======不在可见区");
+        }
+    }
+
 
     @Override
     public void onDestroy() {
@@ -313,7 +367,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeMainTableView.killVirusUsedStyle();
                 break;
             case "通知栏清理":
-                homeToolTableView.postDelayed(()->{homeToolTableView.notifyUsedStyle();},2000);
+                homeToolTableView.postDelayed(() -> {
+                    homeToolTableView.notifyUsedStyle();
+                }, 2000);
                 break;
             case "手机降温":
                 homeToolTableView.coolingUsedStyle();
@@ -439,7 +495,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
     }
-
 
 
     /**
@@ -725,7 +780,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
 
         StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
-        if (PreferenceUtil.getNotificationCleanTime() ) {
+        if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             initThreeAdvOnOffInfo();

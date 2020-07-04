@@ -7,13 +7,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
@@ -34,6 +39,10 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xnad.sdk.MidasAdSdk;
+import com.xnad.sdk.ad.entity.AdInfo;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.config.AdParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +64,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
+    private AdParameter mAdParameter;
 
     @Inject
     public NewPlusCleanMainPresenter() {
@@ -138,7 +148,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                     if (mView == null) return;
 //                    mView.cancelLoadingDialog();
                     try {
-                       // mView.getAccessListBelow(strings);
+                        // mView.getAccessListBelow(strings);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -458,4 +468,54 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 ScanningResultType.MEMORY_JUNK.getType()));
 
     }
+
+    private boolean mAdTwo, mAdThree;
+
+    public boolean getAdTwoLoad() {
+        return mAdTwo;
+    }
+
+    public boolean getAdThreeLoad() {
+        return mAdThree;
+    }
+
+    private boolean mAdTwoShow, mAdThreeShow;
+
+    public boolean getAdTwoShow() {
+        return mAdTwoShow;
+    }
+
+    public boolean getAdThreeShow() {
+        return mAdThreeShow;
+    }
+
+    public void showAdviceLayout(ViewGroup viewGroup, String adviceID) {
+        if (viewGroup == null || mView == null || mView.getActivity() == null) {
+            return;
+        }
+        if (viewGroup.getId() == R.id.ad_two) {
+            mAdTwo = true;
+        }
+        if (viewGroup.getId() == R.id.ad_three) {
+            mAdThree = true;
+        }
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(adviceID).setActivity(mView.getActivity())
+                .setViewContainer(viewGroup).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdShow(AdInfo adInfo) {
+                super.onAdShow(adInfo);
+                viewGroup.setVisibility(View.VISIBLE);
+                if (viewGroup.getId() == R.id.ad_two) {
+                    mAdTwoShow = true;
+                }
+                if (viewGroup.getId() == R.id.ad_three) {
+                    mAdThreeShow = true;
+                }
+            }
+        });
+    }
+
+
 }

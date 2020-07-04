@@ -61,9 +61,7 @@
                     android:id="@+id/view_lottie_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="300dp">
-
-                </com.xiaoniu.cleanking.widget.OneKeyCircleButtonView>
+                    android:minHeight="300dp" />
 
             </RelativeLayout>
 
@@ -72,17 +70,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <com.xiaoniu.cleanking.ui.view.HomeToolTableView
-                android:id="@+id/home_tool_table"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
             <FrameLayout
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_100dp"
-                android:layout_marginTop="@dimen/dp_5"
-                android:background="@color/colorAccent" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5" />
+
+            <com.xiaoniu.cleanking.ui.view.HomeToolTableView
+                android:id="@+id/home_tool_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <FrameLayout
+                android:id="@+id/ad_two"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
@@ -97,11 +101,11 @@
                 android:layout_marginTop="@dimen/dp_5" />
 
             <FrameLayout
-                android:id="@+id/ad_two"
+                android:id="@+id/ad_three"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_100dp"
-                android:layout_marginTop="@dimen/dp_5"
-                android:background="@color/colorAccent" />
+                android:visibility="gone"
+                android:layout_height="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"
@@ -115,9 +119,9 @@
         android:id="@+id/image_interactive"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
         android:layout_marginBottom="100dp"
         android:src="@drawable/icon_home_electric" />
 

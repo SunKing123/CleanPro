@@ -48,6 +48,7 @@ import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
+import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
@@ -55,7 +56,6 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
-import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     BottomBar mBottomBar;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
-    private NewsFragment upQuotaFragment;
+
 
     /**
      * 借款页
@@ -380,14 +380,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         MeFragment mineFragment = MeFragment.getIntance();
         mainFragment = new NewPlusCleanMainFragment();
 
-        YuLeFragment secondFragment = YuLeFragment.getInstance();
+        ToolFragment toolFragment = new ToolFragment();
         MineFragment fourFragment = MineFragment.getInstance();
-        upQuotaFragment = NewsFragment.getNewsFragment("");
+//        NewsFragment upQuotaFragment = NewsFragment.getNewsFragment("");
+        YuLeFragment upQuotaFragment = YuLeFragment.getInstance();
         mFragments.add(mainFragment);
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "1")) {
-            mFragments.add(secondFragment);
+            mFragments.add(toolFragment);
             mFragments.add(upQuotaFragment);
 //            enableOtherComponent();
         }
@@ -395,11 +396,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         mManager.beginTransaction()
                 .add(R.id.frame_layout, mainFragment)
-                .add(R.id.frame_layout, secondFragment)
+                .add(R.id.frame_layout, toolFragment)
                 .add(R.id.frame_layout, upQuotaFragment)
                 .add(R.id.frame_layout, fourFragment)
                 .hide(mainFragment)
-                .hide(secondFragment)
+                .hide(toolFragment)
                 .hide(upQuotaFragment)
                 .hide(fourFragment)
                 .commitAllowingStateLoss();

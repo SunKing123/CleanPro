@@ -13,7 +13,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.comm.jksdk.utils.DisplayUtil;
@@ -22,6 +21,9 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -46,6 +48,8 @@ import com.xiaoniu.common.utils.FileUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.entity.AdInfo;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -97,7 +101,7 @@ public class ToolFragment extends SimpleFragment {
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale = 20; //使用内存占总RAM的比例
-    private AdManager mAdManager;
+   // private AdManager mAdManager;
 
     private static final String TAG = "GeekSdk";
 
@@ -119,17 +123,17 @@ public class ToolFragment extends SimpleFragment {
             if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
-        initGeekAdSdk();
+        //initGeekAdSdk();
         getAccessListBelow();
     }
 
     /**
      * 广告sdk
      */
-    private void initGeekAdSdk() {
+  /*  private void initGeekAdSdk() {
         if (null == mAdManager)
             mAdManager = GeekAdSdk.getAdsManger();
-    }
+    }*/
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
@@ -430,7 +434,20 @@ public class ToolFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        GeekAdSdk.getAdsManger().loadNativeTemplateAd(mActivity, PositionId.AD_ACCELERATION_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(mContext, DisplayUtil.getScreenWidth(mContext)) - 24), new AdListener() {
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
+                .setActivity(mActivity).setViewContainer(frameBottomLayout).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdError(AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+            }
+        });
+       /* GeekAdSdk.getAdsManger().loadNativeTemplateAd(mActivity, PositionId.AD_ACCELERATION_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(mContext, DisplayUtil.getScreenWidth(mContext)) - 24), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
@@ -476,7 +493,7 @@ public class ToolFragment extends SimpleFragment {
 
 
             }
-        });
+        });*/
     }
 
 }
