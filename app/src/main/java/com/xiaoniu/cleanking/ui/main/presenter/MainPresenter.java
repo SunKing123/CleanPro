@@ -23,6 +23,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.ishumei.smantifraud.SmAntiFraud;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -54,6 +55,7 @@ import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherUtils;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -66,8 +68,10 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
+import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.MidasAdSdk;
@@ -451,6 +455,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /**
      * 本地Push配置
      */
+    @Deprecated
     public void getPushSetList() {
         mModel.getLocalPushSet(new Common4Subscriber<PushSettingList>() {
             @Override
@@ -985,5 +990,33 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         }
     }
+
+    //todo
+    public void initShuMeiSDK() {
+        // 如果 AndroidManifest.xml 中没有指定主进程名字，主进程名默认与 packagename 相同
+        if (AppApplication.getInstance().getPackageName().equals(SystemUtils.getProcessName(AppApplication.getInstance()))) {
+            SmAntiFraud.SmOption option = new SmAntiFraud.SmOption();
+            String DEBUG_ORG = "FYe06ziad8tPJmiAIJP2";// organization 代码 不要传 AccessKey
+            option.setOrganization(DEBUG_ORG);
+            option.setChannel(ChannelUtil.getChannel());//渠道代码
+            SmAntiFraud.create(AppApplication.getInstance(), option);
+            // 注意！！获取 deviceId，这个接口在需要使用 deviceId 时地方调用。
+
+
+            //todo:zzh
+/*            //1.通用配置项
+            option.setOrganization("xxxxxxx"); //必填，组织标识，邮件中 organization 项
+            option.setAppId("default"); //必填，应用标识，登录数美后台应用管理查看
+            option.setPublicKey("xxxxxxxx"); //必填，加密 KEY，邮件中 android_public_key 附件内容
+            option.setAinfoKey("xxxxxxxx"); //必填，加密 KEY，邮件中 Android ainfo key 项
+//2.连接海外机房特殊配置项，仅供设备数据上报海外机房客户使用
+// option.setArea(SmAntiFraud.AREA_XJP); //连接新加坡机房客户使用此选项
+// option.setArea(SmAntiFraud.AREA_FJNY); //连接美国机房客户使用此选项
+//3.SDK 初始化
+            SmAntiFraud.create(this,option);*/
+
+        }
+    }
+
 
 }

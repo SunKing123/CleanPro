@@ -116,11 +116,6 @@
         <meta-data
             android:name="com.xiaoniu.statistic.ProductID"
             android:value="181" /> <!-- 热修复回调 -->
-        <receiver android:name=".hotfix.listener.MyPatchListener$ScreenBroadcastReceiver" />
-
-        <service
-            android:name=".hotfix.service.HotFixResultService"
-            android:exported="false" />
 
         <activity
             android:name=".base.SimpleWebActivity"

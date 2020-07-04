@@ -6,4 +6,8 @@
             <certificates src="user" overridePins="true" /> <!--信任用户证书-->
         </trust-anchors>
     </base-config>
+    <!--数美sdk-->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">fengkongcloud.com</domain>
+    </domain-config>
 </network-security-config>

@@ -50,6 +50,13 @@ public class ImplPreferencesHelper implements PreferencesHelper {
         mSPrefs.edit().putString(SpConstants.CUSTOMERID, customerId).apply();
     }
 
+
+    @Override
+    public String getCustomerId() {
+        return mSPrefs.getString(SpConstants.CUSTOMERID, "");
+//        return "bb22c38d305e456994701d3ef430e5f6";
+    }
+
     public void setPhoneNum(String phoneNum) {
         mSPrefs.edit().putString(SpConstants.PHONENUM, phoneNum).apply();
     }
@@ -70,10 +77,20 @@ public class ImplPreferencesHelper implements PreferencesHelper {
         mSPrefs.edit().putString(SpConstants.LENDED_APPLICATION_ID, value).apply();
     }
 
-    @Override
-    public String getCustomerId() {
-        return mSPrefs.getString(SpConstants.CUSTOMERID, "");
-//        return "bb22c38d305e456994701d3ef430e5f6";
+    public void setWxLoginSuccess(boolean tag) {
+        mSPrefs.edit().putBoolean(SpConstants.WX_LOGIN_FLAG, tag).apply();
+    }
+
+    public boolean getWxLoginFlag() {
+        return mSPrefs.getBoolean(SpConstants.WX_LOGIN_FLAG, false);
+    }
+
+    public void setOpenID(String id) {
+        mSPrefs.edit().putString("openid", id).apply();
+    }
+
+    public String getOpenID() {
+        return mSPrefs.getString("openid", "");
     }
 
     @Override

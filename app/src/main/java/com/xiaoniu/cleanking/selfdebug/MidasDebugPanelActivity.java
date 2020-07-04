@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -30,7 +31,7 @@ public class MidasDebugPanelActivity extends BaseActivity implements View.OnClic
 
 
     private Button splashType;
-    private FrameLayout fragmentSplashType;
+    private ViewGroup fragmentSplashType;
     private Button bannerType;
     private FrameLayout fragmentBannerType;
     private Button feedVideoType;
@@ -60,10 +61,8 @@ public class MidasDebugPanelActivity extends BaseActivity implements View.OnClic
     @Override
     protected void initView() {
 
-
-
         splashType = (Button) findViewById(R.id.splash_type);
-        fragmentSplashType = (FrameLayout) findViewById(R.id.fragment_splash_type);
+        fragmentSplashType =  findViewById(R.id.fragment_splash_type);
         bannerType = (Button) findViewById(R.id.banner_type);
         fragmentBannerType = (FrameLayout) findViewById(R.id.fragment_banner_type);
         feedVideoType = (Button) findViewById(R.id.feed_video_type);

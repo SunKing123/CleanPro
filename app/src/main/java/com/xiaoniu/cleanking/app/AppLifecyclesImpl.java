@@ -16,7 +16,6 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,7 +26,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
@@ -84,22 +82,16 @@ import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
-import com.xiaoniu.common.utils.MiitHelper;
+import com.xiaoniu.cleanking.utils.MiitHelper;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.payshare.PayShareApplication;
-import com.xiaoniu.statistic.Configuration;
-import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.statistic.NiuDataTrackEventCallBack;
-import com.xnad.sdk.MidasAdSdk;
-import com.xnad.sdk.ad.entity.ScreenOrientation;
-import com.xnad.sdk.config.AdConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -161,7 +153,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
 
 
-        String processName = getProcessName(application);
+        String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
             //商业化初始化
             MidasRequesCenter.init(application);
@@ -248,11 +240,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
 
-    public void initMidas(Application application){
-
-
-
-    }
 
     /**
      * js回调
@@ -320,31 +307,42 @@ public class AppLifecyclesImpl implements AppLifecycles {
         // Do nothing because of nothing
     }
 
-    //埋点初始化
-//    public void initNiuData(Application application) {
-//        //测试环境
-//        NiuDataAPI.init(application, new Configuration()
-//                //切换到sdk默认的测试环境地址
-//                .serverUrl(BuildConfig.BIGDATA_MD)
-//                .setHeartbeatUrl(BuildConfig.BIGDATA_MD)
-//                //打开sdk日志信息
-//                .logOpen()
-//                .setHeartbeatInterval(5000)
-//                .channel(ChannelUtil.getChannel())
-//        );
-//
-//        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
-//            @Override
-//            public void onHeartbeatStart(JSONObject eventProperties) {
-//                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
-//                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
-//            }
-//        });
-//
-//    }
+ /*
+    //商业化sdk已经完成初始化；
+    埋点初始化
+    public void initNiuData(Application application) {
+        //测试环境
+        NiuDataAPI.init(application, new Configuration()
+                //切换到sdk默认的测试环境地址
+                .serverUrl(BuildConfig.BIGDATA_MD)
+                .setHeartbeatUrl(BuildConfig.BIGDATA_MD)
+                //打开sdk日志信息
+                .logOpen()
+                .setHeartbeatInterval(5000)
+                .channel(ChannelUtil.getChannel())
+        );
 
-    private String oaId = "";
+        NiuDataAPI.setHeartbeatCallback(new HeartbeatCallBack() {
+            @Override
+            public void onHeartbeatStart(JSONObject eventProperties) {
+                //这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段
+                Log.d("onHeartbeatStart", "onHeartbeatStart: " + "这里可以给心跳事件 追加额外字段  在每次心跳启动的时候，会带上额外字段");
+            }
+        });
 
+    }*/
+
+    private static String oaId = "";
+    private static boolean isSupportOaid = true;
+    public static String getOaid() {
+        return oaId;
+    }
+    public static boolean isSupportOaid() {
+        return isSupportOaid;
+    }
+    public static void setIsSupportOaid(boolean isSupportOaid) {
+        AppLifecyclesImpl.isSupportOaid = isSupportOaid;
+    }
     public void initOaid(Application application) {
         //判断是否为当前主进程
         String processName = SystemUtils.getProcessName(application);
@@ -626,26 +624,5 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
 
-    /**
-     * 获取当前进程名称
-     *
-     * @param context
-     * @return
-     */
-    private String getProcessName(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
-        if (runningApps == null) {
-            return "";
-        }
-        for (ActivityManager.RunningAppProcessInfo proInfo : runningApps) {
-            if (proInfo.pid == android.os.Process.myPid()) {
-                if (proInfo.processName != null) {
-                    return proInfo.processName;
-                }
-            }
-        }
-        return "";
-    }
 
 }

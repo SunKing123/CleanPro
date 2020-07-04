@@ -7,6 +7,7 @@ import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
+import com.xiaoniu.cleanking.app.injector.interceptor.RequestParamInterceptor;
 import com.xiaoniu.common.utils.JSONUtils;
 
 import java.security.SecureRandom;

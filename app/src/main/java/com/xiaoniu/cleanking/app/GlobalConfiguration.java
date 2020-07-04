@@ -23,7 +23,7 @@ import com.jess.arms.di.module.GlobalConfigModule;
 import com.jess.arms.http.log.RequestInterceptor;
 import com.jess.arms.integration.ConfigModule;
 import com.xiaoniu.cleanking.BuildConfig;
-import com.xiaoniu.cleanking.app.injector.module.RequestParamInterceptor;
+import com.xiaoniu.cleanking.app.injector.interceptor.RequestParamInterceptor;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

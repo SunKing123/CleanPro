@@ -25,6 +25,8 @@ import okhttp3.Response;
 
 /**
  * Created by tie on 2017/5/17.
+ * 网络请求拦截器
+ * 仅在信息流模块用到了,暂时不添加美数参数
  */
 public class RequestParamInterceptor implements Interceptor {
     private static final String TAG = "RequestParamInterceptor";
@@ -35,46 +37,6 @@ public class RequestParamInterceptor implements Interceptor {
         long timeMillis = System.currentTimeMillis();
         Request original = chain.request();
         Request.Builder requestBuilder = original.newBuilder();
-//        requestBuilder.addHeader("request-id", UUID.randomUUID().toString());
-//        requestBuilder.addHeader("request-agent", "1");//1：android、2：iOS、3：PC、4、H5、5：wechat
-//        requestBuilder.addHeader("device-id", AndroidUtil.getUdid());
-//        requestBuilder.addHeader("os-version", "0");//0：android、1：iOS
-//        requestBuilder.addHeader("sdk-version", AndroidUtil.getAndroidSDKVersion()+"");
-//        requestBuilder.addHeader("phone-model", AndroidUtil.getSystemModel());
-//        requestBuilder.addHeader("market", AndroidUtil.getMarketId());
-//        requestBuilder.addHeader("app-version", AndroidUtil.getAppVersionName());
-//        requestBuilder.addHeader("app-name", AndroidUtil.getAppNum());
-//        requestBuilder.addHeader("app-id", BuildConfig.API_APPID);
-//        requestBuilder.addHeader("timestamp", timeMillis +"");
-//        requestBuilder.addHeader("sign", hashByHmacSHA256(BuildConfig.API_APPID + timeMillis, BuildConfig.API_APPSECRET));
-//        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId());
-//        requestBuilder.addHeader("access-token", AndroidUtil.getToken());
-
-
-//        //请求定制：添加请求头
-//        Request.Builder requestBuilder = original.newBuilder();
-//        CommonParam commonParam = new CommonParam();
-//        //Token
-//        commonParam.setToken(AndroidUtil.getToken());
-//        //phone
-//        commonParam.setPhone(AndroidUtil.getPhoneNum());
-//        //requestId
-//        commonParam.setRequestId(UUID.randomUUID().toString());
-//        //cid
-//        commonParam.setCid(AndroidUtil.getCustomerId());
-//        //osversion
-//        commonParam.setOsversion("android");
-//        commonParam.setAppName("4");
-//        //appversion
-//        commonParam.setAppversion(AndroidUtil.getAppVersionName(AppApplication.getInstance()));
-//        //deviceId
-//        commonParam.setDeviceId(AndroidUtil.getUdid(AppApplication.getInstance()));
-//        //sdkversion
-//        commonParam.setSdkversion(AndroidUtil.getAndroidSDKVersion() + "");
-//        //市场
-//        commonParam.setMarket(AndroidUtil.getMarketId(AppApplication.getInstance()));
-
-//        String json = new Gson().toJson(commonParam);
         Map<String, Object> mapHeader = new HashMap<>();
         mapHeader.put("Ip", "172.16.88.23");
         mapHeader.put("appVersion", AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
