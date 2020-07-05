@@ -22,6 +22,7 @@ import android.widget.TextView;
 import androidx.core.widget.NestedScrollView;
 
 import com.comm.jksdk.utils.MmkvUtil;
+import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
@@ -164,7 +165,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
-        checkScroll();
+
 
 
         imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
@@ -179,31 +180,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
     }
 
-    private void checkScroll() {
-        mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                Rect scrollRect = new Rect();
-                nestedScrollView.getHitRect(scrollRect);
-                //子控件在可视范围内（至少有一个像素在可视范围内）
-                if (adLayoutTwo.getLocalVisibleRect(scrollRect) && !mPresenter.getAdTwoLoad()) {
-                    mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
-                }
-                if (adLayoutThree.getLocalVisibleRect(scrollRect) && !mPresenter.getAdThreeLoad()) {
-                    mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
-                }
-            }
-        });
-    }
 
 
     private void initClearItemCard() {
-        clearSoundLayout.setLeftTitle("音频文件");
-        clearSoundLayout.setLeftIcon(R.mipmap.clear_icon_sound);
-        clearSoundLayout.setCommonItemImageRes(R.mipmap.clear_item_sound);
-        clearSoundLayout.setOnClickListener(view -> {
-
-        });
 
         clearVideoLayout.setLeftTitle("视频文件");
         clearVideoLayout.setLeftIcon(R.mipmap.clear_icon_video);
@@ -322,18 +301,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void refreshAdvice() {
-        Rect scrollRect = new Rect();
-        mScrollView.getHitRect(scrollRect);
-        //子控件在可视范围内（至少有一个像素在可视范围内）
-        if (adLayoutTwo.getLocalVisibleRect(scrollRect)&&mPresenter.getAdTwoShow()) {
-            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
-        }
-        if (adLayoutThree.getLocalVisibleRect(scrollRect)&&mPresenter.getAdThreeShow()) {
-            LogUtils.e("======在可见区，刷新广告");
-            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
-        }else {
-            LogUtils.e("======不在可见区");
-        }
+        mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
+        mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
     }
 
 

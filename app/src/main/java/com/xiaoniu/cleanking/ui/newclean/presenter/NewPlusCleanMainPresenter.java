@@ -7,39 +7,28 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.trello.rxlifecycle2.android.FragmentEvent;
-import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
-import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
-import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.newclean.bean.ScanningLevel;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
-import com.xiaoniu.cleanking.ui.newclean.fragment.NewCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
-import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
-import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
-import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.config.AdParameter;
@@ -469,35 +458,10 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     }
 
-    private boolean mAdTwo, mAdThree;
-
-    public boolean getAdTwoLoad() {
-        return mAdTwo;
-    }
-
-    public boolean getAdThreeLoad() {
-        return mAdThree;
-    }
-
-    private boolean mAdTwoShow, mAdThreeShow;
-
-    public boolean getAdTwoShow() {
-        return mAdTwoShow;
-    }
-
-    public boolean getAdThreeShow() {
-        return mAdThreeShow;
-    }
 
     public void showAdviceLayout(ViewGroup viewGroup, String adviceID) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
-        }
-        if (viewGroup.getId() == R.id.ad_two) {
-            mAdTwo = true;
-        }
-        if (viewGroup.getId() == R.id.ad_three) {
-            mAdThree = true;
         }
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
@@ -506,13 +470,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             @Override
             public void onAdShow(AdInfo adInfo) {
                 super.onAdShow(adInfo);
-                viewGroup.setVisibility(View.VISIBLE);
-                if (viewGroup.getId() == R.id.ad_two) {
-                    mAdTwoShow = true;
-                }
-                if (viewGroup.getId() == R.id.ad_three) {
-                    mAdThreeShow = true;
-                }
+                LogUtils.e("====首页two,three广告展示成功====");
             }
         });
     }
