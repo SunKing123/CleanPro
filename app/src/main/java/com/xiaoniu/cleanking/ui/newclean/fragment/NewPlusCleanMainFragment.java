@@ -135,6 +135,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
+    private boolean isFirst = false;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -238,7 +239,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void initEvent() {
-
         imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
             @Override
             public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
@@ -266,7 +266,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
             }
         });
-
         homeToolTableView.setOnItemClickListener(new HomeToolTableView.OnItemClick() {
             @Override
             public void onClick(int item) {
@@ -291,6 +290,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
     }
 
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************load one advInfo*****************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+    private void loadOneAdvInfo() {
+        mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
+    }
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************activity lifecycle*****************************************************************************
@@ -307,19 +317,24 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         //刷新广告
         refreshAdvice();
+
+        if (isVisible() || isFirst) {
+            isFirst = false;
+            loadOneAdvInfo();
+        }
     }
 
     private void refreshAdvice() {
         Rect scrollRect = new Rect();
         mScrollView.getHitRect(scrollRect);
         //子控件在可视范围内（至少有一个像素在可视范围内）
-        if (adLayoutTwo.getLocalVisibleRect(scrollRect)&&mPresenter.getAdTwoShow()) {
+        if (adLayoutTwo.getLocalVisibleRect(scrollRect) && mPresenter.getAdTwoShow()) {
             mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
         }
-        if (adLayoutThree.getLocalVisibleRect(scrollRect)&&mPresenter.getAdThreeShow()) {
+        if (adLayoutThree.getLocalVisibleRect(scrollRect) && mPresenter.getAdThreeShow()) {
             LogUtils.e("======在可见区，刷新广告");
             mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
-        }else {
+        } else {
             LogUtils.e("======不在可见区");
         }
     }
@@ -393,7 +408,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
 
     }
-
 
 
     /*

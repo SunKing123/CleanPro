@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -42,6 +43,7 @@ import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.ad.widget.TemplateView;
 import com.xnad.sdk.config.AdParameter;
 
 import java.util.ArrayList;
@@ -502,20 +504,68 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
-                viewGroup.setVisibility(View.VISIBLE);
-                if (viewGroup.getId() == R.id.ad_two) {
-                    mAdTwoShow = true;
+        if (viewGroup.getId() == R.id.ad_one) {
+            MidasRequesCenter.requestAd(params, new AdvCallBack(viewGroup, adviceID));
+        } else {
+            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+                @Override
+                public void onAdShow(AdInfo adInfo) {
+                    super.onAdShow(adInfo);
+                    viewGroup.setVisibility(View.VISIBLE);
+                    if (viewGroup.getId() == R.id.ad_two) {
+                        mAdTwoShow = true;
+                    }
+                    if (viewGroup.getId() == R.id.ad_three) {
+                        mAdThreeShow = true;
+                    }
                 }
-                if (viewGroup.getId() == R.id.ad_three) {
-                    mAdThreeShow = true;
-                }
-            }
-        });
+            });
+        }
     }
 
+
+    class AdvCallBack extends AbsAdCallBack {
+        ViewGroup viewGroup;
+        String advId;
+
+        AdvCallBack(ViewGroup viewGroup, String advId) {
+            this.viewGroup = viewGroup;
+            this.advId = advId;
+        }
+
+        @Override
+        public void onAdError(AdInfo adInfo, int i, String s) {
+            super.onAdError(adInfo, i, s);
+        }
+
+        @Override
+        public void onShowError(int i, String s) {
+            super.onShowError(i, s);
+        }
+
+        @Override
+        public void onAdShow(AdInfo adInfo) {
+            super.onAdShow(adInfo);
+            switch (advId) {
+                case MidasConstants.MAIN_ONE_ID:
+                    break;
+            }
+        }
+
+        @Override
+        public void onAdClicked(AdInfo adInfo) {
+            super.onAdClicked(adInfo);
+        }
+
+        @Override
+        public void onAdClose(AdInfo adInfo) {
+            super.onAdClose(adInfo);
+        }
+
+        @Override
+        public void onAdClose(AdInfo adInfo, TemplateView templateView) {
+            super.onAdClose(adInfo, templateView);
+        }
+    }
 
 }

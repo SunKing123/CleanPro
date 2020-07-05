@@ -30,6 +30,11 @@ public interface MidasConstants {
     String FINISH_SCREEN_ID="adpos_1938682621";
 
     /**
+     * 首页广告位1 ID
+     */
+    String MAIN_ONE_ID="adpos_2021709551";
+
+    /**
      * 首页广告位2 ID
      */
     String MAIN_TWO_ID="adpos_2021709551";
