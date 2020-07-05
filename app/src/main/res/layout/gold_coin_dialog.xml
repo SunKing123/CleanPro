@@ -94,11 +94,23 @@
                         android:id="@+id/tips_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:text="每日连续签到，奖励不间断哦"
                         android:textColor="#A4A4A4"
                         android:textSize="12sp"
                         android:visibility="gone" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/see_video_to_double"
+                        android:layout_width="@dimen/dimen_219dp"
+                        android:layout_height="@dimen/dp_38"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:background="@mipmap/btn_see_video"
+                        android:text="看视频多倍领取"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/sp_14"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
 
                     <RelativeLayout
                         android:id="@+id/coin_double_rl"
@@ -213,27 +225,12 @@
             android:gravity="center_vertical"
             android:orientation="horizontal" />
         <!--广告填充-->
-        <com.qq.e.ads.nativ.widget.NativeAdContainer
-            android:id="@+id/native_ad_container"
+        <FrameLayout
+            android:id="@+id/root_fl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ad_bottom_corner_bg"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:layout_marginBottom="@dimen/dimen_10dp" />
 
-            <FrameLayout
-                android:id="@+id/root_fl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_10dp" />
-
-            <ImageView
-                android:id="@+id/ll_ad_anim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/dimen_5dp"
-                android:scaleType="fitXY" />
-        </com.qq.e.ads.nativ.widget.NativeAdContainer>
 
         <RelativeLayout
             android:layout_width="match_parent"

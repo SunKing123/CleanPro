@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.room.util.StringUtil;
 
 /**
@@ -43,9 +44,9 @@ import androidx.room.util.StringUtil;
 public class GoldCoinDialog {
 
 
-    public static final String ADV_FIRST="scratch_card_first";
-    public static final String ADV_SECOND="scratch_card_second";
-    public static final String ADV_VIDEO="scratch_card_video";
+    public static final String ADV_FIRST = "scratch_card_first";
+    public static final String ADV_SECOND = "scratch_card_second";
+    public static final String ADV_VIDEO = "scratch_card_video";
 
     public static void showGoldCoinDialog(GoldCoinBean coinBean) {
         if (coinBean == null || coinBean.obtainCoinCount < 0) {
@@ -68,7 +69,7 @@ public class GoldCoinDialog {
         totalCoinCountTv.setTypeface(typ_RE);
         RelativeLayout CoinDoubleRL = dialog.findViewById(R.id.coin_double_rl);
         TextView tv_coin_str = dialog.findViewById(R.id.tv_coin_str);
-        ImageView mLlAdAnim = dialog.findViewById(R.id.ll_ad_anim);
+        // ImageView mLlAdAnim = dialog.findViewById(R.id.ll_ad_anim);
         FrameLayout mRootRL = dialog.findViewById(R.id.root_fl);
         RelativeLayout ll_top = dialog.findViewById(R.id.ll_top);
         NativeAdContainer container = dialog.findViewById(R.id.native_ad_container);
@@ -79,6 +80,7 @@ public class GoldCoinDialog {
         ImageView ivAnim = dialog.findViewById(R.id.iv_anim);
         ImageView iv_top_one = dialog.findViewById(R.id.iv_top_one);
         ImageView iv_top_three = dialog.findViewById(R.id.iv_top_three);
+        AppCompatButton see_video_to_double = dialog.findViewById(R.id.see_video_to_double);
         iv_top_one.setVisibility(View.GONE);
         ivAnim.setVisibility(View.GONE);
         rl_type_two.setVisibility(View.GONE);
@@ -96,6 +98,10 @@ public class GoldCoinDialog {
             rl_type_two.setVisibility(View.VISIBLE);
             layoutParams.topMargin = DisplayUtil.dip2px(coinBean.context, 65);
         } else if (coinBean.dialogType == 3) {
+            see_video_to_double.setVisibility(View.VISIBLE);
+            see_video_to_double.setOnClickListener(view -> {
+                requestAd(coinBean, mRootRL, true);
+            });
             iv_top_three.setVisibility(View.VISIBLE);
             layoutParams.topMargin = DisplayUtil.dip2px(coinBean.context, 86);
         } else {
@@ -121,7 +127,13 @@ public class GoldCoinDialog {
             CoinDoubleRL.setVisibility(View.VISIBLE);
             AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
         }
-        obtainCoinCountTv.setText(String.valueOf(totalCoin));
+        if (coinBean.dialogType == 3) {
+            obtainCoinCountTv.setText("+" + totalCoin);
+            requestAd(coinBean, mRootRL, false);
+        } else {
+            obtainCoinCountTv.setText(String.valueOf(totalCoin));
+        }
+
         if (coinBean.totalCoinCount > 99) {
             float calculate = Math.round((coinBean.totalCoinCount)) / 10000f;
             String afterCalculate = TimeUtil.getNum(calculate);
@@ -133,49 +145,65 @@ public class GoldCoinDialog {
         countDownTimeViewDelay(3, adLookTime, closeDlg);
         //边上跑的动画
         AnimationsContainer.FrameseAnim animaDra = null;
-        animaDra = AnimationsContainer.getInstance(R.array.small_ad_anim, 80).createAnim(mLlAdAnim);
-        animaDra.start();
+        //  animaDra = AnimationsContainer.getInstance(R.array.small_ad_anim, 80).createAnim(mLlAdAnim);
+        //  animaDra.start();
         closeDlg.setOnClickListener(view -> {
             dialog.dismiss();
         });
     }
 
+
+    /**
+     *
+     */
+    private static void requestAd(GoldCoinBean coinBean, ViewGroup mRootRL, boolean isVideo) {
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(isVideo?coinBean.adVideoId:coinBean.adId).setActivity((Activity) coinBean.context)
+                .setViewContainer(mRootRL).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+        });
+    }
+
+
     /**
      * 两个刮刮卡刮完显示的广告
+     *
      * @param coinBean
      */
-    private void loadFirstAdv(GoldCoinBean coinBean,ViewGroup mRootRL) {
-        loadAdv(coinBean,mRootRL,ADV_FIRST);
+    private void loadFirstAdv(GoldCoinBean coinBean, ViewGroup mRootRL) {
+        loadAdv(coinBean, mRootRL, ADV_FIRST);
     }
 
     /**
      * 看完激励视频显示的广告
+     *
      * @param coinBean
      */
-    private void loadSecondAdv(GoldCoinBean coinBean,ViewGroup mRootRL) {
-        loadAdv(coinBean,mRootRL,ADV_SECOND);
+    private void loadSecondAdv(GoldCoinBean coinBean, ViewGroup mRootRL) {
+        loadAdv(coinBean, mRootRL, ADV_SECOND);
     }
 
     /**
      * 点击金币翻倍展示的激励视频广告
+     *
      * @param coinBean
      */
-    private void loadVideoAdv(GoldCoinBean coinBean,ViewGroup mRootRL) {
-        loadAdv(coinBean,mRootRL,ADV_VIDEO);
+    private void loadVideoAdv(GoldCoinBean coinBean, ViewGroup mRootRL) {
+        loadAdv(coinBean, mRootRL, ADV_VIDEO);
     }
 
 
-    private void loadAdv(GoldCoinBean coinBean,ViewGroup mRootRL,String resourceName){
-        if(coinBean.context==null||!(coinBean.context instanceof Activity)){
+    private void loadAdv(GoldCoinBean coinBean, ViewGroup mRootRL, String resourceName) {
+        if (coinBean.context == null || !(coinBean.context instanceof Activity)) {
             log("context必须为activity级别");
             return;
         }
         String advId = getAdvId(coinBean.context, resourceName + coinBean.pageId);
-        log("开始加载广告: "+resourceName+" advId="+advId);
+        log("开始加载广告: " + resourceName + " advId=" + advId);
         if (TextUtils.isEmpty(advId)) {
             return;
         }
-        
+
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(advId).setActivity((Activity) coinBean.context)
                 .setViewContainer(mRootRL).build();

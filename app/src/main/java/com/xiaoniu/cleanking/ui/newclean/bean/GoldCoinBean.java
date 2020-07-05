@@ -24,4 +24,5 @@ public class GoldCoinBean {
     public boolean fbTip;
     public boolean isDouble;
     public String doubleAdCode;
+    public String adVideoId;
 }
