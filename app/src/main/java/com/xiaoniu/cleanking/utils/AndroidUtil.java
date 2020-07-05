@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -8,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.text.InputFilter;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -19,14 +22,21 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
+import com.ishumei.smantifraud.SmAntiFraud;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
+import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.utils.encypt.Base64;
 import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
+import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.ChannelUtil;
+import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -125,37 +135,62 @@ public class AndroidUtil {
     }
 
 
+    public static boolean isWxLogin() {
+        return implPreferencesHelper.getWxLoginFlag();
+    }
+
+
+    public static String getOpenID() {
+        return implPreferencesHelper.getOpenID();
+    }
+
     public static String getPhoneNum() {
         return implPreferencesHelper.getPhoneNum();
     }
 
+    public static boolean haveLiuhai = false;
     /**
      * 获取H5后面拼接的xn_data字符串
      *
      * @return
      */
     public static String getXnData() {
-
         long timeMillis = System.currentTimeMillis();
         Map<String, String> map = new HashMap<>();
         map.put("request-id", UUID.randomUUID().toString());
+        map.put("haveLiuhai", haveLiuhai ? "1" : "0");
+        map.put("language", "cn");
         //1：android、2：iOS、3：PC、4、H5、5：wechat
         map.put("request-agent", "1");
-        map.put("device-id", "");
+        map.put("device-id", AndroidUtil.getDeviceID());
         //0：android、1：iOS
         map.put("os-version", "0");
-        map.put("sdk-version", DeviceUtils.getSDKVersion() + "");
-//        map.put("phone-model", AndroidUtil.getModel());
-        map.put("market", "");
-        map.put("app-version", "");
-        map.put("app-name", AndroidUtil.getAppNum());
-        map.put("app-id", BuildConfig.API_APPID);
+        map.put("sdk-version", AndroidUtil.getAndroidSDKVersion() + "");
+        map.put("phone-model", AndroidUtil.getSystemModel());
+        map.put("market", ChannelUtil.getChannel());
+        map.put("app-version", AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
+        map.put("app-name", "gj_clean");
+//        map.put("app-id", AppConfig.API_APPID);//todo:zzh
         map.put("timestamp", timeMillis + "");
-        map.put("sign", hashByHmacSHA256(BuildConfig.API_APPID + timeMillis, BuildConfig.API_APPSECRET));
+//        map.put("sign", hashByHmacSHA256(AppConfig.API_APPID + timeMillis, AppConfig.API_APPSECRET));//todo:zz
         map.put("customer-id", AndroidUtil.getCustomerId());
         map.put("access-token", AndroidUtil.getToken());
         map.put("phone-number", AndroidUtil.getPhoneNum());
-        return Base64.encodeToString(new Gson().toJson(map).getBytes(), Base64.NO_WRAP);
+        map.put("uuid", NiuDataAPI.getUUID());
+        if (AndroidUtil.isLogin()) {
+            if (AndroidUtil.isWxLogin()) {
+                map.put("userType", "1");
+                map.put("uid", getOpenID());
+            } else {
+                map.put("userType", "2");
+            }
+        } else {
+            map.put("userType", "其他账号");
+        }
+        String deviceId = SmAntiFraud.getDeviceId();
+        map.put("sm-deviceid", deviceId);
+        map.put("sdk-uid", NiuDataAPI.getUUID());
+        return android.util.Base64.encodeToString(new Gson().toJson(map).getBytes(), android.util.Base64.NO_WRAP);
     }
 
     /**
@@ -322,6 +357,94 @@ public class AndroidUtil {
         ForegroundColorSpan span = new ForegroundColorSpan(color);
         spanString.setSpan(span, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         return spanString;
+    }
+
+
+
+    //数美接入
+    private static String sDeviceID = "";
+    //数美接入
+    /**
+     * 热云方法[暂时只做IMEI调用时使用]
+     *
+     * @return
+     */
+    @SuppressLint({"MissingPermission"})
+    public static String getDeviceID() {
+        Context context = AppApplication.getInstance();
+        if (!TextUtils.isEmpty(sDeviceID) && !"unknown".equals(sDeviceID)) {
+            return sDeviceID;
+        } else {
+            try {
+                TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    sDeviceID = tm.getImei();
+                } else if (Build.VERSION.SDK_INT >= 23) {
+                    sDeviceID = tm.getDeviceId(0);
+                } else {
+                    sDeviceID = tm.getDeviceId();
+                }
+                if (TextUtils.isEmpty(sDeviceID)) {
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        if (AppLifecyclesImpl.isSupportOaid()) {
+                            sDeviceID = AppLifecyclesImpl.getOaid();
+                        } else {
+                            sDeviceID = getAndroidId(AppApplication.getInstance());
+                        }
+                    } else {
+                        sDeviceID = getAndroidId(AppApplication.getInstance());
+                    }
+                }
+                return sDeviceID;
+            } catch (Exception var2) {
+                return sDeviceID;
+            }
+        }
+    }
+
+
+    public static String getAndroidId(Context context) {
+        String androidId = "unknown";
+        try {
+            androidId = Settings.Secure.getString(context.getContentResolver(),
+                    "android_id");
+        } catch (Exception e) {
+        }
+        return androidId != null && androidId.length() != 0 ? androidId : "unknown";
+    }
+
+
+    /**
+     * 获取sdk版本
+     *
+     * @return
+     */
+    public static int getAndroidSDKVersion() {
+        return Build.VERSION.SDK_INT;
+    }
+
+
+
+    /**
+     * 获取手机型号
+     *
+     * @return 手机型号
+     */
+    public static String getSystemModel() {
+        return Build.MODEL;
+    }
+
+
+    /**
+     * 用户是否登录
+     *
+     * @return
+     */
+    public static boolean isLogin() {
+        if (!TextUtils.isEmpty(implPreferencesHelper.getCustomerId())) {
+            return true;
+        }
+        return false;
     }
 
 }

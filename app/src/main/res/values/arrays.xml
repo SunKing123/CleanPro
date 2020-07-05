@@ -37,10 +37,54 @@
         <!--<item>@drawable/iv_ad_circle_anim34</item>-->
         <item>@drawable/iv_ad_circle_anim35</item>
     </string-array>
-
+    <string-array name="loading_coin">
+        <item>@drawable/loading_coin_01</item>
+        <item>@drawable/loading_coin_02</item>
+        <item>@drawable/loading_coin_03</item>
+        <item>@drawable/loading_coin_04</item>
+        <item>@drawable/loading_coin_05</item>
+        <item>@drawable/loading_coin_06</item>
+        <item>@drawable/loading_coin_08</item>
+        <item>@drawable/loading_coin_09</item>
+        <item>@drawable/loading_coin_10</item>
+        <item>@drawable/loading_coin_11</item>
+        <item>@drawable/loading_coin_12</item>
+        <item>@drawable/loading_coin_13</item>
+        <item>@drawable/loading_coin_14</item>
+        <item>@drawable/loading_coin_15</item>
+        <item>@drawable/loading_coin_16</item>
+        <item>@drawable/loading_coin_17</item>
+        <item>@drawable/loading_coin_18</item>
+        <item>@drawable/loading_coin_19</item>
+        <item>@drawable/loading_coin_20</item>
+        <item>@drawable/loading_coin_21</item>
+        <item>@drawable/loading_coin_22</item>
+        <item>@drawable/loading_coin_23</item>
+    </string-array>
 
     <array name="array_male">
         <item>男</item>
         <item>女</item>
     </array>
+
+    <string-array name="ball_star_anim">
+        <item>@drawable/iv_star_anim1</item>
+        <item>@drawable/iv_star_anim2</item>
+        <item>@drawable/iv_star_anim3</item>
+        <item>@drawable/iv_star_anim4</item>
+        <item>@drawable/iv_star_anim5</item>
+        <item>@drawable/iv_star_anim6</item>
+        <item>@drawable/iv_star_anim7</item>
+        <item>@drawable/iv_star_anim8</item>
+        <item>@drawable/iv_star_anim9</item>
+        <item>@drawable/iv_star_anim10</item>
+        <item>@drawable/iv_star_anim11</item>
+        <item>@drawable/iv_star_anim12</item>
+        <item>@drawable/iv_star_anim13</item>
+        <item>@drawable/iv_star_anim14</item>
+        <item>@drawable/iv_star_anim15</item>
+        <item>@drawable/iv_star_anim16</item>
+        <item>@drawable/iv_star_anim17</item>
+        <item>@drawable/iv_star_anim18</item>
+    </string-array>
 </resources>
