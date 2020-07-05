@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -166,8 +167,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         checkAndUploadPoint();
         checkScroll();
+        printHandCardAdvIds();
     }
 
+    private void printHandCardAdvIds(){
+        for (int i=1;i<=10;i++){
+            int resourceId = getResources().getIdentifier("hang_card_start"+i, "string", getContext().getPackageName());
+            Log.e("handCardId",getResources().getString(resourceId));
+        }
+
+    }
     private void checkScroll() {
         mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
