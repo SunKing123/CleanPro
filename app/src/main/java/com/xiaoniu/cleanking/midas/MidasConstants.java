@@ -104,4 +104,10 @@ public interface MidasConstants {
      */
     String FINISH02_FEEED_ID = "adpos_9065892151";
 
+
+    /**
+     * 锁屏-信息流模板
+     */
+    String LOCK_PAGE_FEED_ID = "adpos_1531089251";
+
 }
