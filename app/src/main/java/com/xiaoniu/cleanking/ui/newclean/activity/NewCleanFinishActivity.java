@@ -33,6 +33,9 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.constant.RouteConstants;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
@@ -66,6 +69,8 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -1240,8 +1245,48 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
-        AdManager adManager = GeekAdSdk.getAdsManger();
 
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
+                .setActivity(this)
+                .setViewContainer(ad_container_pos01)
+                .build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdLoadSuccess(adInfo);
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
+            }
+
+            @Override
+            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+//                jumpActivity();
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+//                jumpActivity();
+            }
+
+            @Override
+            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdShow(adInfo);
+            }
+
+            @Override
+            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+            }
+
+            @Override
+            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
+                super.onAdClose(adInfo, templateView);
+//                jumpActivity();
+            }
+        });
+
+       /* AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_POSITION_FOUR, Float.valueOf(DisplayUtil.px2dp(NewCleanFinishActivity.this, DisplayUtil.getScreenWidth(NewCleanFinishActivity.this)) - 28), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -1296,7 +1341,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 });
 
             }
-        });
+        });*/
     }
 
     private int mBottomAdShowCount = 0;

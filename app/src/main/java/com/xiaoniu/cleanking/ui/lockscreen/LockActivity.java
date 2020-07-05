@@ -28,6 +28,9 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
@@ -54,6 +57,8 @@ import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -338,7 +343,45 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
         mLastTime = SystemClock.elapsedRealtime();
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "lock_screen", "lock_screen");
+
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.LOCK_PAGE_FEED_ID).setActivity(this).setViewContainer(relAd).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdLoadSuccess(adInfo);
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
+            }
+
+            @Override
+            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+//                jumpActivity();
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+//                jumpActivity();
+            }
+
+            @Override
+            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdShow(adInfo);
+            }
+
+            @Override
+            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+            }
+
+            @Override
+            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
+                super.onAdClose(adInfo, templateView);
+//                jumpActivity();
+            }
+        });
+
+       /* StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "lock_screen", "lock_screen");
         GeekAdSdk.getAdsManger().loadNativeTemplateAd(this,PositionId.AD_LOCK_SCREEN_ADVERTISING_1_3_0, Float.valueOf (DisplayUtil.px2dp(LockActivity.this, DisplayUtil.getScreenWidth(LockActivity.this)) -28), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -381,7 +424,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
             }
-        });
+        });*/
 //        AdManager adManager = GeekAdSdk.getAdsManger();
 //        adManager.loadAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING_1_4_0, new AdListener() {
 //            @Override

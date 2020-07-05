@@ -21,6 +21,9 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
@@ -34,6 +37,8 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.json.JSONObject;
 
@@ -162,7 +167,44 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private void initGeekSdkAD() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "hot_splash_page");
-        mAdManager = GeekAdSdk.getAdsManger();
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SP_HOT_START_ID)
+                .setActivity(this).setViewContainer(container).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdLoadSuccess(adInfo);
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
+            }
+
+            @Override
+            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+                jumpActivity();
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+                jumpActivity();
+            }
+
+            @Override
+            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdShow(adInfo);
+            }
+
+            @Override
+            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+            }
+
+            @Override
+            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
+                super.onAdClose(adInfo, templateView);
+                jumpActivity();
+            }
+        });
+        /*mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadSplashAd(this, PositionId.AD_POSITION_HOT_KP, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -209,7 +251,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 showProgressBar();
                 showBottomAd();
             }
-        });
+        });*/
     }
 
     private int mBottomAdShowCount = 0;

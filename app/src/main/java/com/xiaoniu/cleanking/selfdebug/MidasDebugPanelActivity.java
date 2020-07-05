@@ -13,6 +13,7 @@ import com.bytedance.embedapplog.AppLog;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
@@ -91,7 +92,7 @@ public class MidasDebugPanelActivity extends BaseActivity implements View.OnClic
             case R.id.splash_type:
                 //加载展示广告
                 //上下文、广告位置ID
-                adParameter = new AdParameter.Builder(this,"adpos_9193403301")
+                adParameter = new AdParameter.Builder(this, MidasConstants.SP_HOT_START_ID)
                         //设置填充父布局
                         .setViewContainer(fragmentSplashType)
                         .build();
