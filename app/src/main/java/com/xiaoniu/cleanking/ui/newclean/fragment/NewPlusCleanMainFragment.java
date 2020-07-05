@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -166,7 +165,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
 
 
-
         imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
             @Override
             public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
@@ -178,7 +176,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             }
         });
     }
-
 
 
     private void initClearItemCard() {
@@ -300,8 +297,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void refreshAdvice() {
-        mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
-        mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
+        }
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
+        }
+
     }
 
 
@@ -373,7 +375,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
 
     }
-
 
 
     /*
