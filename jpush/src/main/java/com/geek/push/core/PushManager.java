@@ -167,6 +167,11 @@ public class PushManager {
         mIPushClient.deleteTag(tag);
     }
 
+    public void clearAllTag() {
+        LogUtils.i(String.format("%s--%s", getPushPlatFormName(), "deleteAllTag"));
+        mIPushClient.clearAllTag();
+    }
+
     public int getPushPlatFormCode() {
         return mPlatformCode;
     }
