@@ -33,7 +33,6 @@ import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.QueryFileUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.WxQqUtil;
-import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -49,6 +48,7 @@ import butterknife.OnClick;
  * 我的
  * Created on 2018/3/21.
  */
+@Deprecated
 public class MeFragment extends SimpleFragment {
     @BindView(R.id.iv_top)
     ImageView iv_top;
@@ -88,7 +88,7 @@ public class MeFragment extends SimpleFragment {
         line_about.setOnClickListener(v -> {
             Log.e("fdsa", "dsd");
             StatisticsUtils.trackClick("about_click", "\"关于\"点击", "mine_page", "personal_center_page");
-            startActivity(AboutActivity.class);
+//            startActivity(AboutActivity.class);
         });
 
         ConstraintLayout.LayoutParams clp = (ConstraintLayout.LayoutParams) iv_top.getLayoutParams();

@@ -383,7 +383,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void initFragments() {
-        MeFragment mineFragment = MeFragment.getIntance();
+//        MeFragment mineFragment = MeFragment.getIntance();
         mainFragment = new NewPlusCleanMainFragment();
 
         ToolFragment toolFragment = new ToolFragment();

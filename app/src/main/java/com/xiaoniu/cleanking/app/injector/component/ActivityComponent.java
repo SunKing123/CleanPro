@@ -35,7 +35,6 @@ import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanAudActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanFileActivity;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
-import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.FeedBackActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
@@ -76,7 +75,6 @@ public interface ActivityComponent {
 
     void inject(WhiteListSpeedManageActivity whiteListSpeedManageActivity);
 
-    void inject(AboutActivity aboutActivity);
 
     void inject(PhoneAccessActivity phoneAccessActivity);
 
