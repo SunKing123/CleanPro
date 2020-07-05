@@ -318,9 +318,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
             mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
         }
-
     }
-
 
     @Override
     public void onDestroy() {

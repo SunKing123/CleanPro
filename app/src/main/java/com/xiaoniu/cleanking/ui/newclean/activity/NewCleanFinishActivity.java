@@ -21,6 +21,7 @@ import com.bumptech.glide.util.Util;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.umeng.socialize.UMShareAPI;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -36,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
@@ -49,6 +51,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.GlideUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -99,6 +102,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     String returnEventName = "";
     String sysReturnEventName = "";
     private boolean mIsFromHomeMain; //是否来自首页主功能区
+
     boolean isOpenOne = false;
     boolean isOpenTwo = false;
 
@@ -188,102 +192,27 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private void initGeekAd() {
-       /*   if (null != AppHolder.getInstance() && null != AppHolder.getInstance().getSwitchInfoList()
-                 && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-
-             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                 if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.tool_one_key_speed).contains(mTitle) && PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.tool_super_power_saving).contains(mTitle) && PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.tool_notification_clean).contains(mTitle) && PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.tool_chat_clear).contains(mTitle)) { //微信清理
-                     if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
-                         if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                             isOpenOne = switchInfoList.isOpen();
-                         }
-                         if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                             isOpenTwo = switchInfoList.isOpen();
-                         }
-                     }
-                 } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle) && PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.tool_qq_clear).contains(mTitle) && PositionId.KEY_QQ.equals(switchInfoList.getConfigKey())) { //QQ专清
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.tool_phone_clean).contains(mTitle) && PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey())) { //手机清理
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.game_quicken).contains(mTitle) && PositionId.KEY_GAME.equals(switchInfoList.getConfigKey())) { //游戏加速
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.virus_kill).contains(mTitle) && PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey())) { //病毒查杀
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 } else if (getString(R.string.network_quicken).contains(mTitle) && PositionId.KEY_NET.equals(switchInfoList.getConfigKey())) { //网络加速
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                         isOpenOne = switchInfoList.isOpen();
-                     }
-                     if (switchInfoList.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                         isOpenTwo = switchInfoList.isOpen();
-                     }
-                 }
-             }*/
+        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpenOne = switchInfoList.isOpen();
+                }
+                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition())) {
+                    isOpenTwo = switchInfoList.isOpen();
+                }
+            }
+        }
         if (isOpenOne) {
             initPos01Ad();
         }
 
         if (isOpenTwo) {
-           // initAd02();
+            initPos02Ad();
         }
 
 
-}
+    }
 
     //获取埋点参数
     void getPageData() {
@@ -1195,7 +1124,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             NiuDataAPI.onPageEnd("clean_up_page_view_immediately", "清理完成页浏览");
         }
 
-
         super.onPause();
     }
 
@@ -1236,8 +1164,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
-
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos01)
                 .build();
@@ -1333,7 +1260,65 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             }
         });*/
-}
+    }
+
+
+    public void initPos02Ad() {
+        if (!isOpenTwo) {
+            return;
+        }
+        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
+                .setActivity(this)
+                .setViewContainer(ad_container_pos02)
+                .build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdLoadSuccess(adInfo);
+                log("广告位2： onAdLoadSuccess()");
+            }
+
+            @Override
+            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+                log("广告位2： onAdError()   "+s);
+
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+                log("广告位2： onShowError()   "+s);
+            }
+
+            @Override
+            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdShow(adInfo);
+                log("广告位2： onAdShow()   ");
+            }
+
+            @Override
+            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+                log("广告位2： onAdClicked()   ");
+            }
+
+            @Override
+            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
+                super.onAdClose(adInfo, templateView);
+                log("广告位2： onAdClose()   ");
+
+
+            }
+        });
+    }
+
+    private void log(String text) {
+        if (BuildConfig.DEBUG) {
+            LogUtils.e("功能完成页面： " + text);
+        }
+    }
 
 //   private int mBottomAdShowCount = 0;
 
@@ -1426,9 +1411,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     */
 
-/**
- * 打底广告
- *//*
+    /**
+     * 打底广告
+     *//*
     private void showBottomAd2() {
         if (null != AppHolder.getInstance().getBottomAdList() &&
                 AppHolder.getInstance().getBottomAdList().size() > 0) {
@@ -1521,9 +1506,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     }
                 });
     }*/
-@Override
-protected void onActivityResult(int requestCode,int resultCode,Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 /*
         switch (requestCode) {
             case 100:
@@ -1533,8 +1518,8 @@ protected void onActivityResult(int requestCode,int resultCode,Intent data){
                 showBottomAd2();
                 return;
         }*/
-        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
-        }
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
 
 
-        }
+}
