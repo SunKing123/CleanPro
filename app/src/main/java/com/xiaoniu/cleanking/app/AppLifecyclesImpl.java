@@ -27,10 +27,16 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+import androidx.multidex.MultiDex;
+import androidx.room.Room;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.baidu.mobstat.StatService;
 import com.bun.miitmdid.core.JLibrary;
+import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
+import com.chuanglan.shanyan_sdk.listener.InitListener;
 import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
@@ -76,13 +82,13 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.MiitHelper;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
-import com.xiaoniu.cleanking.utils.MiitHelper;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.payshare.PayShareApplication;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -94,14 +100,19 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.multidex.MultiDex;
-import androidx.room.Room;
-
 import butterknife.ButterKnife;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import timber.log.Timber;
+
+import static com.xiaoniu.cleanking.constant.Constant.QQ_APPID;
+import static com.xiaoniu.cleanking.constant.Constant.QQ_APPKEY;
+import static com.xiaoniu.cleanking.constant.Constant.SHANYAN_APPID;
+import static com.xiaoniu.cleanking.constant.Constant.SINA_APPID;
+import static com.xiaoniu.cleanking.constant.Constant.SINA_APPSECRET;
+import static com.xiaoniu.cleanking.constant.Constant.UMENG_APPKEY;
+import static com.xiaoniu.cleanking.constant.Constant.WEICHAT_APPID;
+import static com.xiaoniu.cleanking.constant.Constant.WEICHAT_APPSECRET;
 
 /**
  * ================================================
@@ -127,10 +138,10 @@ public class AppLifecyclesImpl implements AppLifecycles {
     public void onCreate(@NonNull Application application) {
         ContextUtils.initApplication(application);
         logConfig();
-        PayShareApplication.getInstance().initPayShare(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "")
-                .setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2")
-                .setQQZone("1109516379", "SJUCaQdURyRd8Dfi")
-                .setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
+        PayShareApplication.getInstance().initPayShare(application, UMENG_APPKEY, ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "")
+                .setWeixin(WEICHAT_APPID, WEICHAT_APPSECRET)
+                .setQQZone(QQ_APPID, QQ_APPKEY)
+                .setSinaWeibo(SINA_APPID, SINA_APPSECRET, "http://xiaoniu.com");
 //        PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
 //        PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
 //        PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
@@ -151,6 +162,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         setErrorHander();
         initRoom(application);
 //        initNiuData(application);
+
 
 
         String processName = SystemUtils.getProcessName(application);
@@ -185,7 +197,20 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
         initBaiduSdk(application);
         initPermission(application);
+        initShanYan(application);
 
+    }
+
+    /**
+     * 初始化闪验一键登录
+     */
+    private void initShanYan(Application application) {
+        OneKeyLoginManager.getInstance().init(application, SHANYAN_APPID, new InitListener() {
+            @Override
+            public void getInitStatus(int code, String result) {
+                LogUtils.e("闪验初始化结果: code==" + code + "==result==" + result);
+            }
+        });
     }
 
 

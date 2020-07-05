@@ -1,30 +1,17 @@
 package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 
-import androidx.multidex.MultiDex;
-
-import com.baidu.mobstat.StatService;
-import com.hellogeek.permission.Integrate.Permission;
-import com.hellogeek.permission.Integrate.PermissionIntegrate;
-import com.hellogeek.permission.Integrate.interfaces.PermissionRecordCallback;
 import com.jess.arms.base.BaseApplication;
 import com.xiaoniu.common.BuildConfig;
-import com.xiaoniu.common.utils.ChannelUtil;
-import com.xiaoniu.common.utils.ContextUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 
 /**

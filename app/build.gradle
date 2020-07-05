@@ -265,7 +265,8 @@ dependencies {
     implementation project(':otherlib:asmhelp')
     implementation project(':otherlib:xrecyclerview')
     implementation project(':jpush')
-
+    //闪验aar
+    implementation files('libs/shanyan_sdk_v2.3.1.5.aar')
     //数美
     implementation files('libs/smantifraud.aar')
 

@@ -3,14 +3,20 @@ package com.xiaoniu.cleanking.ui.login.model;
 import android.app.Application;
 
 import com.google.gson.Gson;
+import com.jess.arms.di.scope.ActivityScope;
 import com.jess.arms.integration.IRepositoryManager;
 import com.jess.arms.mvp.ArmBaseModel;
-
-import com.jess.arms.di.scope.ActivityScope;
+import com.xiaoniu.cleanking.api.CommonApiService;
+import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
+import com.xiaoniu.cleanking.ui.login.contract.LoginWeiChatContract;
 
 import javax.inject.Inject;
 
-import com.xiaoniu.cleanking.ui.login.contract.LoginWeiChatContract;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import okhttp3.RequestBody;
 
 
 /**
@@ -36,5 +42,21 @@ public class LoginWeiChatModel extends ArmBaseModel implements LoginWeiChatContr
         super.onDestroy();
         this.mGson = null;
         this.mApplication = null;
+    }
+
+    @Override
+    public Observable<LoginDataBean> loginWithWeiChat(RequestBody body) {
+        return Observable.just(mRepositoryManager
+                .obtainRetrofitService(CommonApiService.class)
+                .loginWeiChatApi(body))
+                .flatMap(new Function<Observable<LoginDataBean>, ObservableSource<LoginDataBean>>() {
+                    @Override
+                    public ObservableSource<LoginDataBean> apply(@NonNull Observable<LoginDataBean> listObservable) throws Exception {
+                        return listObservable;
+                    }
+                });
+//        return Observable.just(mRepositoryManager
+//                .obtainRetrofitService(LoginService.class)
+//                .loginWeiChatApi());
     }
 }

@@ -1,14 +1,12 @@
 package com.xiaoniu.cleanking.app.injector.interceptor;
 
 import android.os.Build;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.ishumei.smantifraud.SmAntiFraud;
 import com.xiaoniu.cleanking.BuildConfig;
-import com.xiaoniu.cleanking.midas.MidasConstants;
-import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -80,8 +78,8 @@ public class RequestParamInterceptor implements Interceptor {
 //        requestBuilder.addHeader("gt-id", TextUtils.isEmpty(pushId)?"":pushId)//todo:zzh  暂时未接入个推
         requestBuilder.addHeader("timestamp", timeMillis + "");
         requestBuilder.addHeader("sign", hashByHmacSHA256(BuildConfig.API_APPID + timeMillis, BuildConfig.API_APPSECRET));
-        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId()); //登录的信息
-        requestBuilder.addHeader("access-token", AndroidUtil.getToken());
+        requestBuilder.addHeader("customer-id", UserHelper.init().getCustomerId()); //登录的信息
+        requestBuilder.addHeader("access-token", UserHelper.init().getToken());
         requestBuilder.addHeader("sm-deviceid", SmAntiFraud.getDeviceId());  //数美参数DeviceId（）
         requestBuilder.addHeader("gps-lng", "");
         requestBuilder.addHeader("gps-lat", "");

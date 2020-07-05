@@ -83,8 +83,8 @@ public class AuthorizedLogin {
         if (!umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN)) {
             showToast("请先安装微信");
         } else {
-            umShareAPI.doOauthVerify((Activity) mContext, SHARE_MEDIA.WEIXIN, authListener);
-//            umShareAPI.getPlatformInfo((Activity) mContext, SHARE_MEDIA.WEIXIN, authListener);
+//            umShareAPI.doOauthVerify((Activity) mContext, SHARE_MEDIA.WEIXIN, authListener);
+            umShareAPI.getPlatformInfo((Activity) mContext, SHARE_MEDIA.WEIXIN, authListener);
         }
     }
 
