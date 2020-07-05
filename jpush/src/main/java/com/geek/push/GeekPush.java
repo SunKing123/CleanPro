@@ -83,6 +83,13 @@ public class GeekPush implements PushResultCode {
         PushManager.getInstance().deleteTag(tag);
     }
 
+    /*
+     delete all tag
+     */
+    public static void clearAllTag(){
+        PushManager.getInstance().clearAllTag();
+    }
+
     /**
      * Gets the current push platform type
      *

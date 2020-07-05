@@ -17,6 +17,10 @@ public interface MidasConstants {
      */
     String PRODUCT_ID = "181";
 
+    /**
+     * InmoBiAppId
+     */
+    String INMOBI_APPID = "7f8d97e6b5684c5c9e6f8bd7259c811d";
 
     /**
      * 内部插屏广告ID

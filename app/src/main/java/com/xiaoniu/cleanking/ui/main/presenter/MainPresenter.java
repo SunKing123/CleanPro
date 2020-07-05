@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -77,7 +76,6 @@ import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.config.AdParameter;
@@ -186,33 +184,41 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 激活极光
      */
     public void commitJPushAlias() {
-        if (PreferenceUtil.getIsSaveJPushAlias(AppApplication.getInstance()))
-            return;
-        // GeekPush.bindAlias(DeviceUtils.getUdid());
-        GeekPush.addTag(Constant.APP_NAME + "_" + BuildConfig.VERSION_CODE);
-        GeekPush.addTag(BuildConfig.PUSH_TAG);//区分推送环境
+        if (!PreferenceUtil.getIsSaveJPushAliasCurrentVersion(AppApplication.getInstance())) {
+            GeekPush.clearAllTag();
+            new Handler().postDelayed(()->{
+                LogUtils.e("======极光正在注册===");
+                // GeekPush.bindAlias(DeviceUtils.getUdid());
+                GeekPush.addTag(Constant.APP_NAME + "_" + BuildConfig.VERSION_CODE);
+                GeekPush.addTag(BuildConfig.PUSH_TAG);//区分推送环境
+                GeekPush.addTag("love"+BuildConfig.VERSION_CODE);
+                mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
+                    @Override
+                    public void showExtraOp(String code, String message) {
 
-        mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
-            @Override
-            public void showExtraOp(String code, String message) {
+                    }
 
-            }
+                    @Override
+                    public void getData(BaseEntity baseEntity) {
+                        LogUtils.e("======极光注册成功===");
+                        PreferenceUtil.saveJPushAliasCurrentVersion(true);
+                    }
 
-            @Override
-            public void getData(BaseEntity baseEntity) {
-                PreferenceUtil.saveJPushAlias(true);
-            }
+                    @Override
+                    public void showExtraOp(String message) {
 
-            @Override
-            public void showExtraOp(String message) {
+                    }
 
-            }
+                    @Override
+                    public void netConnectError() {
 
-            @Override
-            public void netConnectError() {
+                    }
+                });
 
-            }
-        });
+            },5000);
+
+        }
+
     }
 
     /**

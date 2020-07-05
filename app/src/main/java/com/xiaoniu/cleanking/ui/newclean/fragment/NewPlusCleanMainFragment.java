@@ -166,6 +166,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
+<<<<<<< HEAD
         checkScroll();
         printHandCardAdvIds();
     }
@@ -179,29 +180,26 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
     private void checkScroll() {
         mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+=======
+
+
+
+        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
+>>>>>>> 757754267312969a4b9bccaa5aa8cee99c52059d
             @Override
-            public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                Rect scrollRect = new Rect();
-                nestedScrollView.getHitRect(scrollRect);
-                //子控件在可视范围内（至少有一个像素在可视范围内）
-                if (adLayoutTwo.getLocalVisibleRect(scrollRect) && !mPresenter.getAdTwoLoad()) {
-                    mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
-                }
-                if (adLayoutThree.getLocalVisibleRect(scrollRect) && !mPresenter.getAdThreeLoad()) {
-                    mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
-                }
+            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+                if (data != null)
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
             }
         });
     }
 
 
-    private void initClearItemCard() {
-        clearSoundLayout.setLeftTitle("音频文件");
-        clearSoundLayout.setLeftIcon(R.mipmap.clear_icon_sound);
-        clearSoundLayout.setCommonItemImageRes(R.mipmap.clear_item_sound);
-        clearSoundLayout.setOnClickListener(view -> {
 
-        });
+    private void initClearItemCard() {
 
         clearVideoLayout.setLeftTitle("视频文件");
         clearVideoLayout.setLeftIcon(R.mipmap.clear_icon_video);
@@ -334,6 +332,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void refreshAdvice() {
+<<<<<<< HEAD
         Rect scrollRect = new Rect();
         mScrollView.getHitRect(scrollRect);
         //子控件在可视范围内（至少有一个像素在可视范围内）
@@ -346,6 +345,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         } else {
             LogUtils.e("======不在可见区");
         }
+=======
+        mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
+        mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
+>>>>>>> 757754267312969a4b9bccaa5aa8cee99c52059d
     }
 
 

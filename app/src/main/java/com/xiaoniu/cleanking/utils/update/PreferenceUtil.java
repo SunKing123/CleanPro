@@ -214,19 +214,18 @@ public class PreferenceUtil {
      * @param alias
      * @return
      */
-    public static boolean saveJPushAlias(boolean alias) {
+    public static void saveJPushAliasCurrentVersion(boolean alias) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SpCacheConfig.IS_SAVE_JPUSH_ALIAS, alias).commit();
-        return true;
+        editor.putBoolean(SpCacheConfig.IS_SAVE_JPUSH_ALIAS + BuildConfig.VERSION_CODE, alias).apply();
     }
 
     /**
-     * 保存极光 激活
+     * 判断当前版本是否注册了极光
      */
-    public static boolean getIsSaveJPushAlias(Context context) {
+    public static boolean getIsSaveJPushAliasCurrentVersion(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_JPUSH_ALIAS, false);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_JPUSH_ALIAS + BuildConfig.VERSION_CODE, false);
     }
 
     /**
@@ -443,22 +442,24 @@ public class PreferenceUtil {
 
     /**
      * get unused the virus kill function days
+     *
      * @return
      */
-    public static int getUnusedVirusKillDays(){
+    public static int getUnusedVirusKillDays() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
-        long nowTime=System.currentTimeMillis();
-        if(time==0){
+        long nowTime = System.currentTimeMillis();
+        if (time == 0) {
             return 0;
         }
-        long sec=(nowTime-time)/1000;
-        long min=sec/60;
-        long diffH=min/60;
-        int day=(int)diffH/24;
+        long sec = (nowTime - time) / 1000;
+        long min = sec / 60;
+        long diffH = min / 60;
+        int day = (int) diffH / 24;
 
         return day;
     }
+
     /**
      * 保存垃圾清理是否已使用
      */
@@ -849,8 +850,9 @@ public class PreferenceUtil {
      */
     public static int getCleanCoolNum() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(SpCacheConfig.SAVE_COOL_NUM,4);
+        return sharedPreferences.getInt(SpCacheConfig.SAVE_COOL_NUM, 4);
     }
+
     /**
      * 保存手机降温是否已使用
      */

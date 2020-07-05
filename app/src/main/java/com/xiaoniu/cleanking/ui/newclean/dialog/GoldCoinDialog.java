@@ -139,7 +139,7 @@ public class GoldCoinDialog {
         String advId=getAdvId(null,"hang_card_video"+coinBean.ballPosition);
     }
 
-    
+
     private String getAdvId(Context context,String id){
         int resourceId=context.getResources().getIdentifier(id, "string", context.getPackageName());
         return context.getResources().getString(resourceId);
