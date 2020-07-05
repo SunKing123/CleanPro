@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.dialog;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -121,9 +122,29 @@ public class GoldCoinDialog {
         closeDlg.setOnClickListener(view -> {
             dialog.dismiss();
         });
+    }
+
+
+    private void loadFirstAdv(GoldCoinBean coinBean){
+         String advId=getAdvId(null,"hang_card_start"+coinBean.ballPosition);
 
     }
 
+    private void loadSecondAdv(GoldCoinBean coinBean){
+        String advId=getAdvId(null,"hang_card_second"+coinBean.ballPosition);
+
+    }
+
+    private void loadVideoAdv(GoldCoinBean coinBean){
+        String advId=getAdvId(null,"hang_card_video"+coinBean.ballPosition);
+    }
+
+
+    private String getAdvId(Context context,String id){
+        int resourceId=context.getResources().getIdentifier(id, "string", context.getPackageName());
+        return context.getResources().getString(resourceId);
+
+    }
     //倒计时展示  msc 秒数
     private static void countDownTimeViewDelay(int msc, TextView adLookTime, View closeDlg) {
         if (adLookTime != null) {
@@ -133,7 +154,6 @@ public class GoldCoinDialog {
             if (adLookTime != null && closeDlg != null) {
                 countDownTimeView(msc, adLookTime, closeDlg);
             }
-
         });
     }
 
