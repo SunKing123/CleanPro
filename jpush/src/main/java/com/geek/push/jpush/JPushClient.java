@@ -33,6 +33,13 @@ public class JPushClient implements IPushClient {
             tagSet.clear();
         }
     };
+    private Runnable clearTagRunnable = new Runnable() {
+        @Override
+        public void run() {
+            JPushInterface.cleanTags(context, GeekPush.TYPE_ADD_TAG);
+        }
+    };
+
 
     @Override
     public void initContext(Context context) {
@@ -85,6 +92,13 @@ public class JPushClient implements IPushClient {
         handler.removeCallbacks(setTagRunnable);
         tagSet.add(tag);
         handler.postDelayed(setTagRunnable, 300);
+    }
+
+    @Override
+    public void clearAllTag() {
+        LogUtils.d(TAG, "-----clearAllTag------");
+        handler.removeCallbacks(clearTagRunnable);
+        handler.postDelayed(clearTagRunnable, 300);
     }
 
     @Override

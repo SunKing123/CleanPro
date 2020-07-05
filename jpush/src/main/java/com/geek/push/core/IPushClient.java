@@ -65,4 +65,8 @@ public interface IPushClient {
      */
     void deleteTag(String tag);
 
+    /**
+     * clear all tag
+     */
+    void clearAllTag();
 }
