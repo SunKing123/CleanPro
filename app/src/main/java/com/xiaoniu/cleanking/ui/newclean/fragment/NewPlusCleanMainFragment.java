@@ -134,6 +134,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
+    private boolean isFirst = false;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -225,7 +226,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void initEvent() {
-
         imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
             @Override
             public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
@@ -253,7 +253,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
             }
         });
-
         homeToolTableView.setOnItemClickListener(new HomeToolTableView.OnItemClick() {
             @Override
             public void onClick(int item) {
@@ -278,6 +277,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
     }
 
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************load one advInfo*****************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+    private void loadOneAdvInfo() {
+        mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
+    }
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************activity lifecycle*****************************************************************************
@@ -294,6 +304,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
         //刷新广告
         refreshAdvice();
+
+        if (isVisible() || isFirst) {
+            isFirst = false;
+            loadOneAdvInfo();
+        }
     }
 
     private void refreshAdvice() {

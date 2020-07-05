@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="scratch_card_first1">adpos_2278476951</string>
+    <string name="scratch_card_video1">adpos_4107976241</string>
+    <string name="scratch_card_second1">adpos_3025587351</string>
+
+    <string name="scratch_card_first2">adpos_8893810351</string>
+    <string name="scratch_card_video2">adpos_3602924441</string>
+    <string name="scratch_card_second2">adpos_1441904751</string>
+
+    <string name="scratch_card_first3">adpos_8836276451</string>
+    <string name="scratch_card_video3">adpos_8574951641</string>
+    <string name="scratch_card_second3">adpos_2552192751</string>
+
+    <string name="scratch_card_first4">adpos_8698120251</string>
+    <string name="scratch_card_video4">adpos_6853604641</string>
+    <string name="scratch_card_second4">adpos_4985127151</string>
+
+    <string name="scratch_card_first5">adpos_6236665851</string>
+    <string name="scratch_card_video5">adpos_4855628341</string>
+    <string name="scratch_card_second5">adpos_2913165551</string>
+
+    <string name="scratch_card_first6">adpos_1977193151</string>
+    <string name="scratch_card_video6">adpos_4457530141</string>
+    <string name="scratch_card_second6">adpos_9041656051</string>
+
+    <string name="scratch_card_first7">adpos_1930905251</string>
+    <string name="scratch_card_video7">adpos_6347483741</string>
+    <string name="scratch_card_second7">adpos_2336197251</string>
+
+    <string name="scratch_card_first8">adpos_3741364851</string>
+    <string name="scratch_card_video8">adpos_7724294441</string>
+    <string name="scratch_card_second8">adpos_7300383951</string>
+
+    <string name="scratch_card_first9">adpos_9550969851</string>
+    <string name="scratch_card_video9">adpos_6013547841</string>
+    <string name="scratch_card_second9">adpos_2552192751</string>
+
+    <string name="scratch_card_first10">adpos_4255436351</string>
+    <string name="scratch_card_video10">adpos_4255436351</string>
+    <string name="scratch_card_second10">adpos_5043039251</string>
+
+</resources>

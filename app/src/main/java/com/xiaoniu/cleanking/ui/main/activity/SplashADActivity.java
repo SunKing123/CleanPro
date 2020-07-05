@@ -31,6 +31,9 @@ import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
@@ -55,6 +58,8 @@ import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.json.JSONObject;
 
@@ -91,7 +96,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private ViewGroup container;
     private RoundProgressBar skipView;
     private Disposable mSubscription;
-    private AdManager mAdManager;
+//    private AdManager mAdManager;
     private boolean mIsOpen; //冷启动广告开关
     private String mAdTitle = " "; //广告标题
     private String mAdSourse = " "; //广告来源
@@ -349,8 +354,46 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private boolean mIsAdError;
 
     private void initGeekSdkAD() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "clod_splash_page", "clod_splash_page");
-        mAdManager = GeekAdSdk.getAdsManger();
+//        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "clod_splash_page", "clod_splash_page");
+
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
+                .setActivity(this).setViewContainer(container).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdLoadSuccess(adInfo);
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
+            }
+
+            @Override
+            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+                jumpActivity();
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+                jumpActivity();
+            }
+
+            @Override
+            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdShow(adInfo);
+            }
+
+            @Override
+            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+            }
+
+            @Override
+            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
+                super.onAdClose(adInfo, templateView);
+                jumpActivity();
+            }
+        });
+      /*  mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadSplashAd(this, PositionId.AD_POSITION_COLD_KP, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -406,7 +449,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                     jumpActivity();
                 }
             }
-        });
+        });*/
     }
 
     public void getBottomAdListSuccess() {

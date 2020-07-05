@@ -39,6 +39,11 @@ public interface MidasConstants {
     String FINISH_INSIDE_SCREEN_ID = "adpos_8769830121";
 
     /**
+     * 首页广告位1 ID
+     */
+    String MAIN_ONE_ID = "adpos_3925669851";
+
+    /**
      * 首页广告位2 ID
      */
     String MAIN_TWO_AD_ID = "adpos_3109552951";
@@ -64,6 +69,15 @@ public interface MidasConstants {
      * 我的页面底部广告
      */
     String ME_BOTTOM_ID = "adpos_9634429151";
+    /**
+     * 冷启动-开屏
+     */
+    String SP_CODE_START_ID = "adpos_2851353101";
+
+    /**
+     * 热启动-开屏
+     */
+    String SP_HOT_START_ID = "adpos_8811905601";
 
     /**
      * 完成页面金币弹窗领取广告
@@ -80,5 +94,14 @@ public interface MidasConstants {
      */
     String GET_DOUBLE_GOLD_COIN_SUCCESS="adpos_7576129651";
 
+    /**
+     * 完成页_头部-信息流模板
+     */
+    String FINISH01_TOP_FEEED_ID = "adpos_9504039951";
+
+    /**
+     * 完成页02-信息流模板
+     */
+    String FINISH02_FEEED_ID = "adpos_9065892151";
 
 }

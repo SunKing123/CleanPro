@@ -7,14 +7,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
@@ -31,6 +34,7 @@ import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.ad.widget.TemplateView;
 import com.xnad.sdk.config.AdParameter;
 
 import java.util.ArrayList;
@@ -466,14 +470,67 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
-                LogUtils.e("====首页two,three广告展示成功====");
-            }
-        });
+
+        if (adviceID == MidasConstants.MAIN_ONE_ID) {
+            MidasRequesCenter.requestAd(params, new AdvCallBack(viewGroup, adviceID));
+        } else {
+            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+                @Override
+                public void onAdShow(AdInfo adInfo) {
+                    super.onAdShow(adInfo);
+                    LogUtils.e("====首页two,three广告展示成功====");
+                }
+            });
+        }
     }
 
+    class AdvCallBack extends AbsAdCallBack {
+        ViewGroup viewGroup;
+        String advId;
+
+        AdvCallBack(ViewGroup viewGroup, String advId) {
+            this.viewGroup = viewGroup;
+            this.advId = advId;
+        }
+
+        @Override
+        public void onAdError(AdInfo adInfo, int i, String s) {
+            super.onAdError(adInfo, i, s);
+            LogUtils.e("====首页广告one====:加载失败:" + s);
+        }
+
+        @Override
+        public void onShowError(int i, String s) {
+            super.onShowError(i, s);
+            LogUtils.e("====首页广告one====:显示失败:" + s);
+
+        }
+
+        @Override
+        public void onAdShow(AdInfo adInfo) {
+            super.onAdShow(adInfo);
+            LogUtils.e("====首页广告one====:加载成功:");
+            viewGroup.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onAdClicked(AdInfo adInfo) {
+            super.onAdClicked(adInfo);
+            LogUtils.e("====首页广告one====:点击了");
+        }
+
+        @Override
+        public void onAdClose(AdInfo adInfo) {
+            super.onAdClose(adInfo);
+            LogUtils.e("====首页广告one====:点击关闭按钮");
+        }
+
+        @Override
+        public void onAdClose(AdInfo adInfo, TemplateView templateView) {
+            super.onAdClose(adInfo, templateView);
+            LogUtils.e("====首页广告one====:点击关闭按钮");
+
+        }
+    }
 
 }
