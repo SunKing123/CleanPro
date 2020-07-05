@@ -166,38 +166,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
-<<<<<<< HEAD
-        checkScroll();
-        printHandCardAdvIds();
     }
-
-    private void printHandCardAdvIds(){
-        for (int i=1;i<=10;i++){
-            int resourceId = getResources().getIdentifier("hang_card_start"+i, "string", getContext().getPackageName());
-            Log.e("handCardId",getResources().getString(resourceId));
-        }
-
-    }
-    private void checkScroll() {
-        mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-=======
-
-
-
-        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
->>>>>>> 757754267312969a4b9bccaa5aa8cee99c52059d
-            @Override
-            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                if (data != null)
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-            }
-        });
-    }
-
-
 
     private void initClearItemCard() {
 
@@ -332,23 +301,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void refreshAdvice() {
-<<<<<<< HEAD
-        Rect scrollRect = new Rect();
-        mScrollView.getHitRect(scrollRect);
-        //子控件在可视范围内（至少有一个像素在可视范围内）
-        if (adLayoutTwo.getLocalVisibleRect(scrollRect) && mPresenter.getAdTwoShow()) {
-            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
-        }
-        if (adLayoutThree.getLocalVisibleRect(scrollRect) && mPresenter.getAdThreeShow()) {
-            LogUtils.e("======在可见区，刷新广告");
-            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
-        } else {
-            LogUtils.e("======不在可见区");
-        }
-=======
         mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
         mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
->>>>>>> 757754267312969a4b9bccaa5aa8cee99c52059d
     }
 
 

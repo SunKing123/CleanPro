@@ -7,10 +7,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
@@ -468,25 +470,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-<<<<<<< HEAD
-        if (viewGroup.getId() == R.id.ad_one) {
-            MidasRequesCenter.requestAd(params, new AdvCallBack(viewGroup, adviceID));
-        } else {
-            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-                @Override
-                public void onAdShow(AdInfo adInfo) {
-                    super.onAdShow(adInfo);
-                    viewGroup.setVisibility(View.VISIBLE);
-                    if (viewGroup.getId() == R.id.ad_two) {
-                        mAdTwoShow = true;
-                    }
-                    if (viewGroup.getId() == R.id.ad_three) {
-                        mAdThreeShow = true;
-                    }
-                }
-            });
-        }
-=======
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onAdShow(AdInfo adInfo) {
@@ -494,9 +477,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 LogUtils.e("====首页two,three广告展示成功====");
             }
         });
->>>>>>> 757754267312969a4b9bccaa5aa8cee99c52059d
     }
-
 
     class AdvCallBack extends AbsAdCallBack {
         ViewGroup viewGroup;
