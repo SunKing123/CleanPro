@@ -23,6 +23,6 @@ public class NewMineModel extends BaseModel {
     }
 
     public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
-        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);
+//        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);
     }
 }
