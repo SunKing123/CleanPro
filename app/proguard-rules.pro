@@ -683,3 +683,6 @@
 -keep class com.kwad.sdk.** { *;}
 -keep class com.ksad.download.** { *;}
 -keep class com.kwai.filedownloader.** { *;}
+
+#数美sdk
+-keep class com.ishumei.** { *; }
