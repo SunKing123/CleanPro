@@ -56,6 +56,18 @@ public interface MidasConstants {
     String SPEED_BOTTOM_ID="adpos_2021709551";
 
 
+    /**
+     * 冷启动-开屏
+     */
+    String SP_CODE_START_ID = "adpos_2851353101";
+
+    /**
+     * 热启动-开屏
+     */
+    String SP_HOT_START_ID = "adpos_8811905601";
+
+
+
 
 
 
