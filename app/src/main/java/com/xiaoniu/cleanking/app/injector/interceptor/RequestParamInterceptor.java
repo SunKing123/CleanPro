@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.ishumei.smantifraud.SmAntiFraud;
+import com.xiaoniu.cleanking.BuildConfig;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.common.utils.AppUtils;
@@ -74,13 +76,13 @@ public class RequestParamInterceptor implements Interceptor {
         requestBuilder.addHeader("market", ChannelUtil.getChannel());
         requestBuilder.addHeader("app-version",AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
         requestBuilder.addHeader("app-name", "gj_clean");
-//        requestBuilder.addHeader("app-id", AppConfig.API_APPID);//todo:zzh
-//        requestBuilder.addHeader("gt-id", TextUtils.isEmpty(pushId)?"":pushId)//todo:zzh  未接入个推
+        requestBuilder.addHeader("app-id", BuildConfig.API_APPID);
+//        requestBuilder.addHeader("gt-id", TextUtils.isEmpty(pushId)?"":pushId)//todo:zzh  暂时未接入个推
         requestBuilder.addHeader("timestamp", timeMillis + "");
-//        requestBuilder.addHeader("sign", hashByHmacSHA256(AppConfig.API_APPID + timeMillis, AppConfig.API_APPSECRET))//todo:zzh
-        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId()); //登录的信息//todo:zzh
+        requestBuilder.addHeader("sign", hashByHmacSHA256(BuildConfig.API_APPID + timeMillis, BuildConfig.API_APPSECRET));
+        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId()); //登录的信息
         requestBuilder.addHeader("access-token", AndroidUtil.getToken());
-        requestBuilder.addHeader("sm-deviceid", SmAntiFraud.getDeviceId());  //数美参数
+        requestBuilder.addHeader("sm-deviceid", SmAntiFraud.getDeviceId());  //数美参数DeviceId（）
         requestBuilder.addHeader("gps-lng", "");
         requestBuilder.addHeader("gps-lat", "");
         requestBuilder.addHeader("sdk-uid", NiuDataAPI.getUUID());
