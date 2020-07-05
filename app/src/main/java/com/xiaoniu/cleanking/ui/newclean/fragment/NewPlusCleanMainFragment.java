@@ -134,7 +134,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
-    private boolean isFirst = false;
+    private boolean isFirst = true;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -302,12 +302,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        //刷新广告
-        refreshAdvice();
 
         if (isVisible() || isFirst) {
             isFirst = false;
             loadOneAdvInfo();
+            refreshAdvice();
         }
     }
 
