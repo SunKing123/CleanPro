@@ -26,6 +26,7 @@ import cn.jzvd.Jzvd;
  * 全屏插屏广告
  * 由功能结束页进入
  */
+@Deprecated
 public class InsertScreenFinishActivity extends BaseActivity<InsertScreenFinishPresenter> implements View.OnClickListener {
 
     private AdManager mAdManager;

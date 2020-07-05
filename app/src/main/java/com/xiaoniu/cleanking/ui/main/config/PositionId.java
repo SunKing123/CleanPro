@@ -74,6 +74,20 @@ public class PositionId {
     public static final String KEY_PAGE_HOME_MORE_REWARD_VIDEO = "page_home_more_reward_video";   //首页更多列表第一个激励视频开关
     public static final String KEY_PAGE_EXIT_RETAIN = "page_exit_retain_advinfo";//挽留弹窗界面广告
 
+    //完成页左上角返回时显示在首页的插屏广告
+    public static final String KEY_FINISH_PAGE_BACK_SCREEN = "page_finish_one_gj_3.0";
+    //首页第二个广告位
+    public static final String KEY_MAIN_TWO_AD = "page_main_two_ad";
+    //首页第三个广告位
+    public static final String KEY_MAIN_THREE_AD = "page_main_three_ad";
+    //完成页插屏广告
+    public static final String KEY_FINISH_INSIDE_SCREEN = "page_finish_inside_screen";
+    //完成页金币领取弹窗
+    public static final String KEY_FINISH_GET_GOLD_COIN="page_finish_get_gold_coin";
+    //领取金币弹窗界面
+    //领取双倍金币成功广告
+    public static final String KEY_GET_DOUBLE_GOLD_COIN_SUCCESS="page_get_double_gold_coin_success";
+
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";

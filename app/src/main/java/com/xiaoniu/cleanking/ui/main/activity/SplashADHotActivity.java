@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.bean.HotStartAction;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
@@ -31,6 +32,7 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
+import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -40,6 +42,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -67,6 +70,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private boolean adClicked = false;
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_splash_ad_hot;
@@ -74,7 +78,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     public void jumpActivity() {
         //热启动的时候去掉内部插屏和红包相关判断
-        // showRedPacket();
+        showRedPacket();
         finish();
     }
 
@@ -96,21 +100,19 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             return;
         switch (redPacketDataBean.getLocation()) {
             case 5:
+                String activityName = getIntent().getStringExtra("activityName");
+                boolean isMainPage = activityName.contains(MainActivity.class.getSimpleName());
                 if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
                     InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdSwitchMap().get(PositionId.KEY_NEIBU_SCREEN);
                     if (null != dataBean && dataBean.isOpen()) {//内部插屏广告
-                           /* if (dataBean.getShowRate() == 1 || PreferenceUtil.getRedPacketShowCount() % dataBean.getShowRate() == 0) {
-                                PreferenceUtil.saveScreenInsideTime();
-                                startActivity(new Intent(this, ScreenInsideActivity.class));
-                                return;
-                            }*/
                         if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
                             List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
                             InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
                             int startCount = inside.getCount();
-                            if (internalList.contains(String.valueOf(startCount))) {
+                            if (internalList.contains(String.valueOf(startCount)) && isMainPage) {
                                 PreferenceUtil.saveScreenInsideTime();
-                                startActivity(new Intent(this, ScreenInsideActivity.class));
+                                EventBus.getDefault().post(new HotStartEvent(HotStartAction.INSIDE_SCREEN));
+                                //  startActivity(new Intent(this, ScreenInsideActivity.class));
                                 return;
                             }
                         }
@@ -118,9 +120,12 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                     }
                 }
                 //所有页面展示红包
-                if (redPacketDataBean.getTrigger() == 0
-                        || PreferenceUtil.getRedPacketShowCount() % redPacketDataBean.getTrigger() == 0) {
-                    startActivity(new Intent(this, RedPacketHotActivity.class));
+                if (redPacketDataBean.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % redPacketDataBean.getTrigger() == 0) {
+                    if (isMainPage) {
+                        EventBus.getDefault().post(new HotStartEvent(HotStartAction.RED_PACKET));
+                        // startActivity(new Intent(this, RedPacketHotActivity.class));
+                    }
+
                 }
                 break;
         }
