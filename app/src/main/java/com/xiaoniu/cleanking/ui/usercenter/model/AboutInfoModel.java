@@ -11,6 +11,7 @@ import com.jess.arms.di.scope.ActivityScope;
 
 import javax.inject.Inject;
 
+import com.xiaoniu.cleanking.api.CommonApiService;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.cache.CommonCache;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
@@ -50,7 +51,7 @@ public class AboutInfoModel extends ArmBaseModel implements AboutInfoContract.Mo
     @Override
     public Observable<AppVersion> getVersion(Context ctx) {
         return Observable.just(mRepositoryManager
-                .obtainRetrofitService(UserApiService.class)
+                .obtainRetrofitService(CommonApiService.class)
                 .queryAppVersion())
                 .flatMap(new Function<Observable<AppVersion>, ObservableSource<AppVersion>>() {
                     @Override
