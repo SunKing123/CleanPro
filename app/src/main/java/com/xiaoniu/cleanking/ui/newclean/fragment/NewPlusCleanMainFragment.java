@@ -134,7 +134,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private CompositeDisposable compositeDisposable;
 
     private boolean isDenied = false;
-    private boolean isFirst = false;
+    private boolean isFirst = true;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -285,7 +285,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     private void loadOneAdvInfo() {
-        mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
     }
 
     /*
@@ -302,25 +301,24 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-        //刷新广告
-        refreshAdvice();
 
         if (isVisible() || isFirst) {
             isFirst = false;
-            loadOneAdvInfo();
+            refreshAdvice();
         }
     }
 
     private void refreshAdvice() {
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
+        }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
             mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
             mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
         }
-
     }
-
 
     @Override
     public void onDestroy() {
@@ -637,8 +635,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_HOME_ADV.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
+                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isThreeAdvOpen = switchInfoList.isOpen();
+                    break;
                 }
             }
         }

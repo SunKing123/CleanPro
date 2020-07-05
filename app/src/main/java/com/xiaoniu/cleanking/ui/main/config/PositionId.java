@@ -48,7 +48,8 @@ public class PositionId {
     public static final String KEY_VIDEO_PLAY = "page_video_play_screen";
     public static final String KEY_ADVERT_LOCK_SCREEN = "advert_lock_screen";  //锁屏模块开关（以advertPosition 区分）
     public static final String KEY_AD_PAGE_HOME = "page_home_advinfo";
-    public static final String KEY_AD_PAGE_FINISH = "page_complete_finish_advinfo";
+
+    public static final String KEY_AD_PAGE_FINISH = "page_finish_adv_gj_3.0";
 
 
     public static final String KEY_FINISH_SWITCH = "page_res_fixed_ad_3";
@@ -75,6 +76,8 @@ public class PositionId {
 
     //完成页左上角返回时显示在首页的插屏广告
     public static final String KEY_FINISH_PAGE_BACK_SCREEN = "page_finish_one_gj_3.0";
+    //首页第二个广告位
+    public static final String KEY_MAIN_ONE_AD = "page_main_one_ad";
     //首页第二个广告位
     public static final String KEY_MAIN_TWO_AD = "page_main_two_ad";
     //首页第三个广告位
@@ -145,10 +148,6 @@ public class PositionId {
     //悟空开关
     public static final String KEY_CLEAN_FINSH = "page_clean_up_complete";
 
-
     public static final String LOCK_INTERACTIVE = "lock_interactive";//锁屏互动式广告
-
-    public static final String KEY_HOME_ADV = "key_home_adv";
-
 
 }

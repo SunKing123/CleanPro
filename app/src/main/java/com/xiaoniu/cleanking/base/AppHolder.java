@@ -192,6 +192,7 @@ public class AppHolder {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (configKey.equals(switchInfoList.getConfigKey())) {
                     isOpen = switchInfoList.isOpen();
+                    break;
                 }
             }
         }
