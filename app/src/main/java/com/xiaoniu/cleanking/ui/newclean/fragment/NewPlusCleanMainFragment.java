@@ -285,7 +285,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     private void loadOneAdvInfo() {
-        mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
     }
 
     /*
@@ -305,12 +304,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         if (isVisible() || isFirst) {
             isFirst = false;
-            loadOneAdvInfo();
             refreshAdvice();
         }
     }
 
     private void refreshAdvice() {
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
+        }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
             mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
         }
