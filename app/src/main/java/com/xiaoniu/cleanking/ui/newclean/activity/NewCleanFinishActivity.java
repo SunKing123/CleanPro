@@ -99,8 +99,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     String returnEventName = "";
     String sysReturnEventName = "";
     private boolean mIsFromHomeMain; //是否来自首页主功能区
-    //  boolean isOpenOne = false;
-    //  boolean isOpenTwo = false;
+    boolean isOpenOne = false;
+    boolean isOpenTwo = false;
 
     FileQueryUtils fileQueryUtils;
     int processNum = 0;
@@ -184,11 +184,11 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         getPageData();
         setListener();
         loadData();
-        // initGeekAd();
+        initGeekAd();
     }
 
-    /* private void initGeekAd() {
-         if (null != AppHolder.getInstance() && null != AppHolder.getInstance().getSwitchInfoList()
+    private void initGeekAd() {
+       /*   if (null != AppHolder.getInstance() && null != AppHolder.getInstance().getSwitchInfoList()
                  && null != AppHolder.getInstance().getSwitchInfoList().getData()
                  && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
 
@@ -273,17 +273,18 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                          isOpenTwo = switchInfoList.isOpen();
                      }
                  }
-             }
-             if (isOpenOne) {
-                 initPos01Ad();
-             }
+             }*/
+        if (isOpenOne) {
+            initPos01Ad();
+        }
 
-             if (isOpenTwo) {
-                 initAd02();
-             }
-         }
-     }
- */
+        if (isOpenTwo) {
+           // initAd02();
+        }
+
+
+}
+
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
@@ -921,7 +922,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 return;
             }*/
             //使用的第mScreenShowCount几倍次 并且插屏开关打开 展示
-            if (isScreenSwitchOpen) {
+         /*   if (isScreenSwitchOpen) {
                 int count = 0;
                 boolean isClick = false;
                 if (getString(R.string.tool_one_key_speed).contains(mTitle)) { //一键加速
@@ -1230,7 +1231,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         changeUI(getIntent());
     }
 
-  /*  public void initPos01Ad() {
+    public void initPos01Ad() {
         if (!isOpenOne) {
             return;
         }
@@ -1332,13 +1333,17 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
             }
         });*/
-    }
-*/
-    //   private int mBottomAdShowCount = 0;
+}
 
-    /**
-     * 打底广告
-     */
+//   private int mBottomAdShowCount = 0;
+
+/**
+ * 打底广告
+ * <p>
+ * 打底广告
+ * <p>
+ * 打底广告
+ */
    /* private void showBottomAd() {
         if (null != AppHolder.getInstance().getBottomAdList() &&
                 AppHolder.getInstance().getBottomAdList().size() > 0) {
@@ -1421,9 +1426,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     */
 
-    /**
-     * 打底广告
-     *//*
+/**
+ * 打底广告
+ *//*
     private void showBottomAd2() {
         if (null != AppHolder.getInstance().getBottomAdList() &&
                 AppHolder.getInstance().getBottomAdList().size() > 0) {
@@ -1516,9 +1521,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     }
                 });
     }*/
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+@Override
+protected void onActivityResult(int requestCode,int resultCode,Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
 /*
         switch (requestCode) {
             case 100:
@@ -1528,8 +1533,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 showBottomAd2();
                 return;
         }*/
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
+        UMShareAPI.get(this).onActivityResult(requestCode,resultCode,data);
+        }
 
 
-}
+        }
