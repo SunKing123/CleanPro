@@ -523,12 +523,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
     //显示内部插屏广告
-    public void showInsideScreenDialog() {
-        if (mActivity == null) {
+    public void showInsideScreenDialog(String appID) {
+        if (mActivity == null||TextUtils.isEmpty(appID)) {
             return;
         }
         AdRequestParams params = new AdRequestParams.Builder()
-                .setActivity(mActivity).setAdId(MidasConstants.INSIDE_SCREEN_ID).build();
+                .setActivity(mActivity).setAdId(appID).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onAdShow(AdInfo adInfo) {
@@ -556,7 +556,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         int startCount = inside.getCount();
                         LogUtils.e("=======count:" + startCount);
                         if (internalList.contains(String.valueOf(startCount))) {
-                            showInsideScreenDialog();
+                            showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
                             return;
                         }
 
@@ -917,7 +917,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /**
      * 插屏广告开关
      */
-    public void getScreentSwitch() {
+    public void getScreenSwitch() {
         mModel.getScreentSwitch(new Common4Subscriber<InsertAdSwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {

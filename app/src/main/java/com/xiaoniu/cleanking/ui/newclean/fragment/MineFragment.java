@@ -15,6 +15,9 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.login.activity.BindPhoneActivity;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
@@ -29,6 +32,7 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 import butterknife.OnClick;
 
@@ -154,7 +158,14 @@ public class MineFragment extends BaseFragment<MinePresenter> {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_MINE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
-        GeekAdSdk.getAdsManger().loadNativeTemplateAd(getActivity(), PositionId.AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(getContext(), DisplayUtil.getScreenWidth(getContext())) - 24), new AdListener() {
+        AdRequestParams params=new AdRequestParams.Builder()
+                .setAdId(MidasConstants.ME_BOTTOM_ID)
+                .setActivity(getActivity())
+                .setViewContainer(mBinding.bannerAdLl).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+
+        });
+      /*  GeekAdSdk.getAdsManger().loadNativeTemplateAd(getActivity(), PositionId.AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(getContext(), DisplayUtil.getScreenWidth(getContext())) - 24), new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
                 if (null != info) {
@@ -195,6 +206,6 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                     }
                 });
             }
-        });
+        });*/
     }
 }

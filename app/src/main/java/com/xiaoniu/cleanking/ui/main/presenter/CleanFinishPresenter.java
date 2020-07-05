@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.annotation.SuppressLint;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
@@ -46,7 +47,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     /**
      * 插屏广告开关
      */
-    public void getScreentSwitch() {
+    public void getScreenSwitch() {
         mModel.getScreentSwitch(new Common4Subscriber<InsertAdSwitchInfoList>() {
             @Override
             public void showExtraOp(String code, String message) {
@@ -55,7 +56,8 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 
             @Override
             public void getData(InsertAdSwitchInfoList switchInfoList) {
-                mView.getScreentSwitchSuccess(switchInfoList);
+                AppHolder.getInstance().setInsertAdSwitchInfoList(switchInfoList);
+                mView.getScreenSwitchSuccess();
             }
 
             @Override
@@ -115,7 +117,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             return;
         }
         AdRequestParams params = new AdRequestParams.Builder()
-                .setActivity(mActivity).setAdId(MidasConstants.FINISH_SCREEN_ID).build();
+                .setActivity(mActivity).setAdId(MidasConstants.FINISH_INSIDE_SCREEN_ID).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onAdShow(AdInfo adInfo) {
@@ -129,8 +131,9 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     public void showGetGoldCoinDialog() {
         GoldCoinBean bean = new GoldCoinBean();
         bean.dialogType = 3;
-        bean.obtainCoinCount=20;
-        bean.context=mActivity;
+        bean.obtainCoinCount = 20;
+        bean.adId=MidasConstants.FINISH_GET_GOLD_COIN;
+        bean.context = mActivity;
         GoldCoinDialog.showGoldCoinDialog(bean);
     }
 }

@@ -4,14 +4,12 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -166,7 +164,20 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
+
+
+        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
+            @Override
+            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
+                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+                if (data != null)
+                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
+            }
+        });
     }
+
 
     private void initClearItemCard() {
 
@@ -301,8 +312,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void refreshAdvice() {
-        mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_ID);
-        mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_ID);
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
+        }
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
+        }
+
     }
 
 

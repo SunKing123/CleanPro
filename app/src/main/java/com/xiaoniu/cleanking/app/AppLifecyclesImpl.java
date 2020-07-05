@@ -97,6 +97,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 import androidx.room.Room;
+
 import butterknife.ButterKnife;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -129,7 +130,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         PayShareApplication.getInstance().initPayShare(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "")
                 .setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2")
                 .setQQZone("1109516379", "SJUCaQdURyRd8Dfi")
-                .setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b","http://xiaoniu.com");
+                .setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
 //        PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
 //        PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
 //        PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
@@ -150,7 +151,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         setErrorHander();
         initRoom(application);
 //        initNiuData(application);
-
 
 
         String processName = SystemUtils.getProcessName(application);
@@ -189,9 +189,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
 
-
-
-
     private void initInjector(Application application) {
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(application))
@@ -202,18 +199,16 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
 
-
-    public void initBaiduSdk(Application application){
+    public void initBaiduSdk(Application application) {
         //接入百度统计sdk
         StatService.setAppChannel(application, ChannelUtil.getChannel(), true);
         StatService.autoTrace(application);
 
 
-
     }
 
 
-    public void initPermission(Application application){
+    public void initPermission(Application application) {
         //权限相关初始化
         PermissionIntegrate.getInstance(application)
                 .setPermissionList(Permission.SUSPENDEDTOAST, Permission.SELFSTARTING,
@@ -238,7 +233,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         }
         ContextUtils.initAdBid(GeekAdSdk.getBid());
     }
-
 
 
     /**
@@ -334,15 +328,19 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
     private static String oaId = "";
     private static boolean isSupportOaid = true;
+
     public static String getOaid() {
         return oaId;
     }
+
     public static boolean isSupportOaid() {
         return isSupportOaid;
     }
+
     public static void setIsSupportOaid(boolean isSupportOaid) {
         AppLifecyclesImpl.isSupportOaid = isSupportOaid;
     }
+
     public void initOaid(Application application) {
         //判断是否为当前主进程
         String processName = SystemUtils.getProcessName(application);
@@ -559,6 +557,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);
+                            intent.putExtra("activityName", activity.getLocalClassName());
                             application.getApplicationContext().startActivity(intent);
                             mIsBack = false;
                             //only hot launch to send LifecycleEvent
@@ -605,7 +604,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         return processName.equals(application.getPackageName());
     }
 
-    public void logConfig(){
+    public void logConfig() {
         if (BuildConfig.DEBUG) {//Timber初始化
             //Timber 是一个日志框架容器,外部使用统一的Api,内部可以动态的切换成任何日志框架(打印策略)进行日志打印
             //并且支持添加多个日志框架(打印策略),做到外部调用一次 CoolingApi,内部却可以做到同时使用多个策略
@@ -622,7 +621,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
             ButterKnife.setDebug(true);
         }
     }
-
 
 
 }

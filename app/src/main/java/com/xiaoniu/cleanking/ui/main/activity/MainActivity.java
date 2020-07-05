@@ -29,15 +29,18 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
+import com.xiaoniu.cleanking.bean.HotStartAction;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -58,8 +61,10 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotchUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -76,6 +81,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -215,7 +221,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             getDeviceInfo();
         }
         //初始插屏广告开关
-        mPresenter.getScreentSwitch();
+        mPresenter.getScreenSwitch();
         //弹窗信息接口
         mPresenter.getPopupData();
         //获取定位权限
@@ -608,7 +614,22 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     //清理完成页返回弹出广告
     @Subscribe
     public void onEventScan(FromHomeCleanFinishEvent backMainEvent) {
-        mPresenter.showInsideScreenDialog();
+        Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
+        InsertAdSwitchInfoList.DataBean configBean = map.get(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
+        if (configBean != null && configBean.isOpen()) {
+            mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+        }
+
+    }
+
+    //热启
+    @Subscribe
+    public void onEventHotStart(HotStartEvent event) {
+        if (event.getAction() == HotStartAction.RED_PACKET) {
+            startActivity(new Intent(this, RedPacketHotActivity.class));
+        } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
+            mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+        }
     }
 
 
