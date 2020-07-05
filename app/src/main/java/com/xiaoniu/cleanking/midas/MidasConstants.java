@@ -85,14 +85,19 @@ public interface MidasConstants {
     String FINISH_GET_GOLD_COIN = "adpos_4210290151";
 
     /**
-     * 红包广告ID
+     * 点击领取双倍金币按钮时的激励视频
      */
-    String RED_PACKET = "adpos_7710425041";
+    String CLICK_GET_DOUBLE_COIN_BUTTON="adpos_9076480841";
 
     /***
      * 翻倍领取金币成功页面
      */
     String GET_DOUBLE_GOLD_COIN_SUCCESS="adpos_7576129651";
+
+    /**
+     * 红包广告ID
+     */
+    String RED_PACKET = "adpos_7710425041";
 
     /**
      * 完成页_头部-信息流模板
