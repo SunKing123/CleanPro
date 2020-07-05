@@ -41,7 +41,7 @@ public class MidasRequesCenter {
                 .setYlhAppId(Constant.YLH_AD_ID)//优量汇appId
                 .setNeedInitCsj(true)//如果外部已经初始化了穿山甲，可以填写false
                 .setNeedInitYlh(true)//如果外部已经初始化了优量汇，可以填写false
-                .setInmoBiAppId("7f8d97e6b5684c5c9e6f8bd7259c811d")//预初始化inmobi
+                .setInmoBiAppId(MidasConstants.INMOBI_APPID)//预初始化inmobi
                 .build();
         //初始化广告SDK
         MidasAdSdk.init(application, configBuild);

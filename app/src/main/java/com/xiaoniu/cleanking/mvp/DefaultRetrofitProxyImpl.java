@@ -3,7 +3,7 @@ package com.xiaoniu.cleanking.mvp;
 import android.annotation.SuppressLint;
 
 import com.xiaoniu.cleanking.BuildConfig;
-import com.xiaoniu.cleanking.app.injector.module.RequestParamInterceptor;
+import com.xiaoniu.cleanking.app.injector.interceptor.RequestParamInterceptor;
 
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;

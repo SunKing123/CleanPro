@@ -78,6 +78,16 @@ public class Constant {
 
 
     /**
+     *数美sdk
+     */
+    public static final String SMANTIFRAUD_ORGANIZATION = "twbumcBWaJEWBgmNPkNy";//公司标识
+    public static final String SMANTIFRAUD_ACCESSKEY = "9b7cNnxUv89g8wC6toXi";//密钥
+    public static final String SMANTIFRAUD_AINFOKEY = "XivVizeZcPCRRqxXHHtGawuQUxpWjkLMcqaeBguyoNSCiXEKtjsYalJfnYGHyoQU";//ainfokey
+    public static final String SMANTIFRAUD_PUBLIC_KEY = "MIIDLzCCAhegAwIBAgIBMDANBgkqhkiG9w0BAQUFADAyMQswCQYDVQQGEwJDTjELMAkGA1UECwwCU00xFjAUBgNVBAMMDWUuaXNodW1laS5jb20wHhcNMjAwNjI4MDgyNzA4WhcNNDAwNjIzMDgyNzA4WjAyMQswCQYDVQQGEwJDTjELMAkGA1UECwwCU00xFjAUBgNVBAMMDWUuaXNodW1laS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCW0VkSqMdoidqEWiwmeGlwt2xZJun10/vsfXvezuz6N/4I7VTckRtCdSyXWlLZUTZ6gx8+rXYEkvjes+DRlTSHv1Cu++HWwTfmFbWAsZ2P0tTJiEt9JHE/kHsOMm+nsxJOMA18vEG8Ca4sYsMKIVlZcTgnJk0L+B9O+vqEqNosVGfUK17nq4oONx0IwrwO/skb9pMcZdHesVxOilgLZbRsYaNClViIVqpjBqXyGquRFgRtgjdsljGaKD4VQGlp0+gcrL1b0ELv2sToMi1wYO8dIuoukBGzBDyqs6NPELKjtvhmpdW4d2Nlr/IAzsykQgY/nl3+XKdT6pj6AzxaN/YDAgMBAAGjUDBOMB0GA1UdDgQWBBT6cHQqsOBPPwxJfGmzwebJVbm24TAfBgNVHSMEGDAWgBT6cHQqsOBPPwxJfGmzwebJVbm24TAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQBtoZmeJmKYATA8xbNfn+k4L2eKnQsbggv1glTKF1QHmUfnCdDIC05jXv9F6buMQOZ9JimXY/eh8BOhD0ojxjU+fJYgChg88xLyLket1GPYHLBeVUcgCROe8CLYvUc/INFnzSDEms6jMxFLev9f7mLiy1YFRfvPpYuZSJ3asenLnIDZJl5EKCNUKV45wScgqLJQ/zxuJerVfIqLHSLIFjacYcTTuu8uE+1BK5vqI3JRt4wAzOYvPxxz65XFEXjmuZ6KDg9XBwEPJ2ZUJaQGuHKi7KvaMfevzwMXxpuQnmoDLFQ5IQyPBoGTJpLpSdqOYdVZyXtepf9jQzFbu6ogrCbM";//public_key
+    public static final String APPLICATION_IDENTIFICATION = "default";         //应用标识
+
+
+    /**
      * 白名单
      */
 
@@ -116,5 +126,8 @@ public class Constant {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+
+
+
 }
 

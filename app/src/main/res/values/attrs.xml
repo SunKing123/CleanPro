@@ -130,4 +130,8 @@
         <!--阴影颜色模糊度，越大越模糊-->
         <attr name="shadowRadius" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="rubble">
+        <attr name="location" format="integer" />
+    </declare-styleable>
 </resources>

@@ -25,7 +25,6 @@ import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
-import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.base.UmengEnum;
@@ -56,10 +55,12 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
-import com.xiaoniu.cleanking.ui.news.fragment.NewsFragment;
+import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.NotchUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
@@ -94,12 +95,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     BottomBar mBottomBar;
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
-    private NewsFragment upQuotaFragment;
-    private static final long DEFAULT_REFRESH_TIME = 10 * 60 * 1000L;
-    /**
-     * 定时扫面手机时间 1小时
-     */
-    private static final long SCAN_LOOP_TIME = 3 * 1000;
+
 
     /**
      * 借款页
@@ -134,25 +130,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private boolean isSelectTop = false;
     private NewPlusCleanMainFragment mainFragment;
     private final String TAG = "GeekSdk";
-//    private MyHandler mHandler = new MyHandler(this);
-
-  /*  private class MyHandler extends Handler {
-        WeakReference<Activity> mActivity;
-
-        public MyHandler(Activity con) {
-            this.mActivity = new WeakReference<>(con);
-        }
-
-        public void handleMessage(android.os.Message msg) {
-            if (msg.what == 1) {
-                if (isSelectTop)
-                    return;
-                if (mBottomBarTab != null) {
-                    mBottomBarTab.showBadgeView("...");
-                }
-            }
-        }
-    }*/
 
     @Override
     public int getLayoutId() {
@@ -167,10 +144,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
 //        LogUtils.i("zz-----path----"+appPaths.get(0).getFile_path()+"----"+ AESUtils01.decrypt(appPaths.get(0).getFile_path(),"E3A37D84081C89D9787D0B8546BA8BA5"));
 //        LogUtils.i("zz-----path----"+uselessApks1.get(1).getFilePath()+"----"+ AESUtils01.decrypt(uselessApks1.get(1).getFilePath(),"E3A37D84081C89D9787D0B8546BA8BA5"));
+
         PreferenceUtil.saveShowAD(false);
-        getIconListFail();
+        refBottomState();
+        //数美sdk初始化
+        mPresenter.initShuMeiSDK();
         mPresenter.getIconList();
-//        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
         isFirstCreate = true;
         initFragments();
         CLEAN = 0;
@@ -196,9 +175,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 } else {
                     if (isSelectTop) {
                         isSelectTop = false;
-                        //清空所有的消息
-//                        mHandler.removeCallbacksAndMessages(null);
-//                        mHandler.sendEmptyMessageDelayed(1, DEFAULT_REFRESH_TIME);
                     }
                 }
 
@@ -224,15 +200,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 
         checkReadPermission();
-
-       /* String absolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        //扫描更新系统数据库
-        MediaScannerConnection.scanFile(this, new String[]{absolutePath}, null, null);*/
-
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
-        //获取本地推送配置
-        //   mPresenter.getPushSetList();
         //从服务器获取本地推送的配置信息
         mPresenter.getLocalPushConfigFromServer();
         //启动本地推送服务的Service(仅针对非华为手机的设备启动，因为在非华为设备在保活进程没有做适配)
@@ -251,9 +220,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.getPopupData();
         //获取定位权限
         mPresenter.requestPhoneStatePermission();
-
+        AndroidUtil.haveLiuhai = NotchUtils.hasNotchScreen(this);
 //        测试入口
-
         if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
         }
@@ -264,13 +232,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus && isFirstCreate) {
-            //检查是否有补丁
-//            mPresenter.queryPatch();
             //检测版本更新
             mPresenter.queryAppVersion(() -> {
             });
-            //获取WebUrl
-//            mPresenter.getWebUrl();
             isFirstCreate = false;
         }
     }
@@ -415,11 +379,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private void initFragments() {
         MeFragment mineFragment = MeFragment.getIntance();
         mainFragment = new NewPlusCleanMainFragment();
-        String url = ApiModule.SHOPPING_MALL;
 
         ToolFragment toolFragment = new ToolFragment();
         MineFragment fourFragment = MineFragment.getInstance();
-        upQuotaFragment = NewsFragment.getNewsFragment("");
+//        NewsFragment upQuotaFragment = NewsFragment.getNewsFragment("");
+        YuLeFragment upQuotaFragment = YuLeFragment.getInstance();
         mFragments.add(mainFragment);
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
@@ -820,7 +784,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     /**
      * 获取底部icon失败
      */
-    public void getIconListFail() {
+    public void refBottomState() {
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {

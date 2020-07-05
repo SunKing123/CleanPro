@@ -1,17 +1,25 @@
-package com.xiaoniu.cleanking.app.injector.module;
+package com.xiaoniu.cleanking.app.injector.interceptor;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.ishumei.smantifraud.SmAntiFraud;
+import com.xiaoniu.cleanking.BuildConfig;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.selfdebug.AppConfig;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -25,6 +33,7 @@ import okhttp3.Response;
 
 /**
  * Created by tie on 2017/5/17.
+ * 网络请求拦截器；
  */
 public class RequestParamInterceptor implements Interceptor {
     private static final String TAG = "RequestParamInterceptor";
@@ -55,6 +64,28 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("appName", "gj_clean");
         mapHeader.put("bid", (int) (99 * Math.random()));
         requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
+
+        //爱步行header参数；
+        requestBuilder.addHeader("request-id", UUID.randomUUID().toString());
+        requestBuilder.addHeader("language", "cn");
+        requestBuilder.addHeader("request-agent", "1");//1：android、2：iOS、3：PC、4、H5、5：wechat
+        requestBuilder.addHeader("device-id", AndroidUtil.getDeviceID());
+        requestBuilder.addHeader("os-version", "0");//0：android、1：iOS
+        requestBuilder.addHeader("sdk-version", AndroidUtil.getAndroidSDKVersion() + "");
+        requestBuilder.addHeader("phone-model", Build.MODEL);
+        requestBuilder.addHeader("market", ChannelUtil.getChannel());
+        requestBuilder.addHeader("app-version",AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
+        requestBuilder.addHeader("app-name", "gj_clean");
+        requestBuilder.addHeader("app-id", BuildConfig.API_APPID);
+//        requestBuilder.addHeader("gt-id", TextUtils.isEmpty(pushId)?"":pushId)//todo:zzh  暂时未接入个推
+        requestBuilder.addHeader("timestamp", timeMillis + "");
+        requestBuilder.addHeader("sign", hashByHmacSHA256(BuildConfig.API_APPID + timeMillis, BuildConfig.API_APPSECRET));
+        requestBuilder.addHeader("customer-id", AndroidUtil.getCustomerId()); //登录的信息
+        requestBuilder.addHeader("access-token", AndroidUtil.getToken());
+        requestBuilder.addHeader("sm-deviceid", SmAntiFraud.getDeviceId());  //数美参数DeviceId（）
+        requestBuilder.addHeader("gps-lng", "");
+        requestBuilder.addHeader("gps-lat", "");
+        requestBuilder.addHeader("sdk-uid", NiuDataAPI.getUUID());
         if (original.body() instanceof FormBody) {
 
             FormBody oidFormBody = (FormBody) original.body();
