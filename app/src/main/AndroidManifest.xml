@@ -169,11 +169,13 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
         <activity
-            android:name=".ui.usercenter.activity.AboutActivity"
+            android:name=".ui.usercenter.activity.AboutInfoActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.main.activity.CleanBigFileActivity"
             android:excludeFromRecents="true"

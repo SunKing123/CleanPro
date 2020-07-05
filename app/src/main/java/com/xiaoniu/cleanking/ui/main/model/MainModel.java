@@ -62,7 +62,7 @@ public class MainModel extends BaseModel {
     }
 
     public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
-        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+//        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     public void getWebUrl(Common4Subscriber<WebUrlEntity> commonSubscriber) {

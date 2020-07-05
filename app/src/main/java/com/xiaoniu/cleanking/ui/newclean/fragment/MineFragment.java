@@ -26,7 +26,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
-import com.xiaoniu.cleanking.ui.usercenter.activity.AboutActivity;
+import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -126,7 +126,7 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 break;
             case R.id.step_record_ll:
                 StatisticsUtils.trackClick("about_click", "\"关于\"点击", "mine_page", "personal_center_page");
-                startActivity(new Intent(getActivity(), AboutActivity.class));
+                startActivity(new Intent(getActivity(), AboutInfoActivity.class));
                 break;
             case R.id.kefu_ll:
                 StatisticsUtils.trackClick("Check_for_updates_click", "检查更新", "mine_page", "about_page");
