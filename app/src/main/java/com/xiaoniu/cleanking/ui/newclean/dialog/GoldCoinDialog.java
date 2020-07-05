@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 
 import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.BaseDialog;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
@@ -23,6 +26,8 @@ import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
+
+import androidx.room.util.StringUtil;
 
 /**
  * Created by zhaoyingtao
@@ -125,26 +130,57 @@ public class GoldCoinDialog {
     }
 
 
-    private void loadFirstAdv(GoldCoinBean coinBean){
-         String advId=getAdvId(null,"hang_card_start"+coinBean.ballPosition);
+    private void loadFirstAdv(GoldCoinBean coinBean) {
+        String advId = getAdvId(coinBean.context, "hang_card_first" + coinBean.ballPosition);
+        log("刮刮卡广告：开始加载第一个广告 id=" + advId);
+        if (TextUtils.isEmpty(advId)) {
+            return;
+        }
 
     }
 
-    private void loadSecondAdv(GoldCoinBean coinBean){
-        String advId=getAdvId(null,"hang_card_second"+coinBean.ballPosition);
-
+    private void loadSecondAdv(GoldCoinBean coinBean) {
+        String advId = getAdvId(coinBean.context, "hang_card_second" + coinBean.ballPosition);
+        log("刮刮卡广告：开始加载第二个广告 id=" + advId);
+        if (TextUtils.isEmpty(advId)) {
+            return;
+        }
     }
 
-    private void loadVideoAdv(GoldCoinBean coinBean){
-        String advId=getAdvId(null,"hang_card_video"+coinBean.ballPosition);
+    private void loadVideoAdv(GoldCoinBean coinBean) {
+        String advId = getAdvId(coinBean.context, "hang_card_video" + coinBean.ballPosition);
+        log("刮刮卡广告：开始加载激励视屏广告 id=" + advId);
+        if (TextUtils.isEmpty(advId)) {
+            return;
+        }
     }
 
 
-    private String getAdvId(Context context,String id){
-        int resourceId=context.getResources().getIdentifier(id, "string", context.getPackageName());
-        return context.getResources().getString(resourceId);
+    private String getAdvId(Context context, String id) {
+        if (context == null) {
+            log("不能加载广告，context为空。");
+            return "";
+        }
+        int resourceId = context.getResources().getIdentifier(id, "string", context.getPackageName());
 
+        if (resourceId == 0) {
+            log("不能加载广告，广告id资源为0");
+            return "";
+        }
+        try {
+            return context.getResources().getString(resourceId);
+        } catch (Exception e) {
+            log("不能加载广告，获取广告id异常。");
+        }
+        return "";
     }
+    
+    private void log(String text) {
+        if (BuildConfig.DEBUG) {
+            Log.e("handCard", text);
+        }
+    }
+
     //倒计时展示  msc 秒数
     private static void countDownTimeViewDelay(int msc, TextView adLookTime, View closeDlg) {
         if (adLookTime != null) {
