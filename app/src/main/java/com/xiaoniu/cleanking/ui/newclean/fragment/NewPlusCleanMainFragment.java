@@ -165,18 +165,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         checkAndUploadPoint();
         checkScroll();
-
-
-        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
-            @Override
-            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                if (data != null)
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-            }
-        });
     }
 
     private void checkScroll() {
@@ -296,7 +284,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         onNetworkSpeedClick();
                         break;
                     case HomeToolTableView.ITEM_FOLDER:
-                        onOneKeySpeedClick();
+                        onCleanFolderClick();
                         break;
                 }
             }
@@ -713,6 +701,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
+    }
+
+    /*
+     * *********************************************************************************************************************************************************
+     * **********************************************************folder clean start*****************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+    public void onCleanFolderClick() {
+        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "acceleration_page");
+        startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
 
     /**
