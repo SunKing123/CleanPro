@@ -165,18 +165,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         checkAndUploadPoint();
         checkScroll();
-
-
-        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
-            @Override
-            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                if (data != null)
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-            }
-        });
     }
 
     private void checkScroll() {
