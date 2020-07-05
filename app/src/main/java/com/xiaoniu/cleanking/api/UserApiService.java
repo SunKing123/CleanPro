@@ -19,7 +19,6 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
@@ -41,7 +40,7 @@ public interface UserApiService {
      * @return
      */
     @GET("/app/upgrade")
-    Observable<AppVersion> queryAppVersion();
+    Flowable<AppVersion> queryAppVersion();
 
     /**
      * 过审开关
