@@ -3,12 +3,15 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 import android.annotation.SuppressLint;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -16,8 +19,11 @@ import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
@@ -28,6 +34,8 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -69,6 +77,41 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             }
         });
     }
+
+    /**
+     * 获取金币
+     */
+    public void getGoldCoin() {
+        mModel.getGoleGonfigs(new Common3Subscriber<BubbleConfig>() {
+            @Override
+            public void showExtraOp(String code, String message) {  //关心错误码；
+                ToastUtils.showShort(message);
+            }
+
+            @Override
+            public void getData(BubbleConfig bubbleConfig) {
+                if (bubbleConfig != null && bubbleConfig.getData().size() > 0) {
+                    for (BubbleConfig.DataBean item : bubbleConfig.getData()) {
+                        if (item.getLocationNum() == 5) {
+                            showGetGoldCoinDialog(item.getGoldCount());
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+                ToastUtils.showShort(R.string.notwork_error);
+            }
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView));
+    }
+
 
     /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
@@ -128,10 +171,10 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     //金币领取广告弹窗
-    public void showGetGoldCoinDialog() {
+    private void showGetGoldCoinDialog(int coinCount) {
         GoldCoinBean bean = new GoldCoinBean();
         bean.dialogType = 3;
-        bean.obtainCoinCount = 20;
+        bean.obtainCoinCount = coinCount;
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
         bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
         bean.context = mActivity;
