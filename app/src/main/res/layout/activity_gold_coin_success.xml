@@ -44,8 +44,6 @@
             android:textSize="@dimen/dimen_18dp"
             android:textColor="@color/white"
             />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
