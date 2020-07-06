@@ -27,18 +27,12 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class GoldModel extends BaseModel {
-
     @Inject
     UserApiService mService;
 
-    @Inject
-    public GoldModel() {
-    }
-
     /**
-     * 首页广告查询
+     * 金币查询
      *
-     * position 1-首页广告位
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")

@@ -105,10 +105,15 @@ public interface MidasConstants {
     String FINISH01_TOP_FEEED_ID = "adpos_9504039951";
 
     /**
+     * 完成页_中间-左文右图模板广告
+     */
+    String FINISH01_CENTER_FEEED_ID = "adpos_5609031951";
+
+
+    /**
      * 完成页02-信息流模板
      */
     String FINISH02_FEEED_ID = "adpos_9065892151";
-
 
     /**
      * 锁屏-信息流模板

@@ -1224,7 +1224,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }
         StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
-        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos02)
                 .build();
