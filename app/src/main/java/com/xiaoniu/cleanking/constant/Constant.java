@@ -16,6 +16,7 @@ import java.util.List;
 public class Constant {
 
     public static final String SUCCESS = "000000";
+    public static final String SUCCESS_V3 = "0";
 
     public static String APP_IS_LIVE = "";
     //用户中心跳转通用H5 Activity字段

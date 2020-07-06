@@ -47,7 +47,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
+@Deprecated
 public class NewCleanMainPresenter extends RxPresenter<NewCleanMainFragment, NewScanModel> {
 
     private FileQueryUtils mFileQueryUtils;

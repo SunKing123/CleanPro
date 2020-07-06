@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.BallRewardBean;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
@@ -29,7 +30,7 @@ public class LuckBubbleView extends LinearLayout {
     private AnimationsContainer.FrameseAnim ballAnim;
     private int loact;
     private IBullClickListener iBullClickListener;
-    private BallRewardBean.DataBean.BallBean listBean;
+    private BubbleConfig.DataBean listBean;
     private Typeface typ_RE;
 
     public LuckBubbleView(Context context, AttributeSet attributeSet) {
@@ -74,7 +75,7 @@ public class LuckBubbleView extends LinearLayout {
             imgbg.setImageResource(R.drawable.kw4);
         }
         ivBallAnim.setLayoutParams(lp);
-//        setVisibility(GONE);
+        setVisibility(GONE);
     }
 
     /**
@@ -99,41 +100,42 @@ public class LuckBubbleView extends LinearLayout {
         this.iBullClickListener = clickListener;
     }
 
-    public BallRewardBean.DataBean.BallBean getBullBean() {
+    public BubbleConfig.DataBean getBullBean() {
         return listBean;
     }
 
-    public void setDataCheckToShow(final BallRewardBean.DataBean.BallBean listBean) {
+    public void setDataCheckToShow(final BubbleConfig.DataBean listBean) {
         this.listBean = listBean;
         if (listBean == null) {
             setVisibility(GONE);
             return;
         }
         setVisibility(VISIBLE);
-        if (listBean.getCode().contains("randomShowNum")) {//随机可见金币 randomShowNum1 randomShowNum2 randomShowNum3
+        content.setText(String.valueOf(listBean.getGoldCount()));
+        /*if (listBean.getLocationNum() == 1.contains("randomShowNum")) {//随机可见金币 randomShowNum1 randomShowNum2 randomShowNum3
             content.setText(String.valueOf(listBean.getGoldAmount()));
         } else if (TextUtils.equals("randomHideNum", listBean.getCode())) {
             content.setText(String.valueOf(listBean.getGoldAmount()));
         } else if (TextUtils.equals("exchangeStep", listBean.getCode())) {
             content.setText(String.valueOf(listBean.getGoldAmount()));
 
-        }
+        }*/
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 iBullClickListener.clickBull(listBean, loact);
                 if (loact == 1) {
 //                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "1");
-                    listBean.setPosition("1");
+//                    listBean.setPosition("1");
                 } else if (loact == 2) {
 //                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "3");
-                    listBean.setPosition("3");
+//                    listBean.setPosition("3");
                 } else if (loact == 3) {
 //                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "2");
-                    listBean.setPosition("2");
+//                    listBean.setPosition("2");
                 } else if (loact == 4) {
 //                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "4");
-                    listBean.setPosition("4");
+//                    listBean.setPosition("4");
                 }
             }
         });

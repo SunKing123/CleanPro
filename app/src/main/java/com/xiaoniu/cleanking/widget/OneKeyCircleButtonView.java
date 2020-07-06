@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.bean.LottiePathdata;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -44,7 +45,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     private List<LottieAnimationView> lottieList;
     private TouchImageView ivCenter;
     private Map<Integer, LottiePathdata> lottiePathdataMap;
-
+    private LuckBubbleView lftop,lfbotm,rttop,rtbotm;
     private TextView tv_file_total_size, tv_file_total_tag;
     private LinearLayout linear_text_tag;
     private RelativeLayout rel_container;
@@ -84,6 +85,10 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         tv_file_total_tag = (TextView) v.findViewById(R.id.tv_file_total_tag);
         rel_container = (RelativeLayout) v.findViewById(R.id.rel_parent);
         ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
+        lftop = (LuckBubbleView)v.findViewById(R.id.lftop);
+        lfbotm = (LuckBubbleView)v.findViewById(R.id.lfbotm);
+        rttop = (LuckBubbleView)v.findViewById(R.id.rttop);
+        rtbotm = (LuckBubbleView)v.findViewById(R.id.rtbotm);
         lottieList = new ArrayList<>();
         lottieList.add(viewLottieGreen);
         lottieList.add(viewLottieYellow);
@@ -328,6 +333,40 @@ public class OneKeyCircleButtonView extends RelativeLayout {
             viewLottieYellow.setVisibility(GONE);
         }
     }
+
+    /**
+     * 头部金币刷新
+     * @param dataBean
+     */
+    public void refBubbleView(BubbleConfig dataBean){
+        lfbotm.setDataCheckToShow(null);
+        lftop.setDataCheckToShow(null);
+        rtbotm.setDataCheckToShow(null);
+        rttop.setDataCheckToShow(null);
+        for (BubbleConfig.DataBean dataBean1 : dataBean.getData()){
+            if(dataBean1 ==null){
+                return;
+            }
+            switch (dataBean1.getLocationNum()) {
+                case 1://左上
+                    lftop.setDataCheckToShow(dataBean1);
+                    break;
+                case 2://右上
+                    rttop.setDataCheckToShow(dataBean1);
+                    break;
+                case 3://左下
+                    lfbotm.setDataCheckToShow(dataBean1);
+                    break;
+                case 4://右下
+                    rtbotm.setDataCheckToShow(dataBean1);
+                    break;
+
+            }
+        }
+    }
+
+
+
 
 
 }

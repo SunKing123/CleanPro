@@ -24,14 +24,13 @@ import javax.inject.Inject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class NewScanModel extends BaseModel {
+public class NewScanModel extends GoldModel {
 
     private final RxFragment mRxFragment;
-    @Inject
-    UserApiService mService;
 
     @Inject
     public NewScanModel(RxFragment rxFragment) {
+        super(rxFragment);
         mRxFragment = rxFragment;
     }
 
