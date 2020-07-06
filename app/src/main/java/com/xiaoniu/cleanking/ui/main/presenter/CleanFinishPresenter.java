@@ -132,10 +132,8 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         GoldCoinBean bean = new GoldCoinBean();
         bean.dialogType = 3;
         bean.obtainCoinCount = 20;
-        //  bean.adId=MidasConstants.FINISH_GET_GOLD_COIN;
-        bean.adId = "adpos_2021709551";
-       // bean.adVideoId=MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
-        bean.adVideoId="adpos_2188815441";
+        bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
+        bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
         bean.context = mActivity;
         GoldCoinDialog.showGoldCoinDialog(bean);
     }
