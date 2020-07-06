@@ -1,6 +1,9 @@
 package com.xiaoniu.cleanking.ui.newclean.bean;
 
-import android.content.Context;
+import android.app.Activity;
+import android.view.View;
+
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 import androidx.annotation.NonNull;
 
@@ -9,29 +12,26 @@ import androidx.annotation.NonNull;
  * Date: 2020/7/1
  * Describe: 领取奖励弹窗的参数
  */
-public class GoldCoinBean {
+public class GoldCoinDialogParameter {
 
     //刮刮卡页面
-    public static final int FROM_SCRATCH_CARD=1;
+    public static final int FROM_SCRATCH_CARD = 1;
     //清理完成页
-    public static final int FROM_FINISH_COMPLETE=2;
+    public static final int FROM_FINISH_COMPLETE = 2;
 
-    @NonNull
-    public Context context;
     //dialog的类型 1 转圈  2 撒花 3 清理金币奖励 默认是1
     public int dialogType;
-    public String formType;
-    public String ballPosition;
-    public int pageId;
-    public String adId;
-    public int videoSource;
     public int obtainCoinCount;
     public double totalCoinCount;
+    public String adId;
     public boolean fbTip;
     public boolean isDouble;
-    public String doubleAdCode;
-    public String adVideoId;
-
     //金币来源
     public int fromType;
+    @NonNull
+    public Activity context;
+    //翻倍按钮点击
+    public View.OnClickListener onDoubleClickListener;
+    //广告回调
+    public AbsAdCallBack advCallBack;
 }
