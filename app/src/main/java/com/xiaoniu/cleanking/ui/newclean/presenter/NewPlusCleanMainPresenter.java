@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -551,6 +552,32 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             @Override
             public void getData(BubbleConfig bubbleConfig) {
                 mView.setTopBubbleView(bubbleConfig);
+
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+                ToastUtils.showShort(R.string.notwork_error);
+            }
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView));
+    }
+
+
+    //获取金币
+    public void bullCollect(){
+        mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
+            @Override
+            public void showExtraOp(String code, String message) {  //关心错误码；
+                ToastUtils.showShort(message);
+            }
+
+            @Override
+            public void getData(BubbleCollected bubbleConfig) {
+//                mView.setTopBubbleView(bubbleConfig);
 
             }
 
