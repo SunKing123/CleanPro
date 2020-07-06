@@ -31,4 +31,6 @@ public interface CommonApiService {
      */
     @POST("/clean-user/login")
     Observable<LoginDataBean> loginWeiChatApi(@Body RequestBody body);
+
+
 }
