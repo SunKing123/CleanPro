@@ -369,53 +369,10 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }
         //判断金币领取弹窗是否打开
-      /*  if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_FINISH_GET_GOLD_COIN)) {
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_FINISH_GET_GOLD_COIN)) {
             mPresenter.showGetGoldCoinDialog();
-        }*/
-        mPresenter.showGetGoldCoinDialog();
+        }
 
-        // for (InsertAdSwitchInfoList.DataBean switchInfoList : list.getData()) {
-
-
-
-/*
-            if (getString(R.string.tool_suggest_clean).contains(mTitle) && PositionId.KEY_CLEAN_ALL.equals(switchInfoList.getConfigKey())) { //建议清理
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_one_key_speed).contains(mTitle) && PositionId.KEY_JIASU.equals(switchInfoList.getConfigKey())) { //一键加速
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_super_power_saving).contains(mTitle) && PositionId.KEY_CQSD.equals(switchInfoList.getConfigKey())) { //超强省电
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_notification_clean).contains(mTitle) && PositionId.KEY_NOTIFY.equals(switchInfoList.getConfigKey())) {//通知栏清理
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_chat_clear).contains(mTitle)) { //微信清理
-                if (PositionId.KEY_WECHAT.equals(switchInfoList.getConfigKey())) {
-                    isScreenSwitchOpen = switchInfoList.isOpen();
-                    mScreenShowCount = switchInfoList.getShowRate();
-                }
-            } else if (getString(R.string.tool_phone_temperature_low).contains(mTitle) && PositionId.KEY_COOL.equals(switchInfoList.getConfigKey())) { //手机降温
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_qq_clear).contains(mTitle) && PositionId.KEY_QQ.equals(switchInfoList.getConfigKey())) { //QQ专清
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.tool_phone_clean).contains(mTitle) && PositionId.KEY_PHONE.equals(switchInfoList.getConfigKey())) { //手机清理
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.game_quicken).contains(mTitle) && PositionId.KEY_GAME.equals(switchInfoList.getConfigKey())) { //游戏加速
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.virus_kill).contains(mTitle) && PositionId.KEY_VIRUS.equals(switchInfoList.getConfigKey())) { //病毒查杀
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            } else if (getString(R.string.network_quicken).contains(mTitle) && PositionId.KEY_NET.equals(switchInfoList.getConfigKey())) { //网络加速
-                isScreenSwitchOpen = switchInfoList.isOpen();
-                mScreenShowCount = switchInfoList.getShowRate();
-            }*/
-        // }
     }
 
     private void changeUI(Intent intent) {
@@ -1282,14 +1239,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
                 super.onAdError(adInfo, i, s);
-                log("广告位2： onAdError()   "+s);
+                log("广告位2： onAdError()   " + s);
 
             }
 
             @Override
             public void onShowError(int i, String s) {
                 super.onShowError(i, s);
-                log("广告位2： onShowError()   "+s);
+                log("广告位2： onShowError()   " + s);
             }
 
             @Override
