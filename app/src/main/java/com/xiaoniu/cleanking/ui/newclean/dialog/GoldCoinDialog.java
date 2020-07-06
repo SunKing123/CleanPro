@@ -21,9 +21,12 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseDialog;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
@@ -32,6 +35,7 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
@@ -49,12 +53,12 @@ public class GoldCoinDialog {
     public static final String ADV_FIRST_PREFIX = "scratch_card_first";
     public static final String ADV_SECOND_PREFIX = "scratch_card_second";
     public static final String ADV_VIDEO_PREFIX = "scratch_card_video";
-
+    private static BaseDialog dialog;
     public static void showGoldCoinDialog(GoldCoinBean coinBean) {
         if (coinBean == null || coinBean.obtainCoinCount < 0) {
             return;
         }
-        BaseDialog dialog = new BaseDialog(coinBean.context, R.style.common_dialog_style);
+        dialog = new BaseDialog(coinBean.context, R.style.common_dialog_style);
         dialog.setContentView(R.layout.gold_coin_dialog);
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
@@ -163,11 +167,40 @@ public class GoldCoinDialog {
                 .setAdId(isVideo ? coinBean.adVideoId : coinBean.adId).setActivity((Activity) coinBean.context)
                 .setViewContainer(mRootRL).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+
+
+            @Override
+            public void onAdError(AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+                ToastUtils.showLong("网络异常");
+                if (dialog!=null){
+                    dialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+                ToastUtils.showLong("网络异常");
+                if (dialog!=null){
+                    dialog.dismiss();
+                }
+            }
+
             @Override
             public void onAdVideoComplete(AdInfo adInfo) {
                 super.onAdVideoComplete(adInfo);
-                if (isVideo) {
-                    coinBean.context.startActivity(new Intent(coinBean.context, GoldCoinSuccessActivity.class));
+                if (isVideo && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
+                    Intent intent = new Intent(coinBean.context, GoldCoinSuccessActivity.class);
+                    intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinBean.obtainCoinCount * 2);
+                    intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
+                    coinBean.context.startActivity(intent);
+                }else {
+                    ToastUtils.showLong("网络异常");
+                    if (dialog!=null){
+                        dialog.dismiss();
+                    }
+
                 }
             }
         });
