@@ -30,8 +30,6 @@ public class GoldCoinDialogParameter {
     public int fromType;
     @NonNull
     public Activity context;
-    //金币信息
-    public GoldCoinDialogParameter goldCoinDialogParameter;
     //翻倍按钮点击
     public View.OnClickListener onDoubleClickListener;
     //广告回调
