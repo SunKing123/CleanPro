@@ -28,7 +28,14 @@
                 android:layout_width="88dp"
                 android:layout_height="88dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="130dp" />
+                android:layout_marginTop="130dp"
+                android:background="@mipmap/applogo" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_22dp"
+                android:src="@mipmap/icon_login_text_logo" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,7 +44,8 @@
                 android:text="让走路更有趣"
                 android:textColor="@color/color_333333"
                 android:textSize="19sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
         </LinearLayout>
 
 
