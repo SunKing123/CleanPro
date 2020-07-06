@@ -167,7 +167,9 @@ public class GoldCoinDialog {
             public void onAdVideoComplete(AdInfo adInfo) {
                 super.onAdVideoComplete(adInfo);
                 if (isVideo) {
-                    coinBean.context.startActivity(new Intent(coinBean.context, GoldCoinSuccessActivity.class));
+                    Intent intent = new Intent(coinBean.context, GoldCoinSuccessActivity.class);
+                    intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinBean.obtainCoinCount * 2);
+                    coinBean.context.startActivity(intent);
                 }
             }
         });

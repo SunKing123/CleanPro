@@ -29,15 +29,12 @@ import java.lang.StringBuilder
  */
 class GoldCoinSuccessActivity : BaseActivity() {
 
-    val COIN_NUM = "coinNum";
+
 
     private var coinNum: Int = 0
 
     companion object {
-        @JvmStatic
-        fun start(context: Context) {
-            context.startActivity(context.intentFor<GoldCoinSuccessActivity>())
-        }
+        const val COIN_NUM="coin_num"
     }
 
     override fun initLayout(savedInstanceState: Bundle?) {
