@@ -50,7 +50,10 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
+import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -68,6 +71,7 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
+import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.Points;
@@ -91,7 +95,7 @@ import io.reactivex.disposables.Disposable;
  * Created by xinxiaolong on 2020/6/30.
  * email：xinxiaolong123@foxmail.com
  */
-public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> {
+public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener {
 
     private static final String TAG = "GeekSdk";
 
@@ -403,6 +407,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
         textLayout.setMargins(0, 0 - Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
         view_lottie_top.setLayoutParams(textLayout);
+        LuckBubbleView lftop = view_lottie_top.findViewById(R.id.lftop);
+        LuckBubbleView lfbottom = view_lottie_top.findViewById(R.id.lfbotm);
+        LuckBubbleView rttop = view_lottie_top.findViewById(R.id.rttop);
+        LuckBubbleView rtbottom = view_lottie_top.findViewById(R.id.rtbotm);
+        lftop.setIBullListener(this);
+        lfbottom.setIBullListener(this);
+        rttop.setIBullListener(this);
+        rtbottom.setIBullListener(this);
+
     }
 
     /**
@@ -850,6 +863,27 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (null != view_lottie_top) {
             view_lottie_top.refBubbleView(dataBean);
         }
+    }
+    /*
+     * *********************************************************************************************************************************************************
+     * ********************************************************** 头部金币点击 ***************************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    @Override
+    public void clickBull(BubbleConfig.DataBean ballBean, int pos) {
+        showGetGoldCoinDialog();
+
+    }
+
+    //金币领取广告弹窗
+    public void showGetGoldCoinDialog() {
+        GoldCoinBean bean = new GoldCoinBean();
+        bean.dialogType = 1;
+        bean.obtainCoinCount = 20;
+        bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
+        bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
+        bean.context = mActivity;
+        GoldCoinDialog.showGoldCoinDialog(bean);
     }
 
     /*

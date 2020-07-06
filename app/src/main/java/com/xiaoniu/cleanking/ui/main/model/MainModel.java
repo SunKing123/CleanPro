@@ -9,7 +9,6 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
 import com.xiaoniu.cleanking.base.BaseEntity;
-import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
@@ -18,7 +17,6 @@ import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -27,6 +25,7 @@ import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.GreenDaoManager;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.LocationCityInfo;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherCity;
+import com.xiaoniu.cleanking.ui.newclean.model.GoldModel;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
@@ -46,7 +45,7 @@ import okhttp3.RequestBody;
  * @author tie
  * @date 2017/5/15
  */
-public class MainModel extends BaseModel {
+public class MainModel extends GoldModel {
 
     private final RxAppCompatActivity mActivity;
 
