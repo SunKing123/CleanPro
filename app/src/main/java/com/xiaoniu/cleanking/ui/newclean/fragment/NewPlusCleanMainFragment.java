@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -840,6 +841,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
+    /*
+     * *********************************************************************************************************************************************************
+     * ********************************************************** 刷新头部样式 ***************************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    public void setTopBubbleView(BubbleConfig dataBean){
+        if (null != view_lottie_top) {
+            view_lottie_top.refBubbleView(dataBean);
+        }
+    }
+
+
 
     /*
      * *********************************************************************************************************************************************************
@@ -857,4 +870,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //initGeekSdkCenter();
         }
     };
+
+
+
+
+
+
+
 }

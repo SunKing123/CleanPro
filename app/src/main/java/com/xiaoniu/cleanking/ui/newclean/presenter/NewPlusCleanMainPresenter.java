@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
@@ -542,23 +543,22 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         mModel.getGoleGonfigs(new Common3Subscriber<BubbleConfig>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
-//                LogUtils.i("zz---"+code+"---"+message);
+                ToastUtils.showShort(message);
             }
 
             @Override
             public void getData(BubbleConfig bubbleConfig) {
-//                LogUtils.i("zz---"+new Gson().toJson(bubbleConfig));
+                mView.setTopBubbleView(bubbleConfig);
 
             }
 
             @Override
             public void showExtraOp(String message) {
-//                LogUtils.i("zz--"+message);
             }
 
             @Override
             public void netConnectError() {
-//                LogUtils.i("zz--网络异常");
+                ToastUtils.showShort(R.string.notwork_error);
             }
         });
     }

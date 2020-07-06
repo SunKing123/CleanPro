@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.listener;
 
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.BallRewardBean;
 
 /**
@@ -7,5 +8,5 @@ import com.xiaoniu.cleanking.ui.newclean.bean.BallRewardBean;
  */
 
 public interface IBullClickListener {
-    public void clickBull(BallRewardBean.DataBean.BallBean ballBean, int pos);
+    public void clickBull(BubbleConfig.DataBean ballBean, int pos);
 }
