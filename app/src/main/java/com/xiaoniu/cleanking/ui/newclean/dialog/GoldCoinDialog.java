@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
+import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
 import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -44,11 +45,6 @@ import androidx.room.util.StringUtil;
  * Describe:
  */
 public class GoldCoinDialog {
-
-    //广告id资源前缀
-    public static final String ADV_FIRST_PREFIX = "scratch_card_first";
-    public static final String ADV_SECOND_PREFIX = "scratch_card_second";
-    public static final String ADV_VIDEO_PREFIX = "scratch_card_video";
 
     public static void showGoldCoinDialog(GoldCoinBean coinBean) {
         if (coinBean == null || coinBean.obtainCoinCount < 0) {
@@ -173,123 +169,6 @@ public class GoldCoinDialog {
         });
     }
 
-
-    /**
-     * 两个刮刮卡刮完显示的广告
-     *
-     * @param coinBean
-     */
-    private void loadFirstAdv(GoldCoinBean coinBean, ViewGroup mRootRL) {
-        loadAdv(coinBean, mRootRL, ADV_FIRST_PREFIX);
-    }
-
-    /**
-     * 看完激励视频显示的广告
-     *
-     * @param coinBean
-     */
-    private void loadSecondAdv(GoldCoinBean coinBean, ViewGroup mRootRL) {
-        loadAdv(coinBean, mRootRL, ADV_SECOND_PREFIX);
-    }
-
-    /**
-     * 点击金币翻倍展示的激励视频广告
-     *
-     * @param coinBean
-     */
-    private void loadVideoAdv(GoldCoinBean coinBean, ViewGroup mRootRL) {
-        loadAdv(coinBean, mRootRL, ADV_VIDEO_PREFIX);
-    }
-
-    private void loadAdv(GoldCoinBean coinBean, ViewGroup mRootRL, String resNamePrefix) {
-        log("开始加载广告: " + resNamePrefix);
-
-        if (coinBean.context == null || !(coinBean.context instanceof Activity)) {
-            log("context必须为activity级别");
-            return;
-        }
-
-        String allResourceName = resNamePrefix + coinBean.pageId;
-        String advId = getAdvId(coinBean.context, allResourceName);
-        log("获取到广告id: " + advId);
-        if (TextUtils.isEmpty(advId)) {
-            return;
-        }
-
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(advId).setActivity((Activity) coinBean.context)
-                .setViewContainer(mRootRL).build();
-
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdError(AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
-                log("onAdError()====" + resNamePrefix + "====" + s);
-            }
-
-            @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-                log("onShowError()====" + resNamePrefix + "====" + s);
-            }
-
-            @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
-                log("onAdShow()====" + resNamePrefix);
-            }
-
-            @Override
-            public void onAdClicked(AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-                log("onAdClicked()====" + resNamePrefix);
-            }
-
-            @Override
-            public void onAdClose(AdInfo adInfo) {
-                super.onAdClose(adInfo);
-                log("onAdClose()====" + resNamePrefix);
-            }
-
-            @Override
-            public void onAdVideoComplete(AdInfo adInfo) {
-                super.onAdVideoComplete(adInfo);
-                log("onAdVideoComplete()====" + resNamePrefix);
-            }
-
-            @Override
-            public void onAdSkippedVideo(AdInfo adInfo) {
-                super.onAdSkippedVideo(adInfo);
-                log("onAdSkippedVideo()====" + resNamePrefix);
-            }
-        });
-    }
-
-    private String getAdvId(Context context, String resourceName) {
-        if (context == null) {
-            log("不能加载广告，context为空。");
-            return "";
-        }
-        int resourceId = context.getResources().getIdentifier(resourceName, "string", context.getPackageName());
-
-        if (resourceId == 0) {
-            log("不能加载广告，广告resourceId为0");
-            return "";
-        }
-        try {
-            return context.getResources().getString(resourceId);
-        } catch (Exception e) {
-            log("不能加载广告，获取广告id异常。");
-        }
-        return "";
-    }
-
-    private void log(String text) {
-        if (BuildConfig.DEBUG) {
-            LogUtils.e("scratchCard： " + text);
-        }
-    }
-
     //倒计时展示  msc 秒数
     private static void countDownTimeViewDelay(int msc, TextView adLookTime, View closeDlg) {
         if (adLookTime != null) {
@@ -321,4 +200,7 @@ public class GoldCoinDialog {
         }.start();
     }
 
+    private void doubleClick(){
+
+    }
 }
