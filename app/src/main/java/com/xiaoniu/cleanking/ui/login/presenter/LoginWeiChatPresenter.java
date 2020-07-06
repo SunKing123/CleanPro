@@ -42,7 +42,12 @@ public class LoginWeiChatPresenter extends BasePresenter<LoginWeiChatContract.Mo
         super(model, rootView);
     }
 
+    /**
+     * 微信登录
+     * @param map
+     */
     public void loginWithWeiChat(Map<String, Object> map) {
+        map.put("userType", 1);
         Gson gson = new Gson();
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
@@ -56,12 +61,35 @@ public class LoginWeiChatPresenter extends BasePresenter<LoginWeiChatContract.Mo
                     @Override
                     public void onNext(LoginDataBean loginDataBean) {
                         if (mRootView != null) {
-                            mRootView.dealLoginResult(loginDataBean);
+                            mRootView.dealLoginResult(1,loginDataBean);
                         }
                     }
                 });
     }
 
+    /**
+     * 绑定微信到游客账户
+     * @param map
+     */
+    public void bindingWeiChat(Map<String, Object> map) {
+        Gson gson = new Gson();
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mModel.bindingWeiChat(body).subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))//使用 Rxlifecycle,使 Disposable 和 Activity 一起销毁
+                .subscribe(new ErrorHandleSubscriber<LoginDataBean>(mErrorHandler) {
+                    @Override
+                    public void onNext(LoginDataBean loginDataBean) {
+                        if (mRootView != null) {
+                            mRootView.dealLoginResult(2,loginDataBean);
+                        }
+                    }
+                });
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

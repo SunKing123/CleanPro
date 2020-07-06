@@ -49,7 +49,6 @@ import com.xiaoniu.cleanking.ui.main.dialog.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
-import com.xiaoniu.cleanking.ui.main.fragment.MeFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
@@ -64,7 +63,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotchUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -231,6 +229,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (BuildConfig.DEBUG) {
             AppConfig.showDebugWindow(mContext);
         }
+        //游客登录
+        mPresenter.visitorLogin();
     }
 
 

@@ -6,6 +6,11 @@
     android:background="@color/color_4690FD"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/top_middle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_1dp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_56dp">
@@ -20,13 +25,15 @@
             style="@style/top_tv_title"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/img_back"
-            android:text="个人信息" />
+            android:text="个人信息"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_middle_title"
             style="@style/top_tv_title"
             android:layout_centerInParent="true"
-            android:text="个人信息" />
+            android:text="个人信息"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_right"

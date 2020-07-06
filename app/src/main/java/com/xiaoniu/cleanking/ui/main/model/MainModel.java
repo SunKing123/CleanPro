@@ -10,10 +10,12 @@ import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.api.WeatherDataApiService;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
+import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
+import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -29,6 +31,7 @@ import com.xiaoniu.cleanking.ui.newclean.model.GoldModel;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -64,6 +67,14 @@ public class MainModel extends GoldModel {
 //        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
+    /**
+     * 游客登录
+     * @param body
+     * @param commonSubscriber
+     */
+    public void visitorLogin(RequestBody body,CommonSubscriber<LoginDataBean> commonSubscriber) {
+        mService.loginApi(body).compose(RxUtil.<LoginDataBean>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
     public void getWebUrl(Common4Subscriber<WebUrlEntity> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
@@ -215,6 +226,15 @@ public class MainModel extends GoldModel {
 
         }
         return locationWeatherCity;
+    }
+
+    /**
+     * 退出登录
+     *
+     * @param commonSubscriber
+     */
+    public void exitLogin(CommonSubscriber<ExitLoginBean> commonSubscriber) {
+        mService.exitLogin().compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
     /**
      * 上报Device消息

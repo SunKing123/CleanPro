@@ -50,6 +50,19 @@ public class ImplPreferencesHelper implements PreferencesHelper {
         mSPrefs.edit().putString(SpConstants.CUSTOMERID, customerId).apply();
     }
 
+    /**
+     * 清除用户相关信息，再退出登录时调用
+     */
+    public void clearUserInfo() {
+        mSPrefs.edit().remove(SpConstants.CUSTOMERID).apply();
+        mSPrefs.edit().remove(SpConstants.TOKEN).apply();
+        mSPrefs.edit().remove(SpConstants.PHONENUM).apply();
+        mSPrefs.edit().remove(SpConstants.NICKNAME).apply();
+        mSPrefs.edit().remove(SpConstants.WX_LOGIN_FLAG).apply();
+        mSPrefs.edit().remove(SpConstants.USER_NAME).apply();
+        mSPrefs.edit().remove(SpConstants.CLIENT_ID).apply();
+        mSPrefs.edit().remove("openid").apply();
+    }
 
     @Override
     public String getCustomerId() {
@@ -62,6 +75,10 @@ public class ImplPreferencesHelper implements PreferencesHelper {
     }
 
     public void setNickName(String nickName) {
+        mSPrefs.edit().putString(SpConstants.NICKNAME, nickName).apply();
+    }
+
+    public void set(String nickName) {
         mSPrefs.edit().putString(SpConstants.NICKNAME, nickName).apply();
     }
 
@@ -120,10 +137,12 @@ public class ImplPreferencesHelper implements PreferencesHelper {
         mSPrefs.edit().putString(SpConstants.USER_NAME, userName).apply();
     }
 
-    public String getUserName() {
-        return mSPrefs.getString(SpConstants.USER_NAME, "");
+    public void setUserHeadPortraitUrl(String portraitUrl) {
+        mSPrefs.edit().putString(SpConstants.USER_HEAD_PORTRAIT_URL, portraitUrl).apply();
     }
-
+    public String getUserHeadPortraitUrl() {
+        return mSPrefs.getString(SpConstants.USER_HEAD_PORTRAIT_URL,"");
+    }
     public void setIDNum(String idNum) {
         mSPrefs.edit().putString(SpConstants.ID_NUM, idNum).apply();
     }
@@ -134,17 +153,19 @@ public class ImplPreferencesHelper implements PreferencesHelper {
 
     /**
      * 获取费率路由
+     *
      * @return
      */
-    public String getCustRate(){
+    public String getCustRate() {
         return mSPrefs.getString(SpConstants.CUST_RATE, "1");
     }
 
     /**
      * 设置费率路由
+     *
      * @param value
      */
-    public void setCustRate(String value){
+    public void setCustRate(String value) {
         mSPrefs.edit().putString(SpConstants.CUST_RATE, value).apply();
     }
 

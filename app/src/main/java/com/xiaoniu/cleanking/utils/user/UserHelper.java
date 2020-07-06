@@ -30,7 +30,7 @@ public class UserHelper {
     static ImplPreferencesHelper implPreferencesHelper = new ImplPreferencesHelper();
 
     /**
-     * 用户是否登录
+     * 用户是否登录==游客、微信登录都算登录
      *
      * @return
      */
@@ -58,7 +58,12 @@ public class UserHelper {
     public String getCustomerId() {
         return implPreferencesHelper.getCustomerId();
     }
-
+    public String getNickName() {
+        return implPreferencesHelper.getNickName();
+    }
+    public String getUserHeadPortraitUrl() {
+        return implPreferencesHelper.getUserHeadPortraitUrl();
+    }
     public String getOpenID() {
         return implPreferencesHelper.getOpenID();
     }
@@ -74,13 +79,18 @@ public class UserHelper {
      */
     public void saveUserInfo(UserInfoBean userInfo) {
         implPreferencesHelper.setClientId(userInfo.userId);
-        implPreferencesHelper.setCustomerId(userInfo.openId);
+        implPreferencesHelper.setCustomerId(userInfo.userId);
         implPreferencesHelper.setUserName(userInfo.nickname);
         implPreferencesHelper.setNickName(userInfo.nickname);
         implPreferencesHelper.setToken(userInfo.token);
-        implPreferencesHelper.setWxLoginSuccess(true);
+        if (userInfo.userType == 1){//微信登录
+            implPreferencesHelper.setWxLoginSuccess(true);
+        }else {
+            implPreferencesHelper.setWxLoginSuccess(false);
+        }
         implPreferencesHelper.setOpenID(userInfo.openId);
         implPreferencesHelper.setPhoneNum(userInfo.phone);
+        implPreferencesHelper.setUserHeadPortraitUrl(userInfo.userAvatar);
         EventBus.getDefault().post("loginSuccessRefreshUserInfo");
     }
 
@@ -99,9 +109,7 @@ public class UserHelper {
      */
     public void clearCurrentUserInfo() {
         changeLoginState(false);
-//        AppSPreferencesHelper.init().del(AppConstant.USER_INFO);
-//        AppSPreferencesHelper.init().del(USER_SESSION);
-//        AppSPreferencesHelper.init().del(USER_ID_TOKEN);
+        implPreferencesHelper.clearUserInfo();
         //关闭推送渠道
 //        PushServiceFactory.getCloudPushService().turnOffPushChannel(null);
     }

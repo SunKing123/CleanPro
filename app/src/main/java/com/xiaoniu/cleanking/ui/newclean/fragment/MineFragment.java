@@ -1,11 +1,11 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
-import com.hellogeek.permission.strategy.ServiceEvent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -62,7 +63,8 @@ public class MineFragment extends BaseFragment<MinePresenter> {
     protected void initView() {
         EventBus.getDefault().register(this);
         mBinding = DataBindingUtil.bind(getView());
-        mBinding.phoneNumTv.setText("未登录请登录");
+        mBinding.phoneNumTv.setText("未登录");
+        setUserInfo();
     }
 
     FragmentMineBinding mBinding;
@@ -74,8 +76,8 @@ public class MineFragment extends BaseFragment<MinePresenter> {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUserInfo(String string) {
         if ("loginSuccessRefreshUserInfo".equals(string)) {
-//            mBinding.phoneNumTv.setText(UserHelper.init().getPhoneNum());
-            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
+//            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
+            setUserInfo();
         }
     }
 
@@ -105,7 +107,9 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 break;
             case R.id.head_img_iv:
             case R.id.phone_num_tv:
-                startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
+                if (!UserHelper.init().isWxLogin()){
+                    startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
+                }
 //                GoldCoinBean goldCoinBean = new GoldCoinBean();
 //                goldCoinBean.context = getContext();
 //                goldCoinBean.obtainCoinCount = 10;
@@ -148,20 +152,24 @@ public class MineFragment extends BaseFragment<MinePresenter> {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-//    private void handUserInfo() {
-//        if (AndroidUtil.isLogin()) {
-//            mBinding.phoneNumTv.setText(mPreferencesHelper.getNickName());
-//            if (AndroidUtil.isWxLogin()) {
-//                ImageUtil.display(mPreferencesHelper.getAvaterUrl(), mHeadImgIv);
-//            } else {
-//                mBinding.headImgIv.setImageResource(R.mipmap.default_head);
-//            }
-////            mPresenter.getUserInfo();
-//        } else {
-//            mBinding.headImgIv.setImageResource(R.mipmap.default_head);
-//            mBinding.phoneNumTv.setText("立即登录");
-//        }
-//    }
+
+    private void setUserInfo() {
+        if (UserHelper.init().isLogin()) {
+            String phoneNum = UserHelper.init().getPhoneNum();
+            if (TextUtils.isEmpty(phoneNum)) {
+                phoneNum = UserHelper.init().getNickName();
+            }
+            mBinding.phoneNumTv.setText(phoneNum);
+            if (UserHelper.init().isWxLogin()) {
+                ImageUtil.display(UserHelper.init().getUserHeadPortraitUrl(), mBinding.headImgIv,R.mipmap.default_head);
+            } else {
+                mBinding.headImgIv.setImageResource(R.mipmap.default_head);
+            }
+        } else {
+            mBinding.headImgIv.setImageResource(R.mipmap.default_head);
+            mBinding.phoneNumTv.setText("立即登录");
+        }
+    }
 
     /**
      * 底部广告样式--

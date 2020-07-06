@@ -1,11 +1,13 @@
 package com.xiaoniu.cleanking.ui.login.bean;
 
+import com.xiaoniu.cleanking.base.BaseEntity;
+
 /**
  * Created by zhaoyingtao
  * Date: 2020/7/5
  * Describe:
  */
-public class LoginDataBean {
+public class LoginDataBean extends BaseEntity {
 
     /**
      * requestId : 1111111
@@ -17,8 +19,6 @@ public class LoginDataBean {
 
     private String requestId;
     private long timestamp;
-    private String code;
-    private String message;
     private UserInfoBean data;
 
     public String getRequestId() {

@@ -120,6 +120,7 @@ public class RequestParamInterceptor implements Interceptor {
 //        }
 
         Request request = requestBuilder.build();
+//        Log.e("_api","url=="+request.url().url()+"\n"+"请求方式："+request.method());
         return chain.proceed(request);
     }
 

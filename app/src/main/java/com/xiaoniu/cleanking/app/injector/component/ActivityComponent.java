@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.activity.SoftManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
@@ -121,5 +122,7 @@ public interface ActivityComponent {
     void inject(NetWorkActivity activity);
 
     void inject(ScreenFinishBeforActivity activity);
+
+    void inject(WhiteListSettingActivity activity);
 }
 
