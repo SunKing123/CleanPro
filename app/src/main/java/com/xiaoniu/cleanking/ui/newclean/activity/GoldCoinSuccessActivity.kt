@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,11 +31,11 @@ import java.lang.StringBuilder
 class GoldCoinSuccessActivity : BaseActivity() {
 
 
-
     private var coinNum: Int = 0
 
     companion object {
-        const val COIN_NUM="coin_num"
+        const val COIN_NUM = "coin_num"
+        const val AD_ID = "ad_id"
     }
 
     override fun initLayout(savedInstanceState: Bundle?) {
@@ -46,29 +47,34 @@ class GoldCoinSuccessActivity : BaseActivity() {
     }
 
     override fun initData() {
-        coinNum = intent.getIntExtra(COIN_NUM, 0);
-        var text="到账"+coinNum+"金币";
+        coinNum = intent.getIntExtra(COIN_NUM, 0)
+        //广告ID，如果广告位没有打开的话，不传这个ID即可（在进入ACTIVITY前自行判断是否打开了配置）
+        val adId = intent.getStringExtra(AD_ID)
+        var text = "到账" + coinNum + "金币";
 
-        var sp=SpannableString(text)
-        var start=text.indexOf(coinNum.toString())
-        var end=start+coinNum.toString().length;
-        var size= AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_24))
-        sp.setSpan(size,start,end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        var sp = SpannableString(text)
+        var start = text.indexOf(coinNum.toString())
+        var end = start + coinNum.toString().length;
+        var size = AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_24))
+        sp.setSpan(size, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         tv_coin_content.setText(sp)
 
         btnLeft.setOnClickListener { finish() }
 
-        //显示广告
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-            val params = AdRequestParams.Builder().setAdId(MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS).setViewContainer(ad_frameLayout)
+
+        if (!TextUtils.isEmpty(adId)) {
+            //显示广告
+            val params = AdRequestParams.Builder().setAdId(adId).setViewContainer(ad_frameLayout)
                     .setActivity(this).build()
             MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
 
             })
+
         }
 
 
     }
+
 
 }
