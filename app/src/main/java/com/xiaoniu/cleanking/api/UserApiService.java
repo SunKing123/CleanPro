@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
+import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -44,6 +45,13 @@ public interface UserApiService {
      */
     @GET("/app/upgrade")
     Flowable<AppVersion> queryAppVersion();
+    /**
+     * 账户/账户信息查询（赚赚、我的、我的钱包）
+     *
+     * @return
+     */
+    @GET("/account/info")
+    Flowable<MinePageInfoBean> getMinePageInfo();
 
     /**
      * 微信、游客登录

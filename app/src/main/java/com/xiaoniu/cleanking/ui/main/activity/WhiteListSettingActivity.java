@@ -16,6 +16,8 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.OnClick;
 
 /**
@@ -104,6 +106,7 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
     public void exitLoginResult(ExitLoginBean exitLoginBean) {
         if (exitLoginBean != null && "200".equals(exitLoginBean.code)) {
             UserHelper.init().clearCurrentUserInfo();
+            EventBus.getDefault().post("exitLoginSuccess");
             ToastUtils.showShort("退出登录成功");
             ll_exit_login.setVisibility(View.GONE);
         }
