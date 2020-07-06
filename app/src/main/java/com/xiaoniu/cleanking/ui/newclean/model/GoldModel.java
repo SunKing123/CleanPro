@@ -28,13 +28,11 @@ import okhttp3.RequestBody;
 
 public class GoldModel extends BaseModel {
 
-    private final RxFragment mRxFragment;
     @Inject
     UserApiService mService;
 
     @Inject
-    public GoldModel(RxFragment rxFragment) {
-        mRxFragment = rxFragment;
+    public GoldModel() {
     }
 
     /**

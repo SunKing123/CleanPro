@@ -30,7 +30,6 @@ public class NewScanModel extends GoldModel {
 
     @Inject
     public NewScanModel(RxFragment rxFragment) {
-        super(rxFragment);
         mRxFragment = rxFragment;
     }
 
