@@ -59,4 +59,17 @@ public class LoginWeiChatModel extends ArmBaseModel implements LoginWeiChatContr
 //                .obtainRetrofitService(LoginService.class)
 //                .loginWeiChatApi());
     }
+
+    @Override
+    public Observable<LoginDataBean> bindingWeiChat(RequestBody body) {
+        return Observable.just(mRepositoryManager
+                .obtainRetrofitService(CommonApiService.class)
+                .bindingWeiChatApi(body))
+                .flatMap(new Function<Observable<LoginDataBean>, ObservableSource<LoginDataBean>>() {
+                    @Override
+                    public ObservableSource<LoginDataBean> apply(@NonNull Observable<LoginDataBean> listObservable) throws Exception {
+                        return listObservable;
+                    }
+                });
+    }
 }

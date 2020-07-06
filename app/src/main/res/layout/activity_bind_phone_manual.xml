@@ -110,14 +110,17 @@
         </LinearLayout>
     </LinearLayout>
 
-
-    <ImageView
+    <TextView
         android:id="@+id/next_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimen_220dp"
+        android:layout_height="@dimen/dimen_40dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="38dp"
+        android:background="@drawable/bg_confirm_select_btn"
         android:enabled="false"
-        android:src="@drawable/bd_phone_btn" />
+        android:gravity="center"
+        android:text="安全保存"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/dimen_16dp" />
 
 </LinearLayout>

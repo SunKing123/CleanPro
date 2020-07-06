@@ -24,7 +24,8 @@ public abstract class CommonSubscriber<T extends BaseEntity> extends ResourceSub
 
     @Override
     public void onNext(T t) {
-        if (Constant.SUCCESS.equals(t.code)) {
+        //添加200也是返回成功的code值 zyt
+        if (Constant.SUCCESS.equals(t.code) || "200".equals(t.code)) {
             //成功
             getData(t);
 //        } else if (Constant.TokenFailure.equals(t.code) || Constant.TokenIllegality.equals(t.code)) {

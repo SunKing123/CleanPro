@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.jess.arms.utils.DeviceUtils;
 import com.xiaoniu.cleanking.R;
 
 import butterknife.BindView;
@@ -36,6 +37,8 @@ public class CommonTitleLayout extends FrameLayout {
     TextView tvRight;
     @BindView(R.id.root_layout)
     LinearLayout rootLayout;
+    @BindView(R.id.top_middle)
+    View topMiddle;
     private Context mContext;
     private boolean leftFinish = true;
 
@@ -60,11 +63,21 @@ public class CommonTitleLayout extends FrameLayout {
         });
         tvMiddleTitle.setVisibility(GONE);
         tvTitle.setVisibility(GONE);
+        //动态计算手机状态栏高度
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) topMiddle.getLayoutParams();
+        layoutParams.height = DeviceUtils.getStatusBarHeight(mContext);
+        topMiddle.setLayoutParams(layoutParams);
     }
 
     public CommonTitleLayout setLeftTitle(String title) {
         tvTitle.setVisibility(VISIBLE);
         tvTitle.setText(title);
+        return this;
+    }
+
+    public CommonTitleLayout setTitleColor(int color) {
+        tvMiddleTitle.setTextColor(getResources().getColor(color));
+        tvTitle.setTextColor(getResources().getColor(color));
         return this;
     }
 
@@ -87,6 +100,17 @@ public class CommonTitleLayout extends FrameLayout {
      */
     public CommonTitleLayout setBgColor(int color) {
         rootLayout.setBackgroundColor(getResources().getColor(color));
+        return this;
+    }
+
+    /**
+     * S设置返回键的颜色
+     *
+     * @param color
+     * @return
+     */
+    public CommonTitleLayout setLeftBackColor(int color) {
+        imgBack.setColorFilter(getResources().getColor(color));
         return this;
     }
 
