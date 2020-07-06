@@ -51,6 +51,7 @@ import androidx.room.util.StringUtil;
 public class GoldCoinDialog {
 
     private static BaseDialog dialog;
+
     public static void showGoldCoinDialog(GoldCoinBean coinBean) {
         if (coinBean == null || coinBean.obtainCoinCount < 0) {
             return;
@@ -144,6 +145,15 @@ public class GoldCoinDialog {
         } else {
             totalCoinCountTv.setText(Html.fromHtml(coinBean.totalCoinCount + "≈<font color=#febf28>" + 0.00 + "元</font>"));
         }
+
+        CoinDoubleRL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                  //点击翻倍，显示激励广告
+
+            }
+        });
+
         dialog.show();
         countDownTimeViewDelay(3, adLookTime, closeDlg);
         //边上跑的动画
@@ -164,7 +174,6 @@ public class GoldCoinDialog {
                 .setAdId(isVideo ? coinBean.adVideoId : coinBean.adId).setActivity((Activity) coinBean.context)
                 .setViewContainer(mRootRL).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-
 
             @Override
             public void onAdError(AdInfo adInfo, int i, String s) {

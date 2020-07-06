@@ -852,14 +852,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
-
-
     /*
      * *********************************************************************************************************************************************************
      * ********************************************************** others ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
-
     public View.OnClickListener getOnHomeTabClickListener() {
         return onClickListener;
     }
@@ -867,14 +864,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //initGeekSdkCenter();
+            refreshAdvice();
         }
     };
-
-
-
-
-
-
-
 }
