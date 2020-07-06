@@ -27,16 +27,9 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class GoldModel extends BaseModel {
-
-    private final RxFragment mRxFragment;
     @Inject
     UserApiService mService;
-
-    @Inject
-    public GoldModel(RxFragment rxFragment) {
-        mRxFragment = rxFragment;
-    }
-
+    
     /**
      * 首页广告查询
      *
