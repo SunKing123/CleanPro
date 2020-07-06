@@ -115,4 +115,75 @@ public interface MidasConstants {
      */
     String LOCK_PAGE_FEED_ID = "adpos_1531089251";
 
+
+    /**
+     * 首页金币-左上-模板
+     */
+    String HOME_PAGE_LFTOP_GOLD_01 = "adpos_2731393451";
+
+
+    /**
+     *首页金币-左上-激励视频
+     */
+    String HOME_PAGE_LFTOP_GOLD_02 = "adpos_7147998041";
+
+    /**
+     *首页金币-左上-模板
+     */
+    String HOME_PAGE_LFTOP_GOLD_03 = "adpos_7526694551";
+
+
+
+    /**
+     * 首页金币-右上-模板
+     */
+    String HOME_PAGE_RTTOP_GOLD_01 = "adpos_6859891951";
+
+
+    /**
+     *首页金币-右上-激励视频
+     */
+    String HOME_PAGE_RTTOP_GOLD_02 = "adpos_9419610341";
+
+    /**
+     *首页金币-右上-模板
+     */
+    String HOME_PAGE_RTTOP_GOLD_03 = "adpos_3592791451";
+
+
+    /**
+     *首页金币-左下-模板
+     */
+    String HOME_PAGE_LFBOTTOM_GOLD_01 = "adpos_5841153051";
+
+
+    /**
+     *首页金币-右上-激励视频
+     */
+    String HOME_PAGE_LFBOTTOM_GOLD_02 = "adpos_3829083041";
+
+    /**
+     *首页金币-右上-模板
+     */
+    String HOME_PAGE_LFBOTTOM_GOLD_03 = "adpos_1561862051";
+
+
+
+    /**
+     *首页金币-左下-模板
+     */
+    String HOME_PAGE_RTBOTTOM_GOLD_01 = "adpos_9321897351";
+
+
+    /**
+     *首页金币-右上-激励视频
+     */
+    String HOME_PAGE_RTLFBOTTOM_GOLD_02 = "adpos_4476822141";
+
+    /**
+     *首页金币-右上-模板
+     */
+    String HOME_PAGE_RTLFBOTTOM_GOLD_03 = "adpos_7546373351";
+
+
 }
