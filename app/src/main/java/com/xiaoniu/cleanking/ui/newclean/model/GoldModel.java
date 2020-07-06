@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.FlowableTransformer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -43,8 +44,8 @@ public class GoldModel extends BaseModel {
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
-    public void getGoleGonfigs(CommonSubscriber<BubbleConfig> commonSubscriber) {
-        mService.getBubbleConfig().compose(RxUtil.<BubbleConfig>rxSchedulerHelper(mRxFragment))
+    public void getGoleGonfigs(CommonSubscriber<BubbleConfig> commonSubscriber, FlowableTransformer tt) {
+        mService.getBubbleConfig().compose(tt)
                 .subscribeWith(commonSubscriber);
     }
 
