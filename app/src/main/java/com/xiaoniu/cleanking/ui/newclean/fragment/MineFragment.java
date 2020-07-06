@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 import org.greenrobot.eventbus.EventBus;
@@ -175,7 +176,10 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 .setActivity(getActivity())
                 .setViewContainer(mBinding.bannerAdLl).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-
+            @Override
+            public void onAdShow(AdInfo adInfo) {
+                super.onAdShow(adInfo);
+            }
         });
       /*  GeekAdSdk.getAdsManger().loadNativeTemplateAd(getActivity(), PositionId.AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(getContext(), DisplayUtil.getScreenWidth(getContext())) - 24), new AdListener() {
             @Override
