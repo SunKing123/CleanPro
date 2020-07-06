@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.TimeUtils;
 
 import javax.inject.Inject;
@@ -262,12 +262,12 @@ public class NoClearSPHelper {
 
     //获取是否是第一上传通话记录
     public boolean getIsCallLog() {
-        return !AndroidUtil.getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.IS_CALL_LOG, ""));
+        return !UserHelper.init().getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.IS_CALL_LOG, ""));
     }
 
     //获取是否是第一上传短息记录
     public boolean getIsUpdateSms() {
-        return !AndroidUtil.getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.IS_UPDATE_SMS, ""));
+        return !UserHelper.init().getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.IS_UPDATE_SMS, ""));
     }
 
     //身份认证页面是否是第一次请求权限状态
@@ -297,20 +297,20 @@ public class NoClearSPHelper {
     }
 
     public boolean getContacts() {
-        return !AndroidUtil.getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.CONSTANTS_INFO, ""));
+        return !UserHelper.init().getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.CONSTANTS_INFO, ""));
     }
 
     public boolean isAppInfo() {
-        return !AndroidUtil.getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.APP_INFO, ""));
+        return !UserHelper.init().getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.APP_INFO, ""));
     }
 
     public boolean isPhoneDevice() {
-        return !AndroidUtil.getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.PHONE_DEVICE, ""));
+        return !UserHelper.init().getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.PHONE_DEVICE, ""));
     }
 
     //是否是重新进件
     public boolean isAgainAuth(){
-        return AndroidUtil.getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.IS_AGAIN_AUTH, ""));
+        return UserHelper.init().getPhoneNum().equalsIgnoreCase(mSPrefs.getString(SpConstants.IS_AGAIN_AUTH, ""));
     }
 
     //是否是重新进件

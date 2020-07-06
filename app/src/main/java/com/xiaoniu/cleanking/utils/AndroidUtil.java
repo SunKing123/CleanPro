@@ -27,10 +27,8 @@ import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
-import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.utils.encypt.Base64;
-import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -124,31 +122,8 @@ public class AndroidUtil {
     }
 
 
-    static ImplPreferencesHelper implPreferencesHelper = new ImplPreferencesHelper();
-
-    public static String getToken() {
-        return implPreferencesHelper.getToken();
-    }
-
-    public static String getCustomerId() {
-        return implPreferencesHelper.getCustomerId();
-    }
-
-
-    public static boolean isWxLogin() {
-        return implPreferencesHelper.getWxLoginFlag();
-    }
-
-
-    public static String getOpenID() {
-        return implPreferencesHelper.getOpenID();
-    }
-
-    public static String getPhoneNum() {
-        return implPreferencesHelper.getPhoneNum();
-    }
-
     public static boolean haveLiuhai = false;
+
     /**
      * 获取H5后面拼接的xn_data字符串
      *
@@ -173,14 +148,14 @@ public class AndroidUtil {
 //        map.put("app-id", AppConfig.API_APPID);//todo:zzh
         map.put("timestamp", timeMillis + "");
 //        map.put("sign", hashByHmacSHA256(AppConfig.API_APPID + timeMillis, AppConfig.API_APPSECRET));//todo:zz
-        map.put("customer-id", AndroidUtil.getCustomerId());
-        map.put("access-token", AndroidUtil.getToken());
-        map.put("phone-number", AndroidUtil.getPhoneNum());
+        map.put("customer-id", UserHelper.init().getCustomerId());
+        map.put("access-token", UserHelper.init().getToken());
+        map.put("phone-number", UserHelper.init().getPhoneNum());
         map.put("uuid", NiuDataAPI.getUUID());
-        if (AndroidUtil.isLogin()) {
-            if (AndroidUtil.isWxLogin()) {
+        if (UserHelper.init().isLogin()) {
+            if (UserHelper.init().isWxLogin()) {
                 map.put("userType", "1");
-                map.put("uid", getOpenID());
+                map.put("uid", UserHelper.init().getOpenID());
             } else {
                 map.put("userType", "2");
             }
@@ -260,7 +235,7 @@ public class AndroidUtil {
 //        maps.put("app-version", getAppVersionName());
 //        maps.put("market", getMarketId());
         maps.put("phone-models", DeviceUtils.getModel());
-        maps.put("access-token", getToken());
+        maps.put("access-token", UserHelper.init().getToken());
         return maps;
     }
 
@@ -346,8 +321,8 @@ public class AndroidUtil {
         ArrayList<FirstJunkInfo> list = getAllReadyInstallApps(context);
         Collections.shuffle(list);
         int count = list.size() > maxCount ? maxCount : list.size();
-        if(count<0){
-            count=0;
+        if (count < 0) {
+            count = 0;
         }
         return new ArrayList<>(list.subList(0, count));
     }
@@ -360,10 +335,10 @@ public class AndroidUtil {
     }
 
 
-
     //数美接入
     private static String sDeviceID = "";
     //数美接入
+
     /**
      * 热云方法[暂时只做IMEI调用时使用]
      *
@@ -424,7 +399,6 @@ public class AndroidUtil {
     }
 
 
-
     /**
      * 获取手机型号
      *
@@ -434,17 +408,5 @@ public class AndroidUtil {
         return Build.MODEL;
     }
 
-
-    /**
-     * 用户是否登录
-     *
-     * @return
-     */
-    public static boolean isLogin() {
-        if (!TextUtils.isEmpty(implPreferencesHelper.getCustomerId())) {
-            return true;
-        }
-        return false;
-    }
 
 }

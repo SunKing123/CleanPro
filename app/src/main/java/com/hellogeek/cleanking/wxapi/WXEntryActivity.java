@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.wxapi;
+package com.hellogeek.cleanking.wxapi;
 
 
 import com.umeng.socialize.weixin.view.WXCallbackActivity;

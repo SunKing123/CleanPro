@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.login.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,13 +22,17 @@ import com.jess.arms.utils.ArmsUtils;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
+import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
 import com.xiaoniu.cleanking.ui.login.contract.LoginWeiChatContract;
 import com.xiaoniu.cleanking.ui.login.di.component.DaggerLoginWeiChatComponent;
 import com.xiaoniu.cleanking.ui.login.presenter.LoginWeiChatPresenter;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.payshare.AuthorizeLoginListener;
 import com.xiaoniu.payshare.AuthorizedLogin;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -112,7 +117,12 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
 
             @Override
             public void authorizeSuccess(SHARE_MEDIA platform, Map<String, String> data) {
-
+                HashMap<String, Object> paramsMap = new HashMap<>();
+                paramsMap.put("userType", 1);
+                paramsMap.put("openId", data.get("openid"));
+                paramsMap.put("nickname", data.get("name"));
+                paramsMap.put("userAvatar", data.get("iconurl"));
+                mPresenter.loginWithWeiChat(paramsMap);
             }
         });
     }
@@ -151,10 +161,23 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
                 killMyself();
                 break;
             case R.id.vx_login_ll:
-                startActivity(new Intent(this, BindPhoneActivity.class));
-//                AuthorizedLogin.getInstance().userWeiChatLogin(this);
+//                startActivity(new Intent(this, BindPhoneActivity.class));
+                AuthorizedLogin.getInstance().userWeiChatLogin(this);
                 break;
         }
     }
 
+    @Override
+    public Activity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void dealLoginResult(LoginDataBean loginDataBean) {
+        UserInfoBean infoBean = loginDataBean.getData();
+        if (infoBean != null) {
+            UserHelper.init().saveUserInfo(infoBean);
+            finish();
+        }
+    }
 }

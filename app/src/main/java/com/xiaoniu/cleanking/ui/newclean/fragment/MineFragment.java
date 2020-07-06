@@ -5,11 +5,7 @@ import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdListener;
-import com.comm.jksdk.utils.DisplayUtil;
-import com.orhanobut.logger.Logger;
+import com.hellogeek.permission.strategy.ServiceEvent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -18,21 +14,23 @@ import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
-import com.xiaoniu.cleanking.ui.login.activity.BindPhoneActivity;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
-import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.OnClick;
 
@@ -62,6 +60,7 @@ public class MineFragment extends BaseFragment<MinePresenter> {
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
         mBinding = DataBindingUtil.bind(getView());
         mBinding.phoneNumTv.setText("未登录请登录");
     }
@@ -70,6 +69,14 @@ public class MineFragment extends BaseFragment<MinePresenter> {
 
     public static MineFragment getInstance() {
         return new MineFragment();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshUserInfo(String string) {
+        if ("loginSuccessRefreshUserInfo".equals(string)) {
+//            mBinding.phoneNumTv.setText(UserHelper.init().getPhoneNum());
+            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
+        }
     }
 
     @Override
@@ -98,16 +105,16 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 break;
             case R.id.head_img_iv:
             case R.id.phone_num_tv:
-//                startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
-                GoldCoinBean goldCoinBean = new GoldCoinBean();
-                goldCoinBean.context = getContext();
-                goldCoinBean.obtainCoinCount = 10;
-                goldCoinBean.totalCoinCount = 135;
-                goldCoinBean.dialogType = 3;
-                goldCoinBean.adId = "";
-                goldCoinBean.isDouble = true;
-                goldCoinBean.videoSource = 12;
-                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
+                startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
+//                GoldCoinBean goldCoinBean = new GoldCoinBean();
+//                goldCoinBean.context = getContext();
+//                goldCoinBean.obtainCoinCount = 10;
+//                goldCoinBean.totalCoinCount = 135;
+//                goldCoinBean.dialogType = 3;
+//                goldCoinBean.adId = "";
+//                goldCoinBean.isDouble = true;
+//                goldCoinBean.videoSource = 12;
+//                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
 //                ToastUtils.showShort("用户信息");
                 break;
             case R.id.iv_inter_ad:
@@ -136,6 +143,11 @@ public class MineFragment extends BaseFragment<MinePresenter> {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 //    private void handUserInfo() {
 //        if (AndroidUtil.isLogin()) {
 //            mBinding.phoneNumTv.setText(mPreferencesHelper.getNickName());
@@ -158,7 +170,7 @@ public class MineFragment extends BaseFragment<MinePresenter> {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_MINE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
-        AdRequestParams params=new AdRequestParams.Builder()
+        AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(MidasConstants.ME_BOTTOM_ID)
                 .setActivity(getActivity())
                 .setViewContainer(mBinding.bannerAdLl).build();
