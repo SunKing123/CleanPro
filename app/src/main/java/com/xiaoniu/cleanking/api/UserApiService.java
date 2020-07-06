@@ -6,6 +6,7 @@ import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -192,6 +193,13 @@ public interface UserApiService {
      */
     @POST("/device/save")
     Flowable<BaseEntity> pushDeviceInfo(@Body RequestBody body);
+
+
+    /**
+     * 用户气泡金币配置获取
+     */
+    @GET("/bubble/user/configs")
+    Flowable<BubbleConfig> getBubbleConfig();
 
 
 }

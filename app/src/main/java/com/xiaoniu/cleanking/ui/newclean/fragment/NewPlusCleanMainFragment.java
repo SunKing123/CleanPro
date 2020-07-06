@@ -157,6 +157,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         rxPermissions = new RxPermissions(requireActivity());
         compositeDisposable = new CompositeDisposable();
         mPresenter.getInteractionSwitch();
+        mPresenter.refBullList();
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
 
