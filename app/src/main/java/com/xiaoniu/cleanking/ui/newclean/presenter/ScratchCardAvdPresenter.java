@@ -77,11 +77,7 @@ public class ScratchCardAvdPresenter {
             parameter.onDoubleClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isOpenTwo()) {
-                        loadVideoAdv(getVideoAdvId());
-                    } else {
-                        handlerVideoAdvError();
-                    }
+                    loadVideoAdv();
                 }
             };
         }
@@ -90,6 +86,14 @@ public class ScratchCardAvdPresenter {
         GoldCoinDialog.showGoldCoinDialog(parameter);
     }
 
+    //加载激励视频广告
+    private void loadVideoAdv(){
+        if (isOpenTwo()) {
+            loadVideoAdv(getVideoAdvId());
+        } else {
+            handlerVideoAdvError();
+        }
+    }
     /**
      * 两个刮刮卡刮完显示的广告id
      */
