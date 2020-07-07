@@ -22,6 +22,8 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 
+import javax.annotation.PostConstruct;
+
 import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -222,8 +224,8 @@ public interface UserApiService {
     /**
      * 金币领取
      */
-    @GET("/bubble/collect")
-    Flowable<BubbleCollected> bubbleCollected();
+    @POST("/bubble/collect")
+    Flowable<BubbleCollected> bubbleCollected(@Body RequestBody body);
 
 //
 //    /**

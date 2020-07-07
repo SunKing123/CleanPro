@@ -877,8 +877,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Override
     public void clickBull(BubbleConfig.DataBean ballBean, int pos) {
-
-//        showGetGoldCoinDialog();
+//      showGetGoldCoinDialog();
+        if (ballBean == null)
+            return;
+        mPresenter.bullCollect(ballBean.getLocationNum());
 
     }
 

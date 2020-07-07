@@ -35,7 +35,7 @@ public class MidasRequesCenter {
                 .setChannel(ChannelUtil.getChannel())//渠道名
                 .setServerUrl(BuildConfig.BIGDATA_MD)//业务埋点地址
                 .setBusinessUrl(BuildConfig.MIDAS_NIU_DATA_SERVER_URL)//商业变现埋点地址
-                .setIsFormal(BuildConfig.MIDAS_IS_FORMAL)//是否是正式环境 true 线上环境
+                .setIsFormal(true)//是否是正式环境 true 线上环境
                 .setScreenOrientation(ScreenOrientation.VERTICAL)//设置屏幕方向
                 .setCsjAppId(Constant.CSJ_AD_ID)//穿山甲appId
                 .setYlhAppId(Constant.YLH_AD_ID)//优量汇appId

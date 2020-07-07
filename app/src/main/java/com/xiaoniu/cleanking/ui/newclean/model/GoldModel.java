@@ -48,8 +48,13 @@ public class GoldModel extends BaseModel {
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
-    public void goleCollect(CommonSubscriber<BubbleCollected> commonSubscriber, FlowableTransformer tt) {
-        mService.bubbleCollected().compose(tt)
+    public void goleCollect(CommonSubscriber<BubbleCollected> commonSubscriber, FlowableTransformer tt,int locationNum) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("locationNum", locationNum);
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.bubbleCollected(body).compose(tt)
                 .subscribeWith(commonSubscriber);
     }
 
