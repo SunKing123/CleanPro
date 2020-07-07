@@ -568,7 +568,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
 
     //获取金币
-    public void bullCollect(){
+    public void bullCollect(int locationNum){
         mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
@@ -589,7 +589,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             public void netConnectError() {
                 ToastUtils.showShort(R.string.notwork_error);
             }
-        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView));
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView),locationNum);
     }
 
 }
