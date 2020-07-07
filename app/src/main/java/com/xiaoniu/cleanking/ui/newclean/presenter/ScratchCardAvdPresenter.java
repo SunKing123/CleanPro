@@ -64,6 +64,9 @@ public class ScratchCardAvdPresenter {
 
 
     public void showDialog(int cardIndex, int coinCount) {
+
+        log("调用弹框 showDialog()" + cardIndex + "    " + coinCount);
+
         if (activity == null) {
             new Throwable("activity 不可为空！");
         }
@@ -87,13 +90,14 @@ public class ScratchCardAvdPresenter {
     }
 
     //加载激励视频广告
-    private void loadVideoAdv(){
+    private void loadVideoAdv() {
         if (isOpenTwo()) {
             loadVideoAdv(getVideoAdvId());
         } else {
             handlerVideoAdvError();
         }
     }
+
     /**
      * 两个刮刮卡刮完显示的广告id
      */
@@ -263,21 +267,27 @@ public class ScratchCardAvdPresenter {
         if (hasInit) {
             return;
         }
+
+        log("===========================检查刮刮卡的广告开关 start======================================");
         hasInit = true;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenOne = switchInfoList.isOpen();
+                    log("第一个广告位开关信息:isOpen=" + isOpenOne());
                 }
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenTwo = switchInfoList.isOpen();
+                    log("第二个广告位开关信息:isOpen=" + isOpenTwo());
                 }
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenThree = switchInfoList.isOpen();
+                    log("第三个广告位开关信息:isOpen=" + isOpenThree());
                 }
             }
         }
+        log("==============================检查刮刮卡的广告开关 end========================================");
     }
 
     public void destroy() {
