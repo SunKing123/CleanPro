@@ -20,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.google.gson.Gson;
@@ -58,6 +57,7 @@ import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
 
@@ -365,15 +365,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 //                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
             }
 
-            @Override
-            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
-                jumpActivity();
-            }
+
 
             @Override
             public void onShowError(int i, String s) {
-                super.onShowError(i, s);
                 jumpActivity();
             }
 
@@ -384,12 +379,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdClicked(adInfo);
+                jumpActivity();
             }
 
             @Override
-            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
-                super.onAdClose(adInfo, templateView);
+            public void onAdClose(AdInfo adInfo) {
+                super.onAdClose(adInfo);
                 jumpActivity();
             }
         });
