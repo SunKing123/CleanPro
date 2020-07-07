@@ -50,9 +50,7 @@ import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
-import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
-import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
@@ -884,16 +882,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     }
 
-    //金币领取广告弹窗
-    public void showGetGoldCoinDialog() {
-        GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
-        bean.dialogType = 1;
-        bean.obtainCoinCount = 20;
-        bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
-        //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
-        bean.context = mActivity;
-        GoldCoinDialog.showGoldCoinDialog(bean);
-    }
 
     /*
      * *********************************************************************************************************************************************************
