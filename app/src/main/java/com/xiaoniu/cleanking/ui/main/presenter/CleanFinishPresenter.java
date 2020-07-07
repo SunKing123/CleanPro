@@ -1,6 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
@@ -13,10 +16,13 @@ import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
+import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
@@ -174,8 +180,51 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         bean.dialogType = 3;
         bean.obtainCoinCount = coinCount;
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
-        //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
+        bean.fromType = GoldCoinDialogParameter.FROM_FINISH_COMPLETE;
         bean.context = mActivity;
+        bean.advCallBack = new AbsAdCallBack() {
+
+        };
+        bean.onDoubleClickListener = (v) -> {
+            ViewGroup viewGroup = (ViewGroup) mView.getWindow().getDecorView();
+            AdRequestParams params = new AdRequestParams.Builder().
+                    setActivity(mActivity).
+                    setViewContainer(viewGroup).
+                    setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build();
+            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+                @Override
+                public void onShowError(int i, String s) {
+                    super.onShowError(i, s);
+                    ToastUtils.showLong("网络异常");
+                }
+
+                @Override
+                public void onAdError(AdInfo adInfo, int i, String s) {
+                    super.onAdError(adInfo, i, s);
+                    ToastUtils.showLong("网络异常");
+
+                }
+
+                @Override
+                public void onAdVideoComplete(AdInfo adInfo) {
+                    super.onAdVideoComplete(adInfo);
+                    if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
+                        Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
+                        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
+                        intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
+                        mActivity.startActivity(intent);
+                    } else {
+                        ToastUtils.showLong("网络异常");
+
+                    }
+
+                }
+            });
+
+
+        };
         GoldCoinDialog.showGoldCoinDialog(bean);
     }
+
+
 }
