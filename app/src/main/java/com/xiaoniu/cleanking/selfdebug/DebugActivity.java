@@ -108,6 +108,9 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void playLottie(View view){
+        String test =  "cleanking://com.hellogeek.cleanking/jump?isfullscreen=1&need_login=&url=http%3A%2F%2F192.168.85.61%3A9999%2Fhtml%2FactivitiesHtml%2FscratchCards%2Fscratch.html%3Fid%3D22%26rondaId%3D3%26awardType%3D1%26hitCode%3D1%26num%3D1222222%26remark%3D%26cardType%3D12312312%26goldSectionNum%3D51%26actRdNum%3D20%3A00%26needRefresh%3D1%26currentPageId%3Dscratch_card_activity_page";
+//        String test02 ="cleanking://com.hellogeek.cleanking/jump?isfullscreen=1&amp;need_login=&amp;url=http%3A%2F%2F192.168.85.61";
+        SchemeProxy.openScheme(this, test);
 //        oneKeyCircleButtonView.startLottie();
 //        lottieAnimationView.setAnimation("home_top_scan/anim10/data.json");
 //        lottieAnimationView.setImageAssetsFolder("home_top_scan/anim10/images");
