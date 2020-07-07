@@ -131,12 +131,13 @@ public class ScratchCardAvdPresenter {
     private String getAdvId(String resNamePrefix, int index) {
         String allResourceName = resNamePrefix + index;
         String advId = getAdvId(activity, allResourceName);
-        log("================================================resNamePrefix=" + resNamePrefix + "   index=" + index + "   广告id=" + advId+"");
+        log("================================================resNamePrefix=" + resNamePrefix + "   index=" + index + "   广告id=" + advId + "");
         return advId;
     }
 
     class CardAdCallBack extends CMAbsAdCallBack {
         String resNamePrefix;
+        boolean videoPlayed = false;
 
         public CardAdCallBack(String resNamePrefix) {
             this.resNamePrefix = resNamePrefix;
@@ -195,19 +196,22 @@ public class ScratchCardAvdPresenter {
         public void onAdClose(AdInfo adInfo) {
             super.onAdClose(adInfo);
             log("onAdClose()====" + resNamePrefix);
+            switch (resNamePrefix) {
+                case ADV_FIRST_PREFIX:
+                    break;
+                case ADV_VIDEO_PREFIX:
+                    if (videoPlayed) {
+                        startCoinCompletePage();
+                    }
+                    break;
+            }
         }
 
         @Override
         public void onAdVideoComplete(AdInfo adInfo) {
             super.onAdVideoComplete(adInfo);
             log("onAdVideoComplete()====" + resNamePrefix);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    GoldCoinDialog.dismiss();
-                    break;
-            }
+            videoPlayed = true;
         }
 
         @Override
@@ -282,7 +286,7 @@ public class ScratchCardAvdPresenter {
                 }
             }
         }
-        
+
         log("第一个广告位开关信息:isOpen=" + isOpenOne());
         log("第二个广告位开关信息:isOpen=" + isOpenTwo());
         log("第三个广告位开关信息:isOpen=" + isOpenThree());
