@@ -1,93 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.xiaoniu.cleanking.widget.ShadowViewCard xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingTop="5dp"
-    android:paddingRight="10dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="实用工具"
-        android:textColor="@color/home_content" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/wx_clean"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp">
-
-        <ImageView
-            android:id="@+id/image_wx"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/icon_home_clean_wx"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp">
 
         <TextView
-            android:id="@+id/tv_wx_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="微信清理"
-            android:textColor="@color/home_title"
-            android:textSize="21dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_wx_content"
-            app:layout_constraintLeft_toRightOf="@+id/image_wx"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:text="实用工具"
+            android:textColor="@color/home_content" />
 
-        <TextView
-            android:id="@+id/tv_wx_content"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wx_clean"
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+            <ImageView
+                android:id="@+id/image_wx"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_home_clean_wx"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_wx_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="微信清理"
+                android:textColor="@color/home_title"
+                android:textSize="21dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_wx_content"
+                app:layout_constraintLeft_toRightOf="@+id/image_wx"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_wx_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_wx_title"
+                android:layout_toRightOf="@+id/image_wx"
+                android:text="大量缓存垃圾"
+                android:textColor="@color/home_content"
+                android:textSize="17dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_wx_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_wx_title" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_wx_clean"
+                style="@style/home_button"
+                android:text="立即清理"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <GridLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_wx_title"
-            android:layout_toRightOf="@+id/image_wx"
-            android:text="大量缓存垃圾"
-            android:textColor="@color/home_content"
-            android:textSize="17dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_wx_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_wx_title" />
+            android:columnCount="2">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_wx_clean"
-            style="@style/home_button"
-            android:text="立即清理"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
+                android:id="@+id/item_temperature"
+                style="@style/home_tool_item" />
 
+            <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
+                android:id="@+id/item_notify"
+                style="@style/home_tool_item" />
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-      >
+            <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
+                android:id="@+id/item_network"
+                style="@style/home_tool_item" />
 
-        <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
-            android:id="@+id/item_temperature"
-            style="@style/home_tool_item" />
+            <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
+                android:id="@+id/item_folder"
+                style="@style/home_tool_item" />
 
-        <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
-            android:id="@+id/item_notify"
-            style="@style/home_tool_item" />
-
-        <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
-            android:id="@+id/item_network"
-            style="@style/home_tool_item" />
-
-        <com.xiaoniu.cleanking.ui.view.HomeToolTableItemView
-            android:id="@+id/item_folder"
-            style="@style/home_tool_item" />
-
-    </GridLayout>
+        </GridLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+</com.xiaoniu.cleanking.widget.ShadowViewCard>

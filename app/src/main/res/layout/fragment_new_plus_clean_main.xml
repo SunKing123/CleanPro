@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
 
-            <include layout="@layout/layout_weather_video"></include>
+            <include layout="@layout/layout_weather_video"/>
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
