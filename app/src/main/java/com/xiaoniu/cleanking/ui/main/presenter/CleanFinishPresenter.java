@@ -224,7 +224,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 }
             });
 
-
         };
         GoldCoinDialog.showGoldCoinDialog(bean);
     }

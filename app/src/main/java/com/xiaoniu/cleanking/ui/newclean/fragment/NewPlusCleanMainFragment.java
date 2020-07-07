@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
+import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
@@ -37,7 +38,9 @@ import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -48,6 +51,7 @@ import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
@@ -77,6 +81,8 @@ import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xnad.sdk.ad.entity.AdInfo;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -492,9 +498,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 点击立即清理
      */
-    @OnClick({R.id.iv_center,R.id.layout_temp})
+    @OnClick({R.id.iv_center, R.id.layout_temp})
     public void nowClean(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.iv_center:
                 StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
                 if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
@@ -863,11 +869,19 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * ********************************************************** 刷新头部样式 ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
-    public void setTopBubbleView(BubbleConfig dataBean){
-        if (null != view_lottie_top) {
+
+    /**
+     * 刷新金币显示
+     *
+     * @param dataBean
+     */
+    public void setTopBubbleView(BubbleConfig dataBean) {
+        if (null != view_lottie_top && null != dataBean) {
             view_lottie_top.refBubbleView(dataBean);
         }
     }
+
+
     /*
      * *********************************************************************************************************************************************************
      * ********************************************************** 头部金币点击 ***************************************************************************************
@@ -875,11 +889,54 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Override
     public void clickBull(BubbleConfig.DataBean ballBean, int pos) {
-//      showGetGoldCoinDialog();
         if (ballBean == null)
             return;
         mPresenter.bullCollect(ballBean.getLocationNum());
 
+    }
+
+
+    /**
+     * 金币领取成功
+     *
+     * @param dataBean
+     */
+    public void bubbleCollected(BubbleCollected dataBean) {
+        if (null != dataBean) {
+            mPresenter.refBullList();//刷新金币列表；
+        }
+        mPresenter.showGetGoldCoinDialog(dataBean);
+    }
+
+
+    /**
+     * 激励视频播放完成金币翻倍
+     *
+     * @param dataBean
+     */
+    public void bubbleDouble(BubbleCollected dataBean) {
+        if (null != dataBean) {
+            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount());//刷新金币列表；
+        }
+
+
+    }
+
+    /**
+     * 翻倍成功
+     *
+     * @param dataBean
+     */
+    public void bubbleDoubleSuccess(BubbleDouble dataBean) {
+        if (null == dataBean)
+            return;
+        mPresenter.refBullList();//刷新金币列表；
+        Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
+        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount() * 2);
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
+            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(),2));
+        }
+        mActivity.startActivity(intent);
     }
 
 

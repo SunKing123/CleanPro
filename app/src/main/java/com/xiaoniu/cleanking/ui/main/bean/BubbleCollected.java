@@ -2,8 +2,6 @@ package com.xiaoniu.cleanking.ui.main.bean;
 
 import com.xiaoniu.cleanking.base.BaseEntity;
 
-import java.util.List;
-
 /**
  * @author zhengzhihao
  * @date 2020/7/6 12
@@ -12,22 +10,34 @@ import java.util.List;
 public class BubbleCollected extends BaseEntity {
 
 
-    private List<DataBean> data;
+    /**
+     * data : {"collected":true,"uuid":"4ac7f670625445dfb76539102c80adf2","locationNum":2,"goldCount":75,"canDouble":1}
+     */
 
-    public List<DataBean> getData() {
+    private DataBean data;
+
+    public DataBean getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(DataBean data) {
         this.data = data;
     }
 
     public static class DataBean {
+        /**
+         * collected : true
+         * uuid : 4ac7f670625445dfb76539102c80adf2
+         * locationNum : 2
+         * goldCount : 75
+         * canDouble : 1
+         */
 
         private boolean collected;
         private String uuid;
         private int locationNum;
         private int goldCount;
+        private int canDouble;
 
         public boolean isCollected() {
             return collected;
@@ -59,6 +69,14 @@ public class BubbleCollected extends BaseEntity {
 
         public void setGoldCount(int goldCount) {
             this.goldCount = goldCount;
+        }
+
+        public int getCanDouble() {
+            return canDouble;
+        }
+
+        public void setCanDouble(int canDouble) {
+            this.canDouble = canDouble;
         }
     }
 }
