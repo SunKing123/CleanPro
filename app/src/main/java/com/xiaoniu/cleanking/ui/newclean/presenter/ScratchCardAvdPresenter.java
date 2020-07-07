@@ -43,7 +43,7 @@ public class ScratchCardAvdPresenter {
     private Activity activity;
     private int cardIndex;
     private int coinCount;
-    GoldCoinDialogParameter parameter = new GoldCoinDialogParameter();
+    GoldCoinDialogParameter parameter;
 
     public ScratchCardAvdPresenter(Activity activity) {
         initOnOff();
