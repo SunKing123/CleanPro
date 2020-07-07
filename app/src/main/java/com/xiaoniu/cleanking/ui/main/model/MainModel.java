@@ -66,7 +66,7 @@ public class MainModel extends GoldModel {
     }
 
     public void queryAppVersion(Common4Subscriber<AppVersion> commonSubscriber) {
-//        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+        mService.queryAppVersion().compose(RxUtil.<AppVersion>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
     /**
