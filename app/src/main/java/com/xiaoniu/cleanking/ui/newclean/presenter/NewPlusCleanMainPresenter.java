@@ -656,15 +656,16 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 public void onAdVideoComplete(AdInfo adInfo) {
                     super.onAdVideoComplete(adInfo);
                     if(!mView.getActivity().isFinishing()){
-                        mView.bubbleDouble(dataBean);
                         GoldCoinDialog.dismiss();
                     }
                 }
 
                 @Override
                 public void onAdClose(AdInfo adInfo, boolean isComplete) {
-                    if (isComplete && !mView.getActivity().isFinishing()) {
-                        mView.bubbleDouble(dataBean);
+                    if (!mView.getActivity().isFinishing()) {
+                        if(isComplete){
+                            mView.bubbleDouble(dataBean);
+                        }
                         GoldCoinDialog.dismiss();
                     }
                 }

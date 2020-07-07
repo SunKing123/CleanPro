@@ -1,13 +1,8 @@
 package com.xiaoniu.cleanking.midas;
 
-import android.bluetooth.le.AdvertiseCallback;
-
 import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.entity.SelfRenderBean;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.widget.TemplateView;
 
-import java.util.List;
 
 /**
  * Desc:广告回调抽象类
