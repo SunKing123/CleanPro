@@ -66,7 +66,7 @@ public class ScratchCardAvdPresenter {
         log("刮刮卡调用弹框 showDialog()" + cardIndex + "    " + coinCount);
 
         if (activity == null) {
-            log("activity 对象为空，你能弹框");
+            log("activity 对象为空，不能弹框");
             return;
         }
         this.cardIndex = cardIndex;
