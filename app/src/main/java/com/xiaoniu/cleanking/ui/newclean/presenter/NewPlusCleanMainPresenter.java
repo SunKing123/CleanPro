@@ -476,21 +476,10 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-
-        if (adviceID == MidasConstants.MAIN_ONE_ID) {
-            MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID));
-        } else {
-            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-                @Override
-                public void onAdShow(AdInfo adInfo) {
-                    super.onAdShow(adInfo);
-                    LogUtils.e("====首页two,three广告展示成功====");
-                }
-            });
-        }
+        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID));
     }
 
-    class AdvCallBack extends CMAbsAdCallBack {
+    static class AdvCallBack extends CMAbsAdCallBack {
         String advId;
 
         AdvCallBack(String advId) {
