@@ -166,7 +166,7 @@ public class GoldCoinDialog {
         });
     }
 
-    public static void dismissDialog(){
+    public static void dismiss(){
         if(dialog!=null&&dialog.isShowing()){
             dialog.dismiss();
         }
