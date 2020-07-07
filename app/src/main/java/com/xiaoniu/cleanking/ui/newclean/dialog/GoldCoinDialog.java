@@ -173,47 +173,6 @@ public class GoldCoinDialog {
             dialog.dismiss();
         }
     }
-    /**
-     *
-     */
-//    private static void requestAd(Activity context,GoldCoinBean coinBean, ViewGroup mRootRL, boolean isVideo) {
-//        AdRequestParams params = new AdRequestParams.Builder()
-//                .setAdId(isVideo ? coinBean.adVideoId : coinBean.adId).setActivity(context)
-//                .setViewContainer(mRootRL).build();
-//        MidasAdSdk.getAdsManger().askIsReady(context,isVideo ? coinBean.adVideoId : coinBean.adId, new AskReadyCallBack() {
-//            @Override
-//            public void onReady(boolean b) {
-//                dialog.show();
-//                MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-//                    @Override
-//                    public void onShowError(int i, String s) {
-//                        super.onShowError(i, s);
-//                        ToastUtils.showLong("网络异常");
-//                        if (dialog!=null){
-//                            dialog.dismiss();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onAdVideoComplete(AdInfo adInfo) {
-//                        super.onAdVideoComplete(adInfo);
-//                        if (isVideo && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-//                            Intent intent = new Intent(context, GoldCoinSuccessActivity.class);
-//                            intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinBean.obtainCoinCount * 2);
-//                            intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
-//                            context.startActivity(intent);
-//                        }else {
-//                            ToastUtils.showLong("网络异常");
-//                            if (dialog!=null){
-//                                dialog.dismiss();
-//                            }
-//
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//    }
 
     //倒计时展示  msc 秒数
     private static void countDownTimeViewDelay(int msc, TextView adLookTime, View closeDlg) {
