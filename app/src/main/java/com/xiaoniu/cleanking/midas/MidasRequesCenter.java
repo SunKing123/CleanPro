@@ -6,7 +6,6 @@ import android.util.Log;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.common.utils.ChannelUtil;
-import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.MidasAdSdk;
@@ -75,6 +74,27 @@ public class MidasRequesCenter {
                 .build();
         MidasAdSdk.getAdsManger().loadAd(adParameter,absAdCallBack);
     }
+
+    /**
+     * 激励视频广告请求入口
+     * @param adRequestParams
+     * @param absAdCallBack
+     */
+    public static void requestAdVideo(AdRequestParams adRequestParams, VideoAbsAdCallBack absAdCallBack){
+        //上下文、广告位置ID
+        AdParameter adParameter = new AdParameter.Builder(adRequestParams.getActivity(),adRequestParams.getAdId())
+                //设置填充父布局
+                .setViewContainer(adRequestParams.getViewContainer())
+                .build();
+        MidasAdSdk.getAdsManger().loadAd(adParameter,absAdCallBack);
+    }
+
+
+
+
+
+
+
 
 
 

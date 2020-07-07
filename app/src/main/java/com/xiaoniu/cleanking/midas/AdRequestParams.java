@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.xnad.sdk.ad.entity.AdInfo;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -80,6 +82,8 @@ public class AdRequestParams {
     private AdTemplateLoadListener mAdTemplateLoadListener;
 
 
+    private AdInfo adInfo;
+
     public AdRequestParams(Builder builder) {
         if (builder.activityWeakReference != null) {
             this.activity = builder.activityWeakReference.get();
@@ -97,6 +101,7 @@ public class AdRequestParams {
         this.mAdRepeatShowListener = builder.mAdRepeatShowListener;
         this.mAdTemplateLoadListener = builder.mAdTemplateLoadListener;
         this.isSkipSwitch = builder.isSkipSwitch;
+        this.adInfo = builder.adInfo;
     }
 
 
@@ -240,6 +245,11 @@ public class AdRequestParams {
          */
         private AdTemplateLoadListener mAdTemplateLoadListener;
 
+        private AdInfo adInfo;
+
+
+
+
         public Builder setActivity(Activity activity) {
             activityWeakReference = new WeakReference<>(activity);
             return this;
@@ -322,6 +332,12 @@ public class AdRequestParams {
 
         public Builder setAdTemplateLoadListener(AdTemplateLoadListener a) {
             this.mAdTemplateLoadListener = a;
+            return this;
+        }
+
+
+        public Builder setAdInfo(AdInfo a) {
+            this.adInfo = a;
             return this;
         }
 
