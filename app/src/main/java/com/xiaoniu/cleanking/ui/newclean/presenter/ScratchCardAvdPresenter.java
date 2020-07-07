@@ -266,7 +266,6 @@ public class ScratchCardAvdPresenter {
         if (hasInit) {
             return;
         }
-
         log("================================================检查刮刮卡的广告开关 start");
         hasInit = true;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
@@ -274,22 +273,19 @@ public class ScratchCardAvdPresenter {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenOne = switchInfoList.isOpen();
-                    log("第一个广告位开关信息:isOpen=" + isOpenOne());
                 }
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenTwo = switchInfoList.isOpen();
-                    log("第二个广告位开关信息:isOpen=" + isOpenTwo());
                 }
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenThree = switchInfoList.isOpen();
-                    log("第三个广告位开关信息:isOpen=" + isOpenThree());
                 }
             }
         }
-
-        isOpenOne=true;
-        isOpenTwo=true;
-        isOpenThree=true;
+        
+        log("第一个广告位开关信息:isOpen=" + isOpenOne());
+        log("第二个广告位开关信息:isOpen=" + isOpenTwo());
+        log("第三个广告位开关信息:isOpen=" + isOpenThree());
 
         log("================================================检查刮刮卡的广告开关 end");
     }
