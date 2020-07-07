@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -22,7 +21,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
-import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
@@ -186,6 +184,12 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 
         };
         bean.onDoubleClickListener = (v) -> {
+
+            if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)) {
+                ToastUtils.showLong("网络异常");
+                GoldCoinDialog.dismiss();
+                return;
+            }
             ViewGroup viewGroup = (ViewGroup) mView.getWindow().getDecorView();
             AdRequestParams params = new AdRequestParams.Builder().
                     setActivity(mActivity).
@@ -209,15 +213,13 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 @Override
                 public void onAdVideoComplete(AdInfo adInfo) {
                     super.onAdVideoComplete(adInfo);
+                    Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
+                    intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
                     if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-                        Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
-                        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
                         intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
-                        mActivity.startActivity(intent);
-                    } else {
-                        ToastUtils.showLong("网络异常");
-                        GoldCoinDialog.dismiss();
                     }
+                    mActivity.startActivity(intent);
+                    GoldCoinDialog.dismiss();
 
                 }
             });

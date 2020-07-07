@@ -83,11 +83,12 @@ public class PositionId {
     public static final String KEY_MAIN_THREE_AD = "page_main_three_ad";
     //完成页插屏广告
     public static final String KEY_FINISH_INSIDE_SCREEN = "page_finish_inside_screen";
-    //完成页金币领取弹窗
-    public static final String KEY_FINISH_GET_GOLD_COIN="page_finish_get_gold_coin";
-    //领取金币弹窗界面
-    //领取双倍金币成功广告
-    public static final String KEY_GET_DOUBLE_GOLD_COIN_SUCCESS="page_get_double_gold_coin_success";
+    //完成页是否显示   金币领取弹窗开关
+    public static final String KEY_FINISH_GET_GOLD_COIN = "page_finish_get_gold_coin";
+    //金币领取弹窗中点击翻倍按钮时是否展示激励视频开关
+    public static final String KEY_GOLD_DIALOG_SHOW_VIDEO = "page_click_to_get_double_gold_coin";
+    //领取双倍金币成功页面广告开关
+    public static final String KEY_GET_DOUBLE_GOLD_COIN_SUCCESS = "page_get_double_gold_coin_success";
 
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
