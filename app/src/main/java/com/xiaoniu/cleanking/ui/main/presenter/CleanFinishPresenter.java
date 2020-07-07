@@ -175,7 +175,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     //金币领取广告弹窗
-    private void showGetGoldCoinDialog(int coinCount) {
+    public void showGetGoldCoinDialog(int coinCount) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 3;
         bean.obtainCoinCount = coinCount;
@@ -196,13 +196,14 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 public void onShowError(int i, String s) {
                     super.onShowError(i, s);
                     ToastUtils.showLong("网络异常");
+                    GoldCoinDialog.dismiss();
                 }
 
                 @Override
                 public void onAdError(AdInfo adInfo, int i, String s) {
                     super.onAdError(adInfo, i, s);
                     ToastUtils.showLong("网络异常");
-
+                    GoldCoinDialog.dismiss();
                 }
 
                 @Override
@@ -215,7 +216,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                         mActivity.startActivity(intent);
                     } else {
                         ToastUtils.showLong("网络异常");
-
+                        GoldCoinDialog.dismiss();
                     }
 
                 }
