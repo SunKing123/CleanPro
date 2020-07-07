@@ -1,29 +1,26 @@
 package com.xiaoniu.cleanking.ui.lockscreen;
 
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdListener;
-import com.comm.jksdk.ad.listener.AdManager;
-import com.xiaoniu.cleanking.BuildConfig;
-import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.NetworkUtils;
-import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.ToastUtils;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.comm.jksdk.ad.entity.AdInfo;
+import com.comm.jksdk.ad.listener.AdManager;
+import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 /**
  * @author zhengzhihao
@@ -34,10 +31,11 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     RelativeLayout flayoutAdContainer;
     RelativeLayout full_screen_insert_ad_header_layout;
     private AdManager adManager;
-    private TextView adShowTime, progree_tv;
+    //private TextView adShowTime;
+    private TextView progree_tv;
     private ImageView adClose;
     private int showTimeSecond = 3;
-    private CountDownTimer countDownTimer;
+    // private CountDownTimer countDownTimer;
     AdInfo adInfo;
 
     @Override
@@ -45,16 +43,16 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         ActivityCollector.addActivity(this, PopLayerActivity.class);
         setContentView(R.layout.activity_pop_layer);
-        adShowTime = findViewById(R.id.full_screen_insert_ad_show_time_txt);
+        //adShowTime = findViewById(R.id.full_screen_insert_ad_show_time_txt);
         flayoutAdContainer = (RelativeLayout) findViewById(R.id.flayout_ad_container);
         full_screen_insert_ad_header_layout = (RelativeLayout) findViewById(R.id.full_screen_insert_ad_header_layout);
         adClose = findViewById(R.id.full_screen_insert_ad_close);
         progree_tv = findViewById(R.id.progree_tv);
-        adShowTime.setText(showTimeSecond + "s");
-        adShowTime.setVisibility(View.VISIBLE);
+        // adShowTime.setText(showTimeSecond + "s");
+        // adShowTime.setVisibility(View.VISIBLE);
         progree_tv.setText("已提速" + NumberUtils.mathRandom(25, 50) + "%");
         showTimeSecond = NumberUtils.mathRandomInt(25, 50);
-        countDownTimer = new CountDownTimer(5 * 1000, 1000) {
+      /*  countDownTimer = new CountDownTimer(5 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 adShowTime.setText(millisUntilFinished / 1000 + "s");
@@ -66,12 +64,12 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
                 adClose.setVisibility(View.VISIBLE);
             }
         };
-        countDownTimer.start();
+        countDownTimer.start();*/
         adClose.setOnClickListener(this);
         if (NetworkUtils.isNetConnected()) {
             adInit();
         } else {
-            countDownTimer.cancel();
+            // countDownTimer.cancel();
             finish();
         }
     }
@@ -79,7 +77,29 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     public void adInit() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "external_advertising_page", "external_advertising_page");
-        AdManager adManager = GeekAdSdk.getAdsManger();
+        AdRequestParams params = new AdRequestParams.Builder().setViewContainer(flayoutAdContainer)
+                .setActivity(this).setAdId(MidasConstants.SCREEN_ON_ID).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdShow(adInfo);
+                LogUtils.e("===========桌面弹窗展示成功");
+            }
+
+            @Override
+            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+                LogUtils.e("===========桌面弹窗展示失败:"+s);
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+                LogUtils.e("===========桌面弹窗展示失败："+s);
+            }
+        });
+
+       /* AdManager adManager = GeekAdSdk.getAdsManger();
         adManager.loadAd(this, PositionId.AD_EXTERNAL_ADVERTISING_AD_1, new AdListener() {
             @Override
             public void adSuccess(AdInfo info) {
@@ -118,7 +138,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
                 finish();
             }
         });
-
+*/
     }
 
     @Override

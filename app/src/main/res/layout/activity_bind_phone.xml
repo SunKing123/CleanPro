@@ -33,12 +33,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_14dp">
 
-            <ImageView
+            <TextView
                 android:id="@+id/iv_bind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:src="@mipmap/sysdk_login_safe_bg" />
+                android:layout_width="@dimen/dimen_240dp"
+                android:layout_height="@dimen/dimen_40dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_green_confirm_fillet_30"
+                android:enabled="false"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:gravity="center"
+                android:text="本机号码一键安全登录"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/dimen_16dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -54,6 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginTop="@dimen/dimen_10dp"
             android:text="验证码绑定"
             android:textColor="#5CD0FF"
             android:textSize="@dimen/dimen_16sp" />

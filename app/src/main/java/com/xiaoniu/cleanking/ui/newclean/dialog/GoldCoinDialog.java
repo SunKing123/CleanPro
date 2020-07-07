@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -42,13 +43,13 @@ public class GoldCoinDialog {
 
     public static void showGoldCoinDialog(GoldCoinDialogParameter parameter) {
 
-        int fromType=parameter.fromType;
-        Activity context=parameter.context;
-        AbsAdCallBack advCallBack=parameter.advCallBack;
-        View.OnClickListener onDoubleClickListener=parameter.onDoubleClickListener;
+        int fromType = parameter.fromType;
+        Activity context = parameter.context;
+        AbsAdCallBack advCallBack = parameter.advCallBack;
+        View.OnClickListener onDoubleClickListener = parameter.onDoubleClickListener;
 
-        if (context==null||advCallBack==null||onDoubleClickListener==null||parameter == null || parameter.obtainCoinCount < 0) {
-            if(BuildConfig.DEBUG){
+        if (context == null || advCallBack == null || onDoubleClickListener == null || parameter == null || parameter.obtainCoinCount < 0) {
+            if (BuildConfig.DEBUG) {
                 ToastUtils.showShort("加载广告请求参数错误！！！");
             }
             return;
@@ -96,9 +97,7 @@ public class GoldCoinDialog {
             layoutParams.topMargin = DisplayUtil.dip2px(context, 65);
         } else if (parameter.dialogType == 3) {
             see_video_to_double.setVisibility(View.VISIBLE);
-            see_video_to_double.setOnClickListener(view -> {
-                 onDoubleClickListener.onClick(view);
-            });
+            see_video_to_double.setOnClickListener(onDoubleClickListener);
             iv_top_three.setVisibility(View.VISIBLE);
             layoutParams.topMargin = DisplayUtil.dip2px(context, 86);
         } else {
@@ -141,7 +140,7 @@ public class GoldCoinDialog {
         CoinDoubleRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  //点击翻倍，显示激励广告
+                //点击翻倍，显示激励广告
                 onDoubleClickListener.onClick(v);
             }
         });
@@ -150,6 +149,11 @@ public class GoldCoinDialog {
         closeDlg.setOnClickListener(view -> {
             dialog.dismiss();
         });
+
+        //当传进来的id为空时，不加载广告
+        if(TextUtils.isEmpty(parameter.adId)){
+            return;
+        }
         requestAd(context,advCallBack,parameter, mRootRL);
     }
 
@@ -157,58 +161,22 @@ public class GoldCoinDialog {
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(coinBean.adId).setActivity(context)
                 .setViewContainer(mRootRL).build();
-        MidasAdSdk.getAdsManger().askIsReady(context,coinBean.adId, new AskReadyCallBack() {
+        MidasAdSdk.getAdsManger().askIsReady(context, coinBean.adId, new AskReadyCallBack() {
             @Override
             public void onReady(boolean b) {
-                if(dialog!=null&&!context.isFinishing()){
+                if (dialog != null && !context.isFinishing()) {
                     dialog.show();
-                    MidasRequesCenter.requestAd(params,callBack);
+                    MidasRequesCenter.requestAd(params, callBack);
                 }
             }
         });
     }
 
-    /**
-     *
-     */
-//    private static void requestAd(Activity context,GoldCoinBean coinBean, ViewGroup mRootRL, boolean isVideo) {
-//        AdRequestParams params = new AdRequestParams.Builder()
-//                .setAdId(isVideo ? coinBean.adVideoId : coinBean.adId).setActivity(context)
-//                .setViewContainer(mRootRL).build();
-//        MidasAdSdk.getAdsManger().askIsReady(context,isVideo ? coinBean.adVideoId : coinBean.adId, new AskReadyCallBack() {
-//            @Override
-//            public void onReady(boolean b) {
-//                dialog.show();
-//                MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-//                    @Override
-//                    public void onShowError(int i, String s) {
-//                        super.onShowError(i, s);
-//                        ToastUtils.showLong("网络异常");
-//                        if (dialog!=null){
-//                            dialog.dismiss();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onAdVideoComplete(AdInfo adInfo) {
-//                        super.onAdVideoComplete(adInfo);
-//                        if (isVideo && AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-//                            Intent intent = new Intent(context, GoldCoinSuccessActivity.class);
-//                            intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinBean.obtainCoinCount * 2);
-//                            intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
-//                            context.startActivity(intent);
-//                        }else {
-//                            ToastUtils.showLong("网络异常");
-//                            if (dialog!=null){
-//                                dialog.dismiss();
-//                            }
-//
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//    }
+    public static void dismiss(){
+        if(dialog!=null&&dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
 
     //倒计时展示  msc 秒数
     private static void countDownTimeViewDelay(int msc, TextView adLookTime, View closeDlg) {
@@ -241,7 +209,7 @@ public class GoldCoinDialog {
         }.start();
     }
 
-    private void doubleClick(){
+    private void doubleClick() {
 
     }
 }

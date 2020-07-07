@@ -165,7 +165,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             }
             mBinding.phoneNumTv.setText(phoneNum);
             if (UserHelper.init().isWxLogin()) {
-                ImageUtil.display(UserHelper.init().getUserHeadPortraitUrl(), mBinding.headImgIv, R.mipmap.default_head);
+                ImageUtil.displayCircle(UserHelper.init().getUserHeadPortraitUrl(), mBinding.headImgIv, R.mipmap.default_head);
             } else {
                 mBinding.headImgIv.setImageResource(R.mipmap.default_head);
             }

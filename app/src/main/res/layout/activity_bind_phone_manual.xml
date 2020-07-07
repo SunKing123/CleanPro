@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <com.xiaoniu.cleanking.widget.CommonTitleLayout
@@ -112,7 +113,7 @@
 
     <TextView
         android:id="@+id/next_tv"
-        android:layout_width="@dimen/dimen_220dp"
+        android:layout_width="@dimen/dimen_240dp"
         android:layout_height="@dimen/dimen_40dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="38dp"
@@ -120,7 +121,7 @@
         android:enabled="false"
         android:gravity="center"
         android:text="安全保存"
-        android:textColor="@color/common_white"
+        android:textColor="@color/color_A4A4A4"
         android:textSize="@dimen/dimen_16dp" />
 
 </LinearLayout>

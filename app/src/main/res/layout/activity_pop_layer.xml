@@ -72,6 +72,7 @@
        android:layout_alignParentRight="true"
        android:layout_marginTop="9dp"
        android:layout_marginRight="9dp"
+       android:visibility="gone"
        android:background="@drawable/insert_ad_time_count_bg"
        android:gravity="center"
        android:text="3s"
