@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
 import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
@@ -227,13 +228,13 @@ public interface UserApiService {
     @POST("/bubble/collect")
     Flowable<BubbleCollected> bubbleCollected(@Body RequestBody body);
 
-//
-//    /**
-//     * 金币翻倍
-//     */
-//
-//    @GET("/bubble/collect/double")
-//    Flowable<BubbleCollected> bubbleCollected();
+
+    /**
+     * 金币翻倍
+     */
+
+    @GET("/bubble/collect/double")
+    Flowable<BubbleDouble> bubbleDouble(@Body RequestBody body);
 
     /**
      * 退出登录

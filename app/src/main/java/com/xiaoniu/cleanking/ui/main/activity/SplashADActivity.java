@@ -365,8 +365,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 //                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
             }
 
-
-
             @Override
             public void onShowError(int i, String s) {
                 jumpActivity();
@@ -384,10 +382,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
             @Override
             public void onAdClose(AdInfo adInfo) {
-                super.onAdClose(adInfo);
                 jumpActivity();
             }
         });
+
       /*  mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadSplashAd(this, PositionId.AD_POSITION_COLD_KP, new AdListener() {
             @Override
