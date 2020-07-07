@@ -852,7 +852,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
             //高德
             positionArea = locationCityInfo.getDistrict() + locationCityInfo.getAoiName();
-            LogUtils.i("-zzh--" + positionArea);
+            LogUtils.i("zz--" + positionArea);
         }
         uploadPositionCity(weatherCity, locationCityInfo.getLatitude(), locationCityInfo.getLongitude(), positionArea);
     }
