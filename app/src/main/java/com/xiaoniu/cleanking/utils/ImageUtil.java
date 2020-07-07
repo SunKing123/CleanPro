@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -98,7 +99,7 @@ public class ImageUtil {
                 .apply(options).into(imageView);
     }
 
-    public static void displayRound(String imageUrl, ImageView imageView, Integer errorImgResouce) {
+    public static void displayCircle(String imageUrl, ImageView imageView, Integer errorImgResouce) {
         if (TextUtils.isEmpty(imageUrl)) {
             imageUrl = "http://xiaoniutaojin.jpg";
         }
@@ -108,7 +109,7 @@ public class ImageUtil {
         RequestOptions options = new RequestOptions()
                 .placeholder(errorImgResouce)// 正在加载中的图片
                 .error(errorImgResouce) // 加载失败的图片
-                .bitmapTransform(new RoundedCorners(15))
+                .bitmapTransform(new CircleCrop())
                 .diskCacheStrategy(DiskCacheStrategy.ALL); // 磁盘缓存策略
         Glide.with(imageView.getContext()).load(imageUrl).
                 apply(options).into(imageView);

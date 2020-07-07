@@ -3,7 +3,7 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/color_4690FD"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <View
@@ -22,17 +22,23 @@
 
         <TextView
             android:id="@+id/tv_title"
-            style="@style/top_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/img_back"
             android:text="个人信息"
+            android:textColor="@color/color_262626"
+            android:textSize="@dimen/dimen_18dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_middle_title"
-            style="@style/top_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="个人信息"
+            android:textColor="@color/color_262626"
+            android:textSize="@dimen/dimen_18dp"
             android:textStyle="bold" />
 
         <TextView
@@ -45,4 +51,11 @@
             android:layout_marginRight="@dimen/dimen_12dp"
             android:text="" />
     </RelativeLayout>
+
+    <View
+        android:id="@+id/line_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_1dp"
+        android:background="#F4F4F4"
+        android:visibility="gone" />
 </LinearLayout>
