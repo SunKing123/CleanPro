@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -124,7 +125,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 
             @Override
             public void getData(BubbleCollected bubbleConfig) {
-                showGetGoldCoinDialog(goldNum);
+                showGetGoldCoinDialog(bubbleConfig);
             }
 
             @Override
@@ -136,6 +137,39 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 ToastUtils.showShort(R.string.notwork_error);
             }
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), goldNum);
+    }
+
+    private void addDoubleGoldCoin(BubbleCollected bubbleCollected) {
+        mModel.goleDouble(new Common3Subscriber<BubbleDouble>() {
+                              @Override
+                              public void showExtraOp(String code, String message) {  //关心错误码；
+                                  ToastUtils.showShort(message);
+                                  GoldCoinDialog.dismiss();
+                              }
+
+                              @Override
+                              public void getData(BubbleDouble bubbleDouble) {
+                                  Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
+                                  intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, bubbleCollected.getData().getGoldCount());
+                                  if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
+                                      intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
+                                  }
+                                  mActivity.startActivity(intent);
+                                  GoldCoinDialog.dismiss();
+                              }
+
+                              @Override
+                              public void showExtraOp(String message) {
+                                  ToastUtils.showShort(message);
+                                  GoldCoinDialog.dismiss();
+                              }
+
+                              @Override
+                              public void netConnectError() {
+                                  ToastUtils.showShort(R.string.notwork_error);
+                              }
+                          }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), bubbleCollected.getData().getUuid(), bubbleCollected.getData().getLocationNum(),
+                bubbleCollected.getData().getGoldCount());
     }
 
     /**
@@ -196,10 +230,10 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     //金币领取广告弹窗
-    private void showGetGoldCoinDialog(int coinCount) {
+    private void showGetGoldCoinDialog(BubbleCollected bubbleCollected) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 3;
-        bean.obtainCoinCount = coinCount;
+        bean.obtainCoinCount = bubbleCollected.getData().getGoldCount();
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
         bean.fromType = GoldCoinDialogParameter.FROM_FINISH_COMPLETE;
         bean.context = mActivity;
@@ -236,14 +270,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 @Override
                 public void onAdVideoComplete(AdInfo adInfo) {
                     super.onAdVideoComplete(adInfo);
-                    Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
-                    intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount);
-                    if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-                        intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
-                    }
-                    mActivity.startActivity(intent);
-                    GoldCoinDialog.dismiss();
-
+                    addDoubleGoldCoin(bubbleCollected);
                 }
             });
 
