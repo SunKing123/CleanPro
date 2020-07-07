@@ -478,7 +478,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 .setViewContainer(viewGroup).build();
 
         if (adviceID == MidasConstants.MAIN_ONE_ID) {
-            MidasRequesCenter.requestAd(params, new AdvCallBack(viewGroup, adviceID));
+            MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID));
         } else {
             MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
                 @Override
@@ -491,11 +491,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
     class AdvCallBack extends CMAbsAdCallBack {
-        ViewGroup viewGroup;
         String advId;
 
-        AdvCallBack(ViewGroup viewGroup, String advId) {
-            this.viewGroup = viewGroup;
+        AdvCallBack(String advId) {
             this.advId = advId;
         }
 
