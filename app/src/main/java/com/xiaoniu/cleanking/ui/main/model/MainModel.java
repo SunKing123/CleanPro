@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.model;
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
+import com.comm.jksdk.http.base.BaseResponse;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -22,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.bean.WeatherForecastResponseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.GreenDaoManager;
@@ -75,6 +77,7 @@ public class MainModel extends GoldModel {
     public void visitorLogin(RequestBody body,CommonSubscriber<LoginDataBean> commonSubscriber) {
         mService.loginApi(body).compose(RxUtil.<LoginDataBean>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
+
     public void getWebUrl(Common4Subscriber<WebUrlEntity> commonSubscriber) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
@@ -210,10 +213,19 @@ public class MainModel extends GoldModel {
 
 
     /**
-     * 游戏加速列表顶部广告
+     * 72小时详细天气信息；
      */
     public void getWeather72HourList(String areaCode, Common2Subscriber<WeatherResponseContent> commonSubscriber) {
         weatherDataApiService.getWeather72HourList(areaCode).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
+    }
+
+
+
+    /**
+     * 天气视频
+     */
+    public void getWeatherVideo(String areaCode, Common2Subscriber<BaseResponse<WeatherForecastResponseEntity>> commonSubscriber) {
+        weatherDataApiService.getWeatherForecastInfo(areaCode).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
 

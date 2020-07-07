@@ -18,6 +18,8 @@ public class BaseResponse<T> implements Serializable {
     private int code;
     private String msg;
     private T data;
+    private long timestamp;
+
 
     public int getCode() {
         return code;
@@ -51,6 +53,14 @@ public class BaseResponse<T> implements Serializable {
             return false;
         }
 
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override

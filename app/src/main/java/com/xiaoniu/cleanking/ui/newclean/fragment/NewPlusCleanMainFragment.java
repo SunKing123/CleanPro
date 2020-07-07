@@ -58,6 +58,7 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
@@ -497,37 +498,46 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 点击立即清理
      */
-    @OnClick(R.id.iv_center)
-    public void nowClean() {
-        StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-        if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
-            if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                //读取扫描缓存
-                startActivity(NowCleanActivity.class);
-            } else {    //scanState ==0: 扫描中
-                checkStoragePermission();
-            }
-        } else {
-            String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
-            CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
-            if (null != countEntity && getActivity() != null && this.isAdded()) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
-                bundle.putString("num", countEntity.getTotalSize());
-                bundle.putString("unit", countEntity.getUnit());
-                Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            } else {
-                //判断扫描缓存；
-                if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                    //读取扫描缓存
-                    startActivity(NowCleanActivity.class);
-                } else {                //scanState ==0: 扫描中
-                    checkStoragePermission();
+    @OnClick({R.id.iv_center,R.id.layout_temp})
+    public void nowClean(View view) {
+        switch (view.getId()){
+            case R.id.iv_center:
+                StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
+                if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
+                    if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                        //读取扫描缓存
+                        startActivity(NowCleanActivity.class);
+                    } else {    //scanState ==0: 扫描中
+                        checkStoragePermission();
+                    }
+                } else {
+                    String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+                    CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+                    if (null != countEntity && getActivity() != null && this.isAdded()) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
+                        bundle.putString("num", countEntity.getTotalSize());
+                        bundle.putString("unit", countEntity.getUnit());
+                        Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    } else {
+                        //判断扫描缓存；
+                        if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                            //读取扫描缓存
+                            startActivity(NowCleanActivity.class);
+                        } else {                //scanState ==0: 扫描中
+                            checkStoragePermission();
+                        }
+                    }
                 }
-            }
+                break;
+
+            case R.id.layout_temp://获取天气信息；
+                EventBus.getDefault().post(new WeatherInfoRequestEvent(0));
+                break;
         }
+
     }
 
 

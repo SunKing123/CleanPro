@@ -19,6 +19,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.comm.jksdk.http.base.BaseResponse;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -49,6 +50,7 @@ import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
+import com.xiaoniu.cleanking.ui.main.bean.WeatherForecastResponseEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.LocationCityInfo;
@@ -786,8 +788,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             mLocationClient.setLocationOption(option);
             //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
             //todo
-         /*   mLocationClient.stopLocation();
-            mLocationClient.startLocation();*/
+//            mLocationClient.stopLocation();
+//            mLocationClient.startLocation();
         }
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //获取一次定位结果：
@@ -833,7 +835,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     location.getAoiName(),
                     location.getAddress()
             );
-            LogUtils.i("-zzh-" + new Gson().toJson(location));
+            LogUtils.i("zz--" + new Gson().toJson(location));
             if (!TextUtils.isEmpty(city))
                 PreferenceUtil.getInstants().save("city", city);
             dealLocationSuccess(cityInfo);
@@ -876,7 +878,25 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mModel == null || mView == null) {
             return;
         }
-        mModel.getWeather72HourList(positionCity.getAreaCode(), new Common2Subscriber<WeatherResponseContent>() {
+
+        mModel.getWeatherVideo(positionCity.getAreaCode(), new Common2Subscriber<BaseResponse<WeatherForecastResponseEntity>>() {
+            @Override
+            public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
+                try {
+                    LogUtils.i("zz--"+new Gson().toJson(entityBaseResponse));
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+
+      /*  mModel.getWeather72HourList(positionCity.getAreaCode(), new Common2Subscriber<WeatherResponseContent>() {
             @Override
             public void getData(WeatherResponseContent weatherResponseContent) {
                 try {
@@ -909,7 +929,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             public void netConnectError() {
 
             }
-        });
+        });*/
       /*  mModel.uploadPositionCity(requestBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
