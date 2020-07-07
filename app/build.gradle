@@ -103,7 +103,7 @@ android {
             buildConfigField "String", "API_APPID", "\"181001\"" //3.0版本api接口appId;
             buildConfigField "String", "API_APPSECRET", "\"d0c804fe06a142deb3d149e44a3ga710\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-dev-default.xiaoniuhy.com/video/v2/query\""
-            buildConfigField "String", "WEATHER_BASE_URL", "\"http://devweatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://testweatapi.hellogeek.com/\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
@@ -129,7 +129,7 @@ android {
             buildConfigField "String", "API_APPID", "\"181001\""  //3.0版本api接口appId;
             buildConfigField "String", "API_APPSECRET", "\"d0c804fe06a142deb3d149e44a3ga710\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com/video/v2/query\""
-            buildConfigField "String", "WEATHER_BASE_URL", "\"http://testweatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://testweatapi.hellogeek.com/\""
             buildConfigField "String", "PUSH_TAG", "\"test\""
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
@@ -152,7 +152,7 @@ android {
             buildConfigField "String", "API_APPID", "\"181001\""
             buildConfigField "String", "API_APPSECRET", "\"671dac08afef455e99e877f753712080\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
-            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
             buildConfigField "String", "SYSTEM_EN", "\"prod\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
@@ -173,13 +173,15 @@ android {
             buildConfigField "String", "API_APPID", "\"181001\""
             buildConfigField "String", "API_APPSECRET", "\"671dac08afef455e99e877f753712080\""
             buildConfigField "String", "VIDEO_BASE_URL", "\"https://clsystem.wukongclean.com/video/v2/query\""
-            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/weatapi/\""
+            buildConfigField "String", "WEATHER_BASE_URL", "\"http://weatapi.hellogeek.com/\""
             buildConfigField "String", "PUSH_TAG", "\"product\""
             buildConfigField "String", "SYSTEM_EN", "\"prod\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
             buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
+            buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://realisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
+            buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
             minifyEnabled false
             signingConfig signingConfigs.release
             debuggable = true

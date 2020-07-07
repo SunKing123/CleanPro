@@ -61,6 +61,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.NotchUtils;
@@ -629,6 +630,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             startActivity(new Intent(this, RedPacketHotActivity.class));
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
             mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+        }
+    }
+
+
+    //请求天气信息
+    @Subscribe
+    public void onEventWeatherInfo(WeatherInfoRequestEvent infotype) {
+        if (infotype.getAction() == 0) {
+           mPresenter.requestLocationPermission();
         }
     }
 
