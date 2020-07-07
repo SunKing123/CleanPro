@@ -170,17 +170,6 @@ public class ScratchCardAvdPresenter {
         }
 
         @Override
-        public void onAdLoadSuccess(AdInfo adInfo) {
-            super.onAdLoadSuccess(adInfo);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    break;
-            }
-        }
-
-        @Override
         public void onAdClicked(AdInfo adInfo) {
             super.onAdClicked(adInfo);
             log("onAdClicked()====" + resNamePrefix);
@@ -198,6 +187,7 @@ public class ScratchCardAvdPresenter {
             log("onAdClose()====" + resNamePrefix);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
+
                     break;
                 case ADV_VIDEO_PREFIX:
                     if (videoPlayed) {
@@ -212,18 +202,6 @@ public class ScratchCardAvdPresenter {
             super.onAdVideoComplete(adInfo);
             log("onAdVideoComplete()====" + resNamePrefix);
             videoPlayed = true;
-        }
-
-        @Override
-        public void onAdSkippedVideo(AdInfo adInfo) {
-            super.onAdSkippedVideo(adInfo);
-            log("onAdSkippedVideo()====" + resNamePrefix);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    break;
-            }
         }
     }
 

@@ -81,8 +81,6 @@ import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -101,8 +99,6 @@ import io.reactivex.disposables.Disposable;
  * email：xinxiaolong123@foxmail.com
  */
 public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener {
-
-    private static final String TAG = "GeekSdk";
 
     @BindView(R.id.view_lottie_top)
     OneKeyCircleButtonView view_lottie_top;
@@ -137,7 +133,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
-    private int mRamScale; //使用内存占总RAM的比例
+    private int mRamScale=0;
     private RxPermissions rxPermissions;
 
     private AlertDialog dlg;
@@ -177,15 +173,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
 
 
-        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
-            @Override
-            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                if (data != null)
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-            }
+        imageInteractive.setClickListener(data -> {
+            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+            StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+            if (data != null)
+                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                        .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
         });
     }
 
@@ -237,53 +230,44 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void initEvent() {
-        imageInteractive.setClickListener(new HomeInteractiveView.OnClickListener() {
-            @Override
-            public void onClick(InteractionSwitchList.DataBean.SwitchActiveLineDTOList data) {
-                AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-                if (data != null)
-                    startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-            }
+        imageInteractive.setClickListener(data -> {
+            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+            StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
+            if (data != null)
+                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
+                        .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
         });
 
-        homeMainTableView.setOnItemClickListener(new HomeMainTableView.OnItemClick() {
-            @Override
-            public void onClick(int item) {
-                switch (item) {
-                    case HomeMainTableView.ITEM_ONE_KEY:
-                        onOneKeySpeedClick();
-                        break;
-                    case HomeMainTableView.ITEM_KILL_VIRUS:
-                        onKillVirusClick();
-                        break;
-                    case HomeMainTableView.ITEM_ELECTRIC:
-                        onElectricClick();
-                        break;
-                }
+        homeMainTableView.setOnItemClickListener(item -> {
+            switch (item) {
+                case HomeMainTableView.ITEM_ONE_KEY:
+                    onOneKeySpeedClick();
+                    break;
+                case HomeMainTableView.ITEM_KILL_VIRUS:
+                    onKillVirusClick();
+                    break;
+                case HomeMainTableView.ITEM_ELECTRIC:
+                    onElectricClick();
+                    break;
             }
         });
-        homeToolTableView.setOnItemClickListener(new HomeToolTableView.OnItemClick() {
-            @Override
-            public void onClick(int item) {
-                switch (item) {
-                    case HomeToolTableView.ITEM_WX:
-                        onCleanWxClick();
-                        break;
-                    case HomeToolTableView.ITEM_TEMPERATURE:
-                        onCoolingClick();
-                        break;
-                    case HomeToolTableView.ITEM_NOTIFY:
-                        onCleanNotifyClick();
-                        break;
-                    case HomeToolTableView.ITEM_NETWORK:
-                        onNetworkSpeedClick();
-                        break;
-                    case HomeToolTableView.ITEM_FOLDER:
-                        onCleanFolderClick();
-                        break;
-                }
+        homeToolTableView.setOnItemClickListener(item -> {
+            switch (item) {
+                case HomeToolTableView.ITEM_WX:
+                    onCleanWxClick();
+                    break;
+                case HomeToolTableView.ITEM_TEMPERATURE:
+                    onCoolingClick();
+                    break;
+                case HomeToolTableView.ITEM_NOTIFY:
+                    onCleanNotifyClick();
+                    break;
+                case HomeToolTableView.ITEM_NETWORK:
+                    onNetworkSpeedClick();
+                    break;
+                case HomeToolTableView.ITEM_FOLDER:
+                    onCleanFolderClick();
+                    break;
             }
         });
     }
@@ -357,9 +341,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 homeMainTableView.killVirusUsedStyle();
                 break;
             case "通知栏清理":
-                homeToolTableView.postDelayed(() -> {
-                    homeToolTableView.notifyUsedStyle();
-                }, 2000);
+                homeToolTableView.postDelayed(() -> homeToolTableView.notifyUsedStyle(), 2000);
                 break;
             case "手机降温":
                 homeToolTableView.coolingUsedStyle();
@@ -380,9 +362,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Subscribe
     public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
         if (null == view_lottie_top) return;
-        if (lifecycEvent.isActivity()) {
-
-        }
         //热启动后重新检测权限
         isDenied = false;
         homeMainTableView.initViewState();
@@ -406,7 +385,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private void showHomeLottieView() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
-        textLayout.setMargins(0, 0 - Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
+        textLayout.setMargins(0, -Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
         view_lottie_top.setLayoutParams(textLayout);
         LuckBubbleView lftop = view_lottie_top.findViewById(R.id.lftop);
         LuckBubbleView lfbottom = view_lottie_top.findViewById(R.id.lfbotm);
@@ -479,12 +458,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         } else {//未取得权限
             LogUtils.i("--checkScanState()");
             //避免重复弹出
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (!isDenied) {
-                        mPresenter.checkStoragePermission();  //重新开始扫描
-                    }
+            new Handler().postDelayed(() -> {
+                if (!isDenied) {
+                    mPresenter.checkStoragePermission();  //重新开始扫描
                 }
             }, 200);
             //未授权默认样式——存在大量垃圾；
@@ -590,9 +566,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 dlg.dismiss();
                 goSetting();
             });
-            btnCancle.setOnClickListener(v -> {
-                dlg.dismiss();
-            });
+            btnCancle.setOnClickListener(v -> dlg.dismiss());
         }
     }
 
@@ -737,7 +711,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 获取互动式广告成功
      *
-     * @param switchInfoList
      */
     public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
         if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
@@ -873,7 +846,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 刷新金币显示
      *
-     * @param dataBean
      */
     public void setTopBubbleView(BubbleConfig dataBean) {
         if (null != view_lottie_top && null != dataBean) {
@@ -899,12 +871,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 金币领取成功
      *
-     * @param dataBean
      */
     public void bubbleCollected(BubbleCollected dataBean) {
         if (null != dataBean) {
             mPresenter.refBullList();//刷新金币列表；
         }
+        assert dataBean != null;
         mPresenter.showGetGoldCoinDialog(dataBean);
     }
 
@@ -912,7 +884,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 激励视频播放完成金币翻倍
      *
-     * @param dataBean
      */
     public void bubbleDouble(BubbleCollected dataBean) {
         if (null != dataBean) {
@@ -925,7 +896,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 翻倍成功
      *
-     * @param dataBean
      */
     public void bubbleDoubleSuccess(BubbleDouble dataBean) {
         if (null == dataBean)
@@ -949,10 +919,5 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         return onClickListener;
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            refreshAd();
-        }
-    };
+    final View.OnClickListener onClickListener = v -> refreshAd();
 }
