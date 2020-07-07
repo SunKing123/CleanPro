@@ -39,6 +39,8 @@ public class CommonTitleLayout extends FrameLayout {
     LinearLayout rootLayout;
     @BindView(R.id.top_middle)
     View topMiddle;
+    @BindView(R.id.line_view)
+    View line_view;
     private Context mContext;
     private boolean leftFinish = true;
 
@@ -89,6 +91,15 @@ public class CommonTitleLayout extends FrameLayout {
 
     public CommonTitleLayout setRightMsg(String msg) {
         tvRight.setText(msg);
+        return this;
+    }
+
+    public CommonTitleLayout isShowBottomLine(boolean isShow) {
+        if (isShow) {
+            line_view.setVisibility(VISIBLE);
+        } else {
+            line_view.setVisibility(GONE);
+        }
         return this;
     }
 

@@ -80,7 +80,7 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         StatusBarCompat.translucentStatusBarForImage(this, true, true);
-        titleLayout.setLeftTitle("").setBgColor(R.color.common_white).setLeftBackColor(R.color.color_666666);
+        titleLayout.setLeftTitle("").setLeftBackColor(R.color.color_666666).isShowBottomLine(true);
         initListener();
         setXieYi();
         paramsMap = new HashMap<>();

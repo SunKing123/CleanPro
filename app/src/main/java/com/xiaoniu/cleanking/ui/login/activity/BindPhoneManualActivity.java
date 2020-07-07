@@ -74,7 +74,7 @@ public class BindPhoneManualActivity extends BaseActivity<BindPhoneManualPresent
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         StatusBarCompat.translucentStatusBarForImage(this, true, true);
-        titleLayout.setMiddleTitle("绑定手机号").setTitleColor(R.color.color_262626).setBgColor(R.color.common_white).setLeftBackColor(R.color.color_666666);
+        titleLayout.setMiddleTitle("绑定手机号").setLeftBackColor(R.color.color_666666).isShowBottomLine(true);
         bindPhoneEt.setTextListener(this);
         inputCodeEt.setTextListener(this);
     }
@@ -148,8 +148,10 @@ public class BindPhoneManualActivity extends BaseActivity<BindPhoneManualPresent
     public void onTextAfter() {
         if (!TextUtils.isEmpty(bindPhoneEt.getText().toString()) && !TextUtils.isEmpty(inputCodeEt.getText().toString())) {
             nextTv.setEnabled(true);
+            nextTv.setTextColor(getResources().getColor(R.color.white));
         } else {
             nextTv.setEnabled(false);
+            nextTv.setTextColor(getResources().getColor(R.color.color_A4A4A4));
         }
     }
 
