@@ -62,13 +62,12 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-
     public void showDialog(int cardIndex, int coinCount) {
-
-        log("调用弹框 showDialog()" + cardIndex + "    " + coinCount);
+        log("刮刮卡调用弹框 showDialog()" + cardIndex + "    " + coinCount);
 
         if (activity == null) {
-            new Throwable("activity 不可为空！");
+            log("activity 对象为空，你能弹框");
+            return;
         }
         this.cardIndex = cardIndex;
         this.coinCount = coinCount;
@@ -84,7 +83,7 @@ public class ScratchCardAvdPresenter {
                 }
             };
         }
-        parameter.adId = isOpenOne() ? getFirstAdvId() : "";
+        parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
         GoldCoinDialog.showGoldCoinDialog(parameter);
     }
@@ -92,7 +91,7 @@ public class ScratchCardAvdPresenter {
     //加载激励视频广告
     private void loadVideoAdv() {
         if (isOpenTwo()) {
-            loadVideoAdv(getVideoAdvId());
+            loadVideoAdv(getVideoAdvId(cardIndex));
         } else {
             handlerVideoAdvError();
         }
@@ -101,21 +100,21 @@ public class ScratchCardAvdPresenter {
     /**
      * 两个刮刮卡刮完显示的广告id
      */
-    private String getFirstAdvId() {
+    private String getFirstAdvId(int cardIndex) {
         return getAdvId(ADV_FIRST_PREFIX, cardIndex);
     }
 
     /**
      * 获取翻倍完成的广告id
      */
-    public String getSecondAdvId() {
+    public String getSecondAdvId(int cardIndex) {
         return getAdvId(ADV_SECOND_PREFIX, cardIndex);
     }
 
     /**
      * 点击金币翻倍展示的激励视频广告id
      */
-    private String getVideoAdvId() {
+    private String getVideoAdvId(int cardIndex) {
         return getAdvId(ADV_VIDEO_PREFIX, cardIndex);
     }
 
@@ -131,7 +130,7 @@ public class ScratchCardAvdPresenter {
     private String getAdvId(String resNamePrefix, int index) {
         String allResourceName = resNamePrefix + index;
         String advId = getAdvId(activity, allResourceName);
-        log("resNamePrefix="+resNamePrefix+"   index="+index+"   获取到的广告id=" + advId);
+        log("resNamePrefix=" + resNamePrefix + "   index=" + index + "   获取到的广告id=" + advId);
         return advId;
     }
 
@@ -198,10 +197,11 @@ public class ScratchCardAvdPresenter {
             log("onAdClose()====" + resNamePrefix);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
+
                     break;
                 case ADV_VIDEO_PREFIX:
                     //用户关闭激励视频，给金币翻倍，跳转至金币成功页面
-                    openCoinCompletePage();
+                    startCoinCompletePage();
                     break;
             }
         }
@@ -231,10 +231,10 @@ public class ScratchCardAvdPresenter {
         GoldCoinDialog.dismiss();
     }
 
-    private void openCoinCompletePage() {
+    private void startCoinCompletePage() {
         Intent intent = new Intent(activity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
-        intent.putExtra(GoldCoinSuccessActivity.AD_ID, isOpenThree() ? getSecondAdvId() : "");
+        intent.putExtra(GoldCoinSuccessActivity.AD_ID, isOpenThree() ? getSecondAdvId(cardIndex) : "");
         activity.startActivity(intent);
         GoldCoinDialog.dismiss();
     }
