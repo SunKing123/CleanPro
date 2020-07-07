@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -95,7 +96,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 if (bubbleConfig != null && bubbleConfig.getData().size() > 0) {
                     for (BubbleConfig.DataBean item : bubbleConfig.getData()) {
                         if (item.getLocationNum() == 5) {
-                            showGetGoldCoinDialog(item.getGoldCount());
+                            addGoldCoin(item.getGoldCount());
                             break;
                         }
                     }
@@ -114,6 +115,28 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView));
     }
 
+    private void addGoldCoin(int goldNum) {
+        mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
+            @Override
+            public void showExtraOp(String code, String message) {  //关心错误码；
+                ToastUtils.showShort(message);
+            }
+
+            @Override
+            public void getData(BubbleCollected bubbleConfig) {
+                showGetGoldCoinDialog(goldNum);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+                ToastUtils.showShort(R.string.notwork_error);
+            }
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), goldNum);
+    }
 
     /**
      * 获取到可以加速的应用名单Android O以下的获取最近使用情况
@@ -214,7 +237,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 public void onAdVideoComplete(AdInfo adInfo) {
                     super.onAdVideoComplete(adInfo);
                     Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
-                    intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
+                    intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount);
                     if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
                         intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
                     }
