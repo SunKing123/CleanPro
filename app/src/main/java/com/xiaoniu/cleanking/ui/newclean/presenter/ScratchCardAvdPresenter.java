@@ -64,7 +64,7 @@ public class ScratchCardAvdPresenter {
     }
 
     public void showDialog(int cardIndex, int coinCount) {
-        log("刮刮卡调用弹框 showDialog()" + cardIndex + "    " + coinCount);
+        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount);
 
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -131,7 +131,7 @@ public class ScratchCardAvdPresenter {
     private String getAdvId(String resNamePrefix, int index) {
         String allResourceName = resNamePrefix + index;
         String advId = getAdvId(activity, allResourceName);
-        log("resNamePrefix=" + resNamePrefix + "   index=" + index + "   获取到的广告id=" + advId);
+        log("================================================resNamePrefix=" + resNamePrefix + "   index=" + index + "   广告id=" + advId+"");
         return advId;
     }
 
@@ -148,7 +148,6 @@ public class ScratchCardAvdPresenter {
             log("onShowError()====" + resNamePrefix + "====" + s);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
-
                     break;
                 case ADV_VIDEO_PREFIX:
                     handlerVideoAdvError();
@@ -164,6 +163,7 @@ public class ScratchCardAvdPresenter {
                 case ADV_FIRST_PREFIX:
                     break;
                 case ADV_VIDEO_PREFIX:
+                    GoldCoinDialog.dismiss();
                     break;
             }
         }
@@ -171,7 +171,6 @@ public class ScratchCardAvdPresenter {
         @Override
         public void onAdLoadSuccess(AdInfo adInfo) {
             super.onAdLoadSuccess(adInfo);
-            log("onAdLoadSuccess()====" + resNamePrefix);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
                     break;
@@ -196,21 +195,19 @@ public class ScratchCardAvdPresenter {
         public void onAdClose(AdInfo adInfo) {
             super.onAdClose(adInfo);
             log("onAdClose()====" + resNamePrefix);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    //用户关闭激励视频，给金币翻倍，跳转至金币成功页面
-                    startCoinCompletePage();
-                    break;
-            }
         }
 
         @Override
         public void onAdVideoComplete(AdInfo adInfo) {
             super.onAdVideoComplete(adInfo);
             log("onAdVideoComplete()====" + resNamePrefix);
+            switch (resNamePrefix) {
+                case ADV_FIRST_PREFIX:
+                    break;
+                case ADV_VIDEO_PREFIX:
+                    GoldCoinDialog.dismiss();
+                    break;
+            }
         }
 
         @Override
@@ -270,7 +267,7 @@ public class ScratchCardAvdPresenter {
             return;
         }
 
-        log("===========================检查刮刮卡的广告开关 start======================================");
+        log("================================================检查刮刮卡的广告开关 start");
         hasInit = true;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
@@ -289,7 +286,12 @@ public class ScratchCardAvdPresenter {
                 }
             }
         }
-        log("==============================检查刮刮卡的广告开关 end========================================");
+
+        isOpenOne=true;
+        isOpenTwo=true;
+        isOpenThree=true;
+
+        log("================================================检查刮刮卡的广告开关 end");
     }
 
     public void destroy() {

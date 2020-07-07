@@ -20,7 +20,7 @@
     <string name="scratch_card_first5">adpos_6236665851</string>
     <string name="scratch_card_video5">adpos_4855628341</string>
     <string name="scratch_card_second5">adpos_2913165551</string>
-
+    
     <string name="scratch_card_first6">adpos_1977193151</string>
     <string name="scratch_card_video6">adpos_4457530141</string>
     <string name="scratch_card_second6">adpos_9041656051</string>
@@ -35,10 +35,9 @@
 
     <string name="scratch_card_first9">adpos_9550969851</string>
     <string name="scratch_card_video9">adpos_6013547841</string>
-    <string name="scratch_card_second9">adpos_2552192751</string>
+    <string name="scratch_card_second9">adpos_6871210251</string>
 
     <string name="scratch_card_first10">adpos_4255436351</string>
-    <string name="scratch_card_video10">adpos_4255436351</string>
+    <string name="scratch_card_video10">adpos_8922269141</string>
     <string name="scratch_card_second10">adpos_5043039251</string>
-
 </resources>

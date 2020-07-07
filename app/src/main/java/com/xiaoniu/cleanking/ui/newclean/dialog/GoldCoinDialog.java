@@ -107,6 +107,16 @@ public class GoldCoinDialog {
             ivAnim.setVisibility(View.VISIBLE);
             ll_my_coin.setVisibility(View.VISIBLE);
         }
+
+
+        switch (fromType) {
+            case GoldCoinDialogParameter.FROM_SCRATCH_CARD:
+                CoinDoubleRL.setVisibility(View.VISIBLE);
+                break;
+            case GoldCoinDialogParameter.FROM_FINISH_COMPLETE:
+
+                break;
+        }
         ll_top_content.setLayoutParams(layoutParams);
         int totalCoin;
         if (parameter.fbTip) {//手动点击翻倍和自动翻倍后的需要展示插屏结果
@@ -151,10 +161,11 @@ public class GoldCoinDialog {
         });
 
         //当传进来的id为空时，不加载广告
-        if(TextUtils.isEmpty(parameter.adId)){
+        if (TextUtils.isEmpty(parameter.adId)) {
+            dialog.show();
             return;
         }
-        requestAd(context,advCallBack,parameter, mRootRL);
+        requestAd(context, advCallBack, parameter, mRootRL);
     }
 
     private static void requestAd(Activity context, AbsAdCallBack callBack, GoldCoinDialogParameter coinBean, ViewGroup mRootRL) {
@@ -172,8 +183,8 @@ public class GoldCoinDialog {
         });
     }
 
-    public static void dismiss(){
-        if(dialog!=null&&dialog.isShowing()){
+    public static void dismiss() {
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
     }
