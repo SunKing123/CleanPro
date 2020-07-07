@@ -67,6 +67,10 @@ public class InsertAdSwitchInfoList extends BaseEntity {
             return isOpen;
         }
 
+        public void setOpen(boolean open) {
+            isOpen = open;
+        }
+
         public String getConfigKey() {
             return configKey;
         }

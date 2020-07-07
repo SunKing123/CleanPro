@@ -173,7 +173,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     //金币领取广告弹窗
-    public void showGetGoldCoinDialog(int coinCount) {
+    private void showGetGoldCoinDialog(int coinCount) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 3;
         bean.obtainCoinCount = coinCount;

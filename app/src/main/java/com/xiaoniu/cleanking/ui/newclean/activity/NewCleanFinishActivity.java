@@ -371,7 +371,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_FINISH_GET_GOLD_COIN)) {
             mPresenter.getGoldCoin();
         }
-
     }
 
     private void changeUI(Intent intent) {
