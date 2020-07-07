@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,21 +15,27 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
+import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
@@ -541,6 +548,8 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }
     }
 
+
+
     //更新金币列表
     public void refBullList(){
         mModel.getGoleGonfigs(new Common3Subscriber<BubbleConfig>() {
@@ -577,8 +586,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             @Override
             public void getData(BubbleCollected bubbleConfig) {
-//                mView.setTopBubbleView(bubbleConfig);
-
+                mView.bubbleCollected(bubbleConfig);
             }
 
             @Override
@@ -591,5 +599,91 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             }
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView),locationNum);
     }
+
+
+    //金币翻倍
+    public void bullDouble(String uuid, int locationNum, int goldCount) {
+        mModel.goleDouble(new Common3Subscriber<BubbleDouble>() {
+            @Override
+            public void showExtraOp(String code, String message) {  //关心错误码；
+                ToastUtils.showShort(message);
+            }
+
+            @Override
+            public void getData(BubbleDouble bubbleDouble) {
+                mView.bubbleDoubleSuccess(bubbleDouble);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+                ToastUtils.showShort(R.string.notwork_error);
+            }
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount);
+    }
+
+
+
+    //金币领取广告弹窗
+    public void showGetGoldCoinDialog(BubbleCollected dataBean) {
+        GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
+        bean.dialogType = 1;
+        bean.obtainCoinCount = dataBean.getData().getGoldCount();
+        bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(),0);
+        bean.isDouble = true;
+        //广告回调
+        bean.advCallBack = new AbsAdCallBack() {
+            @Override
+            public void onAdShow(AdInfo adInfo) {
+
+            }
+
+            @Override
+            public void onAdError(AdInfo adInfo, int i, String s) {
+
+            }
+        };
+        //翻倍回调
+        bean.onDoubleClickListener = (v) -> {
+            ViewGroup viewGroup = (ViewGroup) mView.getActivity().getWindow().getDecorView();
+            AdRequestParams params = new AdRequestParams.Builder().
+                    setActivity(mView.getActivity()).
+                    setViewContainer(viewGroup).
+                    setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(),1)).build();
+            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+                @Override
+                public void onShowError(int i, String s) {
+                    ToastUtils.showLong("网络异常");
+                    GoldCoinDialog.dismiss();
+                }
+
+                @Override
+                public void onAdError(AdInfo adInfo, int i, String s) {
+
+                    ToastUtils.showLong("网络异常");
+                    GoldCoinDialog.dismiss();
+                }
+
+                @Override
+                public void onAdVideoComplete(AdInfo adInfo) {
+                    if(!mView.getActivity().isFinishing()){
+                        mView.bubbleDouble(dataBean);
+                        GoldCoinDialog.dismiss();
+                    }
+
+
+                }
+            });
+        };
+        //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
+        bean.context = mView.getActivity();
+        GoldCoinDialog.showGoldCoinDialog(bean);
+    }
+
+
+
 
 }

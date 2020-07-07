@@ -1,5 +1,9 @@
 package com.xiaoniu.cleanking.midas;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author zhengzhihao
  * @date 2020/7/3 13
@@ -87,12 +91,12 @@ public interface MidasConstants {
     /**
      * 点击领取双倍金币按钮时的激励视频
      */
-    String CLICK_GET_DOUBLE_COIN_BUTTON="adpos_9076480841";
+    String CLICK_GET_DOUBLE_COIN_BUTTON = "adpos_9076480841";
 
     /***
      * 翻倍领取金币成功页面
      */
-    String GET_DOUBLE_GOLD_COIN_SUCCESS="adpos_7576129651";
+    String GET_DOUBLE_GOLD_COIN_SUCCESS = "adpos_7576129651";
 
     /**
      * 红包广告ID
@@ -128,15 +132,17 @@ public interface MidasConstants {
 
 
     /**
-     *首页金币-左上-激励视频
+     * 首页金币-左上-激励视频
      */
     String HOME_PAGE_LFTOP_GOLD_02 = "adpos_7147998041";
 
     /**
-     *首页金币-左上-模板
+     * 首页金币-左上-模板
      */
     String HOME_PAGE_LFTOP_GOLD_03 = "adpos_7526694551";
 
+
+    List<String> HOMELTTOP_LIST = new ArrayList<String>(Arrays.asList(new String[]{HOME_PAGE_LFTOP_GOLD_01, HOME_PAGE_LFTOP_GOLD_02, HOME_PAGE_LFTOP_GOLD_03}));
 
 
     /**
@@ -146,55 +152,55 @@ public interface MidasConstants {
 
 
     /**
-     *首页金币-右上-激励视频
+     * 首页金币-右上-激励视频
      */
     String HOME_PAGE_RTTOP_GOLD_02 = "adpos_9419610341";
 
     /**
-     *首页金币-右上-模板
+     * 首页金币-右上-模板
      */
     String HOME_PAGE_RTTOP_GOLD_03 = "adpos_3592791451";
 
+    List<String> HOMERTTOP_LIST = new ArrayList<String>(Arrays.asList(new String[]{HOME_PAGE_RTTOP_GOLD_01, HOME_PAGE_RTTOP_GOLD_02, HOME_PAGE_RTTOP_GOLD_03}));
 
     /**
-     *首页金币-左下-模板
+     * 首页金币-左下-模板
      */
     String HOME_PAGE_LFBOTTOM_GOLD_01 = "adpos_5841153051";
 
 
     /**
-     *首页金币-右上-激励视频
+     * 首页金币-右上-激励视频
      */
     String HOME_PAGE_LFBOTTOM_GOLD_02 = "adpos_3829083041";
 
     /**
-     *首页金币-右上-模板
+     * 首页金币-右上-模板
      */
     String HOME_PAGE_LFBOTTOM_GOLD_03 = "adpos_1561862051";
 
-
+    List<String> HOMELFBOTTOM_LIST = new ArrayList<String>(Arrays.asList(new String[]{HOME_PAGE_LFBOTTOM_GOLD_01, HOME_PAGE_LFBOTTOM_GOLD_02, HOME_PAGE_LFBOTTOM_GOLD_03}));
 
     /**
-     *首页金币-左下-模板
+     * 首页金币-左下-模板
      */
     String HOME_PAGE_RTBOTTOM_GOLD_01 = "adpos_9321897351";
 
-
     /**
-     *首页金币-右上-激励视频
+     * 首页金币-右上-激励视频
      */
     String HOME_PAGE_RTLFBOTTOM_GOLD_02 = "adpos_4476822141";
 
     /**
-     *首页金币-右上-模板
+     * 首页金币-右上-模板
      */
     String HOME_PAGE_RTLFBOTTOM_GOLD_03 = "adpos_7546373351";
 
-
-
+    List<String> HOMERTBOTTOM_LIST = new ArrayList<String>(Arrays.asList(new String[]{HOME_PAGE_RTBOTTOM_GOLD_01, HOME_PAGE_RTLFBOTTOM_GOLD_02, HOME_PAGE_RTLFBOTTOM_GOLD_03}));
     /**
      * 解锁或按home键10秒后在桌面显示的插屏广告
      */
-    String SCREEN_ON_ID="adpos_9164081851";
+    String SCREEN_ON_ID = "adpos_9164081851";
+
 
 }
