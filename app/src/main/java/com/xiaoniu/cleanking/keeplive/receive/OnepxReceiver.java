@@ -7,6 +7,7 @@ import android.os.Looper;
 
 import com.xiaoniu.cleanking.keeplive.onepx.OnePixelActivity;
 import com.xiaoniu.cleanking.keeplive.utils.KeepAliveUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 
 @SuppressWarnings(value = {"unchecked", "deprecation"})
 public final class OnepxReceiver extends BroadcastReceiver {
@@ -19,6 +20,9 @@ public final class OnepxReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
+
+        LogUtils.e("=================OnepxReceiver:" + intent.getAction());
+
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {    //屏幕关闭的时候接受到广播
             appIsForeground = KeepAliveUtils.IsForeground(context);
            /* try {
@@ -32,6 +36,8 @@ public final class OnepxReceiver extends BroadcastReceiver {
             }*/
             //通知屏幕已关闭，开始播放无声音乐
             context.sendBroadcast(new Intent("_ACTION_SCREEN_OFF"));
+        } else if (Intent.ACTION_SCREEN_ON.equals(intent.getAction())) {
+            context.sendBroadcast(new Intent("_ACTION_SCREEN_ON"));
         }
       /*  else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {   //屏幕打开的时候发送广播  结束一像素
             context.sendBroadcast(new Intent("finish activity"));

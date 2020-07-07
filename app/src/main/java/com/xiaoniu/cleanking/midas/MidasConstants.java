@@ -120,4 +120,10 @@ public interface MidasConstants {
      */
     String LOCK_PAGE_FEED_ID = "adpos_1531089251";
 
+
+    /**
+     * 解锁或按home键10秒后在桌面显示的插屏广告
+     */
+    String SCREEN_ON_ID="adpos_9164081851";
+
 }
