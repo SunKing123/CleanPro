@@ -233,7 +233,7 @@ public interface UserApiService {
      * 金币翻倍
      */
 
-    @GET("/bubble/collect/double")
+    @POST("/bubble/collect/double")
     Flowable<BubbleDouble> bubbleDouble(@Body RequestBody body);
 
     /**
