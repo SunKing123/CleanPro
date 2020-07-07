@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.ishumei.smantifraud.SmAntiFraud;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.net.RequestApiInfoLog;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -120,8 +121,12 @@ public class RequestParamInterceptor implements Interceptor {
 //        }
 
         Request request = requestBuilder.build();
-//        Log.e("_api","url=="+request.url().url()+"\n"+"请求方式："+request.method());
-        return chain.proceed(request);
+        Response response = chain.proceed(request);
+        if (BuildConfig.DEBUG){
+            //打印请求相关信息
+            RequestApiInfoLog.collectionLog(request,response);
+        }
+        return response;
     }
 
     /**

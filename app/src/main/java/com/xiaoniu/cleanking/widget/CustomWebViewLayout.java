@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebSettingsImpl;
 import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
 import com.xiaoniu.cleanking.R;
@@ -61,6 +62,7 @@ public class CustomWebViewLayout extends FrameLayout {
                 .closeIndicator()
                 .setWebChromeClient(mWebChromeClient)
                 .setWebViewClient(mWebViewClient)
+                .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())
                 .createAgentWeb()
                 .ready();
         animaDra = AnimationsContainer.getInstance(R.array.loading_coin, 100).createAnim(load_iv);

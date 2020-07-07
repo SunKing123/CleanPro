@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +19,6 @@ import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 /**
  * Created by xinxiaolong on 2020/7/6.

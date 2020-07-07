@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.login.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +23,12 @@ import com.xiaoniu.cleanking.ui.login.presenter.BindPhonePresenter;
 import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -64,11 +71,19 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         StatusBarCompat.translucentStatusBarForImage(this, true, true);
         titleLayout.setMiddleTitle("绑定手机号").setLeftBackColor(R.color.color_666666).isShowBottomLine(true);
         requestPhonePermission();
         //设置授权的样式
         OneKeyLoginManager.getInstance().setAuthThemeConfig(ShanYanManager.getCJSConfig(this));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String eventMsg) {
+        if ("BindPhoneSuccess".equals(eventMsg)) {//绑定手机号成功关闭页面
+            finish();
+        }
     }
 
     @Override
@@ -91,6 +106,14 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
     public void launchActivity(@NonNull Intent intent) {
         checkNotNull(intent);
         ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Override
@@ -126,8 +149,21 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
                 if (codeL != 1000) {
                     goToShouDongBinding();
                 }
-            } else if (typeL == 103) {//页面关闭情况
-
+            } else if (typeL == 103) {//登录结果
+                if (codeL == 1000) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(messageL);
+                        String token = jsonObject.optString("token");
+                        if (!TextUtils.isEmpty(token)) {
+                            mPresenter.getPhoneNumFromShanYan(token);
+                        } else {
+                            startActivity(new Intent(BindPhoneActivity.this, BindPhoneManualActivity.class));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }
@@ -144,7 +180,16 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
             }
         });
     }
-    private void goToShouDongBinding(){
+
+    private void goToShouDongBinding() {
         startActivity(new Intent(this, BindPhoneManualActivity.class));
+    }
+
+    /**
+     * 通过闪验绑定手机号成功
+     */
+    @Override
+    public void bindPhoneSuccess() {
+        finish();
     }
 }

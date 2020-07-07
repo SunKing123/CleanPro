@@ -15,16 +15,21 @@ import com.jess.arms.utils.ArmsUtils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.login.bean.BindPhoneBean;
 import com.xiaoniu.cleanking.ui.login.bean.IsPhoneBindBean;
+import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
 import com.xiaoniu.cleanking.ui.login.contract.BindPhoneManualContract;
 import com.xiaoniu.cleanking.ui.login.di.component.DaggerBindPhoneManualComponent;
 import com.xiaoniu.cleanking.ui.login.presenter.BindPhoneManualPresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.rewrite.ClearAbleEditText;
 import com.xiaoniu.cleanking.widget.rewrite.CountDownTextView;
 import com.xiaoniu.cleanking.widget.rewrite.OnTextListener;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.KeyboardUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -133,12 +138,15 @@ public class BindPhoneManualActivity extends BaseActivity<BindPhoneManualPresent
 
     private boolean checkIsPhoneNum(String phoneNumber) {
         if (TextUtils.isEmpty(phoneNumber)) {
+            ToastUtils.showShort("请输入手机号");
             return false;
         }
         if (!phoneNumber.startsWith("1")) {
+            ToastUtils.showShort("请输入正确的手机号");
             return false;
         }
         if (phoneNumber.length() != 11) {
+            ToastUtils.showShort("请输入正确的手机号");
             return false;
         }
         return true;
@@ -157,8 +165,16 @@ public class BindPhoneManualActivity extends BaseActivity<BindPhoneManualPresent
 
     @Override
     public void getBindPhoneSuccess(BindPhoneBean listBean) {
-        ToastUtils.showShort("绑定成功");
-        finish();
+        UserInfoBean infoBean = listBean.getData();
+        if (infoBean != null) {
+            ToastUtils.showShort("绑定成功");
+            infoBean.userType = 1;
+            UserHelper.init().saveUserInfo(infoBean);
+            EventBus.getDefault().post("BindPhoneSuccess");
+            KeyboardUtils.closeKeyboard(inputCodeEt);
+            KeyboardUtils.closeKeyboard(bindPhoneEt);
+            finish();
+        }
     }
 
     String isBinded = "-1";

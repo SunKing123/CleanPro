@@ -19,6 +19,7 @@ public class UserInfoBean {
      */
 
     public String userId;
+    // userType 1为微信登录状态 2-游客  绑定手机号只能绑定到微信登录状态
     public int userType;
     public String phone;
     public String nickname;

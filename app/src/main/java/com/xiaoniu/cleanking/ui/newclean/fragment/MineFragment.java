@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.databinding.DataBindingUtil;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -14,7 +15,10 @@ import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
+import com.xiaoniu.cleanking.ui.main.activity.LoginActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
@@ -27,7 +31,6 @@ import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
@@ -100,8 +103,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
     }
 
-    @OnClick({R.id.setting_ll, R.id.head_img_iv, R.id.phone_num_tv, R.id.iv_inter_ad, R.id.llt_invite_friend,
-            R.id.body_data_ll, R.id.step_record_ll, R.id.kefu_ll, R.id.withdrawal_ll})
+    @OnClick({R.id.setting_ll, R.id.head_img_iv, R.id.phone_num_tv, R.id.llt_invite_friend,
+            R.id.body_data_ll, R.id.step_record_ll, R.id.kefu_ll, R.id.withdrawal_ll, R.id.wallet_ll})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.setting_ll:
@@ -124,11 +127,21 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 //                GoldCoinDialog.showGoldCoinDialog(goldCoinBean);
 //                ToastUtils.showShort("用户信息");
                 break;
-            case R.id.iv_inter_ad:
-                ToastUtils.showShort("插入广告");
-                break;
+//            case R.id.iv_inter_ad:
+//                ToastUtils.showShort("插入广告");
+//                break;
             case R.id.withdrawal_ll:
-                ToastUtils.showShort("提现操作");
+            case R.id.wallet_ll:
+                if (UserHelper.init().isWxLogin()) {
+                    String url = H5Urls.WITHDRAWAL_URL;
+                    String scheme = SchemeConstant.SCHEME +
+                            "://" + SchemeConstant.HOST + "/jump?url=" + url +
+                            "&" + SchemeConstant.IS_FULL_SCREEN + "=1";
+                    SchemeProxy.openScheme(getActivity(), scheme);
+                } else {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+//                ToastUtils.showShort("提现操作");
                 break;
             case R.id.llt_invite_friend:
                 StatisticsUtils.trackClick("privilege_management_click", "\"权限管理\"点击", AppHolder.getInstance().getSourcePageId(), "personal_center_page");

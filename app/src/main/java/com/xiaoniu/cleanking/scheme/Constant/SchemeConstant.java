@@ -30,6 +30,7 @@ public class SchemeConstant {
     //native params参数
     public static final String EXTRA_MAIN_INDEX = "main_index";
 
+    public static final String IS_FULL_SCREEN = "isfullscreen";
     /**
      * 本地push scheme
      */
