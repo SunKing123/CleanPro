@@ -39,6 +39,7 @@ public class SpConstants {
     public static final String CONTACT_PERMISSION = "contact_permission";
 
     public static final String USER_NAME = "user_name";
+    public static final String USER_HEAD_PORTRAIT_URL = "user_name";
     public static final String ID_NUM = "id_num";
     public static final String SPLASH_IMG_URL = "home_banner_config";
     public static final String UN_AUTHEN_LINE = "un_authen_line";

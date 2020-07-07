@@ -1,5 +1,8 @@
 package com.xiaoniu.cleanking.api;
 
+import com.xiaoniu.cleanking.base.BaseEntity;
+import com.xiaoniu.cleanking.ui.login.bean.BindPhoneBean;
+import com.xiaoniu.cleanking.ui.login.bean.IsPhoneBindBean;
 import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 
@@ -8,6 +11,7 @@ import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * @author z
@@ -32,5 +36,42 @@ public interface CommonApiService {
     @POST("/clean-user/login")
     Observable<LoginDataBean> loginWeiChatApi(@Body RequestBody body);
 
+
+
+    /**
+     * 绑定微信到游客
+     *
+     * @param body
+     * @return
+     */
+    @POST("/clean-user/bindWechat")
+    Observable<LoginDataBean> bindingWeiChatApi(@Body RequestBody body);
+
+    /**
+     * 校验手机号是否被绑定
+     *
+     * @param phoneNum
+     * @return
+     */
+    @GET("/clean-user/isPhoneBinded")
+    Observable<IsPhoneBindBean> checkPhoneBindedApi(@Query("phoneNum") String phoneNum);
+
+    /**
+     * 手机号绑定
+     *
+     * @param body
+     * @return
+     */
+    @POST("/clean-user/bindPhone")
+    Observable<BindPhoneBean> phoneBindApi(@Body RequestBody body);
+
+    /**
+     * 发送短信验证码
+     *
+     * @param body
+     * @return
+     */
+    @POST("/clean-user/sendMsg")
+    Observable<BaseEntity> sendMsgApi(@Body RequestBody body);
 
 }

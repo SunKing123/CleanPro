@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
@@ -27,8 +28,11 @@ import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
 import com.xiaoniu.cleanking.ui.login.contract.LoginWeiChatContract;
 import com.xiaoniu.cleanking.ui.login.di.component.DaggerLoginWeiChatComponent;
 import com.xiaoniu.cleanking.ui.login.presenter.LoginWeiChatPresenter;
+import com.xiaoniu.cleanking.ui.newclean.dialog.CommonDialogUtils;
+import com.xiaoniu.cleanking.ui.newclean.interfice.OnBtnClickListener;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.payshare.AuthorizeLoginListener;
 import com.xiaoniu.payshare.AuthorizedLogin;
 
@@ -71,11 +75,15 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         return R.layout.activity_login_wei_chat; //如果你不需要框架帮你设置 setContentView(id) 需要自行设置,请返回 0
     }
 
+    HashMap<String, Object> paramsMap;
+
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        titleLayout.setLeftTitle("登录").setBgColor(R.color.common_white);
+        StatusBarCompat.translucentStatusBarForImage(this, true, true);
+        titleLayout.setLeftTitle("").setBgColor(R.color.common_white).setLeftBackColor(R.color.color_666666);
         initListener();
         setXieYi();
+        paramsMap = new HashMap<>();
     }
 
     private void setXieYi() {
@@ -117,12 +125,16 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
 
             @Override
             public void authorizeSuccess(SHARE_MEDIA platform, Map<String, String> data) {
-                HashMap<String, Object> paramsMap = new HashMap<>();
-                paramsMap.put("userType", 1);
+//                paramsMap.put("openId",  AndroidUtil.getDeviceID());
                 paramsMap.put("openId", data.get("openid"));
                 paramsMap.put("nickname", data.get("name"));
                 paramsMap.put("userAvatar", data.get("iconurl"));
-                mPresenter.loginWithWeiChat(paramsMap);
+                if (UserHelper.init().isLogin() && !UserHelper.init().isWxLogin()) {//微信登陆什么也不处理 步数不要清理
+                    paramsMap.remove("userType");
+                    mPresenter.bindingWeiChat(paramsMap);
+                } else {//啥也没登陆就去 登陆微信
+                    mPresenter.loginWithWeiChat(paramsMap);
+                }
             }
         });
     }
@@ -173,11 +185,39 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     }
 
     @Override
-    public void dealLoginResult(LoginDataBean loginDataBean) {
+    public void dealLoginResult(int flag, LoginDataBean loginDataBean) {
+        //flag 1 微信登录  2 绑定微信
+        if (flag == 2) {
+            if ("2028".equals(loginDataBean.getCode())) {
+                String tip = "账号已注册，登录后游客模式账号金币不同步,是否继续登录";
+                CommonDialogUtils.showRemindDialogStyle01(this, tip, "确认", new OnBtnClickListener() {
+                    @Override
+                    public void onClickView(int type) {
+                        mPresenter.loginWithWeiChat(paramsMap);
+                    }
+                });
+            } else if ("200".equals(loginDataBean.getCode())) {
+                mPresenter.loginWithWeiChat(paramsMap);
+            }
+        }
+
         UserInfoBean infoBean = loginDataBean.getData();
         if (infoBean != null) {
             UserHelper.init().saveUserInfo(infoBean);
-            finish();
+            if (flag == 1) {
+                if (TextUtils.isEmpty(infoBean.phone)) {
+                    goToBindPhone();
+
+                }
+                finish();
+            }
         }
+    }
+
+    /**
+     * 跳转绑定手机号页面
+     */
+    private void goToBindPhone() {
+        startActivity(new Intent(this, BindPhoneActivity.class));
     }
 }

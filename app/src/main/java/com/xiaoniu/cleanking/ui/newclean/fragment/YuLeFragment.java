@@ -31,7 +31,8 @@ public class YuLeFragment extends SimpleFragment {
     @Override
     protected void initView() {
         mBinding = DataBindingUtil.bind(getView());
-        mBinding.webViewLayout.loadUrl("https://www.baidu.com/");
+//        mBinding.webViewLayout.loadUrl("https://www.baidu.com/");
+        mBinding.webViewLayout.loadUrl("http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList.html");
 
         mAgentWeb = mBinding.webViewLayout.getAgentWeb();
     }
@@ -39,10 +40,10 @@ public class YuLeFragment extends SimpleFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
+//        if (!hidden) {
             //放在initView中无效
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
-        }
+//        }
     }
 
     @Override

@@ -2,15 +2,21 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.suke.widget.SwitchButton;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
+import com.xiaoniu.cleanking.ui.main.presenter.WhiteListSettingPresenter;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.OnClick;
 
@@ -18,14 +24,15 @@ import butterknife.OnClick;
  * 白名单设置
  * Created by lang.chen on 2019/7/5
  */
-public class WhiteListSettingActivity extends BaseActivity {
+public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPresenter> {
 
     private SwitchButton mSbtnScreenTag;
     private SwitchButton mSbtnNotificationTag;
+    private LinearLayout ll_exit_login;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
-
+        activityComponent.inject(this);
     }
 
     @Override
@@ -41,6 +48,7 @@ public class WhiteListSettingActivity extends BaseActivity {
     @Override
     protected void initView() {
         mSbtnScreenTag = findViewById(R.id.s_btn_screen_tag);
+        ll_exit_login = findViewById(R.id.ll_exit_login);
         mSbtnNotificationTag = findViewById(R.id.s_notification_tag);
         mSbtnScreenTag.setChecked(PreferenceUtil.getScreenTag());
         mSbtnScreenTag.setOnCheckedChangeListener((view, isChecked) -> PreferenceUtil.saveScreenTag(isChecked));
@@ -53,6 +61,11 @@ public class WhiteListSettingActivity extends BaseActivity {
             }
             PreferenceUtil.saveIsNotificationEnabled(isChecked);
         });
+        if (UserHelper.init().isLogin()) {
+            ll_exit_login.setVisibility(View.VISIBLE);
+        } else {
+            ll_exit_login.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -86,7 +99,16 @@ public class WhiteListSettingActivity extends BaseActivity {
             intent.putExtra("type", "soft_white_list");
             startActivity(intent);
         } else if (ids == R.id.ll_exit_login) {
-            ToastUtils.showShort("退出登录");
+            mPresenter.exitUserLogin();
+        }
+    }
+
+    public void exitLoginResult(ExitLoginBean exitLoginBean) {
+        if (exitLoginBean != null && "200".equals(exitLoginBean.code)) {
+            UserHelper.init().clearCurrentUserInfo();
+            EventBus.getDefault().post("exitLoginSuccess");
+            ToastUtils.showShort("退出登录成功");
+            ll_exit_login.setVisibility(View.GONE);
         }
     }
 }

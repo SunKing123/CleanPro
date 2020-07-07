@@ -38,6 +38,8 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
+import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
+import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
@@ -65,11 +67,13 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -84,6 +88,7 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +104,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Created by tie on 2017/5/15.
@@ -117,6 +124,39 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     @Inject
     public MainPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
+    }
+    /**
+     * 游客登录
+     */
+    public void visitorLogin() {
+        if (UserHelper.init().isLogin()){//已经登录跳过
+            return;
+        }
+        Gson gson = new Gson();
+        Map<String, Object> paramsMap = new HashMap<>();
+        paramsMap.put("userType", 2);
+        paramsMap.put("openId",  AndroidUtil.getDeviceID());
+        String json = gson.toJson(paramsMap);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mModel.visitorLogin(body, new CommonSubscriber<LoginDataBean>() {
+            @Override
+            public void getData(LoginDataBean loginDataBean) {
+                UserInfoBean infoBean = loginDataBean.getData();
+                if (infoBean != null) {
+                    UserHelper.init().saveUserInfo(infoBean);
+                }
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
     }
 
     /**
@@ -186,12 +226,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void commitJPushAlias() {
         if (!PreferenceUtil.getIsSaveJPushAliasCurrentVersion(AppApplication.getInstance())) {
             GeekPush.clearAllTag();
-            new Handler().postDelayed(()->{
+            new Handler().postDelayed(() -> {
                 LogUtils.e("======极光正在注册===");
                 // GeekPush.bindAlias(DeviceUtils.getUdid());
                 GeekPush.addTag(Constant.APP_NAME + "_" + BuildConfig.VERSION_CODE);
                 GeekPush.addTag(BuildConfig.PUSH_TAG);//区分推送环境
-                GeekPush.addTag("love"+BuildConfig.VERSION_CODE);
+                GeekPush.addTag("love" + BuildConfig.VERSION_CODE);
                 mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
                     @Override
                     public void showExtraOp(String code, String message) {
@@ -215,7 +255,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }
                 });
 
-            },5000);
+            }, 5000);
 
         }
 
@@ -524,7 +564,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     //显示内部插屏广告
     public void showInsideScreenDialog(String appID) {
-        if (mActivity == null||TextUtils.isEmpty(appID)) {
+        if (mActivity == null || TextUtils.isEmpty(appID)) {
             return;
         }
         AdRequestParams params = new AdRequestParams.Builder()
@@ -812,7 +852,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
             //高德
             positionArea = locationCityInfo.getDistrict() + locationCityInfo.getAoiName();
-            LogUtils.i("-zzh--" + positionArea);
+            LogUtils.i("zz--" + positionArea);
         }
         uploadPositionCity(weatherCity, locationCityInfo.getLatitude(), locationCityInfo.getLongitude(), positionArea);
     }
@@ -1006,7 +1046,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             // option.setArea(SmAntiFraud.AREA_XJP); //连接新加坡机房客户使用此选项
             // option.setArea(SmAntiFraud.AREA_FJNY); //连接美国机房客户使用此选项
             //3.SDK 初始化
-            SmAntiFraud.create(AppApplication.getInstance(),option);
+            SmAntiFraud.create(AppApplication.getInstance(), option);
 
         }
     }

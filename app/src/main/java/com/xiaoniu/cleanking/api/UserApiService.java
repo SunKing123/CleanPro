@@ -3,17 +3,20 @@ package com.xiaoniu.cleanking.api;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
+import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
-import com.xiaoniu.cleanking.ui.main.bean.Patch;
+import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -42,6 +45,22 @@ public interface UserApiService {
      */
     @GET("/app/upgrade")
     Flowable<AppVersion> queryAppVersion();
+    /**
+     * 账户/账户信息查询（赚赚、我的、我的钱包）
+     *
+     * @return
+     */
+    @GET("/account/info")
+    Flowable<MinePageInfoBean> getMinePageInfo();
+
+    /**
+     * 微信、游客登录
+     *
+     * @param body
+     * @return
+     */
+    @POST("/clean-user/login")
+    Flowable<LoginDataBean> loginApi(@Body RequestBody body);
 
     /**
      * 过审开关
@@ -151,8 +170,6 @@ public interface UserApiService {
     Flowable<AppVersion> sendVoiceSmsCode(@Body RequestBody body);
 
 
-
-
     /**
      * 意见反馈
      */
@@ -202,4 +219,25 @@ public interface UserApiService {
     Flowable<BubbleConfig> getBubbleConfig();
 
 
+    /**
+     * 金币领取
+     */
+    @GET("/bubble/collect")
+    Flowable<BubbleCollected> bubbleCollected();
+
+//
+//    /**
+//     * 金币翻倍
+//     */
+//
+//    @GET("/bubble/collect/double")
+//    Flowable<BubbleCollected> bubbleCollected();
+
+    /**
+     * 退出登录
+     *
+     * @return
+     */
+    @GET("/clean-user/logout")
+    Flowable<ExitLoginBean> exitLogin();
 }

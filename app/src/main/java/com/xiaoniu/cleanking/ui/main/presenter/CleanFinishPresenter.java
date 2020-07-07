@@ -15,7 +15,7 @@ import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
-import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinBean;
+import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -34,8 +34,6 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -172,11 +170,11 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 
     //金币领取广告弹窗
     private void showGetGoldCoinDialog(int coinCount) {
-        GoldCoinBean bean = new GoldCoinBean();
+        GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 3;
         bean.obtainCoinCount = coinCount;
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
-        bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
+        //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
         bean.context = mActivity;
         GoldCoinDialog.showGoldCoinDialog(bean);
     }

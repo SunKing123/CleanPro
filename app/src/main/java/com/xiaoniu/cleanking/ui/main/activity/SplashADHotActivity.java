@@ -172,7 +172,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private void initGeekSdkAD() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "hot_splash_page");
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SP_HOT_START_ID)
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
                 .setActivity(this).setViewContainer(container).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
