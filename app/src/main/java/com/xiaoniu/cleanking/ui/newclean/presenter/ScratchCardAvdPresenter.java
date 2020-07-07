@@ -131,6 +131,7 @@ public class ScratchCardAvdPresenter {
     private String getAdvId(String resNamePrefix, int index) {
         String allResourceName = resNamePrefix + index;
         String advId = getAdvId(activity, allResourceName);
+        log("resNamePrefix="+resNamePrefix+"   index="+index+"   获取到的广告id=" + advId);
         return advId;
     }
 
