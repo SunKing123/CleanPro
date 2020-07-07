@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -150,6 +151,10 @@ public class GoldCoinDialog {
         closeDlg.setOnClickListener(view -> {
             dialog.dismiss();
         });
+
+        if(TextUtils.isEmpty(parameter.adId)){
+            return;
+        }
         requestAd(context,advCallBack,parameter, mRootRL);
     }
 

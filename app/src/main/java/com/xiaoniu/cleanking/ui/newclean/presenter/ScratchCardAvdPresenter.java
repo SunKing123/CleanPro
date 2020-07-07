@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,11 @@ import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
@@ -39,6 +42,8 @@ public class ScratchCardAvdPresenter {
 
     private Activity activity;
     private int cardIndex;
+    private int coinCount;
+    GoldCoinDialogParameter parameter = new GoldCoinDialogParameter();
 
     public ScratchCardAvdPresenter(Activity activity) {
         initOnOff();
@@ -58,22 +63,30 @@ public class ScratchCardAvdPresenter {
     }
 
 
-    public void showDialog(int cardIndex) {
+    public void showDialog(int cardIndex, int coinCount) {
+        if (activity == null) {
+            new Throwable("activity 不可为空！");
+        }
         this.cardIndex = cardIndex;
-        String advId = getFirstAdvId();
-        CardAdCallBack cardAdCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
-        GoldCoinDialogParameter parameter = new GoldCoinDialogParameter();
-        parameter.adId = advId;
-        parameter.context = activity;
-        parameter.fromType = GoldCoinDialogParameter.FROM_SCRATCH_CARD;
-        parameter.advCallBack = cardAdCallBack;
-        parameter.onDoubleClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadVideoAdv(getVideoAdvId());
-            }
-        };
-
+        this.coinCount = coinCount;
+        if (parameter == null) {
+            parameter = new GoldCoinDialogParameter();
+            parameter.context = activity;
+            parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
+            parameter.fromType = GoldCoinDialogParameter.FROM_SCRATCH_CARD;
+            parameter.onDoubleClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isOpenTwo()) {
+                        loadVideoAdv(getVideoAdvId());
+                    } else {
+                        handlerVideoAdvError();
+                    }
+                }
+            };
+        }
+        parameter.adId = isOpenOne() ? getFirstAdvId() : "";
+        parameter.obtainCoinCount = coinCount;
         GoldCoinDialog.showGoldCoinDialog(parameter);
     }
 
@@ -98,13 +111,13 @@ public class ScratchCardAvdPresenter {
         return getAdvId(ADV_VIDEO_PREFIX, cardIndex);
     }
 
+    //加载激励视屏广告
     private void loadVideoAdv(String advId) {
-
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(advId).setActivity(activity)
                 .setViewContainer((ViewGroup) activity.getWindow().getDecorView()).build();
 
-        MidasRequesCenter.requestAd(params, new CardAdCallBack(advId));
+        MidasRequesCenter.requestAd(params, new CardAdCallBack(ADV_VIDEO_PREFIX));
     }
 
     private String getAdvId(String resNamePrefix, int index) {
@@ -121,29 +134,15 @@ public class ScratchCardAvdPresenter {
         }
 
         @Override
-        public void onAdError(AdInfo adInfo, int i, String s) {
-            super.onAdError(adInfo, i, s);
-            log("onAdError()====" + resNamePrefix + "====" + s);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_SECOND_PREFIX:
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    break;
-            }
-        }
-
-        @Override
         public void onShowError(int i, String s) {
             super.onShowError(i, s);
             log("onShowError()====" + resNamePrefix + "====" + s);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_SECOND_PREFIX:
+
                     break;
                 case ADV_VIDEO_PREFIX:
+                    handlerVideoAdvError();
                     break;
             }
         }
@@ -154,8 +153,6 @@ public class ScratchCardAvdPresenter {
             log("onAdShow()====" + resNamePrefix);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_SECOND_PREFIX:
                     break;
                 case ADV_VIDEO_PREFIX:
                     break;
@@ -169,8 +166,6 @@ public class ScratchCardAvdPresenter {
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
                     break;
-                case ADV_SECOND_PREFIX:
-                    break;
                 case ADV_VIDEO_PREFIX:
                     break;
             }
@@ -180,11 +175,8 @@ public class ScratchCardAvdPresenter {
         public void onAdClicked(AdInfo adInfo) {
             super.onAdClicked(adInfo);
             log("onAdClicked()====" + resNamePrefix);
-
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_SECOND_PREFIX:
                     break;
                 case ADV_VIDEO_PREFIX:
                     break;
@@ -198,9 +190,9 @@ public class ScratchCardAvdPresenter {
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
                     break;
-                case ADV_SECOND_PREFIX:
-                    break;
                 case ADV_VIDEO_PREFIX:
+                    //用户关闭激励视频，给金币翻倍，跳转至金币成功页面
+                    openCoinCompletePage();
                     break;
             }
         }
@@ -218,12 +210,24 @@ public class ScratchCardAvdPresenter {
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
                     break;
-                case ADV_SECOND_PREFIX:
-                    break;
                 case ADV_VIDEO_PREFIX:
                     break;
             }
         }
+    }
+
+    //激励视频加载失败，提示用户并关闭弹框
+    private void handlerVideoAdvError() {
+        ToastUtils.showShort("网络异常");
+        GoldCoinDialog.dismiss();
+    }
+
+    private void openCoinCompletePage() {
+        Intent intent = new Intent(activity, GoldCoinSuccessActivity.class);
+        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
+        intent.putExtra(GoldCoinSuccessActivity.AD_ID, isOpenThree() ? getSecondAdvId() : "");
+        activity.startActivity(intent);
+        GoldCoinDialog.dismiss();
     }
 
     private String getAdvId(Context context, String resourceName) {
@@ -270,5 +274,12 @@ public class ScratchCardAvdPresenter {
                 }
             }
         }
+    }
+
+    public void destroy() {
+        parameter.advCallBack = null;
+        parameter.context = null;
+        parameter = null;
+        activity = null;
     }
 }
