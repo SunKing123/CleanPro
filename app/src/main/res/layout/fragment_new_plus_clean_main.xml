@@ -70,9 +70,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <FrameLayout
+            <com.xiaoniu.cleanking.widget.ShadowViewCard
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
 
@@ -81,13 +83,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <FrameLayout
+            <com.xiaoniu.cleanking.widget.ShadowViewCard
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
 
-            <include layout="@layout/layout_weather_video"></include>
+            <include layout="@layout/layout_weather_video"/>
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
@@ -101,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
 
-            <FrameLayout
+            <com.xiaoniu.cleanking.widget.ShadowViewCard
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

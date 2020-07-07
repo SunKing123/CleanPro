@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
+import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -66,7 +67,7 @@ public class ScratchCardAvdPresenter {
         log("刮刮卡调用弹框 showDialog()" + cardIndex + "    " + coinCount);
 
         if (activity == null) {
-            log("activity 对象为空，你能弹框");
+            log("activity 对象为空，不能弹框");
             return;
         }
         this.cardIndex = cardIndex;
@@ -134,7 +135,7 @@ public class ScratchCardAvdPresenter {
         return advId;
     }
 
-    class CardAdCallBack extends AbsAdCallBack {
+    class CardAdCallBack extends CMAbsAdCallBack {
         String resNamePrefix;
 
         public CardAdCallBack(String resNamePrefix) {

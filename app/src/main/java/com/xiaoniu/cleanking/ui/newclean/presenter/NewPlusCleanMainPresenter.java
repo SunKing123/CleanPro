@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.AdposUtil;
+import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
@@ -43,7 +44,6 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
-import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -485,27 +485,21 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-
-        if (adviceID == MidasConstants.MAIN_ONE_ID) {
-            MidasRequesCenter.requestAd(params, new AdvCallBack(viewGroup, adviceID));
-        } else {
-            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-                @Override
-                public void onAdShow(AdInfo adInfo) {
-                    super.onAdShow(adInfo);
-                    LogUtils.e("====首页two,three广告展示成功====");
-                }
-            });
-        }
+        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID));
     }
 
-    class AdvCallBack extends AbsAdCallBack {
-        ViewGroup viewGroup;
+    static class AdvCallBack extends CMAbsAdCallBack {
         String advId;
 
-        AdvCallBack(ViewGroup viewGroup, String advId) {
-            this.viewGroup = viewGroup;
+        AdvCallBack(String advId) {
             this.advId = advId;
+        }
+
+        @Override
+        public void onAdLoadSuccess(AdInfo adInfo) {
+            super.onAdLoadSuccess(adInfo);
+            LogUtils.e("====首页广告one====:onAdLoadSuccess:");
+
         }
 
         @Override
@@ -518,14 +512,12 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         public void onShowError(int i, String s) {
             super.onShowError(i, s);
             LogUtils.e("====首页广告one====:显示失败:" + s);
-
         }
 
         @Override
         public void onAdShow(AdInfo adInfo) {
             super.onAdShow(adInfo);
             LogUtils.e("====首页广告one====:加载成功:");
-            viewGroup.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -537,14 +529,12 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         @Override
         public void onAdClose(AdInfo adInfo) {
             super.onAdClose(adInfo);
-            LogUtils.e("====首页广告one====:点击关闭按钮");
         }
 
         @Override
         public void onAdClose(AdInfo adInfo, TemplateView templateView) {
             super.onAdClose(adInfo, templateView);
-            LogUtils.e("====首页广告one====:点击关闭按钮");
-
+            LogUtils.e("====首页广告one====templateView:点击关闭按钮");
         }
     }
 

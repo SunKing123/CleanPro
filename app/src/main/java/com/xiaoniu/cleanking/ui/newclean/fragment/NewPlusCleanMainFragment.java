@@ -293,13 +293,21 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /*
      *********************************************************************************************************************************************************
-     ************************************************************load one advInfo*****************************************************************************
+     ************************************************************load advInfo*********************************************************************************
      *********************************************************************************************************************************************************
      */
 
-    private void loadOneAdvInfo() {
+    private void refreshAd() {
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
+        }
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
+        }
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
+        }
     }
-
     /*
      *********************************************************************************************************************************************************
      ************************************************************activity lifecycle*****************************************************************************
@@ -317,19 +325,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         if (isVisible() || isFirst) {
             isFirst = false;
-            refreshAdvice();
-        }
-    }
-
-    private void refreshAdvice() {
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
-            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
-            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
-            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
+            refreshAd();
         }
     }
 
@@ -958,7 +954,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            refreshAdvice();
+            refreshAd();
         }
     };
 }
