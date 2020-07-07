@@ -191,4 +191,10 @@ public interface MidasConstants {
     String HOME_PAGE_RTLFBOTTOM_GOLD_03 = "adpos_7546373351";
 
 
+
+    /**
+     * 解锁或按home键10秒后在桌面显示的插屏广告
+     */
+    String SCREEN_ON_ID="adpos_9164081851";
+
 }

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -113,7 +114,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (null == context) {
                         return;
                     }
-                    startActivity(context);
+                    startDialogActivityOnLauncher(context, 10 * 1000);
 
                     long lastAppPressHome = MmkvUtil.getLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
 
@@ -139,13 +140,12 @@ public class TimingReceiver extends BroadcastReceiver {
                     break;
                 case "app_add_full"://锁屏打开页面||home按键触发  //应用植入插屏全屏广告
                     if (null != context) {
-                        startFullActivty(context.getApplicationContext());
+                        startFullActivity(context.getApplicationContext());
                     }
                     break;
                 case "unlock_screen"://锁屏打开页面
-                    if (null != context) {
-                        startActivity(context);
-                    }
+                    LogUtils.e("================监听到锁屏打开页面");
+                    startDialogActivityOnLauncher(context, 3000);
                     break;
                 default:
                     break;
@@ -244,32 +244,35 @@ public class TimingReceiver extends BroadcastReceiver {
 
 
     //悬浮广告页面
-    public void startActivity(Context context) {
+    public void startDialogActivityOnLauncher(Context context, int delay) {
+
+
         try {
             //判断是否进入后台
             int isBack = MmkvUtil.getInt("isback", -1);
-            Log.e("dong   isBack==", isBack + "");
+
+            LogUtils.e("=====startDialogActivityOnLauncher:isBack:" + isBack);
 
             if (isBack != 1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class))
                 return;
 
             //判断广告开关
             boolean isOpen = false;
-            int showTimes = 3;
-            int displayTime = 0;
+            //  int showTimes = 3;
+            //  int displayTime = 0;
             if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
-                isOpen = null == map.get("page_outside_screen") ? false : map.get("page_outside_screen").isOpen();
-                showTimes = null == map.get("page_outside_screen") ? 3 : map.get("page_outside_screen").getShowRate();
-                displayTime = null == map.get("page_outside_screen") ? 0 : map.get("page_outside_screen").getDisplayTime();
+                isOpen = null != map.get("page_outside_screen") && map.get("page_outside_screen").isOpen();
+                // showTimes = null == map.get("page_outside_screen") ? 3 : map.get("page_outside_screen").getShowRate();
+                // displayTime = null == map.get("page_outside_screen") ? 0 : map.get("page_outside_screen").getDisplayTime();
             }
-            if (!isOpen) return;
+            if (!isOpen)
+                return;
 
-
+/*
             String mPopLayerTime = PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME);
             long preTime = TextUtils.isEmpty(mPopLayerTime) ? 0 : Long.parseLong(mPopLayerTime);
             int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
-//            Logger.i("zz--"+System.currentTimeMillis()+"---"+pretime);
             //第一次|| 间隔时间大于一个小时||一小时内N次（N<showRate）(每次间隔时间<displayTime)
             if (preTime == 0 || (System.currentTimeMillis() - preTime) > (60 * 60 * 1000) || ((System.currentTimeMillis() - preTime) > (displayTime * 60 * 1000) && (System.currentTimeMillis() - preTime) <= (60 * 60 * 1000) && number < showTimes)) {
                 if ((System.currentTimeMillis() - preTime) > (60 * 60 * 1000)) {//超过一小时重置次数
@@ -279,13 +282,20 @@ public class TimingReceiver extends BroadcastReceiver {
                     Intent screenIntent = getIntent(context);
                     context.startActivity(screenIntent);
                 }
+            }*/
+
+            if (NetworkUtils.isNetConnected()) {
+                new Handler().postDelayed(() -> {
+                    Intent screenIntent = getIntent(context);
+                    context.startActivity(screenIntent);
+                }, delay);
             }
         } catch (Exception e) {
-            Log.e("LockerService", "start lock activity error:" + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private void startFullActivty(Context context) {
+    private void startFullActivity(Context context) {
         //判断是否进入后台
         boolean isBack = AppLifecycleUtil.isRunningForeground(context);
         Log.e("dong", "应用内插屏展示isBack ==" + isBack);

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,7 +41,7 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
     @BindView(R.id.titleLayout)
     CommonTitleLayout titleLayout;
     @BindView(R.id.iv_bind)
-    ImageView ivBind;
+    TextView ivBind;
     @BindView(R.id.rl_bind)
     RelativeLayout rlBind;
     @BindView(R.id.tv_manual)
@@ -66,7 +65,7 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         StatusBarCompat.translucentStatusBarForImage(this, true, true);
-        titleLayout.setMiddleTitle("绑定手机号").setTitleColor(R.color.color_262626).setBgColor(R.color.common_white).setLeftBackColor(R.color.color_666666);
+        titleLayout.setMiddleTitle("绑定手机号").setLeftBackColor(R.color.color_666666).isShowBottomLine(true);
         requestPhonePermission();
         //设置授权的样式
         OneKeyLoginManager.getInstance().setAuthThemeConfig(ShanYanManager.getCJSConfig(this));
