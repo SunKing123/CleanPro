@@ -168,6 +168,11 @@ public class GoldCoinDialog {
         });
     }
 
+    public static void dismissDialog(){
+        if(dialog!=null&&dialog.isShowing()){
+            dialog.dismiss();
+        }
+    }
     /**
      *
      */
