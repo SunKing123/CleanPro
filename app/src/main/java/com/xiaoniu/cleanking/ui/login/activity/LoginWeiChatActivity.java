@@ -204,12 +204,12 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         UserInfoBean infoBean = loginDataBean.getData();
         if (infoBean != null) {
             UserHelper.init().saveUserInfo(infoBean);
-            if (flag == 1){
-                if (TextUtils.isEmpty(infoBean.phone)){
+            if (flag == 1) {
+                if (TextUtils.isEmpty(infoBean.phone)) {
                     goToBindPhone();
-                }else {
-                    finish();
+
                 }
+                finish();
             }
         }
     }
@@ -217,7 +217,7 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     /**
      * 跳转绑定手机号页面
      */
-    private void goToBindPhone(){
+    private void goToBindPhone() {
         startActivity(new Intent(this, BindPhoneActivity.class));
     }
 }

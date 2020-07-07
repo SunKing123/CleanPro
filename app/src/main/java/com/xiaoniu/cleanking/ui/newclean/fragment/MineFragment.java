@@ -17,7 +17,9 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
+import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
@@ -42,7 +44,7 @@ import butterknife.OnClick;
  * Date: 2020/6/30
  * Describe:个人中心 替换之前的MeFragment页面
  */
-public class MineFragment extends BaseFragment<MinePresenter> {
+public class MineFragment extends BaseFragment<MinePresenter> implements MineFragmentContact.View {
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -76,7 +78,7 @@ public class MineFragment extends BaseFragment<MinePresenter> {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUserInfo(String string) {
-        if ("loginSuccessRefreshUserInfo".equals(string)) {
+        if ("loginSuccessRefreshUserInfo".equals(string) || "exitLoginSuccess".equals(string)) {
 //            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
             setUserInfo();
         }
@@ -108,7 +110,7 @@ public class MineFragment extends BaseFragment<MinePresenter> {
                 break;
             case R.id.head_img_iv:
             case R.id.phone_num_tv:
-                if (!UserHelper.init().isWxLogin()){
+                if (!UserHelper.init().isWxLogin()) {
                     startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
                 }
 //                GoldCoinBean goldCoinBean = new GoldCoinBean();
@@ -156,19 +158,31 @@ public class MineFragment extends BaseFragment<MinePresenter> {
 
     private void setUserInfo() {
         if (UserHelper.init().isLogin()) {
+            mPresenter.getMinePageInfo();
             String phoneNum = UserHelper.init().getPhoneNum();
             if (TextUtils.isEmpty(phoneNum)) {
                 phoneNum = UserHelper.init().getNickName();
             }
             mBinding.phoneNumTv.setText(phoneNum);
             if (UserHelper.init().isWxLogin()) {
-                ImageUtil.display(UserHelper.init().getUserHeadPortraitUrl(), mBinding.headImgIv,R.mipmap.default_head);
+                ImageUtil.display(UserHelper.init().getUserHeadPortraitUrl(), mBinding.headImgIv, R.mipmap.default_head);
             } else {
                 mBinding.headImgIv.setImageResource(R.mipmap.default_head);
             }
         } else {
+            mBinding.moneyTv.setText("--");
+            mBinding.goldCoinTv.setText("--");
             mBinding.headImgIv.setImageResource(R.mipmap.default_head);
             mBinding.phoneNumTv.setText("立即登录");
+        }
+    }
+
+    @Override
+    public void getInfoDataSuccess(MinePageInfoBean infoBean) {
+        if (infoBean != null && infoBean.getData() != null) {
+            MinePageInfoBean.DataBean data = infoBean.getData();
+            mBinding.moneyTv.setText(String.valueOf(data.getAmount()));
+            mBinding.goldCoinTv.setText(String.valueOf(data.getGold()));
         }
     }
 
@@ -232,4 +246,5 @@ public class MineFragment extends BaseFragment<MinePresenter> {
             }
         });*/
     }
+
 }

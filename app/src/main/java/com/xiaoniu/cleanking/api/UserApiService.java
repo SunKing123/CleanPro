@@ -7,6 +7,7 @@ import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
@@ -15,6 +16,7 @@ import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
+import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
@@ -43,6 +45,13 @@ public interface UserApiService {
      */
     @GET("/app/upgrade")
     Flowable<AppVersion> queryAppVersion();
+    /**
+     * 账户/账户信息查询（赚赚、我的、我的钱包）
+     *
+     * @return
+     */
+    @GET("/account/info")
+    Flowable<MinePageInfoBean> getMinePageInfo();
 
     /**
      * 微信、游客登录
@@ -209,6 +218,20 @@ public interface UserApiService {
     @GET("/bubble/user/configs")
     Flowable<BubbleConfig> getBubbleConfig();
 
+
+    /**
+     * 金币领取
+     */
+    @GET("/bubble/collect")
+    Flowable<BubbleCollected> bubbleCollected();
+
+//
+//    /**
+//     * 金币翻倍
+//     */
+//
+//    @GET("/bubble/collect/double")
+//    Flowable<BubbleCollected> bubbleCollected();
 
     /**
      * 退出登录

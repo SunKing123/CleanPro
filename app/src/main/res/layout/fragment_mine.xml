@@ -134,6 +134,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="≈"
+                            android:layout_marginLeft="@dimen/dimen_5dp"
+                            android:layout_marginRight="@dimen/dimen_5dp"
                             android:textColor="@color/color_FDBB1D"
                             android:textSize="@dimen/dimen_24dp" />
 

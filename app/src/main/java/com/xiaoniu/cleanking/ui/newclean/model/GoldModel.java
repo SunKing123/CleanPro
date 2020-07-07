@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.base.BaseModel;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -40,6 +41,18 @@ public class GoldModel extends BaseModel {
         mService.getBubbleConfig().compose(tt)
                 .subscribeWith(commonSubscriber);
     }
+
+    /**
+     * 金币查询
+     *
+     * @param commonSubscriber
+     */
+    @SuppressLint("CheckResult")
+    public void goleCollect(CommonSubscriber<BubbleCollected> commonSubscriber, FlowableTransformer tt) {
+        mService.bubbleCollected().compose(tt)
+                .subscribeWith(commonSubscriber);
+    }
+
 
 
 }
