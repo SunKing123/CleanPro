@@ -64,7 +64,7 @@ public class ScratchCardAvdPresenter {
     }
 
     public void showDialog(int cardIndex, int coinCount) {
-        log("刮刮卡调用弹框 showDialog()" + cardIndex + "    " + coinCount);
+        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount);
 
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -131,12 +131,13 @@ public class ScratchCardAvdPresenter {
     private String getAdvId(String resNamePrefix, int index) {
         String allResourceName = resNamePrefix + index;
         String advId = getAdvId(activity, allResourceName);
-        log("resNamePrefix=" + resNamePrefix + "   index=" + index + "   获取到的广告id=" + advId);
+        log("================================================resNamePrefix=" + resNamePrefix + "   index=" + index + "   广告id=" + advId + "");
         return advId;
     }
 
     class CardAdCallBack extends CMAbsAdCallBack {
         String resNamePrefix;
+        boolean videoPlayed = false;
 
         public CardAdCallBack(String resNamePrefix) {
             this.resNamePrefix = resNamePrefix;
@@ -148,7 +149,6 @@ public class ScratchCardAvdPresenter {
             log("onShowError()====" + resNamePrefix + "====" + s);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
-
                     break;
                 case ADV_VIDEO_PREFIX:
                     handlerVideoAdvError();
@@ -164,6 +164,7 @@ public class ScratchCardAvdPresenter {
                 case ADV_FIRST_PREFIX:
                     break;
                 case ADV_VIDEO_PREFIX:
+                    GoldCoinDialog.dismiss();
                     break;
             }
         }
@@ -171,7 +172,6 @@ public class ScratchCardAvdPresenter {
         @Override
         public void onAdLoadSuccess(AdInfo adInfo) {
             super.onAdLoadSuccess(adInfo);
-            log("onAdLoadSuccess()====" + resNamePrefix);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
                     break;
@@ -198,11 +198,11 @@ public class ScratchCardAvdPresenter {
             log("onAdClose()====" + resNamePrefix);
             switch (resNamePrefix) {
                 case ADV_FIRST_PREFIX:
-
                     break;
                 case ADV_VIDEO_PREFIX:
-                    //用户关闭激励视频，给金币翻倍，跳转至金币成功页面
-                    startCoinCompletePage();
+                    if (videoPlayed) {
+                        startCoinCompletePage();
+                    }
                     break;
             }
         }
@@ -211,6 +211,7 @@ public class ScratchCardAvdPresenter {
         public void onAdVideoComplete(AdInfo adInfo) {
             super.onAdVideoComplete(adInfo);
             log("onAdVideoComplete()====" + resNamePrefix);
+            videoPlayed = true;
         }
 
         @Override
@@ -269,27 +270,28 @@ public class ScratchCardAvdPresenter {
         if (hasInit) {
             return;
         }
-
-        log("===========================检查刮刮卡的广告开关 start======================================");
+        log("================================================检查刮刮卡的广告开关 start");
         hasInit = true;
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenOne = switchInfoList.isOpen();
-                    log("第一个广告位开关信息:isOpen=" + isOpenOne());
                 }
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenTwo = switchInfoList.isOpen();
-                    log("第二个广告位开关信息:isOpen=" + isOpenTwo());
                 }
                 if (PositionId.KEY_AD_PAGE_SCRATCH_CARD.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
                     isOpenThree = switchInfoList.isOpen();
-                    log("第三个广告位开关信息:isOpen=" + isOpenThree());
                 }
             }
         }
-        log("==============================检查刮刮卡的广告开关 end========================================");
+
+        log("第一个广告位开关信息:isOpen=" + isOpenOne());
+        log("第二个广告位开关信息:isOpen=" + isOpenTwo());
+        log("第三个广告位开关信息:isOpen=" + isOpenThree());
+
+        log("================================================检查刮刮卡的广告开关 end");
     }
 
     public void destroy() {

@@ -68,28 +68,30 @@
             <com.xiaoniu.cleanking.ui.view.HomeMainTableView
                 android:id="@+id/home_main_table"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-15dp" />
 
             <com.xiaoniu.cleanking.widget.ShadowViewCard
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="2dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_5" />
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
+                android:layout_marginEnd="2dp" />
 
             <com.xiaoniu.cleanking.ui.view.HomeToolTableView
                 android:id="@+id/home_tool_table"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+               />
 
             <com.xiaoniu.cleanking.widget.ShadowViewCard
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_5" />
+                android:layout_height="wrap_content" />
 
-            <include layout="@layout/layout_weather_video"/>
+            <include layout="@layout/layout_weather_video" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
@@ -119,7 +121,7 @@
 
     <com.xiaoniu.cleanking.ui.view.HomeInteractiveView
         android:id="@+id/image_interactive"
-        android:layout_width="45dp"
+        android:layout_width="99dp"
         android:layout_height="45dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
