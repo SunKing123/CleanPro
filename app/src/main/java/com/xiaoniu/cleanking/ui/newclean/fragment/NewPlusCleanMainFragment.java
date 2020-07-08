@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -76,6 +77,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -211,12 +213,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-
-    }
-
     /**
      * 权限埋点上报
      */
@@ -292,9 +288,32 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
     /*
      *********************************************************************************************************************************************************
-     ************************************************************activity lifecycle*****************************************************************************
+     ************************************************************fragment lifecycle***************************************************************************
      *********************************************************************************************************************************************************
      */
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        Log.e("fragment","onHiddenChanged()  hidden="+hidden);
+
+        if (!hidden) {
+            NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
+            }
+            //重新检测头部扫描状态
+            checkScanState();
+            //刷新广告数据
+            refreshAd();
+        } else {
+            NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -913,9 +932,4 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * ********************************************************** others ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
-    public View.OnClickListener getOnHomeTabClickListener() {
-        return onClickListener;
-    }
-
-    final View.OnClickListener onClickListener = v -> refreshAd();
 }

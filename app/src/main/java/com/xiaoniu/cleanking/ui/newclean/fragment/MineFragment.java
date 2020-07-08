@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -87,12 +88,16 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
     }
 
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            //放在initView中无效
-            StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), false);
+            }
             //展示广告
             addBottomAdView();
         }
