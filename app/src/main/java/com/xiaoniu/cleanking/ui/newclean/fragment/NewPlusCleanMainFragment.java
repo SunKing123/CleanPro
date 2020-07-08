@@ -111,6 +111,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     HomeToolTableView homeToolTableView;
     @BindView(R.id.layout_clean_top)
     RelativeLayout layoutCleanTop;
+    @BindView(R.id.tv_withDraw)
+    TextView tvWithDraw;
+    @BindView(R.id.tv_coin_num)
+    TextView tvCoinNum;
 
     @BindView(R.id.clear_card_video)
     ClearCardView clearVideoLayout;
@@ -127,7 +131,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     FrameLayout adLayoutThree;
     @BindView(R.id.image_interactive)
     HomeInteractiveView imageInteractive;
-
     @BindView(R.id.layout_scroll)
     NestedScrollView mScrollView;
 
@@ -136,7 +139,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
-    private int mRamScale=0;
+    private int mRamScale = 0;
     private RxPermissions rxPermissions;
 
     private AlertDialog dlg;
@@ -267,8 +270,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     break;
             }
         });
-    }
 
+        tvWithDraw.setOnClickListener(v -> {
+            //todo 跳转提现页面
+        });
+    }
 
     /*
      *********************************************************************************************************************************************************
@@ -297,7 +303,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-        Log.e("fragment","onHiddenChanged()  hidden="+hidden);
+        Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
         if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
@@ -397,7 +403,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //完成页返回通知
     @Subscribe
     public void userInfoUpdate(UserInfoEvent event) {
-
+        if (event != null) {
+            tvCoinNum.setVisibility(View.VISIBLE);
+            tvWithDraw.setVisibility(View.VISIBLE);
+            tvCoinNum.setText(event.infoBean.getGold());
+        }
     }
 
     /*
@@ -734,7 +744,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /**
      * 获取互动式广告成功
-     *
      */
     public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
         if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
@@ -869,7 +878,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /**
      * 刷新金币显示
-     *
      */
     public void setTopBubbleView(BubbleConfig dataBean) {
         if (null != view_lottie_top && null != dataBean) {
@@ -894,7 +902,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /**
      * 金币领取成功
-     *
      */
     public void bubbleCollected(BubbleCollected dataBean) {
         if (null != dataBean) {
@@ -907,7 +914,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /**
      * 激励视频播放完成金币翻倍
-     *
      */
     public void bubbleDouble(BubbleCollected dataBean) {
         if (null != dataBean) {
@@ -917,7 +923,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /**
      * 翻倍成功
-     *
      */
     public void bubbleDoubleSuccess(BubbleDouble dataBean) {
         if (null == dataBean)
@@ -926,7 +931,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount() * 2);
 //        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(),2));
+        intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
 //        }
         mActivity.startActivity(intent);
     }
