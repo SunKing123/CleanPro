@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
@@ -64,6 +65,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotchUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -76,6 +78,8 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +89,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import cn.jpush.android.api.JPushInterface;
 import cn.jzvd.Jzvd;
 
 import static com.xiaoniu.cleanking.keeplive.config.RunMode.POWER_SAVING;
@@ -136,13 +141,65 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private NewPlusCleanMainFragment mainFragment;
     private final String TAG = "GeekSdk";
 
+
+    /**
+     * 消息Id
+     **/
+    private static final String KEY_MSGID = "msg_id";
+    /**
+     * 该通知的下发通道
+     **/
+    private static final String KEY_WHICH_PUSH_SDK = "rom_type";
+    /**
+     * 通知标题
+     **/
+    private static final String KEY_TITLE = "n_title";
+    /**
+     * 通知内容
+     **/
+    private static final String KEY_CONTENT = "n_content";
+    /**
+     * 通知附加字段
+     **/
+    private static final String KEY_EXTRAS = "n_extras";
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
     }
 
+
+    private void parsePushData(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+        String uriData = intent.getStringExtra("push_uri");
+        if (!TextUtils.isEmpty(uriData)) {
+            try {
+                JSONObject jsonObject = new JSONObject(uriData);
+                String msgId = jsonObject.optString(KEY_MSGID);
+                byte whichPushSDK = (byte) jsonObject.optInt(KEY_WHICH_PUSH_SDK);
+                String title = jsonObject.optString(KEY_TITLE);
+                String content = jsonObject.optString(KEY_CONTENT);
+                String extras = jsonObject.optString(KEY_EXTRAS);
+                //上报点击事件
+                LogUtils.e("=====点击上报成功 msgId:" + msgId + " whichPushSDK:" + whichPushSDK);
+                JPushInterface.reportNotificationOpened(this, msgId, whichPushSDK);
+                jsonObject = new JSONObject(extras);
+                String schema = jsonObject.getString("url");
+                if (!TextUtils.isEmpty(schema)) {
+                    SchemeProxy.openScheme(this, schema);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     @Override
     protected void initView() {
+        parsePushData(getIntent());
 //        List<UninstallList> uselessApks = AppLifecyclesImpl.getAppPathDatabase().uninstallListDao().getAll();
 //        List<AppPath> appPaths = AppLifecyclesImpl.getAppPathDatabase().cleanPathDao().getAll();
 //        List<UselessApk> uselessApks1 = AppLifecyclesImpl.getAppPathDatabase().uselessApkDao().getAll();
@@ -324,6 +381,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        parsePushData(intent);
         if (intent.getExtras() != null) {
             changeTab(intent.getExtras());
         }
@@ -638,7 +696,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Subscribe
     public void onEventWeatherInfo(WeatherInfoRequestEvent infotype) {
         if (infotype.getAction() == 0) {
-           mPresenter.requestLocationPermission();
+            mPresenter.requestLocationPermission();
         }
     }
 

@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +18,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.listener.AdListener;
-import com.comm.jksdk.ad.listener.AdManager;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
@@ -59,7 +54,6 @@ import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.json.JSONObject;
 
@@ -96,14 +90,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private ViewGroup container;
     private RoundProgressBar skipView;
     private Disposable mSubscription;
-//    private AdManager mAdManager;
+    //    private AdManager mAdManager;
     private boolean mIsOpen; //冷启动广告开关
     private String mAdTitle = " "; //广告标题
     private String mAdSourse = " "; //广告来源
 
     private final String TAG = "GeekSdk";
     private boolean adClicked = false;
-
+    String pushData = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +106,21 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+
+        getDataFromPush();
+    }
+
+    private void getDataFromPush() {
+
+        //获取华为平台附带的jpush信息
+        if (getIntent().getData() != null) {
+            pushData = getIntent().getData().toString();
+        }
+        //获取fcm、oppo、vivo、华硕、小米平台附带的jpush信息
+        if (TextUtils.isEmpty(pushData) && getIntent().getExtras() != null) {
+            pushData = getIntent().getExtras().getString("JMessageExtra");
+        }
+
     }
 
     @Override
@@ -248,7 +257,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
     public void jumpActivity() {
-        startActivity(new Intent(SplashADActivity.this, MainActivity.class));
+        Intent intent = new Intent(SplashADActivity.this, MainActivity.class);
+        if (!TextUtils.isEmpty(pushData)) {
+            intent.putExtra("push_uri", pushData);
+        }
+        startActivity(intent);
         finish();
     }
 
@@ -356,7 +369,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private void initGeekSdkAD() {
 //        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "clod_splash_page", "clod_splash_page");
 
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
                 .setActivity(this).setViewContainer(container).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override

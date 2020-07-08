@@ -233,7 +233,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 // GeekPush.bindAlias(DeviceUtils.getUdid());
                 GeekPush.addTag(Constant.APP_NAME + "_" + BuildConfig.VERSION_CODE);
                 GeekPush.addTag(BuildConfig.PUSH_TAG);//区分推送环境
-                GeekPush.addTag("love" + BuildConfig.VERSION_CODE);
                 mModel.commitJPushAlias(new Common4Subscriber<BaseEntity>() {
                     @Override
                     public void showExtraOp(String code, String message) {
