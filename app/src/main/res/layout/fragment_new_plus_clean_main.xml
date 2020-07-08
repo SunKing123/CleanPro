@@ -22,14 +22,11 @@
             android:textColor="@color/color_333333"
             android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/iv_interaction"
-            android:layout_width="@dimen/dimen_45dp"
-            android:layout_height="@dimen/dimen_45dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dimen_10dp"
-            android:visibility="gone" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_withDr"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            andbac/>-->
 
     </RelativeLayout>
 

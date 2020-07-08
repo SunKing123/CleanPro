@@ -215,6 +215,7 @@ public class ScratchCardAvdPresenter {
         GoldCoinDialog.dismiss();
     }
 
+
     private void startCoinCompletePage() {
         Intent intent = new Intent(activity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
@@ -269,6 +270,10 @@ public class ScratchCardAvdPresenter {
                 }
             }
         }
+
+        isOpenOne=true;
+        isOpenTwo=true;
+        isOpenThree=true;
 
         log("第一个广告位开关信息:isOpen=" + isOpenOne());
         log("第二个广告位开关信息:isOpen=" + isOpenTwo());

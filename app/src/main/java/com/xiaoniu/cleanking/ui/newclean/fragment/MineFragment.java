@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
+import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.ImageUtil;
@@ -201,6 +202,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             MinePageInfoBean.DataBean data = infoBean.getData();
             mBinding.moneyTv.setText(String.valueOf(data.getAmount()));
             mBinding.goldCoinTv.setText(String.valueOf(data.getGold()));
+            UserInfoEvent event=new UserInfoEvent();
+            event.infoBean=data;
+            EventBus.getDefault().post(event);
         }
     }
 
