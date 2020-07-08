@@ -51,19 +51,14 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherForecastResponseEntity;
-import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.LocationCityInfo;
-import com.xiaoniu.cleanking.ui.main.bean.weatherdao.Weather72HEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherCity;
-import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherResponeUtils;
-import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherUtils;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.weather.activity.WeatherForecastActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -85,7 +80,6 @@ import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.config.AdParameter;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -122,7 +116,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     NoClearSPHelper mPreferencesHelper;
     private AMapLocationClient mLocationClient = null;
     private AMapLocationClientOption mLocationOption = null;
-    AdParameter mAdParameter;
 
     @Inject
     public MainPresenter(RxAppCompatActivity activity) {
