@@ -16,6 +16,9 @@ import com.xiaoniu.common.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * 暂时废弃===登录默认微信登录===LoginWeiChatActivity
+ */
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     public ArrayList<SnsPlatform> platforms = new ArrayList<>();

@@ -10,6 +10,8 @@ import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.main.fragment.BaseBrowserFragment;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by zhaoyingtao
  * Date: 2020/7/7
@@ -49,5 +51,12 @@ public class BrowserActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     mBrowserFragment).commitAllowingStateLoss();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        //去刷新刮刮乐的h5
+        EventBus.getDefault().post("refreshGuaGuaLeH5");
+        super.onDestroy();
     }
 }

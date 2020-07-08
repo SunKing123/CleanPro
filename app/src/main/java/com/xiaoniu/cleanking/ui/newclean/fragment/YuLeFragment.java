@@ -48,7 +48,7 @@ public class YuLeFragment extends SimpleFragment {
     public static YuLeFragment getInstance() {
         return new YuLeFragment();
     }
-   
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_yule;
@@ -71,7 +71,7 @@ public class YuLeFragment extends SimpleFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Log.e("fragment","onHiddenChanged()  hidden="+hidden);
+        Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
         if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
@@ -98,9 +98,9 @@ public class YuLeFragment extends SimpleFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUserInfo(String string) {
-        if ("loginSuccessRefreshUserInfo".equals(string) || "exitLoginSuccess".equals(string)) {
+        if ("loginSuccessRefreshUserInfo".equals(string) || "exitLoginSuccess".equals(string) || "refreshGuaGuaLeH5".equals(string)) {
 //            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
-            mAgentWeb.getWebCreator().getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
         }
     }
 

@@ -140,7 +140,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                             "&" + SchemeConstant.IS_FULL_SCREEN + "=1&jumpType=1";
                     SchemeProxy.openScheme(getActivity(), scheme);
                 } else {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    startActivity(new Intent(getActivity(), LoginWeiChatActivity.class));
                 }
 //                ToastUtils.showShort("提现操作");
                 break;
