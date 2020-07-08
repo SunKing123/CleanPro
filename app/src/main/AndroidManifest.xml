@@ -464,6 +464,10 @@
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
 
+        <activity
+            android:name=".ui.weather.activity.WeatherForecastActivity"
+            android:screenOrientation="portrait"/>
+
 
         <activity
             android:name=".ui.lockscreen.LockActivity"

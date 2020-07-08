@@ -316,6 +316,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             checkScanState();
             //刷新广告数据
             refreshAd();
+            //金币配置刷新
+            mPresenter.refBullList();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -392,6 +394,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         isDenied = false;
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
+        mPresenter.refBullList();//金币配置刷新；
     }
 
     //完成页返回通知
