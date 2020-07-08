@@ -1,10 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.bean.ConfigBean;
-import com.comm.jksdk.config.listener.ConfigListener;
-import com.comm.jksdk.http.utils.LogUtils;
-import com.comm.jksdk.utils.JsonUtils;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.constant.Constant;
@@ -122,57 +117,6 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
         });
     }
 
-    //获取广告配置
-    public void geekAdSDKConfig() {
-        if(null==mActivity)
-            return;
-        LogUtils.i("-cgName-----冷启动进入前台");
-//        GeekAdSdk.refAdConfig(mActivity);
-        //1.4.5版本走本地配置
-        GeekAdSdk.requestConfig(new ConfigListener() {
-            @Override
-            public void adSuccess(List<ConfigBean.AdListBean> configList) {
-                String config = JsonUtils.encode(configList);
-                String aa = config.substring(0, config.length() / 2);//
-                LogUtils.i("config:" + aa);
-            }
 
-            @Override
-            public void adError(int errorCode, String errorMsg) {
-                LogUtils.i(errorCode + "----config--error---:" + errorMsg);
 
-            }
-        });
-    }
-
-    /**
-     * 打底广告
-     */
-    public void getBottomAdList() {
-        mModel.getBottomAdList(new Common4Subscriber<BottoomAdList>() {
-
-            @Override
-            public void getData(BottoomAdList auditSwitch) {
-                if (null == auditSwitch.getData() || auditSwitch.getData().size() <= 0) return;
-                AppHolder.getInstance().setBottomAdList(auditSwitch.getData());
-                PreferenceUtil.getInstants().save(SpCacheConfig.BOTTOM_AD_LIST, new Gson().toJson(auditSwitch));
-                mView.getBottomAdListSuccess();
-            }
-
-            @Override
-            public void showExtraOp(String code, String message) {
-                mView.getBottomAdListSuccess();
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-                mView.getBottomAdListSuccess();
-            }
-
-            @Override
-            public void netConnectError() {
-                mView.getBottomAdListSuccess();
-            }
-        });
-    }
 }

@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -544,16 +545,11 @@ public class TimingReceiver extends BroadcastReceiver {
             e.onNext(runningProcess);
             //扫描apk安装包
             List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
+            if (CollectionUtils.isEmpty(apkJunkInfos)) {
+                apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
+            }
             e.onNext(apkJunkInfos);
-
-            boolean isScanFile = apkJunkInfos.size() > 0;
-            //扫描私有路径下缓存文件
-            ArrayList<FirstJunkInfo> androidDataInfo = mFileQueryUtils.getAndroidDataInfo(isScanFile);
-            //根据私有路径扫描公用路径
-            ArrayList<FirstJunkInfo> publicDataInfo = mFileQueryUtils.getExternalStorageCache(androidDataInfo);
-            e.onNext(publicDataInfo);
-
-//            //公用路径残留文件
+            //扫描卸载残余垃圾
             ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
             e.onNext(leaveDataInfo);
 

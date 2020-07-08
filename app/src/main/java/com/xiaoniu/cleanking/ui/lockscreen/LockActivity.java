@@ -17,14 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdListener;
-import com.comm.jksdk.ad.listener.AdManager;
-import com.comm.jksdk.ad.listener.VideoAdListener;
-import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
@@ -123,7 +115,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-
         rel_clean_file = ViewUtils.get(this, R.id.rel_clean_file);
         rel_clean_ram = ViewUtils.get(this, R.id.rel_clean_ram);
         rel_clean_virus = ViewUtils.get(this, R.id.rel_clean_virus);
@@ -155,10 +146,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
         linAdLayout = ViewUtils.get(this, R.id.lock_ad_container);
         relAd = ViewUtils.get(this, R.id.rel_ad);
-
-        rel_interactive = ViewUtils.get(this, R.id.rel_interactive);
-        iv_interactive = ViewUtils.get(this, R.id.iv_interactive);
-        rel_interactive.setOnClickListener(this::onClick);
 
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
@@ -209,51 +196,9 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             lin_tem_bottom.setVisibility(View.GONE);
 
         }
-        setInteractive();
+
     }
 
-    private void setInteractive() {
-        if (TextUtils.isEmpty(MmkvUtil.getString(PositionId.LOCK_INTERACTIVE, ""))) {
-            rel_interactive.setVisibility(View.GONE);
-        } else {
-            InteractionSwitchList.DataBean dataBean = new Gson().fromJson(MmkvUtil.getString(PositionId.LOCK_INTERACTIVE, ""), InteractionSwitchList.DataBean.class);
-            if (dataBean != null && !dataBean.isOpen()) {
-                mInteractionList = dataBean.getSwitchActiveLineDTOList();
-                if (mInteractionList != null && mInteractionList.size() > 0) {
-                    rel_interactive.setVisibility(View.VISIBLE);
-                    Glide.with(this).load(mInteractionList.get(0).getImgUrl()).into(iv_interactive);
-                }
-            }
-        }
-    }
-
-
-    private List<InteractionSwitchList.DataBean.SwitchActiveLineDTOList> mInteractionList;
-
-    private int mInteractionPoistion; //互动式广告position
-
-    /**
-     * 互动式广告点击
-     */
-    public void interactionClick() {
-        StatisticsUtils.trackClick("interactive_advertising_click", "互动式广告点击", "lock_screen", "lock_screen");
-        if (null != mInteractionList && mInteractionList.size() > 0) {
-            if (mInteractionPoistion > mInteractionList.size() - 1) {
-                mInteractionPoistion = 0;
-            }
-
-            if (mInteractionList.size() == 1) {
-                startActivity(new Intent(this, AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(0).getLinkUrl()));
-            } else {
-                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
-                    startActivity(new Intent(this, AgentWebViewActivity.class)
-                            .putExtra(ExtraConstant.WEB_URL, mInteractionList.get(mInteractionPoistion).getLinkUrl()));
-                }
-            }
-            mInteractionPoistion++;
-        }
-    }
 
     /**
      * 设置功能按钮状态
@@ -337,158 +282,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
      */
     private long mLastTime = 0;
 
-    public void adInit() {
-        //避免重复加载
-        if (SystemClock.elapsedRealtime() - mLastTime < 500) {
-            return;
-        }
-        mLastTime = SystemClock.elapsedRealtime();
 
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.LOCK_PAGE_FEED_ID).setActivity(this).setViewContainer(relAd).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdLoadSuccess(adInfo);
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
-            }
-
-            @Override
-            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
-//                jumpActivity();
-            }
-
-            @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-//                jumpActivity();
-            }
-
-            @Override
-            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdShow(adInfo);
-            }
-
-            @Override
-            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-            }
-
-            @Override
-            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
-                super.onAdClose(adInfo, templateView);
-//                jumpActivity();
-            }
-        });
-
-       /* StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "lock_screen", "lock_screen");
-        GeekAdSdk.getAdsManger().loadNativeTemplateAd(this,PositionId.AD_LOCK_SCREEN_ADVERTISING_1_3_0, Float.valueOf (DisplayUtil.px2dp(LockActivity.this, DisplayUtil.getScreenWidth(LockActivity.this)) -28), new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null == info) return;
-//                Log.d(TAG, "adSuccess 锁屏==" + info.toString());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
-                if (info.getAdView() != null && null != relAd) {
-                    relAd.removeAllViews();
-                    relAd.addView(info.getAdView());
-                    //模板样式暂不支持预加载
-//                    adPredLoad();
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "adExposed 锁屏");
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
-                LogUtils.e("adExposed");
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "adError 锁屏==" + errorCode + "---" + errorMsg);
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
-                }
-                //打底样式
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showBottomAd();
-                    }
-                });
-            }
-        });*/
-//        AdManager adManager = GeekAdSdk.getAdsManger();
-//        adManager.loadAd(this, PositionId.AD_LOCK_SCREEN_ADVERTISING_1_4_0, new AdListener() {
-//            @Override
-//            public void adSuccess(AdInfo info) {
-//                if (null == info) return;
-//                Log.d(TAG, "adSuccess 锁屏==" + info.toString());
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "lock_screen");
-//                if (info.getAdView() != null && null != relAd) {
-//                    relAd.removeAllViews();
-//                    relAd.addView(info.getAdView());
-////                    adPredLoad();
-//                }
-//            }
-//
-//            @Override
-//            public void adExposed(AdInfo info) {
-//                if (null == info) return;
-//                Log.d(TAG, "adExposed 锁屏");
-//                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
-//                LogUtils.e("adExposed");
-//            }
-//
-//            @Override
-//            public void adClicked(AdInfo info) {
-//                if (null == info) return;
-//                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "lock_screen", info.getAdTitle());
-//            }
-//
-//            @Override
-//            public void adError(AdInfo info, int errorCode, String errorMsg) {
-//                Log.d(TAG, "adError 锁屏==" + errorCode + "---" + errorMsg);
-//                if (null != info) {
-//                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
-//                }
-//
-//                //打底样式
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        showBottomAd();
-//                    }
-//                });
-//
-//            }
-//        });
-    }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (null != mInteractionList && mInteractionList.size() > 0) {
-            if (mInteractionPoistion > mInteractionList.size() - 1) {
-                mInteractionPoistion = 0;
-            }
-            if (mInteractionList.size() == 1) {
-                GlideUtils.loadGif(this, mInteractionList.get(0).getImgUrl(), iv_interactive, 10000);
-            } else {
-                if (mInteractionList.size() - 1 >= mInteractionPoistion) {
-                    GlideUtils.loadGif(this, mInteractionList.get(mInteractionPoistion).getImgUrl(), iv_interactive, 10000);
-                }
-            }
-        }
-
 
         if (null == mUnlockView)
             return;
@@ -596,21 +395,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rel_clean_virus://病毒查杀
                 StatisticsUtils.trackClick("virus_killing_click", "病毒查杀点击", "lock_screen", "lock_screen");
                 PreferenceUtil.getInstants().save("lock_action", "virus");//埋点区分逻辑
-
                 if (PreferenceUtil.getVirusKillTime()) {
-                    if (dataBeans.size() <= 0) {
-                        startVirUsKill();
-                    } else {
-                        for (SwitchInfoList.DataBean switchInfoList : dataBeans) {
-                            if (PositionId.KEY_VIRUS_JILI.equals(switchInfoList.getConfigKey())) {
-                                if (switchInfoList.isOpen()) {
-                                    loadGeekAd();
-                                } else {
-                                    startVirUsKill();
-                                }
-                            }
-                        }
-                    }
+                    startVirUsKill();
                 } else {
                     Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
                     intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -624,10 +410,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(intentClean);
 
                 }
-
-                break;
-            case R.id.rel_interactive:
-                interactionClick();
                 break;
 
         }
@@ -658,68 +440,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    /**
-     * 病毒查杀激励视频
-     */
-    private void loadGeekAd() {
-        AdManager mAdManager = GeekAdSdk.getAdsManger();
-        if (null == mAdManager) return;
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "lock_screen", "virus_killing_video_page");
-        NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频页浏览");
-        NiuDataAPIUtil.onPageEnd("lock_screen", "virus_killing_video_page", "view_page", "病毒查杀激励视频页浏览");
-        mAdManager.loadRewardVideoAd(this, PositionId.AD_VIRUS, "user123", 1, new VideoAdListener() {
-            @Override
-            public void onVideoResume(AdInfo info) {
 
-            }
-
-            @Override
-            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
-
-            }
-
-            @Override
-            public void onVideoComplete(AdInfo info) {
-                NiuDataAPI.onPageStart("view_page", "病毒查杀激励视频结束页浏览");
-            }
-
-            @Override
-            public void adSuccess(AdInfo info) {
-
-                if (null == info) return;
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "lock_screen", "virus_killing_video_page");
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "lock_screen", "virus_killing_video_page", " ");
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "lock_screen", "virus_killing_video_page", " ");
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                NiuDataAPIUtil.onPageEnd("lock_screen", "virus_killing_video_end_page", "view_page", "病毒查杀激励视频结束页浏览");
-                if (null != info) {
-                    StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_page", " ");
-                }
-                startVirUsKill();
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "virus_killing_video_page");
-                }
-                startVirUsKill();
-            }
-        });
-    }
 
     protected UIChangingReceiver mUIChangingReceiver;
 
@@ -842,50 +563,53 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     iv_virus_btn.setImageDrawable(this.getResources().getDrawable(R.drawable.icon_lock_btn_hot));
                 }
             }
-
         } else {
             setRandState(1);
         }
     }
 
-
     /**
-     * 锁屏打底广告
+     * 加载广告
      */
-    private int mBottomAdShowCount = 0;
-
-    private void showBottomAd() {
-
-        if (bottomAds.size() > 0) {
-            for (BottoomAdList.DataBean dataBean : bottomAds) {
-                if (dataBean.getSwitcherKey().equals(PositionId.KEY_LOCK_SCREEN)) {
-                    if (dataBean.getShowType() == 1) { //循环
-                        mBottomAdShowCount = PreferenceUtil.getBottomLockAdCount();
-                        if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
-                            PreferenceUtil.saveBottomLockAdCount(0);
-                        } else {
-                            PreferenceUtil.saveBottomLockAdCount(PreferenceUtil.getBottomLockAdCount() + 1);
-                        }
-                    } else { //随机
-                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
-                            mBottomAdShowCount = 0;
-                        } else {
-                            mBottomAdShowCount = NumberUtils.mathRandomInt(0, dataBean.getAdvBottomPicsDTOS().size() - 1);
-                        }
-                    }
-                    if(null==mErrorAdIv)
-                        return;
-                    GlideUtils.loadImage(LockActivity.this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorAdIv);
-                    mErrorAdIv.setOnClickListener(v -> {
-                        AppHolder.getInstance().setCleanFinishSourcePageId("lock_screen");
-                        startActivity(new Intent(this, AgentWebViewActivity.class)
-                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
-                                .putExtra(ExtraConstant.WEB_FROM, "LockActivity"));
-
-                    });
-                }
-            }
+    public void adInit() {
+        //避免重复加载
+        if (SystemClock.elapsedRealtime() - mLastTime < 500) {
+            return;
         }
-    }
+        mLastTime = SystemClock.elapsedRealtime();
 
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.LOCK_PAGE_FEED_ID).setActivity(this).setViewContainer(relAd).build();
+        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdLoadSuccess(adInfo);
+//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
+            }
+
+            @Override
+            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
+                super.onAdError(adInfo, i, s);
+
+            }
+
+            @Override
+            public void onShowError(int i, String s) {
+                super.onShowError(i, s);
+
+            }
+
+            @Override
+            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdShow(adInfo);
+            }
+
+            @Override
+            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+                super.onAdClicked(adInfo);
+            }
+
+
+        });
+
+    }
 }
