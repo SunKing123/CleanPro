@@ -59,11 +59,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/mtg_provider_paths"/>
+                android:resource="@xml/mtg_provider_paths" />
         </provider>
-
-
-
 
 
         <activity
@@ -457,6 +454,9 @@
         <activity
             android:name=".ui.login.activity.BindPhoneManualActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.usercenter.activity.BrowserActivity"
+            android:screenOrientation="portrait" />
 
 
         <activity
@@ -772,10 +772,6 @@
             android:value="true" />
 
 
-
-
-
-
         <provider
             android:name=".utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"
@@ -883,6 +879,7 @@
             android:screenOrientation="behind"
             android:targetActivity="com.chuanglan.shanyan_sdk.view.CmccLoginActivity"
             android:theme="@style/shanyanDialogStyle" />
+
         <activity
             android:name="com.chuanglan.shanyan_sdk.view.ShanYanOneKeyActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -925,7 +922,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />

@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
@@ -296,8 +295,10 @@ public class ScratchCardAvdPresenter {
     }
 
     public void destroy() {
-        parameter.advCallBack = null;
-        parameter.context = null;
+        if (parameter != null){
+            parameter.advCallBack = null;
+            parameter.context = null;
+        }
         parameter = null;
         activity = null;
     }

@@ -34,6 +34,12 @@ public interface H5Urls {
      * 钱包页面
      */
     String WITHDRAWAL_URL = BuildConfig.Base_H5_Host + "/html/wallet/withdrawal.html?" + timeFlag;
+    /**
+     * 刮刮卡页面
+     * 刘帅帅 域名 http://192.168.85.61:9999
+     */
+    String SCRATCHCARDS_URL = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList.html?" + timeFlag;
+//    String SCRATCHCARDS_URL = BuildConfig.Base_H5_Host + "/html/activitiesHtml/scratchCards/cardList.html?" + timeFlag;
 
     /**
      * 邀请好友

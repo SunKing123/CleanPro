@@ -23,14 +23,45 @@ public class SchemeConstant {
     public static final String H5_TITLE = "h5_title";//H5标题
     public static final String NATIVE_NAME = "name";
     public static final String ANDROID_NAME = "a_name";
-
     //native协议
     public static final String NATIVE_MAIN = "main";
 
     //native params参数
     public static final String EXTRA_MAIN_INDEX = "main_index";
-
+    //刮刮乐相关
     public static final String IS_FULL_SCREEN = "isfullscreen";
+    public static final String TAB_INDEX = "tabIndex";
+    public static final String NEED_LOGIN = "need_login";
+    public static final String NEED_YK_LOGIN = "need_yk_login";
+    public static final String REWARD_TOP = "/rewardPop";
+    public static final String CLOSE = "/close";
+    public static final String HOME = "/home";
+    //params 参数
+    public static final String PARAMS_MAIN_INDEX = "main_index";
+    public static final String TOTAL_COIN = "totalCoin";
+    public static final String COIN = "coin";
+    public static final String IS_DOUBLE = "isDouble";
+    public static final String TASK_ID = "taskId";
+    public static final String IS_REFRESH = "isRefresh";
+    public static final String SIGNDAY = "signDay";
+    public static final String TARGET = "target";
+    public static final String URL = "url";
+    /**
+     * 广告配置新增参数
+     * source:广告来源
+     * applicationId:广告配置id(穿山甲、优量汇)
+     * codeId:广告位id
+     * adDes:埋点描述
+     */
+    public static final String AD_SOURCE = "source";
+    public static final String AD_SOURCE2 = "source2";
+    public static final String AD_APPLICATIONID = "applicationId";
+    public static final String AD_CODEID = "codeId";
+    public static final String AD_CODEID2 = "codeId2";
+    public static final String AD_ADDES = "adDes";
+    public static final String AD_CURRENT_PAGE_ID = "currentPageId";
+    public static final String AD_AD_POSITION_ID = "adPosition";
+    public static final String AD_AD_POSITION_ID2 = "adPosition2";
     /**
      * 本地push scheme
      */

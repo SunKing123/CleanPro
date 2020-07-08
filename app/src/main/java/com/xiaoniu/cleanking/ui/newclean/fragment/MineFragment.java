@@ -1,14 +1,12 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -94,11 +92,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), true);
-            } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), false);
-            }
+            StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
             //展示广告
             addBottomAdView();
         }
@@ -139,10 +133,11 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             case R.id.withdrawal_ll:
             case R.id.wallet_ll:
                 if (UserHelper.init().isWxLogin()) {
-                    String url = H5Urls.WITHDRAWAL_URL;
+//                    String url = H5Urls.WITHDRAWAL_URL;
+                    String url = "http://192.168.85.61:9999/html/wallet/wallet.html";
                     String scheme = SchemeConstant.SCHEME +
                             "://" + SchemeConstant.HOST + "/jump?url=" + url +
-                            "&" + SchemeConstant.IS_FULL_SCREEN + "=1";
+                            "&" + SchemeConstant.IS_FULL_SCREEN + "=1&jumpType=1";
                     SchemeProxy.openScheme(getActivity(), scheme);
                 } else {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -178,11 +173,11 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     private void setUserInfo() {
         if (UserHelper.init().isLogin()) {
             mPresenter.getMinePageInfo();
-            String phoneNum = UserHelper.init().getPhoneNum();
-            if (TextUtils.isEmpty(phoneNum)) {
-                phoneNum = UserHelper.init().getNickName();
+            String nickName = UserHelper.init().getNickName();
+            if (TextUtils.isEmpty(nickName)) {
+                nickName = UserHelper.init().getPhoneNum();
             }
-            mBinding.phoneNumTv.setText(phoneNum);
+            mBinding.phoneNumTv.setText(nickName);
             if (UserHelper.init().isWxLogin()) {
                 ImageUtil.displayCircle(UserHelper.init().getUserHeadPortraitUrl(), mBinding.headImgIv, R.mipmap.default_head);
             } else {
@@ -202,8 +197,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             MinePageInfoBean.DataBean data = infoBean.getData();
             mBinding.moneyTv.setText(String.valueOf(data.getAmount()));
             mBinding.goldCoinTv.setText(String.valueOf(data.getGold()));
-            UserInfoEvent event=new UserInfoEvent();
-            event.infoBean=data;
+            UserInfoEvent event = new UserInfoEvent();
+            event.infoBean = data;
             EventBus.getDefault().post(event);
         }
     }

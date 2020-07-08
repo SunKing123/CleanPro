@@ -225,11 +225,19 @@
             android:gravity="center_vertical"
             android:orientation="horizontal" />
         <!--广告填充-->
-        <FrameLayout
-            android:id="@+id/root_fl"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dimen_10dp" />
+            android:background="@drawable/ad_bottom_corner_bg"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/root_fl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:minHeight="@dimen/dimen_2dp" />
+        </LinearLayout>
 
 
         <RelativeLayout
