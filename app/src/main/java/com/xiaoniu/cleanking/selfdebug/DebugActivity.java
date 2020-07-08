@@ -381,7 +381,6 @@ public class DebugActivity extends BaseActivity {
             @Override
             public void adExposed(AdInfo info) {
                 Log.d(TAG, "-----adExposed 完成页返回插屏-----");
-                PreferenceUtil.saveShowAD(true);
                 if (null == info) return;
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
             }
@@ -396,7 +395,6 @@ public class DebugActivity extends BaseActivity {
             @Override
             public void adClose(AdInfo info) {
                 Log.d(TAG, "adClose 完成页返回插屏---");
-                PreferenceUtil.saveShowAD(false);
                 finish();
                 if (null == info) return;
                 StatisticsUtils.clickAD("ad_click", "关闭点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());

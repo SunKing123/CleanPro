@@ -160,7 +160,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
 
              override fun adExposed(info: AdInfo?) {
                  Log.d(TAG, "-----adExposed-----")
-                 PreferenceUtil.saveShowAD(true)
                  if (null == info) return
                  mAdExposed = true
                  StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info!!.adId, info.adSource, "hot_splash_page", "red_envelopes_page_video_page", info.adTitle)

@@ -577,8 +577,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
 //                      if (PreferenceUtil.getHomeBackTime() && PositionId.HOT_CODE.equals(switchInfoList.getAdvertPosition()) && switchInfoList.isOpen()) {
-                        if (PositionId.HOT_CODE.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen() && !PreferenceUtil.isShowAD() &&
-                                PreferenceUtil.getHomeBackTime(switchInfo.getHotStartInterval())) {
+                        if (PositionId.HOT_CODE.equals(switchInfo.getAdvertPosition()) && switchInfo.isOpen() && PreferenceUtil.getHomeBackTime(switchInfo.getHotStartInterval())) {
                             Intent intent = new Intent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.setClass(application.getApplicationContext(), SplashADHotActivity.class);

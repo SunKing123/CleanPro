@@ -233,7 +233,7 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
                 if (null == info) return
                 Log.d(TAG, "adExposed 完成页前全屏视频")
                 StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)
-                PreferenceUtil.saveShowAD(true)
+
             }
 
             override fun adClicked(info: AdInfo) {
@@ -243,7 +243,6 @@ class ScreenFinishBeforActivity : BaseActivity<ScreenFinishBeforPresenter>() {
             }
 
             override fun adClose(info: AdInfo) {
-                PreferenceUtil.saveShowAD(false)
                 if (null != info) {
                     Log.d(TAG, "adClose 完成页前全屏视频")
                     StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.adId, info.adSource, mSourcePage, mCurrentPage, info.adTitle)

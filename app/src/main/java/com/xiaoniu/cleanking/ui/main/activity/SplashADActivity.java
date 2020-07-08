@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,18 +27,14 @@ import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
-import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.newclean.view.RoundProgressBar;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
-import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileUtils;
-import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
@@ -54,23 +48,17 @@ import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-
-import org.json.JSONObject;
-
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 /**
- * 这是demo工程的入口Activity，在这里会首次调用广点通的SDK。
+ * 冷启动开屏页面
  * <p>
- * 在调用SDK之前，如果您的App的targetSDKVersion >= 23，那么建议动态申请相关权限。
+ *
  */
 public class SplashADActivity extends BaseActivity<SplashPresenter> implements View.OnClickListener {
 
@@ -84,16 +72,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     TextView mAgreement;
     @BindView(R.id.error_ad_iv)
     ImageView mErrorAdIv;
-
     @Inject
     NoClearSPHelper mSPHelper;
     private ViewGroup container;
     private Disposable mSubscription;
-    //    private AdManager mAdManager;
     private boolean mIsOpen; //冷启动广告开关
-    private String mAdTitle = " "; //广告标题
-    private String mAdSourse = " "; //广告来源
-
     String pushData = null;
     private boolean mCanJump;
 

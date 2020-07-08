@@ -1298,25 +1298,8 @@ public class PreferenceUtil {
         return sharedPreferences.getInt(SpCacheConfig.RED_PACKET_SHOW_TRIGGER, 0);
     }
 
-    /**
-     * 保存是否正在播放广告
-     *
-     * @return
-     */
-    public static boolean saveShowAD(boolean isShow) {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SpCacheConfig.IS_SHOW_AD, isShow).commit();
-        return true;
-    }
 
-    /**
-     * 获取是否正在播放广告(正在播放广告时不展示红包)
-     */
-    public static boolean isShowAD() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(SpCacheConfig.IS_SHOW_AD, false);
-    }
+
 
     /**
      * 保存是否有版本更新
