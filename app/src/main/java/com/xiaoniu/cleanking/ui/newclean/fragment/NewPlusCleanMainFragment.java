@@ -179,13 +179,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
 
 
-        imageInteractive.setClickListener(data -> {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-            if (data != null)
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-        });
     }
 
 
@@ -229,13 +222,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customCheckPermission(Points.DEVICE_IDENTIFICATION_EVENT_CODE, Points.DEVICE_IDENTIFICATION_EVENT_NAME, phoneStatePrmStatus, "", "home_page");
     }
 
+
     private void initEvent() {
         imageInteractive.setClickListener(data -> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
             StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-            if (data != null)
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
+            //todo 跳转到刮刮卡页面
+
         });
 
         homeMainTableView.setOnItemClickListener(item -> {
@@ -270,6 +263,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     break;
             }
         });
+
 
         tvWithDraw.setOnClickListener(v -> {
             //todo 跳转提现页面
