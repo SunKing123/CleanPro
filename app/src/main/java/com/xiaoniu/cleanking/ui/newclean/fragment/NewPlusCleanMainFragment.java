@@ -32,10 +32,13 @@ import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.LoginActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -75,6 +78,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -260,9 +264,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             }
         });
 
-
         tvWithDraw.setOnClickListener(v -> {
-            //todo 跳转提现页面
+            //todo 跳转提现页面测试
+            if (UserHelper.init().isWxLogin()) {
+//                    String url = H5Urls.WITHDRAWAL_URL;
+                String url = "http://192.168.85.61:9999/html/wallet/wallet.html";
+                String scheme = SchemeConstant.SCHEME +
+                        "://" + SchemeConstant.HOST + "/jump?url=" + url +
+                        "&" + SchemeConstant.IS_FULL_SCREEN + "=1&jumpType=1";
+                SchemeProxy.openScheme(getActivity(), scheme);
+            } else {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
         });
     }
 
@@ -937,7 +950,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     View.OnClickListener onInteractiveListener;
-    public void setOnInteractiveClickListener(View.OnClickListener listener){
-       this.onInteractiveListener=listener;
+
+    public void setOnInteractiveClickListener(View.OnClickListener listener) {
+        this.onInteractiveListener = listener;
     }
 }
