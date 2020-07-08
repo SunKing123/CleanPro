@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 
 import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
 import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
@@ -39,6 +38,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
 
@@ -204,10 +204,11 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             }
 
             @Override
-            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
-                super.onAdClose(adInfo, templateView);
+            public void onAdClose(AdInfo adInfo) {
+                super.onAdClose(adInfo);
                 jumpActivity();
             }
+
         });
         /*mAdManager = GeekAdSdk.getAdsManger();
         mAdManager.loadSplashAd(this, PositionId.AD_POSITION_HOT_KP, new AdListener() {
