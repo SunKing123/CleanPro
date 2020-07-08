@@ -61,6 +61,7 @@ import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherUtils;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
+import com.xiaoniu.cleanking.ui.weather.activity.WeatherForecastActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileUtils;
@@ -701,8 +702,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                         PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
                     }
                 }
-                //过去imei
-                requestPhoneStatePermission();
             }
         });
     }
@@ -845,6 +844,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
 
     private void dealLocationSuccess(LocationCityInfo locationCityInfo) {
+
         if (locationCityInfo == null) {
             return;
         }
@@ -877,12 +877,15 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mModel == null || mView == null) {
             return;
         }
-
+        if (AndroidUtil.isFastDoubleClick()) {
+            return;
+        }
         mModel.getWeatherVideo(positionCity.getAreaCode(), new Common2Subscriber<BaseResponse<WeatherForecastResponseEntity>>() {
             @Override
             public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
                 try {
                     LogUtils.i("zz--"+new Gson().toJson(entityBaseResponse));
+                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(),entityBaseResponse.getData().getPublishSource());
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
@@ -891,7 +894,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void netConnectError() {
-
+                LogUtils.i("zz--网络异常");
             }
         });
 

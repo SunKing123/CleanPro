@@ -276,6 +276,7 @@ dependencies {
   //  implementation files('libs\\push-core.aar')
   //  implementation files('libs\\push-jpush.aar')
     implementation project(':permission')
+    implementation project(':qsvideoplayer')
 
 
     //百度统计sdk

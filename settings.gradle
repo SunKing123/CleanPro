@@ -11,5 +11,7 @@ include ':app',
         ':geekWebpage',
         ':jpush',
         ':permission',
-        ':arms'
+        ':arms',
+        ':qsvideoplayer'
+
 

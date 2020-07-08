@@ -157,9 +157,13 @@ public class GoldCoinDialog {
 
         countDownTimeViewDelay(3, adLookTime, closeDlg);
         closeDlg.setOnClickListener(view -> {
+            if (parameter.closeClickListener != null) {
+                parameter.closeClickListener.onClick(view);
+            }
             dialog.dismiss();
         });
 
+        dialog.setOnDismissListener(parameter.dismissListener);
         //当传进来的id为空时，不加载广告
         if (TextUtils.isEmpty(parameter.adId)) {
             dialog.show();

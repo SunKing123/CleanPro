@@ -22,15 +22,31 @@
             android:textColor="@color/color_333333"
             android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/iv_interaction"
-            android:layout_width="@dimen/dimen_45dp"
-            android:layout_height="@dimen/dimen_45dp"
+        <TextView
+            android:id="@+id/tv_withDraw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dimen_10dp"
+            android:background="@drawable/gradient_button_bg"
+            android:paddingLeft="9dp"
+            android:paddingRight="9dp"
+            android:text="提现"
+            android:textColor="@color/white"
+            android:textSize="12dp"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/tv_coin_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:layout_toLeftOf="@+id/tv_withDraw"
+            android:drawableLeft="@drawable/icon_home_gold"
+            android:text=""
+            android:textColor="#26DFB0"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <!--完成动画-->
@@ -77,14 +93,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="@dimen/dp_5"
-                android:layout_marginBottom="@dimen/dp_5"
-                android:layout_marginEnd="2dp" />
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="@dimen/dp_5" />
 
             <com.xiaoniu.cleanking.ui.view.HomeToolTableView
                 android:id="@+id/home_tool_table"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               />
+                android:layout_height="wrap_content" />
 
             <com.xiaoniu.cleanking.widget.ShadowViewCard
                 android:id="@+id/ad_two"

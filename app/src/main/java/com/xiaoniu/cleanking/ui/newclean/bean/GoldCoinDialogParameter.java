@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.bean;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.view.View;
 
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
@@ -32,6 +33,10 @@ public class GoldCoinDialogParameter {
     public Activity context;
     //翻倍按钮点击
     public View.OnClickListener onDoubleClickListener;
+    //点击关闭按钮
+    public View.OnClickListener closeClickListener;
+    //金币框消息回调
+    public DialogInterface.OnDismissListener dismissListener;
     //广告回调
     public AbsAdCallBack advCallBack;
 }

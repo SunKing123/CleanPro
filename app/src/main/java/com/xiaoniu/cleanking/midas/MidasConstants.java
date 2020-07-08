@@ -195,12 +195,23 @@ public interface MidasConstants {
      * 首页金币-右上-模板
      */
     String HOME_PAGE_RTLFBOTTOM_GOLD_03 = "adpos_7546373351";
-
+    /**
+     * 首页金币-右上
+     */
     List<String> HOMERTBOTTOM_LIST = new ArrayList<String>(Arrays.asList(new String[]{HOME_PAGE_RTBOTTOM_GOLD_01, HOME_PAGE_RTLFBOTTOM_GOLD_02, HOME_PAGE_RTLFBOTTOM_GOLD_03}));
     /**
      * 解锁或按home键10秒后在桌面显示的插屏广告
      */
     String SCREEN_ON_ID = "adpos_9164081851";
+
+
+    /**
+     * 天气预报页面信息流模板；
+     */
+    String WEATHER_VIDEO_PAGE_BELOW = "adpos_9164081851";
+
+
+
 
 
 }
