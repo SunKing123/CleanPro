@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.utils.prefs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.xiaoniu.cleanking.app.AppApplication;
 
@@ -48,6 +49,12 @@ public class ImplPreferencesHelper implements PreferencesHelper {
 
     public void setCustomerId(String customerId) {
         mSPrefs.edit().putString(SpConstants.CUSTOMERID, customerId).apply();
+    }
+
+    public void putString(String key, String value) {
+        if (!TextUtils.isEmpty(key)) {
+            mSPrefs.edit().putString(key, value).apply();
+        }
     }
 
     /**
@@ -140,9 +147,11 @@ public class ImplPreferencesHelper implements PreferencesHelper {
     public void setUserHeadPortraitUrl(String portraitUrl) {
         mSPrefs.edit().putString(SpConstants.USER_HEAD_PORTRAIT_URL, portraitUrl).apply();
     }
+
     public String getUserHeadPortraitUrl() {
-        return mSPrefs.getString(SpConstants.USER_HEAD_PORTRAIT_URL,"");
+        return mSPrefs.getString(SpConstants.USER_HEAD_PORTRAIT_URL, "");
     }
+
     public void setIDNum(String idNum) {
         mSPrefs.edit().putString(SpConstants.ID_NUM, idNum).apply();
     }

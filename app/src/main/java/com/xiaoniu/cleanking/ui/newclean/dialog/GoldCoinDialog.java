@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.dialog;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
@@ -14,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
+
 import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -22,15 +25,15 @@ import com.xiaoniu.cleanking.base.BaseDialog;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
+import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
+import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.listener.AskReadyCallBack;
-
-import androidx.appcompat.widget.AppCompatButton;
 
 /**
  * Created by zhaoyingtao
@@ -89,7 +92,10 @@ public class GoldCoinDialog {
         tv_coin_str.setVisibility(View.GONE);
         iv_top_three.setVisibility(View.GONE);
         ll_my_coin.setVisibility(View.GONE);
-
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            mRootRL.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(context,8)));
+            mRootRL.setClipToOutline(true);
+        }
         LinearLayout.MarginLayoutParams layoutParams = (LinearLayout.MarginLayoutParams) ll_top_content.getLayoutParams();
         //dialog的类型 1 转圈  2 撒花 3 清理金币奖励 默认是1
         if (parameter.dialogType == 2) {
@@ -154,8 +160,10 @@ public class GoldCoinDialog {
                 onDoubleClickListener.onClick(v);
             }
         });
-
-        countDownTimeViewDelay(3, adLookTime, closeDlg);
+        //需求设计不需要倒计时
+        adLookTime.setVisibility(View.GONE);
+        closeDlg.setVisibility(View.VISIBLE);
+//        countDownTimeViewDelay(3, adLookTime, closeDlg);
         closeDlg.setOnClickListener(view -> {
             if (parameter.closeClickListener != null) {
                 parameter.closeClickListener.onClick(view);
@@ -166,6 +174,7 @@ public class GoldCoinDialog {
         dialog.setOnDismissListener(parameter.dismissListener);
         //当传进来的id为空时，不加载广告
         if (TextUtils.isEmpty(parameter.adId)) {
+            middle_ll.setVisibility(View.GONE);
             dialog.show();
             return;
         }
@@ -180,7 +189,18 @@ public class GoldCoinDialog {
             @Override
             public void onReady(boolean b) {
                 if (dialog != null && !context.isFinishing()) {
-                    dialog.show();
+                    //延迟显示，体验更好
+                    new CountDownTimer(500, 500) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            dialog.show();
+                        }
+                    }.start();
                     MidasRequesCenter.requestAd(params, callBack);
                 }
             }

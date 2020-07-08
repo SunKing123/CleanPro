@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,6 +65,7 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
+import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -283,6 +286,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
         //游客登录
         mPresenter.visitorLogin();
+
+        mainFragment.setOnInteractiveClickListener(v -> {
+            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+            StatisticsUtils.trackClick("Interaction_ad_click", "用户点击了刮刮卡运营位", "home_page", "home_page");
+            mBottomBar.setCurrentItem(2);
+        });
     }
 
 

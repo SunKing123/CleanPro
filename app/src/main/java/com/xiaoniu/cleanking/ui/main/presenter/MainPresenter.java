@@ -51,19 +51,14 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherForecastResponseEntity;
-import com.xiaoniu.cleanking.ui.main.bean.WeatherResponseContent;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.LocationCityInfo;
-import com.xiaoniu.cleanking.ui.main.bean.weatherdao.Weather72HEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherCity;
-import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherResponeUtils;
-import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherUtils;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.weather.activity.WeatherForecastActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -128,17 +123,18 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public MainPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
     }
+
     /**
      * 游客登录
      */
     public void visitorLogin() {
-        if (UserHelper.init().isLogin()){//已经登录跳过
+        if (UserHelper.init().isLogin()) {//已经登录跳过
             return;
         }
         Gson gson = new Gson();
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("userType", 2);
-        paramsMap.put("openId",  AndroidUtil.getDeviceID());
+        paramsMap.put("openId", AndroidUtil.getDeviceID());
         String json = gson.toJson(paramsMap);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mModel.visitorLogin(body, new CommonSubscriber<LoginDataBean>() {
@@ -146,6 +142,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             public void getData(LoginDataBean loginDataBean) {
                 UserInfoBean infoBean = loginDataBean.getData();
                 if (infoBean != null) {
+                    infoBean.userType = 2;
                     UserHelper.init().saveUserInfo(infoBean);
                 }
             }
@@ -884,8 +881,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             @Override
             public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
                 try {
-                    LogUtils.i("zz--"+new Gson().toJson(entityBaseResponse));
-                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(),entityBaseResponse.getData().getPublishSource());
+                    LogUtils.i("zz--" + new Gson().toJson(entityBaseResponse));
+                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(), entityBaseResponse.getData().getPublishSource());
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
