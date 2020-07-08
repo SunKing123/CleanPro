@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.newclean.interfice.OnBtnClickListener;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.payshare.AuthorizeLoginListener;
 import com.xiaoniu.payshare.AuthorizedLogin;
 
@@ -80,7 +81,7 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         StatusBarCompat.translucentStatusBarForImage(this, true, true);
-        titleLayout.setLeftTitle("").setLeftBackColor(R.color.color_666666).isShowBottomLine(true);
+        titleLayout.setLeftTitle("").setLeftBackColor(R.color.color_666666);
         initListener();
         setXieYi();
         paramsMap = new HashMap<>();
@@ -174,7 +175,11 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
                 break;
             case R.id.vx_login_ll:
 //                startActivity(new Intent(this, BindPhoneActivity.class));
-                AuthorizedLogin.getInstance().userWeiChatLogin(this);
+                if (bottomBtn.isChecked()) {
+                    AuthorizedLogin.getInstance().userWeiChatLogin(this);
+                } else {
+                    ToastUtils.showShort("请先同意《服务协议》和《隐私条款》");
+                }
                 break;
         }
     }
@@ -205,9 +210,8 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         if (infoBean != null) {
             UserHelper.init().saveUserInfo(infoBean);
             if (flag == 1) {
-                if (TextUtils.isEmpty(infoBean.phone)) {
+                if (TextUtils.isEmpty(infoBean.phone)) {//未绑定手机号去绑定
                     goToBindPhone();
-
                 }
                 finish();
             }

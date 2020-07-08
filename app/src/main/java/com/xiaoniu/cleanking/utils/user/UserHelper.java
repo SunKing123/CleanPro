@@ -58,12 +58,15 @@ public class UserHelper {
     public String getCustomerId() {
         return implPreferencesHelper.getCustomerId();
     }
+
     public String getNickName() {
         return implPreferencesHelper.getNickName();
     }
+
     public String getUserHeadPortraitUrl() {
         return implPreferencesHelper.getUserHeadPortraitUrl();
     }
+
     public String getOpenID() {
         return implPreferencesHelper.getOpenID();
     }
@@ -78,20 +81,27 @@ public class UserHelper {
      * @param userInfo
      */
     public void saveUserInfo(UserInfoBean userInfo) {
+        if (userInfo == null) {
+            return;
+        }
         implPreferencesHelper.setClientId(userInfo.userId);
         implPreferencesHelper.setCustomerId(userInfo.userId);
         implPreferencesHelper.setUserName(userInfo.nickname);
         implPreferencesHelper.setNickName(userInfo.nickname);
         implPreferencesHelper.setToken(userInfo.token);
-        if (userInfo.userType == 1){//微信登录
+        if (userInfo.userType == 1) {//微信登录
             implPreferencesHelper.setWxLoginSuccess(true);
-        }else {
+        } else {
             implPreferencesHelper.setWxLoginSuccess(false);
         }
         implPreferencesHelper.setOpenID(userInfo.openId);
         implPreferencesHelper.setPhoneNum(userInfo.phone);
         implPreferencesHelper.setUserHeadPortraitUrl(userInfo.userAvatar);
         EventBus.getDefault().post("loginSuccessRefreshUserInfo");
+    }
+
+    public void setUserPhoneNum(String phoneNum) {
+        implPreferencesHelper.setPhoneNum(phoneNum);
     }
 
     /**

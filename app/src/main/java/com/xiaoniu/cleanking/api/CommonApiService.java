@@ -4,6 +4,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.login.bean.BindPhoneBean;
 import com.xiaoniu.cleanking.ui.login.bean.IsPhoneBindBean;
 import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
+import com.xiaoniu.cleanking.ui.login.bean.RequestPhoneBean;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 
 import io.reactivex.Observable;
@@ -73,5 +74,9 @@ public interface CommonApiService {
      */
     @POST("/clean-user/sendMsg")
     Observable<BaseEntity> sendMsgApi(@Body RequestBody body);
-
+    /**
+     * 闪验通过token获取手机号
+     */
+    @GET("/clean-user/quickBinding")
+    Observable<RequestPhoneBean> getPhoneNumFromShanYanApi(@Query("token") String systemType);
 }

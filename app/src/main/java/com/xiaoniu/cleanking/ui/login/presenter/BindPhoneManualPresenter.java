@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.ui.login.bean.BindPhoneBean;
 import com.xiaoniu.cleanking.ui.login.bean.IsPhoneBindBean;
 import com.xiaoniu.cleanking.ui.login.contract.BindPhoneManualContract;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +73,7 @@ public class BindPhoneManualPresenter extends BasePresenter<BindPhoneManualContr
         Map<String, Object> requestMap = new HashMap<>();
         Gson gson = new Gson();
         requestMap.put("phoneNum", phoneNum);
-        requestMap.put("bizType", "phoneNum-手机号绑定");
+        requestMap.put("bizType", "wzBindPhone");
         requestMap.put("msgCode", code);
         String json = gson.toJson(requestMap);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
@@ -85,8 +86,12 @@ public class BindPhoneManualPresenter extends BasePresenter<BindPhoneManualContr
                 .subscribe(new ErrorHandleSubscriber<BindPhoneBean>(mErrorHandler) {
                     @Override
                     public void onNext(BindPhoneBean loginDataBean) {
-                        if (mRootView != null) {
-                            mRootView.getBindPhoneSuccess(loginDataBean);
+                        if ("200".equals(loginDataBean.code)) {
+                            if (mRootView != null) {
+                                mRootView.getBindPhoneSuccess(loginDataBean);
+                            }
+                        } else {
+                            ToastUtils.showShort(loginDataBean.msg);
                         }
                     }
                 });
@@ -96,7 +101,7 @@ public class BindPhoneManualPresenter extends BasePresenter<BindPhoneManualContr
         Map<String, Object> requestMap = new HashMap<>();
         Gson gson = new Gson();
         requestMap.put("phoneNum", phoneNum);
-        requestMap.put("bizType", "wkBindPhone");
+        requestMap.put("bizType", "wzBindPhone");
         String json = gson.toJson(requestMap);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mModel.sendMsg(body).subscribeOn(Schedulers.io())

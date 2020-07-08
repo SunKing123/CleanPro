@@ -61,7 +61,7 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
             }
             PreferenceUtil.saveIsNotificationEnabled(isChecked);
         });
-        if (UserHelper.init().isLogin()) {
+        if (UserHelper.init().isWxLogin()) {
             ll_exit_login.setVisibility(View.VISIBLE);
         } else {
             ll_exit_login.setVisibility(View.GONE);

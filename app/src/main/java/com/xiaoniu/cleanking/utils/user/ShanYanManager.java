@@ -115,11 +115,12 @@ public class ShanYanManager {
     public static ShanYanUIConfig getCJSConfig(final Context context) {
         /************************************************自定义控件**************************************************************/
         Drawable authNavHidden = context.getResources().getDrawable(R.drawable.bg_white_fillet_06);
-        Drawable logoImgPath = context.getResources().getDrawable(R.mipmap.applogo);
-        Drawable logBtnImgPath = context.getResources().getDrawable(R.mipmap.sysdk_login_safe_bg);
+        Drawable logoImgPath = context.getResources().getDrawable(R.mipmap.icon_shan_yan_login_logo);
+//        Drawable logBtnImgPath = context.getResources().getDrawable(R.mipmap.sysdk_login_safe_bg);
+        Drawable logBtnImgPath = context.getResources().getDrawable(R.drawable.bg_green_confirm_fillet_30);
         Drawable uncheckedImgPath = context.getResources().getDrawable(R.mipmap.icon_login_no_check);
         Drawable checkedImgPath = context.getResources().getDrawable(R.mipmap.icon_login_check);
-        Drawable navReturnImgPath = context.getResources().getDrawable(R.mipmap.back);
+        Drawable navReturnImgPath = context.getResources().getDrawable(R.mipmap.icon_gray_back);
 
         TextView otherTV = new TextView(context);
         otherTV.setText(context.getResources().getString(R.string.app_name));
@@ -141,8 +142,8 @@ public class ShanYanManager {
                 .setNavTextColor(Color.parseColor("#262626")) //设置标题栏文字颜色
                 .setAuthBGImgPath(authNavHidden)
                 .setNavReturnImgPath(navReturnImgPath)
-                .setNavReturnBtnWidth(10)
-                .setNavReturnBtnHeight(16)
+                .setNavReturnBtnWidth(21)
+                .setNavReturnBtnHeight(21)
                 .setNavReturnBtnOffsetX(10)
 
                 //.setFullScreen(true)
@@ -150,8 +151,8 @@ public class ShanYanManager {
 
                 //授权页logo（logo的层级在次底层，仅次于自定义控件）
                 .setLogoImgPath(logoImgPath)  //设置logo图片
-                .setLogoWidth(78)   //设置logo宽度
-                .setLogoHeight(78)   //设置logo高度
+                .setLogoWidth(115)   //设置logo宽度
+                .setLogoHeight(123)   //设置logo高度
                 .setLogoOffsetY(106)  //设置logo相对于标题栏下边缘y偏移
                 .setLogoHidden(false)   //是否隐藏logo
 //                .setLogoOffsetX(20)
@@ -165,12 +166,12 @@ public class ShanYanManager {
 
 
                 //授权页登录按钮：
-                .setLogBtnText("")  //设置登录按钮文字
-                .setLogBtnTextColor(Color.parseColor("#252222"))   //设置登录按钮文字颜色
+                .setLogBtnText("本机号码一键绑定")  //设置登录按钮文字
+                .setLogBtnTextColor(Color.parseColor("#ffffff"))   //设置登录按钮文字颜色
                 .setLogBtnImgPath(logBtnImgPath)   //设置登录按钮图片
-                .setLogBtnOffsetY(266)   //设置登录按钮相对于标题栏下边缘y偏移
+                .setLogBtnOffsetY(280)   //设置登录按钮相对于标题栏下边缘y偏移
                 .setLogBtnTextSize(15)
-                .setLogBtnHeight(68)
+                .setLogBtnHeight(40)
                 .setLogBtnWidth(256)
 
                 //授权页隐私栏：
@@ -183,18 +184,20 @@ public class ShanYanManager {
                 .setPrivacyState(true)
                 .setCheckBoxMargin(0, 0, 4, 20)
                 .setAppPrivacyColor(Color.parseColor("#A4A4A4"), Color.parseColor("#5CD0FF"))   //	设置隐私条款名称颜色(基础文字颜色，协议文字颜色)
-                .setPrivacyOffsetBottomY(50)//设置隐私条款相对于屏幕下边缘y偏
+                .setPrivacyOffsetBottomY(60)//设置隐私条款相对于屏幕下边缘y偏
                 .setUncheckedImgPath(uncheckedImgPath)
                 .setCheckedImgPath(checkedImgPath)
 
                 //授权页slogan：
                 .setSloganTextColor(Color.parseColor("#A4A4A4"))  //设置slogan文字颜色
                 .setSloganTextSize(11)
-                .setSloganOffsetBottomY(20)  //设置slogan相对于标题栏下边缘y偏移
+                .setSloganOffsetBottomY(40)  //设置slogan相对于标题栏下边缘y偏移
                 .setSloganHidden(false)
+                //授权页创蓝slogan
+                .setShanYanSloganOffsetBottomY(20)
 
                 // 添加自定义控件:
-                .addCustomView(otherTV, false, false, null)
+//                .addCustomView(otherTV, false, false, null)
 //                .addCustomView(relativeLayout, false, false, null)
                 .build();
         return uiConfig;
