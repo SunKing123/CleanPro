@@ -101,7 +101,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
 
-
     /**
      * 借款页
      */
@@ -213,7 +212,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
       /*  if (!RomUtils.checkIsHuaWeiRom()) {
             LogUtils.e("====非华为设备，启动推送Service");
             startService(new Intent(this, LocalPushService.class));
-
         }*/
         //上报设备信息
         if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报

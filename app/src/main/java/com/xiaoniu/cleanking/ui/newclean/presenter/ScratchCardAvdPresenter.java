@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +19,6 @@ import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 /**
  * Created by xinxiaolong on 2020/7/6.
@@ -33,6 +31,7 @@ public class ScratchCardAvdPresenter {
     public static final String ADV_SECOND_PREFIX = "scratch_card_second";
     public static final String ADV_VIDEO_PREFIX = "scratch_card_video";
 
+    //开关是否初始化过
     private static boolean hasInit = false;
     //刮刮卡广告开关
     private static boolean isOpenOne;
@@ -44,7 +43,7 @@ public class ScratchCardAvdPresenter {
     private Activity activity;
     private int cardIndex;
     private int coinCount;
-    GoldCoinDialogParameter parameter;
+    private GoldCoinDialogParameter parameter;
 
     public ScratchCardAvdPresenter(Activity activity) {
         initOnOff();
@@ -77,12 +76,7 @@ public class ScratchCardAvdPresenter {
             parameter.context = activity;
             parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
             parameter.fromType = GoldCoinDialogParameter.FROM_SCRATCH_CARD;
-            parameter.onDoubleClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loadVideoAdv();
-                }
-            };
+            parameter.onDoubleClickListener = v -> loadVideoAdv();
         }
         parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
