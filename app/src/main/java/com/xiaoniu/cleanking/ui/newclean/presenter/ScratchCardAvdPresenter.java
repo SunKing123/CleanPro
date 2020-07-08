@@ -17,6 +17,8 @@ import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.common.utils.Points;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 
@@ -64,7 +66,6 @@ public class ScratchCardAvdPresenter {
 
     public void showDialog(int cardIndex, int coinCount) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount);
-
         if (activity == null) {
             log("activity 对象为空，不能弹框");
             return;
@@ -76,20 +77,29 @@ public class ScratchCardAvdPresenter {
             parameter.context = activity;
             parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
             parameter.fromType = GoldCoinDialogParameter.FROM_SCRATCH_CARD;
-            parameter.onDoubleClickListener = v -> loadVideoAdv();
+            parameter.onDoubleClickListener = v -> handlerDoubleClick();
+            parameter.closeClickListener = v -> handlerCloseClick();
         }
         parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
+
         GoldCoinDialog.showGoldCoinDialog(parameter);
+        StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
-    //加载激励视频广告
-    private void loadVideoAdv() {
+    //点击翻倍按钮事件
+    private void handlerDoubleClick() {
         if (isOpenTwo()) {
             loadVideoAdv(getVideoAdvId(cardIndex));
         } else {
             handlerVideoAdvError();
         }
+        StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
+    }
+
+    //点击关闭按钮事件
+    private void handlerCloseClick() {
+        StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_CLOSE_CLICK_CODE, Points.ScratchCard.WINDOW_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
     /**
@@ -211,6 +221,7 @@ public class ScratchCardAvdPresenter {
         intent.putExtra(GoldCoinSuccessActivity.AD_ID, isOpenThree() ? getSecondAdvId(cardIndex) : "");
         activity.startActivity(intent);
         GoldCoinDialog.dismiss();
+        StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
     }
 
     private String getAdvId(Context context, String resourceName) {

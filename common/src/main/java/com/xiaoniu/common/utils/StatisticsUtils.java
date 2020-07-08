@@ -479,4 +479,44 @@ public class StatisticsUtils {
         NiuDataAPI.trackClick(event_code, event_name, extension);
     }
 
+
+    /**
+     * 刮刮卡弹窗埋点
+     * @param event_code
+     * @param event_name
+     * @param cardIndex
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void scratchCardCustom(String event_code,String event_name,int cardIndex, String source_page_id, String current_page_id) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("card_position_id", String.valueOf(cardIndex));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackEvent(event_code, event_name, extension);
+    }
+
+    /**
+     * 刮刮卡弹窗埋点
+     * @param event_code
+     * @param event_name
+     * @param cardIndex
+     * @param source_page_id
+     * @param current_page_id
+     */
+    public static void scratchCardClick(String event_code,String event_name,int cardIndex, String source_page_id, String current_page_id) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", source_page_id);
+            extension.put("current_page_id", current_page_id);
+            extension.put("card_position_id", String.valueOf(cardIndex));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackClick(event_code, event_name, extension);
+    }
 }

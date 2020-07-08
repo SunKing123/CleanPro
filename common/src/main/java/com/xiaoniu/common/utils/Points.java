@@ -35,8 +35,24 @@ public interface Points {
         String ANIMATION_FINISH_PAGE_EVENT_CODE = "virus_killing_finish_animation_page_view_page";
         String ANIMATION_FINISH_PAGE_EVENT_NAME = "病毒查杀动画完成页浏览";
         String ANIMATION_FINISH_SYSTEM_RETURN_EVENT_NAME = "病毒查杀动画完成页返回";
-
     }
 
+
+    interface ScratchCard {
+        String WINDOW_PAGE = "scratch_card_gold_coin_pop_up_window_page";
+
+        String WINDOW_UP_EVENT_CODE = "scratch_card_gold_coin_pop_up_window_custom";
+        String WINDOW_UP_EVENT_NAME = "刮刮卡金币领取弹窗曝光";
+        String WINDOW_DOUBLE_CLICK_EVENT_CODE = "double_the_gold_coin_click";
+        String WINDOW_DOUBLE_CLICK_EVENT_NAME = "金币翻倍按钮点击";
+        String WINDOW_CLOSE_CLICK_CODE = "close_click";
+        String WINDOW_CLOSE_CLICK_NAME = "弹窗关闭点击";
+
+        String VIDEO_PAGE = "scratch_card_incentive_video_page";
+        String VIDEO_PAGE_CLOSE_CLICK_CODE = "close_click";
+        String VIDEO_PAGE_CLOSE_CLICK_NAME = "刮刮卡激励视频广告关闭点击";
+
+
+    }
 
 }
