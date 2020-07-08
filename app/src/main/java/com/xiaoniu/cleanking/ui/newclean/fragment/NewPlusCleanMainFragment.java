@@ -129,10 +129,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     FrameLayout adLayoutTwo;
     @BindView(R.id.ad_three)
     FrameLayout adLayoutThree;
-    @BindView(R.id.image_interactive)
-    HomeInteractiveView imageInteractive;
     @BindView(R.id.layout_scroll)
     NestedScrollView mScrollView;
+    @BindView(R.id.image_interactive)
+    public HomeInteractiveView imageInteractive;
 
     private boolean isThreeAdvOpen = false;
     private boolean hasInitThreeAdvOnOff = false;
@@ -224,12 +224,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
 
     private void initEvent() {
-        imageInteractive.setClickListener(data -> {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-            //todo 跳转到刮刮卡页面
 
-        });
+        imageInteractive.setClickListener(data -> onInteractiveListener.onClick(null));
 
         homeMainTableView.setOnItemClickListener(item -> {
             switch (item) {
@@ -939,4 +935,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * ********************************************************** others ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
+
+    View.OnClickListener onInteractiveListener;
+    public void setOnInteractiveClickListener(View.OnClickListener listener){
+       this.onInteractiveListener=listener;
+    }
 }

@@ -284,7 +284,7 @@ public class ScratchCardAvdPresenter {
 
         log("================================================检查刮刮卡的广告开关 end");
     }
-   
+
     public void setOnVideoPlayedListener(OnVideoPlayedListener onVideoPlayedListener) {
         this.onVideoPlayedListener = onVideoPlayedListener;
     }
