@@ -239,7 +239,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
     /*---------------------------------------------------------广告请求--------------------------------------------------------------------------------------------------*/
     public void requestAd(){
         //todo_zz
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.WEATHER_VIDEO_PAGE_BELOW)
                 .setActivity(this).setViewContainer(relRootAd).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
