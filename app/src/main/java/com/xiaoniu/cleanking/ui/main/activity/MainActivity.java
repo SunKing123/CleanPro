@@ -101,7 +101,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
 
-
     /**
      * 借款页
      */
@@ -169,10 +168,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             public void onTabSelected(int position, int prePosition) {
                 mCurrentPosition = position + 1;
                 showHideFragment(position, prePosition);
-
-                if (mainFragment != null && mCurrentPosition == 1) {
-                    mainFragment.getOnHomeTabClickListener().onClick(null);
-                }
                 //如果没有选中头条，开始10分钟记时
                 if (position == 2) {
                     isSelectTop = true;
@@ -213,7 +208,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
       /*  if (!RomUtils.checkIsHuaWeiRom()) {
             LogUtils.e("====非华为设备，启动推送Service");
             startService(new Intent(this, LocalPushService.class));
-
         }*/
         //上报设备信息
         if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
@@ -245,7 +239,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             isFirstCreate = false;
         }
     }
-
 
     private void checkReadPermission() {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {

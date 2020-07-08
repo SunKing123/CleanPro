@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -25,6 +26,7 @@ import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
+import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.ImageUtil;
@@ -87,12 +89,16 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
     }
 
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            //放在initView中无效
-            StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_27D599), false);
+            }
             //展示广告
             addBottomAdView();
         }
@@ -196,6 +202,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             MinePageInfoBean.DataBean data = infoBean.getData();
             mBinding.moneyTv.setText(String.valueOf(data.getAmount()));
             mBinding.goldCoinTv.setText(String.valueOf(data.getGold()));
+            UserInfoEvent event=new UserInfoEvent();
+            event.infoBean=data;
+            EventBus.getDefault().post(event);
         }
     }
 

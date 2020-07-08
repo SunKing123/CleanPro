@@ -4,6 +4,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -23,6 +24,7 @@ import com.xiaoniu.cleanking.ui.newclean.util.YuLeWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.statistic.NiuDataAPI;
 
 /**
  * Created by zhaoyingtao
@@ -41,7 +43,7 @@ public class YuLeFragment extends SimpleFragment {
     public static YuLeFragment getInstance() {
         return new YuLeFragment();
     }
-
+   
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_yule;
@@ -55,6 +57,23 @@ public class YuLeFragment extends SimpleFragment {
             mAgentWeb.getWebCreator().getWebView().loadUrl(url);
             Log.e("snow","=="+AndroidUtil.getXnData());
         });
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.e("fragment","onHiddenChanged()  hidden="+hidden);
+
+        if (!hidden) {
+            NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
+            } else {
+                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
+            }
+        } else {
+            NiuDataAPI.onPageEnd("home_page_view_page", "刮刮卡浏览");
+        }
     }
 
     private void initWebView() {
@@ -171,15 +190,6 @@ public class YuLeFragment extends SimpleFragment {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-//        if (!hidden) {
-        //放在initView中无效
-        StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
-//        }
     }
 
     @Override
