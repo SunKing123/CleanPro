@@ -191,17 +191,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     }
 
     private void initGeekAd() {
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpenOne = switchInfoList.isOpen();
-                }
-                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_TWO_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpenTwo = switchInfoList.isOpen();
-                }
-            }
-        }
+        isOpenOne=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH,PositionId.DRAW_ONE_CODE);
+        isOpenTwo=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH,PositionId.DRAW_TWO_CODE);
+
         if (isOpenOne) {
             initPos01Ad();
         }
@@ -209,8 +201,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (isOpenTwo) {
             initPos02Ad();
         }
-
-
     }
 
     //获取埋点参数

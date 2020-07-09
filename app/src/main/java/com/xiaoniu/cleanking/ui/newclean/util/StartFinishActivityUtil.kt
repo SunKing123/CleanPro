@@ -38,19 +38,9 @@ class StartFinishActivityUtil {
                 return
             }
             hasInit = true
-            if (AppHolder.getInstance().getSwitchInfoList() != null && AppHolder.getInstance().getSwitchInfoList().getData() != null && AppHolder.getInstance().switchInfoList.data.size > 0) {
-                for (switchInfoList in AppHolder.getInstance().switchInfoList.data) {
-                    if (PositionId.KEY_AD_PAGE_FINISH == switchInfoList.configKey && PositionId.DRAW_ONE_CODE == switchInfoList.advertPosition) {
-                        isOneOpen = switchInfoList.isOpen
-                    }
-                    if (PositionId.KEY_AD_PAGE_FINISH == switchInfoList.configKey && PositionId.DRAW_TWO_CODE == switchInfoList.advertPosition) {
-                        isTwoOpen = switchInfoList.isOpen
-                    }
-                    if (PositionId.KEY_AD_PAGE_FINISH == switchInfoList.configKey && PositionId.DRAW_THREE_CODE == switchInfoList.advertPosition) {
-                        isThreeOpen = switchInfoList.isOpen
-                    }
-                }
-            }
+            isOneOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE)
+            isTwoOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_TWO_CODE)
+            isThreeOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_THREE_CODE)
         }
     }
 }
