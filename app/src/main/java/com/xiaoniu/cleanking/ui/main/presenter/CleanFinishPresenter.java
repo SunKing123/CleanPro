@@ -230,23 +230,18 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     //金币领取广告弹窗
-    private void showGetGoldCoinDialog(BubbleCollected bubbleCollected) {
+    public void showGetGoldCoinDialog(BubbleCollected bubbleCollected) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 3;
         bean.obtainCoinCount = bubbleCollected.getData().getGoldCount();
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
         bean.fromType = GoldCoinDialogParameter.FROM_FINISH_COMPLETE;
         bean.context = mActivity;
+        bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO);
         bean.advCallBack = new AbsAdCallBack() {
 
         };
         bean.onDoubleClickListener = (v) -> {
-
-            if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)) {
-                ToastUtils.showLong("网络异常");
-                GoldCoinDialog.dismiss();
-                return;
-            }
             ViewGroup viewGroup = (ViewGroup) mView.getWindow().getDecorView();
             AdRequestParams params = new AdRequestParams.Builder().
                     setActivity(mActivity).
