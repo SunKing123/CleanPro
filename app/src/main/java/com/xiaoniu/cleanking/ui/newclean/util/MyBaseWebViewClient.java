@@ -204,7 +204,7 @@ public class MyBaseWebViewClient extends WebViewClient {
             //getSource获取值不对，这里逻辑后续需要就需要修改
             int source = getSource(isDouble, taskId);
             //TODO 显示广告弹窗
-            cardAvdPresenter.showDialog(Integer.parseInt(adId), Integer.parseInt(coin));
+            cardAvdPresenter.showDialog(Integer.parseInt(adId), obtainCoinCount, obtainCoinCount + totalCoinCount);
         }
         return false;
     }
@@ -294,7 +294,7 @@ public class MyBaseWebViewClient extends WebViewClient {
                 if (adId > 100) {
                     adId = adId - 100;
                 }
-                cardAvdPresenter.showDialog(adId, Integer.parseInt(coin));
+                cardAvdPresenter.showDialog(adId, obtainCoinCount, obtainCoinCount + totalCoinCount);
             }
         }
     }

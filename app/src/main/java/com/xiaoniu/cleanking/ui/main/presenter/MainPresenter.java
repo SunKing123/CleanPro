@@ -125,10 +125,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /**
      * 游客登录
      */
-    public void visitorLogin() {
-        if (UserHelper.init().isLogin()) {//已经登录跳过
-            return;
-        }
+    public void visitorLogin() {//冷启 热启都是需要调游客登录，即使已登录
+//        if (UserHelper.init().isLogin()) {//已经登录跳过
+//            return;
+//        }
         Gson gson = new Gson();
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("userType", 2);
