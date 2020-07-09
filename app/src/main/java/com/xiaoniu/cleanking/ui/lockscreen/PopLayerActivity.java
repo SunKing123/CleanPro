@@ -35,7 +35,6 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     private TextView progree_tv;
     private ImageView adClose;
     private int showTimeSecond = 3;
-    // private CountDownTimer countDownTimer;
     AdInfo adInfo;
 
     @Override
