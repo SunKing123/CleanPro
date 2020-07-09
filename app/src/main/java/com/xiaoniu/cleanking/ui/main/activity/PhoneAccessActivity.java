@@ -35,7 +35,7 @@ import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
@@ -276,14 +276,18 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         PreferenceUtil.saveCleanJiaSuUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");
-        Intent mIntent = new Intent(this, ScreenFinishBeforActivity.class);
+
+
+
+        Intent mIntent = new Intent();
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
         mIntent.putExtra(ExtraConstant.NUM, tv_size != null ? tv_size.getText().toString() : num);
         mIntent.putExtra(ExtraConstant.UNIT, unit);
         if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
             mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
         }
-        startActivity(mIntent);
+        StartFinishActivityUtil.Companion.gotoFinish(this, mIntent);
+
         finish();
     }
 

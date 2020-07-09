@@ -48,6 +48,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -172,6 +173,7 @@ public class TimingReceiver extends BroadcastReceiver {
     }*/
 
     private void startPopActivity(Context context, Long homePressTime, LocalPushConfigModel.Item item) {
+        StatisticsUtils.customTrackEvent("local_push_window_custom", "推送弹窗满足推送时机弹窗创建时", "", "local_push_window");
         Intent screenIntent = new Intent();
         screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCAL_PUSH_ACTIVITY);
         screenIntent.putExtra("config", item);

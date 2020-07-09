@@ -10,9 +10,8 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
@@ -99,8 +98,10 @@ public class WechatCleanResultActivity extends SimpleActivity {
             AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
 
-            startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                    .putExtra(ExtraConstant.TITLE, mTitle));
+            Intent intent=new Intent()
+                    .putExtra(ExtraConstant.TITLE, mTitle);
+            StartFinishActivityUtil.Companion.gotoFinish(this,intent);
+
             finish();
         });
     }

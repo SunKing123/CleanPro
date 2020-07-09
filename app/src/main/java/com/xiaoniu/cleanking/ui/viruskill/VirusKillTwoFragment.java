@@ -21,8 +21,7 @@ import com.jess.arms.widget.LeiDaView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
-import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -203,12 +202,14 @@ public class VirusKillTwoFragment extends SimpleFragment {
 
         EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.virus_kill)));
 
-        Intent mIntent = new Intent(getActivity(), ScreenFinishBeforActivity.class);
+        Intent mIntent = new Intent();
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.virus_kill));
         if (getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
             mIntent.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
         }
-        startActivity(mIntent);
+        StartFinishActivityUtil.Companion.gotoFinish(getActivity(), mIntent);
+
+
         getActivity().finish();
     }
 }

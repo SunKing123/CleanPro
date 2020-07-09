@@ -93,7 +93,7 @@ public class GoldCoinDialog {
         iv_top_three.setVisibility(View.GONE);
         ll_my_coin.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            mRootRL.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(context,8)));
+            mRootRL.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(context, 8)));
             mRootRL.setClipToOutline(true);
         }
         LinearLayout.MarginLayoutParams layoutParams = (LinearLayout.MarginLayoutParams) ll_top_content.getLayoutParams();
@@ -102,8 +102,10 @@ public class GoldCoinDialog {
             rl_type_two.setVisibility(View.VISIBLE);
             layoutParams.topMargin = DisplayUtil.dip2px(context, 65);
         } else if (parameter.dialogType == 3) {
-            see_video_to_double.setVisibility(View.VISIBLE);
-            see_video_to_double.setOnClickListener(onDoubleClickListener);
+            if (parameter.isRewardOpen) {
+                see_video_to_double.setVisibility(View.VISIBLE);
+                see_video_to_double.setOnClickListener(onDoubleClickListener);
+            }
             iv_top_three.setVisibility(View.VISIBLE);
             layoutParams.topMargin = DisplayUtil.dip2px(context, 86);
         } else {

@@ -27,7 +27,7 @@ import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -374,8 +374,11 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         PreferenceUtil.saveCleanPowerUsed(true);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_finish_annimation_page");
-        startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_super_power_saving)));
+
+        Intent intent=new Intent()
+                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_super_power_saving));
+        StartFinishActivityUtil.Companion.gotoFinish(this, intent);
+
         finish();
     }
 

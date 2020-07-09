@@ -514,52 +514,12 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
     private int mBottomAdShowCount = 0;
 
-    /**
-     * 打底广告
-     */
-    private void showBottomAd() {
-        if (null != AppHolder.getInstance().getBottomAdList() &&
-                AppHolder.getInstance().getBottomAdList().size() > 0) {
-            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
-                if (dataBean.getSwitcherKey().equals(PositionId.KEY_CLEAN_ALL)
-                        && dataBean.getAdvertPosition().equals(PositionId.DRAW_THREE_CODE)) {
-                    if (dataBean.getShowType() == 1) { //循环
-                        mBottomAdShowCount = PreferenceUtil.getFinishAdThreeCount();
-                        if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
-                            PreferenceUtil.saveFinishAdThreeCount(0);
-                        } else {
-                            PreferenceUtil.saveFinishAdThreeCount(PreferenceUtil.getFinishAdThreeCount() + 1);
-                        }
-                    } else { //随机
-                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
-                            mBottomAdShowCount = 0;
-                        } else {
-                            mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
-                        }
-                    }
-                    if (null == mErrorIv) return;
-                    ad_container_pos03.setVisibility(View.GONE);
-                    mErrorIv.setVisibility(View.VISIBLE);
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
-                    GlideUtils.loadImage(this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), mErrorIv);
-                    mErrorIv.setOnClickListener(v -> {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
-                        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
-                        startActivityForResult(new Intent(this, AgentWebViewActivity.class)
-                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
-                                .putExtra(ExtraConstant.WEB_FROM, "FinishActivity"), 100);
-                    });
-                }
-            }
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 100:
-                showBottomAd();
+               // showBottomAd();
                 return;
         }
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);

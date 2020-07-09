@@ -359,24 +359,24 @@ public class AndroidUtil {
                 } else {
                     sDeviceID = tm.getDeviceId();
                 }
-                if (TextUtils.isEmpty(sDeviceID)) {
-                    if (Build.VERSION.SDK_INT >= 29) {
-                        if (AppLifecyclesImpl.isSupportOaid()) {
-                            sDeviceID = AppLifecyclesImpl.getOaid();
-                        } else {
-                            sDeviceID = getAndroidId(AppApplication.getInstance());
-                        }
-                    } else {
-                        sDeviceID = getAndroidId(AppApplication.getInstance());
-                    }
-                }
+                setDeviceID();
                 return sDeviceID;
             } catch (Exception var2) {
+                setDeviceID();
                 return sDeviceID;
             }
         }
     }
 
+    private static void setDeviceID() {
+        if (TextUtils.isEmpty(sDeviceID)) {
+            if (Build.VERSION.SDK_INT >= 29 && AppLifecyclesImpl.isSupportOaid()) {
+                sDeviceID = AppLifecyclesImpl.getOaid();
+                return;
+            }
+            sDeviceID = getAndroidId(AppApplication.getInstance());
+        }
+    }
 
     public static String getAndroidId(Context context) {
         String androidId = "unknown";

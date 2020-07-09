@@ -76,6 +76,7 @@ import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtil;
+import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -290,6 +291,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             StatisticsUtils.trackClick("Interaction_ad_click", "用户点击了刮刮卡运营位", "home_page", "home_page");
             mBottomBar.setCurrentItem(2);
         });
+
     }
 
 

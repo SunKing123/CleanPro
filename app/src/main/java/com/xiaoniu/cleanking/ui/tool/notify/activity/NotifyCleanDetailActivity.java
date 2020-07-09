@@ -15,7 +15,7 @@ import com.xiaoniu.cleanking.app.AppManager;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationStateListener;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.adapter.NotifyCleanAdapter;
 import com.xiaoniu.cleanking.ui.tool.notify.bean.NotificationInfo;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
@@ -283,8 +283,10 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
         EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_notification_clean)));
 
-        startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_notification_clean)));
+        Intent intent =new Intent()
+                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_notification_clean));
+        StartFinishActivityUtil.Companion.gotoFinish(this, intent);
+
         finish();
     }
 

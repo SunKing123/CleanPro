@@ -30,7 +30,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileChildEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FileTitleEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.qq.bean.CleanWxClearInfo;
 import com.xiaoniu.cleanking.ui.tool.qq.presenter.QQCleanHomePresenter;
@@ -209,8 +209,12 @@ public class QQCleanHomeActivity extends BaseActivity<QQCleanHomePresenter> {
             totalSize += getSize(az) + getSize(aB) + totalImgSize + totalVideoSize + getSize(al) + getSize(an) + getSize(ah) + getSize(ag);
             if (totalSize == 0) {
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_qq_clear)));
+
+                Intent intent=new Intent()
+                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_qq_clear));
+                StartFinishActivityUtil.Companion.gotoFinish(this, intent);
+
+
                 finish();
             } else {
                 if (selectSize == 0) return;

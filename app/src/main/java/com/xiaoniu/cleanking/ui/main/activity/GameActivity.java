@@ -35,7 +35,7 @@ import com.xiaoniu.cleanking.ui.main.bean.GameSelectEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.GamePresenter;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -719,10 +719,13 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         AppHolder.getInstance().setCleanFinishSourcePageId("gameboost_animation_page");
         String num = NumberUtils.mathRandom(25, 50);
         PreferenceUtil.saveGameCleanPer(num);
-        startActivity(new Intent(GameActivity.this, ScreenFinishBeforActivity.class)
+
+        Intent intent = new Intent()
                 .putExtra(ExtraConstant.TITLE, getString(R.string.game_quicken))
                 .putExtra(ExtraConstant.NUM, num)
-                .putExtra("main", getIntent().getBooleanExtra("main", false)));
+                .putExtra("main", getIntent().getBooleanExtra("main", false));
+
+        StartFinishActivityUtil.Companion.gotoFinish(GameActivity.this, intent);
         finish();
     }
 
