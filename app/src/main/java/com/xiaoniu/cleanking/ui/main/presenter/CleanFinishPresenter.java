@@ -120,7 +120,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
-                ToastUtils.showShort(message);
+               // ToastUtils.showShort(message);
             }
 
             @Override
