@@ -190,7 +190,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         initFileRelation();
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-//        readCleanExternalDb();
         if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
             readyWeatherExternalDb();
         }

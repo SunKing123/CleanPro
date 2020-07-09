@@ -29,6 +29,8 @@ public class GoldCoinDialogParameter {
     public boolean isDouble;
     //金币来源
     public int fromType;
+    //激励视频开关默认打开
+    public boolean isRewardOpen = true;
     @NonNull
     public Activity context;
     //翻倍按钮点击
