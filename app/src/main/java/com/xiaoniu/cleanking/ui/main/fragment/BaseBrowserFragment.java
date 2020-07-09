@@ -65,18 +65,21 @@ public class BaseBrowserFragment extends SimpleFragment {
         return R.layout.fragment_base_browser;
     }
 
+    MyBaseWebViewClient baseWebViewClient;
+
     @Override
     protected void initView() {
         String url = getArguments().getString("url");
         cardAvdPresenter = new ScratchCardAvdPresenter(mActivity);
         Parameters parameter = UrlUtils.getParamsFromUrl(url);
         current_page_id = parameter.getParameter(SchemeConstant.AD_CURRENT_PAGE_ID);
+        baseWebViewClient = new MyBaseWebViewClient(this, cardAvdPresenter, getActivity(), loadIv, current_page_id);
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mRootView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
                 .setMainFrameErrorView(R.layout.web_error_layout, R.id.layout_not_net)
                 .setWebChromeClient(new CustomWebChromeClient())
-                .setWebViewClient(new MyBaseWebViewClient(this, cardAvdPresenter, getActivity(), loadIv, current_page_id))
+                .setWebViewClient(baseWebViewClient)
                 .addJavascriptInterface("native", new JsInterface())
                 .addJavascriptInterface("android", new SdkJsInterface())
                 .createAgentWeb()
@@ -150,6 +153,9 @@ public class BaseBrowserFragment extends SimpleFragment {
     public void onDestroy() {
         mAgentWeb.getWebLifeCycle().onDestroy();
         cardAvdPresenter.destroy();
+        if (baseWebViewClient != null) {
+            baseWebViewClient.destroy();
+        }
         super.onDestroy();
     }
 
@@ -170,6 +176,7 @@ public class BaseBrowserFragment extends SimpleFragment {
     public interface WebListener {
         void onReceivedTitle(String title);
     }
+
     /**
      * @param jsonEvent
      */
@@ -178,6 +185,7 @@ public class BaseBrowserFragment extends SimpleFragment {
             getWebView().loadUrl("javascript:eventCallBack('" + jsonEvent + "')");
         }
     }
+
     public String getBackable() {
         return backable;
     }

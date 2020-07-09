@@ -104,6 +104,16 @@ public class Constant {
     public static final String SINA_APPSECRET = "bee74e1ccd541f657875803a7eb32b1b";
 
     /**
+     * 天气接口默认areaCode
+     */
+    public static final String DEFAULT_AREA_CODE_OF_WEATHER = "121010300";
+
+    /**
+     * 天气预报数据缓存；
+     */
+    public static final String DEFAULT_WEATHER_VIDEO_INFO = "default_weather_video_info";
+
+    /**
      * 白名单
      */
 

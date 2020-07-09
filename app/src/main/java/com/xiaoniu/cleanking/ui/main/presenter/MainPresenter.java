@@ -67,6 +67,7 @@ import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
@@ -125,10 +126,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /**
      * 游客登录
      */
-    public void visitorLogin() {
-        if (UserHelper.init().isLogin()) {//已经登录跳过
-            return;
-        }
+    public void visitorLogin() {//冷启 热启都是需要调游客登录，即使已登录
+//        if (UserHelper.init().isLogin()) {//已经登录跳过
+//            return;
+//        }
         Gson gson = new Gson();
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("userType", 2);
@@ -873,23 +874,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (AndroidUtil.isFastDoubleClick()) {
             return;
         }
-        mModel.getWeatherVideo(positionCity.getAreaCode(), new Common2Subscriber<BaseResponse<WeatherForecastResponseEntity>>() {
-            @Override
-            public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
-                try {
-                    LogUtils.i("zz--" + new Gson().toJson(entityBaseResponse));
-                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(), entityBaseResponse.getData().getPublishSource());
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void netConnectError() {
-                LogUtils.i("zz--网络异常");
-            }
-        });
+        requestWeatherVideo(positionCity.getAreaCode());
 
       /*  mModel.getWeather72HourList(positionCity.getAreaCode(), new Common2Subscriber<WeatherResponseContent>() {
             @Override
@@ -940,6 +925,39 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 });*/
     }
 
+    /**
+     * 获取天气视频
+     * @param areaCode
+     */
+    public void requestWeatherVideo(String areaCode){
+        String cacheData = MmkvUtil.getString(Constant.DEFAULT_WEATHER_VIDEO_INFO,"");
+        if(!TextUtils.isEmpty(cacheData)){
+            WeatherForecastResponseEntity cacheBean = new Gson().fromJson(cacheData, WeatherForecastResponseEntity.class);
+            if (null != cacheBean && (System.currentTimeMillis() - cacheBean.getResponseTime()) < 60 * 60 * 1000) {//一小时内用缓存数据
+                WeatherForecastActivity.launch(mActivity, cacheBean, cacheBean.getPublishSource());
+                return;
+            }
+        }
+        mModel.getWeatherVideo(areaCode, new Common2Subscriber<BaseResponse<WeatherForecastResponseEntity>>() {
+            @Override
+            public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
+                try {
+                    LogUtils.i("zz--" + new Gson().toJson(entityBaseResponse));
+                    WeatherForecastResponseEntity weatherForecastResponseEntity = entityBaseResponse.getData();
+                    weatherForecastResponseEntity.setResponseTime(System.currentTimeMillis());
+                    MmkvUtil.saveString(Constant.DEFAULT_WEATHER_VIDEO_INFO,new Gson().toJson(weatherForecastResponseEntity));
+                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(), entityBaseResponse.getData().getPublishSource());
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            @Override
+            public void netConnectError() {
+                LogUtils.i("zz--网络异常");
+            }
+        });
+    }
 
     /************************************* 定位相关 **************************************/
     /**
