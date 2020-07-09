@@ -272,6 +272,7 @@ public class ScratchCardAvdPresenter {
                 }
             }
         }
+
         log("第一个广告位开关信息:isOpen=" + isOpenOne());
         log("第二个广告位开关信息:isOpen=" + isOpenTwo());
         log("第三个广告位开关信息:isOpen=" + isOpenThree());

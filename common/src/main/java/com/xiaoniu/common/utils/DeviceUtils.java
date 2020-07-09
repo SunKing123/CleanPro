@@ -9,6 +9,7 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import java.io.File;
@@ -185,15 +186,17 @@ public class DeviceUtils {
                 || ("null".equals(string)) || ("\n".equals(string)));
     }
 
-    private synchronized static void getRandomUdidFromFile() {
+    public synchronized static void getRandomUdidFromFile() {
         File installation = new File(ContextUtils.getContext().getFilesDir(), "INSTALLATION");
         try {
             if (!installation.exists()) {
                 writeInstallationFile(installation);
             }
             udid = readInstallationFile(installation);
+            Log.e("getRandomUId",udid);
         } catch (Exception e) {
             udid = "";
+            Log.e("getRandomUId","Exception()");
         }
     }
 

@@ -35,7 +35,7 @@ import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -278,14 +278,15 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             viewLottieBottom.cancelAnimation();
             viewLottieBottom.clearAnimation();
 
-            Intent intent_finish = new Intent(getActivity(), ScreenFinishBeforActivity.class);
+            Intent intent_finish = new Intent();
             intent_finish.putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
             intent_finish.putExtra(ExtraConstant.NUM, checkCountEntity.getTotalSize());
             intent_finish.putExtra(ExtraConstant.UNIT, checkCountEntity.getUnit());
             if (getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
                 intent_finish.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
             }
-            startActivity(intent_finish);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent_finish);
+
             getActivity().finish();
         }
     }

@@ -26,7 +26,7 @@ import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
@@ -206,9 +206,11 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                 AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
 
-                startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_chat_clear)));
+                Intent intent=new Intent()
+                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_chat_clear));
+                StartFinishActivityUtil.Companion.gotoFinish(this,intent);
                 finish();
+
             } else {
                 if (!tvDelete.isSelected()) return;
                 mPresenter.onekeyCleanDelete(tvSelect1.isSelected(), tvSelect.isSelected());

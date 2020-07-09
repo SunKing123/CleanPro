@@ -29,7 +29,7 @@ import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.InsertScreenFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanAudActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanFileActivity;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -120,8 +120,6 @@ public interface ActivityComponent {
     void inject(GameListActivity activity);
 
     void inject(NetWorkActivity activity);
-
-    void inject(ScreenFinishBeforActivity activity);
 
     void inject(WhiteListSettingActivity activity);
 }

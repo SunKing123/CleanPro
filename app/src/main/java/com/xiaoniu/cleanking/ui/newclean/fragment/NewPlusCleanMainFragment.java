@@ -409,7 +409,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //完成页返回通知
     @Subscribe
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null) {
+        if (event != null&&event.infoBean!=null&&event.infoBean.getGold()>0) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
             tvCoinNum.setText(event.infoBean.getGold());

@@ -28,7 +28,7 @@ import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -79,8 +79,8 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
     TextView mTvGb;
     @BindView(R.id.acceview)
     CleanAnimView mCleanAnimView;
-   // @BindView(R.id.web_view)
-  //  WebView mWebView;
+    // @BindView(R.id.web_view)
+    //  WebView mWebView;
     @BindView(R.id.layout_no_file)
     LinearLayout mLayoutNoFile;
     private CleanExpandAdapter mCleanBigFileAdapter;
@@ -116,8 +116,12 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanAnimView.setListener(() -> finish());
         mCleanAnimView.setAnimationEnd(() -> {
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            startActivity(new Intent(this, ScreenFinishBeforActivity.class)
-                    .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_clean)));
+
+            Intent intent = new Intent()
+                    .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_clean));
+
+            StartFinishActivityUtil.Companion.gotoFinish(this, intent);
+
             finish();
         });
     }

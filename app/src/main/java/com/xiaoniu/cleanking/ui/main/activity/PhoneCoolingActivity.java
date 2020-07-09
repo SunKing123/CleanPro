@@ -44,7 +44,7 @@ import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.ui.newclean.activity.ScreenFinishBeforActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -729,9 +729,10 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
 
                 EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_phone_temperature_low)));
 
+                Intent intent=new Intent()
+                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low));
+                StartFinishActivityUtil.Companion.gotoFinish(PhoneCoolingActivity.this, intent);
 
-                startActivity(new Intent(PhoneCoolingActivity.this, ScreenFinishBeforActivity.class)
-                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low)));
                 finish();
             }
 
