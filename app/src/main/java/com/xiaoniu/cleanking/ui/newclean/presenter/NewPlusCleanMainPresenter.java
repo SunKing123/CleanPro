@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import com.alibaba.fastjson.JSONObject;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
@@ -20,6 +22,7 @@ import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
@@ -34,11 +37,13 @@ import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
+import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
+import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -565,12 +570,16 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     public void bullCollect(int locationNum){
         mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
             @Override
-            public void showExtraOp(String code, String message) {  //关心错误码；
+            public void showExtraOp(String code, String message) {  //关心错误码
+                if (TextUtils.equals(code, ErrorCode.LOGIN_EXCEPTION)) {
+                    mView.getActivity().startActivity(new Intent(mView.getActivity(), LoginWeiChatActivity.class));
+                }
                 ToastUtils.showShort(message);
             }
 
             @Override
             public void getData(BubbleCollected bubbleConfig) {
+                RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
                 mView.bubbleCollected(bubbleConfig);
             }
 
@@ -596,6 +605,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             @Override
             public void getData(BubbleDouble bubbleDouble) {
+                RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
                 mView.bubbleDoubleSuccess(bubbleDouble);
             }
 
@@ -618,8 +628,13 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 1;
         bean.obtainCoinCount = dataBean.getData().getGoldCount();
-        bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(),0);
+        //广告位1开关控制
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE)) {
+            bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 0);
+        }
         bean.isDouble = true;
+        bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_TWO_CODE);//激励视频广告位开关
+        bean.totalCoinCount = dataBean.getData().getTotalGoldCount();
         //广告回调
         bean.advCallBack = new AbsAdCallBack() {
             @Override

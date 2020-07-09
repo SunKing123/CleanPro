@@ -19,10 +19,12 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.jess.arms.utils.LogUtils;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherForecastResponseEntity;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.weather.contract.WeatherForecastContract;
 import com.xiaoniu.cleanking.ui.weather.di.component.DaggerWeatherForecastComponent;
 import com.xiaoniu.cleanking.ui.weather.presenter.WeatherForecastPresenter;
@@ -238,20 +240,22 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
 
     /*---------------------------------------------------------广告请求--------------------------------------------------------------------------------------------------*/
     public void requestAd(){
-        //todo_zz
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.WEATHER_VIDEO_PAGE_BELOW)
-                .setActivity(this).setViewContainer(relRootAd).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdError(AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
-            }
+        if(AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WEATHER_VIDEO_PAGE,PositionId.DRAW_ONE_CODE)){
+            AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.WEATHER_VIDEO_PAGE_BELOW)
+                    .setActivity(this).setViewContainer(relRootAd).build();
+            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+                @Override
+                public void onAdError(AdInfo adInfo, int i, String s) {
+                    super.onAdError(adInfo, i, s);
+                }
 
-            @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-            }
-        });
+                @Override
+                public void onShowError(int i, String s) {
+                    super.onShowError(i, s);
+                }
+            });
+        }
+
     }
 
 

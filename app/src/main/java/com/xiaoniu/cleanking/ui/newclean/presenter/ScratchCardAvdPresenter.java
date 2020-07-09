@@ -63,7 +63,7 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-    public void showDialog(int cardIndex, int coinCount) {
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -78,6 +78,7 @@ public class ScratchCardAvdPresenter {
             parameter.fromType = GoldCoinDialogParameter.FROM_SCRATCH_CARD;
             parameter.onDoubleClickListener = v -> handlerDoubleClick();
             parameter.closeClickListener = v -> handlerCloseClick();
+            parameter.totalCoinCount = totalCoinCount;
         }
         parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
@@ -216,7 +217,7 @@ public class ScratchCardAvdPresenter {
 
 
     private void startCoinCompletePage() {
-        if(onVideoPlayedListener!=null){
+        if (onVideoPlayedListener != null) {
             onVideoPlayedListener.onComplete();
         }
         Intent intent = new Intent(activity, GoldCoinSuccessActivity.class);
@@ -282,7 +283,7 @@ public class ScratchCardAvdPresenter {
     }
 
     public void destroy() {
-        if (parameter != null){
+        if (parameter != null) {
             parameter.advCallBack = null;
             parameter.context = null;
         }

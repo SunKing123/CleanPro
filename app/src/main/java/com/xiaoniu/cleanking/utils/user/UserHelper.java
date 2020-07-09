@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
+import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
 
 import org.greenrobot.eventbus.EventBus;
@@ -101,6 +102,7 @@ public class UserHelper {
         implPreferencesHelper.setPhoneNum(userInfo.phone);
         implPreferencesHelper.setUserHeadPortraitUrl(userInfo.userAvatar);
         EventBus.getDefault().post("loginSuccessRefreshUserInfo");
+        RequestUserInfoUtil.getUserCoinInfo();
     }
 
     public void setUserPhoneNum(String phoneNum) {

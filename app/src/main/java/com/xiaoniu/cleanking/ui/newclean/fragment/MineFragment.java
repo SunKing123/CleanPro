@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
+import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
@@ -70,6 +71,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         mBinding = DataBindingUtil.bind(getView());
         mBinding.phoneNumTv.setText("未登录");
         setUserInfo();
+        RequestUserInfoUtil.getUserCoinInfo();
     }
 
     FragmentMineBinding mBinding;
@@ -91,9 +93,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            if (UserHelper.init().isLogin()){
-                mPresenter.getMinePageInfo();
-            }
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
             //展示广告
             addBottomAdView();
@@ -102,6 +101,14 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             NiuDataAPI.onPageEnd("personal_center_view_page", "个人中心浏览");
         } else {
             NiuDataAPI.onPageStart("personal_center_view_page", "个人中心浏览");
+        }
+    }
+
+    //刷新用户金币
+    @Subscribe
+    public void userInfoUpdate(UserInfoEvent event) {
+        if (event != null && event.infoBean != null) {
+            setUserCoinView(event.infoBean.getAmount(), event.infoBean.getGold());
         }
     }
 
@@ -189,6 +196,16 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             mBinding.goldCoinTv.setText("--");
             mBinding.headImgIv.setImageResource(R.mipmap.default_head);
             mBinding.phoneNumTv.setText("立即登录");
+        }
+    }
+
+    private void setUserCoinView(double amount, int gold) {
+        if (gold >= 0) {
+            mBinding.moneyTv.setText(String.valueOf(amount));
+            mBinding.goldCoinTv.setText(String.valueOf(gold));
+        } else {
+            mBinding.moneyTv.setText("--");
+            mBinding.goldCoinTv.setText("--");
         }
     }
 

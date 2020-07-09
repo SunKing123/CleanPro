@@ -900,8 +900,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Override
     public void clickBull(BubbleConfig.DataBean ballBean, int pos) {
-        if (ballBean == null)
+        if (ballBean == null){
+            ToastUtils.showShort(R.string.net_error);
             return;
+        }
         mPresenter.bullCollect(ballBean.getLocationNum());
 
     }
@@ -936,10 +938,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         mPresenter.refBullList();//刷新金币列表；
         Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
-        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount() * 2);
-//        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-        intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
-//        }
+        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount());
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
+            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
+        }
         mActivity.startActivity(intent);
     }
 

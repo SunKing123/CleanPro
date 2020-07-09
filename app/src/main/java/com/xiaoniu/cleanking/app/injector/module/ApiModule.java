@@ -34,14 +34,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class ApiModule {
 
-    private Retrofit mRetrofit;
+    private static Retrofit mRetrofit;
     private Retrofit mRetrofit2;
 
     //网络地址
     public final static String Base_Host = BuildConfig.BASE_HOST;
     public final static String Base_H5_Host = BuildConfig.Base_H5_Host;//H5路径
     public final static String base_weather_api = BuildConfig.WEATHER_BASE_URL;//大数据接口路径
-
 
 
     public final static String SHOPPING_MALL = Base_H5_Host + "/home_new.html";//商城
@@ -68,9 +67,7 @@ public class ApiModule {
         //RequestParamInterceptor requestParamInterceptor = new RequestParamInterceptor();
 
         OkHttpClient okHttpClient = null;
-        try
-
-        {
+        try {
             okHttpClient = new OkHttpClient.Builder()
                     //                .addInterceptor(new LoggerInterceptor("TAG"))
                     .connectTimeout(20, TimeUnit.SECONDS)
@@ -85,14 +82,9 @@ public class ApiModule {
 
 
         } catch (
-                Exception e)
-
-        {
+                Exception e) {
             e.printStackTrace();
         }
-
-
-
 
 
         OkHttpClient okHttpClient3 = new OkHttpClient.Builder()
@@ -120,8 +112,6 @@ public class ApiModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-
-
 
 
     }
@@ -174,6 +164,10 @@ public class ApiModule {
         return mRetrofit2.create(WeatherDataApiService.class);
     }
 
+    public static Retrofit getRetrofit() {
+        return mRetrofit;
+    }
+
     //日志拼接
     private class HttpLogger implements HttpLoggingInterceptor.Logger {
         private StringBuilder mMessage = new StringBuilder();
@@ -195,7 +189,6 @@ public class ApiModule {
                 Logger.d(mMessage.toString());
             }
         }
-
 
 
     }

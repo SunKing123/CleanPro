@@ -38,6 +38,15 @@ public class BubbleCollected extends BaseEntity {
         private int locationNum;
         private int goldCount;
         private int canDouble;
+        private int totalGoldCount;
+
+        public int getTotalGoldCount() {
+            return totalGoldCount;
+        }
+
+        public void setTotalGoldCount(int totalGoldCount) {
+            this.totalGoldCount = totalGoldCount;
+        }
 
         public boolean isCollected() {
             return collected;

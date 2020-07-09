@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.base.UmengEnum;
 import com.xiaoniu.cleanking.base.UmengUtils;
 import com.xiaoniu.cleanking.bean.HotStartAction;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
 import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
@@ -697,7 +698,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Subscribe
     public void onEventWeatherInfo(WeatherInfoRequestEvent infotype) {
         if (infotype.getAction() == 0) {
-            mPresenter.requestLocationPermission();
+            mPresenter.requestWeatherVideo(Constant.DEFAULT_AREA_CODE_OF_WEATHER);
         }
     }
 
