@@ -34,7 +34,6 @@ import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
-import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
@@ -74,7 +73,6 @@ import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
 import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -192,6 +190,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearVideoLayout.setLeftIcon(R.mipmap.clear_icon_video);
         clearVideoLayout.setCommonItemImageRes(R.mipmap.clear_item_video);
         clearVideoLayout.getButton().setOnClickListener(view -> {
+            StatisticsUtils.trackClick("video_file_click", "用户在首页点击【视频文件】", "home_page", "home_page");
             //跳转到视频清理
             startActivity(new Intent(getActivity(), CleanVideoManageActivity.class));
         });
@@ -200,6 +199,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearImageLayout.setLeftIcon(R.mipmap.clear_icon_img);
         clearImageLayout.setCommonItemImageRes(R.mipmap.clear_item_img);
         clearImageLayout.getButton().setOnClickListener(view -> {
+            StatisticsUtils.trackClick("picture_file_Click", "用户在首页点击【图片文件】", "home_page", "home_page");
             Intent intent = new Intent(getActivity(), ImageActivity.class);
             startActivity(intent);
         });
@@ -208,6 +208,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearSoundLayout.setLeftIcon(R.mipmap.clear_icon_sound);
         clearSoundLayout.setCommonItemImageRes(R.mipmap.clear_item_sound);
         clearSoundLayout.getButton().setOnClickListener(view -> {
+            StatisticsUtils.trackClick("audio_file_Click", "用户在首页点击音频文件", "home_page", "home_page");
             //跳转到音乐清理
             startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));
         });
