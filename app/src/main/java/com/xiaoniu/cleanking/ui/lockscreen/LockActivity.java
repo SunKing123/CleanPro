@@ -292,18 +292,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         if (null == mUnlockView)
             return;
         mUnlockView.startAnim();
-
         updateTimeUI();
-        boolean isOpen = false;
-        if (dataBeans.size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : dataBeans) {
-                if (PositionId.KEY_LOCK_SCREEN.equals(switchInfoList.getConfigKey())) {
-                    isOpen = switchInfoList.isOpen();
-                }
-            }
+        boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
+        if(lock_sw){
+            adInit();
         }
-        if (!isOpen) return;
-        adInit();
     }
 
     @Override

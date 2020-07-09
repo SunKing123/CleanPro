@@ -4,12 +4,15 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.HashMap;
@@ -85,6 +88,15 @@ public class AppHolder {
 
 
     public Map<String, InsertAdSwitchInfoList.DataBean> getInsertAdSwitchMap() {
+        if (insertAdSwitchMap.size() <= 0 && !TextUtils.isEmpty(MmkvUtil.getInsertSwitchInfo())) {
+            InsertAdSwitchInfoList dataBean = new Gson().fromJson(MmkvUtil.getInsertSwitchInfo(), InsertAdSwitchInfoList.class);
+            if (null != dataBean && dataBean.getData() != null && dataBean.getData().size() > 0) {
+                List<InsertAdSwitchInfoList.DataBean> dataBeans = dataBean.getData();
+                for (InsertAdSwitchInfoList.DataBean post : dataBeans) {
+                    insertAdSwitchMap.put(post.getConfigKey(), post);
+                }
+            }
+        }
         return insertAdSwitchMap;
     }
 
@@ -169,7 +181,9 @@ public class AppHolder {
      */
     public boolean checkAdSwitch(String configKey, String advertPosition) {
         boolean isOpen = false;
-        if (null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey) && !TextUtils.isEmpty(advertPosition)) {
+        //过审开关是否打开
+        String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1") && null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey) && !TextUtils.isEmpty(advertPosition)) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (configKey.equals(switchInfoList.getConfigKey()) && advertPosition.equals(switchInfoList.getAdvertPosition())) {
                     isOpen = switchInfoList.isOpen();
