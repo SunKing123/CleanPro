@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
+import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
@@ -120,11 +121,13 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
-                ToastUtils.showShort(message);
+                // ToastUtils.showShort(message);
             }
 
             @Override
             public void getData(BubbleCollected bubbleConfig) {
+                //实时更新金币信息
+                RequestUserInfoUtil.getUserCoinInfo();
                 showGetGoldCoinDialog(bubbleConfig);
             }
 
