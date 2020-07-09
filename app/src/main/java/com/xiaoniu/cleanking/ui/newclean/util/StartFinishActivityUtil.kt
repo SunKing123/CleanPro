@@ -1,9 +1,11 @@
-package com.xiaoniu.cleanking.ui.newclean.activity
+package com.xiaoniu.cleanking.ui.newclean.util
 
 import android.content.Context
 import android.content.Intent
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.config.PositionId
+import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity
+import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
 
 /**
  * @author XiLei
@@ -51,6 +53,4 @@ class StartFinishActivityUtil {
             }
         }
     }
-
-
 }
