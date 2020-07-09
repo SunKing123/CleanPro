@@ -74,61 +74,14 @@ public class WeatherForecastResponseEntity implements Parcelable {
 
     private String id;
 
+
+    private long responseTime;
+
     /**
      * 发布来源: 天气由中国气象局15:14权威发布
      */
     @SerializedName(value = "source")
     private String publishSource;
-
-
-    protected WeatherForecastResponseEntity(Parcel in) {
-        bizCode = in.readString();
-        kid = in.readInt();
-        description = in.readString();
-        updateTime = in.readString();
-        title = in.readString();
-        synchronizedTime = in.readString();
-        videoUrl = in.readString();
-        showFlag = in.readString();
-        synchronizedAt = in.readString();
-        duration = in.readString();
-        createTime = in.readString();
-        coverImageUrl = in.readString();
-        picNo = in.readInt();
-        id = in.readString();
-        publishSource = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(bizCode);
-        dest.writeInt(kid);
-        dest.writeString(description);
-        dest.writeString(updateTime);
-        dest.writeString(title);
-        dest.writeString(synchronizedTime);
-        dest.writeString(videoUrl);
-        dest.writeString(showFlag);
-        dest.writeString(synchronizedAt);
-        dest.writeString(duration);
-        dest.writeString(createTime);
-        dest.writeString(coverImageUrl);
-        dest.writeInt(picNo);
-        dest.writeString(id);
-        dest.writeString(publishSource);
-    }
-
-    public static final Creator<WeatherForecastResponseEntity> CREATOR = new Creator<WeatherForecastResponseEntity>() {
-        @Override
-        public WeatherForecastResponseEntity createFromParcel(Parcel in) {
-            return new WeatherForecastResponseEntity(in);
-        }
-
-        @Override
-        public WeatherForecastResponseEntity[] newArray(int size) {
-            return new WeatherForecastResponseEntity[size];
-        }
-    };
 
     public String getBizCode() {
         return bizCode;
@@ -226,12 +179,28 @@ public class WeatherForecastResponseEntity implements Parcelable {
         this.coverImageUrl = coverImageUrl;
     }
 
+    public int getPicNo() {
+        return picNo;
+    }
+
+    public void setPicNo(int picNo) {
+        this.picNo = picNo;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public long getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(long responseTime) {
+        this.responseTime = responseTime;
     }
 
     public String getPublishSource() {
@@ -242,19 +211,63 @@ public class WeatherForecastResponseEntity implements Parcelable {
         this.publishSource = publishSource;
     }
 
-    public int getPicNo() {
-        return picNo;
-    }
-
-    public void setPicNo(int picNo) {
-        this.picNo = picNo;
-    }
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.bizCode);
+        dest.writeInt(this.kid);
+        dest.writeString(this.description);
+        dest.writeString(this.updateTime);
+        dest.writeString(this.title);
+        dest.writeString(this.synchronizedTime);
+        dest.writeString(this.videoUrl);
+        dest.writeString(this.showFlag);
+        dest.writeString(this.synchronizedAt);
+        dest.writeString(this.duration);
+        dest.writeString(this.createTime);
+        dest.writeString(this.coverImageUrl);
+        dest.writeInt(this.picNo);
+        dest.writeString(this.id);
+        dest.writeLong(this.responseTime);
+        dest.writeString(this.publishSource);
+    }
 
+    public WeatherForecastResponseEntity() {
+    }
 
+    protected WeatherForecastResponseEntity(Parcel in) {
+        this.bizCode = in.readString();
+        this.kid = in.readInt();
+        this.description = in.readString();
+        this.updateTime = in.readString();
+        this.title = in.readString();
+        this.synchronizedTime = in.readString();
+        this.videoUrl = in.readString();
+        this.showFlag = in.readString();
+        this.synchronizedAt = in.readString();
+        this.duration = in.readString();
+        this.createTime = in.readString();
+        this.coverImageUrl = in.readString();
+        this.picNo = in.readInt();
+        this.id = in.readString();
+        this.responseTime = in.readLong();
+        this.publishSource = in.readString();
+    }
+
+    public static final Parcelable.Creator<WeatherForecastResponseEntity> CREATOR = new Parcelable.Creator<WeatherForecastResponseEntity>() {
+        @Override
+        public WeatherForecastResponseEntity createFromParcel(Parcel source) {
+            return new WeatherForecastResponseEntity(source);
+        }
+
+        @Override
+        public WeatherForecastResponseEntity[] newArray(int size) {
+            return new WeatherForecastResponseEntity[size];
+        }
+    };
 }
