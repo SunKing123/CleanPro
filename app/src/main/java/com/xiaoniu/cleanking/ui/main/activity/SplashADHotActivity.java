@@ -44,6 +44,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     ImageView mErrorAdIv;
     private ViewGroup container;
     private boolean mCanJump;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_splash_ad_hot;
@@ -70,7 +71,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 String activityName = getIntent().getStringExtra("activityName");
                 boolean isMainPage = activityName.contains(MainActivity.class.getSimpleName());
                 if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
-                    InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdSwitchMap().get(PositionId.KEY_NEIBU_SCREEN);
+                    InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);
                     if (null != dataBean && dataBean.isOpen()) {//内部插屏广告
                         if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
                             List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
@@ -124,7 +125,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
 
     private void initGeekSdkAD() {
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
                 .setActivity(this).setViewContainer(container).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
@@ -176,7 +177,6 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     }
 
 
-
     @Override
     public void netError() {
 
@@ -186,7 +186,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mCanJump){
+        if (mCanJump) {
             jumpActivity();
         }
         mCanJump = true;

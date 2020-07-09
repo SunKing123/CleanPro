@@ -361,8 +361,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
      */
     public void getScreenSwitchSuccess() {
         //判断完成页内部插屏广告是否打开
-        Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
-        InsertAdSwitchInfoList.DataBean configBean = map.get(PositionId.KEY_FINISH_INSIDE_SCREEN);
+        InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN);
         if (configBean != null && configBean.isOpen()) {
             mPresenter.showInsideScreenDialog();
             return;
