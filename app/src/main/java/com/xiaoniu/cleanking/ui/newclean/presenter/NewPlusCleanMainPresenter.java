@@ -629,6 +629,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         bean.obtainCoinCount = dataBean.getData().getGoldCount();
         bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(),0);
         bean.isDouble = true;
+        bean.totalCoinCount = dataBean.getData().getTotalGoldCount();
         //广告回调
         bean.advCallBack = new AbsAdCallBack() {
             @Override

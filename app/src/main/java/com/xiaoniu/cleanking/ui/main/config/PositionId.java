@@ -151,4 +151,9 @@ public class PositionId {
     public static final String LOCK_INTERACTIVE = "lock_interactive";//锁屏互动式广告
 
     public static final String KEY_AD_PAGE_SCRATCH_CARD = "page_scratch_card_adv_gj_3.0";
+
+    //天气预报页面 信息流广告
+    public static final String KEY_AD_PAGE_WEATHER_VIDEO_PAGE = "weather_video_page_gj_3.0";
+
+
 }
