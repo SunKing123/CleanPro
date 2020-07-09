@@ -262,7 +262,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
 
                 //扫描apk安装包
-                List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFileByDb();
+                List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
                 if (CollectionUtils.isEmpty(apkJunkInfos)) {
                     apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
                 }

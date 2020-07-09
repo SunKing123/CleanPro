@@ -4,7 +4,6 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -18,6 +17,7 @@ import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebSettingsImpl;
 import com.just.agentweb.WebChromeClient;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
 import com.xiaoniu.cleanking.ui.newclean.util.YuLeWebViewClient;
@@ -25,6 +25,10 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statistic.NiuDataAPI;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by zhaoyingtao
@@ -35,7 +39,8 @@ public class YuLeFragment extends SimpleFragment {
     FragmentYuleBinding mBinding;
     //返回键 0 不可返回  1 可返回
     private String backable = "1";
-    private String url = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList.html";
+//    private String url = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList.html";
+//    private String url = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/scratch.html?id=27&rondaId=4&awardType=1&hitCode=1&num=1222222&remark=&cardType=12312312&goldSectionNum=16&actRdNum=02:00&needRefresh=1&currentPageId=scratch_card_activity_page";
 //    private String url = "https://www.baidu.com/";
 
     AgentWeb mAgentWeb;
@@ -43,7 +48,7 @@ public class YuLeFragment extends SimpleFragment {
     public static YuLeFragment getInstance() {
         return new YuLeFragment();
     }
-   
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_yule;
@@ -53,24 +58,24 @@ public class YuLeFragment extends SimpleFragment {
     protected void initView() {
         mBinding = DataBindingUtil.bind(getView());
         initWebView();
+        EventBus.getDefault().register(this);
         mBinding.refreshUrl.setOnClickListener(view -> {
-            mAgentWeb.getWebCreator().getWebView().loadUrl(url);
-            Log.e("snow","=="+AndroidUtil.getXnData());
+//            Intent intent = new Intent(getContext(), BrowserActivity.class);
+//            intent.putExtra(Constant.URL,url);
+//            startActivity(intent);
+            mAgentWeb.getWebCreator().getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+            Log.e("snow", "==" + AndroidUtil.getXnData());
         });
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Log.e("fragment","onHiddenChanged()  hidden="+hidden);
+        Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
         if (!hidden) {
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
-            } else {
-                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
-            }
+            StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "刮刮卡浏览");
         }
@@ -88,7 +93,15 @@ public class YuLeFragment extends SimpleFragment {
                 .addJavascriptInterface("android", new SdkJsInterface())
                 .createAgentWeb()
                 .ready()
-                .go(url);
+                .go(H5Urls.SCRATCHCARDS_URL);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshUserInfo(String string) {
+        if ("loginSuccessRefreshUserInfo".equals(string) || "exitLoginSuccess".equals(string) || "refreshGuaGuaLeH5".equals(string)) {
+//            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
+            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+        }
     }
 
     public WebView getWebView() {
@@ -207,6 +220,7 @@ public class YuLeFragment extends SimpleFragment {
     @Override
     public void onDestroyView() {
         mAgentWeb.getWebLifeCycle().onDestroy();
+        EventBus.getDefault().unregister(this);
         super.onDestroyView();
     }
 }

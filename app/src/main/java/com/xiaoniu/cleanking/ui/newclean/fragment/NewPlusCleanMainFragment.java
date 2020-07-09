@@ -32,10 +32,13 @@ import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.LoginActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -75,6 +78,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -129,10 +133,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     FrameLayout adLayoutTwo;
     @BindView(R.id.ad_three)
     FrameLayout adLayoutThree;
-    @BindView(R.id.image_interactive)
-    HomeInteractiveView imageInteractive;
     @BindView(R.id.layout_scroll)
     NestedScrollView mScrollView;
+    @BindView(R.id.image_interactive)
+    public HomeInteractiveView imageInteractive;
 
     private boolean isThreeAdvOpen = false;
     private boolean hasInitThreeAdvOnOff = false;
@@ -179,13 +183,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
 
 
-        imageInteractive.setClickListener(data -> {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-            if (data != null)
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-        });
     }
 
 
@@ -229,14 +226,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customCheckPermission(Points.DEVICE_IDENTIFICATION_EVENT_CODE, Points.DEVICE_IDENTIFICATION_EVENT_NAME, phoneStatePrmStatus, "", "home_page");
     }
 
+
     private void initEvent() {
-        imageInteractive.setClickListener(data -> {
-            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            StatisticsUtils.trackClick("Interaction_ad_click", "用户在首页点击互动式广告按钮（首页右上角图标）", "home_page", "home_page");
-            if (data != null)
-                startActivity(new Intent(getActivity(), AgentWebViewActivity.class)
-                        .putExtra(ExtraConstant.WEB_URL, data.getLinkUrl()));
-        });
+
+        imageInteractive.setClickListener(data -> onInteractiveListener.onClick(null));
 
         homeMainTableView.setOnItemClickListener(item -> {
             switch (item) {
@@ -272,7 +265,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
 
         tvWithDraw.setOnClickListener(v -> {
-            //todo 跳转提现页面
+            //todo 跳转提现页面测试
+            if (UserHelper.init().isWxLogin()) {
+//                    String url = H5Urls.WITHDRAWAL_URL;
+                String url = "http://192.168.85.61:9999/html/wallet/wallet.html";
+                String scheme = SchemeConstant.SCHEME +
+                        "://" + SchemeConstant.HOST + "/jump?url=" + url +
+                        "&" + SchemeConstant.IS_FULL_SCREEN + "=1&jumpType=1";
+                SchemeProxy.openScheme(getActivity(), scheme);
+            } else {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
         });
     }
 
@@ -945,4 +948,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * ********************************************************** others ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
+
+    View.OnClickListener onInteractiveListener;
+
+    public void setOnInteractiveClickListener(View.OnClickListener listener) {
+        this.onInteractiveListener = listener;
+    }
 }

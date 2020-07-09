@@ -594,7 +594,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        PreferenceUtil.saveShowAD(false);
+
         NiuDataAPI.onPageEnd("one_click_acceleration_view_page", "一键加速页浏览");
     }
 

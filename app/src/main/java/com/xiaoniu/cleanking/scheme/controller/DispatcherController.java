@@ -64,7 +64,12 @@ public class DispatcherController {
                 bundle.putString(Constant.Title, title);
             }
             bundle.putBoolean(Constant.NoTitle, isNoTitle);
-            SchemeUtils.toNextPage(activity, bundle);
+            String value = parameters.getParameter("jumpType");
+            if ("1".equals(value)) {//跳转刮刮乐
+                SchemeUtils.toBrowserPage(activity, bundle);
+            } else {
+                SchemeUtils.toNextPage(activity, bundle);
+            }
             return true;
         } else if (TextUtils.equals(SchemeConstant.NATIVE, path)) {
             String name = parameters.getParameter(SchemeConstant.NATIVE_NAME);

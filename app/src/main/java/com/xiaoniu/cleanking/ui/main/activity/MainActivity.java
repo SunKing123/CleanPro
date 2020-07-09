@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,6 +65,7 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
+import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -205,8 +208,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
 //        LogUtils.i("zz-----path----"+appPaths.get(0).getFile_path()+"----"+ AESUtils01.decrypt(appPaths.get(0).getFile_path(),"E3A37D84081C89D9787D0B8546BA8BA5"));
 //        LogUtils.i("zz-----path----"+uselessApks1.get(1).getFilePath()+"----"+ AESUtils01.decrypt(uselessApks1.get(1).getFilePath(),"E3A37D84081C89D9787D0B8546BA8BA5"));
-
-        PreferenceUtil.saveShowAD(false);
         refBottomState();
         //数美sdk初始化
         mPresenter.initShuMeiSDK();
@@ -283,6 +284,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
         //游客登录
         mPresenter.visitorLogin();
+
+        mainFragment.setOnInteractiveClickListener(v -> {
+            AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
+            StatisticsUtils.trackClick("Interaction_ad_click", "用户点击了刮刮卡运营位", "home_page", "home_page");
+            mBottomBar.setCurrentItem(2);
+        });
     }
 
 

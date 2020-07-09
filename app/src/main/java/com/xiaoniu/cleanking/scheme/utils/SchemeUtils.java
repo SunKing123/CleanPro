@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import androidx.fragment.app.Fragment;
 
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.ui.usercenter.activity.BrowserActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.LogUtils;
 
@@ -172,4 +173,20 @@ public class SchemeUtils {
         }
     }
 
+    /**
+     * jump跳转下一个页面
+     *
+     * @param context 上下文
+     * @param bundle  Bundle参数
+     */
+    public static void toBrowserPage(Context context, Bundle bundle) {
+        try {
+            Intent toIntent = new Intent(context, BrowserActivity.class);
+            toIntent.setPackage(context.getPackageName());
+            toIntent.putExtras(bundle);
+            context.startActivity(toIntent);
+        } catch (Exception e) {
+            LogUtils.e(e.getMessage());
+        }
+    }
 }

@@ -1,7 +1,10 @@
 package com.xiaoniu.cleanking.utils.user;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
+import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
 import com.xiaoniu.cleanking.utils.prefs.ImplPreferencesHelper;
 
@@ -120,7 +123,10 @@ public class UserHelper {
     public void clearCurrentUserInfo() {
         changeLoginState(false);
         implPreferencesHelper.clearUserInfo();
-        //关闭推送渠道
-//        PushServiceFactory.getCloudPushService().turnOffPushChannel(null);
+        EventBus.getDefault().post("exitRefreshUserInfo");
+    }
+
+    public void startToLogin(Context mActivity) {
+        mActivity.startActivity(new Intent(mActivity, LoginWeiChatActivity.class));
     }
 }

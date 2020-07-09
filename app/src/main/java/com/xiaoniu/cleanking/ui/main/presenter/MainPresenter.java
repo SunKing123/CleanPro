@@ -121,17 +121,18 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public MainPresenter(RxAppCompatActivity activity) {
         mActivity = activity;
     }
+
     /**
      * 游客登录
      */
     public void visitorLogin() {
-        if (UserHelper.init().isLogin()){//已经登录跳过
+        if (UserHelper.init().isLogin()) {//已经登录跳过
             return;
         }
         Gson gson = new Gson();
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("userType", 2);
-        paramsMap.put("openId",  AndroidUtil.getDeviceID());
+        paramsMap.put("openId", AndroidUtil.getDeviceID());
         String json = gson.toJson(paramsMap);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mModel.visitorLogin(body, new CommonSubscriber<LoginDataBean>() {
@@ -139,6 +140,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             public void getData(LoginDataBean loginDataBean) {
                 UserInfoBean infoBean = loginDataBean.getData();
                 if (infoBean != null) {
+                    infoBean.userType = 2;
                     UserHelper.init().saveUserInfo(infoBean);
                 }
             }
@@ -877,8 +879,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             @Override
             public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
                 try {
-                    LogUtils.i("zz--"+new Gson().toJson(entityBaseResponse));
-                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(),entityBaseResponse.getData().getPublishSource());
+                    LogUtils.i("zz--" + new Gson().toJson(entityBaseResponse));
+                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(), entityBaseResponse.getData().getPublishSource());
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }

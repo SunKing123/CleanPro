@@ -67,7 +67,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
     private WeatherForecastResponseEntity weatherForecastResponseEntity;
     private String publishSource;
 
-    protected JKQSVideoView qsVideoView;
+    private JKQSVideoView qsVideoView;
     private boolean playFlag;//记录退出时播放状态 回来的时候继续播放
     private int position;//记录销毁时的进度 回来继续该进度播放
     private Handler handler = new Handler();
@@ -103,7 +103,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        qsVideoview = initVideoPlayer();
+        initVideoPlayer();
     }
 
 
@@ -256,8 +256,8 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
 
 
 
-    protected JKQSVideoView initVideoPlayer() {
-        JKQSVideoView qsVideoView = (JKQSVideoView) findViewById(R.id.qs_videoview);
+    protected void initVideoPlayer() {
+        qsVideoView = (JKQSVideoView) findViewById(R.id.qs_videoview);
         qsVideoView.setLayoutParams(new LinearLayout.LayoutParams(-1, DisplayUtil.getWidthPixels(this) * 9 / 16));
         qsVideoView.release();
         qsVideoView.setDecodeMedia(AndroidMedia.class);
@@ -320,7 +320,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
         }
 
 //        initStatusView();
-        return qsVideoView;
+//        return qsVideoView;
 }
 
 

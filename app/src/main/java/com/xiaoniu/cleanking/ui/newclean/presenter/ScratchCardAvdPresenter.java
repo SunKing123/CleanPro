@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
@@ -217,6 +216,9 @@ public class ScratchCardAvdPresenter {
 
 
     private void startCoinCompletePage() {
+        if(onVideoPlayedListener!=null){
+            onVideoPlayedListener.onComplete();
+        }
         Intent intent = new Intent(activity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
         intent.putExtra(GoldCoinSuccessActivity.AD_ID, isOpenThree() ? getSecondAdvId(cardIndex) : "");
@@ -270,11 +272,6 @@ public class ScratchCardAvdPresenter {
                 }
             }
         }
-
-        isOpenOne=true;
-        isOpenTwo=true;
-        isOpenThree=true;
-
         log("第一个广告位开关信息:isOpen=" + isOpenOne());
         log("第二个广告位开关信息:isOpen=" + isOpenTwo());
         log("第三个广告位开关信息:isOpen=" + isOpenThree());
@@ -282,9 +279,21 @@ public class ScratchCardAvdPresenter {
         log("================================================检查刮刮卡的广告开关 end");
     }
 
+    public void setOnVideoPlayedListener(OnVideoPlayedListener onVideoPlayedListener) {
+        this.onVideoPlayedListener = onVideoPlayedListener;
+    }
+
+    OnVideoPlayedListener onVideoPlayedListener;
+
+    public interface OnVideoPlayedListener {
+        void onComplete();
+    }
+
     public void destroy() {
-        parameter.advCallBack = null;
-        parameter.context = null;
+        if (parameter != null){
+            parameter.advCallBack = null;
+            parameter.context = null;
+        }
         parameter = null;
         activity = null;
     }
