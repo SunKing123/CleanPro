@@ -582,25 +582,23 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void checkAdviceOrRedPacketDialog() {
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
-            Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
-            if (null != map.get(PositionId.KEY_NEIBU_SCREEN)) {
-                InsertAdSwitchInfoList.DataBean dataBean = map.get(PositionId.KEY_NEIBU_SCREEN);
-                LogUtils.e("======databean:" + new Gson().toJson(dataBean));
-                if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
-                    if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
-                        List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
-                        InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
-                        int startCount = inside.getCount();
-                        LogUtils.e("=======count:" + startCount);
-                        if (internalList.contains(String.valueOf(startCount))) {
-                            showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
-                            return;
-                        }
-
-
+            InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);
+            LogUtils.e("======databean:" + new Gson().toJson(dataBean));
+            if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
+                if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
+                    List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
+                    InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
+                    int startCount = inside.getCount();
+                    LogUtils.e("=======count:" + startCount);
+                    if (internalList.contains(String.valueOf(startCount))) {
+                        showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+                        return;
                     }
+
+
                 }
             }
+
         }
         if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_3G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
