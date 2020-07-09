@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.alibaba.fastjson.JSONObject;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
@@ -627,8 +628,12 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 1;
         bean.obtainCoinCount = dataBean.getData().getGoldCount();
-        bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(),0);
+        //广告位1开关控制
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE)) {
+            bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 0);
+        }
         bean.isDouble = true;
+        bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_TWO_CODE);//激励视频广告位开关
         bean.totalCoinCount = dataBean.getData().getTotalGoldCount();
         //广告回调
         bean.advCallBack = new AbsAdCallBack() {
