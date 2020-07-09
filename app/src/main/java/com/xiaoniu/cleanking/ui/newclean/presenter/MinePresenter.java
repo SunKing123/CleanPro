@@ -34,6 +34,7 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
         this.mContext = mContext;
     }
 
+    //废弃==暂时不掉用了，通过统一地方调用
     public void getMinePageInfo() {
         mModel.getMinePageInfo(new CommonSubscriber<MinePageInfoBean>() {
             @Override

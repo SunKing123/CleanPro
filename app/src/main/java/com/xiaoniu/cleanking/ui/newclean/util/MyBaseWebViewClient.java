@@ -82,6 +82,15 @@ public class MyBaseWebViewClient extends WebViewClient {
         }
     }
 
+    /**
+     * 页面退出时调用此方法
+     */
+    public void destroy() {
+        if (downTimer != null) {
+            downTimer.cancel();
+        }
+    }
+
     CountDownTimer downTimer = new CountDownTimer(5000, 5000) {
         @Override
         public void onTick(long millisUntilFinished) {
