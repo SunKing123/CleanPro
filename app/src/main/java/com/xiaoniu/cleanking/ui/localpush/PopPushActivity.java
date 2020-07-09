@@ -4,13 +4,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
@@ -37,17 +34,7 @@ public class PopPushActivity extends AppCompatActivity {
 
 
     String urlSchema;
-
     PopupWindow mPopupWindow;
-
-  /*  @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            finish();
-        }
-        return super.onTouchEvent(event);
-    }*/
-
 
     private View mView;
 
@@ -62,7 +49,7 @@ public class PopPushActivity extends AppCompatActivity {
         }
 
         ActivityCollector.addActivity(this, PopPushActivity.class);
-        StatisticsUtils.customTrackEvent("local_push_window_custom", "推送弹窗满足推送时机弹窗创建时", "", "local_push_window");
+        StatisticsUtils.customTrackEvent("local_push_window_shuow", "推送弹窗满足推送时机弹窗创建时", "", "local_push_window");
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -174,19 +161,6 @@ public class PopPushActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-    /*    button.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (!TextUtils.isEmpty(urlSchema)) {
-                    StatisticsUtils.trackClick("local_push_window_click", "本地推送弹窗点击", "", "local_push_window");
-                    SchemeProxy.openScheme(PopPushActivity.this, urlSchema);
-                    finish();
-                }
-            }
-            return true;
-        });*/
-        // mHandle.postDelayed(this::finish, 5000);
-
 
     }
 

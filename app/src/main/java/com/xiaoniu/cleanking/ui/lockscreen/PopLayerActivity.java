@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
@@ -30,7 +29,6 @@ import com.xnad.sdk.ad.listener.AbsAdCallBack;
 public class PopLayerActivity extends AppCompatActivity implements View.OnClickListener {
     RelativeLayout flayoutAdContainer;
     RelativeLayout full_screen_insert_ad_header_layout;
-    private AdManager adManager;
     //private TextView adShowTime;
     private TextView progree_tv;
     private ImageView adClose;
@@ -40,6 +38,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StatisticsUtils.customTrackEvent("lock_screen_page_custom", "锁屏页面创建时", "", "lock_screen_page");
         ActivityCollector.addActivity(this, PopLayerActivity.class);
         setContentView(R.layout.activity_pop_layer);
         //adShowTime = findViewById(R.id.full_screen_insert_ad_show_time_txt);
@@ -88,56 +87,16 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
                 super.onAdError(adInfo, i, s);
-                LogUtils.e("===========桌面弹窗展示失败:"+s);
+                LogUtils.e("===========桌面弹窗展示失败:" + s);
             }
 
             @Override
             public void onShowError(int i, String s) {
                 super.onShowError(i, s);
-                LogUtils.e("===========桌面弹窗展示失败："+s);
+                LogUtils.e("===========桌面弹窗展示失败：" + s);
             }
         });
 
-       /* AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, PositionId.AD_EXTERNAL_ADVERTISING_AD_1, new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "external_advertising_page", "external_advertising_page");
-                adInfo = info;
-                if (info.getAdView() != null) {
-                    full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);
-                    flayoutAdContainer.removeAllViews();
-                    flayoutAdContainer.addView(info.getAdView());
-                    int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
-                    PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, number + 1);
-//                    Logger.i("zz--" + (number + 1));
-                    PreferenceUtil.getInstants().save(SpCacheConfig.POP_LAYER_TIME, String.valueOf(System.currentTimeMillis()));
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-//                Logger.i("zz--adExposed--"+info.getAdSource());
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "external_advertising_page", "external_advertising_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "external_advertising_page", "external_advertising_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if (!BuildConfig.SYSTEM_EN.contains("prod"))
-                    ToastUtils.showLong("外部插屏errorcode-----" + errorCode + "---errorMsg----" + errorMsg);
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "external_advertising_page", "external_advertising_page");
-                }
-                finish();
-            }
-        });
-*/
     }
 
     @Override
