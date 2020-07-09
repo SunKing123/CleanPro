@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -75,9 +76,23 @@ public class MyBaseWebViewClient extends WebViewClient {
         if (mLoadImg != null && animaDra != null) {
             mLoadImg.setVisibility(View.VISIBLE);
             animaDra.start();
+            if (downTimer != null) {
+                downTimer.start();
+            }
         }
     }
 
+    CountDownTimer downTimer = new CountDownTimer(5000, 5000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+        }
+
+        @Override
+        public void onFinish() {
+            ToastUtils.showShort("网络异常，请重试");
+        }
+    };
 
     @Override
     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -138,6 +153,9 @@ public class MyBaseWebViewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
+        if (downTimer != null) {
+            downTimer.cancel();
+        }
         if (TextUtils.isEmpty(url)) {
             return;
         }
@@ -181,8 +199,9 @@ public class MyBaseWebViewClient extends WebViewClient {
             int obtainCoinCount = Integer.parseInt(coin);
             int totalCoinCount = Integer.parseInt(totalCoin);
             String adId = needLoadAD(isDouble, taskId);
-            String codeId = ADUtils.getCodeId(adId);
+            String codeId = ADUtils.getCodeId(adId);//getCodeId获取值不对，这里逻辑后续需要就需要修改
             boolean loadAd = !TextUtils.isEmpty(codeId);
+            //getSource获取值不对，这里逻辑后续需要就需要修改
             int source = getSource(isDouble, taskId);
             //TODO 显示广告弹窗
             cardAvdPresenter.showDialog(Integer.parseInt(adId), Integer.parseInt(coin));

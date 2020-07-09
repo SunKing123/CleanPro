@@ -3,11 +3,13 @@ package com.xiaoniu.cleanking.ui.usercenter.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.main.fragment.BaseBrowserFragment;
+import com.xiaoniu.cleanking.ui.newclean.bean.H5EventBean;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,6 +52,17 @@ public class BrowserActivity extends BaseActivity {
             mBrowserFragment = BaseBrowserFragment.newInstance(url);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     mBrowserFragment).commitAllowingStateLoss();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mBrowserFragment != null && "0".equals(mBrowserFragment.getBackable())) {
+            H5EventBean h5EventBean = new H5EventBean();
+            h5EventBean.setEventCode("0");
+            mBrowserFragment.eventCallBack(new Gson().toJson(h5EventBean));
+        } else {
+            super.onBackPressed();
         }
     }
 
