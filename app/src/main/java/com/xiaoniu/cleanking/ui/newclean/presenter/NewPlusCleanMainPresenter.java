@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
+import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -577,6 +578,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             @Override
             public void getData(BubbleCollected bubbleConfig) {
+                RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
                 mView.bubbleCollected(bubbleConfig);
             }
 
@@ -602,6 +604,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             @Override
             public void getData(BubbleDouble bubbleDouble) {
+                RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
                 mView.bubbleDoubleSuccess(bubbleDouble);
             }
 
