@@ -24,8 +24,10 @@ public class GoldCoinDialogParameter {
     public int dialogType;
     public int obtainCoinCount;
     public double totalCoinCount;
-    public String adId;      //当传进来的id为空时，不加载广告
+    //当传进来的id为空时，不加载广告
+    public String adId;
     public boolean fbTip;
+    //是否显示翻倍按钮
     public boolean isDouble;
     //金币来源
     public int fromType;
