@@ -202,7 +202,9 @@ public class AppHolder {
      */
     public boolean checkAdSwitch(String configKey) {
         boolean isOpen = false;
-        if (null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey)) {
+        //过审开关是否打开
+        String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1") &&null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey)) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (configKey.equals(switchInfoList.getConfigKey())) {
                     isOpen = switchInfoList.isOpen();
@@ -220,7 +222,8 @@ public class AppHolder {
      * @return
      */
     public InsertAdSwitchInfoList.DataBean getInsertAdInfo(String configKey) {
-        if (null != getInsertAdSwitchMap()) {
+        String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1") && null != getInsertAdSwitchMap()) {
             Map<String, InsertAdSwitchInfoList.DataBean> map = getInsertAdSwitchMap();
             if (null != map.get(configKey)) {
                 return map.get(configKey);
