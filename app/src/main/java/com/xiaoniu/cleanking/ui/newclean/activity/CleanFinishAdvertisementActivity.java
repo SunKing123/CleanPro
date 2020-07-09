@@ -470,7 +470,8 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             }
         });*/
 
-
+        if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_THREE_CODE))
+            return;
         AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.FINISH02_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos03)
