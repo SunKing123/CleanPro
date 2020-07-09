@@ -77,7 +77,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private ViewGroup container;
     private Disposable mSubscription;
     private boolean mIsOpen; //冷启动广告开关
-    String pushData = null;
+    private String pushData = null;
     private boolean mCanJump;
 
     @Override

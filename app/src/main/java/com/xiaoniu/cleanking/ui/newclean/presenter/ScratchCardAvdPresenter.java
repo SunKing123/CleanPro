@@ -220,9 +220,10 @@ public class ScratchCardAvdPresenter {
             onVideoPlayedListener.onComplete();
         }
         Intent intent = new Intent(activity, GoldCoinSuccessActivity.class);
-        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount * 2);
+        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount);
         intent.putExtra(GoldCoinSuccessActivity.AD_ID, isOpenThree() ? getSecondAdvId(cardIndex) : "");
         activity.startActivity(intent);
+
         GoldCoinDialog.dismiss();
         StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
     }
