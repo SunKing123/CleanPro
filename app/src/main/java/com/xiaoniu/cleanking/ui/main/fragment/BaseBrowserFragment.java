@@ -170,7 +170,14 @@ public class BaseBrowserFragment extends SimpleFragment {
     public interface WebListener {
         void onReceivedTitle(String title);
     }
-
+    /**
+     * @param jsonEvent
+     */
+    public void eventCallBack(String jsonEvent) {
+        if (getWebView() != null) {
+            getWebView().loadUrl("javascript:eventCallBack('" + jsonEvent + "')");
+        }
+    }
     public String getBackable() {
         return backable;
     }

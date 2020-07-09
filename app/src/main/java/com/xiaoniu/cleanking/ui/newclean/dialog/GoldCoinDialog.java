@@ -135,7 +135,7 @@ public class GoldCoinDialog {
             totalCoin = parameter.obtainCoinCount;
             AnimationRotateUtils.getInstance().playRotateAnim(ivAnim, 10000);
         }
-        if (parameter.isDouble) {
+        if (parameter.isDouble&& parameter.isRewardOpen) {
             CoinDoubleRL.setVisibility(View.VISIBLE);
             AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
         }

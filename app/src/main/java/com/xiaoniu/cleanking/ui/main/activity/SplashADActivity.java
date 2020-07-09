@@ -150,7 +150,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 mPresenter.getAuditSwitch();
             } else { //小于10分钟不获取开关直接请求广告
                 //        状态（0=隐藏，1=显示）
-                String auditSwitch = SPUtil.getString(this, SpCacheConfig.AuditSwitch, "1");
+                String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
                 if (auditSwitch.equals("0")) {
                     mStartView.setVisibility(View.GONE);
                     mContentView.setVisibility(View.VISIBLE);
@@ -190,7 +190,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         initFileRelation();
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-//        readCleanExternalDb();
         if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
             readyWeatherExternalDb();
         }
@@ -326,6 +325,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     public void getSwitchInfoListFail() {
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "1");
+            MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
         });

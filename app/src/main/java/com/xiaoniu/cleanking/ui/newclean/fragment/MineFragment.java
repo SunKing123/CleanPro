@@ -17,7 +17,6 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
-import com.xiaoniu.cleanking.ui.main.activity.LoginActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
@@ -92,6 +91,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            if (UserHelper.init().isLogin()){
+                mPresenter.getMinePageInfo();
+            }
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
             //展示广告
             addBottomAdView();
@@ -172,7 +174,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 
     private void setUserInfo() {
         if (UserHelper.init().isLogin()) {
-            mPresenter.getMinePageInfo();
             String nickName = UserHelper.init().getNickName();
             if (TextUtils.isEmpty(nickName)) {
                 nickName = UserHelper.init().getPhoneNum();

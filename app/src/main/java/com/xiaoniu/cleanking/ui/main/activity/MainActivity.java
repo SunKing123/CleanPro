@@ -675,8 +675,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     //清理完成页返回弹出广告
     @Subscribe
     public void onEventScan(FromHomeCleanFinishEvent backMainEvent) {
-        Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
-        InsertAdSwitchInfoList.DataBean configBean = map.get(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
+        InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
         if (configBean != null && configBean.isOpen()) {
             mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
         }
