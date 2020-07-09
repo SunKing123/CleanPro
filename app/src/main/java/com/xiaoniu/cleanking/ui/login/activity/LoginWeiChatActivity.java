@@ -193,7 +193,7 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     public void dealLoginResult(int flag, LoginDataBean loginDataBean) {
         //flag 1 微信登录  2 绑定微信
         if (flag == 2) {
-            if ("2028".equals(loginDataBean.getCode())) {
+            if ("2027".equals(loginDataBean.getCode())) {
                 String tip = "账号已注册，登录后游客模式账号金币不同步,是否继续登录";
                 CommonDialogUtils.showRemindDialogStyle01(this, tip, "确认", new OnBtnClickListener() {
                     @Override
