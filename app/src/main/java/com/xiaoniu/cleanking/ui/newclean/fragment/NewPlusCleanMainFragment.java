@@ -89,7 +89,6 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -99,6 +98,9 @@ import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+
+import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
+import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
 /**
  * Created by xinxiaolong on 2020/6/30.
@@ -423,12 +425,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void userLoginInfo(String eventCode) {
         switch (eventCode) {
             //退出登录
-            case "exitRefreshUserInfo":
+            case EXIT_SUCCESS:
                 tvCoinNum.setVisibility(View.GONE);
                 tvWithDraw.setVisibility(View.GONE);
                 break;
             //登录成功
-            case "loginSuccessRefreshUserInfo":
+            case LOGIN_SUCCESS:
 
                 break;
         }
@@ -950,14 +952,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 翻倍成功
      */
-    public void bubbleDoubleSuccess(BubbleDouble dataBean) {
+    public void bubbleDoubleSuccess(BubbleDouble dataBean,int localNum) {
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
         Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount());
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
-            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
+            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(localNum, 2));
         }
         mActivity.startActivity(intent);
     }

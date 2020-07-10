@@ -237,6 +237,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 3;
         bean.obtainCoinCount = bubbleCollected.getData().getGoldCount();
+        bean.totalCoinCount = bubbleCollected.getData().getTotalGoldCount();
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
         bean.fromType = GoldCoinDialogParameter.FROM_FINISH_COMPLETE;
         bean.context = mActivity;

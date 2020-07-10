@@ -35,6 +35,7 @@ import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.xiaoniu.cleanking.utils.user.UserHelper.BIND_PHONE_SUCCESS;
 
 
 /**
@@ -81,7 +82,7 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(String eventMsg) {
-        if ("BindPhoneSuccess".equals(eventMsg)) {//绑定手机号成功关闭页面
+        if (BIND_PHONE_SUCCESS.equals(eventMsg)) {//绑定手机号成功关闭页面
             finish();
         }
     }
