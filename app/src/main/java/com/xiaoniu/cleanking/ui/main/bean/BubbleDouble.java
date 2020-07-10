@@ -17,13 +17,13 @@ public class BubbleDouble extends BaseEntity {
      * data : {"collected":true,"uuid":"4ac7f670625445dfb76539102c80adf2","locationNum":2,"goldCount":75,"canDouble":1}
      */
 
-    private BubbleCollected.DataBean data;
+    private BubbleDouble.DataBean data;
 
-    public BubbleCollected.DataBean getData() {
+    public BubbleDouble.DataBean getData() {
         return data;
     }
 
-    public void setData(BubbleCollected.DataBean data) {
+    public void setData(BubbleDouble.DataBean data) {
         this.data = data;
     }
 

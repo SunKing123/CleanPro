@@ -934,14 +934,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 翻倍成功
      */
-    public void bubbleDoubleSuccess(BubbleDouble dataBean) {
+    public void bubbleDoubleSuccess(BubbleDouble dataBean,int localNum) {
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
         Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount());
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
-            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
+            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(localNum, 2));
         }
         mActivity.startActivity(intent);
     }
