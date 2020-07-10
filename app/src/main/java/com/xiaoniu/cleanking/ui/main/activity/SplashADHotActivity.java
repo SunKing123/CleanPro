@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashHotPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
+import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -44,6 +45,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     ImageView mErrorAdIv;
     private ViewGroup container;
     private boolean mCanJump;
+    RxTimer rxTimer;
+    private static final int SP_SHOW_OUT_TIME = 9 * 1000;//开屏总超时时间
 
     @Override
     protected int getLayoutId() {
@@ -119,6 +122,14 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
         container = this.findViewById(R.id.splash_container);
         initGeekSdkAD();
+
+        //超时定时器
+        rxTimer = new RxTimer();
+        rxTimer.timer(SP_SHOW_OUT_TIME, number -> {
+            mCanJump = true;
+            jumpActivity();
+        });
+
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("hot_splash_page_custom", "热启动页创建时", "hot_splash_page", "hot_splash_page");
     }
@@ -204,9 +215,18 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
             //热启动的时候去掉内部插屏和红包相关判断
             showRedPacket();
             finish();
+            mCanJump = false;
         } else {
             mCanJump = true;
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (null != rxTimer) {
+            rxTimer.cancel();
+        }
+        super.onDestroy();
     }
 }

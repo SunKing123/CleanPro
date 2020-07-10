@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -38,6 +39,7 @@ import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -55,6 +57,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
@@ -81,6 +84,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private boolean mIsOpen; //冷启动广告开关
     private String pushData = null;
     private boolean mCanJump;
+    RxTimer rxTimer;
+    private static final int SP_SHOW_OUT_TIME = 9 * 1000;//开屏总超时时间
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,7 +139,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
         }
         /*保存冷、热启动的次数*/
-        /*保存冷、热启动的次数*/
         InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
         if (DateUtils.isSameDay(inside.getTime(), System.currentTimeMillis())) {
             inside.setCount(inside.getCount() + 1);
@@ -143,7 +147,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         }
         inside.setTime(System.currentTimeMillis());
         PreferenceUtil.saveColdAndHotStartCount(inside);
-
         if (NetworkUtils.isNetConnected()) {//正常网络
             if (PreferenceUtil.getCoolStartTime()) {
                 mPresenter.getAuditSwitch();
@@ -183,7 +186,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 }
             }
             PreferenceUtil.saveCoolStartTime();
-
         } else {//无网络状态
             if (!PreferenceUtil.isNotFirstOpenApp()) {
                 mStartView.setVisibility(View.VISIBLE);
@@ -195,11 +197,19 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
         initNiuData();
         initFileRelation();
+
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
         if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
             readyWeatherExternalDb();
         }
+        //超时定时器
+        rxTimer = new RxTimer();
+        rxTimer.timer(SP_SHOW_OUT_TIME,number ->{
+            mCanJump = true;
+            jumpActivity();
+        });
+
     }
 
 
@@ -261,6 +271,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             }
             startActivity(intent);
             finish();
+            mCanJump = false;
         } else {
             mCanJump = true;
         }
@@ -347,6 +358,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         if (null != this.mSubscription) {
             this.mSubscription.dispose();
             this.mSubscription = null;
+        }
+        if (null != rxTimer) {
+            rxTimer.cancel();
         }
         super.onDestroy();
     }
@@ -479,4 +493,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         super.onPause();
         mCanJump = false;
     }
+
+
+
 }
