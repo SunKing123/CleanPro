@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import butterknife.OnClick;
 
+import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
+
 /**
  * 白名单设置
  * Created by lang.chen on 2019/7/5
@@ -106,7 +108,7 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
     public void exitLoginResult(ExitLoginBean exitLoginBean) {
         if (exitLoginBean != null && "200".equals(exitLoginBean.code)) {
             UserHelper.init().clearCurrentUserInfo();
-            EventBus.getDefault().post("exitLoginSuccess");
+            EventBus.getDefault().post(EXIT_SUCCESS);
             ToastUtils.showShort("退出登录成功");
             ll_exit_login.setVisibility(View.GONE);
         }

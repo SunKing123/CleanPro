@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class H5EventBean implements Serializable {
     /**
      * 事件类型
-     * 0 ，按返回键时，h5请求拦截时回调
+     * 0 ，按返回键时，h5请求拦截时回调   2 绑定手机号
      */
     private String eventCode;
     /**

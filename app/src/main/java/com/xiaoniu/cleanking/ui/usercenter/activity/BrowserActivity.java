@@ -13,6 +13,10 @@ import com.xiaoniu.cleanking.ui.newclean.bean.H5EventBean;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import static com.xiaoniu.cleanking.utils.user.UserHelper.BIND_PHONE_SUCCESS;
 
 /**
  * Created by zhaoyingtao
@@ -45,6 +49,7 @@ public class BrowserActivity extends BaseActivity {
 //        } else {
 //            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_fff7f8fa), false);
 //        }
+        EventBus.getDefault().register(this);
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
             Bundle extras = intent.getExtras();
@@ -52,6 +57,17 @@ public class BrowserActivity extends BaseActivity {
             mBrowserFragment = BaseBrowserFragment.newInstance(url);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     mBrowserFragment).commitAllowingStateLoss();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(String eventMsg) {
+        if (BIND_PHONE_SUCCESS.equals(eventMsg)) {//绑定手机号成功
+            if (mBrowserFragment != null) {
+                H5EventBean h5EventBean = new H5EventBean();
+                h5EventBean.setEventCode("2");
+                mBrowserFragment.eventCallBack(new Gson().toJson(h5EventBean));
+            }
         }
     }
 
@@ -69,6 +85,7 @@ public class BrowserActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         //去刷新刮刮乐的h5
+        EventBus.getDefault().unregister(this);
         EventBus.getDefault().post("refreshGuaGuaLeH5");
         super.onDestroy();
     }
