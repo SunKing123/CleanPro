@@ -408,13 +408,29 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     }
 
-    //完成页返回通知
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    //更新用户信息
+    @Subscribe
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null && event.infoBean != null && event.infoBean.getGold() > 0) {
+        if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
             tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
+        }
+    }
+
+    //用户登录状态改变通知
+    @Subscribe
+    public void userLoginInfo(String eventCode) {
+        switch (eventCode) {
+            //退出登录
+            case "exitRefreshUserInfo":
+                tvCoinNum.setVisibility(View.GONE);
+                tvWithDraw.setVisibility(View.GONE);
+                break;
+            //登录成功
+            case "loginSuccessRefreshUserInfo":
+
+                break;
         }
     }
 
@@ -901,7 +917,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Override
     public void clickBull(BubbleConfig.DataBean ballBean, int pos) {
-        if (ballBean == null){
+        if (ballBean == null) {
             ToastUtils.showShort(R.string.net_error);
             return;
         }
@@ -934,14 +950,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 翻倍成功
      */
-    public void bubbleDoubleSuccess(BubbleDouble dataBean) {
+    public void bubbleDoubleSuccess(BubbleDouble dataBean,int localNum) {
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
         Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount());
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
-            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
+            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(localNum, 2));
         }
         mActivity.startActivity(intent);
     }
