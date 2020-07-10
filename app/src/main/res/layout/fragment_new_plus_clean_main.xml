@@ -51,7 +51,7 @@
     </RelativeLayout>
 
     <!--完成动画-->
-    <androidx.core.widget.NestedScrollView
+    <com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView
         android:id="@+id/layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -131,8 +131,7 @@
             <com.xiaoniu.cleanking.widget.ShadowViewCard
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"
@@ -140,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView>
 
     <com.xiaoniu.cleanking.ui.view.HomeInteractiveView
         android:id="@+id/image_interactive"
@@ -148,8 +147,8 @@
         android:layout_height="65dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="10dp"
         android:layout_marginBottom="100dp"
-        android:src="@drawable/icon_home_electric" />
+        android:src="@mipmap/icon_main_right_ad"
+        android:visibility="gone"/>
 
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

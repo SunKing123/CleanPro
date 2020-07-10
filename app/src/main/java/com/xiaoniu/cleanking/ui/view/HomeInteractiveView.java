@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.utils.GlideUtils;

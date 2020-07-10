@@ -1,26 +1,21 @@
 package com.xiaoniu.cleanking.ui.newclean.activity
 
-import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
-import android.widget.ImageView
-import android.widget.TextView
 import com.xiaoniu.cleanking.R
-import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.midas.AdRequestParams
-import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.mvp.BaseActivity
-import com.xiaoniu.cleanking.ui.main.config.PositionId
+import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider
+import com.xiaoniu.cleanking.utils.DimenUtils
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import com.xnad.sdk.ad.listener.AbsAdCallBack
 import kotlinx.android.synthetic.main.activity_finish_layout.btnLeft
 import kotlinx.android.synthetic.main.activity_gold_coin_success.*
-import org.jetbrains.anko.intentFor
-import java.lang.StringBuilder
 
 
 /**
@@ -44,6 +39,10 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     override fun initViews() {
         StatusBarCompat.translucentStatusBarForImage(this, true, true)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            ad_frameLayout.outlineProvider = OutlineProvider(DimenUtils.dp2px(context, 6f).toFloat())
+            ad_frameLayout.clipToOutline = true
+        }
     }
 
     override fun initData() {
