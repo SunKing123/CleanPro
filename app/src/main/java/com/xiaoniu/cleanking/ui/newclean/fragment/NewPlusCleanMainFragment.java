@@ -89,6 +89,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -408,12 +409,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     //完成页返回通知
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null&&event.infoBean!=null&&event.infoBean.getGold()>0) {
+        if (event != null && event.infoBean != null && event.infoBean.getGold() > 0) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
-            tvCoinNum.setText(event.infoBean.getGold());
+            tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
         }
     }
 
