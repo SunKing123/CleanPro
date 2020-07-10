@@ -356,7 +356,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             mPresenter.showInsideScreenDialog();
             return;
         }
-        //判断金币领取弹窗是否打开
+        //若弹窗中的广告位没有打开，则不显示弹窗
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_FINISH_GET_GOLD_COIN)) {
             mPresenter.getGoldCoin();
         }
