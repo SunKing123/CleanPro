@@ -318,9 +318,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      *********************************************************************************************************************************************************
      */
 
+    long requestTime;
+
     private void refreshAd() {
+        if (System.currentTimeMillis() - requestTime < 3000) {
+            return;
+        }
+        requestTime = System.currentTimeMillis();
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
-            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
+            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_AD_ID);
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
             mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
@@ -329,6 +335,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
         }
     }
+
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************fragment lifecycle***************************************************************************
@@ -380,7 +388,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
 
     /*
      *********************************************************************************************************************************************************
@@ -467,7 +474,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /*
      *********************************************************************************************************************************************************
-     ************************************************************head oneKey clean start*********************************************************************
+     ************************************************************head oneKey clean start**********************************************************************
      *********************************************************************************************************************************************************
      */
 //    @Deprecated

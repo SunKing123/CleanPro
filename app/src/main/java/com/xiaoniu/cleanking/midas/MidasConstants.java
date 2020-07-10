@@ -45,7 +45,7 @@ public interface MidasConstants {
     /**
      * 首页广告位1 ID
      */
-    String MAIN_ONE_ID = "adpos_3925669851";
+    String MAIN_ONE_AD_ID = "adpos_3925669851";
 
     /**
      * 首页广告位2 ID

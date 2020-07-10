@@ -88,7 +88,6 @@ public class BottomBarTab extends FrameLayout {
             }
         }
 
-
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
         setBackgroundDrawable(drawable);
@@ -106,9 +105,12 @@ public class BottomBarTab extends FrameLayout {
         if (null == mContext || TextUtils.isEmpty(iconString)) {
             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mIcon.setImageResource(icon);
-        } else {
-            params = new LinearLayout.LayoutParams(orderNum == 3 ? ViewGroup.LayoutParams.WRAP_CONTENT : 70, orderNum == 3 ?  context.getResources().getDimensionPixelOffset(R.dimen.dimen_45dp)  : 70);
+        } else if (title.equals("刮刮卡")) {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, context.getResources().getDimensionPixelOffset(R.dimen.dimen_50dp));
             mIcon.setScaleType(ImageView.ScaleType.FIT_XY);
+            GlideUtils.loadImage((Activity) mContext, iconString, mIcon);
+        } else {
+            params = new LinearLayout.LayoutParams(orderNum == 3 ? 110 : 70, orderNum == 3 ? 110 : 70);
             GlideUtils.loadImage((Activity) mContext, iconString, mIcon);
         }
         if (null != params) {
@@ -116,11 +118,15 @@ public class BottomBarTab extends FrameLayout {
         }
         lLContainer.addView(mIcon);
 
-
         mTvTitle = new TextView(context);
         if (orderNum == 3 && !TextUtils.isEmpty(iconString) && TextUtils.equals(auditSwitch, "1")) {
             mTvTitle.setVisibility(GONE);
         }
+
+        if (title.equals("刮刮卡")) {
+            mTvTitle.setVisibility(GONE);
+        }
+
         mTvTitle.setText(title);
         LinearLayout.LayoutParams paramsTv = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         paramsTv.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());

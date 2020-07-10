@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.AdposUtil;
@@ -494,15 +495,26 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     static class AdvCallBack extends CMAbsAdCallBack {
         String advId;
-
+        String title="";
         AdvCallBack(String advId) {
             this.advId = advId;
+            switch (advId){
+                case MidasConstants.MAIN_ONE_AD_ID:
+                    title="one";
+                    break;
+                case MidasConstants.MAIN_TWO_AD_ID:
+                    title="two";
+                    break;
+                case MidasConstants.MAIN_THREE_AD_ID:
+                    title="three";
+                    break;
+            }
         }
 
         @Override
         public void onAdLoadSuccess(AdInfo adInfo) {
             super.onAdLoadSuccess(adInfo);
-            LogUtils.e("====首页广告one====:onAdLoadSuccess:");
+            LogUtils.e("====首页广告"+title+"====:onAdLoadSuccess:");
 
         }
 
@@ -515,13 +527,14 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         @Override
         public void onShowError(int i, String s) {
             super.onShowError(i, s);
-            LogUtils.e("====首页广告one====:显示失败:" + s);
+            LogUtils.e("====首页广告"+title+"====:显示失败:" + s);
         }
 
         @Override
         public void onAdShow(AdInfo adInfo) {
             super.onAdShow(adInfo);
-            LogUtils.e("====首页广告one====:加载成功:");
+
+            LogUtils.e("====首页广告"+title+"====:加载成功:");
         }
 
         @Override
