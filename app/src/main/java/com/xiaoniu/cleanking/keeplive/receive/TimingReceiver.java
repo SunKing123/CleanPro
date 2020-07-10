@@ -117,6 +117,12 @@ public class TimingReceiver extends BroadcastReceiver {
                         return;
                     }
                     long lastAppPressHome = MmkvUtil.getLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
+
+                    if (lastAppPressHome == 0L) {
+                        //由清理管家APP触发的home键不弹出广告
+                        startDialogActivityOnLauncher(context, 10 * 1000);
+                    }
+
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
@@ -126,7 +132,6 @@ public class TimingReceiver extends BroadcastReceiver {
                             return;
                         }
                     }
-                    startDialogActivityOnLauncher(context, 10 * 1000);
                   /*   if (!RomUtils.checkFloatWindowPermission(context)) {
                         LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
                         return;
