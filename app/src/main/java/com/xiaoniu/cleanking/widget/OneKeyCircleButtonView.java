@@ -1,16 +1,11 @@
 package com.xiaoniu.cleanking.widget;
 
-import android.animation.Animator;
-import android.animation.IntArrayEvaluator;
 import android.content.Context;
-import android.content.Entity;
-import android.opengl.Visibility;
-import android.os.Handler;
+import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,8 +17,9 @@ import com.xiaoniu.cleanking.bean.LottiePathdata;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.utils.BitmapUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.lottie.AnimHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,17 +34,22 @@ import java.util.Map;
 public class OneKeyCircleButtonView extends RelativeLayout {
 
     private Context mContext;
-    private LottieAnimationView viewLottieRed;
-    private LottieAnimationView viewLottieYellow;
     private LottieAnimationView viewLottieGreen;
     private RelativeLayout rel_bubble;
-    private List<LottieAnimationView> lottieList;
     private TouchImageView ivCenter;
     private Map<Integer, LottiePathdata> lottiePathdataMap;
     private LuckBubbleView lftop,lfbotm,rttop,rtbotm;
     private TextView tv_file_total_size, tv_file_total_tag;
     private LinearLayout linear_text_tag;
     private RelativeLayout rel_container;
+    private ImageView iv_top_perview;
+    private AnimHelper mAnimHelper = new AnimHelper();
+    private static final int ANIML_COLOR_STATE_GREEN = 1;
+    private static final int ANIML_COLOR_STATE_YELLOW = 2;
+    private static final int ANIML_COLOR_STATE_RED = 3;
+
+    private int currentState = ANIML_COLOR_STATE_GREEN;   //当前动画状态
+    private boolean currentIsFinish = false;            //当前动画状态
 
     public OneKeyCircleButtonView(Context context) {
         super(context);
@@ -76,23 +77,17 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         mContext = context;
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_home_top_circle_anim, this, true);
         linear_text_tag = (LinearLayout) v.findViewById(R.id.linear_text_tag);
-//        fragment_parent = (FrameLayout)v.findViewById(R.id.fragment_parent);
-        viewLottieRed = (LottieAnimationView) v.findViewById(R.id.view_lottie_lower_red);
-        viewLottieYellow = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_yellow);
         viewLottieGreen = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_green);
         rel_bubble = (RelativeLayout)v.findViewById(R.id.rel_bubble);
         tv_file_total_size = (TextView) v.findViewById(R.id.tv_file_total_size);
         tv_file_total_tag = (TextView) v.findViewById(R.id.tv_file_total_tag);
         rel_container = (RelativeLayout) v.findViewById(R.id.rel_parent);
+        iv_top_perview = (ImageView)v.findViewById(R.id.tv_top_perview);
         ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
         lftop = (LuckBubbleView)v.findViewById(R.id.lftop);
         lfbotm = (LuckBubbleView)v.findViewById(R.id.lfbotm);
         rttop = (LuckBubbleView)v.findViewById(R.id.rttop);
         rtbotm = (LuckBubbleView)v.findViewById(R.id.rtbotm);
-        lottieList = new ArrayList<>();
-        lottieList.add(viewLottieGreen);
-        lottieList.add(viewLottieYellow);
-        lottieList.add(viewLottieRed);
         setlottieData();
         setViewLayoutParms();
         greenState(false);
@@ -101,81 +96,25 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     public void setViewLayoutParms() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieYellow.getLayoutParams();
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieGreen.getLayoutParams();
         layoutParams.height = Float.valueOf(screenWidth).intValue();
         layoutParams.width = Float.valueOf(screenWidth).intValue();
-        viewLottieYellow.setLayoutParams(layoutParams);
-        viewLottieRed.setLayoutParams(layoutParams);
+
         viewLottieGreen.setLayoutParams(layoutParams);
         rel_bubble.setLayoutParams(layoutParams);
+        iv_top_perview.setLayoutParams(layoutParams);
 
         RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) ivCenter.getLayoutParams();
         imglayoutParams.height = Float.valueOf(screenWidth * 0.497f).intValue();
         imglayoutParams.width = Float.valueOf(screenWidth * 0.497f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
+        ivCenter.animate().setDuration(2000).alpha(1f).scaleY(1f).scaleX(1f).start();
 
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
         textLayout.height = Float.valueOf(screenWidth * 0.1f).intValue();
         linear_text_tag.setLayoutParams(textLayout);
         linear_text_tag.setVisibility(VISIBLE);
 
-    }
-
-
-
-/*    //清理完成绿色状态;
-    public void setGreenState() {
-        viewLottieGreen.setVisibility(VISIBLE);
-        viewLottieGreen.setAnimation("home_top_scan/anim01b/data.json");
-        viewLottieGreen.setImageAssetsFolder("home_top_scan/anim01b/images");
-        viewLottieGreen.playAnimation();
-        animShow(viewLottieGreen, null);
-        setCenterImg(0);
-    }*/
-
-
-    public void stopAnim(LottieAnimationView lottieview) {
-        if (null != lottieview && !lottieview.getTag().toString().contains("stoped")) {
-            lottieview.setTag("stoped");
-            lottieview.setAlpha(1f);
-            lottieview.setVisibility(VISIBLE);
-            lottieview.animate()
-                    .alpha(0f)
-                    .setDuration(500)
-                    .setListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            lottieview.cancelAnimation();
-                            lottieview.clearAnimation();
-                            lottieview.setVisibility(GONE);
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-
-                        }
-                    });
-        }
-    }
-
-
-    public void animShow(LottieAnimationView lottieview, Animator.AnimatorListener listener) {
-        lottieview.setAlpha(0f);
-        lottieview.setVisibility(VISIBLE);
-        lottieview.animate()
-                .alpha(1f)
-                .setDuration(500)
-                .setListener(listener);
     }
 
     //根据扫描垃圾总数
@@ -214,36 +153,14 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void scanFinish(long totalSize) {
         if (totalSize < 50 * 1024 * 1024) {//50mb以内
             greenState(true);
-        } else if (totalSize > 50 * 1024 * 1024 && totalSize < 100 * 1024 * 1024) {
+        } else if (totalSize > 50 * 1024 * 1024 && totalSize < 100 * 1024 * 1024) {//50mb~100mb
             yellowState(true);
         } else {
             redState(true);
         }
     }
 
-    //正常扫描流程
-    public void setlottieData() {
-        lottiePathdataMap = new HashMap<>();
-        lottiePathdataMap.put(0, new LottiePathdata("home_top_scan/anim01a/data.json", "home_top_scan/anim01a/images"));
-        lottiePathdataMap.put(1, new LottiePathdata("home_top_scan/anim02a/data.json", "home_top_scan/anim02a/images"));
-        lottiePathdataMap.put(2, new LottiePathdata("home_top_scan/anim03a/data.json", "home_top_scan/anim03a/images"));
-        lottiePathdataMap.put(10, new LottiePathdata("home_top_scan/anim01b/data.json", "home_top_scan/anim01b/images"));
-        lottiePathdataMap.put(11, new LottiePathdata("home_top_scan/anim02b/data.json", "home_top_scan/anim02b/images"));
-        lottiePathdataMap.put(12, new LottiePathdata("home_top_scan/anim03b/data.json", "home_top_scan/anim03b/images"));
 
-    }
-
-    public void setCenterImg(int index) {
-        ivCenter.setVisibility(VISIBLE);
-        if (index == 0) {
-            ivCenter.setImageResource(R.drawable.icon_circle_btn_white);
-        } else if (index == 1) {
-            ivCenter.setImageResource(R.drawable.icon_circle_btn_white);
-        } else if (index == 2) {
-            ivCenter.setImageResource(R.drawable.icon_circle_btn_white);
-        }
-
-    }
 
     //根据扫描数值展示状态
     public void changeScanAnim(long totalSize) {
@@ -254,84 +171,70 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         } else {
             redState(false);
         }
-
     }
 
     public void greenState(boolean isFinish) {
-        viewLottieGreen.setVisibility(VISIBLE);
-        if (viewLottieGreen.getAlpha() < 1f) {
-            viewLottieGreen.animate()
-                    .alpha(1f)
-                    .setDuration(500)
-                    .setListener(null);
-        }
-        String newjsonPath =  lottiePathdataMap.get(isFinish ?  10 : 0).getJsonPath().toString();
-        String newPath =  lottiePathdataMap.get(isFinish ?  10 : 0).getImgPath().toString();
-        if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath) ) {
-            viewLottieGreen.setAnimation(newjsonPath);
-            viewLottieGreen.setImageAssetsFolder(newPath);
-            viewLottieGreen.playAnimation();
-            viewLottieGreen.setTag(isFinish);
-            setCenterImg(0);
-        }
-        if (viewLottieYellow.getVisibility() == VISIBLE) {
-            viewLottieYellow.setVisibility(GONE);
-        }
-        if (viewLottieRed.getVisibility() == VISIBLE) {
-            viewLottieRed.setVisibility(GONE);
-        }
+        changeState(isFinish,ANIML_COLOR_STATE_GREEN);
     }
 
     public void yellowState(boolean isFinish) {
-        viewLottieYellow.setVisibility(VISIBLE);
-        if (viewLottieYellow.getAlpha() < 1f) {
-            viewLottieYellow.animate()
-                    .alpha(1f)
-                    .setDuration(500)
-                    .setListener(null);
-        }
-        String newjsonPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getJsonPath().toString();
-        String newPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getImgPath().toString();
-        if (!viewLottieYellow.isAnimating() || !viewLottieYellow.getImageAssetsFolder().equals(newPath)) {
-            viewLottieYellow.setAnimation(newjsonPath);
-            viewLottieYellow.setImageAssetsFolder(newPath);
-            viewLottieYellow.playAnimation();
-            viewLottieYellow.setTag(isFinish);
-            setCenterImg(2);
-        }
-
-        if (viewLottieGreen.getVisibility() == VISIBLE) {
-            viewLottieGreen.setVisibility(GONE);
-        }
-        if (viewLottieRed.getVisibility() == VISIBLE) {
-            viewLottieRed.setVisibility(GONE);
-        }
+        changeState(isFinish,ANIML_COLOR_STATE_YELLOW);
     }
 
     public void redState(boolean isFinish) {
+        changeState(isFinish,ANIML_COLOR_STATE_RED);
+    }
 
-        viewLottieRed.setVisibility(VISIBLE);
-        if (viewLottieRed.getAlpha() < 1f) {
-            viewLottieRed.animate()
-                    .alpha(1f)
-                    .setDuration(500)
-                    .setListener(null);
-        }
-        String newPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getImgPath().toString();
-        String newjsonPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getJsonPath().toString();
-        if (!viewLottieRed.isAnimating() || !viewLottieRed.getImageAssetsFolder().equals(newPath) ) {
-            viewLottieRed.setAnimation(newjsonPath);
-            viewLottieRed.setImageAssetsFolder(newPath);
-            viewLottieRed.playAnimation();
-            setCenterImg(3);
+    //改变扫描动画
+    public void changeState(boolean isFinish,int state){
+        String newjsonPath = "";
+        String newPath = "";
+        switch (state) {
+            case ANIML_COLOR_STATE_GREEN:
+                newjsonPath = lottiePathdataMap.get(isFinish ? 10 : 0).getJsonPath().toString();
+                newPath = lottiePathdataMap.get(isFinish ? 10 : 0).getImgPath().toString();
+                break;
+            case ANIML_COLOR_STATE_YELLOW:
+                newjsonPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getJsonPath().toString();
+                newPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getImgPath().toString();
+                break;
+            case ANIML_COLOR_STATE_RED:
+                newPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getImgPath().toString();
+                newjsonPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getJsonPath().toString();
+                break;
         }
 
-        if (viewLottieGreen.getVisibility() == VISIBLE) {
-            viewLottieGreen.setVisibility(GONE);
+        if(TextUtils.isEmpty(newjsonPath) || TextUtils.isEmpty(newPath))
+            return;
+
+        if(currentState != state ){//红黄绿状态切换;
+            // 设置预览图
+            // 保留上一次图片动画-位图
+            Bitmap bitmap = BitmapUtil.convertViewToBitmap(viewLottieGreen);
+            if (bitmap != null) {
+                iv_top_perview.setImageBitmap(bitmap);
+                iv_top_perview.setVisibility(VISIBLE);
+            }
+
+            if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath) ) {
+                viewLottieGreen.setAnimation(newjsonPath);
+                viewLottieGreen.setImageAssetsFolder(newPath);
+                viewLottieGreen.playAnimation();
+            }
+            mAnimHelper.changeAnim(iv_top_perview,viewLottieGreen,500);
         }
-        if (viewLottieYellow.getVisibility() == VISIBLE) {
-            viewLottieYellow.setVisibility(GONE);
+
+
+        if (!(currentIsFinish && isFinish)) { //是否完成状态切换
+            if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath) ) {
+                viewLottieGreen.setAnimation(newjsonPath);
+                viewLottieGreen.setImageAssetsFolder(newPath);
+                viewLottieGreen.playAnimation();
+            }
         }
+        currentState = state;
+        currentIsFinish = isFinish;
+
     }
 
     /**
@@ -366,7 +269,16 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     }
 
 
-
+    //动画素材初始化
+    public void setlottieData() {
+        lottiePathdataMap = new HashMap<>();
+        lottiePathdataMap.put(0, new LottiePathdata("home_top_scan/anim01a/data.json", "home_top_scan/anim01a/images"));
+        lottiePathdataMap.put(1, new LottiePathdata("home_top_scan/anim02a/data.json", "home_top_scan/anim02a/images"));
+        lottiePathdataMap.put(2, new LottiePathdata("home_top_scan/anim03a/data.json", "home_top_scan/anim03a/images"));
+        lottiePathdataMap.put(10, new LottiePathdata("home_top_scan/anim01b/data.json", "home_top_scan/anim01b/images"));
+        lottiePathdataMap.put(11, new LottiePathdata("home_top_scan/anim02b/data.json", "home_top_scan/anim02b/images"));
+        lottiePathdataMap.put(12, new LottiePathdata("home_top_scan/anim03b/data.json", "home_top_scan/anim03b/images"));
+    }
 
 
 }

@@ -33,11 +33,20 @@
         app:lottie_imageAssetsFolder="home_top_scan/anim01a/images/"
         app:lottie_loop="true" />
 
+
+    <ImageView
+        android:id="@+id/tv_top_perview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <com.xiaoniu.cleanking.widget.TouchImageView
         android:id="@+id/iv_center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:alpha="0.1"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
         app:srcCompat="@drawable/icon_circle_btn_white" />
 
 
@@ -73,6 +82,7 @@
         android:id="@+id/rel_bubble"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.xiaoniu.cleanking.widget.LuckBubbleView
             android:id="@+id/lftop"
             android:layout_width="wrap_content"
@@ -110,8 +120,6 @@
             app:location="4" />
 
     </RelativeLayout>
-
-
 
 
 </RelativeLayout>
