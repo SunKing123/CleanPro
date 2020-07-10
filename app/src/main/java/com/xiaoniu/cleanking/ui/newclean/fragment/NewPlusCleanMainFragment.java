@@ -19,8 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.widget.NestedScrollView;
-
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -60,6 +58,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
+import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
@@ -75,6 +74,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.ClearCardView;
@@ -82,6 +82,7 @@ import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.AppUtils;
+import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -100,6 +101,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+import static com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView.STATE_SLIDING;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
@@ -136,7 +138,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.ad_three)
     FrameLayout adLayoutThree;
     @BindView(R.id.layout_scroll)
-    NestedScrollView mScrollView;
+    ObservableScrollView mScrollView;
     @BindView(R.id.image_interactive)
     public HomeInteractiveView imageInteractive;
 
@@ -153,6 +155,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private boolean isDenied = false;
     private boolean isFirst = true;
+    private boolean isSlide;//正在滑动
+    FloatAnimManager mFloatAnimManager;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -178,13 +182,37 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPresenter.refBullList();
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
-
+        mFloatAnimManager = new FloatAnimManager(imageInteractive, DisplayUtils.dip2px(180));
         initEvent();
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
+        initListener();
+
+    }
 
 
+    private void initListener() {
+        mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(int x, int y, int oldx, int oldy, boolean isBottom) {
+
+            }
+
+            @Override
+            public void onScrollState(int scrollState) {
+                if (scrollState == STATE_SLIDING) {//正在滑动
+                    isSlide = true;
+                    mFloatAnimManager.hindFloatAdvertView();
+                } else {
+                    if (isSlide) {
+                        //滑动过到静止状态
+                        isSlide = false;
+                        mFloatAnimManager.showFloatAdvertView();
+                    }
+                }
+            }
+        });
     }
 
 
@@ -785,7 +813,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (switchInfoList.getData().get(0).isOpen()) {
             imageInteractive.setDataList(switchInfoList.getData().get(0).getSwitchActiveLineDTOList());
             imageInteractive.loadNextDrawable();
+            mFloatAnimManager.setIsNeedOptionAnimation(true);
         } else {
+            mFloatAnimManager.setIsNeedOptionAnimation(false);
             imageInteractive.setVisibility(View.GONE);
         }
     }

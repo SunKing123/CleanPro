@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
@@ -257,12 +258,15 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     @SuppressLint("CheckResult")
     public void scanningJunk() {
-        fileCount = 0;
+
         if (isScaning == true)
             return;
+
         isScaning = true;
         disposable = Observable.create(e -> {
             try {
+                fileCount = 0;
+                totalJunk = 0;
                 //扫描进程占用内存情况
                 ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
                 e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
@@ -555,6 +559,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     //更新金币列表
     public void refBullList(){
+        String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "0");
+        if(!TextUtils.equals(auditSwitch,"1"))
+            return;
         mModel.getGoleGonfigs(new Common3Subscriber<BubbleConfig>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；

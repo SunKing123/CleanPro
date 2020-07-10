@@ -15,7 +15,7 @@ public class AnimHelper {
 
     }
 
-    public void changeAnim(View oldView, View newView, long time) {
+    public void changeAnim(View oldView, View newView) {
         oldAnim = ObjectAnimator.ofFloat(oldView, "alpha", 1f, 0)   ;
         newAnim = ObjectAnimator.ofFloat(newView, "alpha", 0f, 1);
 
@@ -29,7 +29,7 @@ public class AnimHelper {
             }
         });
 
-        oldAnim.setDuration(1500).start();
+        oldAnim.setDuration(1800).start();
         newAnim.setDuration(500).start();
     }
 
