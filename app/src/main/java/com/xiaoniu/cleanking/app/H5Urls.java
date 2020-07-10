@@ -18,28 +18,21 @@ public interface H5Urls {
     long timeFlag = System.currentTimeMillis() / 1000000;
 
     /**
-     * 闲玩url协议
+     * 钱包页面
      */
-    String XIANWAN_URL = "https://h5.17xianwan.com";
-    /**
-     * 9.9电商url
-     */
-    String DIANSHANG_URL = "http://aibuxing.xjjifen.com";
-
+//    String WALLET_URL = "http://192.168.85.61:9999" + "/html/wallet/wallet.html?" + timeFlag;
+    String WALLET_URL = BuildConfig.Base_H5_Host_300 + "/html/wallet/wallet.html?" + timeFlag;
     /**
      * 钱包页面
      */
-    String WALLET_URL = BuildConfig.Base_H5_Host + "/html/wallet/wallet.html?" + timeFlag;
-    /**
-     * 钱包页面
-     */
-    String WITHDRAWAL_URL = BuildConfig.Base_H5_Host + "/html/wallet/withdrawal.html?" + timeFlag;
+//    String WITHDRAWAL_URL = "http://192.168.85.61:9999" + "/html/wallet/withdrawal.html?" + timeFlag;
+    String WITHDRAWAL_URL = BuildConfig.Base_H5_Host_300 + "/html/wallet/withdrawal.html?" + timeFlag;
     /**
      * 刮刮卡页面
      * 刘帅帅 域名 http://192.168.85.61:9999/html/wallet/withdrawal.html?
      */
 //    String SCRATCHCARDS_URL = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList.html?" + timeFlag;
-    String SCRATCHCARDS_URL = BuildConfig.Base_H5_Host + "/html/activitiesHtml/scratchCards/cardList.html?" + timeFlag;
+    String SCRATCHCARDS_URL = BuildConfig.Base_H5_Host_300 + "/html/activitiesHtml/scratchCards/cardList.html?" + timeFlag;
 
     /**
      * 邀请好友
@@ -49,11 +42,11 @@ public interface H5Urls {
     /**
      * 隐私条款页面
      */
-    String PRIVACY_CLAUSE_URL = BuildConfig.Base_H5_Host + "/html/policy/privacy.html?" + timeFlag;
+    String PRIVACY_CLAUSE_URL = BuildConfig.Base_H5_Host_300 + "/html/agreement/privacy.html?" + timeFlag;
 
     /**
-     * 服务协议页面
+     * 用户协议页面
      */
-    String SERVICE_AGREEMENT_URL = BuildConfig.Base_H5_Host + "/html/policy/service.html?" + timeFlag;
+    String USER_AGREEMENT_URL = BuildConfig.Base_H5_Host + "/userAgreement.html?" + timeFlag;
 
 }
