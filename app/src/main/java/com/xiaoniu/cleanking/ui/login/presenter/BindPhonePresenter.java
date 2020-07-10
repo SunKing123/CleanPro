@@ -13,12 +13,16 @@ import com.xiaoniu.cleanking.ui.login.contract.BindPhoneContract;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+
+import static com.xiaoniu.cleanking.utils.user.UserHelper.BIND_PHONE_SUCCESS;
 
 
 /**
@@ -61,6 +65,7 @@ public class BindPhonePresenter extends BasePresenter<BindPhoneContract.Model, B
                             RequestPhoneBean.DataBean dataBean = phoneBean.getData();
                             if (dataBean != null && !TextUtils.isEmpty(dataBean.getPhone())){
                                 UserHelper.init().setUserPhoneNum(dataBean.getPhone());
+                                EventBus.getDefault().post(BIND_PHONE_SUCCESS);
                                 OneKeyLoginManager.getInstance().finishAuthActivity();
                                 ToastUtils.showShort("绑定成功");
                             }else{

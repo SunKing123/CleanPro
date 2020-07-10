@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.databinding.DataBindingUtil;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -40,6 +41,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.OnClick;
+
+import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
+import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
 
 /**
@@ -82,7 +86,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUserInfo(String string) {
-        if ("loginSuccessRefreshUserInfo".equals(string) || "exitLoginSuccess".equals(string)) {
+        if (LOGIN_SUCCESS.equals(string) || EXIT_SUCCESS.equals(string)) {
 //            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
             setUserInfo();
         }
@@ -139,19 +143,11 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 //            case R.id.iv_inter_ad:
 //                ToastUtils.showShort("插入广告");
 //                break;
-            case R.id.withdrawal_ll:
-            case R.id.wallet_ll:
-                if (UserHelper.init().isWxLogin()) {
-//                    String url = H5Urls.WITHDRAWAL_URL;
-                    String url = "http://192.168.85.61:9999/html/wallet/wallet.html";
-                    String scheme = SchemeConstant.SCHEME +
-                            "://" + SchemeConstant.HOST + "/jump?url=" + url +
-                            "&" + SchemeConstant.IS_FULL_SCREEN + "=1&jumpType=1";
-                    SchemeProxy.openScheme(getActivity(), scheme);
-                } else {
-                    startActivity(new Intent(getActivity(), LoginWeiChatActivity.class));
-                }
-//                ToastUtils.showShort("提现操作");
+            case R.id.withdrawal_ll://提现
+                goToWALLETOrWithdrawal(1);
+                break;
+            case R.id.wallet_ll://钱包详细
+                goToWALLETOrWithdrawal(0);
                 break;
             case R.id.llt_invite_friend:
                 StatisticsUtils.trackClick("privilege_management_click", "\"权限管理\"点击", AppHolder.getInstance().getSourcePageId(), "personal_center_page");
@@ -170,6 +166,22 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 mPresenter.queryAppVersion(2, () -> {
                 });
                 break;
+        }
+    }
+
+    private void goToWALLETOrWithdrawal(int type) {
+        if (UserHelper.init().isWxLogin()) {
+            String url = H5Urls.WALLET_URL;
+            if (type == 1) {
+                url = H5Urls.WITHDRAWAL_URL;
+            }
+//          String url = "http://192.168.85.61:9999/html/wallet/wallet.html";
+            String scheme = SchemeConstant.SCHEME +
+                    "://" + SchemeConstant.HOST + "/jump?url=" + url +
+                    "&" + SchemeConstant.IS_FULL_SCREEN + "=1&jumpType=1";
+            SchemeProxy.openScheme(getActivity(), scheme);
+        } else {
+            startActivity(new Intent(getActivity(), LoginWeiChatActivity.class));
         }
     }
 

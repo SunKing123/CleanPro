@@ -35,6 +35,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
+import static com.xiaoniu.cleanking.utils.user.UserHelper.BIND_PHONE_SUCCESS;
 
 
 /**
@@ -170,7 +171,7 @@ public class BindPhoneManualActivity extends BaseActivity<BindPhoneManualPresent
             ToastUtils.showShort("绑定成功");
             infoBean.userType = 1;
             UserHelper.init().saveUserInfo(infoBean);
-            EventBus.getDefault().post("BindPhoneSuccess");
+            EventBus.getDefault().post(BIND_PHONE_SUCCESS);
             KeyboardUtils.closeKeyboard(inputCodeEt);
             KeyboardUtils.closeKeyboard(bindPhoneEt);
             finish();

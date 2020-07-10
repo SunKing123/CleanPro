@@ -4,7 +4,6 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -21,7 +20,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
-import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.newclean.util.YuLeWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -31,6 +29,9 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
+import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
 /**
  * Created by zhaoyingtao
@@ -96,22 +97,11 @@ public class YuLeFragment extends SimpleFragment {
                 .createAgentWeb()
                 .ready()
                 .go(H5Urls.SCRATCHCARDS_URL);
-        new CountDownTimer(10000, 10000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                RequestUserInfoUtil.getUserCoinInfo();
-            }
-        }.start();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUserInfo(String string) {
-        if ("loginSuccessRefreshUserInfo".equals(string) || "exitLoginSuccess".equals(string) || "refreshGuaGuaLeH5".equals(string)) {
+        if (LOGIN_SUCCESS.equals(string) || EXIT_SUCCESS.equals(string) || "refreshGuaGuaLeH5".equals(string)) {
 //            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
             getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
         }

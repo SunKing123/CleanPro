@@ -19,6 +19,9 @@ import org.greenrobot.eventbus.EventBus;
 
 public class UserHelper {
     private volatile static UserHelper userHelper;
+    public static final String LOGIN_SUCCESS = "loginSuccessRefreshUserInfo";
+    public static final String EXIT_SUCCESS = "exitRefreshUserInfo";
+    public static final String BIND_PHONE_SUCCESS = "BindPhoneSuccess";
 
     public static UserHelper init() {
         if (userHelper == null) {
@@ -101,7 +104,7 @@ public class UserHelper {
         implPreferencesHelper.setOpenID(userInfo.openId);
         implPreferencesHelper.setPhoneNum(userInfo.phone);
         implPreferencesHelper.setUserHeadPortraitUrl(userInfo.userAvatar);
-        EventBus.getDefault().post("loginSuccessRefreshUserInfo");
+        EventBus.getDefault().post(LOGIN_SUCCESS);
         RequestUserInfoUtil.getUserCoinInfo();
     }
 
@@ -125,7 +128,7 @@ public class UserHelper {
     public void clearCurrentUserInfo() {
         changeLoginState(false);
         implPreferencesHelper.clearUserInfo();
-        EventBus.getDefault().post("exitRefreshUserInfo");
+        EventBus.getDefault().post(EXIT_SUCCESS);
     }
 
     public void startToLogin(Context mActivity) {
