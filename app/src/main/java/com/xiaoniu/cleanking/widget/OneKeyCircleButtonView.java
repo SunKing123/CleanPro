@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.widget;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -13,10 +14,12 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.bean.LottiePathdata;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.BitmapUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.lottie.AnimHelper;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
 
 /**
  * @author zhengzhihao
@@ -108,7 +112,29 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         imglayoutParams.height = Float.valueOf(screenWidth * 0.497f).intValue();
         imglayoutParams.width = Float.valueOf(screenWidth * 0.497f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
-        ivCenter.animate().setDuration(2000).alpha(1f).scaleY(1f).scaleX(1f).start();
+
+        viewLottieGreen.animate().setDuration(3000).scaleX(1f).scaleY(1f).start();
+        ivCenter.animate().setDuration(3000).alpha(1f).scaleY(1f).scaleX(1f).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                rel_bubble.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).start();
 
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
         textLayout.height = Float.valueOf(screenWidth * 0.1f).intValue();
@@ -185,48 +211,57 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         changeState(isFinish,ANIML_COLOR_STATE_RED);
     }
 
+    String newjsonPath = "";
+    String newPath = "";
     //改变扫描动画
     public void changeState(boolean isFinish,int state){
-        String newjsonPath = "";
-        String newPath = "";
         switch (state) {
             case ANIML_COLOR_STATE_GREEN:
                 newjsonPath = lottiePathdataMap.get(isFinish ? 10 : 0).getJsonPath().toString();
                 newPath = lottiePathdataMap.get(isFinish ? 10 : 0).getImgPath().toString();
                 break;
             case ANIML_COLOR_STATE_YELLOW:
-                newjsonPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getJsonPath().toString();
-                newPath =  lottiePathdataMap.get(isFinish ?  11 : 1).getImgPath().toString();
+                newjsonPath = lottiePathdataMap.get(isFinish ? 11 : 1).getJsonPath().toString();
+                newPath = lottiePathdataMap.get(isFinish ? 11 : 1).getImgPath().toString();
                 break;
             case ANIML_COLOR_STATE_RED:
-                newPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getImgPath().toString();
-                newjsonPath =  lottiePathdataMap.get(isFinish ? 12 : 2).getJsonPath().toString();
+                newPath = lottiePathdataMap.get(isFinish ? 12 : 2).getImgPath().toString();
+                newjsonPath = lottiePathdataMap.get(isFinish ? 12 : 2).getJsonPath().toString();
                 break;
         }
 
-        if(TextUtils.isEmpty(newjsonPath) || TextUtils.isEmpty(newPath))
+        if (TextUtils.isEmpty(newjsonPath) || TextUtils.isEmpty(newPath))
             return;
 
-        if(currentState != state ){//红黄绿状态切换;
-            // 设置预览图
-            // 保留上一次图片动画-位图
-            Bitmap bitmap = BitmapUtil.convertViewToBitmap(viewLottieGreen);
-            if (bitmap != null) {
-                iv_top_perview.setImageBitmap(bitmap);
-                iv_top_perview.setVisibility(VISIBLE);
+        if (currentState != state) {//红黄绿状态切换;
+            long delay = 1000;
+            if (!AndroidUtil.isFastDoubleClick()) {
+                delay = 500;
             }
+            AppLifecyclesImpl.postDelay(new Runnable() {
+                @Override
+                public void run() {
+                    // 设置预览图
+                    // 保留上一次图片动画-位图
+                    Bitmap bitmap = BitmapUtil.convertViewToBitmap(viewLottieGreen);
+                    if (bitmap != null) {
+                        iv_top_perview.setImageBitmap(bitmap);
+                        iv_top_perview.setVisibility(VISIBLE);
+                    }
 
-            if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath) ) {
-                viewLottieGreen.setAnimation(newjsonPath);
-                viewLottieGreen.setImageAssetsFolder(newPath);
-                viewLottieGreen.playAnimation();
-            }
-            mAnimHelper.changeAnim(iv_top_perview,viewLottieGreen,500);
+                    if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath)) {
+                        viewLottieGreen.setAnimation(newjsonPath);
+                        viewLottieGreen.setImageAssetsFolder(newPath);
+                        viewLottieGreen.playAnimation();
+                    }
+                    mAnimHelper.changeAnim(iv_top_perview, viewLottieGreen);
+                }
+            }, delay);
         }
 
 
         if (!(currentIsFinish && isFinish)) { //是否完成状态切换
-            if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath) ) {
+            if (!viewLottieGreen.isAnimating() || !viewLottieGreen.getImageAssetsFolder().equals(newPath)) {
                 viewLottieGreen.setAnimation(newjsonPath);
                 viewLottieGreen.setImageAssetsFolder(newPath);
                 viewLottieGreen.playAnimation();
@@ -234,6 +269,8 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         }
         currentState = state;
         currentIsFinish = isFinish;
+
+
 
     }
 
