@@ -48,8 +48,11 @@ import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
+
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,7 +61,6 @@ import io.reactivex.disposables.Disposable;
 /**
  * 冷启动开屏页面
  * <p>
- *
  */
 public class SplashADActivity extends BaseActivity<SplashPresenter> implements View.OnClickListener {
 
@@ -87,6 +89,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+        long home = MmkvUtil.getLong(SpCacheConfig.KEY_FIRST_INSTALL_APP_TIME, 0L);
+        if (home==0L){
+            MmkvUtil.saveLong(SpCacheConfig.KEY_FIRST_INSTALL_APP_TIME,System.currentTimeMillis());
+        }
         getDataFromPush();
     }
 
@@ -138,14 +144,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         inside.setTime(System.currentTimeMillis());
         PreferenceUtil.saveColdAndHotStartCount(inside);
 
-        if (!NetworkUtils.isNetConnected()) {//无网络状态
-            if (!PreferenceUtil.isNotFirstOpenApp()) {
-                mStartView.setVisibility(View.VISIBLE);
-                mContentView.setVisibility(View.GONE);
-            } else {
-                getAuditSwitchFail();
-            }
-        } else {//正常网络
+        if (NetworkUtils.isNetConnected()) {//正常网络
             if (PreferenceUtil.getCoolStartTime()) {
                 mPresenter.getAuditSwitch();
             } else { //小于10分钟不获取开关直接请求广告
@@ -184,6 +183,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 }
             }
             PreferenceUtil.saveCoolStartTime();
+
+        } else {//无网络状态
+            if (!PreferenceUtil.isNotFirstOpenApp()) {
+                mStartView.setVisibility(View.VISIBLE);
+                mContentView.setVisibility(View.GONE);
+            } else {
+                getAuditSwitchFail();
+            }
         }
 
         initNiuData();
@@ -194,7 +201,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             readyWeatherExternalDb();
         }
     }
-
 
 
     //初始sd根目录关联关系
@@ -395,7 +401,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -463,7 +468,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     @Override
     protected void onResume() {
         super.onResume();
-        if (mCanJump){
+        if (mCanJump) {
             jumpActivity();
         }
         mCanJump = true;

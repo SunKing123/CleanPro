@@ -44,6 +44,8 @@ public class SpCacheConfig {
     public static final String KEY_LAST_BACKGROUND_SCAN_SIZE = "background_scan_size";
     //保存上一次清理APP触发HOME键的时间
     public static final String KEY_LAST_CLEAR_APP_PRESSED_HOME = "clear_app_pressed_home";
+    //第一次安装APP的时间
+    public static final String KEY_FIRST_INSTALL_APP_TIME="first_install_app_time";
 
     //保存挽留弹窗的次数
     public static final String KEY_EXIT_RETAIN_DIALOG_COUNT = "exit_retain_dialog_count";

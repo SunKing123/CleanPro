@@ -187,6 +187,7 @@ public class AppHolder {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (configKey.equals(switchInfoList.getConfigKey()) && advertPosition.equals(switchInfoList.getAdvertPosition())) {
                     isOpen = switchInfoList.isOpen();
+                    break;
                 }
             }
         }
@@ -208,7 +209,7 @@ public class AppHolder {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (configKey.equals(switchInfoList.getConfigKey())) {
                     isOpen = switchInfoList.isOpen();
-                    break;
+                    return isOpen;
                 }
             }
         }
