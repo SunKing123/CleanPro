@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.scheme.utils.Parameters;
 import com.xiaoniu.cleanking.scheme.utils.UrlUtils;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
+import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 
@@ -237,6 +238,11 @@ public class BaseBrowserFragment extends SimpleFragment {
                 return "1";
             }
             return "0";
+        }
+
+        @JavascriptInterface
+        public void walletSuccess() {//提现成功
+            RequestUserInfoUtil.getUserCoinInfo();
         }
     }
 

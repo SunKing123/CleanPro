@@ -108,7 +108,8 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"dev\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-dev-default.xiaoniuhy.com\""
-            buildConfigField "String", "Base_H5_Host", "\"http://testwkkeeperh5.wukongclean.com\""
+            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
+            buildConfigField "String", "Base_H5_Host_300", "\"http://testwkkeeperh5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
             buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
@@ -134,7 +135,8 @@ android {
             buildConfigField "String", "SYSTEM_EN", "\"btest\""
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"88\""
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
-            buildConfigField "String", "Base_H5_Host", "\"http://testwkkeeperh5.wukongclean.com\""
+            buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
+            buildConfigField "String", "Base_H5_Host_300", "\"http://testwkkeeperh5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
             buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
             buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
@@ -158,6 +160,7 @@ android {
             buildConfigField "String", "ADSDK_PRODUCT_NAME", "\"181\""
             buildConfigField "String", "BASE_HOST", "\"https://clsystem.wukongclean.com\""
             buildConfigField "String", "Base_H5_Host", "\"https://wkqlapph5.wukongclean.com\""
+            buildConfigField "String", "Base_H5_Host_3.0", "\"http://wkqlapph5.wukongclean.com\""
             buildConfigField "String", "BIGDATA_MD", "\"http://aidataprobe2.openxiaoniu.com/aidataprobe2/wk\""
             buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://realisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
             buildConfigField "boolean", "MIDAS_IS_FORMAL", 'true'
