@@ -76,11 +76,11 @@ public class PositionId {
     //完成页左上角返回时显示在首页的插屏广告
     public static final String KEY_FINISH_PAGE_BACK_SCREEN = "page_finish_one_gj_3.0";
     //首页第二个广告位
-    public static final String KEY_MAIN_ONE_AD = "page_main_one_ad";
+    public static final String KEY_MAIN_ONE_AD = "page_main_one_ad_gj_3.0";
     //首页第二个广告位
-    public static final String KEY_MAIN_TWO_AD = "page_main_two_ad";
+    public static final String KEY_MAIN_TWO_AD = "page_main_two_ad_gj_3.0";
     //首页第三个广告位
-    public static final String KEY_MAIN_THREE_AD = "page_main_three_ad";
+    public static final String KEY_MAIN_THREE_AD = "page_main_three_ad_gj_3.0";
     //完成页插屏广告
     public static final String KEY_FINISH_INSIDE_SCREEN = "page_finish_inside_screen";
     //完成页是否显示   金币领取弹窗开关
