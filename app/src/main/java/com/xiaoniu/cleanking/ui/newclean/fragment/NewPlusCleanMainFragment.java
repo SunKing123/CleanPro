@@ -89,6 +89,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -408,12 +409,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     //完成页返回通知
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null&&event.infoBean!=null&&event.infoBean.getGold()>0) {
+        if (event != null && event.infoBean != null && event.infoBean.getGold() > 0) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
-            tvCoinNum.setText(event.infoBean.getGold());
+            tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
         }
     }
 
@@ -939,9 +940,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPresenter.refBullList();//刷新金币列表；
         Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
         intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount());
-//        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-        intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
-//        }
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
+            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 2));
+        }
         mActivity.startActivity(intent);
     }
 

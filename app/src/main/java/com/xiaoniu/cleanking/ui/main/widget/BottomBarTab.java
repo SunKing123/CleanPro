@@ -59,7 +59,7 @@ public class BottomBarTab extends FrameLayout {
         init(context, icon, iconString, title, orderNum);
     }
 
-    private void init(Context context, int icon, String iconString, CharSequence title, int orderNum) {
+    protected void init(Context context, int icon, String iconString, CharSequence title, int orderNum) {
         mContext = context;
         //        状态（0=隐藏，1=显示）
         String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
@@ -107,13 +107,16 @@ public class BottomBarTab extends FrameLayout {
             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mIcon.setImageResource(icon);
         } else {
-            params = new LinearLayout.LayoutParams(orderNum == 3 ? 110 : 70, orderNum == 3 ? 110 : 70);
+            params = new LinearLayout.LayoutParams(orderNum == 3 ? ViewGroup.LayoutParams.WRAP_CONTENT : 70, orderNum == 3 ?  context.getResources().getDimensionPixelOffset(R.dimen.dimen_45dp)  : 70);
+            mIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             GlideUtils.loadImage((Activity) mContext, iconString, mIcon);
         }
         if (null != params) {
             mIcon.setLayoutParams(params);
         }
         lLContainer.addView(mIcon);
+
+
         mTvTitle = new TextView(context);
         if (orderNum == 3 && !TextUtils.isEmpty(iconString) && TextUtils.equals(auditSwitch, "1")) {
             mTvTitle.setVisibility(GONE);

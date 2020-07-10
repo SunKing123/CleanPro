@@ -1107,7 +1107,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (!isOpenOne) {
             return;
         }
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
+//        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos01)
@@ -1120,15 +1120,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             }
 
             @Override
-            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
-//                jumpActivity();
-            }
-
-            @Override
             public void onShowError(int i, String s) {
                 super.onShowError(i, s);
-//                jumpActivity();
             }
 
             @Override
@@ -1144,7 +1137,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             @Override
             public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
                 super.onAdClose(adInfo, templateView);
-//                jumpActivity();
             }
         });
 

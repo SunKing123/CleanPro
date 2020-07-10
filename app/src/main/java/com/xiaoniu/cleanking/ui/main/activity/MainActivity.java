@@ -58,6 +58,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
+import com.xiaoniu.cleanking.ui.main.widget.BottomScratchTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
@@ -197,7 +198,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -863,7 +863,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(1).getIconImgUrl()
                                 , iconsEntity.getData().get(1).getTabName()
                                 , iconsEntity.getData().get(1).getOrderNum()))
-                        .addItem(mBottomBarTab)
+
+                        .addItem(new BottomBarTab(this, R.drawable.icon_game_home, iconsEntity.getData().get(2).getIconImgUrl()
+                                , iconsEntity.getData().get(2).getTabName()
+                                , iconsEntity.getData().get(2).getOrderNum()))
+
                         .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(3).getIconImgUrl()
                                 , iconsEntity.getData().get(3).getTabName()
                                 , iconsEntity.getData().get(3).getOrderNum()));

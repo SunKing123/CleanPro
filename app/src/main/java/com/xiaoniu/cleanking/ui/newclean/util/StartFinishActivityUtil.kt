@@ -16,7 +16,6 @@ class StartFinishActivityUtil {
 
 
     companion object {
-
         var isOneOpen = false
         var isTwoOpen = false
         var isThreeOpen = false
@@ -24,11 +23,11 @@ class StartFinishActivityUtil {
 
         fun gotoFinish(context: Context, intent: Intent) {
             initOnOff();
-            if (isOneOpen || isTwoOpen) {
-                intent.setClass(context, NewCleanFinishActivity::class.java);
+            if (isThreeOpen) {
+                intent.setClass(context, CleanFinishAdvertisementActivity::class.java);
                 context.startActivity(intent)
             } else {
-                intent.setClass(context, CleanFinishAdvertisementActivity::class.java);
+                intent.setClass(context, NewCleanFinishActivity::class.java);
                 context.startActivity(intent)
             }
         }

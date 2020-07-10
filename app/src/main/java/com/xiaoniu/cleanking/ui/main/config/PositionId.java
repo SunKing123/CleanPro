@@ -155,5 +155,9 @@ public class PositionId {
     //天气预报页面 信息流广告
     public static final String KEY_AD_PAGE_WEATHER_VIDEO_PAGE = "weather_video_page_gj_3.0";
 
+    //首页金币列表三个广告位
+    public static final String KEY_AD_PAGE_HOME_GOLD_PAGE = "home_gold_page_gj_3.0";
+
+
 
 }
