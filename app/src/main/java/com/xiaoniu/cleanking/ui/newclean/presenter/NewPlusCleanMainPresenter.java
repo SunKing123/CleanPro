@@ -256,12 +256,15 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     @SuppressLint("CheckResult")
     public void scanningJunk() {
-        fileCount = 0;
+
         if (isScaning == true)
             return;
+
         isScaning = true;
         disposable = Observable.create(e -> {
             try {
+                fileCount = 0;
+                totalJunk = 0;
                 //扫描进程占用内存情况
                 ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
                 e.onNext(new JunkWrapper(ScanningResultType.MEMORY_JUNK, runningProcess));
