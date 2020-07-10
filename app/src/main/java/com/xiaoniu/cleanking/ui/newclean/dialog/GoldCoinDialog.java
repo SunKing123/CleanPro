@@ -166,7 +166,9 @@ public class GoldCoinDialog {
         //当传进来的id为空时，不加载广告
         if (TextUtils.isEmpty(parameter.adId)) {
             middle_ll.setVisibility(View.GONE);
-            dialog.show();
+            if (dialog != null && !context.isFinishing()) {
+                dialog.show();
+            }
             return;
         }
         requestAd(context, advCallBack, parameter, mRootRL);
@@ -176,22 +178,13 @@ public class GoldCoinDialog {
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(coinBean.adId).setActivity(context)
                 .setViewContainer(mRootRL).build();
+
+        //尝试预加载，丝滑般的体验...
         MidasAdSdk.getAdsManger().askIsReady(context, coinBean.adId, new AskReadyCallBack() {
             @Override
             public void onReady(boolean b) {
                 if (dialog != null && !context.isFinishing()) {
-                    //延迟显示，体验更好
-                    new CountDownTimer(500, 500) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            dialog.show();
-                        }
-                    }.start();
+                    dialog.show();
                     MidasRequesCenter.requestAd(params, callBack);
                 }
             }

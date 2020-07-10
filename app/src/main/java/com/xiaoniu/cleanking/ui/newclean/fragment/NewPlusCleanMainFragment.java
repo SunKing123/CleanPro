@@ -412,7 +412,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     //更新用户信息
-    @Subscribe(threadMode=ThreadMode.MAIN )
+    @Subscribe(threadMode=ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
         if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);

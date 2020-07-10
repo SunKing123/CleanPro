@@ -14,7 +14,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
  */
 class StartFinishActivityUtil {
 
-
     companion object {
         var isOneOpen = false
         var isTwoOpen = false
