@@ -15,11 +15,6 @@ import androidx.annotation.NonNull;
  */
 public class GoldCoinDialogParameter {
 
-    //刮刮卡页面
-    public static final int FROM_SCRATCH_CARD = 1;
-    //清理完成页
-    public static final int FROM_FINISH_COMPLETE = 2;
-
     //dialog的类型 1 转圈  2 撒花 3 清理金币奖励 默认是1
     public int dialogType;
     public int obtainCoinCount;
@@ -29,8 +24,6 @@ public class GoldCoinDialogParameter {
     public boolean fbTip;
     //是否显示翻倍按钮
     public boolean isDouble;
-    //金币来源
-    public int fromType;
     //激励视频开关默认打开
     public boolean isRewardOpen = true;
     @NonNull

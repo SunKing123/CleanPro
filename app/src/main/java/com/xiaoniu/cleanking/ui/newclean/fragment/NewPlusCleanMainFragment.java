@@ -89,6 +89,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -411,7 +412,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     //更新用户信息
-    @Subscribe
+    @Subscribe(threadMode=ThreadMode.MAIN )
     public void userInfoUpdate(UserInfoEvent event) {
         if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
@@ -421,7 +422,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     //用户登录状态改变通知
-    @Subscribe
+    @Subscribe(threadMode =ThreadMode.MAIN)
     public void userLoginInfo(String eventCode) {
         switch (eventCode) {
             //退出登录

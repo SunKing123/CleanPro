@@ -63,7 +63,7 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-    public void showDialog(int cardIndex, int coinCount, int totalCoinCount) {
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount,boolean isDouble) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -75,10 +75,10 @@ public class ScratchCardAvdPresenter {
             parameter = new GoldCoinDialogParameter();
             parameter.context = activity;
             parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
-            parameter.fromType = GoldCoinDialogParameter.FROM_SCRATCH_CARD;
             parameter.onDoubleClickListener = v -> handlerDoubleClick();
             parameter.closeClickListener = v -> handlerCloseClick();
             parameter.totalCoinCount = totalCoinCount;
+            parameter.isDouble=isDouble;
         }
         parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;

@@ -45,8 +45,6 @@ public class GoldCoinDialog {
     private static BaseDialog dialog;
 
     public static void showGoldCoinDialog(GoldCoinDialogParameter parameter) {
-
-        int fromType = parameter.fromType;
         Activity context = parameter.context;
         AbsAdCallBack advCallBack = parameter.advCallBack;
         View.OnClickListener onDoubleClickListener = parameter.onDoubleClickListener;
@@ -116,15 +114,6 @@ public class GoldCoinDialog {
             ll_my_coin.setVisibility(View.VISIBLE);
         }
 
-
-        switch (fromType) {
-            case GoldCoinDialogParameter.FROM_SCRATCH_CARD:
-                CoinDoubleRL.setVisibility(View.VISIBLE);
-                break;
-            case GoldCoinDialogParameter.FROM_FINISH_COMPLETE:
-
-                break;
-        }
         ll_top_content.setLayoutParams(layoutParams);
         int totalCoin;
         if (parameter.fbTip) {//手动点击翻倍和自动翻倍后的需要展示插屏结果

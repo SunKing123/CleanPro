@@ -90,7 +90,6 @@ public class PositionId {
     //领取双倍金币成功页面广告开关
     public static final String KEY_GET_DOUBLE_GOLD_COIN_SUCCESS = "page_get_double_gold_coin_success_gj_3.0";
 
-
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";
     public static final String KEY_RED_JILI = "page_pop_up_encourag";
