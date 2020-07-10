@@ -63,7 +63,7 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-    public void showDialog(int cardIndex, int coinCount, int totalCoinCount) {
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount,boolean isDouble) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -74,8 +74,9 @@ public class ScratchCardAvdPresenter {
         if (parameter == null) {
             parameter = new GoldCoinDialogParameter();
             parameter.context = activity;
+            parameter.isDouble=isDouble;
+            parameter.isRewardOpen=isOpenTwo();
             parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
-            parameter.fromType = GoldCoinDialogParameter.FROM_SCRATCH_CARD;
             parameter.onDoubleClickListener = v -> handlerDoubleClick();
             parameter.closeClickListener = v -> handlerCloseClick();
             parameter.totalCoinCount = totalCoinCount;
@@ -89,11 +90,7 @@ public class ScratchCardAvdPresenter {
 
     //点击翻倍按钮事件
     private void handlerDoubleClick() {
-        if (isOpenTwo()) {
-            loadVideoAdv(getVideoAdvId(cardIndex));
-        } else {
-            handlerVideoAdvError();
-        }
+        loadVideoAdv(getVideoAdvId(cardIndex));
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 

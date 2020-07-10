@@ -239,7 +239,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         bean.obtainCoinCount = bubbleCollected.getData().getGoldCount();
         bean.totalCoinCount = bubbleCollected.getData().getTotalGoldCount();
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
-        bean.fromType = GoldCoinDialogParameter.FROM_FINISH_COMPLETE;
         bean.context = mActivity;
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO);
         bean.advCallBack = new AbsAdCallBack() {
