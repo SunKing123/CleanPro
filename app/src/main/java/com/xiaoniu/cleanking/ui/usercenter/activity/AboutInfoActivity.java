@@ -12,20 +12,18 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import butterknife.BindView;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
-
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
-import com.xiaoniu.cleanking.ui.usercenter.di.component.DaggerAboutInfoComponent;
 import com.xiaoniu.cleanking.ui.usercenter.contract.AboutInfoContract;
+import com.xiaoniu.cleanking.ui.usercenter.di.component.DaggerAboutInfoComponent;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.AboutInfoPresenter;
-
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -33,6 +31,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -84,37 +83,37 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
         iv_back.setOnClickListener(v -> finish());
         tv_version.setText("当前版本 V" + AppUtils.getVersionName(this, this.getPackageName()));
         //检测版本更新
-        mPresenter.queryAppVersion(this,1);
+        mPresenter.queryAppVersion(this, 1);
 //        line_version.setVisibility(View.GONE);
         line_version.setOnClickListener(v -> {
             StatisticsUtils.trackClick("Check_for_updates_click", "检查更新", "mine_page", "about_page");
             if (tv_newversion.getVisibility() == View.VISIBLE) {
-                mPresenter.queryAppVersion(this,2 );
+                mPresenter.queryAppVersion(this, 2);
             } else {
                 ToastUtils.showShort("当前已是最新版本");
             }
 
         });
-
+        //隐私政策
         line_zc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/agree.html");
+                    jumpXieyiActivity("file:///android_asset/agree.html","隐私政策");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/agree.html");
+                    jumpXieyiActivity(H5Urls.PRIVACY_CLAUSE_URL,"隐私政策");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
             }
         });
-
+        //用户协议
         line_xy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/userAgreement.html");
+                    jumpXieyiActivity("file:///android_asset/userAgreement.html","用户协议");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/userAgreement.html");
+                    jumpXieyiActivity(H5Urls.USER_AGREEMENT_URL,"用户协议");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
             }
@@ -170,13 +169,12 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
     }
 
 
-
-    public void jumpXieyiActivity(String url) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.URL, url);
-        bundle.putString(Constant.Title, "服务协议");
-        bundle.putBoolean(Constant.NoTitle, false);
-        startActivity(new Intent(this,UserLoadH5Activity.class));
+    public void jumpXieyiActivity(String url, String title) {
+        Intent intent = new Intent(this, UserLoadH5Activity.class);
+        intent.putExtra(Constant.URL, url);
+        intent.putExtra(Constant.Title, title);
+        intent.putExtra(Constant.NoTitle, false);
+        startActivity(intent);
     }
 
     //显示是否有新版本文字

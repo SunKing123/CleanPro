@@ -173,7 +173,11 @@ public class UserLoadH5Activity extends BaseActivity<LoadH5Presenter> {
         } else {
             mTitleBar.setVisibility(View.VISIBLE);
         }
-        tvTitle.setText(getString(R.string.app_name));
+        if (!TextUtils.isEmpty(title)){
+            tvTitle.setText(title);
+        }else {
+            tvTitle.setText(getString(R.string.app_name));
+        }
         //判断是否是刘海屏
 //        boolean haveLiuhai = NotchUtils.hasNotchScreen(this);
         if (isParam) {
