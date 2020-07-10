@@ -546,7 +546,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     //更新金币列表
     public void refBullList(){
-        String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
+        String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "0");
         if(!TextUtils.equals(auditSwitch,"1"))
             return;
         mModel.getGoleGonfigs(new Common3Subscriber<BubbleConfig>() {
