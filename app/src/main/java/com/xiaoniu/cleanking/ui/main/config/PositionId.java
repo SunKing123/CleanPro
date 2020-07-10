@@ -74,7 +74,7 @@ public class PositionId {
     public static final String KEY_PAGE_EXIT_RETAIN = "page_exit_retain_advinfo";//挽留弹窗界面广告
 
     //完成页左上角返回时显示在首页的插屏广告
-    public static final String KEY_FINISH_PAGE_BACK_SCREEN = "page_finish_one_gj_3.0";
+    public static final String KEY_FINISH_PAGE_BACK_SCREEN = "page_finish_back_to_main_gj_3.0";
     //首页第二个广告位
     public static final String KEY_MAIN_ONE_AD = "page_main_one_ad";
     //首页第二个广告位
@@ -82,13 +82,13 @@ public class PositionId {
     //首页第三个广告位
     public static final String KEY_MAIN_THREE_AD = "page_main_three_ad";
     //完成页插屏广告
-    public static final String KEY_FINISH_INSIDE_SCREEN = "page_finish_inside_screen";
+    public static final String KEY_FINISH_INSIDE_SCREEN = "page_finish_inside_screen_gj_3.0";
     //完成页是否显示   金币领取弹窗开关
-    public static final String KEY_FINISH_GET_GOLD_COIN = "page_finish_get_gold_coin";
+    public static final String KEY_FINISH_GET_GOLD_COIN = "page_finish_get_gold_coin_gj_3.0";
     //金币领取弹窗中点击翻倍按钮时是否展示激励视频开关
-    public static final String KEY_GOLD_DIALOG_SHOW_VIDEO = "page_click_to_get_double_gold_coin";
+    public static final String KEY_GOLD_DIALOG_SHOW_VIDEO = "page_click_to_get_double_gold_coin_gj_3.0";
     //领取双倍金币成功页面广告开关
-    public static final String KEY_GET_DOUBLE_GOLD_COIN_SUCCESS = "page_get_double_gold_coin_success";
+    public static final String KEY_GET_DOUBLE_GOLD_COIN_SUCCESS = "page_get_double_gold_coin_success_gj_3.0";
 
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
