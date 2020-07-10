@@ -116,10 +116,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (null == context) {
                         return;
                     }
-                    startDialogActivityOnLauncher(context, 10 * 1000);
-
                     long lastAppPressHome = MmkvUtil.getLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
-
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
@@ -129,6 +126,7 @@ public class TimingReceiver extends BroadcastReceiver {
                             return;
                         }
                     }
+                    startDialogActivityOnLauncher(context, 10 * 1000);
                   /*   if (!RomUtils.checkFloatWindowPermission(context)) {
                         LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
                         return;
@@ -253,11 +251,14 @@ public class TimingReceiver extends BroadcastReceiver {
         try {
             //判断是否进入后台
             int isBack = MmkvUtil.getInt("isback", -1);
-
-            LogUtils.e("=====startDialogActivityOnLauncher:isBack:" + isBack);
-
             if (isBack != 1 || ActivityCollector.isActivityExistMkv(FullPopLayerActivity.class))
                 return;
+            //判断距离安装APP是否过了一小时
+            long currentTime = System.currentTimeMillis();
+            long installTime = MmkvUtil.getLong(SpCacheConfig.KEY_FIRST_INSTALL_APP_TIME, currentTime);
+            if (currentTime - installTime < 1000 * 60 * 60) {
+                return;
+            }
 
             //判断广告开关
             boolean isOpen = false;
