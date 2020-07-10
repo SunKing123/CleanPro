@@ -290,9 +290,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      *********************************************************************************************************************************************************
      */
 
+    long requestTime;
+
     private void refreshAd() {
+        if (System.currentTimeMillis() - requestTime < 3000) {
+            return;
+        }
+        requestTime = System.currentTimeMillis();
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
-            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_ID);
+            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_AD_ID);
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
             mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
@@ -301,6 +307,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
         }
     }
+
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************fragment lifecycle***************************************************************************
@@ -352,7 +360,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
 
     /*
      *********************************************************************************************************************************************************
@@ -412,7 +419,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     //更新用户信息
-    @Subscribe(threadMode=ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
         if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
@@ -422,7 +429,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     //用户登录状态改变通知
-    @Subscribe(threadMode =ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void userLoginInfo(String eventCode) {
         switch (eventCode) {
             //退出登录
@@ -439,7 +446,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /*
      *********************************************************************************************************************************************************
-     ************************************************************head oneKey clean start*********************************************************************
+     ************************************************************head oneKey clean start**********************************************************************
      *********************************************************************************************************************************************************
      */
 //    @Deprecated
@@ -953,7 +960,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 翻倍成功
      */
-    public void bubbleDoubleSuccess(BubbleDouble dataBean,int localNum) {
+    public void bubbleDoubleSuccess(BubbleDouble dataBean, int localNum) {
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
