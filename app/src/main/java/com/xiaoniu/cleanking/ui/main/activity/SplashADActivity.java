@@ -144,14 +144,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         inside.setTime(System.currentTimeMillis());
         PreferenceUtil.saveColdAndHotStartCount(inside);
 
-        if (!NetworkUtils.isNetConnected()) {//无网络状态
-            if (!PreferenceUtil.isNotFirstOpenApp()) {
-                mStartView.setVisibility(View.VISIBLE);
-                mContentView.setVisibility(View.GONE);
-            } else {
-                getAuditSwitchFail();
-            }
-        } else {//正常网络
+        if (NetworkUtils.isNetConnected()) {//正常网络
             if (PreferenceUtil.getCoolStartTime()) {
                 mPresenter.getAuditSwitch();
             } else { //小于10分钟不获取开关直接请求广告
@@ -190,6 +183,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 }
             }
             PreferenceUtil.saveCoolStartTime();
+
+        } else {//无网络状态
+            if (!PreferenceUtil.isNotFirstOpenApp()) {
+                mStartView.setVisibility(View.VISIBLE);
+                mContentView.setVisibility(View.GONE);
+            } else {
+                getAuditSwitchFail();
+            }
         }
 
         initNiuData();
