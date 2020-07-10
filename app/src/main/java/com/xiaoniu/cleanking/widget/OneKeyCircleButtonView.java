@@ -113,7 +113,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         imglayoutParams.width = Float.valueOf(screenWidth * 0.497f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
 
-        viewLottieGreen.animate().setDuration(3000).scaleX(1f).scaleY(1f).start();
+//        viewLottieGreen.animate().setDuration(3000).scaleX(1f).scaleY(1f).start();
         ivCenter.animate().setDuration(3000).alpha(1f).scaleY(1f).scaleX(1f).setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
