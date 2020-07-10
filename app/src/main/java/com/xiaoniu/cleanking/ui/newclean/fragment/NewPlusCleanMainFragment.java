@@ -407,13 +407,29 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     }
 
-    //完成页返回通知
+    //更新用户信息
     @Subscribe
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null&&event.infoBean!=null&&event.infoBean.getGold()>0) {
+        if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
             tvCoinNum.setText(event.infoBean.getGold());
+        }
+    }
+
+    //用户登录状态改变通知
+    @Subscribe
+    public void userLoginInfo(String eventCode) {
+        switch (eventCode) {
+            //退出登录
+            case "exitRefreshUserInfo":
+                tvCoinNum.setVisibility(View.GONE);
+                tvWithDraw.setVisibility(View.GONE);
+                break;
+            //登录成功
+            case "loginSuccessRefreshUserInfo":
+
+                break;
         }
     }
 
@@ -900,7 +916,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Override
     public void clickBull(BubbleConfig.DataBean ballBean, int pos) {
-        if (ballBean == null){
+        if (ballBean == null) {
             ToastUtils.showShort(R.string.net_error);
             return;
         }
