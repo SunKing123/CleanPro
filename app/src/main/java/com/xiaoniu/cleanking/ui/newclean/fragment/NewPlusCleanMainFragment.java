@@ -189,6 +189,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         checkAndUploadPoint();
         initListener();
+        StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
 
     }
 
@@ -322,12 +323,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         requestTime = System.currentTimeMillis();
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
             mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_AD_ID);
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+            StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
             mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+            StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
             mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
         }
     }
@@ -602,6 +606,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
 
             case R.id.layout_temp://获取天气信息；
+                StatisticsUtils.trackClick("weather_forecast_click", "用户在首页点击【天气预报】模板", "home_page", "home_page");
                 EventBus.getDefault().post(new WeatherInfoRequestEvent(0));
                 break;
         }
@@ -957,6 +962,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         }
         mPresenter.bullCollect(ballBean.getLocationNum());
+        StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
 
     }
 
