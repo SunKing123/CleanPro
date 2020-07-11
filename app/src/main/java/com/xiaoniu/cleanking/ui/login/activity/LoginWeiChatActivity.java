@@ -22,7 +22,8 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.app.H5Urls;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
 import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
 import com.xiaoniu.cleanking.ui.login.contract.LoginWeiChatContract;
@@ -30,6 +31,7 @@ import com.xiaoniu.cleanking.ui.login.di.component.DaggerLoginWeiChatComponent;
 import com.xiaoniu.cleanking.ui.login.presenter.LoginWeiChatPresenter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.CommonDialogUtils;
 import com.xiaoniu.cleanking.ui.newclean.interfice.OnBtnClickListener;
+import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -94,7 +96,8 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         spannableString.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                SchemeProxy.openScheme(widget.getContext(), "需要协议地址");
+                jumpXieyiActivity(H5Urls.PRIVACY_CLAUSE_URL, "隐私政策");
+//                SchemeProxy.openScheme(widget.getContext(), "需要协议地址");
             }
 
             @Override
@@ -105,7 +108,8 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         spannableString.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                SchemeProxy.openScheme(widget.getContext(), "需要协议地址");
+                jumpXieyiActivity(H5Urls.USER_AGREEMENT_URL, "服务协议");
+//                SchemeProxy.openScheme(widget.getContext(), "需要协议地址");
             }
 
             @Override
@@ -115,6 +119,14 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         }, 3, 9, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         bottomBtn.setText(spannableString);
         bottomBtn.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void jumpXieyiActivity(String url, String title) {
+        Intent intent = new Intent(this, UserLoadH5Activity.class);
+        intent.putExtra(Constant.URL, url);
+        intent.putExtra(Constant.Title, title);
+        intent.putExtra(Constant.NoTitle, false);
+        startActivity(intent);
     }
 
     private void initListener() {
