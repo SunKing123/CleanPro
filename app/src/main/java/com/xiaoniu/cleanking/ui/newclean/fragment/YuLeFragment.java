@@ -77,6 +77,7 @@ public class YuLeFragment extends SimpleFragment {
         Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
         if (!hidden) {
+            getWebView().loadUrl("javascript:refresh()");
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
         } else {
