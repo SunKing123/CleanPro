@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.ImageUtil;
+import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -97,6 +98,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            RequestUserInfoUtil.getUserCoinInfo();
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
             //展示广告
             addBottomAdView();
@@ -170,11 +172,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     }
 
     private void goToWALLETOrWithdrawal(int type) {
-        if (UserHelper.init().isWxLogin()) {
-            String url = H5Urls.WALLET_URL;
-            if (type == 1) {
-                url = H5Urls.WITHDRAWAL_URL;
-            }
+        String url = H5Urls.WALLET_URL;
+        boolean goToH5 = UserHelper.init().isLogin();
+        if (type == 1) {
+            url = H5Urls.WITHDRAWAL_URL;
+            goToH5 = UserHelper.init().isWxLogin();
+        }
+        if (goToH5) {
 //          String url = "http://192.168.85.61:9999/html/wallet/wallet.html";
             String scheme = SchemeConstant.SCHEME +
                     "://" + SchemeConstant.HOST + "/jump?url=" + url +
@@ -212,9 +216,15 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     }
 
     private void setUserCoinView(double amount, int gold) {
-        if (gold >= 0) {
-            mBinding.moneyTv.setText(String.valueOf(amount));
+        if (gold > 99) {
+            mBinding.moneyTv.setText(NumberUtils.getFloatStr2(amount) + "元");
             mBinding.goldCoinTv.setText(String.valueOf(gold));
+        } else if (gold > 0) {
+            mBinding.moneyTv.setText("0.01元");
+            mBinding.goldCoinTv.setText(String.valueOf(gold));
+        } else if (gold == 0) {
+            mBinding.moneyTv.setText("0元");
+            mBinding.goldCoinTv.setText("0");
         } else {
             mBinding.moneyTv.setText("--");
             mBinding.goldCoinTv.setText("--");

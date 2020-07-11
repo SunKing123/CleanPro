@@ -38,9 +38,10 @@ public class BottomBarTab extends FrameLayout {
     private TextView mTvTitle;
     private Context mContext;
     private int mTabPosition = -1;
+    private String title;
 
-    private int[] iconsSelect = {R.drawable.clean_select, R.drawable.tool_select, R.drawable.msg_select, R.drawable.me_select};
-    private int[] icons = {R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.msg_normal, R.drawable.me_normal};
+    private int[] iconsSelect = {R.drawable.clean_select, R.drawable.tool_select, R.drawable.icon_scratch_tab, R.drawable.me_select};
+    private int[] icons = {R.drawable.clean_normal, R.drawable.tool_normal, R.drawable.icon_scratch_tab, R.drawable.me_normal};
     private List<String> iconsSelectNet = new ArrayList<>();
     private List<String> iconsNet = new ArrayList<>();
 
@@ -61,6 +62,8 @@ public class BottomBarTab extends FrameLayout {
 
     protected void init(Context context, int icon, String iconString, CharSequence title, int orderNum) {
         mContext = context;
+        this.title = title.toString();
+
         //        状态（0=隐藏，1=显示）
         String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
 
@@ -154,6 +157,9 @@ public class BottomBarTab extends FrameLayout {
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);
+        if (title.equals("刮刮卡")) {
+            return;
+        }
         if (selected) {
             if (null == mContext || iconsSelectNet.isEmpty()) {
                 mIcon.setImageResource(iconsSelect[mTabPosition]);

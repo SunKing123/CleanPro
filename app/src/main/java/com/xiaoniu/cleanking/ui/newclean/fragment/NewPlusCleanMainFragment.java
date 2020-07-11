@@ -298,17 +298,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
 
         tvWithDraw.setOnClickListener(v -> {
-            //todo 跳转提现页面测试
-            if (UserHelper.init().isWxLogin()) {
-//                    String url = H5Urls.WITHDRAWAL_URL;
-                String url = "http://192.168.85.61:9999/html/wallet/wallet.html";
-                String scheme = SchemeConstant.SCHEME +
-                        "://" + SchemeConstant.HOST + "/jump?url=" + url +
-                        "&" + SchemeConstant.IS_FULL_SCREEN + "=1&jumpType=1";
-                SchemeProxy.openScheme(getActivity(), scheme);
-            } else {
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
+            if(onWithDrawListener!=null)
+            onWithDrawListener.onClick(v);
         });
     }
 
@@ -1013,5 +1004,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     public void setOnInteractiveClickListener(View.OnClickListener listener) {
         this.onInteractiveListener = listener;
+    }
+
+    View.OnClickListener onWithDrawListener;
+
+    public void setOnWithDrawClickListener(View.OnClickListener listener) {
+        this.onWithDrawListener = listener;
     }
 }
