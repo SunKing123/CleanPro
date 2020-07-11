@@ -994,7 +994,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         startGoldSuccess(adId, num, localNum);
     }
 
-    
     private void startGoldSuccess(String adId, int num, int index) {
         GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index,Points.MainGoldCoin.SUCCESS_PAGE);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);

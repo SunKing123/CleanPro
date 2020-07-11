@@ -16,8 +16,8 @@ public class GoldCoinDoubleModel implements Parcelable {
     public String adId;
     //下标值
     public int position;
-    //功能
-    public String functionName="";
+    //功能名称
+    public String functionName = "";
 
     public GoldCoinDoubleModel(String adId, int goldCoinsNum, int position, String currentPage) {
         this.adId = adId;
@@ -26,11 +26,11 @@ public class GoldCoinDoubleModel implements Parcelable {
         this.position = position;
     }
 
-    public GoldCoinDoubleModel(String adId, int goldCoinsNum,String currentPage,String functionName) {
+    public GoldCoinDoubleModel(String adId, int goldCoinsNum, String currentPage, String functionName) {
         this.adId = adId;
         this.goldCoinsNum = goldCoinsNum;
         this.currentPage = currentPage;
-        this.functionName=functionName;
+        this.functionName = functionName;
     }
 
     protected GoldCoinDoubleModel(Parcel in) {
