@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -274,9 +275,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.requestPhoneStatePermission();
         AndroidUtil.haveLiuhai = NotchUtils.hasNotchScreen(this);
 //        测试入口
-//        if (BuildConfig.DEBUG) {
-//            AppConfig.showDebugWindow(mContext);
-//        }
+        if (BuildConfig.DEBUG) {
+            AppConfig.showDebugWindow(mContext);
+        }
         //游客登录
         mPresenter.visitorLogin();
 
@@ -290,10 +291,11 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             @Override
             public void onClick(View v) {
                 AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户点击了提现按钮", "home_page", "home_page");
+                StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
                 mBottomBar.setCurrentItem(3);
             }
         });
+
 
     }
 

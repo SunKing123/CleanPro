@@ -50,6 +50,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
+import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
@@ -188,6 +189,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         checkAndUploadPoint();
         initListener();
+        StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
 
     }
 
@@ -988,14 +990,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
-        Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
-        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, dataBean.getData().getGoldCount());
+        int num=dataBean.getData().getGoldCount();
+        String adId="";
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
-            intent.putExtra(GoldCoinSuccessActivity.AD_ID, AdposUtil.getAdPos(localNum, 2));
+            adId=AdposUtil.getAdPos(localNum, 2);
         }
-        mActivity.startActivity(intent);
+        startGoldSuccess(adId, num, localNum);
     }
 
+    private void startGoldSuccess(String adId, int num, int index) {
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index,Points.MainGoldCoin.SUCCESS_PAGE);
+        GoldCoinSuccessActivity.Companion.start(mActivity, model);
+    }
 
     /*
      * *********************************************************************************************************************************************************

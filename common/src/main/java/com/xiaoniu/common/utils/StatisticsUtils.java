@@ -7,6 +7,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -51,6 +52,33 @@ public class StatisticsUtils {
 
         NiuDataAPI.trackClick(eventCode, eventName, j);
     }
+
+
+
+    /**
+     * sdk 点击埋点（click类型）
+     *
+     * @param eventCode   事件code
+     * @param sourcePage  来源页面
+     * @param currentPage 当前页面
+     * @param extParam   额外参数
+     */
+    public static void trackClickNew(String eventCode, String eventName, String sourcePage, String currentPage, HashMap<String,Object> extParam) {
+        JSONObject extension = new JSONObject();
+        try {
+            extension.put("source_page_id", sourcePage);
+            extension.put("current_page_id", currentPage);
+            if (extParam != null && extParam.size() > 0) {
+                for (Map.Entry<String, Object> param : extParam.entrySet()) {
+                    extension.put(param.getKey(), param.getValue());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        NiuDataAPI.trackClick(eventCode, eventName, extension);
+    }
+
 
     public static void trackClickH5(String eventCode, String eventName, String sourcePage, String currentPage, String id, String name) {
         JSONObject extension = new JSONObject();
@@ -176,7 +204,7 @@ public class StatisticsUtils {
      */
     public static void trackClickJShow(String eventCode, String eventName, String sourcePage, String currentPage, String url,int id,String title) {
         String push_type = "";
-        if ("cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
+        if ("cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
             //立即清理页面
             push_type = "clean_up_immediately";
         }else if (url.contains("main.activity.PhoneAccessActivity")){
@@ -478,7 +506,6 @@ public class StatisticsUtils {
         }
         NiuDataAPI.trackClick(event_code, event_name, extension);
     }
-
 
     /**
      * 刮刮卡弹窗埋点

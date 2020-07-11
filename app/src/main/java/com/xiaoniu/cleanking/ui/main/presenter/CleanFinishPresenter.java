@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -31,6 +32,7 @@ import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
@@ -163,12 +165,12 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 
                               @Override
                               public void getData(BubbleDouble bubbleDouble) {
-                                  Intent intent = new Intent(mActivity, GoldCoinSuccessActivity.class);
-                                  intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, bubbleCollected.getData().getGoldCount());
+
+                                  String adId = "";
                                   if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-                                      intent.putExtra(GoldCoinSuccessActivity.AD_ID, MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS);
+                                      adId = MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS;
                                   }
-                                  mActivity.startActivity(intent);
+                                  startGoldSuccess(adId, bubbleCollected.getData().getGoldCount(), mView.getActivityTitle());
                                   GoldCoinDialog.dismiss();
                               }
 
@@ -184,6 +186,11 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                               }
                           }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), bubbleCollected.getData().getUuid(), bubbleCollected.getData().getLocationNum(),
                 bubbleCollected.getData().getGoldCount());
+    }
+
+    private void startGoldSuccess(String adId, int num, String functionName) {
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, Points.FunctionGoldCoin.SUCCESS_PAGE, functionName);
+        GoldCoinSuccessActivity.Companion.start(mActivity, model);
     }
 
     /**
@@ -276,8 +283,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         };
         bean.dismissListener = dialog -> StatisticsUtils.trackClick("close_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
         bean.onDoubleClickListener = (v) -> {
-
-
             StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
             StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap());
             ViewGroup viewGroup = (ViewGroup) mView.getWindow().getDecorView();
