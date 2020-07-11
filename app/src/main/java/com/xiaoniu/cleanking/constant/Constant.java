@@ -93,7 +93,7 @@ public class Constant {
     //微信  appid
     public static final String WEICHAT_APPID = "wx646080363915ffe2";
     //微信  appsecret
-    public static final String WEICHAT_APPSECRET = "730da38ee6572f518d5d79891219ad4e";
+    public static final String WEICHAT_APPSECRET = "4bfb2061b947f777bd3c4f77181d354e";
     //QQ aapId
     public static final String QQ_APPID = "1109516379";
     //QQ aapkey
