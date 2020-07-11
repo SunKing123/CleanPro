@@ -189,6 +189,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         checkAndUploadPoint();
         initListener();
+        StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
 
     }
 

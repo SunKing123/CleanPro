@@ -291,7 +291,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             @Override
             public void onClick(View v) {
                 AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-                StatisticsUtils.trackClick("Interaction_ad_click", "用户点击了提现按钮", "home_page", "home_page");
+                StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
                 mBottomBar.setCurrentItem(3);
             }
         });
