@@ -10,9 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,16 +56,13 @@ import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
-import com.xiaoniu.cleanking.ui.main.widget.BottomScratchTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
-import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
-import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -78,7 +73,6 @@ import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtil;
-import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -90,7 +84,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -393,6 +386,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        boolean backFromFinish = intent.getBooleanExtra("back_from_finish", false);
+        LogUtils.e("============从完成页返回的:"+backFromFinish);
+        if (backFromFinish) {
+            StatisticsUtils.customTrackEvent("ad_request_sdk_5", "功能完成页广告位5发起请求", "", "success_page");
+            InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
+            if (configBean != null && configBean.isOpen()) {
+                mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+            }
+        }
         parsePushData(intent);
         if (intent.getExtras() != null) {
             changeTab(intent.getExtras());
@@ -673,6 +675,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void setStatusBar() {
     }
 
+
     /**
      * 重新扫描文件
      */
@@ -681,16 +684,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.saveCacheFiles();
     }
 
-
-    //清理完成页返回弹出广告
-    @Subscribe
-    public void onEventScan(FromHomeCleanFinishEvent backMainEvent) {
-        InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
-        if (configBean != null && configBean.isOpen()) {
-            mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
-        }
-
-    }
 
     //热启
     @Subscribe

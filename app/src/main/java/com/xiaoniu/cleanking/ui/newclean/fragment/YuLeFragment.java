@@ -86,7 +86,7 @@ public class YuLeFragment extends SimpleFragment {
     }
 
     private void initWebView() {
-        mAgentWeb = AgentWeb.with(getActivity())
+        mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mBinding.webFragment, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
                 .setMainFrameErrorView(R.layout.common_view_no_network, R.id.no_network_tv)
