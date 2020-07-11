@@ -56,6 +56,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
         PreferenceUtil.updatePressBackExitAppCount(true);
 
         StatisticsUtils.customTrackEvent("retain_the_pop_up_window_custom", "挽留弹窗创建时", "", "retain_the_pop_up_window");
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "挽留弹窗上广告发起请求", "", "retain_the_pop_up_window");
     }
 
     private void initView() {

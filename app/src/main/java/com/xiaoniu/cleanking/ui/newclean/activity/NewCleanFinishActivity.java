@@ -32,6 +32,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
 import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -190,9 +191,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         initGeekAd();
     }
 
+    public String getActivityTitle() {
+        return TextUtils.isEmpty(mTitle) ? "" : mTitle;
+    }
+
     private void initGeekAd() {
-        isOpenOne=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH,PositionId.DRAW_ONE_CODE);
-        isOpenTwo=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH,PositionId.DRAW_TWO_CODE);
+        isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE);
+        isOpenTwo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_TWO_CODE);
 
         if (isOpenOne) {
             initPos01Ad();
@@ -861,7 +866,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             } else { //建议清理
                 PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
             }
-            finish();
+            jumpMainPage();
         });
 
 
@@ -971,6 +976,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         } else { //建议清理
             PreferenceUtil.saveCleanFinishClickCount(PreferenceUtil.getCleanFinishClickCount() + 1);
         }
+        jumpMainPage();
+    }
+
+    private void jumpMainPage() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("back_from_finish", true);
+        startActivity(intent);
         finish();
     }
 
