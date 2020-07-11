@@ -44,6 +44,7 @@ public class SchemeConstant {
     public static final String TASK_ID = "taskId";
     public static final String IS_REFRESH = "isRefresh";
     public static final String SIGNDAY = "signDay";
+    public static final String CARD_POSITION = "cardPosition";
     public static final String TARGET = "target";
     public static final String URL = "url";
     /**

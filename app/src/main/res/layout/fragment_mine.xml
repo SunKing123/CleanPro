@@ -133,9 +133,9 @@
                             android:id="@+id/coin_about"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="≈"
                             android:layout_marginLeft="@dimen/dimen_5dp"
                             android:layout_marginRight="@dimen/dimen_5dp"
+                            android:text="≈"
                             android:textColor="@color/color_FDBB1D"
                             android:textSize="@dimen/dimen_24dp" />
 
@@ -145,7 +145,8 @@
                             android:layout_height="wrap_content"
                             android:text="¥"
                             android:textColor="@color/color_FDBB1D"
-                            android:textSize="@dimen/dimen_16dp" />
+                            android:textSize="@dimen/dimen_16dp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/money_tv"

@@ -141,7 +141,7 @@ public class GoldCoinDialog {
             String afterCalculate = TimeUtil.getNum(calculate);
             totalCoinCountTv.setText(Html.fromHtml(parameter.totalCoinCount + "≈<font color=#febf28>" + afterCalculate + "元</font>"));
         } else {
-            totalCoinCountTv.setText(Html.fromHtml(parameter.totalCoinCount + "≈<font color=#febf28>" + 0.00 + "元</font>"));
+            totalCoinCountTv.setText(Html.fromHtml(parameter.totalCoinCount + "≈<font color=#febf28>" + 0.01 + "元</font>"));
         }
 
         CoinDoubleRL.setOnClickListener(new View.OnClickListener() {
