@@ -300,8 +300,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
 
         tvWithDraw.setOnClickListener(v -> {
-            if(onWithDrawListener!=null)
-            onWithDrawListener.onClick(v);
+            if (onWithDrawListener != null)
+                onWithDrawListener.onClick(v);
         });
     }
 
@@ -319,12 +319,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         requestTime = System.currentTimeMillis();
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
             mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_AD_ID);
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+            StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
             mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+            StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
             mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
         }
     }
