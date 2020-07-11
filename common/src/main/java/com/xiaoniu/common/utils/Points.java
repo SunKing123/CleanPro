@@ -52,8 +52,39 @@ public interface Points {
         String VIDEO_PAGE_CLOSE_CLICK_CODE = "close_click";
         String VIDEO_PAGE_CLOSE_CLICK_NAME = "刮刮卡激励视频广告关闭点击";
 
+
         String SUCCESS_PAGE = "scratch_card_success_page";
-        String SUCCESS_EXPOSURE = "scratch_card_success_page_custom";
+        String SUCCESS_EXPOSURE_CODE = "scratch_card_success_page_custom";
+        String SUCCESS_EXPOSURE_NAME = "刮刮卡翻倍金币领取完成页曝光";
+        String SUCCESS_RETURN_CLICK_NAME = "刮刮卡翻倍金币领取完成页返回";
+        String SUCCESS_AD_REQUEST_SDK_NAME = "刮刮卡翻倍金币领取完成页广告发起请求";
+        String SUCCESS_NUMBER_OF_GOLD_NAME = "刮刮卡翻倍金币领取完成页金币发放数";
+    }
+
+    interface FunctionGoldCoin {
+        String SUCCESS_PAGE = "success_page_gold_coin_pop_up_window_success_page";
+
+        String SUCCESS_EXPOSURE_CODE = "success_page_gold_coin_pop_up_window_success_page_custom";
+        String SUCCESS_EXPOSURE_NAME = "功能完成页金币翻倍领取完成页曝光";
+
+        String SUCCESS_RETURN_CLICK_NAME = "功能完成页金币翻倍领取完成页返回";
+
+        String SUCCESS_AD_REQUEST_SDK_NAME = "功能完成页翻倍金币领取完成页广告发起请求";
+        String SUCCESS_NUMBER_OF_GOLD_NAME = "功能完成页翻倍金币领取完成页金币发放数";
+    }
+
+
+    interface MainGoldCoin {
+        String SUCCESS_PAGE = "home_page_gold_coin_pop_up_window_success_page";
+
+        String SUCCESS_EXPOSURE_CODE = "home_page_gold_coin_pop_up_window_success_page_custom";
+        String SUCCESS_EXPOSURE_NAME = "首页金币翻倍领取完成页曝光";
+
+        String SUCCESS_RETURN_CLICK_NAME = "首页金币翻倍领取完成页返回";
+
+        String SUCCESS_AD_REQUEST_SDK_NAME = "首页翻倍金币领取完成页广告发起请求";
+
+        String SUCCESS_NUMBER_OF_GOLD_NAME = "首页翻倍金币领取完成页金币发放数";
 
     }
 

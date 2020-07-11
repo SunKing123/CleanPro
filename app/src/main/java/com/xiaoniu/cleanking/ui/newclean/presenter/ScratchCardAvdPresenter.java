@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
@@ -217,10 +218,12 @@ public class ScratchCardAvdPresenter {
         if (onVideoPlayedListener != null) {
             onVideoPlayedListener.onComplete();
         }
-        Intent intent = new Intent(activity, GoldCoinSuccessActivity.class);
-        intent.putExtra(GoldCoinSuccessActivity.COIN_NUM, coinCount);
-        intent.putExtra(GoldCoinSuccessActivity.AD_ID, isOpenThree() ? getSecondAdvId(cardIndex) : "");
-        activity.startActivity(intent);
+
+        String adId=isOpenThree() ? getSecondAdvId(cardIndex) : "";
+        int coinNum=coinCount;
+
+        GoldCoinDoubleModel model=new GoldCoinDoubleModel(adId,coinNum,cardIndex, Points.ScratchCard.SUCCESS_PAGE);
+        GoldCoinSuccessActivity.Companion.start(activity,model);
 
         GoldCoinDialog.dismiss();
         StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
