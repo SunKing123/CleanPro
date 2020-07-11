@@ -34,7 +34,7 @@ public class NiuDataAPIUtil {
      */
     public static void trackClickJPush(String eventCode, String eventName, String sourcePage, String currentPage, String url,int id,String title) {
         String push_type = "";
-        if ("cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
+        if ("cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=4".equals(url)){
             //立即清理页面
             AppHolder.getInstance().setCleanFinishSourcePageId("push_info_click");
             push_type = "clean_up_immediately";

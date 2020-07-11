@@ -108,8 +108,8 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void playLottie(View view){
-        String test =  "cleanking://com.hellogeek.cleanking/jump?isfullscreen=1&need_login=&url=http%3A%2F%2F192.168.85.61%3A9999%2Fhtml%2FactivitiesHtml%2FscratchCards%2Fscratch.html%3Fid%3D22%26rondaId%3D3%26awardType%3D1%26hitCode%3D1%26num%3D1222222%26remark%3D%26cardType%3D12312312%26goldSectionNum%3D51%26actRdNum%3D20%3A00%26needRefresh%3D1%26currentPageId%3Dscratch_card_activity_page";
-//        String test02 ="cleanking://com.hellogeek.cleanking/jump?isfullscreen=1&amp;need_login=&amp;url=http%3A%2F%2F192.168.85.61";
+        String test =  "cleankingmajor://com.hellogeek.cleanking/jump?isfullscreen=1&need_login=&url=http%3A%2F%2F192.168.85.61%3A9999%2Fhtml%2FactivitiesHtml%2FscratchCards%2Fscratch.html%3Fid%3D22%26rondaId%3D3%26awardType%3D1%26hitCode%3D1%26num%3D1222222%26remark%3D%26cardType%3D12312312%26goldSectionNum%3D51%26actRdNum%3D20%3A00%26needRefresh%3D1%26currentPageId%3Dscratch_card_activity_page";
+//        String test02 ="cleankingmajor://com.hellogeek.cleanking/jump?isfullscreen=1&amp;need_login=&amp;url=http%3A%2F%2F192.168.85.61";
         SchemeProxy.openScheme(this, test);
 //        oneKeyCircleButtonView.startLottie();
 //        lottieAnimationView.setAnimation("home_top_scan/anim10/data.json");
@@ -119,7 +119,7 @@ public class DebugActivity extends BaseActivity {
     }
     public void toHomeClean(View view) {
         //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=0"
+//        "cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=0"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -130,7 +130,7 @@ public class DebugActivity extends BaseActivity {
 
     public void toHomeTools(View view) {
         //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=1"
+//        "cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=1"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -141,7 +141,7 @@ public class DebugActivity extends BaseActivity {
 
     public void toHomeNews(View view) {
         //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=2"
+//        "cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=2"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -152,7 +152,7 @@ public class DebugActivity extends BaseActivity {
 
     public void toHomeMine(View view) {
         //原生带参数 native协议
-//        "cleanking://com.xiaoniu.cleanking/native?name=main&main_index=3"
+//        "cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=3"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
@@ -163,7 +163,7 @@ public class DebugActivity extends BaseActivity {
 
     public void toH5(View view) {
         //jump 协议
-//        "cleanking://com.xiaoniu.cleanking/jump?url=XXXX"
+//        "cleankingmajor://com.xiaoniu.cleanking/jump?url=XXXX"
         String url = BuildConfig.Base_H5_Host + "/userAgreement.html";
         String jump = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.JUMP + "?url=";
@@ -174,7 +174,7 @@ public class DebugActivity extends BaseActivity {
 
     public void toWeChatClean(View view) {
         //原生不带参数 native_no_params协议
-//        "cleanking://com.xiaoniu.cleanking/native_no_params?a_name=包名.ui.后面的路径"
+//        "cleankingmajor://com.xiaoniu.cleanking/native_no_params?a_name=包名.ui.后面的路径"
 
 //        SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "tool.notify.activity.NotifyCleanGuideActivity";
         String packagePath = "tool.wechat.activity.WechatCleanHomeActivity";
