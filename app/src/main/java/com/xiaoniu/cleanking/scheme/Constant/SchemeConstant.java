@@ -9,7 +9,7 @@ import com.xiaoniu.cleanking.BuildConfig;
  */
 public class SchemeConstant {
     //协议SCHEME和协议HOST
-    public static final String SCHEME = "cleanking";
+    public static final String SCHEME = "cleankingmajor";
     public static final String HOST = BuildConfig.APPLICATION_ID;
     public static final String XIAONIU_HOST = "com.xiaoniu.cleanking";//java代码路径
     //公共协议类型

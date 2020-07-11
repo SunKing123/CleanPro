@@ -520,7 +520,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                      * title : 垃圾清理
                      * content : 垃圾过多严重影响手机使用
                      * position : 立即清理页面
-                     * url : cleanking://com.xiaoniu.cleanking/native?name=main&main_index=4
+                     * url : cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=4
                      * thresholdSign : 1
                      * thresholdNum : 200
                      * interValTime : 2
