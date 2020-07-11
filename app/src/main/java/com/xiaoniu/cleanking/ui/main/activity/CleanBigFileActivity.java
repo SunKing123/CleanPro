@@ -120,7 +120,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
             Intent intent = new Intent()
                     .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_clean));
 
-            StartFinishActivityUtil.Companion.gotoFinish(this, intent);
+            StartFinishActivityUtil.Companion.gotoFinish(this,intent);
 
             finish();
         });

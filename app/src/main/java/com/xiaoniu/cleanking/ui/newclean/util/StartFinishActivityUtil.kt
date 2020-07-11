@@ -6,6 +6,8 @@ import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
+import com.xiaoniu.cleanking.utils.ExtraConstant
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 
 /**
  * @author XiLei
@@ -20,9 +22,10 @@ class StartFinishActivityUtil {
         var isThreeOpen = false
         var hasInit = false;
 
-        fun gotoFinish(context: Context, intent: Intent) {
+        fun gotoFinish(context: Context,intent: Intent) {
             initOnOff();
-            if (isThreeOpen) {
+            var title=intent.getStringExtra(ExtraConstant.TITLE)
+            if (isThreeOpen&&PreferenceUtil.getShowCount(context, title, 0, 0, 0) < 3) {
                 intent.setClass(context, CleanFinishAdvertisementActivity::class.java);
                 context.startActivity(intent)
             } else {

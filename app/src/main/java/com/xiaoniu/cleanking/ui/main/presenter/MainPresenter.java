@@ -76,6 +76,7 @@ import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -565,6 +566,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mActivity == null || TextUtils.isEmpty(appID)) {
             return;
         }
+        StatisticsUtils.customTrackEvent("ad_request_sdk","内部插屏广告发起请求","","inside_advertising_ad_page");
         AdRequestParams params = new AdRequestParams.Builder()
                 .setActivity(mActivity).setAdId(appID).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {

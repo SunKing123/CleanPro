@@ -91,7 +91,7 @@ public class MyBaseWebViewClient extends WebViewClient {
         }
     }
 
-    CountDownTimer downTimer = new CountDownTimer(5000, 5000) {
+    CountDownTimer downTimer = new CountDownTimer(7000, 7000) {
         @Override
         public void onTick(long millisUntilFinished) {
 
@@ -183,42 +183,6 @@ public class MyBaseWebViewClient extends WebViewClient {
     }
 
     /**
-     * 老的协议逻辑
-     *
-     * @param parameters
-     * @param webView
-     * @param url
-     * @return
-     */
-    private boolean rewardTopOld(Parameters parameters, WebView webView, String url) {
-        if (parameters == null || webView == null || TextUtils.isEmpty(url)) {
-            return true;
-        }
-        //总金币数
-        String totalCoin = parameters.getParameter(SchemeConstant.TOTAL_COIN);
-        //当前奖励金币数
-        String coin = parameters.getParameter(SchemeConstant.COIN);
-        //是否翻倍
-        String doubleStr = parameters.getParameter(SchemeConstant.IS_DOUBLE);
-        String taskId = parameters.getParameter(SchemeConstant.TASK_ID);
-        String signDay = parameters.getParameter(SchemeConstant.SIGNDAY);
-        boolean isDouble = TextUtils.equals("1", doubleStr);
-        ADUtils.adSource = "签到翻倍奖励";
-        if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin)) {
-            int obtainCoinCount = Integer.parseInt(coin);
-            int totalCoinCount = Integer.parseInt(totalCoin);
-            String adId = needLoadAD(isDouble, taskId);
-            String codeId = ADUtils.getCodeId(adId);//getCodeId获取值不对，这里逻辑后续需要就需要修改
-            boolean loadAd = !TextUtils.isEmpty(codeId);
-            //getSource获取值不对，这里逻辑后续需要就需要修改
-            int source = getSource(isDouble, taskId);
-            //TODO 显示广告弹窗
-            cardAvdPresenter.showDialog(Integer.parseInt(adId), obtainCoinCount, obtainCoinCount + totalCoinCount,isDouble);
-        }
-        return false;
-    }
-
-    /**
      * 解析url协议
      */
     public boolean parseUrl(WebView webView, String url) {
@@ -262,7 +226,9 @@ public class MyBaseWebViewClient extends WebViewClient {
                     jsonObject.put(key, value);
                 }
             }
-            mBaseBrowserFragment.setVideoCallBackParams(jsonObject.toString());
+            if (mBaseBrowserFragment != null) {
+                mBaseBrowserFragment.setVideoCallBackParams(jsonObject.toString());
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -272,39 +238,28 @@ public class MyBaseWebViewClient extends WebViewClient {
      * 激励后的弹窗 插屏广告
      */
     private void parseRewardPop(WebView webView, String url, Parameters parameters) {
-        if (mActivity == null || mActivity.isFinishing() || webView == null) {
+        if (mActivity == null || mActivity.isFinishing() || webView == null && parameters == null) {
             return;
         }
         String codeId = parameters.getParameter(SchemeConstant.AD_CODEID);//插屏广告code
-        if (!TextUtils.isEmpty(url) && (!url.contains(SchemeConstant.AD_SOURCE) || !url.contains(SchemeConstant.AD_CODEID) || !url.contains(SchemeConstant.AD_ADDES))) {
-            if (rewardTopOld(parameters, webView, url)) {
-                return;
-            }
-        } else {
-            int source = NumberUtils.getInteger(parameters.getParameter(SchemeConstant.AD_SOURCE));//广告来源
-            ADUtils.adSource = parameters.getParameter(SchemeConstant.AD_ADDES);//点击的哪个任务了
-            String ad_position_id = parameters.getParameter(SchemeConstant.AD_AD_POSITION_ID);
-            //总金币数
-            String totalCoin = parameters.getParameter(SchemeConstant.TOTAL_COIN);
-            //当前奖励金币数
-            String coin = parameters.getParameter(SchemeConstant.COIN);
-            //是否需要翻倍
-            boolean isDouble = TextUtils.equals("1", parameters.getParameter(SchemeConstant.IS_DOUBLE));
-            //h5 可能需要传这个id
-            String taskId = parameters.getParameter(SchemeConstant.TASK_ID);
-            //签到天数
-            String signDay = parameters.getParameter(SchemeConstant.SIGNDAY);
-
-            if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin)) {
-                int obtainCoinCount = Integer.parseInt(coin);//获得的金币
-                int totalCoinCount = Integer.parseInt(totalCoin);//用户总金币金额
-                //2.9.0 之后 ad_position_id 会 在原基础 +100， H5 传的值会为+100 的值， 我们在后面会统一处理 所以-100（之前最大 43）
-                int adId = Integer.parseInt(ad_position_id);
-                if (adId > 100) {
-                    adId = adId - 100;
-                }
-                cardAvdPresenter.showDialog(adId, obtainCoinCount, obtainCoinCount + totalCoinCount,isDouble);
-            }
+        int source = NumberUtils.getInteger(parameters.getParameter(SchemeConstant.AD_SOURCE));//广告来源
+        ADUtils.adSource = parameters.getParameter(SchemeConstant.AD_ADDES);//点击的哪个任务了
+        String ad_position_id = parameters.getParameter(SchemeConstant.AD_AD_POSITION_ID);
+        //总金币数
+        String totalCoin = parameters.getParameter(SchemeConstant.TOTAL_COIN);
+        //当前奖励金币数
+        String coin = parameters.getParameter(SchemeConstant.COIN);
+        //是否需要翻倍
+        boolean isDouble = TextUtils.equals("1", parameters.getParameter(SchemeConstant.IS_DOUBLE));
+        //h5 可能需要传这个id
+        String taskId = parameters.getParameter(SchemeConstant.TASK_ID);
+        //签到天数
+        String signDay = parameters.getParameter(SchemeConstant.SIGNDAY);
+        String cardPosition = parameters.getParameter(SchemeConstant.CARD_POSITION);
+        if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin) && !TextUtils.isEmpty(cardPosition)) {
+            int obtainCoinCount = Integer.parseInt(coin);//获得的金币
+            int totalCoinCount = Integer.parseInt(totalCoin);//用户总金币金额
+            cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, obtainCoinCount + totalCoinCount, isDouble);
         }
     }
 
