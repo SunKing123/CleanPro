@@ -263,7 +263,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private void initEvent() {
 
-        imageInteractive.setClickListener(data -> onInteractiveListener.onClick(null));
+        imageInteractive.setClickListener(data -> {
+                    StatisticsUtils.trackClick(Points.MainHome.SCRAPING_BUOY_CLICK_CODE, Points.MainHome.SCRAPING_BUOY_CLICK_NAME, "home_page", "home_page");
+                    onInteractiveListener.onClick(null);
+                }
+        );
 
         homeMainTableView.setOnItemClickListener(item -> {
             switch (item) {
@@ -299,8 +303,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
 
         tvWithDraw.setOnClickListener(v -> {
-            if(onWithDrawListener!=null)
-            onWithDrawListener.onClick(v);
+            if (onWithDrawListener != null)
+                onWithDrawListener.onClick(v);
         });
     }
 
@@ -885,7 +889,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * **********************************************************cooling start**********************************************************************************
      * *********************************************************************************************************************************************************
      */
-
     public void onCoolingClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
@@ -986,16 +989,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
-        int num=dataBean.getData().getGoldCount();
-        String adId="";
+        int num = dataBean.getData().getGoldCount();
+        String adId = "";
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
-            adId=AdposUtil.getAdPos(localNum, 2);
+            adId = AdposUtil.getAdPos(localNum, 2);
         }
         startGoldSuccess(adId, num, localNum);
     }
 
     private void startGoldSuccess(String adId, int num, int index) {
-        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index,Points.MainGoldCoin.SUCCESS_PAGE);
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index, Points.MainGoldCoin.SUCCESS_PAGE);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
     }
 

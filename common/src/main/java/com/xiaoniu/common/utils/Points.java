@@ -37,7 +37,6 @@ public interface Points {
         String ANIMATION_FINISH_SYSTEM_RETURN_EVENT_NAME = "病毒查杀动画完成页返回";
     }
 
-
     interface ScratchCard {
         String WINDOW_PAGE = "scratch_card_gold_coin_pop_up_window_page";
 
@@ -73,7 +72,6 @@ public interface Points {
         String SUCCESS_NUMBER_OF_GOLD_NAME = "功能完成页翻倍金币领取完成页金币发放数";
     }
 
-
     interface MainGoldCoin {
         String SUCCESS_PAGE = "home_page_gold_coin_pop_up_window_success_page";
 
@@ -85,7 +83,51 @@ public interface Points {
         String SUCCESS_AD_REQUEST_SDK_NAME = "首页翻倍金币领取完成页广告发起请求";
 
         String SUCCESS_NUMBER_OF_GOLD_NAME = "首页翻倍金币领取完成页金币发放数";
+    }
 
+
+    interface MainHome {
+        String BOOST_CLICK_CODE = "boost_click";
+        String BOOST_CLICK_NAME = "用户在首页点击【一键加速】按钮";
+
+        String VIRUS_KILLING_CLICK_CODE = "virus_killing_click";
+        String VIRUS_KILLING_CLICK_NAME = "用户在首页点击【病毒查杀】按钮";
+
+        String POWERSAVE_CLICK_CODE = "powersave_click";
+        String POWERSAVE_CLICK_NAME = "用户在首页点击【超强省电】按钮";
+
+        String WXCLEAN_CLICK_CODE = "wxclean_click";
+        String WXCLEAN_CLICK_NAME = "用户在首页点击【微信专清】按钮";
+
+        String COOLING_CLICK_CODE = "cooling_click";
+        String COOLING_CLICK_NAME = "用户在首页点击【手机降温】按钮";
+
+        String NETWORK_ACCELERATION_CLICK_CODE = "network_acceleration_click";
+        String NETWORK_ACCELERATION_CLICK_NAME = "用户在首页点击【网络加速】按钮";
+
+        String NOTIFICATION_CLEAN_CLICK_CODE = "notification_clean_click";
+        String NOTIFICATION_CLEAN_CLICK_NAME = "用户在首页点击【通知清理】按钮";
+
+        String DEEP_CLEANING_CLICK_CODE = "deep_cleaning_click";
+        String DEEP_CLEANING_CLICK_NAME = "用户在首页点击【深度清理】按钮";
+
+        String SCRAPING_BUOY_CLICK_CODE="scraping_buoy_click";
+        String SCRAPING_BUOY_CLICK_NAME="首页刮刮卡浮标点击";
+    }
+
+
+    interface Tab{
+        String CLEAN_CLICK_CODE="tab_clean_click";
+        String CLEAN_CLICK_NAME="底部tab栏清理点击";
+
+        String TOOLBOX_CLICK_CODE="tab_toolbox_click";
+        String TOOLBOX_CLICK_NAME="底部tab栏工具箱点击";
+
+        String SCRAPING_CARD_CLICK_CODE="tab_scraping_card_click";
+        String SCRAPING_CARD_CLICK_NAME="底部tab栏刮刮卡点击";
+
+        String MY_CLICK_CODE="tab_my_click";
+        String MY_CLICK_NAME="底部tab栏我的点击";
     }
 
 }

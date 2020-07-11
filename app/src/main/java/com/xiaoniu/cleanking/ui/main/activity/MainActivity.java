@@ -75,6 +75,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
+import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -239,6 +240,21 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     return;
                 if (!mShowRedFirst && mCurrentPosition == redPacketDataBean.getLocation()) {
                     showRedPacket(redPacketDataBean);
+                }
+             
+                switch (position){
+                    case 0:
+                        StatisticsUtils.trackClick(Points.Tab.CLEAN_CLICK_CODE, Points.Tab.CLEAN_CLICK_NAME, "home_page", "home_page");
+                        break;
+                    case 1:
+                        StatisticsUtils.trackClick(Points.Tab.TOOLBOX_CLICK_CODE, Points.Tab.TOOLBOX_CLICK_NAME, "home_page", "home_page");
+                        break;
+                    case 2:
+                        StatisticsUtils.trackClick(Points.Tab.SCRAPING_CARD_CLICK_CODE, Points.Tab.SCRAPING_CARD_CLICK_NAME, "home_page", "home_page");
+                        break;
+                    case 3:
+                        StatisticsUtils.trackClick(Points.Tab.MY_CLICK_CODE, Points.Tab.MY_CLICK_NAME, "home_page", "home_page");
+                        break;
                 }
             }
 

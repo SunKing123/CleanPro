@@ -65,7 +65,7 @@ public class ScratchCardAvdPresenter {
     }
 
     public void showDialog(int cardIndex, int coinCount, int totalCoinCount,boolean isDouble) {
-        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount);
+        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount+"  isDouble"+isDouble);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
             return;
