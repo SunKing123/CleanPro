@@ -21,6 +21,8 @@ import com.xiaoniu.cleanking.ui.newclean.bean.BallRewardBean;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
+import com.xiaoniu.common.utils.StatisticsUtils;
+
 import java.util.Random;
 
 public class LuckBubbleView extends LinearLayout {
@@ -125,16 +127,16 @@ public class LuckBubbleView extends LinearLayout {
             public void onClick(View view) {
                 iBullClickListener.clickBull(listBean, loact);
                 if (loact == 1) {
-//                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "1");
 //                    listBean.setPosition("1");
+                    StatisticsUtils.trackClick("upper_left_gold_coin_click", "左上金币点击", "home_page", "home_page");
                 } else if (loact == 2) {
-//                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "3");
 //                    listBean.setPosition("3");
+                    StatisticsUtils.trackClick("lower_left_gold_coin_click", "左下金币点击", "home_page", "home_page");
                 } else if (loact == 3) {
-//                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "2");
 //                    listBean.setPosition("2");
+                    StatisticsUtils.trackClick("upper_right_gold_coin_click", "右上金币点击", "home_page", "home_page");
                 } else if (loact == 4) {
-//                    NiuDataUtils.trickCoinBull(listBean.getGoldAmount(), "4");
+                    StatisticsUtils.trackClick("lower_right_gold_coin_click", "右下金币点击", "home_page", "home_page");
 //                    listBean.setPosition("4");
                 }
             }
