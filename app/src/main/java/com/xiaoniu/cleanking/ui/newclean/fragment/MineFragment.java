@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -98,6 +99,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+            StatisticsUtils.customTrackEvent("my_page_custom", "我的页面曝光", "my_page", "my_page");
             RequestUserInfoUtil.getUserCoinInfo();
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
             //展示广告
@@ -121,6 +123,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     @OnClick({R.id.setting_ll, R.id.head_img_iv, R.id.phone_num_tv, R.id.llt_invite_friend,
             R.id.body_data_ll, R.id.step_record_ll, R.id.kefu_ll, R.id.withdrawal_ll, R.id.wallet_ll})
     public void onViewClicked(View view) {
+        if (AndroidUtil.isFastDoubleClick()) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.setting_ll:
                 StatisticsUtils.trackClick("set_up_click", "\"设置\"点击", AppHolder.getInstance().getSourcePageId(), "personal_center_page");
@@ -130,6 +135,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             case R.id.phone_num_tv:
                 if (!UserHelper.init().isWxLogin()) {
                     startActivity(new Intent(getContext(), LoginWeiChatActivity.class));
+                }
+                if (!UserHelper.init().isLogin()) {
+                    StatisticsUtils.trackClick("log_in_now_click", "立即登录点击", "my_page", "my_page");
                 }
 //                GoldCoinBean goldCoinBean = new GoldCoinBean();
 //                goldCoinBean.context = getContext();
@@ -147,6 +155,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 //                break;
             case R.id.withdrawal_ll://提现
                 goToWALLETOrWithdrawal(1);
+                StatisticsUtils.trackClick("cash_withdrawal_click", "提现点击", "my_page", "my_page");
                 break;
             case R.id.wallet_ll://钱包详细
                 goToWALLETOrWithdrawal(0);
@@ -258,6 +267,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             @Override
             public void onAdShow(AdInfo adInfo) {
                 super.onAdShow(adInfo);
+                StatisticsUtils.customTrackEvent("ad_request", "我的页面广告请求（满足广告展现时机时向商业化sdk发起请求数）", "my_page", "my_page");
             }
         });
       /*  GeekAdSdk.getAdsManger().loadNativeTemplateAd(getActivity(), PositionId.AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(getContext(), DisplayUtil.getScreenWidth(getContext())) - 24), new AdListener() {

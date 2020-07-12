@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.newclean.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
@@ -48,5 +50,22 @@ public class CommonDialogUtils {
             clickListener.onClickView(-1);
         });
         return dlg;
+    }
+
+    /**
+     * 正在加载的提示dialog
+     *
+     * @param context 上下文
+     * @return 弹窗
+     */
+    public static Dialog buildProgressDialog(Context context, String loadStr, boolean isCancel) {
+        Dialog dialog = new Dialog(context, R.style.transparent_dialogStyle);
+        View view = LayoutInflater.from(context).inflate(R.layout.loading_dialog, null);
+        TextView applyTv = view.findViewById(R.id.apply_tv);
+        applyTv.setText(loadStr);
+        dialog.setContentView(view);
+        dialog.setCancelable(isCancel);
+        dialog.setCanceledOnTouchOutside(isCancel);
+        return dialog;
     }
 }

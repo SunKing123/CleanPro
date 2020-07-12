@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.login.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -32,9 +33,11 @@ import com.xiaoniu.cleanking.ui.login.presenter.LoginWeiChatPresenter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.CommonDialogUtils;
 import com.xiaoniu.cleanking.ui.newclean.interfice.OnBtnClickListener;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.payshare.AuthorizeLoginListener;
 import com.xiaoniu.payshare.AuthorizedLogin;
@@ -79,6 +82,7 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     }
 
     HashMap<String, Object> paramsMap;
+    Dialog dialogLogin;
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
@@ -87,6 +91,8 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         initListener();
         setXieYi();
         paramsMap = new HashMap<>();
+        StatisticsUtils.customTrackEvent("login_page", "登录页面曝光", "login_page", "login_page");
+        dialogLogin = CommonDialogUtils.buildProgressDialog(this, "登录中...", true);
     }
 
     private void setXieYi() {
@@ -133,7 +139,9 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         AuthorizedLogin.getInstance().setAuthorizedLoginListener(new AuthorizeLoginListener() {
             @Override
             public void authorizeCancel() {
-
+                if (dialogLogin != null) {
+                    dialogLogin.dismiss();
+                }
             }
 
             @Override
@@ -147,6 +155,9 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
                     mPresenter.bindingWeiChat(paramsMap);
                 } else {//啥也没登陆就去 登陆微信
                     mPresenter.loginWithWeiChat(paramsMap);
+                }
+                if (dialogLogin != null) {
+                    dialogLogin.dismiss();
                 }
             }
         });
@@ -181,6 +192,9 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
 
     @OnClick({R.id.img_back, R.id.vx_login_ll})
     public void onViewClicked(View view) {
+        if (AndroidUtil.isFastDoubleClick()) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.img_back:
                 killMyself();
@@ -188,7 +202,11 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
             case R.id.vx_login_ll:
 //                startActivity(new Intent(this, BindPhoneActivity.class));
                 if (bottomBtn.isChecked()) {
+                    StatisticsUtils.trackClick("wxchat_login_click", "微信登录点击", "login_page", "login_page");
                     AuthorizedLogin.getInstance().userWeiChatLogin(this);
+                    if (dialogLogin != null) {
+                        dialogLogin.show();
+                    }
                 } else {
                     ToastUtils.showShort("请先同意《服务协议》和《隐私条款》");
                 }
@@ -202,31 +220,33 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
     }
 
     @Override
-    public void dealLoginResult(int flag, LoginDataBean loginDataBean) {
-        //flag 1 微信登录  2 绑定微信
-        if (flag == 2) {
-            if ("2027".equals(loginDataBean.getCode())) {
-                String tip = "账号已注册，登录后游客模式账号金币不同步,是否继续登录";
-                CommonDialogUtils.showRemindDialogStyle01(this, tip, "确认", new OnBtnClickListener() {
-                    @Override
-                    public void onClickView(int type) {
-                        mPresenter.loginWithWeiChat(paramsMap);
-                    }
-                });
-            } else if ("200".equals(loginDataBean.getCode())) {
-                mPresenter.loginWithWeiChat(paramsMap);
-            }
-        }
-
-        UserInfoBean infoBean = loginDataBean.getData();
-        if (infoBean != null) {
-            UserHelper.init().saveUserInfo(infoBean);
-            if (flag == 1) {
+    public void dealLoginResult(LoginDataBean loginDataBean) {//微信登录
+        if ("200".equals(loginDataBean.getCode())) {
+            UserInfoBean infoBean = loginDataBean.getData();
+            if (infoBean != null) {
+                UserHelper.init().saveUserInfo(infoBean);
                 if (TextUtils.isEmpty(infoBean.phone)) {//未绑定手机号去绑定
                     goToBindPhone();
                 }
                 finish();
             }
+        } else {
+            ToastUtils.showShort(loginDataBean.msg);
+        }
+    }
+
+    @Override
+    public void dealBindLoginResult(LoginDataBean loginDataBean) {//绑定微信
+        if ("2027".equals(loginDataBean.getCode())) {
+            String tip = "账号已注册，登录后游客模式账号金币不同步,是否继续登录";
+            CommonDialogUtils.showRemindDialogStyle01(this, tip, "确认", new OnBtnClickListener() {
+                @Override
+                public void onClickView(int type) {
+                    mPresenter.loginWithWeiChat(paramsMap);
+                }
+            });
+        } else if ("200".equals(loginDataBean.getCode())) {
+            mPresenter.loginWithWeiChat(paramsMap);
         }
     }
 
