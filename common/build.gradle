@@ -76,7 +76,7 @@ dependencies {
     //WebView
 //    api rootProject.ext.dependencies["agentweb"] // (必选)
 //    api rootProject.ext.dependencies["filechooser"]// (可选)//这个会自带agentweb
-    api rootProject.ext.dependencies["Downloader"]// (可选)
+//    api rootProject.ext.dependencies["Downloader"]// (可选)
 
     api rootProject.ext.dependencies["stickylistheaders"]
     api rootProject.ext.dependencies["android-gif-drawable"]

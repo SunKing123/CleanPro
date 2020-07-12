@@ -27,7 +27,6 @@ import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 
-import com.download.library.BuildConfig;
 
 import java.io.File;
 
