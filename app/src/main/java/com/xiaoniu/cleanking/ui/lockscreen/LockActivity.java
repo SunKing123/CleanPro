@@ -111,6 +111,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         //注册订阅者
         EventBus.getDefault().register(this);
+        StatisticsUtils.customTrackEvent("lock_screen_page_custom", "锁屏页面创建时", "lock_screen_page", "lock_screen_page");
 
     }
 
