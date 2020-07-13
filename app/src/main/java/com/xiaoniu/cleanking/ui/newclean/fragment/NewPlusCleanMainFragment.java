@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -18,6 +19,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.widget.NestedScrollView;
 
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
@@ -334,8 +337,35 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
             StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
+            mPresenter.prepareVideoAd(adLayoutThree);
         }
+        showAdVideo();
+    }
+
+
+    boolean isRequest = false;
+
+    private void showAdVideo() {
+        mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            Rect scrollBounds = new Rect();
+            mScrollView.getHitRect(scrollBounds);
+            if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
+                //子控件至少有一个像素在可视范围内
+                if (!isRequest) {
+                    LogUtils.e("==========开始请求视频广告");
+                    if (mPresenter.getReadSuccess()) {
+                        mPresenter.fillVideoAd(adLayoutThree);
+                    }
+                } else {
+                    LogUtils.e("==========可见，请求过了");
+                }
+                isRequest = true;
+            } else {
+                //子控件完全不在可视范围内
+                LogUtils.e("==========不可见");
+            }
+        });
+
     }
 
 
