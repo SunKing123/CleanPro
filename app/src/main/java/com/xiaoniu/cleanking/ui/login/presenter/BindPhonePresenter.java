@@ -61,16 +61,18 @@ public class BindPhonePresenter extends BasePresenter<BindPhoneContract.Model, B
                 .subscribe(new ErrorHandleSubscriber<RequestPhoneBean>(mErrorHandler) {
                     @Override
                     public void onNext(RequestPhoneBean phoneBean) {
-                        if (phoneBean != null){
+                        if (phoneBean != null && "200".equals(phoneBean.code)) {
                             RequestPhoneBean.DataBean dataBean = phoneBean.getData();
-                            if (dataBean != null && !TextUtils.isEmpty(dataBean.getPhone())){
+                            if (dataBean != null && !TextUtils.isEmpty(dataBean.getPhone())) {
                                 UserHelper.init().setUserPhoneNum(dataBean.getPhone());
                                 EventBus.getDefault().post(BIND_PHONE_SUCCESS);
                                 OneKeyLoginManager.getInstance().finishAuthActivity();
                                 ToastUtils.showShort("绑定成功");
-                            }else{
+                            } else {
                                 OneKeyLoginManager.getInstance().finishAuthActivity();
                             }
+                        } else {
+                            ToastUtils.showShort(phoneBean.msg);
                         }
                         if (mRootView != null) {
                             mRootView.bindPhoneSuccess();

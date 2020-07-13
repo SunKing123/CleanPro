@@ -217,14 +217,16 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 mBinding.headImgIv.setImageResource(R.mipmap.default_head);
             }
         } else {
-            mBinding.moneyTv.setText("--");
-            mBinding.goldCoinTv.setText("--");
+            setUserCoinView(-1, -1);
             mBinding.headImgIv.setImageResource(R.mipmap.default_head);
             mBinding.phoneNumTv.setText("立即登录");
         }
     }
 
     private void setUserCoinView(double amount, int gold) {
+        mBinding.coinAbout.setVisibility(View.VISIBLE);
+        mBinding.moneyTv.setVisibility(View.VISIBLE);
+        mBinding.goldCoinTv.setVisibility(View.VISIBLE);
         if (gold > 99) {
             mBinding.moneyTv.setText(NumberUtils.getFloatStr2(amount) + "元");
             mBinding.goldCoinTv.setText(String.valueOf(gold));
@@ -235,6 +237,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             mBinding.moneyTv.setText("0元");
             mBinding.goldCoinTv.setText("0");
         } else {
+            mBinding.coinAbout.setVisibility(View.GONE);
+            mBinding.moneyTv.setVisibility(View.GONE);
             mBinding.moneyTv.setText("--");
             mBinding.goldCoinTv.setText("--");
         }
@@ -244,8 +248,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void getInfoDataSuccess(MinePageInfoBean infoBean) {
         if (infoBean != null && infoBean.getData() != null) {
             MinePageInfoBean.DataBean data = infoBean.getData();
-            mBinding.moneyTv.setText(String.valueOf(data.getAmount()));
-            mBinding.goldCoinTv.setText(String.valueOf(data.getGold()));
+            setUserCoinView(data.getAmount(), data.getGold());
             UserInfoEvent event = new UserInfoEvent();
             event.infoBean = data;
             EventBus.getDefault().post(event);

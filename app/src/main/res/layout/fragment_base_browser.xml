@@ -16,4 +16,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
+    <com.xiaoniu.statusview.StatusView
+        android:id="@+id/web_page_no_network"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 </FrameLayout>
