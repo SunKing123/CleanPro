@@ -190,7 +190,7 @@ public class GoldCoinDialog {
             @Override
             public void onReady(boolean b) {
                 if (dialog != null && !context.isFinishing()) {
-//                    dialog.show();
+                    dialog.show();
                     MidasRequesCenter.requestAd(params, callBack);
                 }
             }
