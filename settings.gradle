@@ -1,3 +1,4 @@
+include ':agentweb-core'
 include ':payshare'
 include ':app',
         ':otherlib:takephoto_library',

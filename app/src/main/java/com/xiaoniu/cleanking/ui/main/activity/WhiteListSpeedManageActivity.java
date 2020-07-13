@@ -71,7 +71,7 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
                 mTvSubTitle.setText(getString(R.string.txt_white_list_speed_title));
             }else {
                 //软件管理白名单
-                mTvTopTitle.setText(getString(R.string.text_soft_package_white_list));
+                mTvTopTitle.setText("软件管理白名单");
                 mTvSubTitle.setVisibility(View.GONE);
             }
             //扫描已安装包的信息

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
@@ -48,6 +49,7 @@ import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
@@ -669,6 +671,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         };
         //翻倍回调
         bean.onDoubleClickListener = (v) -> {
+            StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
             ViewGroup viewGroup = (ViewGroup) mView.getActivity().getWindow().getDecorView();
             AdRequestParams params = new AdRequestParams.Builder().
                     setActivity(mView.getActivity()).
@@ -708,8 +711,15 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             });
         };
+        bean.closeClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
+            }
+        };
         //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
         bean.context = mView.getActivity();
+        StatisticsUtils.customTrackEvent("home_page_gold_coin_pop_up_window_custom", "首页金币领取弹窗曝光", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
         GoldCoinDialog.showGoldCoinDialog(bean);
     }
 

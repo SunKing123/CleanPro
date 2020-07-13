@@ -20,9 +20,11 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.login.contract.BindPhoneContract;
 import com.xiaoniu.cleanking.ui.login.di.component.DaggerBindPhoneComponent;
 import com.xiaoniu.cleanking.ui.login.presenter.BindPhonePresenter;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -78,6 +80,9 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
         requestPhonePermission();
         //设置授权的样式
         OneKeyLoginManager.getInstance().setAuthThemeConfig(ShanYanManager.getCJSConfig(this));
+
+        StatisticsUtils.customTrackEvent("binding_mobile_phone_number_page_custom", "绑定手机号页面曝光", "binding_mobile_phone_number_page", "binding_mobile_phone_number_page");
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -124,11 +129,16 @@ public class BindPhoneActivity extends BaseActivity<BindPhonePresenter> implemen
 
     @OnClick({R.id.rl_bind, R.id.tv_manual})
     public void onViewClicked(View view) {
+        if (AndroidUtil.isFastDoubleClick()) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.rl_bind:
+                StatisticsUtils.trackClick("one_click_secure_binding_click", "一键登录点击", "binding_mobile_phone_number_page", "binding_mobile_phone_number_page");
                 oneBindingOption();
                 break;
             case R.id.tv_manual:
+                StatisticsUtils.trackClick("captcha_binding_click", "验证码绑定点击", "binding_mobile_phone_number_page", "binding_mobile_phone_number_page");
                 goToShouDongBinding();
                 break;
         }

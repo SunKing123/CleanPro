@@ -28,6 +28,9 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.weather.contract.WeatherForecastContract;
 import com.xiaoniu.cleanking.ui.weather.di.component.DaggerWeatherForecastComponent;
 import com.xiaoniu.cleanking.ui.weather.presenter.WeatherForecastPresenter;
+import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import androidx.annotation.NonNull;
@@ -117,6 +120,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
             return;
         }
         super.onBackPressedSupport();
+        StatisticsUtils.trackClick("return_click", "用户在首页点击【天气预报】模板", "home_page", "weather_forecast_page");
     }
 
 
@@ -131,6 +135,8 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
             qsVideoView.seekTo(position);
             position = 0;
         }
+
+        NiuDataAPI.onPageStart("weather_forecast_page_view_page", "用户在天气预报详情页浏览");
     }
 
     @Override
@@ -144,6 +150,8 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
         //暂停
         playFlag = qsVideoView.isPlaying();
         qsVideoView.pause();
+
+        NiuDataAPIUtil.onPageEnd("home_page", "weather_forecast_page", "weather_forecast_page_view_page", "用户在天气预报详情页浏览");
     }
 
 
@@ -241,6 +249,8 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
     /*---------------------------------------------------------广告请求--------------------------------------------------------------------------------------------------*/
     public void requestAd(){
         if(AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WEATHER_VIDEO_PAGE,PositionId.DRAW_ONE_CODE)){
+
+            StatisticsUtils.customTrackEvent("ad_request_sdk", "天气预报详情页广告发起请求", "home_page", "weather_forecast_page");
             AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.WEATHER_VIDEO_PAGE_BELOW)
                     .setActivity(this).setViewContainer(relRootAd).build();
             MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
