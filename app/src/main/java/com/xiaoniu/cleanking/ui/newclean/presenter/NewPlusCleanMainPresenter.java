@@ -556,7 +556,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         @Override
         public void onAdError(AdInfo adInfo, int i, String s) {
             super.onAdError(adInfo, i, s);
-            LogUtils.e("====首页广告one====:加载失败:" + s);
+            LogUtils.e("====首页广告" + title + "====:显示失败:" + s);
         }
 
         @Override
