@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     app:shadowRound="6dp"
-    android:layout_height="@dimen/dimen_189dp">
+    android:layout_height="@dimen/dimen_195dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="17.5dp"
             android:drawableStart="@mipmap/clear_icon_sound"
             android:gravity="center"
             android:textColor="@color/color_323232"
@@ -28,60 +28,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12.5dp"
-            android:layout_marginTop="@dimen/dimen_16dp"
+            android:layout_marginTop="23dp"
             android:layout_marginEnd="12.5dp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/item_1"
+                android:id="@+id/clear_img"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/clear_item_bg"
-                android:src="@mipmap/clear_item_video"
-                app:layout_constraintEnd_toStartOf="@+id/item_2"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                android:layout_marginStart="56.5dp"
+                android:src="@mipmap/clear_image_video"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/item_2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/clear_item_bg"
-                android:src="@mipmap/clear_item_img"
-                app:layout_constraintEnd_toStartOf="@+id/item_3"
-                app:layout_constraintStart_toEndOf="@+id/item_1"
-                app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/item_3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/clear_item_bg"
-                app:layout_constraintEnd_toStartOf="@+id/item_4"
-                app:layout_constraintStart_toEndOf="@+id/item_2"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/item_4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/clear_item_bg"
-                app:layout_constraintEnd_toStartOf="@+id/item_5"
-                app:layout_constraintStart_toEndOf="@+id/item_3"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/clear_content"
+                android:layout_marginStart="@dimen/dimen_13sp"
+                android:textStyle="bold"
+                android:textColor="#ff0007"
+                android:textSize="@dimen/dimen_21sp"
+                app:layout_constraintStart_toEndOf="@id/clear_img"
+                app:layout_constraintTop_toTopOf="@+id/clear_img"
+                android:layout_width="wrap_content"
+                tools:text="视频文件批量删除"
+                android:layout_height="wrap_content"/>
 
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/item_5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/clear_item_bg"
-                android:src="@mipmap/clear_item_video"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/item_4"
-                app:layout_constraintTop_toTopOf="parent" />
-
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/clear_sub_content"
+                android:layout_marginStart="@dimen/dimen_13sp"
+                android:textStyle="bold"
+                android:textColor="#ff0007"
+                android:textSize="@dimen/dimen_14sp"
+                app:layout_constraintStart_toEndOf="@id/clear_img"
+                app:layout_constraintBottom_toBottomOf="@+id/clear_img"
+                android:layout_width="wrap_content"
+                tools:text="有效节省空间"
+                android:layout_height="wrap_content"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

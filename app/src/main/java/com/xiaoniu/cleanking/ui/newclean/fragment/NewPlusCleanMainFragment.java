@@ -30,12 +30,9 @@ import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.MidasConstants;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
-import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.LoginActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -77,7 +74,6 @@ import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
@@ -222,7 +218,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         clearVideoLayout.setLeftTitle("视频文件");
         clearVideoLayout.setLeftIcon(R.mipmap.clear_icon_video);
-        clearVideoLayout.setCommonItemImageRes(R.mipmap.clear_item_video);
+        clearVideoLayout.setClearItemImage(R.mipmap.clear_image_video);
+        clearVideoLayout.setClearItemContent("视频文件批量删除");
+        clearVideoLayout.setClearItemSubContent("有效节省空间");
         clearVideoLayout.getButton().setOnClickListener(view -> {
             StatisticsUtils.trackClick("video_file_click", "用户在首页点击【视频文件】", "home_page", "home_page");
             //跳转到视频清理
@@ -231,7 +229,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         clearImageLayout.setLeftTitle("图片");
         clearImageLayout.setLeftIcon(R.mipmap.clear_icon_img);
-        clearImageLayout.setCommonItemImageRes(R.mipmap.clear_item_img);
+        clearImageLayout.setClearItemImage(R.mipmap.clear_image_pic);
+        clearImageLayout.setClearItemContent("智能相册管理");
+        clearImageLayout.setClearItemSubContent("一键删除无用照片");
         clearImageLayout.getButton().setOnClickListener(view -> {
             StatisticsUtils.trackClick("picture_file_Click", "用户在首页点击【图片文件】", "home_page", "home_page");
             Intent intent = new Intent(getActivity(), ImageActivity.class);
@@ -240,7 +240,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         clearSoundLayout.setLeftTitle("音频文件");
         clearSoundLayout.setLeftIcon(R.mipmap.clear_icon_sound);
-        clearSoundLayout.setCommonItemImageRes(R.mipmap.clear_item_sound);
+        clearSoundLayout.setClearItemImage(R.mipmap.clear_image_audio);
+        clearSoundLayout.setClearItemContent("清除过期音频文件");
+        clearSoundLayout.setClearItemSubContent("释放更多可用空间");
         clearSoundLayout.getButton().setOnClickListener(view -> {
             StatisticsUtils.trackClick("audio_file_Click", "用户在首页点击音频文件", "home_page", "home_page");
             //跳转到音乐清理
