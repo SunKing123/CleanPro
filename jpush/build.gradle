@@ -15,9 +15,9 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0.0"
-        ndk {
-            abiFilters "armeabi", "armeabi-v7a"//, "x86_64","x86"
-        }
+//        ndk {
+//            abiFilters "armeabi", "armeabi-v7a"//, "x86_64","x86"
+//        }
 //        需要配置以下key值
 //        manifestPlaceholders = [
 ////                JPUSH_PKGNAME:"您应用的包名",
