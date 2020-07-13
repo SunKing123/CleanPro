@@ -18,13 +18,13 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
-import com.xiaoniu.cleanking.midas.IOnAdClickListener;
-import com.xiaoniu.cleanking.midas.MidasConstants;
-import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
+import com.xiaoniu.cleanking.midas.IOnAdClickListener;
+import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
@@ -52,6 +52,7 @@ import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
@@ -492,6 +493,29 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     }
 
+
+    private boolean isReadSuccess;
+
+    public boolean getReadSuccess() {
+        return isReadSuccess;
+    }
+
+    public void prepareVideoAd(ViewGroup viewGroup) {
+        if (viewGroup == null || mView == null || mView.getActivity() == null) {
+            return;
+        }
+        //尝试预加载，丝滑般的体验...
+        MidasAdSdk.getAdsManger().askIsReady(mView.getActivity(), MidasConstants.MAIN_THREE_AD_ID, result -> isReadSuccess = result);
+    }
+
+    public void fillVideoAd(ViewGroup viewGroup, IOnAdClickListener onAdClick) {
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(MidasConstants.MAIN_THREE_AD_ID).setActivity(mView.getActivity())
+                .setViewContainer(viewGroup).build();
+        MidasRequesCenter.requestAd(params, new AdvCallBack(MidasConstants.MAIN_THREE_AD_ID, onAdClick));
+    }
+
+
     public void showAdviceLayout(ViewGroup viewGroup, String adviceID, IOnAdClickListener onAdClick) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
@@ -499,7 +523,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID,onAdClick));
+        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
     }
 
     static class AdvCallBack extends CMAbsAdCallBack {
@@ -507,9 +531,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         String title = "";
         IOnAdClickListener onAdClick;
 
-        AdvCallBack(String advId,IOnAdClickListener onAdClick) {
+        AdvCallBack(String advId, IOnAdClickListener onAdClick) {
             this.advId = advId;
-            this.onAdClick=onAdClick;
+            this.onAdClick = onAdClick;
             switch (advId) {
                 case MidasConstants.MAIN_ONE_AD_ID:
                     title = "one";
@@ -526,7 +550,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         @Override
         public void onAdLoadSuccess(AdInfo adInfo) {
             super.onAdLoadSuccess(adInfo);
-            LogUtils.e("====首页广告" + title + "====:onAdLoadSuccess:");
 
         }
 
@@ -546,14 +569,12 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         public void onAdShow(AdInfo adInfo) {
             super.onAdShow(adInfo);
 
-            LogUtils.e("====首页广告" + title + "====:加载成功:");
         }
 
         @Override
         public void onAdClicked(AdInfo adInfo) {
             super.onAdClicked(adInfo);
-            LogUtils.e("====首页广告one====:点击了");
-            if(onAdClick==null){
+            if (onAdClick != null) {
                 onAdClick.onClick(advId);
             }
         }
@@ -665,7 +686,8 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount);
     }
 
-    boolean videoAdRequesting=false;
+    boolean videoAdRequesting = false;
+
     //金币领取广告弹窗
     public void showGetGoldCoinDialog(BubbleCollected dataBean) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
@@ -696,7 +718,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         //翻倍回调
         bean.onDoubleClickListener = (v) -> {
             try {
-                if(videoAdRequesting){
+                if (videoAdRequesting) {
                     return;
                 }
                 //翻倍按钮点击
@@ -714,13 +736,13 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         setActivity(mView.getActivity()).
                         setViewContainer(viewGroup).
                         setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1)).build();
-                videoAdRequesting=true;
+                videoAdRequesting = true;
                 MidasRequesCenter.requestAdVideo(params, new VideoAbsAdCallBack() {
                     @Override
                     public void onShowError(int i, String s) {
                         ToastUtils.showLong("网络异常");
                         GoldCoinDialog.dismiss();
-                        videoAdRequesting=false;
+                        videoAdRequesting = false;
                     }
 
                     @Override
@@ -735,7 +757,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         if (!mView.getActivity().isFinishing()) {
                             GoldCoinDialog.dismiss();
                         }
-                        videoAdRequesting=false;
+                        videoAdRequesting = false;
                     }
 
                     @Override

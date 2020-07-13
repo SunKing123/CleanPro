@@ -4,13 +4,13 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.widget.NestedScrollView;
 
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
@@ -319,10 +321,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     private void refreshAdAll() {
-        LogUtils.e("=========================refreshAdAll()===================");
         refreshAd(MidasConstants.MAIN_ONE_AD_ID);
         refreshAd(MidasConstants.MAIN_TWO_AD_ID);
         refreshAd(MidasConstants.MAIN_THREE_AD_ID);
+        showAdVideo();
     }
 
     private void refreshAd(String adId) {
@@ -340,15 +342,49 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
                 break;
             case MidasConstants.MAIN_THREE_AD_ID:
-                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
-                    StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
-                    mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
+                if (getAdLayoutThreeVisible()) {
+                    if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+                        StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
+                        mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
+                    }
+                } else {
+                    mPresenter.prepareVideoAd(adLayoutThree);
                 }
                 break;
         }
     }
 
-    IOnAdClickListener adClick = adId -> refreshAd(adId);
+    IOnAdClickListener adClick = this::refreshAd;
+
+
+    private boolean getAdLayoutThreeVisible() {
+        Rect scrollBounds = new Rect();
+        mScrollView.getHitRect(scrollBounds);
+        return adLayoutThree.getLocalVisibleRect(scrollBounds);
+    }
+
+    boolean isRequest = false;
+
+
+    private void showAdVideo() {
+        mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            Rect scrollBounds = new Rect();
+            mScrollView.getHitRect(scrollBounds);
+            if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
+                //子控件至少有一个像素在可视范围内
+                if (!isRequest) {
+                    if (mPresenter.getReadSuccess()) {
+                        mPresenter.fillVideoAd(adLayoutThree, adClick);
+                    }
+                }
+                isRequest = true;
+            } else {
+                //子控件完全不在可视范围内
+            }
+        });
+
+    }
+
 
     /*
      *********************************************************************************************************************************************************
@@ -360,9 +396,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-        Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
-        if (!hidden) {
+        if (!hidden && getActivity() != null) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
@@ -830,6 +865,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             imageInteractive.setVisibility(View.GONE);
         }
     }
+
+
 
     /*
      * *********************************************************************************************************************************************************
