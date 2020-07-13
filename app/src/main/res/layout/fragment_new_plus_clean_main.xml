@@ -143,8 +143,8 @@
 
     <com.xiaoniu.cleanking.ui.view.HomeInteractiveView
         android:id="@+id/image_interactive"
-        android:layout_width="144dp"
-        android:layout_height="65dp"
+        android:layout_width="116dp"
+        android:layout_height="45dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"

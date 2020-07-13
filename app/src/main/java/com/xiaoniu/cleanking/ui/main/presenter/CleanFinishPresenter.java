@@ -278,7 +278,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         bean.advCallBack = new AbsAdCallBack() {
 
         };
-        bean.closeClickListener = view -> StatisticsUtils.trackClick("close_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
+        bean.closeClickListener = view -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
         bean.onDoubleClickListener = (v) -> {
             StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
             StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap());

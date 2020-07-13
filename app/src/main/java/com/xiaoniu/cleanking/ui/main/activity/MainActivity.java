@@ -77,6 +77,7 @@ import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -205,6 +206,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        LogUtils.i("zz---db---"+ uselessApks.size()+"---"+appPaths.size()+"---"+uselessApks1.size());
 //        LogUtils.i("zz-----path----"+appPaths.get(0).getFile_path()+"----"+ AESUtils01.decrypt(appPaths.get(0).getFile_path(),"E3A37D84081C89D9787D0B8546BA8BA5"));
 //        LogUtils.i("zz-----path----"+uselessApks1.get(1).getFilePath()+"----"+ AESUtils01.decrypt(uselessApks1.get(1).getFilePath(),"E3A37D84081C89D9787D0B8546BA8BA5"));
+        LogUtils.i("zz---deviceId--" + AndroidUtil.getDeviceID());
         refBottomState();
         //数美sdk初始化
         mPresenter.initShuMeiSDK();
@@ -241,7 +243,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 if (!mShowRedFirst && mCurrentPosition == redPacketDataBean.getLocation()) {
                     showRedPacket(redPacketDataBean);
                 }
-             
+
                 switch (position){
                     case 0:
                         StatisticsUtils.trackClick(Points.Tab.CLEAN_CLICK_CODE, Points.Tab.CLEAN_CLICK_NAME, "home_page", "home_page");
@@ -282,6 +284,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //上报设备信息
         if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
             getDeviceInfo();
+
         }
         //初始插屏广告开关
         mPresenter.getScreenSwitch();
@@ -299,7 +302,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         mainFragment.setOnInteractiveClickListener(v -> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            StatisticsUtils.trackClick("Interaction_ad_click", "用户点击了刮刮卡运营位", "home_page", "home_page");
+            StatisticsUtils.trackClick("scraping_buoy_click", "首页刮刮卡浮标点击", "home_page", "home_page");
             mBottomBar.setCurrentItem(2);
         });
 
@@ -501,7 +504,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 .hide(upQuotaFragment)
                 .hide(fourFragment)
                 .commitAllowingStateLoss();
-
     }
 
     private void showHideFragment(int position, int prePosition) {
@@ -534,7 +536,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         AppHolder.getInstance().setSourcePageId(currentPage);
         //默认二级选中页面为当前页面
         AppHolder.getInstance().setOtherSourcePageId(currentPage);
-        StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
+       // StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)
             source_page = "wode";
         if (position == CLEAN) {
