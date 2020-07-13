@@ -231,6 +231,7 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
                 finish();
             }
         } else {
+            AuthorizedLogin.getInstance().delAuthorized(this, SHARE_MEDIA.WEIXIN);
             ToastUtils.showShort(loginDataBean.msg);
         }
     }
