@@ -157,6 +157,9 @@ public class PositionId {
     //首页金币列表三个广告位
     public static final String KEY_AD_PAGE_HOME_GOLD_PAGE = "home_gold_page_gj_3.0";
 
+    //网赚Header_DeviceId存储
+    public static final String HEAD_DEVICE_ID = "head_device_id";//锁屏互动式广告
+
 
 
 }

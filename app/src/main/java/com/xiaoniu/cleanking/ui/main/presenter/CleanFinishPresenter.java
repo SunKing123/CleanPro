@@ -149,7 +149,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             public void netConnectError() {
                 ToastUtils.showShort(R.string.notwork_error);
             }
-        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), goldNum);
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), 5);
     }
 
     private void addDoubleGoldCoin(BubbleCollected bubbleCollected) {
