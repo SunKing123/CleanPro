@@ -191,7 +191,7 @@ public class HomeToolTableView extends LinearLayout {
      */
     public void notifyUnusedStyle() {
         itemNotify.setContentColor(getYellowColor());
-        itemNotify.setContent("发现骚扰通知");
+        itemNotify.setContent("已发现骚扰通知");
     }
 
     public void notifyUsedStyle() {
