@@ -21,6 +21,7 @@ buildscript {
         }
         jcenter()
         maven {url 'http://developer.huawei.com/repo/'}
+        maven { url 'http://pre.openxiaoniu.com/repository/xiaoniuhy-andriod-release' }
     }
     dependencies {
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.0.0'
@@ -73,6 +74,7 @@ allprojects {
         }
         jcenter()
         maven {url 'http://developer.huawei.com/repo/'}
+        maven { url 'http://pre.openxiaoniu.com/repository/xiaoniuhy-andriod-release' }
     }
 }
 

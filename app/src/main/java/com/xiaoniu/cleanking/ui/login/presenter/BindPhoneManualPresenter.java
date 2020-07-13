@@ -62,8 +62,12 @@ public class BindPhoneManualPresenter extends BasePresenter<BindPhoneManualContr
                 .subscribe(new ErrorHandleSubscriber<IsPhoneBindBean>(mErrorHandler) {
                     @Override
                     public void onNext(IsPhoneBindBean loginDataBean) {
-                        if (mRootView != null) {
-                            mRootView.getIsPhoneBindedSuccess(loginDataBean);
+                        if ("200".equals(loginDataBean.code)) {
+                            if (mRootView != null) {
+                                mRootView.getIsPhoneBindedSuccess(loginDataBean);
+                            }
+                        } else {
+                            ToastUtils.showShort(loginDataBean.msg);
                         }
                     }
                 });
@@ -113,8 +117,12 @@ public class BindPhoneManualPresenter extends BasePresenter<BindPhoneManualContr
                 .subscribe(new ErrorHandleSubscriber<BaseEntity>(mErrorHandler) {
                     @Override
                     public void onNext(BaseEntity msd) {
-                        if (mRootView != null) {
-                            mRootView.getCodeSuccess();
+                        if ("200".equals(msd.code)) {
+                            if (mRootView != null) {
+                                mRootView.getCodeSuccess();
+                            }
+                        } else {
+                            ToastUtils.showShort(msd.msg);
                         }
                     }
                 });

@@ -6,14 +6,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.geek.webpage.utils.NetkUtils;
 import com.just.agentweb.AgentWeb;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.Parameters;
@@ -23,6 +26,9 @@ import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statusview.StatusView;
+import com.xiaoniu.statusview.StatusViewBuilder;
 
 import butterknife.BindView;
 
@@ -42,6 +48,8 @@ public class BaseBrowserFragment extends SimpleFragment {
     RelativeLayout mRootView;
     @BindView(R.id.load_iv)
     ImageView loadIv;
+    @BindView(R.id.web_page_no_network)
+    StatusView webPageNoNetwork;
 
     private String current_page_id;
 
@@ -91,6 +99,36 @@ public class BaseBrowserFragment extends SimpleFragment {
             getWebView().loadUrl("javascript:videoCallBack(" + videoRequestJsonParams + ")");
             mActivity.finish();
         });
+        netWorkAbout();
+    }
+
+    private void netWorkAbout() {
+        webPageNoNetwork.config(new StatusViewBuilder.Builder()
+                .setOnErrorRetryClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //错误页面重试点击
+                        if (getWebView() != null && checkNetWork()) {
+                            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+                        } else {
+                            ToastUtils.showShort("网络连接异常，请检查网络设置");
+                        }
+                    }
+                }).build());
+        checkNetWork();
+    }
+
+    private boolean checkNetWork() {
+        if (NetkUtils.isConnected(getContext())) {
+            mRootView.setVisibility(View.VISIBLE);
+            webPageNoNetwork.setVisibility(View.GONE);
+            return true;
+        } else if (webPageNoNetwork.getVisibility() != View.VISIBLE) {
+            webPageNoNetwork.showErrorView();
+            webPageNoNetwork.setVisibility(View.VISIBLE);
+            return false;
+        }
+        return false;
     }
 
     public void setVideoCallBackParams(String jsonParams) {

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 import androidx.databinding.DataBindingUtil;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.geek.webpage.utils.NetkUtils;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebSettingsImpl;
 import com.just.agentweb.WebChromeClient;
@@ -24,7 +26,9 @@ import com.xiaoniu.cleanking.ui.newclean.util.YuLeWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
+import com.xiaoniu.statusview.StatusViewBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,6 +73,36 @@ public class YuLeFragment extends SimpleFragment {
             mAgentWeb.getWebCreator().getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
             Log.e("snow", "==" + AndroidUtil.getXnData());
         });
+        netWorkAbout();
+    }
+
+    private void netWorkAbout() {
+        mBinding.webPageNoNetwork.config(new StatusViewBuilder.Builder()
+                .setOnErrorRetryClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //错误页面重试点击
+                        if (getWebView() != null && checkNetWork()) {
+                            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+                        } else {
+                            ToastUtils.showShort("网络连接异常，请检查网络设置");
+                        }
+                    }
+                }).build());
+        checkNetWork();
+    }
+
+    private boolean checkNetWork() {
+        if (NetkUtils.isConnected(getContext())) {
+            mBinding.webFragment.setVisibility(View.VISIBLE);
+            mBinding.webPageNoNetwork.setVisibility(View.GONE);
+            return true;
+        } else if (mBinding.webPageNoNetwork.getVisibility() != View.VISIBLE) {
+            mBinding.webPageNoNetwork.showErrorView();
+            mBinding.webPageNoNetwork.setVisibility(View.VISIBLE);
+            return false;
+        }
+        return false;
     }
 
     @Override
@@ -77,6 +111,7 @@ public class YuLeFragment extends SimpleFragment {
         Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
         if (!hidden) {
+//            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
             getWebView().loadUrl("javascript:refresh()");
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
             StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
