@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -86,7 +85,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.settingLl.getLayoutParams();
         params.topMargin = DeviceUtils.getStatusBarHeight(mContext) + 30;
         mBinding.settingLl.setLayoutParams(params);
-        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
+//        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
     }
 
     FragmentMineBinding mBinding;
