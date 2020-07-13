@@ -36,9 +36,6 @@ class GoldCoinSuccessActivity : BaseActivity() {
     private lateinit var extParam: HashMap<String, Any>
 
     companion object {
-        const val COIN_NUM = "coin_num"
-        const val AD_ID = "ad_id"
-
         fun start(context: Context, model: GoldCoinDoubleModel) {
             var intent = Intent(context, GoldCoinSuccessActivity::class.java);
             intent.putExtra("model", model)
@@ -48,10 +45,13 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     override fun initLayout(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_gold_coin_success)
+        point = intent.getParcelableExtra("model")
+        coinNum = point.goldCoinsNum
+        exposurePoint()
+        goldCoinsNumPoint()
     }
 
     override fun initViews() {
-        exposurePoint()
         StatusBarCompat.translucentStatusBarForImage(this, true, true)
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             ad_frameLayout.outlineProvider = OutlineProvider(DimenUtils.dp2px(context, 6f).toFloat())
@@ -60,25 +60,20 @@ class GoldCoinSuccessActivity : BaseActivity() {
     }
 
     override fun initData() {
-        point = intent.getParcelableExtra("model")
-        coinNum = point.goldCoinsNum
-        //广告ID，如果广告位没有打开的话，不传这个ID即可（在进入ACTIVITY前自行判断是否打开了配置）
-        val adId = intent.getStringExtra(AD_ID)
-
         initCoinView();
 
         btnLeft.setOnClickListener { finish() }
 
-        if (!TextUtils.isEmpty(adId)) {
+        //广告ID，如果广告位没有打开的话，不传这个ID即可（在进入ACTIVITY前自行判断是否打开了配置）
+        if (!TextUtils.isEmpty(point.adId)) {
             //显示广告
-            val params = AdRequestParams.Builder().setAdId(adId).setViewContainer(ad_frameLayout)
+            val params = AdRequestParams.Builder().setAdId(point.adId).setViewContainer(ad_frameLayout)
                     .setActivity(this).build()
             adRequestPoint()
             MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
 
             })
         }
-        goldCoinsNumPoint()
     }
 
     override fun finish() {
