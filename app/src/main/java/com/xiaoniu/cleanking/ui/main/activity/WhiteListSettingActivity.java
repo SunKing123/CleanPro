@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.suke.widget.SwitchButton;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -15,6 +16,7 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.payshare.AuthorizedLogin;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -107,10 +109,12 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
 
     public void exitLoginResult(ExitLoginBean exitLoginBean) {
         if (exitLoginBean != null && "200".equals(exitLoginBean.code)) {
+            AuthorizedLogin.getInstance().delAuthorized(this, SHARE_MEDIA.WEIXIN);
             UserHelper.init().clearCurrentUserInfo();
             EventBus.getDefault().post(EXIT_SUCCESS);
             ToastUtils.showShort("退出登录成功");
             ll_exit_login.setVisibility(View.GONE);
+
         }
     }
 }

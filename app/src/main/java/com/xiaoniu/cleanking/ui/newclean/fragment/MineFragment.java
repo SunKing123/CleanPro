@@ -2,10 +2,13 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.jess.arms.utils.DeviceUtils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -78,6 +81,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         mBinding.phoneNumTv.setText("未登录");
         setUserInfo();
         RequestUserInfoUtil.getUserCoinInfo();
+
+
+        RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.settingLl.getLayoutParams();
+        params.topMargin = DeviceUtils.getStatusBarHeight(mContext) + 30;
+        mBinding.settingLl.setLayoutParams(params);
+        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
     }
 
     FragmentMineBinding mBinding;
