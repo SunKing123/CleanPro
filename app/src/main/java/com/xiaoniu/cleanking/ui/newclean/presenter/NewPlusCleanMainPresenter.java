@@ -660,7 +660,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount);
     }
 
-
+    boolean videoAdRequesting=false;
     //金币领取广告弹窗
     public void showGetGoldCoinDialog(BubbleCollected dataBean) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
@@ -691,6 +691,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         //翻倍回调
         bean.onDoubleClickListener = (v) -> {
             try {
+                if(videoAdRequesting){
+                    return;
+                }
                 //翻倍按钮点击
                 org.json.JSONObject exJson = new org.json.JSONObject();
                 exJson.put("gold_coin_position_id", dataBean.getData().getLocationNum());
@@ -706,11 +709,13 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         setActivity(mView.getActivity()).
                         setViewContainer(viewGroup).
                         setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1)).build();
+                videoAdRequesting=true;
                 MidasRequesCenter.requestAdVideo(params, new VideoAbsAdCallBack() {
                     @Override
                     public void onShowError(int i, String s) {
                         ToastUtils.showLong("网络异常");
                         GoldCoinDialog.dismiss();
+                        videoAdRequesting=false;
                     }
 
                     @Override
@@ -725,6 +730,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         if (!mView.getActivity().isFinishing()) {
                             GoldCoinDialog.dismiss();
                         }
+                        videoAdRequesting=false;
                     }
 
                     @Override

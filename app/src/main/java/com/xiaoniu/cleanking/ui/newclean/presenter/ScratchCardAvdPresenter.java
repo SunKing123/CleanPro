@@ -42,7 +42,7 @@ public class ScratchCardAvdPresenter {
     //翻倍广告开关
     private static boolean isOpenThree;
     //激励视频是否点击
-    private boolean isVideoClicked=false;
+    private boolean isVideoRequesting=false;
 
     private Activity activity;
     private int cardIndex;
@@ -72,7 +72,6 @@ public class ScratchCardAvdPresenter {
             log("activity 对象为空，不能弹框");
             return;
         }
-        this.isVideoClicked=false;
         this.cardIndex = cardIndex;
         this.coinCount = coinCount;
         if (parameter == null) {
@@ -94,10 +93,9 @@ public class ScratchCardAvdPresenter {
 
     //点击翻倍按钮事件
     private void handlerDoubleClick() {
-        if(isVideoClicked){
+        if(isVideoRequesting){
             return;
         }
-        isVideoClicked=true;
         loadVideoAdv(getVideoAdvId(cardIndex));
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
@@ -130,10 +128,10 @@ public class ScratchCardAvdPresenter {
 
     //加载激励视屏广告
     private void loadVideoAdv(String advId) {
+        isVideoRequesting=true;
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(advId).setActivity(activity)
                 .setViewContainer((ViewGroup) activity.getWindow().getDecorView()).build();
-
         MidasRequesCenter.requestAd(params, new CardAdCallBack(ADV_VIDEO_PREFIX));
     }
 
@@ -160,6 +158,7 @@ public class ScratchCardAvdPresenter {
                 case ADV_FIRST_PREFIX:
                     break;
                 case ADV_VIDEO_PREFIX:
+                    isVideoRequesting=false;
                     handlerVideoAdvError();
                     break;
             }
@@ -211,6 +210,7 @@ public class ScratchCardAvdPresenter {
             super.onAdVideoComplete(adInfo);
             log("onAdVideoComplete()====" + resNamePrefix);
             videoPlayed = true;
+            isVideoRequesting=false;
         }
     }
 
