@@ -85,6 +85,11 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.settingLl.getLayoutParams();
         params.topMargin = DeviceUtils.getStatusBarHeight(mContext) + 30;
         mBinding.settingLl.setLayoutParams(params);
+        if (AppHolder.getInstance().getAuditSwitch()) {//特殊情况隐藏
+            mBinding.cashRl.setVisibility(View.GONE);
+        } else {
+            mBinding.cashRl.setVisibility(View.VISIBLE);
+        }
 //        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
     }
 

@@ -4,7 +4,7 @@
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/common_default"
+        android:background="@color/white"
         android:orientation="vertical"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -72,6 +72,7 @@
             </RelativeLayout>
             <!--金币提现模块-->
             <RelativeLayout
+                android:id="@+id/cash_rl"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_115dp"
                 android:layout_marginLeft="@dimen/dimen_14dp"
