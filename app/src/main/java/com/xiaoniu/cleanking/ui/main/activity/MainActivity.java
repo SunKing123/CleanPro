@@ -302,7 +302,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         mainFragment.setOnInteractiveClickListener(v -> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-            StatisticsUtils.trackClick("Interaction_ad_click", "用户点击了刮刮卡运营位", "home_page", "home_page");
+            StatisticsUtils.trackClick("scraping_buoy_click", "首页刮刮卡浮标点击", "home_page", "home_page");
             mBottomBar.setCurrentItem(2);
         });
 
