@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
+import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
@@ -491,23 +492,24 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     }
 
-
-    public void showAdviceLayout(ViewGroup viewGroup, String adviceID) {
+    public void showAdviceLayout(ViewGroup viewGroup, String adviceID, IOnAdClickListener onAdClick) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID));
+        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID,onAdClick));
     }
 
     static class AdvCallBack extends CMAbsAdCallBack {
         String advId;
         String title = "";
+        IOnAdClickListener onAdClick;
 
-        AdvCallBack(String advId) {
+        AdvCallBack(String advId,IOnAdClickListener onAdClick) {
             this.advId = advId;
+            this.onAdClick=onAdClick;
             switch (advId) {
                 case MidasConstants.MAIN_ONE_AD_ID:
                     title = "one";
@@ -551,6 +553,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         public void onAdClicked(AdInfo adInfo) {
             super.onAdClicked(adInfo);
             LogUtils.e("====首页广告one====:点击了");
+            if(onAdClick==null){
+                onAdClick.onClick(advId);
+            }
         }
 
         @Override

@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdposUtil;
+import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
@@ -317,27 +318,37 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      *********************************************************************************************************************************************************
      */
 
-    long requestTime;
+    private void refreshAdAll() {
+        LogUtils.e("=========================refreshAdAll===================");
+        refreshAd(MidasConstants.MAIN_ONE_AD_ID);
+        refreshAd(MidasConstants.MAIN_TWO_AD_ID);
+        refreshAd(MidasConstants.MAIN_THREE_AD_ID);
+    }
 
-    private void refreshAd() {
-        if (System.currentTimeMillis() - requestTime < 3000) {
-            return;
-        }
-        requestTime = System.currentTimeMillis();
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_AD_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
+    private void refreshAd(String adId) {
+        switch (adId) {
+            case MidasConstants.MAIN_ONE_AD_ID:
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+                    StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
+                    mPresenter.showAdviceLayout(adLayoutOne, adId, adClick);
+                }
+                break;
+            case MidasConstants.MAIN_TWO_AD_ID:
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+                    StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
+                    mPresenter.showAdviceLayout(adLayoutTwo, adId, adClick);
+                }
+                break;
+            case MidasConstants.MAIN_THREE_AD_ID:
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+                    StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
+                    mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
+                }
+                break;
         }
     }
 
+    IOnAdClickListener adClick = adId -> refreshAd(adId);
 
     /*
      *********************************************************************************************************************************************************
@@ -361,7 +372,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //重新检测头部扫描状态
             checkScanState();
             //刷新广告数据
-            refreshAd();
+            refreshAdAll();
             //金币配置刷新
             mPresenter.refBullList();
         } else {
@@ -378,11 +389,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-
-        if (isVisible() || isFirst) {
-            isFirst = false;
-            refreshAd();
-        }
     }
 
     @Override
@@ -452,10 +458,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
 
-        if(AppHolder.getInstance().getAuditSwitch()){
+        if (AppHolder.getInstance().getAuditSwitch()) {
             tvCoinNum.setVisibility(View.GONE);
             tvWithDraw.setVisibility(View.GONE);
-        }else if (event != null && event.infoBean != null) {
+        } else if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
             tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
