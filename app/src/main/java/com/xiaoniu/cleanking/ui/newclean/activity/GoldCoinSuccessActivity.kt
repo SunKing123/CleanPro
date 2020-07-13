@@ -15,9 +15,11 @@ import com.xiaoniu.cleanking.mvp.BaseActivity
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel
 import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider
 import com.xiaoniu.cleanking.utils.DimenUtils
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
+import com.xnad.sdk.ad.entity.AdInfo
 import com.xnad.sdk.ad.listener.AbsAdCallBack
 import kotlinx.android.synthetic.main.activity_finish_layout.btnLeft
 import kotlinx.android.synthetic.main.activity_gold_coin_success.*
@@ -60,21 +62,29 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     override fun initData() {
         initCoinView();
-
         btnLeft.setOnClickListener { finish() }
+        loadAd()
+    }
 
+    fun loadAd(){
         //广告ID，如果广告位没有打开的话，不传这个ID即可（在进入ACTIVITY前自行判断是否打开了配置）
         if (!TextUtils.isEmpty(model.adId)) {
-            //显示广告
             val params = AdRequestParams.Builder().setAdId(model.adId).setViewContainer(ad_frameLayout)
                     .setActivity(this).build()
             adRequestPoint()
             MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
+                override fun onAdClose(p0: AdInfo?) {
+                    super.onAdClose(p0)
+                    loadAd()
+                }
 
+                override fun onAdError(p0: AdInfo?, p1: Int, p2: String?) {
+                    super.onAdError(p0, p1, p2)
+                    LogUtils.d("=====================goldCoinSuccess onAdError()"+p2)
+                }
             })
         }
     }
-
     override fun finish() {
         super.finish()
         returnBackPoint()
