@@ -128,8 +128,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
 
-            <com.xiaoniu.cleanking.widget.ShadowViewCard
+            <FrameLayout
                 android:id="@+id/ad_three"
+                android:background="@drawable/icon_boxbg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

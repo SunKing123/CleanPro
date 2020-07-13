@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.midas;
 import android.app.Application;
 import android.util.Log;
 
+import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -71,6 +72,7 @@ public class MidasRequesCenter {
         AdParameter adParameter = new AdParameter.Builder(adRequestParams.getActivity(),adRequestParams.getAdId())
                 //设置填充父布局
                 .setViewContainer(adRequestParams.getViewContainer())
+                .setViewWidth(adRequestParams.getViewWidth())
                 .build();
         MidasAdSdk.getAdsManger().loadAd(adParameter,absAdCallBack);
     }

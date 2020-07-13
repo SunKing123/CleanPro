@@ -58,7 +58,7 @@ class ShadowViewCard(context: Context, attributeSet: AttributeSet) : FrameLayout
         shadowRadius = a.getInteger(R.styleable.ShadowViewCard_shadowRadius, DEFAULT_VALUE_SHADOW_RADIUS).toFloat()
         a.recycle()
         setPadding(shadowLeftHeight, shadowTopHeight, shadowRightHeight, shadowBottomHeight)
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+//        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
     private fun dp2px(context: Context, dipValue: Int): Int {

@@ -481,10 +481,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 //    @Deprecated
     private void showHomeLottieView() {
-        int screenWidth = ScreenUtils.getScreenWidth(mContext);
-        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
-        textLayout.setMargins(0, -Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
-        view_lottie_top.setLayoutParams(textLayout);
+//        int screenWidth = ScreenUtils.getScreenWidth(mContext);
+//        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
+//        textLayout.setMargins(0, -Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
+//        view_lottie_top.setLayoutParams(textLayout);
         LuckBubbleView lftop = view_lottie_top.findViewById(R.id.lftop);
         LuckBubbleView lfbottom = view_lottie_top.findViewById(R.id.lfbotm);
         LuckBubbleView rttop = view_lottie_top.findViewById(R.id.rttop);

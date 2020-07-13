@@ -20,26 +20,36 @@
         android:id="@+id/tv_top_perview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+<!--
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+    </FrameLayout>-->
     <com.xiaoniu.cleanking.widget.TouchImageView
         android:id="@+id/iv_center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:alpha="0.5"
+        android:alpha="0.8"
         android:scaleX="0.8"
         android:scaleY="0.8"
         app:srcCompat="@drawable/icon_circle_btn_white" />
 
-
+<!--    <TextView
+        android:layout_width="113dp"
+        android:layout_height="35dp"
+        android:text="一键清理"
+        android:textColor="#ff000000"
+        android:textSize="25sp"
+        />-->
     <LinearLayout
         android:id="@+id/linear_text_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-
-        android:layout_marginBottom="@dimen/dp_50"
+        android:layout_centerInParent="true"
         android:orientation="horizontal">
 
         <TextView
@@ -56,8 +66,7 @@
             android:layout_height="wrap_content"
             android:text="@string/home_top_text_tag"
             android:textColor="@color/color_666666"
-            android:textSize="15sp"
-            android:visibility="gone" />
+            android:textSize="15sp"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -71,13 +80,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="29dp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="23dp"
+            android:background="@color/home_content_red"
             app:location="1" />
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
             android:id="@+id/lfbotm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/home_content_red"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="27dp"
@@ -87,8 +98,9 @@
             android:id="@+id/rttop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/home_content_red"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="23dp"
             android:layout_marginRight="@dimen/dp_18"
             app:location="3" />
 
@@ -97,6 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:background="@color/home_content_red"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="28dp"
