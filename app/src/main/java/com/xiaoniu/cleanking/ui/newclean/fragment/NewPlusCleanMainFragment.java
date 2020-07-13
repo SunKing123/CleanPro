@@ -319,7 +319,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     private void refreshAdAll() {
-        LogUtils.e("=========================refreshAdAll===================");
+        LogUtils.e("=========================refreshAdAll()===================");
         refreshAd(MidasConstants.MAIN_ONE_AD_ID);
         refreshAd(MidasConstants.MAIN_TWO_AD_ID);
         refreshAd(MidasConstants.MAIN_THREE_AD_ID);
