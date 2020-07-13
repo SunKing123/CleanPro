@@ -451,7 +451,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //更新用户信息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null && event.infoBean != null) {
+
+        if(AppHolder.getInstance().getAuditSwitch()){
+            tvCoinNum.setVisibility(View.GONE);
+            tvWithDraw.setVisibility(View.GONE);
+        }else if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
             tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
@@ -822,8 +826,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             imageInteractive.setVisibility(View.GONE);
         }
     }
-
-
 
     /*
      * *********************************************************************************************************************************************************

@@ -196,6 +196,14 @@ public class AppHolder {
 
 
     /**
+     * 过审开关是否打开
+     * @return  true 打开
+     */
+    public boolean getAuditSwitch(){
+        return !MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1").equals("1");
+    }
+
+    /**
      * 总开关检查
      *
      * @param configKey

@@ -314,8 +314,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 mBottomBar.setCurrentItem(3);
             }
         });
-
-
     }
 
 
