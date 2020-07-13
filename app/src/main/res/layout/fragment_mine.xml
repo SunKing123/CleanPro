@@ -4,7 +4,7 @@
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/common_default"
         android:orientation="vertical"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -25,7 +25,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="@dimen/dimen_28dp"
                     android:paddingRight="@dimen/dimen_15dp"
                     android:src="@mipmap/icon_white_setting" />
 
@@ -137,7 +136,8 @@
                             android:layout_marginRight="@dimen/dimen_5dp"
                             android:text="≈"
                             android:textColor="@color/color_FDBB1D"
-                            android:textSize="@dimen/dimen_24dp" />
+                            android:textSize="@dimen/dimen_24dp"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/coin_unit"
@@ -154,7 +154,8 @@
                             android:layout_height="wrap_content"
                             android:text="--"
                             android:textColor="@color/color_FDBB1D"
-                            android:textSize="@dimen/dimen_20dp" />
+                            android:textSize="@dimen/dimen_20dp"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
 

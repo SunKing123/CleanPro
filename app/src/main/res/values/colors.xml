@@ -125,10 +125,12 @@
     <color name="color_f2f2f2">#F2F2F2</color>
 
     <color name="common_white">#FFFFFF</color>
+    <color name="common_default">#F4F4F4</color>
     <color name="common_half_alpha">#55000000</color>
     <color name="translucent">#01000000</color>
     <color name="some_translucent">#80000000</color>
     <color name="some_translucent01">#A0FFFFFF</color>
+
 
     <color name="color_82838C">#82838C</color>
     <color name="color_66404040">#66404040</color>

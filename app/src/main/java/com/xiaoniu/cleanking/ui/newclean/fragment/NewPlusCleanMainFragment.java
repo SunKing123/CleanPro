@@ -391,7 +391,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //重新检测头部扫描状态
             checkScanState();
             //刷新广告数据
-            refreshAd();
+            refreshAdAll();
             //金币配置刷新
             mPresenter.refBullList();
         } else {
@@ -408,11 +408,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-
-        if (isVisible() || isFirst) {
-            isFirst = false;
-            refreshAd();
-        }
     }
 
     @Override
@@ -481,7 +476,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //更新用户信息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null && event.infoBean != null) {
+
+        if (AppHolder.getInstance().getAuditSwitch()) {
+            tvCoinNum.setVisibility(View.GONE);
+            tvWithDraw.setVisibility(View.GONE);
+        } else if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
             tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
@@ -770,8 +769,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             }
         }
     }
-
-
 
     /*
      * *********************************************************************************************************************************************************
