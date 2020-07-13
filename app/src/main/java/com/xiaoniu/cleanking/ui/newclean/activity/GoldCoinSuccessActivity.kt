@@ -40,7 +40,7 @@ class GoldCoinSuccessActivity : BaseActivity() {
         const val AD_ID = "ad_id"
 
         fun start(context: Context, model: GoldCoinDoubleModel) {
-            var intent = Intent(context, GoldCoinSuccessActivity.javaClass);
+            var intent = Intent(context, GoldCoinSuccessActivity::class.java);
             intent.putExtra("model", model)
             context.startActivity(intent)
         }
