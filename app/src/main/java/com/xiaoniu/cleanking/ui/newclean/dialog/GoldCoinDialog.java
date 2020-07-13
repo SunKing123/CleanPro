@@ -40,7 +40,7 @@ import com.xnad.sdk.ad.listener.AskReadyCallBack;
 /**
  * Created by zhaoyingtao
  * Date: 2020/7/1
- * Describe:
+ * Describe:注意只能有一个弹窗，消失后才能再次弹出
  */
 public class GoldCoinDialog {
 
@@ -57,7 +57,9 @@ public class GoldCoinDialog {
             }
             return;
         }
-
+        if (dialog != null && dialog.isShowing()) {
+            return;
+        }
         dialog = new BaseDialog(context, R.style.common_dialog_style);
         dialog.setContentView(R.layout.gold_coin_dialog);
         dialog.setCancelable(false);

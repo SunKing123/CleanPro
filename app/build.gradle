@@ -7,7 +7,7 @@ apply plugin: 'com.didiglobal.booster'
 
 android {
 
-    compileOptions.encoding="UTF-8"
+    compileOptions.encoding = "UTF-8"
 
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
@@ -21,7 +21,7 @@ android {
         flavorDimensions "environment"
         ndk {
             //选择要添加的对应cpu类型的.so库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'arm64-v8a'
+            abiFilters 'armeabi', 'armeabi-v7a'//, 'x86', 'arm64-v8a'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
         javaCompileOptions {
@@ -216,11 +216,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
+//    sourceSets {
+//        main {
+//            jniLibs.srcDirs = ['libs']
+//        }
+//    }
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
@@ -232,6 +232,7 @@ android {
 static def getSimpleDate() {
     return new Date().format("yyyyMMdd_HHmm", TimeZone.getDefault())
 }
+
 repositories {
     flatDir {
         dirs 'libs'
@@ -276,8 +277,8 @@ dependencies {
     implementation files('libs/smantifraud.aar')
 
     //推送
-  //  implementation files('libs\\push-core.aar')
-  //  implementation files('libs\\push-jpush.aar')
+    //  implementation files('libs\\push-core.aar')
+    //  implementation files('libs\\push-jpush.aar')
     implementation project(':permission')
     implementation project(':qsvideoplayer')
 

@@ -1,10 +1,15 @@
 package com.xiaoniu.cleanking.utils.user;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,9 +18,28 @@ import com.chuanglan.shanyan_sdk.listener.ActionListener;
 import com.chuanglan.shanyan_sdk.listener.GetPhoneInfoListener;
 import com.chuanglan.shanyan_sdk.listener.OneKeyLoginListener;
 import com.chuanglan.shanyan_sdk.listener.OpenLoginAuthListener;
+import com.chuanglan.shanyan_sdk.listener.ShanYanCustomInterface;
 import com.chuanglan.shanyan_sdk.tool.ShanYanUIConfig;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.api.CommonApiService;
+import com.xiaoniu.cleanking.mvp.DefaultRetrofitProxyImpl;
+import com.xiaoniu.cleanking.ui.login.activity.BindPhoneManualActivity;
+import com.xiaoniu.cleanking.ui.login.bean.RequestPhoneBean;
 import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+
+import static com.xiaoniu.cleanking.utils.user.UserHelper.BIND_PHONE_SUCCESS;
 
 /**
  * Created by zhaoyingtao
@@ -123,13 +147,13 @@ public class ShanYanManager {
         Drawable navReturnImgPath = context.getResources().getDrawable(R.mipmap.icon_gray_back);
 
         TextView otherTV = new TextView(context);
-        otherTV.setText(context.getResources().getString(R.string.app_name));
-        otherTV.setTextColor(Color.parseColor("#333333"));
+        otherTV.setText("验证码绑定");
+        otherTV.setTextColor(Color.parseColor("#5CD0FF"));
         otherTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         otherTV.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
 
         RelativeLayout.LayoutParams mLayoutParams1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        mLayoutParams1.setMargins(0, DisplayUtils.dip2px(190), 0, 0);
+        mLayoutParams1.setMargins(0, DisplayUtils.dip2px(330), 0, 0);
         mLayoutParams1.addRule(RelativeLayout.CENTER_HORIZONTAL);
         otherTV.setLayoutParams(mLayoutParams1);
 
@@ -179,7 +203,7 @@ public class ShanYanManager {
 //                .setAppPrivacyTwo("闪验隐私政策", "https://api.253.com/api_doc/yin-si-zheng-ce/ge-ren-xin-xi-bao-hu-sheng-ming.html")  //设置开发者隐私条款2名称和URL(名称，url)
 //                .setAppPrivacyThree("用户服务条款", "https://api.253.com/api_doc/yin-si-zheng-ce/ge-ren-xin-xi-bao-hu-sheng-ming.html")
                 .setPrivacyText("同意安全绑定则代表同意", "", "", "",
-                        "授权"+context.getResources().getString(R.string.app_name)+"获得本机号码")
+                        "授权" + context.getResources().getString(R.string.app_name) + "获得本机号码")
                 .setPrivacyTextSize(13)
                 .setPrivacyState(true)
                 .setCheckBoxMargin(0, 0, 4, 20)
@@ -197,10 +221,105 @@ public class ShanYanManager {
                 .setShanYanSloganOffsetBottomY(20)
 
                 // 添加自定义控件:
-//                .addCustomView(otherTV, false, false, null)
+                .addCustomView(otherTV, false, false, new ShanYanCustomInterface() {
+                    @Override
+                    public void onClick(Context context, View view) {
+                        Intent intent = new Intent(context, BindPhoneManualActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                })
 //                .addCustomView(relativeLayout, false, false, null)
                 .build();
         return uiConfig;
 
+    }
+
+    /**
+     * 检验手机状态权限
+     */
+    public static void requestPhonePermission(Activity mActivity) {
+        String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
+        new RxPermissions(mActivity).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) {
+
+            }
+        });
+    }
+
+    /**
+     * 调起闪验一键登录页面及后续操作
+     */
+    public static void oneBindingOption(Context mContext) {
+        if (mContext == null) {
+            return;
+        }
+        //设置授权的样式
+        OneKeyLoginManager.getInstance().setAuthThemeConfig(ShanYanManager.getCJSConfig(mContext));
+        ShanYanManager.getPhoneInfo((type, code, message) -> {
+            if (code == 1022) {
+                openLoginAuth(mContext);
+            } else {
+                goToShouDongBinding(mContext);
+            }
+        });
+    }
+
+    private static void goToShouDongBinding(Context mContext) {
+        Intent intent = new Intent(mContext, BindPhoneManualActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContext.startActivity(intent);
+    }
+
+    private static void openLoginAuth(Context mContext) {
+        ShanYanManager.openLoginAuth((typeL, codeL, messageL) -> {
+            if (typeL == 102) {//拉取页面结果
+                if (codeL != 1000) {
+                    goToShouDongBinding(mContext);
+                }
+            } else if (typeL == 103) {//登录结果
+                if (codeL == 1000) {
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(messageL);
+                        String token = jsonObject.optString("token");
+                        if (!TextUtils.isEmpty(token)) {
+                            getPhoneNumFromShanYan(token);
+                        } else {
+                            goToShouDongBinding(mContext);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private static void getPhoneNumFromShanYan(String token) {
+        DefaultRetrofitProxyImpl.getRetrofit().create(CommonApiService.class).getPhoneNumFromShanYanApi(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(() -> {
+                })
+                .subscribe(new ErrorHandleSubscriber<RequestPhoneBean>(RxErrorHandler.builder().build()) {
+                    @Override
+                    public void onNext(RequestPhoneBean phoneBean) {
+                        if (phoneBean != null && "200".equals(phoneBean.code)) {
+                            RequestPhoneBean.DataBean dataBean = phoneBean.getData();
+                            if (dataBean != null && !TextUtils.isEmpty(dataBean.getPhone())) {
+                                UserHelper.init().setUserPhoneNum(dataBean.getPhone());
+                                EventBus.getDefault().post(BIND_PHONE_SUCCESS);
+                                OneKeyLoginManager.getInstance().finishAuthActivity();
+                                ToastUtils.showShort("绑定成功");
+                            } else {
+                                OneKeyLoginManager.getInstance().finishAuthActivity();
+                            }
+                        } else {
+                            ToastUtils.showShort(phoneBean.msg);
+                        }
+                    }
+                });
     }
 }

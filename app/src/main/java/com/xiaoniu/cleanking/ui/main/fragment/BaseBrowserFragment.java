@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.geek.webpage.utils.NetkUtils;
 import com.just.agentweb.AgentWeb;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.Parameters;
@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statusview.StatusView;
@@ -75,10 +76,11 @@ public class BaseBrowserFragment extends SimpleFragment {
     }
 
     MyBaseWebViewClient baseWebViewClient;
+    String url;
 
     @Override
     protected void initView() {
-        String url = getArguments().getString("url");
+        url = getArguments().getString("url");
         cardAvdPresenter = new ScratchCardAvdPresenter(mActivity);
         Parameters parameter = UrlUtils.getParamsFromUrl(url);
         current_page_id = parameter.getParameter(SchemeConstant.AD_CURRENT_PAGE_ID);
@@ -109,7 +111,8 @@ public class BaseBrowserFragment extends SimpleFragment {
                     public void onClick(View v) {
                         //错误页面重试点击
                         if (getWebView() != null && checkNetWork()) {
-                            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+                            getWebView().setVisibility(View.VISIBLE);
+                            getWebView().loadUrl(url);
                         } else {
                             ToastUtils.showShort("网络连接异常，请检查网络设置");
                         }
@@ -120,8 +123,8 @@ public class BaseBrowserFragment extends SimpleFragment {
 
     private boolean checkNetWork() {
         if (NetkUtils.isConnected(getContext())) {
-            mRootView.setVisibility(View.VISIBLE);
             webPageNoNetwork.setVisibility(View.GONE);
+            mRootView.setVisibility(View.VISIBLE);
             return true;
         } else if (webPageNoNetwork.getVisibility() != View.VISIBLE) {
             webPageNoNetwork.showErrorView();
@@ -281,6 +284,14 @@ public class BaseBrowserFragment extends SimpleFragment {
         @JavascriptInterface
         public void walletSuccess() {//提现成功
             RequestUserInfoUtil.getUserCoinInfo();
+        }
+
+        @JavascriptInterface
+        public void fastBindPhone() {//绑定手机号操作
+            new Handler().post(() -> {
+                ShanYanManager.oneBindingOption(getContext());
+            });
+
         }
     }
 

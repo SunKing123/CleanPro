@@ -149,7 +149,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             public void netConnectError() {
                 ToastUtils.showShort(R.string.notwork_error);
             }
-        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), goldNum);
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), 5);
     }
 
     private void addDoubleGoldCoin(BubbleCollected bubbleCollected) {
@@ -266,6 +266,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         return jsonObject;
     }
 
+    boolean videoAdRequesting=false;
     //金币领取广告弹窗
     public void showGetGoldCoinDialog(BubbleCollected bubbleCollected) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
@@ -280,6 +281,9 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         };
         bean.closeClickListener = view -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
         bean.onDoubleClickListener = (v) -> {
+            if(videoAdRequesting){
+                return;
+            }
             StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
             StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap());
             ViewGroup viewGroup = (ViewGroup) mView.getWindow().getDecorView();
@@ -287,12 +291,14 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                     setActivity(mActivity).
                     setViewContainer(viewGroup).
                     setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build();
+            videoAdRequesting=true;
             MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
                 @Override
                 public void onShowError(int i, String s) {
                     super.onShowError(i, s);
                     ToastUtils.showLong("网络异常");
                     GoldCoinDialog.dismiss();
+                    videoAdRequesting=false;
                 }
 
                 @Override
@@ -312,10 +318,11 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 public void onAdVideoComplete(AdInfo adInfo) {
                     super.onAdVideoComplete(adInfo);
                     addDoubleGoldCoin(bubbleCollected);
+                    videoAdRequesting=false;
                 }
             });
-
         };
+
         StatisticsUtils.customTrackEvent("success_page_gold_coin_pop_up_window_custom", "功能完成页金币领取弹窗曝光", "", "success_page_gold_coin_pop_up_window");
         StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页金币领取弹窗上广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap());
         GoldCoinDialog.showGoldCoinDialog(bean);

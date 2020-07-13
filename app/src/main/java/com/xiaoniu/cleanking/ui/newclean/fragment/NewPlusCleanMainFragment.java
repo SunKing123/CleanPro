@@ -4,13 +4,13 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.widget.NestedScrollView;
 
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
@@ -29,6 +31,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdposUtil;
+import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
@@ -98,7 +101,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-import static com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView.STATE_SLIDING;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
@@ -194,21 +196,30 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(int x, int y, int oldx, int oldy, boolean isBottom) {
-
-            }
-
-            @Override
-            public void onScrollState(int scrollState) {
-                if (scrollState == STATE_SLIDING) {//正在滑动
-                    isSlide = true;
-                    mFloatAnimManager.hindFloatAdvertView();
-                } else {
+                if (y == 0) {
                     if (isSlide) {
                         //滑动过到静止状态
                         isSlide = false;
                         mFloatAnimManager.showFloatAdvertView();
                     }
+                }else {
+                    isSlide = true;
+                    mFloatAnimManager.hindFloatAdvertView();
                 }
+            }
+
+            @Override
+            public void onScrollState(int scrollState) {
+//                if (scrollState == STATE_SLIDING) {//正在滑动
+//                    isSlide = true;
+//                    mFloatAnimManager.hindFloatAdvertView();
+//                } else {
+//                    if (isSlide) {
+//                        //滑动过到静止状态
+//                        isSlide = false;
+//                        mFloatAnimManager.showFloatAdvertView();
+//                    }
+//                }
             }
         });
     }
@@ -317,25 +328,69 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      *********************************************************************************************************************************************************
      */
 
-    long requestTime;
+    private void refreshAdAll() {
+        refreshAd(MidasConstants.MAIN_ONE_AD_ID);
+        refreshAd(MidasConstants.MAIN_TWO_AD_ID);
+        refreshAd(MidasConstants.MAIN_THREE_AD_ID);
+        showAdVideo();
+    }
 
-    private void refreshAd() {
-        if (System.currentTimeMillis() - requestTime < 3000) {
-            return;
+    private void refreshAd(String adId) {
+        switch (adId) {
+            case MidasConstants.MAIN_ONE_AD_ID:
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+                    StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
+                    mPresenter.showAdviceLayout(adLayoutOne, adId, adClick);
+                }
+                break;
+            case MidasConstants.MAIN_TWO_AD_ID:
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+                    StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
+                    mPresenter.showAdviceLayout(adLayoutTwo, adId, adClick);
+                }
+                break;
+            case MidasConstants.MAIN_THREE_AD_ID:
+                if (getAdLayoutThreeVisible()) {
+                    if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+                        StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
+                        mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
+                    }
+                } else {
+                    mPresenter.prepareVideoAd(adLayoutThree);
+                }
+                break;
         }
-        requestTime = System.currentTimeMillis();
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_AD_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutThree, MidasConstants.MAIN_THREE_AD_ID);
-        }
+    }
+
+    IOnAdClickListener adClick = this::refreshAd;
+
+
+    private boolean getAdLayoutThreeVisible() {
+        Rect scrollBounds = new Rect();
+        mScrollView.getHitRect(scrollBounds);
+        return adLayoutThree.getLocalVisibleRect(scrollBounds);
+    }
+
+    boolean isRequest = false;
+
+
+    private void showAdVideo() {
+        mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            Rect scrollBounds = new Rect();
+            mScrollView.getHitRect(scrollBounds);
+            if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
+                //子控件至少有一个像素在可视范围内
+                if (!isRequest) {
+                    if (mPresenter.getReadSuccess()) {
+                        mPresenter.fillVideoAd(adLayoutThree, adClick);
+                    }
+                }
+                isRequest = true;
+            } else {
+                //子控件完全不在可视范围内
+            }
+        });
+
     }
 
 
@@ -349,9 +404,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-        Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
-        if (!hidden) {
+        if (!hidden && getActivity() != null) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
@@ -361,7 +415,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //重新检测头部扫描状态
             checkScanState();
             //刷新广告数据
-            refreshAd();
+            refreshAdAll();
             //金币配置刷新
             mPresenter.refBullList();
         } else {
@@ -378,11 +432,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-
-        if (isVisible() || isFirst) {
-            isFirst = false;
-            refreshAd();
-        }
     }
 
     @Override
@@ -451,7 +500,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //更新用户信息
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void userInfoUpdate(UserInfoEvent event) {
-        if (event != null && event.infoBean != null) {
+
+        if (AppHolder.getInstance().getAuditSwitch()) {
+            tvCoinNum.setVisibility(View.GONE);
+            tvWithDraw.setVisibility(View.GONE);
+        } else if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
             tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
@@ -740,8 +793,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             }
         }
     }
-
-
 
     /*
      * *********************************************************************************************************************************************************

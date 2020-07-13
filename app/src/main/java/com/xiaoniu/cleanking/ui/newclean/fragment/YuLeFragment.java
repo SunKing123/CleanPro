@@ -83,6 +83,7 @@ public class YuLeFragment extends SimpleFragment {
                     public void onClick(View v) {
                         //错误页面重试点击
                         if (getWebView() != null && checkNetWork()) {
+                            getWebView().setVisibility(View.VISIBLE);
                             getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
                         } else {
                             ToastUtils.showShort("网络连接异常，请检查网络设置");
@@ -94,8 +95,8 @@ public class YuLeFragment extends SimpleFragment {
 
     private boolean checkNetWork() {
         if (NetkUtils.isConnected(getContext())) {
-            mBinding.webFragment.setVisibility(View.VISIBLE);
             mBinding.webPageNoNetwork.setVisibility(View.GONE);
+            mBinding.webFragment.setVisibility(View.VISIBLE);
             return true;
         } else if (mBinding.webPageNoNetwork.getVisibility() != View.VISIBLE) {
             mBinding.webPageNoNetwork.showErrorView();

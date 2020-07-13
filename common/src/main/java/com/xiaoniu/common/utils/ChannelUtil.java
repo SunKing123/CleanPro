@@ -27,7 +27,6 @@ public class ChannelUtil {
     }
 
 
-
     /**
      * 从apk中获取版本信息
      *
