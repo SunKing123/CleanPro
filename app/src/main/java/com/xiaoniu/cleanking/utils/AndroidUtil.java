@@ -28,6 +28,8 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -347,8 +349,10 @@ public class AndroidUtil {
     @SuppressLint({"MissingPermission"})
     public static String getDeviceID() {
         Context context = AppApplication.getInstance();
-        if (!TextUtils.isEmpty(sDeviceID) && !"unknown".equals(sDeviceID)) {
-            return sDeviceID;
+        String mkId = MmkvUtil.getString(PositionId.HEAD_DEVICE_ID,"");
+        if (!TextUtils.isEmpty(mkId) && !"unknown".equals(mkId)) {
+            sDeviceID = mkId;
+            return mkId;
         } else {
             try {
                 TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -364,6 +368,10 @@ public class AndroidUtil {
             } catch (Exception var2) {
                 setDeviceID();
                 return sDeviceID;
+            }finally {
+                if (!TextUtils.isEmpty(sDeviceID) && !"unknown".equals(sDeviceID)) {
+                    MmkvUtil.saveString(PositionId.HEAD_DEVICE_ID, sDeviceID);
+                }
             }
         }
     }
