@@ -41,6 +41,8 @@ public class ScratchCardAvdPresenter {
     private static boolean isOpenTwo;
     //翻倍广告开关
     private static boolean isOpenThree;
+    //激励视频是否点击
+    private boolean isVideoClicked=false;
 
     private Activity activity;
     private int cardIndex;
@@ -70,6 +72,7 @@ public class ScratchCardAvdPresenter {
             log("activity 对象为空，不能弹框");
             return;
         }
+        this.isVideoClicked=false;
         this.cardIndex = cardIndex;
         this.coinCount = coinCount;
         if (parameter == null) {
@@ -91,6 +94,10 @@ public class ScratchCardAvdPresenter {
 
     //点击翻倍按钮事件
     private void handlerDoubleClick() {
+        if(isVideoClicked){
+            return;
+        }
+        isVideoClicked=true;
         loadVideoAdv(getVideoAdvId(cardIndex));
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
