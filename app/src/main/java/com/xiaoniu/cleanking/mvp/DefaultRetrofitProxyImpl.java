@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public final class DefaultRetrofitProxyImpl implements IRetrofitProxy {
 
     private static final int DEFAULT_MILLISECONDS = 20 * 1000;
-    private Retrofit mRetrofit;
+    private static Retrofit mRetrofit;
     /**
      * 该url只是占位使用，具体使用url，使用retrofitUrlManager的逻辑处理
      */
@@ -49,7 +49,7 @@ public final class DefaultRetrofitProxyImpl implements IRetrofitProxy {
         return mRetrofit.create(serviceClass);
     }
 
-    private void createRetrofit() {
+    private static void createRetrofit() {
         OkHttpClient.Builder mBuilder = RetrofitUrlManager.getInstance().with(new OkHttpClient.Builder());
         mBuilder.connectTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
         mBuilder.readTimeout(DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
@@ -102,5 +102,12 @@ public final class DefaultRetrofitProxyImpl implements IRetrofitProxy {
                 .addConverterFactory(GsonConverterFactory.create(GSON.getGson))
                 .client(mBuilder.build())
                 .build();
+    }
+
+    public static Retrofit getRetrofit() {
+        if (mRetrofit == null) {
+            createRetrofit();
+        }
+        return mRetrofit;
     }
 }

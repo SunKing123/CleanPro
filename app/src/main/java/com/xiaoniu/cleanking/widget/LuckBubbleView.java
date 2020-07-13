@@ -11,9 +11,11 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
@@ -43,7 +45,8 @@ public class LuckBubbleView extends LinearLayout {
     private void initView(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.rubble);
         loact = typedArray.getInt(R.styleable.rubble_location, 1);
-        typ_RE = Typeface.createFromAsset(context.getAssets(), "DIN-Medium.otf");
+        typ_RE = Typeface.createFromAsset(context.getAssets(), "fonts/D-DIN.otf");
+
 
         activity = (Activity) context;
         inflate(activity, R.layout.luck_bubble, this);
@@ -52,31 +55,41 @@ public class LuckBubbleView extends LinearLayout {
         ImageView imgbg = (ImageView) findViewById(R.id.imgbg);
         setVisibility(VISIBLE);
 
-        ImageView ivBallAnim = (ImageView) findViewById(R.id.iv_ball_anim);
-        setAnim(ivBallAnim);
+//        ImageView ivBallAnim = (ImageView) findViewById(R.id.iv_ball_anim);
+//        setAnim(ivBallAnim);
 
-        LayoutParams lp = new LayoutParams(ivBallAnim.getLayoutParams());
-        lp.setMargins(50, 100, 0, 0);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(imgbg.getLayoutParams());
+        imgbg.setImageResource(R.drawable.icon_kw00);
+//        lp.setMargins(50, 100, 0, 0);
         if (loact == 1) {//left-top
-            content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
-            lp.setMargins(DisplayUtil.dip2px(context,-15), 0, 0, DisplayUtil.dip2px(context,-12));
-            imgbg.setImageResource(R.drawable.kw1);
-        } else if (loact == 2) {//left-bom
-            content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 11);
-            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 30f);
-            lp.setMargins(DisplayUtil.dip2px(context,30), 0, 0,DisplayUtil.dip2px(context,-15));
-            imgbg.setImageResource(R.drawable.kw2);
-        } else if (loact == 3) {//right-top
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-            lp.setMargins(DisplayUtil.dip2px(context,-10), 0, 0, DisplayUtil.dip2px(context,-10));
-            imgbg.setImageResource(R.drawable.kw3);
-        } else if (loact == 4) {//right-bom
+            lp.width = DisplayUtil.dip2px(context, 31.5f);
+            lp.height = DisplayUtil.dip2px(context, 33f);
+            imgbg.setLayoutParams(lp);
+        } else if (loact == 2) {//left-bom
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 60f);
-            lp.setMargins(DisplayUtil.dip2px(context,40), 0, 0, DisplayUtil.dip2px(context,-15));
-            imgbg.setImageResource(R.drawable.kw4);
+//            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 30f);
+//            lp.setMargins(DisplayUtil.dip2px(context,30), 0, 0,DisplayUtil.dip2px(context,-15));
+            lp.width = DisplayUtil.dip2px(context, 38.5f);
+            lp.height = DisplayUtil.dip2px(context, 40.5f);
+            imgbg.setLayoutParams(lp);
+
+
+        } else if (loact == 3) {//right-top
+            content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+//            lp.setMargins(DisplayUtil.dip2px(context,-10), 0, 0, DisplayUtil.dip2px(context,-10));
+            lp.width = DisplayUtil.dip2px(context, 38.5f);
+            lp.height = DisplayUtil.dip2px(context, 40.5f);
+            imgbg.setLayoutParams(lp);
+        } else if (loact == 4) {//right-bom
+            content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+//            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 60f);
+//            lp.setMargins(DisplayUtil.dip2px(context,40), 0, 0, DisplayUtil.dip2px(context,-15));
+            lp.width = DisplayUtil.dip2px(context, 45.5f);
+            lp.height = DisplayUtil.dip2px(context, 48.5f);
+            imgbg.setLayoutParams(lp);
         }
-        ivBallAnim.setLayoutParams(lp);
+//        ivBallAnim.setLayoutParams(lp);
         setVisibility(GONE);
     }
 

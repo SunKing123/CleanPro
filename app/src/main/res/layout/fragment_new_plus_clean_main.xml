@@ -153,6 +153,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
         android:src="@mipmap/icon_main_right_ad"
-        android:visibility="gone" />
+        android:paddingRight="-10dp"
+        android:visibility="gone"/>
 
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

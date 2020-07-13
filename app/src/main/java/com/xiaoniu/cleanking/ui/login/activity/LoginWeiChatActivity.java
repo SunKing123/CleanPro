@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.ui.newclean.dialog.CommonDialogUtils;
 import com.xiaoniu.cleanking.ui.newclean.interfice.OnBtnClickListener;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -93,6 +94,7 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
         paramsMap = new HashMap<>();
         StatisticsUtils.customTrackEvent("login_page", "登录页面曝光", "login_page", "login_page");
         dialogLogin = CommonDialogUtils.buildProgressDialog(this, "登录中...", true);
+        ShanYanManager.requestPhonePermission(this);
     }
 
     private void setXieYi() {
@@ -226,7 +228,8 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
             if (infoBean != null) {
                 UserHelper.init().saveUserInfo(infoBean);
                 if (TextUtils.isEmpty(infoBean.phone)) {//未绑定手机号去绑定
-                    goToBindPhone();
+//                    goToBindPhone();
+                    ShanYanManager.oneBindingOption(this);
                 }
                 finish();
             }

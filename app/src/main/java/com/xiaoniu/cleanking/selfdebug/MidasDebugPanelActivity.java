@@ -122,7 +122,7 @@ public class MidasDebugPanelActivity extends BaseActivity implements View.OnClic
                 MidasAdSdk.getAdsManger().loadAd(adParameter,mAbsAdCallBack);
                 break;
             case R.id.feed_video_type:
-                adParameter = new AdParameter.Builder(this,"adpos_8829543351")
+                adParameter = new AdParameter.Builder(this,MidasConstants.MAIN_THREE_AD_ID)
                         //设置填充父布局
                         .setViewContainer(fragmentFeedVideoType)
                         .build();

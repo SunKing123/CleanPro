@@ -84,6 +84,9 @@ public class AdRequestParams {
 
     private AdInfo adInfo;
 
+
+    private int viewWidth;
+
     public AdRequestParams(Builder builder) {
         if (builder.activityWeakReference != null) {
             this.activity = builder.activityWeakReference.get();
@@ -102,6 +105,7 @@ public class AdRequestParams {
         this.mAdTemplateLoadListener = builder.mAdTemplateLoadListener;
         this.isSkipSwitch = builder.isSkipSwitch;
         this.adInfo = builder.adInfo;
+        this.viewWidth = builder.viewWidth;
     }
 
 
@@ -109,7 +113,13 @@ public class AdRequestParams {
         return activity;
     }
 
+    public int getViewWidth() {
+        return viewWidth;
+    }
 
+    public void setViewWidth(int viewWidth) {
+        this.viewWidth = viewWidth;
+    }
 
     public String getAdId() {
         return adId;
@@ -247,7 +257,7 @@ public class AdRequestParams {
 
         private AdInfo adInfo;
 
-
+        private int viewWidth;
 
 
         public Builder setActivity(Activity activity) {
@@ -338,6 +348,12 @@ public class AdRequestParams {
 
         public Builder setAdInfo(AdInfo a) {
             this.adInfo = a;
+            return this;
+        }
+
+
+        public Builder setViewWidth(int width){
+            this.viewWidth =width;
             return this;
         }
 

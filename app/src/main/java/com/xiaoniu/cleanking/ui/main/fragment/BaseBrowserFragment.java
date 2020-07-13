@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statusview.StatusView;
@@ -282,6 +284,14 @@ public class BaseBrowserFragment extends SimpleFragment {
         @JavascriptInterface
         public void walletSuccess() {//提现成功
             RequestUserInfoUtil.getUserCoinInfo();
+        }
+
+        @JavascriptInterface
+        public void fastBindPhone() {//绑定手机号操作
+            new Handler().post(() -> {
+                ShanYanManager.oneBindingOption(getContext());
+            });
+
         }
     }
 

@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.BaseDialog;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
@@ -32,6 +33,7 @@ import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.MidasAdSdk;
+import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.listener.AskReadyCallBack;
 
@@ -179,7 +181,9 @@ public class GoldCoinDialog {
     private static void requestAd(Activity context, AbsAdCallBack callBack, GoldCoinDialogParameter coinBean, ViewGroup mRootRL) {
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(coinBean.adId).setActivity(context)
+                .setViewWidth(ScreenUtils.getScreenWidth(context) - DisplayUtil.dip2px(context, 45))
                 .setViewContainer(mRootRL).build();
+
 
         //尝试预加载，丝滑般的体验...
         MidasAdSdk.getAdsManger().askIsReady(context, coinBean.adId, new AskReadyCallBack() {
