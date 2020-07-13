@@ -101,7 +101,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
-import static com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView.STATE_SLIDING;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
@@ -197,21 +196,30 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(int x, int y, int oldx, int oldy, boolean isBottom) {
-
-            }
-
-            @Override
-            public void onScrollState(int scrollState) {
-                if (scrollState == STATE_SLIDING) {//正在滑动
-                    isSlide = true;
-                    mFloatAnimManager.hindFloatAdvertView();
-                } else {
+                if (y == 0) {
                     if (isSlide) {
                         //滑动过到静止状态
                         isSlide = false;
                         mFloatAnimManager.showFloatAdvertView();
                     }
+                }else {
+                    isSlide = true;
+                    mFloatAnimManager.hindFloatAdvertView();
                 }
+            }
+
+            @Override
+            public void onScrollState(int scrollState) {
+//                if (scrollState == STATE_SLIDING) {//正在滑动
+//                    isSlide = true;
+//                    mFloatAnimManager.hindFloatAdvertView();
+//                } else {
+//                    if (isSlide) {
+//                        //滑动过到静止状态
+//                        isSlide = false;
+//                        mFloatAnimManager.showFloatAdvertView();
+//                    }
+//                }
             }
         });
     }
