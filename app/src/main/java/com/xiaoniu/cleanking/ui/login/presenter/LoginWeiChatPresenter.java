@@ -44,6 +44,7 @@ public class LoginWeiChatPresenter extends BasePresenter<LoginWeiChatContract.Mo
 
     /**
      * 微信登录
+     *
      * @param map
      */
     public void loginWithWeiChat(Map<String, Object> map) {
@@ -61,7 +62,7 @@ public class LoginWeiChatPresenter extends BasePresenter<LoginWeiChatContract.Mo
                     @Override
                     public void onNext(LoginDataBean loginDataBean) {
                         if (mRootView != null) {
-                            mRootView.dealLoginResult(1,loginDataBean);
+                            mRootView.dealLoginResult(loginDataBean);
                         }
                     }
                 });
@@ -69,6 +70,7 @@ public class LoginWeiChatPresenter extends BasePresenter<LoginWeiChatContract.Mo
 
     /**
      * 绑定微信到游客账户
+     *
      * @param map
      */
     public void bindingWeiChat(Map<String, Object> map) {
@@ -85,11 +87,12 @@ public class LoginWeiChatPresenter extends BasePresenter<LoginWeiChatContract.Mo
                     @Override
                     public void onNext(LoginDataBean loginDataBean) {
                         if (mRootView != null) {
-                            mRootView.dealLoginResult(2,loginDataBean);
+                            mRootView.dealBindLoginResult(loginDataBean);
                         }
                     }
                 });
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

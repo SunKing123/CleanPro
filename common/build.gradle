@@ -74,9 +74,9 @@ dependencies {
 
     api rootProject.ext.dependencies["lottie"]
     //WebView
-    api rootProject.ext.dependencies["agentweb"] // (必选)
-    api rootProject.ext.dependencies["filechooser"]// (可选)
-    api rootProject.ext.dependencies["Downloader"]// (可选)
+//    api rootProject.ext.dependencies["agentweb"] // (必选)
+//    api rootProject.ext.dependencies["filechooser"]// (可选)//这个会自带agentweb
+//    api rootProject.ext.dependencies["Downloader"]// (可选)
 
     api rootProject.ext.dependencies["stickylistheaders"]
     api rootProject.ext.dependencies["android-gif-drawable"]
@@ -96,6 +96,8 @@ dependencies {
 
     api project(':geekWebpage')
     api project(':arms')
+    //修改agentweb4.1.3版本的一个bug，作者修改了提交到master，但没升级稳定版本
+    api project(path: ':agentweb-core')
 
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 

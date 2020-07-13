@@ -54,7 +54,7 @@ public class AuthorizedLogin {
         if (!umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.SINA)) {
             showToast("请先安装新浪微博");
         } else {
-            umShareAPI.doOauthVerify((Activity) mContext, SHARE_MEDIA.SINA, authListener);
+            umShareAPI.getPlatformInfo((Activity) mContext, SHARE_MEDIA.SINA, authListener);
         }
     }
 
@@ -69,7 +69,7 @@ public class AuthorizedLogin {
         if (!isInstallThisApp(mContext, "com.tencent.mobileqq")) {
             showToast("请先安装QQ");
         } else {
-            umShareAPI.doOauthVerify((Activity) mContext, SHARE_MEDIA.QQ, authListener);
+            umShareAPI.getPlatformInfo((Activity) mContext, SHARE_MEDIA.QQ, authListener);
         }
     }
 
@@ -79,7 +79,7 @@ public class AuthorizedLogin {
     public void userWeiChatLogin(Context mContext) {
         this.mContext = mContext;
         UMShareAPI umShareAPI = UMShareAPI.get(mContext);
-        umShareAPI.deleteOauth((Activity) mContext, SHARE_MEDIA.WEIXIN, null);
+//        umShareAPI.deleteOauth((Activity) mContext, SHARE_MEDIA.WEIXIN, null);
         if (!umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.WEIXIN)) {
             showToast("请先安装微信");
         } else {
