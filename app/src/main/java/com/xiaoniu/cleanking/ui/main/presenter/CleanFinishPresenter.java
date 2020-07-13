@@ -1,8 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.view.ViewGroup;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -37,7 +35,6 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -281,7 +278,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         bean.advCallBack = new AbsAdCallBack() {
 
         };
-        bean.dismissListener = dialog -> StatisticsUtils.trackClick("close_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
+        bean.closeClickListener = view -> StatisticsUtils.trackClick("close_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
         bean.onDoubleClickListener = (v) -> {
             StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
             StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap());

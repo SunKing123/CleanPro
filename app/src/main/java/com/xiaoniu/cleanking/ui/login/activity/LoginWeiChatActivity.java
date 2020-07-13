@@ -247,6 +247,8 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
             });
         } else if ("200".equals(loginDataBean.getCode())) {
             mPresenter.loginWithWeiChat(paramsMap);
+        } else {
+            ToastUtils.showShort(loginDataBean.msg);
         }
     }
 

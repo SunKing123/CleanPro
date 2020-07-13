@@ -504,7 +504,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 .hide(upQuotaFragment)
                 .hide(fourFragment)
                 .commitAllowingStateLoss();
-
     }
 
     private void showHideFragment(int position, int prePosition) {
@@ -537,7 +536,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         AppHolder.getInstance().setSourcePageId(currentPage);
         //默认二级选中页面为当前页面
         AppHolder.getInstance().setOtherSourcePageId(currentPage);
-        StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
+       // StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)
             source_page = "wode";
         if (position == CLEAN) {
