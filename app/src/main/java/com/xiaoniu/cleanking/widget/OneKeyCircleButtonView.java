@@ -101,16 +101,17 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     public void setViewLayoutParms() {
         int screenWidth = ScreenUtils.getScreenWidth(mContext);
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) viewLottieGreen.getLayoutParams();
-        layoutParams.height = Float.valueOf(screenWidth).intValue();
-        layoutParams.width = Float.valueOf(screenWidth).intValue();
-
-        viewLottieGreen.setLayoutParams(layoutParams);
+        layoutParams.height = Float.valueOf(screenWidth*0.9f).intValue();
+        layoutParams.width = Float.valueOf(screenWidth*0.9f).intValue();
         rel_bubble.setLayoutParams(layoutParams);
         iv_top_perview.setLayoutParams(layoutParams);
 
+        layoutParams.setMargins(0, -Float.valueOf(screenWidth *0.9f* 0.1f).intValue(), 0, 0);
+        viewLottieGreen.setLayoutParams(layoutParams);
+
         RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) ivCenter.getLayoutParams();
-        imglayoutParams.height = Float.valueOf(screenWidth * 0.497f).intValue();
-        imglayoutParams.width = Float.valueOf(screenWidth * 0.497f).intValue();
+        imglayoutParams.height = Float.valueOf(screenWidth * 0.9f * 0.497f).intValue();
+        imglayoutParams.width = Float.valueOf(screenWidth * 0.9f * 0.497f).intValue();
         ivCenter.setLayoutParams(imglayoutParams);
 
 //        viewLottieGreen.animate().setDuration(3000).scaleX(1f).scaleY(1f).start();
