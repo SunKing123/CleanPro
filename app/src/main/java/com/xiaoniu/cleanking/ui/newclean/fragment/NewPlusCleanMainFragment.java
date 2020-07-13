@@ -702,7 +702,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onOneKeySpeedClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
-        StatisticsUtils.trackClick("boost_click", "用户在首页点击【一键加速】按钮", "home_page", "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.BOOST_CLICK_CODE, Points.MainHome.BOOST_CLICK_NAME, "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
             initThreeAdvOnOffInfo();
@@ -751,7 +751,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     //click kill virus
     private void onKillVirusClick() {
-        StatisticsUtils.trackClick("virus_killing_click", "用户在首页点击【病毒查杀】按钮", "home_page", "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.VIRUS_KILLING_CLICK_CODE, Points.MainHome.VIRUS_KILLING_CLICK_NAME, "home_page", "home_page");
         startKillVirusActivity();
     }
 
@@ -777,7 +777,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onElectricClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
-        StatisticsUtils.trackClick("powersave_click", "用户在首页点击【超强省电】按钮", "home_page", "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.POWERSAVE_CLICK_CODE, Points.MainHome.POWERSAVE_CLICK_NAME, "home_page", "home_page");
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
@@ -803,7 +803,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     public void onCleanFolderClick() {
-        StatisticsUtils.trackClick("cell_phone_clean_click", "\"手机清理\"点击", AppHolder.getInstance().getSourcePageId(), "acceleration_page");
+        StatisticsUtils.trackClick(Points.MainHome.DEEP_CLEANING_CLICK_CODE, Points.MainHome.DEEP_CLEANING_CLICK_NAME, AppHolder.getInstance().getSourcePageId(), "acceleration_page");
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
 
@@ -837,7 +837,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onCleanWxClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
-        StatisticsUtils.trackClick("wxclean_click", "用户在首页点击【微信专清】按钮", "home_page", "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.WXCLEAN_CLICK_CODE, Points.MainHome.WXCLEAN_CLICK_NAME, "home_page", "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
@@ -871,7 +871,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 //        ADUtilsKt.preloadingSplashAd(getActivity(), PositionId.AD_FINISH_BEFOR);
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
 
-        StatisticsUtils.trackClick("notification_clean_click", "用户在首页点击【通知清理】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.NOTIFICATION_CLEAN_CLICK_CODE, Points.MainHome.NOTIFICATION_CLEAN_CLICK_NAME, AppHolder.getInstance().getSourcePageId(), "home_page");
         if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
@@ -898,7 +898,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     public void onCoolingClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
-        StatisticsUtils.trackClick("cooling_click", "用户在首页点击【手机降温】按钮", AppHolder.getInstance().getSourcePageId(), "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.COOLING_CLICK_CODE, Points.MainHome.COOLING_CLICK_NAME, AppHolder.getInstance().getSourcePageId(), "home_page");
 
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
@@ -924,6 +924,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * *********************************************************************************************************************************************************
      */
     private void onNetworkSpeedClick() {
+        StatisticsUtils.trackClick(Points.MainHome.NETWORK_ACCELERATION_CLICK_CODE, Points.MainHome.NETWORK_ACCELERATION_CLICK_NAME, AppHolder.getInstance().getSourcePageId(), "home_page");
         if (PreferenceUtil.getSpeedNetWorkTime()) {
             startActivity(NetWorkActivity.class);
         } else {
