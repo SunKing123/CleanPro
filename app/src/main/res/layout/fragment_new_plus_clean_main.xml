@@ -132,7 +132,6 @@
 
             <FrameLayout
                 android:id="@+id/ad_three"
-                android:background="@drawable/icon_boxbg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shadow" />

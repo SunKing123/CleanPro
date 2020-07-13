@@ -20,36 +20,26 @@
         android:id="@+id/tv_top_perview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-<!--
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </FrameLayout>-->
     <com.xiaoniu.cleanking.widget.TouchImageView
         android:id="@+id/iv_center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:alpha="0.8"
+        android:alpha="0.5"
         android:scaleX="0.8"
         android:scaleY="0.8"
         app:srcCompat="@drawable/icon_circle_btn_white" />
 
-<!--    <TextView
-        android:layout_width="113dp"
-        android:layout_height="35dp"
-        android:text="一键清理"
-        android:textColor="#ff000000"
-        android:textSize="25sp"
-        />-->
+
     <LinearLayout
         android:id="@+id/linear_text_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
+
+        android:layout_marginBottom="@dimen/dp_50"
         android:orientation="horizontal">
 
         <TextView
