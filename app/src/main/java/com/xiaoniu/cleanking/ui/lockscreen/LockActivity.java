@@ -111,6 +111,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         //注册订阅者
         EventBus.getDefault().register(this);
+        StatisticsUtils.customTrackEvent("lock_screen_page_custom", "锁屏页面创建时", "lock_screen_page", "lock_screen_page");
 
     }
 
@@ -571,6 +572,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
         mLastTime = SystemClock.elapsedRealtime();
 
+        StatisticsUtils.customTrackEvent("ad_request_sdk","锁屏页广告发起请求","lock_screen_page","lock_screen_page");
         AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.LOCK_PAGE_FEED_ID).setActivity(this).setViewContainer(relAd).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override

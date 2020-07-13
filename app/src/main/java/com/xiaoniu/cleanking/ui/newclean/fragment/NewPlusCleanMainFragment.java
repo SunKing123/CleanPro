@@ -976,7 +976,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (null != dataBean) {
             mPresenter.refBullList();//刷新金币列表；
         }
-        assert dataBean != null;
+        assert dataBean != null && dataBean.getData() != null;
         mPresenter.showGetGoldCoinDialog(dataBean);
     }
 

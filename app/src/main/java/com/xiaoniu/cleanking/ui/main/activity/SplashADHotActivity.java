@@ -136,6 +136,8 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
 
     private void initGeekSdkAD() {
+
+        StatisticsUtils.customTrackEvent("ad_request_sdk","热启动页广告发起请求","hot_page","hot_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
                 .setActivity(this).setViewContainer(container).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {

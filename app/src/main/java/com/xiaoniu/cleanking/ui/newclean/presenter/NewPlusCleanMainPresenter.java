@@ -56,10 +56,13 @@ import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
 import com.xnad.sdk.config.AdParameter;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -588,7 +591,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
 
-    //获取金币
+    //领取金币
     public void bullCollect(int locationNum){
         mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
             @Override
@@ -601,8 +604,18 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             @Override
             public void getData(BubbleCollected bubbleConfig) {
-                RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
-                mView.bubbleCollected(bubbleConfig);
+                //实时更新金币信息
+                RequestUserInfoUtil.getUserCoinInfo();
+                if (null != bubbleConfig && null != bubbleConfig.getData()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("gold_coin_position_id", bubbleConfig.getData().getLocationNum());
+                    map.put("gold_number",bubbleConfig.getData().getGoldCount());
+                    StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", "首页金币领取弹窗金币发放数", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", map);
+
+
+                    mView.bubbleCollected(bubbleConfig);
+                }
+
             }
 
             @Override
@@ -653,6 +666,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         //广告位1开关控制
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE)) {
             bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 0);
+            Map<String,Object> mapJson= new HashMap<>();
+            mapJson.put("gold_coin_position_id",String.valueOf(dataBean.getData().getLocationNum()));
+            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页金币领取弹窗上广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window",mapJson);
         }
         bean.isDouble = true;
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_TWO_CODE);//激励视频广告位开关
@@ -671,50 +687,76 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         };
         //翻倍回调
         bean.onDoubleClickListener = (v) -> {
-            StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
-            ViewGroup viewGroup = (ViewGroup) mView.getActivity().getWindow().getDecorView();
-            AdRequestParams params = new AdRequestParams.Builder().
-                    setActivity(mView.getActivity()).
-                    setViewContainer(viewGroup).
-                    setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(),1)).build();
-            MidasRequesCenter.requestAdVideo(params, new VideoAbsAdCallBack() {
-                @Override
-                public void onShowError(int i, String s) {
-                    ToastUtils.showLong("网络异常");
-                    GoldCoinDialog.dismiss();
-                }
+            try {
+                //翻倍按钮点击
+                org.json.JSONObject exJson= new org.json.JSONObject();
+                exJson.put("gold_coin_position_id",dataBean.getData().getLocationNum());
+                StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window",exJson);
 
-                @Override
-                public void onAdError(AdInfo adInfo, int i, String s) {
-                    ToastUtils.showLong("网络异常");
-                    GoldCoinDialog.dismiss();
-                }
+                //翻倍视频请求
+                Map<String,Object> mapJson= new HashMap<>();
+                mapJson.put("gold_coin_position_id",String.valueOf(dataBean.getData().getLocationNum()));
+                StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页翻倍激励视频广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window",mapJson);
 
-                @Override
-                public void onAdVideoComplete(AdInfo adInfo) {
-                    super.onAdVideoComplete(adInfo);
-                    if(!mView.getActivity().isFinishing()){
+                ViewGroup viewGroup = (ViewGroup) mView.getActivity().getWindow().getDecorView();
+                AdRequestParams params = new AdRequestParams.Builder().
+                        setActivity(mView.getActivity()).
+                        setViewContainer(viewGroup).
+                        setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(),1)).build();
+                MidasRequesCenter.requestAdVideo(params, new VideoAbsAdCallBack() {
+                    @Override
+                    public void onShowError(int i, String s) {
+                        ToastUtils.showLong("网络异常");
                         GoldCoinDialog.dismiss();
                     }
-                }
 
-                @Override
-                public void onAdClose(AdInfo adInfo, boolean isComplete) {
-                    if (!mView.getActivity().isFinishing()) {
-                        if(isComplete){
-                            mView.bubbleDouble(dataBean);
+                    @Override
+                    public void onAdError(AdInfo adInfo, int i, String s) {
+                        ToastUtils.showLong("网络异常");
+                        GoldCoinDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onAdVideoComplete(AdInfo adInfo) {
+                        super.onAdVideoComplete(adInfo);
+                        if(!mView.getActivity().isFinishing()){
+                            GoldCoinDialog.dismiss();
                         }
-                        GoldCoinDialog.dismiss();
                     }
-                }
+
+                    @Override
+                    public void onAdClose(AdInfo adInfo, boolean isComplete) {
+                        try {
+                            org.json.JSONObject exJson= new org.json.JSONObject();
+                            exJson.put("gold_coin_position_id",dataBean.getData().getLocationNum());
+                            StatisticsUtils.trackClick("incentive_video_ad_click", "首页金币翻倍激励视频广告关闭点击", "home_page_gold_coin_pop_up_window_incentive_video_page", "home_page_gold_coin_pop_up_window_incentive_video_page",exJson);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (!mView.getActivity().isFinishing()) {
+                            if(isComplete){
+                                mView.bubbleDouble(dataBean);
+                            }
+                            GoldCoinDialog.dismiss();
+                        }
+                    }
 
 
-            });
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         };
         bean.closeClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
+                try {
+                    org.json.JSONObject exJson= new org.json.JSONObject();
+                    exJson.put("gold_coin_position_id",dataBean.getData().getLocationNum());
+                    StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window",exJson);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         };
         //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;

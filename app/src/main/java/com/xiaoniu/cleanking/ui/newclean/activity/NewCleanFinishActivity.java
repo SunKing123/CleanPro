@@ -1119,7 +1119,8 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (!isOpenOne) {
             return;
         }
-//        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", sourcePage, currentPage);
+
+        StatisticsUtils.customTrackEvent("ad_request_sdk_1","功能完成页广告位1发起请求",sourcePage,"success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos01)
@@ -1215,7 +1216,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (!isOpenTwo) {
             return;
         }
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
+        StatisticsUtils.customTrackEvent("ad_request_sdk_2","功能完成页广告位2发起请求",sourcePage,"success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos02)
