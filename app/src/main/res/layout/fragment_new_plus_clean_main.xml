@@ -58,8 +58,8 @@
         android:layout_below="@+id/v_top"
         android:fadingEdgeLength="@dimen/dimen_0dp"
         android:overScrollMode="never"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -88,31 +88,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="-15dp" />
 
-            <com.xiaoniu.cleanking.widget.ShadowViewCard
+            <FrameLayout
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:layout_marginTop="@dimen/dp_5"
                 android:layout_marginEnd="2dp"
-                android:layout_marginBottom="@dimen/dp_5" />
+                android:layout_marginBottom="@dimen/dp_5"
+                android:background="@drawable/shadow" />
 
-            <com.xiaoniu.cleanking.widget.ShadowViewCard
+            <FrameLayout
+                android:background="@drawable/shadow"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:shadowRound="20dp">
+                android:layout_height="wrap_content">
 
                 <com.xiaoniu.cleanking.ui.view.HomeToolTableView
                     android:id="@+id/home_tool_table"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-            </com.xiaoniu.cleanking.widget.ShadowViewCard>
+            </FrameLayout>
 
-            <com.xiaoniu.cleanking.widget.ShadowViewCard
+            <FrameLayout
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/shadow" />
 
             <include layout="@layout/layout_weather_video" />
 
@@ -128,10 +130,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5" />
 
-            <com.xiaoniu.cleanking.widget.ShadowViewCard
+            <FrameLayout
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/shadow" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"
@@ -149,6 +152,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
         android:src="@mipmap/icon_main_right_ad"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>
