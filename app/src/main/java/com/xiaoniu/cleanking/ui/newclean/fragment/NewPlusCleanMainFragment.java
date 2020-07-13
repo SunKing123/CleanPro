@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -32,6 +31,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdposUtil;
+import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
@@ -320,30 +320,51 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      *********************************************************************************************************************************************************
      */
 
-    long requestTime;
-
-    private void refreshAd() {
-        if (System.currentTimeMillis() - requestTime < 3000) {
-            return;
-        }
-        requestTime = System.currentTimeMillis();
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutOne, MidasConstants.MAIN_ONE_AD_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
-            mPresenter.showAdviceLayout(adLayoutTwo, MidasConstants.MAIN_TWO_AD_ID);
-        }
-        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
-            StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
-            mPresenter.prepareVideoAd(adLayoutThree);
-        }
+    private void refreshAdAll() {
+        refreshAd(MidasConstants.MAIN_ONE_AD_ID);
+        refreshAd(MidasConstants.MAIN_TWO_AD_ID);
+        refreshAd(MidasConstants.MAIN_THREE_AD_ID);
         showAdVideo();
     }
 
+    private void refreshAd(String adId) {
+        switch (adId) {
+            case MidasConstants.MAIN_ONE_AD_ID:
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
+                    StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
+                    mPresenter.showAdviceLayout(adLayoutOne, adId, adClick);
+                }
+                break;
+            case MidasConstants.MAIN_TWO_AD_ID:
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
+                    StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
+                    mPresenter.showAdviceLayout(adLayoutTwo, adId, adClick);
+                }
+                break;
+            case MidasConstants.MAIN_THREE_AD_ID:
+                if (getAdLayoutThreeVisible()) {
+                    if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+                        StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
+                        mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
+                    }
+                } else {
+                    mPresenter.prepareVideoAd(adLayoutThree);
+                }
+                break;
+        }
+    }
+
+    IOnAdClickListener adClick = this::refreshAd;
+
+
+    private boolean getAdLayoutThreeVisible() {
+        Rect scrollBounds = new Rect();
+        mScrollView.getHitRect(scrollBounds);
+        return adLayoutThree.getLocalVisibleRect(scrollBounds);
+    }
 
     boolean isRequest = false;
+
 
     private void showAdVideo() {
         mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -352,17 +373,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
                 //子控件至少有一个像素在可视范围内
                 if (!isRequest) {
-                    LogUtils.e("==========开始请求视频广告");
                     if (mPresenter.getReadSuccess()) {
-                        mPresenter.fillVideoAd(adLayoutThree);
+                        mPresenter.fillVideoAd(adLayoutThree, adClick);
                     }
-                } else {
-                    LogUtils.e("==========可见，请求过了");
                 }
                 isRequest = true;
             } else {
                 //子控件完全不在可视范围内
-                LogUtils.e("==========不可见");
             }
         });
 
@@ -379,9 +396,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-        Log.e("fragment", "onHiddenChanged()  hidden=" + hidden);
 
-        if (!hidden) {
+        if (!hidden && getActivity() != null) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
