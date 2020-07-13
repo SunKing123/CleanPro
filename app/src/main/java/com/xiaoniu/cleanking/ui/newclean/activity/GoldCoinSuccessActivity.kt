@@ -30,10 +30,9 @@ import kotlinx.android.synthetic.main.activity_gold_coin_success.*
  */
 class GoldCoinSuccessActivity : BaseActivity() {
 
-
     private var coinNum: Int = 0
-    private lateinit var point: GoldCoinDoubleModel
-    private lateinit var extParam: HashMap<String, Any>
+    private lateinit var model: GoldCoinDoubleModel
+    private  var extParam = HashMap<String, Any>()
 
     companion object {
         fun start(context: Context, model: GoldCoinDoubleModel) {
@@ -45,8 +44,8 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     override fun initLayout(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_gold_coin_success)
-        point = intent.getParcelableExtra("model")
-        coinNum = point.goldCoinsNum
+        model = intent.getParcelableExtra("model")
+        coinNum = model.goldCoinsNum
         exposurePoint()
         goldCoinsNumPoint()
     }
@@ -65,9 +64,9 @@ class GoldCoinSuccessActivity : BaseActivity() {
         btnLeft.setOnClickListener { finish() }
 
         //广告ID，如果广告位没有打开的话，不传这个ID即可（在进入ACTIVITY前自行判断是否打开了配置）
-        if (!TextUtils.isEmpty(point.adId)) {
+        if (!TextUtils.isEmpty(model.adId)) {
             //显示广告
-            val params = AdRequestParams.Builder().setAdId(point.adId).setViewContainer(ad_frameLayout)
+            val params = AdRequestParams.Builder().setAdId(model.adId).setViewContainer(ad_frameLayout)
                     .setActivity(this).build()
             adRequestPoint()
             MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
@@ -94,7 +93,7 @@ class GoldCoinSuccessActivity : BaseActivity() {
     //广告请求埋点
     fun adRequestPoint() {
         var adRequestName = ""
-        when (point.currentPage) {
+        when (model.currentPage) {
             Points.ScratchCard.SUCCESS_PAGE ->
                 adRequestName = Points.ScratchCard.SUCCESS_AD_REQUEST_SDK_NAME;
             Points.FunctionGoldCoin.SUCCESS_PAGE ->
@@ -102,56 +101,55 @@ class GoldCoinSuccessActivity : BaseActivity() {
             Points.MainGoldCoin.SUCCESS_PAGE ->
                 adRequestName = Points.MainGoldCoin.SUCCESS_AD_REQUEST_SDK_NAME;
         }
-        StatisticsUtils.customTrackEvent("ad_request_sdk", adRequestName, "", point.currentPage, extParam())
+        StatisticsUtils.customTrackEvent("ad_request_sdk", adRequestName, "", model.currentPage, extParam())
     }
 
     //曝光埋点
     fun exposurePoint() {
-        when (point.currentPage) {
+        when (model.currentPage) {
             Points.ScratchCard.SUCCESS_PAGE ->
-                StatisticsUtils.customTrackEvent(Points.ScratchCard.SUCCESS_EXPOSURE_CODE, Points.ScratchCard.SUCCESS_EXPOSURE_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.customTrackEvent(Points.ScratchCard.SUCCESS_EXPOSURE_CODE, Points.ScratchCard.SUCCESS_EXPOSURE_NAME, "", model.currentPage, extParam())
             Points.FunctionGoldCoin.SUCCESS_PAGE ->
-                StatisticsUtils.customTrackEvent(Points.FunctionGoldCoin.SUCCESS_EXPOSURE_CODE, Points.FunctionGoldCoin.SUCCESS_EXPOSURE_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.customTrackEvent(Points.FunctionGoldCoin.SUCCESS_EXPOSURE_CODE, Points.FunctionGoldCoin.SUCCESS_EXPOSURE_NAME, "", model.currentPage, extParam())
             Points.MainGoldCoin.SUCCESS_PAGE ->
-                StatisticsUtils.customTrackEvent(Points.MainGoldCoin.SUCCESS_EXPOSURE_CODE, Points.MainGoldCoin.SUCCESS_EXPOSURE_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.customTrackEvent(Points.MainGoldCoin.SUCCESS_EXPOSURE_CODE, Points.MainGoldCoin.SUCCESS_EXPOSURE_NAME, "", model.currentPage, extParam())
 
         }
     }
 
     //金币翻倍数量埋点
     fun goldCoinsNumPoint() {
-        when (point.currentPage) {
+        when (model.currentPage) {
             Points.ScratchCard.SUCCESS_PAGE ->
-                StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.ScratchCard.SUCCESS_NUMBER_OF_GOLD_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.ScratchCard.SUCCESS_NUMBER_OF_GOLD_NAME, "", model.currentPage, extParam())
             Points.FunctionGoldCoin.SUCCESS_PAGE ->
-                StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.FunctionGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.FunctionGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", model.currentPage, extParam())
             Points.MainGoldCoin.SUCCESS_PAGE ->
-                StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.MainGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.MainGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", model.currentPage, extParam())
 
         }
     }
 
     //返回事件埋点
     fun returnBackPoint() {
-        when (point.currentPage) {
+        when (model.currentPage) {
             Points.ScratchCard.SUCCESS_PAGE ->
-                StatisticsUtils.trackClickNew("return_click", Points.ScratchCard.SUCCESS_RETURN_CLICK_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.trackClickNew("return_click", Points.ScratchCard.SUCCESS_RETURN_CLICK_NAME, "", model.currentPage, extParam())
             Points.FunctionGoldCoin.SUCCESS_PAGE ->
-                StatisticsUtils.trackClickNew("return_click", Points.FunctionGoldCoin.SUCCESS_RETURN_CLICK_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.trackClickNew("return_click", Points.FunctionGoldCoin.SUCCESS_RETURN_CLICK_NAME, "", model.currentPage, extParam())
             Points.MainGoldCoin.SUCCESS_PAGE ->
-                StatisticsUtils.trackClickNew("return_click", Points.MainGoldCoin.SUCCESS_RETURN_CLICK_NAME, "", point.currentPage, extParam())
+                StatisticsUtils.trackClickNew("return_click", Points.MainGoldCoin.SUCCESS_RETURN_CLICK_NAME, "", model.currentPage, extParam())
 
         }
     }
 
     fun extParam(): HashMap<String, Any> {
-        if (extParam != null) {
+        if (extParam.containsKey("position_id")) {
             return extParam
         }
-        extParam = HashMap();
-        extParam.put("position_id", point.position)
-        extParam.put("gold_number", point.goldCoinsNum)
-        extParam.put("function_name", point.functionName)
+        extParam.put("position_id", model.position)
+        extParam.put("gold_number", model.goldCoinsNum)
+        extParam.put("function_name", model.functionName)
         return extParam;
     }
 }
