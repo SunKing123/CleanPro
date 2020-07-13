@@ -9,13 +9,13 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleActivity;
 import com.xiaoniu.cleanking.ui.main.receiver.HomeKeyEventBroadCastReceiver;
 import com.xiaoniu.cleanking.ui.usercenter.service.FloatingImageDisplayService;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import butterknife.BindView;
 
@@ -54,23 +54,17 @@ public class PermissionActivity extends SimpleActivity {
             }
         });
         line_permiht.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(PermissionActivity.this)) {
-                Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
-                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
-            } else {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                startActivity(intent);
-                FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_htyx1, R.mipmap.icon_htyx2};
-                FloatingImageDisplayService.imageWidth = new int[]{275, 275};
-                FloatingImageDisplayService.imageHeight = new int[]{186, 186};
-
-                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
-            }
+            Uri packageURI = Uri.parse("package:" + getPackageName());
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+            startActivity(intent);
         });
         line_xfc.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
-                Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
-                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
+            if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(PermissionActivity.this)) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, 1);
+                ToastUtils.showShort("当前无权限，请授权");
             } else {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
                 startActivity(intent);
@@ -81,17 +75,20 @@ public class PermissionActivity extends SimpleActivity {
             }
         });
         line_dingwei.setOnClickListener(v -> {
-            if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
-                Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
-                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
-            } else {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
-                startActivity(intent);
-                FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_ht1, R.mipmap.icon_ht2, R.mipmap.icon_ht3, R.mipmap.icon_ht4};
-                FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275, 275};
-                FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206, 186};
-                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
-            }
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+//            if (Build.VERSION.SDK_INT >= 23 &&!Settings.canDrawOverlays(PermissionActivity.this)) {
+//                Toast.makeText(PermissionActivity.this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+//                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 1);
+//            } else {
+//                Intent intent = new Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+//                startActivity(intent);
+//                FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_ht1, R.mipmap.icon_ht2, R.mipmap.icon_ht3, R.mipmap.icon_ht4};
+//                FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275, 275};
+//                FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206, 186};
+//                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+//            }
         });
 
     }
@@ -107,8 +104,10 @@ public class PermissionActivity extends SimpleActivity {
         super.onDestroy();
         unRegisterScreenActionReceiver(this);
     }
+
     private boolean isRegisterReceiver = false;
     private HomeKeyEventBroadCastReceiver homeKeyEventBroadCastReceiver = new HomeKeyEventBroadCastReceiver();
+
     /**
      * 广播注册
      *
