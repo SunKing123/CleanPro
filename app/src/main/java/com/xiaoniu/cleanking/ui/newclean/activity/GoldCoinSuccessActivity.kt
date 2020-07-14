@@ -8,6 +8,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
+import com.comm.jksdk.utils.DisplayUtil
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
@@ -69,7 +70,9 @@ class GoldCoinSuccessActivity : BaseActivity() {
         //广告ID，如果广告位没有打开的话，不传这个ID即可（在进入ACTIVITY前自行判断是否打开了配置）
         if (!TextUtils.isEmpty(model.adId)) {
             val params = AdRequestParams.Builder().setAdId(model.adId).setViewContainer(ad_frameLayout)
-                    .setActivity(this).build()
+                    .setActivity(this)
+                    .setViewWidth(DisplayUtil.px2dp(context, (DisplayUtil.getScreenWidth(context)).toFloat()) - 50)//设置宽度；
+                    .build()
             adRequestPoint()
             MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
                 override fun onAdClose(p0: AdInfo?) {
