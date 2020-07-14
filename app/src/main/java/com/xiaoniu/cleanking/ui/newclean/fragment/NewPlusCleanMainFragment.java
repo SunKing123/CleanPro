@@ -1040,9 +1040,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             ToastUtils.showShort(R.string.net_error);
             return;
         }
-        mPresenter.bullCollect(ballBean.getLocationNum());
-        StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
-
+        if (!AndroidUtil.isFastDoubleClick()) {
+            mPresenter.bullCollect(ballBean.getLocationNum());
+            StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
+        }
     }
 
 
