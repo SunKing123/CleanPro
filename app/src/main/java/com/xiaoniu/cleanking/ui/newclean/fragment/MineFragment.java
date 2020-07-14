@@ -24,6 +24,7 @@ import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
@@ -90,6 +91,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         } else {
             mBinding.cashRl.setVisibility(View.VISIBLE);
         }
+        ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
+        ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
 //        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
     }
 
