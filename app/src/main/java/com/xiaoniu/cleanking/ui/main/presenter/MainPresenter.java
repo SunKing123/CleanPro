@@ -131,6 +131,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 //        if (UserHelper.init().isLogin()) {//已经登录跳过
 //            return;
 //        }
+        if (!UserHelper.init().checkUserToken()) {//掉登状态
+            return;
+        }
         Gson gson = new Gson();
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("userType", 2);
@@ -566,7 +569,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mActivity == null || TextUtils.isEmpty(appID)) {
             return;
         }
-        StatisticsUtils.customTrackEvent("ad_request_sdk","内部插屏广告发起请求","","inside_advertising_ad_page");
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
         AdRequestParams params = new AdRequestParams.Builder()
                 .setActivity(mActivity).setAdId(appID).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
@@ -929,11 +932,12 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     /**
      * 获取天气视频
+     *
      * @param areaCode
      */
-    public void requestWeatherVideo(String areaCode){
-        String cacheData = MmkvUtil.getString(Constant.DEFAULT_WEATHER_VIDEO_INFO,"");
-        if(!TextUtils.isEmpty(cacheData)){
+    public void requestWeatherVideo(String areaCode) {
+        String cacheData = MmkvUtil.getString(Constant.DEFAULT_WEATHER_VIDEO_INFO, "");
+        if (!TextUtils.isEmpty(cacheData)) {
             WeatherForecastResponseEntity cacheBean = new Gson().fromJson(cacheData, WeatherForecastResponseEntity.class);
             if (null != cacheBean && (System.currentTimeMillis() - cacheBean.getResponseTime()) < 60 * 60 * 1000) {//一小时内用缓存数据
                 WeatherForecastActivity.launch(mActivity, cacheBean, cacheBean.getPublishSource());
@@ -947,13 +951,14 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     LogUtils.i("zz--" + new Gson().toJson(entityBaseResponse));
                     WeatherForecastResponseEntity weatherForecastResponseEntity = entityBaseResponse.getData();
                     weatherForecastResponseEntity.setResponseTime(System.currentTimeMillis());
-                    MmkvUtil.saveString(Constant.DEFAULT_WEATHER_VIDEO_INFO,new Gson().toJson(weatherForecastResponseEntity));
+                    MmkvUtil.saveString(Constant.DEFAULT_WEATHER_VIDEO_INFO, new Gson().toJson(weatherForecastResponseEntity));
                     WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(), entityBaseResponse.getData().getPublishSource());
                 } catch (JsonSyntaxException e) {
                     e.printStackTrace();
                 }
 
             }
+
             @Override
             public void netConnectError() {
                 LogUtils.i("zz--网络异常");

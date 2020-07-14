@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
+import com.xiaoniu.cleanking.ui.main.bean.CheckUserTokenBean;
 import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
@@ -22,8 +23,6 @@ import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
-
-import javax.annotation.PostConstruct;
 
 import io.reactivex.Flowable;
 import okhttp3.MultipartBody;
@@ -48,6 +47,7 @@ public interface UserApiService {
      */
     @GET("/app/upgrade")
     Flowable<AppVersion> queryAppVersion();
+
     /**
      * 账户/账户信息查询（赚赚、我的、我的钱包）
      *
@@ -243,4 +243,12 @@ public interface UserApiService {
      */
     @GET("/clean-user/logout")
     Flowable<ExitLoginBean> exitLogin();
+
+    /**
+     * 用户/token校验
+     *
+     * @return
+     */
+    @GET("/clean-user/checkLogin")
+    Flowable<CheckUserTokenBean> checkUserTokenApi();
 }

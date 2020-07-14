@@ -13,7 +13,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
@@ -34,6 +33,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -57,7 +57,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
@@ -95,10 +94,12 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
         long home = MmkvUtil.getLong(SpCacheConfig.KEY_FIRST_INSTALL_APP_TIME, 0L);
-        if (home==0L){
-            MmkvUtil.saveLong(SpCacheConfig.KEY_FIRST_INSTALL_APP_TIME,System.currentTimeMillis());
+        if (home == 0L) {
+            MmkvUtil.saveLong(SpCacheConfig.KEY_FIRST_INSTALL_APP_TIME, System.currentTimeMillis());
         }
         getDataFromPush();
+        //用户/token校验
+        RequestUserInfoUtil.checkUserToken(this);
     }
 
     private void getDataFromPush() {
@@ -205,7 +206,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         }
         //超时定时器
         rxTimer = new RxTimer();
-        rxTimer.timer(SP_SHOW_OUT_TIME,number ->{
+        rxTimer.timer(SP_SHOW_OUT_TIME, number -> {
             mCanJump = true;
             jumpActivity();
         });
@@ -383,7 +384,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
 
     private void initGeekSdkAD() {
-        StatisticsUtils.customTrackEvent("ad_request_sdk","冷启动页广告发起请求","clod_page","clod_page");
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "冷启动页广告发起请求", "clod_page", "clod_page");
 
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
                 .setActivity(this).setViewContainer(container).build();
@@ -495,7 +496,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         super.onPause();
         mCanJump = false;
     }
-
 
 
 }

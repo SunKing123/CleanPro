@@ -22,6 +22,7 @@ public class UserHelper {
     public static final String LOGIN_SUCCESS = "loginSuccessRefreshUserInfo";
     public static final String EXIT_SUCCESS = "exitRefreshUserInfo";
     public static final String BIND_PHONE_SUCCESS = "BindPhoneSuccess";
+    public static final String CHECK_USER_TOKEN = "checkUserToken";
 
     public static UserHelper init() {
         if (userHelper == null) {
@@ -70,6 +71,14 @@ public class UserHelper {
         return implPreferencesHelper.getNickName();
     }
 
+    public void setCheckUserTokenResult(boolean isOk) {
+        implPreferencesHelper.setCheckUserTokenResult(isOk);
+    }
+
+    public boolean checkUserToken() {
+        return implPreferencesHelper.checkUserToken();
+    }
+
     public String getUserHeadPortraitUrl() {
         return implPreferencesHelper.getUserHeadPortraitUrl();
     }
@@ -104,6 +113,8 @@ public class UserHelper {
         implPreferencesHelper.setOpenID(userInfo.openId);
         implPreferencesHelper.setPhoneNum(userInfo.phone);
         implPreferencesHelper.setUserHeadPortraitUrl(userInfo.userAvatar);
+        //设置掉登状态
+        implPreferencesHelper.setCheckUserTokenResult(true);
         EventBus.getDefault().post(LOGIN_SUCCESS);
         RequestUserInfoUtil.getUserCoinInfo();
     }

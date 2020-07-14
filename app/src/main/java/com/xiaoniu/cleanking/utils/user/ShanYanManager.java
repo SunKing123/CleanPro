@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.api.CommonApiService;
 import com.xiaoniu.cleanking.mvp.DefaultRetrofitProxyImpl;
 import com.xiaoniu.cleanking.ui.login.activity.BindPhoneManualActivity;
 import com.xiaoniu.cleanking.ui.login.bean.RequestPhoneBean;
+import com.xiaoniu.cleanking.utils.net.CustomRxErrorHandler;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -36,7 +37,6 @@ import org.json.JSONObject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
 import static com.xiaoniu.cleanking.utils.user.UserHelper.BIND_PHONE_SUCCESS;
@@ -285,7 +285,7 @@ public class ShanYanManager {
                         jsonObject = new JSONObject(messageL);
                         String token = jsonObject.optString("token");
                         if (!TextUtils.isEmpty(token)) {
-                            getPhoneNumFromShanYan(token);
+                            getPhoneNumFromShanYan(token,mContext);
                         } else {
                             goToShouDongBinding(mContext);
                         }
@@ -297,13 +297,14 @@ public class ShanYanManager {
         });
     }
 
-    private static void getPhoneNumFromShanYan(String token) {
+
+    private static void getPhoneNumFromShanYan(String token, Context context) {
         DefaultRetrofitProxyImpl.getRetrofit().create(CommonApiService.class).getPhoneNumFromShanYanApi(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doFinally(() -> {
                 })
-                .subscribe(new ErrorHandleSubscriber<RequestPhoneBean>(RxErrorHandler.builder().build()) {
+                .subscribe(new ErrorHandleSubscriber<RequestPhoneBean>(new CustomRxErrorHandler(context).build()) {
                     @Override
                     public void onNext(RequestPhoneBean phoneBean) {
                         if (phoneBean != null && "200".equals(phoneBean.code)) {
