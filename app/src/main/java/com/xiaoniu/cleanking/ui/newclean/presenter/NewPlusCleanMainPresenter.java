@@ -55,6 +55,7 @@ import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xnad.sdk.ad.listener.AskReadyCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
 import com.xnad.sdk.config.AdParameter;
 
@@ -514,16 +515,21 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         MidasRequesCenter.requestAd(params, new AdvCallBack(MidasConstants.MAIN_THREE_AD_ID, onAdClick));
     }
 
-
     public void showAdviceLayout(ViewGroup viewGroup, String adviceID, IOnAdClickListener onAdClick) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
-        viewGroup.setVisibility(View.VISIBLE);
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
-        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
+
+        MidasAdSdk.getAdsManger().askIsReady(mView.getActivity(), adviceID, new AskReadyCallBack() {
+            @Override
+            public void onReady(boolean b) {
+                viewGroup.setVisibility(View.VISIBLE);
+                MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
+            }
+        });
     }
 
     static class AdvCallBack extends CMAbsAdCallBack {
@@ -552,12 +558,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             super.onAdLoadSuccess(adInfo);
 
         }
-
-//        @Override
-//        public void onAdError(AdInfo adInfo, int i, String s) {
-//            super.onAdError(adInfo, i, s);
-//            LogUtils.e("====首页广告" + title + "====:显示失败:" + s);
-//        }
 
         @Override
         public void onShowError(int i, String s) {
@@ -638,7 +638,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 RequestUserInfoUtil.getUserCoinInfo();
                 if (null != bubbleConfig && null != bubbleConfig.getData()) {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("gold_coin_position_id", bubbleConfig.getData().getLocationNum());
+                    map.put("position_id", bubbleConfig.getData().getLocationNum());
                     map.put("gold_number", bubbleConfig.getData().getGoldCount());
                     StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", "首页金币领取弹窗金币发放数", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", map);
 
@@ -697,7 +697,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE)) {
             bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 0);
             Map<String, Object> mapJson = new HashMap<>();
-            mapJson.put("gold_coin_position_id", String.valueOf(dataBean.getData().getLocationNum()));
+            mapJson.put("position_id", String.valueOf(dataBean.getData().getLocationNum()));
             StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页金币领取弹窗上广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", mapJson);
         }
         bean.isDouble = true;
@@ -723,12 +723,12 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 }
                 //翻倍按钮点击
                 org.json.JSONObject exJson = new org.json.JSONObject();
-                exJson.put("gold_coin_position_id", dataBean.getData().getLocationNum());
+                exJson.put("position_id", dataBean.getData().getLocationNum());
                 StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", exJson);
 
                 //翻倍视频请求
                 Map<String, Object> mapJson = new HashMap<>();
-                mapJson.put("gold_coin_position_id", String.valueOf(dataBean.getData().getLocationNum()));
+                mapJson.put("position_id", String.valueOf(dataBean.getData().getLocationNum()));
                 StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页翻倍激励视频广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", mapJson);
 
                 ViewGroup viewGroup = (ViewGroup) mView.getActivity().getWindow().getDecorView();
@@ -764,7 +764,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                     public void onAdClose(AdInfo adInfo, boolean isComplete) {
                         try {
                             org.json.JSONObject exJson = new org.json.JSONObject();
-                            exJson.put("gold_coin_position_id", dataBean.getData().getLocationNum());
+                            exJson.put("position_id", dataBean.getData().getLocationNum());
                             StatisticsUtils.trackClick("incentive_video_ad_click", "首页金币翻倍激励视频广告关闭点击", "home_page_gold_coin_pop_up_window_incentive_video_page", "home_page_gold_coin_pop_up_window_incentive_video_page", exJson);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -788,7 +788,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             public void onClick(View v) {
                 try {
                     org.json.JSONObject exJson = new org.json.JSONObject();
-                    exJson.put("gold_coin_position_id", dataBean.getData().getLocationNum());
+                    exJson.put("position_id", dataBean.getData().getLocationNum());
                     StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", exJson);
                 } catch (JSONException e) {
                     e.printStackTrace();
