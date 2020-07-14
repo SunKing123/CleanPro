@@ -188,6 +188,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     private void startGoldSuccess(String adId, int num, String functionName) {
         GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, Points.FunctionGoldCoin.SUCCESS_PAGE, functionName);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
+        mActivity.finish();
     }
 
     /**
