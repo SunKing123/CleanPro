@@ -93,7 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@drawable/shadow" />
+                android:background="@drawable/shadow"
+                android:padding="4dp"/>
 
             <FrameLayout
                 android:layout_marginTop="@dimen/dp_10"
@@ -115,7 +116,8 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shadow" />
+                android:background="@drawable/shadow"
+                android:padding="4dp"/>
 
             <include layout="@layout/layout_weather_video" />
 
@@ -136,7 +138,8 @@
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shadow" />
+                android:background="@drawable/shadow"
+                android:padding="4dp"/>
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"

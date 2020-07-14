@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.midas;
 
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.xnad.sdk.ad.entity.AdInfo;
@@ -16,8 +17,9 @@ public class CMAbsAdCallBack extends AbsAdCallBack {
         super.onAdClose(adInfo);
         if(adInfo!=null&&adInfo.mAdParameter!=null&&adInfo.mAdParameter.getViewContainer()!=null){
             ViewGroup viewGroup = adInfo.mAdParameter.getViewContainer();
-            viewGroup.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            viewGroup.getLayoutParams().height =ViewGroup.LayoutParams.WRAP_CONTENT;
+            viewGroup.setVisibility(View.GONE);
+            //viewGroup.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            //viewGroup.getLayoutParams().height =ViewGroup.LayoutParams.WRAP_CONTENT;
         }
     }
 }
