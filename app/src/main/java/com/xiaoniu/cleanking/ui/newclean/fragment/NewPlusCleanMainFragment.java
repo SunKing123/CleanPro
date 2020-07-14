@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -131,11 +132,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     ClearCardView clearSoundLayout;
 
     @BindView(R.id.ad_one)
-    FrameLayout adLayoutOne;
+    ViewGroup adLayoutOne;
     @BindView(R.id.ad_two)
-    FrameLayout adLayoutTwo;
+    ViewGroup adLayoutTwo;
     @BindView(R.id.ad_three)
-    FrameLayout adLayoutThree;
+    ViewGroup adLayoutThree;
     @BindView(R.id.layout_scroll)
     ObservableScrollView mScrollView;
     @BindView(R.id.image_interactive)
