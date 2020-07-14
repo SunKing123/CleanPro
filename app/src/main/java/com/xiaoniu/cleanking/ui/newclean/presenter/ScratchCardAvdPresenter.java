@@ -64,8 +64,8 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble) {
-        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble" + isDouble);
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble,boolean isAreaOne) {
+        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble=" + isDouble);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
             return;
@@ -74,20 +74,20 @@ public class ScratchCardAvdPresenter {
         this.coinCount = coinCount;
         parameter = new GoldCoinDialogParameter();
         parameter.context = activity;
-        parameter.isDouble = isDouble;
+        parameter.isDouble = isDouble&&!isAreaOne;
         parameter.isRewardOpen = isOpenTwo();
         parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
         parameter.onDoubleClickListener = v -> handlerDoubleClick();
         parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
-        parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
+        parameter.adId = isOpenOne()&&!isAreaOne ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
 
-        GoldCoinDialog.showGoldCoinDialog(parameter);
         pointAdOne();
+        GoldCoinDialog.showGoldCoinDialog(parameter);
         StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
-    
+
     private void pointAdOne() {
         if (isOpenOne()) {
             HashMap<String, Object> map = new HashMap<>();

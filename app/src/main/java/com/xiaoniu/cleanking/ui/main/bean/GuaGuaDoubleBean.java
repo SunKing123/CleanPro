@@ -53,17 +53,17 @@ public class GuaGuaDoubleBean extends BaseEntity {
          * userId : 6793823640115736571
          */
 
-        private int area;
+        private String area;
         private int gold;
         private String date;
-        private int appName;
+        private String appName;
         private String userId;
 
-        public int getArea() {
+        public String getArea() {
             return area;
         }
 
-        public void setArea(int area) {
+        public void setArea(String area) {
             this.area = area;
         }
 
@@ -83,11 +83,11 @@ public class GuaGuaDoubleBean extends BaseEntity {
             this.date = date;
         }
 
-        public int getAppName() {
+        public String getAppName() {
             return appName;
         }
 
-        public void setAppName(int appName) {
+        public void setAppName(String appName) {
             this.appName = appName;
         }
 

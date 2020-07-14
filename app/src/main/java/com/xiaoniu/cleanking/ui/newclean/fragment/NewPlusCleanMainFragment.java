@@ -884,9 +884,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * **********************************************************folder clean start*****************************************************************************
      * *********************************************************************************************************************************************************
      */
-
     public void onCleanFolderClick() {
-        StatisticsUtils.trackClick(Points.MainHome.DEEP_CLEANING_CLICK_CODE, Points.MainHome.DEEP_CLEANING_CLICK_NAME, AppHolder.getInstance().getSourcePageId(), "acceleration_page");
+        StatisticsUtils.trackClick(Points.MainHome.DEEP_CLEANING_CLICK_CODE, Points.MainHome.DEEP_CLEANING_CLICK_NAME, "home_page", "home_page");
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
 
