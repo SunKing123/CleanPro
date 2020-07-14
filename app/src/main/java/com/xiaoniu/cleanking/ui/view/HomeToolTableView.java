@@ -34,7 +34,7 @@ public class HomeToolTableView extends LinearLayout {
     public static final int ITEM_NETWORK = 4;
     public static final int ITEM_FOLDER = 5;
 
-    private Button wxBtn;
+    private TextView wxBtn;
     private TextView tvWxContent;
     private HomeToolTableItemView itemTemperature;
     private HomeToolTableItemView itemNotify;
@@ -107,7 +107,6 @@ public class HomeToolTableView extends LinearLayout {
             onItemClick.onClick(item);
         }
     }
-
 
     public void initViewState() {
         //wx

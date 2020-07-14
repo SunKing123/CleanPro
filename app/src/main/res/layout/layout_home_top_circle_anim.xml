@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:alpha="0.5"
+        android:alpha="0.7"
         android:scaleX="0.8"
         android:scaleY="0.8">
 
@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/circle_shadow" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,9 +92,8 @@
             android:id="@+id/lftop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="29dp"
-            android:layout_marginTop="23dp"
-            android:background="@color/home_content_red"
+            android:layout_marginLeft="41dp"
+            android:layout_marginTop="25dp"
             app:location="1" />
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -101,9 +101,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="27dp"
-            android:background="@color/home_content_red"
+            android:layout_marginLeft="18dp"
+            android:layout_marginBottom="32dp"
             app:location="2" />
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -113,7 +112,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="23dp"
             android:layout_marginRight="@dimen/dp_18"
-            android:background="@color/home_content_red"
             app:location="3" />
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -123,8 +121,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="28dp"
-            android:background="@color/home_content_red"
+            android:layout_marginBottom="35dp"
             app:location="4" />
 
     </RelativeLayout>

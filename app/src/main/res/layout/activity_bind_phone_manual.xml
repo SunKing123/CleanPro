@@ -45,6 +45,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="11"
+                android:minHeight="@dimen/dimen_10dp"
                 android:textColor="#222222"
                 android:textColorHint="#c1c0c8"
                 android:textSize="@dimen/dimen_14sp"
@@ -102,6 +103,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="4"
+                android:minHeight="@dimen/dimen_10dp"
                 android:textColor="#222222"
                 android:textColorHint="#c1c0c8"
                 android:textSize="@dimen/dimen_14sp"
@@ -110,6 +112,11 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE" />
 
     <TextView
         android:id="@+id/next_tv"

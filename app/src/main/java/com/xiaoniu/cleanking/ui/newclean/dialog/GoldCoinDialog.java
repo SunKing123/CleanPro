@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.dialog;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -21,7 +22,6 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.BaseDialog;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
@@ -33,7 +33,6 @@ import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.MidasAdSdk;
-import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 import com.xnad.sdk.ad.listener.AskReadyCallBack;
 
@@ -44,7 +43,7 @@ import com.xnad.sdk.ad.listener.AskReadyCallBack;
  */
 public class GoldCoinDialog {
 
-    private static BaseDialog dialog;
+    private static Dialog dialog;
 
     public static void showGoldCoinDialog(GoldCoinDialogParameter parameter) {
         Activity context = parameter.context;
@@ -60,12 +59,12 @@ public class GoldCoinDialog {
         if (dialog != null && dialog.isShowing()) {
             return;
         }
-        dialog = new BaseDialog(context, R.style.common_dialog_style);
+        dialog = new Dialog(context, R.style.dialog_2_button);
         dialog.setContentView(R.layout.gold_coin_dialog);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);//所有的翻倍弹窗、奖励弹窗，支持物理键返回关闭弹窗。
         dialog.setCanceledOnTouchOutside(false);
-        dialog.setGravityLayout(BaseDialog.CENTER);
-        dialog.setFullScreen();
+//        dialog.setGravityLayout(BaseDialog.CENTER);
+//        dialog.setFullScreen();
         Typeface typ_ME = Typeface.createFromAsset(context.getAssets(), "DIN-Medium.otf");
         Typeface typ_RE = Typeface.createFromAsset(context.getAssets(), "DIN-Regular.otf");
         TextView adLookTime = dialog.findViewById(R.id.ad_look_time);
@@ -184,17 +183,17 @@ public class GoldCoinDialog {
                 .setViewWidth(ScreenUtils.getScreenWidth(context) - DisplayUtil.dip2px(context, 45))
                 .setViewContainer(mRootRL).build();
 
-
-        //尝试预加载，丝滑般的体验...
+        if (dialog != null && !context.isFinishing()) {
+            dialog.show();
+            MidasRequesCenter.requestAd(params, callBack);
+        }
+     /*   //尝试预加载，丝滑般的体验...
         MidasAdSdk.getAdsManger().askIsReady(context, coinBean.adId, new AskReadyCallBack() {
             @Override
             public void onReady(boolean b) {
-                if (dialog != null && !context.isFinishing()) {
-                    dialog.show();
-                    MidasRequesCenter.requestAd(params, callBack);
-                }
+
             }
-        });
+        });*/
     }
 
     public static void dismiss() {

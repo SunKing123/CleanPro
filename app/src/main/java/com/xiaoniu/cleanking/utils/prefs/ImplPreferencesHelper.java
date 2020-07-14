@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import javax.inject.Inject;
 
 import static com.xiaoniu.cleanking.utils.prefs.SpConstants.SHAREDPREFERENCES_NAME;
+import static com.xiaoniu.cleanking.utils.user.UserHelper.CHECK_USER_TOKEN;
 
 /**
  * @author: Est <codeest.dev@gmail.com>
@@ -115,6 +116,14 @@ public class ImplPreferencesHelper implements PreferencesHelper {
 
     public String getOpenID() {
         return mSPrefs.getString("openid", "");
+    }
+
+    public void setCheckUserTokenResult(boolean isOk) {
+        mSPrefs.edit().putBoolean(CHECK_USER_TOKEN, isOk).apply();
+    }
+
+    public boolean checkUserToken() {
+        return mSPrefs.getBoolean(CHECK_USER_TOKEN, true);
     }
 
     @Override

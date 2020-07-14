@@ -520,7 +520,7 @@ public class StatisticsUtils {
         try {
             extension.put("source_page_id", source_page_id);
             extension.put("current_page_id", current_page_id);
-            extension.put("card_position_id", String.valueOf(cardIndex));
+            extension.put("position_id", String.valueOf(cardIndex));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -540,7 +540,7 @@ public class StatisticsUtils {
         try {
             extension.put("source_page_id", source_page_id);
             extension.put("current_page_id", current_page_id);
-            extension.put("card_position_id", String.valueOf(cardIndex));
+            extension.put("position_id", String.valueOf(cardIndex));
         } catch (Exception e) {
             e.printStackTrace();
         }

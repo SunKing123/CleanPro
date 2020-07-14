@@ -51,12 +51,12 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
-import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
@@ -108,7 +108,7 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * Created by xinxiaolong on 2020/6/30.
  * email：xinxiaolong123@foxmail.com
  */
-public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener {
+public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener , FragmentOnFocusListenable {
 
     @BindView(R.id.view_lottie_top)
     OneKeyCircleButtonView view_lottie_top;
@@ -151,9 +151,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private AlertDialog dlg;
     private CompositeDisposable compositeDisposable;
-
+    //判断重新启动
+    boolean isFirstCreate = false;
     private boolean isDenied = false;
-    private boolean isFirst = true;
     private boolean isSlide;//正在滑动
     FloatAnimManager mFloatAnimManager;
 
@@ -182,15 +182,28 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
         mFloatAnimManager = new FloatAnimManager(imageInteractive, DisplayUtils.dip2px(180));
+        isFirstCreate = true;
         initEvent();
         showHomeLottieView();
         initClearItemCard();
         checkAndUploadPoint();
         initListener();
+        //金币前两个位置预加载
+        mPresenter.goldAdprev();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
+        LogUtils.i("zz------22---"+System.currentTimeMillis());
 
     }
 
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus && isFirstCreate) {
+            refreshAdAll();
+            isFirstCreate = false;
+        }
+
+    }
 
     private void initListener() {
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
@@ -232,7 +245,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearVideoLayout.setClearItemImage(R.mipmap.clear_image_video);
         clearVideoLayout.setClearItemContent("视频文件批量删除");
         clearVideoLayout.setClearItemSubContent("有效节省空间");
-        clearVideoLayout.getButton().setOnClickListener(view -> {
+        clearVideoLayout.setOnClickListener(view -> {
             StatisticsUtils.trackClick("video_file_click", "用户在首页点击【视频文件】", "home_page", "home_page");
             //跳转到视频清理
             startActivity(new Intent(getActivity(), CleanVideoManageActivity.class));
@@ -243,7 +256,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearImageLayout.setClearItemImage(R.mipmap.clear_image_pic);
         clearImageLayout.setClearItemContent("智能相册管理");
         clearImageLayout.setClearItemSubContent("一键删除无用照片");
-        clearImageLayout.getButton().setOnClickListener(view -> {
+        clearImageLayout.setOnClickListener(view -> {
             StatisticsUtils.trackClick("picture_file_Click", "用户在首页点击【图片文件】", "home_page", "home_page");
             Intent intent = new Intent(getActivity(), ImageActivity.class);
             startActivity(intent);
@@ -254,7 +267,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearSoundLayout.setClearItemImage(R.mipmap.clear_image_audio);
         clearSoundLayout.setClearItemContent("清除过期音频文件");
         clearSoundLayout.setClearItemSubContent("释放更多可用空间");
-        clearSoundLayout.getButton().setOnClickListener(view -> {
+        clearSoundLayout.setOnClickListener(view -> {
             StatisticsUtils.trackClick("audio_file_Click", "用户在首页点击音频文件", "home_page", "home_page");
             //跳转到音乐清理
             startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));
@@ -322,6 +335,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
     }
 
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************load advInfo*********************************************************************************
@@ -381,9 +395,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
                 //子控件至少有一个像素在可视范围内
                 if (!isRequest) {
-                    if (mPresenter.getReadSuccess()) {
-                        mPresenter.fillVideoAd(adLayoutThree, adClick);
-                    }
+                    mPresenter.fillVideoAd(adLayoutThree, adClick);
                 }
                 isRequest = true;
             } else {
@@ -415,12 +427,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //重新检测头部扫描状态
             checkScanState();
             //刷新广告数据
-            refreshAdAll();
+            if(!isFirstCreate){
+                refreshAdAll();
+            }
             //金币配置刷新
             mPresenter.refBullList();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
+
+
+
     }
 
 
@@ -631,13 +648,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case R.id.iv_center:
                 StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
                 if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
+                    ToastUtils.showShort("清理已间隔5分钟");
                     if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
                         //读取扫描缓存
+                        ToastUtils.showShort("跳转清理页面");
                         startActivity(NowCleanActivity.class);
                     } else {    //scanState ==0: 扫描中
                         checkStoragePermission();
                     }
                 } else {
+                    ToastUtils.showShort("清理未间隔5分钟");
                     String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
                     CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                     if (null != countEntity && getActivity() != null && this.isAdded()) {
@@ -649,10 +669,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
                         intent.putExtras(bundle);
                         startActivity(intent);
+                        ToastUtils.showShort("跳转NewCleanFinishActivity.class");
                     } else {
                         //判断扫描缓存；
                         if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
                             //读取扫描缓存
+                            ToastUtils.showShort("跳转NowCleanActivity.class");
                             startActivity(NowCleanActivity.class);
                         } else {                //scanState ==0: 扫描中
                             checkStoragePermission();
@@ -674,18 +696,22 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * 检查文件存贮权限
      */
     private void checkStoragePermission() {
+        ToastUtils.showShort("清理checkStoragePermission()");
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Disposable disposable = rxPermissions.request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
                         mPresenter.stopScanning();
+                        ToastUtils.showShort("跳转NowCleanActivity.class");
                         startActivity(NowCleanActivity.class);
                     } else {
                         if (hasPermissionDeniedForever()) {  //点击拒绝
+                            ToastUtils.showShort("跳转NowCleanActivity.class");
                             startActivity(NowCleanActivity.class);
                         } else {                            //点击永久拒绝
                             showPermissionDialog();
+                            ToastUtils.showShort("弹框提醒打开权限");
                         }
                     }
                 });
@@ -1023,9 +1049,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             ToastUtils.showShort(R.string.net_error);
             return;
         }
-        mPresenter.bullCollect(ballBean.getLocationNum());
-        StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
-
+        if (!AndroidUtil.isFastDoubleClick()) {
+            mPresenter.bullCollect(ballBean.getLocationNum());
+            StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
+        }
     }
 
 

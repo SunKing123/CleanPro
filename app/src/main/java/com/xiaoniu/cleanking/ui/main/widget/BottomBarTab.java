@@ -109,7 +109,7 @@ public class BottomBarTab extends FrameLayout {
             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             mIcon.setImageResource(icon);
         } else if (title.equals("刮刮卡")) {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, context.getResources().getDimensionPixelOffset(R.dimen.dimen_50dp));
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, context.getResources().getDimensionPixelOffset(R.dimen.dimen_40dp));
             mIcon.setScaleType(ImageView.ScaleType.FIT_XY);
             GlideUtils.loadImage((Activity) mContext, iconString, mIcon);
         } else {

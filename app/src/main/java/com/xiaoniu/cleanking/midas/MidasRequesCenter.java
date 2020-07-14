@@ -77,6 +77,16 @@ public class MidasRequesCenter {
         MidasAdSdk.getAdsManger().loadAd(adParameter,absAdCallBack);
     }
 
+    public static void preLoad(AdRequestParams adRequestParams){
+        //上下文、广告位置ID
+        AdParameter adParameter = new AdParameter.Builder(adRequestParams.getActivity(),adRequestParams.getAdId())
+                //设置填充父布局
+                .setViewContainer(adRequestParams.getViewContainer())
+                .setViewWidth(adRequestParams.getViewWidth())
+                .build();
+        MidasAdSdk.getAdsManger().preLoad(adParameter,null);
+    }
+
     /**
      * 激励视频广告请求入口
      * @param adRequestParams

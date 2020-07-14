@@ -28,6 +28,7 @@ import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -166,6 +167,9 @@ public class CustomWebViewLayout extends FrameLayout {
     public class JsInterface {
         @JavascriptInterface
         public String getXnData() {
+            LogUtils.e("=================================getXnData() start");
+            LogUtils.e(AndroidUtil.getXnData());
+            LogUtils.e("=================================getXnData() end");
             return AndroidUtil.getXnData();
         }
 

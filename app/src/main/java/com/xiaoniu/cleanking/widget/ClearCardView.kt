@@ -17,7 +17,7 @@ class ClearCardView(context: Context, attributeSet: AttributeSet) : LinearLayout
     private var mClearImage: AppCompatImageView
     private var mContentText: AppCompatTextView
     private var mSubContentText: AppCompatTextView
-    private var mButton: AppCompatButton
+    private var mButton: AppCompatTextView
 
 
     init {
@@ -53,7 +53,7 @@ class ClearCardView(context: Context, attributeSet: AttributeSet) : LinearLayout
     }
 
 
-    fun getButton(): AppCompatButton {
+    fun getButton(): AppCompatTextView {
         return mButton
     }
 }
