@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -36,6 +37,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
@@ -521,6 +523,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
+                .setViewWidth(ScreenUtils.getScreenWidth(mView.getActivity()) - DisplayUtil.dip2px(mView.getActivity(),28))
                 .setViewContainer(viewGroup).build();
 
         MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
