@@ -38,7 +38,6 @@ import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
@@ -117,14 +116,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
     }
 
-
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
             StatisticsUtils.customTrackEvent("my_page_custom", "我的页面曝光", "my_page", "my_page");
             RequestUserInfoUtil.getUserCoinInfo();
-            StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
+//            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
             //展示广告
             addBottomAdView();
         }

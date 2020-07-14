@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
@@ -17,6 +18,8 @@ import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 
@@ -64,7 +67,15 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble,boolean isAreaOne) {
+    /**
+     * 显示刮刮卡弹框
+     *
+     * @param coinCount      金币数
+     * @param totalCoinCount 总金币数
+     * @param isDouble       是否可以翻倍
+     * @param isAreaOne      是否是第一个刮刮卡
+     */
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble, boolean isAreaOne) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble=" + isDouble);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -74,29 +85,34 @@ public class ScratchCardAvdPresenter {
         this.coinCount = coinCount;
         parameter = new GoldCoinDialogParameter();
         parameter.context = activity;
-        parameter.isDouble = isDouble&&!isAreaOne;
+        parameter.isDouble = isDouble && !isAreaOne;
         parameter.isRewardOpen = isOpenTwo();
         parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
         parameter.onDoubleClickListener = v -> handlerDoubleClick();
         parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
-        parameter.adId = isOpenOne()&&!isAreaOne ? getFirstAdvId(cardIndex) : "";
+        parameter.adId = isOpenOne() && !isAreaOne ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
 
-        pointAdOne();
+        if (TextUtils.isEmpty(parameter.adId)) {
+            pointAdOne();
+        }
         GoldCoinDialog.showGoldCoinDialog(parameter);
         StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
+    /**
+     * 广告位1埋点
+     */
     private void pointAdOne() {
-        if (isOpenOne()) {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("position_id", cardIndex);
-            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
-        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("position_id", cardIndex);
+        StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
     }
 
-    //点击翻倍按钮事件
+    /**
+     * 点击翻倍按钮事件
+     */
     private void handlerDoubleClick() {
         if (isVideoRequesting) {
             return;
@@ -106,7 +122,9 @@ public class ScratchCardAvdPresenter {
 
     }
 
-    //点击关闭按钮事件
+    /**
+     * 点击关闭按钮事件
+     */
     private void handlerCloseClick() {
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_CLOSE_CLICK_CODE, Points.ScratchCard.WINDOW_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
@@ -227,7 +245,9 @@ public class ScratchCardAvdPresenter {
         }
     }
 
-    //激励视频加载失败，提示用户并关闭弹框
+    /**
+     * 激励视频加载失败，提示用户并关闭弹框
+     */
     private void handlerVideoAdvError() {
         ToastUtils.showShort("网络异常");
         GoldCoinDialog.dismiss();
@@ -309,5 +329,24 @@ public class ScratchCardAvdPresenter {
         }
         parameter = null;
         activity = null;
+    }
+
+    public void preLoadAd() {
+        if (isOpenOne()) {
+            adPrevData(getAdvId(ADV_FIRST_PREFIX, 1));
+        }
+        if (isOpenTwo()) {
+            adPrevData(getAdvId(ADV_SECOND_PREFIX, 1));
+        }
+    }
+
+    //广告预加载
+    private void adPrevData(String posId) {
+        if (TextUtils.isEmpty(posId)) {
+            return;
+        }
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(posId).setActivity(activity).build();
+        MidasRequesCenter.preLoad(params);
     }
 }

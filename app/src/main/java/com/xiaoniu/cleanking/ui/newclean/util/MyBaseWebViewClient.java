@@ -109,18 +109,18 @@ public class MyBaseWebViewClient extends WebViewClient {
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         super.onPageStarted(view, url, favicon);
-        if (errorView != null) {
-            errorView.setVisibility(View.GONE);
-        }
+//        if (errorView != null) {
+//            errorView.setVisibility(View.GONE);
+//        }
     }
 
     @Override
     public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
         super.onReceivedError(view, request, error);
-        if (errorView != null) {
-            errorView.setVisibility(View.VISIBLE);
-            errorView.showErrorView();
-        }
+//        if (errorView != null) {
+//            errorView.setVisibility(View.VISIBLE);
+//            errorView.showErrorView();
+//        }
         Log.e("snow", "=====onReceivedError=========");
     }
 
@@ -187,6 +187,7 @@ public class MyBaseWebViewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
+        Log.e("snow", "=============onPageFinished=====");
         if (downTimer != null) {
             downTimer.cancel();
         }
@@ -274,6 +275,9 @@ public class MyBaseWebViewClient extends WebViewClient {
         String totalCoin = parameters.getParameter(SchemeConstant.TOTAL_COIN);
         //当前奖励金币数
         String coin = parameters.getParameter(SchemeConstant.COIN);
+        //area=1  区域1
+        //area=2  区域2
+        String area = parameters.getParameter(SchemeConstant.AREA);
         //是否需要翻倍
         boolean isDouble = TextUtils.equals("1", parameters.getParameter(SchemeConstant.IS_DOUBLE));
         //h5 可能需要传这个id
@@ -284,7 +288,7 @@ public class MyBaseWebViewClient extends WebViewClient {
         if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin) && !TextUtils.isEmpty(cardPosition) && cardAvdPresenter != null) {
             int obtainCoinCount = Integer.parseInt(coin);//获得的金币
             int totalCoinCount = Integer.parseInt(totalCoin);//用户总金币金额===这里totalCoinCount在h5已经添加过了
-            cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, totalCoinCount, isDouble,false);
+            cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, totalCoinCount, isDouble, "1".equals(area));
         }
     }
 
@@ -300,7 +304,6 @@ public class MyBaseWebViewClient extends WebViewClient {
             SchemeUtils.openScheme(mActivity, target, null, ActivityUtils.REQUEST_CODE_FROM_BROWSER);
         }
         mActivity.finish();
-
     }
 
     /**

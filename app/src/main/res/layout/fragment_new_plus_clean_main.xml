@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,10 +9,16 @@
     android:orientation="vertical"
     android:visibility="visible">
 
+    <com.xiaoniu.cleanking.widget.CommonTitleLayout
+        android:id="@+id/commonTitleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <RelativeLayout
         android:id="@+id/v_top"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_below="@id/commonTitleLayout"
         android:paddingLeft="@dimen/dimen_16dp"
         android:paddingRight="@dimen/dimen_16dp">
 
@@ -59,15 +66,14 @@
         android:layout_below="@+id/v_top"
         android:fadingEdgeLength="@dimen/dimen_0dp"
         android:overScrollMode="never"
-        android:scrollbars="none"
+        android:paddingLeft="6dp"
         android:paddingRight="6dp"
-        android:paddingLeft="6dp">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-          >
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/layout_clean_top"
@@ -87,15 +93,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop"
-                android:padding="4dp"
                 android:background="@drawable/shadow"
-                android:visibility="gone"
-                />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -111,13 +118,14 @@
 
             </FrameLayout>
 
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop"
-                android:layout_marginBottom="@dimen/main_home_marginTop"
                 android:background="@drawable/shadow"
+                android:gravity="center"
+                android:orientation="vertical"
                 android:visibility="gone" />
 
             <include layout="@layout/layout_weather_video" />
@@ -134,15 +142,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop" />
 
-            <FrameLayout
+
+            <LinearLayout
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop"
                 android:background="@drawable/shadow"
-                android:padding="4dp"
-                android:visibility="gone"
-                />
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"

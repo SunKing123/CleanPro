@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -23,10 +25,10 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
+import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.statusview.StatusViewBuilder;
@@ -71,10 +73,12 @@ public class YuLeFragment extends SimpleFragment {
 //            Intent intent = new Intent(getContext(), BrowserActivity.class);
 //            intent.putExtra(Constant.URL,url);
 //            startActivity(intent);
-            mAgentWeb.getWebCreator().getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
-            Log.e("snow", "==" + AndroidUtil.getXnData());
+//            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+//            Log.e("snow", "==" + AndroidUtil.getXnData());
+            Log.e("snow", "=errorView.getVisibility=" + errorView.getVisibility());
         });
         netWorkAbout();
+        new ScratchCardAvdPresenter(getActivity()).preLoadAd();
     }
 
     private void netWorkAbout() {
@@ -100,7 +104,7 @@ public class YuLeFragment extends SimpleFragment {
                         }
                     }
                 }).build());
-        checkNetWork();
+//        checkNetWork();
     }
 
     private boolean checkNetWork() {
@@ -123,17 +127,28 @@ public class YuLeFragment extends SimpleFragment {
 //            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
             getWebView().loadUrl("javascript:refresh()");
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
-            StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
+//            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "刮刮卡浏览");
         }
     }
 
+    View errorView;
+
     private void initWebView() {
+        errorView = LayoutInflater.from(getContext()).inflate(R.layout.web_error_layout, null, false);
+        errorView.findViewById(R.id.sv_error_retry).setOnClickListener(v -> {
+            if (!AndroidUtil.isFastDoubleClick()) {
+                getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+            }
+        });
+        errorView.findViewById(R.id.text_go_to_setting).setOnClickListener(v -> {
+            getContext().startActivity(new Intent(Settings.ACTION_SETTINGS));
+        });
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mBinding.webFragment, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-//                .setMainFrameErrorView(R.layout.common_view_no_network, R.id.no_network_tv)
+                .setMainFrameErrorView(errorView)
                 .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())
                 .setWebViewClient(new MyBaseWebViewClient(null, null, getActivity(), mBinding.loadIv, mBinding.webPageNoNetwork))
                 .setWebChromeClient(mWebChromeClient)
