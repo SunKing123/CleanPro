@@ -184,11 +184,18 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
         mTitleTv.setText(mTitle);
-        mPresenter.getScreenSwitch();
+        requestScreenSwitch();
         getPageData();
         setListener();
         loadData();
         initGeekAd();
+    }
+
+    private void requestScreenSwitch() {
+        boolean unused = getIntent().getBooleanExtra("unused", false);
+        if (!unused) {
+            mPresenter.getScreenSwitch();
+        }
     }
 
     public String getActivityTitle() {
@@ -1120,7 +1127,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }
 
-        StatisticsUtils.customTrackEvent("ad_request_sdk_1","功能完成页广告位1发起请求",sourcePage,"success_page");
+        StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页广告位1发起请求", sourcePage, "success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos01)
@@ -1216,7 +1223,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         if (!isOpenTwo) {
             return;
         }
-        StatisticsUtils.customTrackEvent("ad_request_sdk_2","功能完成页广告位2发起请求",sourcePage,"success_page");
+        StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页广告位2发起请求", sourcePage, "success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
                 .setActivity(this)
                 .setViewContainer(ad_container_pos02)
