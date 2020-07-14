@@ -263,7 +263,7 @@ public class MyBaseWebViewClient extends WebViewClient {
         if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin) && !TextUtils.isEmpty(cardPosition)) {
             int obtainCoinCount = Integer.parseInt(coin);//获得的金币
             int totalCoinCount = Integer.parseInt(totalCoin);//用户总金币金额===这里totalCoinCount在h5已经添加过了
-            cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, totalCoinCount, isDouble);
+            cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, totalCoinCount, isDouble,false);
         }
     }
 

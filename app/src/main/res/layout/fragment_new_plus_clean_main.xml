@@ -140,7 +140,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop"
                 android:background="@drawable/shadow"
-                android:padding="4dp" />
+                android:padding="4dp"
+                android:visibility="gone"
+                />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"
