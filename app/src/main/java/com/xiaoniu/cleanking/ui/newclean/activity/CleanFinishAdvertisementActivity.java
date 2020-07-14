@@ -477,7 +477,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
 
         AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.FINISH02_FEEED_ID)
                 .setActivity(this)
-                .setViewContainer(ad_container_pos03)
+                .setViewContainer(ad_container_pos03).setViewWidthOffset(24)
                 .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override

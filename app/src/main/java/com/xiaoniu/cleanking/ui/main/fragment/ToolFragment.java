@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.comm.jksdk.utils.DisplayUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -428,10 +427,8 @@ public class ToolFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
-                .setActivity(mActivity)
-                .setViewWidth(DisplayUtil.px2dp(mActivity, DisplayUtil.getScreenWidth(mActivity)) - 24)
-                .setViewContainer(frameBottomLayout).build();
+        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
+                .setActivity(mActivity).setViewContainer(frameBottomLayout).setViewWidthOffset(24).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onReadyToShow(AdInfo adInfo) {
