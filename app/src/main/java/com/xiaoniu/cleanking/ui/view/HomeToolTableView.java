@@ -34,7 +34,7 @@ public class HomeToolTableView extends LinearLayout {
     public static final int ITEM_NETWORK = 4;
     public static final int ITEM_FOLDER = 5;
 
-    private TextView wxBtn;
+    private View wxBtn;
     private TextView tvWxContent;
     private HomeToolTableItemView itemTemperature;
     private HomeToolTableItemView itemNotify;
@@ -59,7 +59,7 @@ public class HomeToolTableView extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.item_home_tool_table_layout, this);
-        wxBtn = findViewById(R.id.btn_wx_clean);
+        wxBtn = findViewById(R.id.wx_clean);
         tvWxContent = findViewById(R.id.tv_wx_content);
         itemTemperature = findViewById(R.id.item_temperature);
         itemNotify = findViewById(R.id.item_notify);

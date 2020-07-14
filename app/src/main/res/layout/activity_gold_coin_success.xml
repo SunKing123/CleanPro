@@ -15,7 +15,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dimen_45dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -37,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:text="恭喜您翻倍成功"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16dp" />
+                    android:textSize="@dimen/dimen_15dp" />
 
                 <TextView
                     android:id="@+id/tv_coin_content"
@@ -51,13 +53,15 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/btnLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:padding="@dimen/dimen_17dp"
-        android:src="@drawable/common_icon_back_arrow_white" />
+        android:text="返回"
+        android:textColor="@color/white"
+        android:drawableStart="@drawable/common_icon_back_arrow_white" />
 
 
     <FrameLayout

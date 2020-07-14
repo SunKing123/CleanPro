@@ -243,7 +243,7 @@ public interface UserApiService {
      * @return
      */
 
-    @POST("/guaGuaActivity/doubleAward")
+    @GET("/guaGuaActivity/doubleAward")
     Flowable<GuaGuaDoubleBean> guaGuaBubbleDouble(@Query("id") String id);
 
     /**
