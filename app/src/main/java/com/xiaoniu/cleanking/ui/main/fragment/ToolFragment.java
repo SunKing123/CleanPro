@@ -95,7 +95,7 @@ public class ToolFragment extends SimpleFragment {
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale = 20; //使用内存占总RAM的比例
-   // private AdManager mAdManager;
+    // private AdManager mAdManager;
 
     private static final String TAG = "GeekSdk";
 
@@ -128,7 +128,6 @@ public class ToolFragment extends SimpleFragment {
         if (null == mAdManager)
             mAdManager = GeekAdSdk.getAdsManger();
     }*/
-
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
         Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{FileUtils.getFreeSpace(), FileUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
@@ -429,8 +428,14 @@ public class ToolFragment extends SimpleFragment {
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
         AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
-                .setActivity(mActivity).setViewContainer(frameBottomLayout).build();
+                .setActivity(mActivity).setViewContainer(frameBottomLayout).setViewWidthOffset(24).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            @Override
+            public void onReadyToShow(AdInfo adInfo) {
+                super.onReadyToShow(adInfo);
+                adInfo.getAdParameter().getViewContainer().setVisibility(View.VISIBLE);
+            }
+
             @Override
             public void onAdError(AdInfo adInfo, int i, String s) {
                 super.onAdError(adInfo, i, s);

@@ -504,7 +504,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }
         //尝试预加载，丝滑般的体验...
         AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(MidasConstants.MAIN_THREE_AD_ID).setActivity(mView.getActivity())
+                .setAdId(MidasConstants.MAIN_THREE_AD_ID).setActivity(mView.getActivity()).setViewWidthOffset(28)
                 .setViewContainer(viewGroup).build();
         MidasRequesCenter.preLoad(params);
 //        MidasAdSdk.getAdsManger().askIsReady(mView.getActivity(), MidasConstants.MAIN_THREE_AD_ID, result -> isReadSuccess = result);
@@ -513,7 +513,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     public void fillVideoAd(ViewGroup viewGroup, IOnAdClickListener onAdClick) {
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(MidasConstants.MAIN_THREE_AD_ID).setActivity(mView.getActivity())
-                .setViewContainer(viewGroup).build();
+                .setViewContainer(viewGroup).setViewWidthOffset(28).build();
         MidasRequesCenter.requestAd(params, new AdvCallBack(MidasConstants.MAIN_THREE_AD_ID, onAdClick));
     }
 

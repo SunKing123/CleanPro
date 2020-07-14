@@ -37,7 +37,6 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
@@ -67,7 +66,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import cn.jzvd.Jzvd;
 
@@ -129,7 +127,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         fileQueryUtils = new FileQueryUtils();
         processNum = fileQueryUtils.getRunningProcess().size();
         mTitle = getIntent().getStringExtra("title");
-        mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
+        mBtnLeft = (ImageView) findViewById(R.id.gold_finish_btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
         mRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -1131,7 +1129,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页广告位1发起请求", sourcePage, "success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
                 .setActivity(this)
-                .setViewContainer(ad_container_pos01)
+                .setViewContainer(ad_container_pos01).setViewWidthOffset(24)
                 .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
@@ -1227,7 +1225,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页广告位2发起请求", sourcePage, "success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
                 .setActivity(this)
-                .setViewContainer(ad_container_pos02)
+                .setViewContainer(ad_container_pos02).setViewWidthOffset(24)
                 .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override

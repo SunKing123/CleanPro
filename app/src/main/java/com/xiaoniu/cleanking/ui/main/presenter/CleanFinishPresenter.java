@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
@@ -180,6 +181,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                               @Override
                               public void netConnectError() {
                                   ToastUtils.showShort(R.string.notwork_error);
+                                  GoldCoinDialog.dismiss();
                               }
                           }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), bubbleCollected.getData().getUuid(), bubbleCollected.getData().getLocationNum(),
                 bubbleCollected.getData().getGoldCount());
@@ -301,7 +303,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                     setViewContainer(viewGroup).
                     setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build();
             videoAdRequesting = true;
-            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+            MidasRequesCenter.requestAd(params, new VideoAbsAdCallBack() {
                 @Override
                 public void onShowError(int i, String s) {
                     super.onShowError(i, s);
@@ -318,12 +320,19 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 }
 
                 @Override
-                public void onAdClose(AdInfo adInfo) {
-                    super.onAdClose(adInfo);
+                public void onAdClose(AdInfo adInfo, boolean isComplete) {
+                    super.onAdClose(adInfo, isComplete);
                     StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop-up_window_incentive_video_page", getStatisticsJson());
-                    addDoubleGoldCoin(bubbleCollected);
+                    if (isComplete) {
+                        //播放完成的话去翻倍
+                        addDoubleGoldCoin(bubbleCollected);
+                    } else {
+                        //没有播放完成就关闭广告的话把弹窗关掉
+                        GoldCoinDialog.dismiss();
+                    }
                     videoAdRequesting = false;
                 }
+
 
                 @Override
                 public void onAdVideoComplete(AdInfo adInfo) {
