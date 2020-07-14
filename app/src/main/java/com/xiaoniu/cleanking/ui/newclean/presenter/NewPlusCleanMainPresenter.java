@@ -520,6 +520,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
+        viewGroup.setVisibility(View.VISIBLE);
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();

@@ -167,7 +167,12 @@ public class AndroidUtil {
         String deviceId = SmAntiFraud.getDeviceId();
         map.put("sm-deviceid", deviceId);
         map.put("sdk-uid", NiuDataAPI.getUUID());
-        return android.util.Base64.encodeToString(new Gson().toJson(map).getBytes(), android.util.Base64.NO_WRAP);
+
+        String xnData = android.util.Base64.encodeToString(new Gson().toJson(map).getBytes(), android.util.Base64.NO_WRAP);
+        LogUtils.e("=================================getXnData() start");
+        LogUtils.e(xnData);
+        LogUtils.e("=================================getXnData() end");
+        return xnData;
     }
 
     /**
@@ -349,7 +354,7 @@ public class AndroidUtil {
     @SuppressLint({"MissingPermission"})
     public static String getDeviceID() {
         Context context = AppApplication.getInstance();
-        String mkId = MmkvUtil.getString(PositionId.HEAD_DEVICE_ID,"");
+        String mkId = MmkvUtil.getString(PositionId.HEAD_DEVICE_ID, "");
         if (!TextUtils.isEmpty(mkId) && !"unknown".equals(mkId)) {
             sDeviceID = mkId;
             return mkId;
@@ -368,7 +373,7 @@ public class AndroidUtil {
             } catch (Exception var2) {
                 setDeviceID();
                 return sDeviceID;
-            }finally {
+            } finally {
                 if (!TextUtils.isEmpty(sDeviceID) && !"unknown".equals(sDeviceID)) {
                     MmkvUtil.saveString(PositionId.HEAD_DEVICE_ID, sDeviceID);
                 }

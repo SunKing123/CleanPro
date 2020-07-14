@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -98,6 +99,9 @@ public class BaseBrowserFragment extends SimpleFragment {
                 .go(url);
         //播放视频完成的回调
         cardAvdPresenter.setOnVideoPlayedListener(() -> {
+            LogUtils.e("==========================================================getXnData() JsonParams start");
+            LogUtils.e(videoRequestJsonParams);
+            LogUtils.e("==========================================================getXnData() JsonParams  end");
             getWebView().loadUrl("javascript:videoCallBack(" + videoRequestJsonParams + ")");
             mActivity.finish();
         });
