@@ -66,7 +66,7 @@ public class GoldModel extends BaseModel {
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
-    public void goleDouble(CommonSubscriber<BubbleDouble> commonSubscriber, FlowableTransformer tt, String uuid, int locationNum, int goldCount) {
+    public void goldDouble(CommonSubscriber<BubbleDouble> commonSubscriber, FlowableTransformer tt, String uuid, int locationNum, int goldCount) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("locationNum", locationNum);

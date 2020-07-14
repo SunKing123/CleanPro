@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
@@ -19,6 +20,8 @@ import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
+
+import java.util.HashMap;
 
 /**
  * Created by xinxiaolong on 2020/7/6.
@@ -72,7 +75,6 @@ public class ScratchCardAvdPresenter {
         }
         this.cardIndex = cardIndex;
         this.coinCount = coinCount;
-//        if (parameter == null) {
         parameter = new GoldCoinDialogParameter();
         parameter.context = activity;
         parameter.isDouble = isDouble;
@@ -81,11 +83,16 @@ public class ScratchCardAvdPresenter {
         parameter.onDoubleClickListener = v -> handlerDoubleClick();
         parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
-//        }
         parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
 
         GoldCoinDialog.showGoldCoinDialog(parameter);
+
+        if (isOpenOne()) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("position_id", cardIndex);
+            StatisticsUtils.customTrackEvent("ad_request_sdk", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
+        }
         StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
@@ -96,6 +103,7 @@ public class ScratchCardAvdPresenter {
         }
         loadVideoAdv(getVideoAdvId(cardIndex));
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
+
     }
 
     //点击关闭按钮事件
@@ -127,10 +135,17 @@ public class ScratchCardAvdPresenter {
     //加载激励视屏广告
     private void loadVideoAdv(String advId) {
         isVideoRequesting = true;
+        pointVideo();
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(advId).setActivity(activity)
                 .setViewContainer((ViewGroup) activity.getWindow().getDecorView()).build();
         MidasRequesCenter.requestAd(params, new CardAdCallBack(ADV_VIDEO_PREFIX));
+    }
+
+    private void pointVideo() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("position_id", cardIndex);
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "刮刮卡翻倍激励视频广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
     }
 
     private String getAdvId(String resNamePrefix, int index) {

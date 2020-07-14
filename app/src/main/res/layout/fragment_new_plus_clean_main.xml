@@ -25,13 +25,12 @@
 
         <TextView
             android:id="@+id/tv_withDraw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="19dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/gradient_button_bg"
-            android:paddingLeft="9dp"
-            android:paddingRight="9dp"
+            android:gravity="center"
             android:text="提现"
             android:textColor="@color/white"
             android:textSize="12dp"
@@ -40,11 +39,13 @@
         <TextView
             android:id="@+id/tv_coin_num"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="19dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="6dp"
             android:layout_toLeftOf="@+id/tv_withDraw"
             android:drawableLeft="@drawable/icon_home_gold"
+            android:drawablePadding="4dp"
+            android:gravity="center"
             android:text=""
             android:textColor="#26DFB0"
             android:visibility="gone" />
@@ -58,16 +59,15 @@
         android:layout_below="@+id/v_top"
         android:fadingEdgeLength="@dimen/dimen_0dp"
         android:overScrollMode="never"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:paddingRight="6dp"
+        android:paddingLeft="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingStart="7dp"
-            android:paddingEnd="7dp">
+          >
 
             <RelativeLayout
                 android:id="@+id/layout_clean_top"
@@ -92,32 +92,32 @@
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
-                android:background="@drawable/shadow"
-                android:padding="4dp"/>
+                android:layout_marginTop="@dimen/main_home_marginTop"
+                android:padding="4dp"
+                android:visibility="gone" />
 
             <FrameLayout
-                android:layout_marginTop="@dimen/dp_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_home_marginTop"
                 android:background="@drawable/shadow">
 
                 <com.xiaoniu.cleanking.ui.view.HomeToolTableView
                     android:id="@+id/home_tool_table"
                     android:layout_width="match_parent"
-                    android:padding="4dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:padding="4dp" />
 
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginBottom="@dimen/dp_10"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_home_marginTop"
+                android:layout_marginBottom="@dimen/main_home_marginTop"
                 android:background="@drawable/shadow"
-                android:padding="4dp"/>
+                android:visibility="gone" />
 
             <include layout="@layout/layout_weather_video" />
 
@@ -125,28 +125,28 @@
                 android:id="@+id/clear_card_video"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10" />
+                android:layout_marginTop="@dimen/main_home_marginTop" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10" />
+                android:layout_marginTop="@dimen/main_home_marginTop" />
 
             <FrameLayout
-                android:layout_marginTop="@dimen/dp_10"
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/main_home_marginTop"
                 android:background="@drawable/shadow"
-                android:padding="4dp"/>
+                android:padding="4dp" />
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_sound"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_13"
-                android:layout_marginTop="@dimen/dp_10" />
+                android:layout_marginTop="@dimen/main_home_marginTop"
+                android:layout_marginBottom="@dimen/dp_13" />
         </LinearLayout>
     </com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView>
 
@@ -157,8 +157,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
-        android:src="@mipmap/icon_main_right_ad"
         android:paddingRight="-10dp"
-        android:visibility="gone"/>
+        android:src="@mipmap/icon_main_right_ad"
+        android:visibility="gone" />
 
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>

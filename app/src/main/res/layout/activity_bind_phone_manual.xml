@@ -111,6 +111,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE" />
+
     <TextView
         android:id="@+id/next_tv"
         android:layout_width="@dimen/dimen_240dp"
