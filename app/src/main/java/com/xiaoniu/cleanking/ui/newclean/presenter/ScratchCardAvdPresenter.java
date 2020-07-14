@@ -65,6 +65,14 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
+    /**
+     * 显示刮刮卡弹框
+     * @param cardIndex                卡片位置
+     * @param coinCount                金币数
+     * @param totalCoinCount           总金币数
+     * @param isDouble                 是否可以翻倍
+     * @param isAreaOne                是否是第一个刮刮卡
+     */
     public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble, boolean isAreaOne) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble=" + isDouble);
         if (activity == null) {
@@ -91,13 +99,18 @@ public class ScratchCardAvdPresenter {
         StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
+    /**
+     * 广告位1埋点
+     */
     private void pointAdOne() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("position_id", cardIndex);
         StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
     }
 
-    //点击翻倍按钮事件
+    /**
+     * 点击翻倍按钮事件
+     */
     private void handlerDoubleClick() {
         if (isVideoRequesting) {
             return;
@@ -107,7 +120,9 @@ public class ScratchCardAvdPresenter {
 
     }
 
-    //点击关闭按钮事件
+    /**
+     * 点击关闭按钮事件
+     */
     private void handlerCloseClick() {
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_CLOSE_CLICK_CODE, Points.ScratchCard.WINDOW_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
@@ -228,7 +243,9 @@ public class ScratchCardAvdPresenter {
         }
     }
 
-    //激励视频加载失败，提示用户并关闭弹框
+    /**
+     * 激励视频加载失败，提示用户并关闭弹框
+     */
     private void handlerVideoAdvError() {
         ToastUtils.showShort("网络异常");
         GoldCoinDialog.dismiss();
