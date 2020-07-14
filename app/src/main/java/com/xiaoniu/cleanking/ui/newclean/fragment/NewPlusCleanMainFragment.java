@@ -645,6 +645,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
                         bundle.putString("num", countEntity.getTotalSize());
                         bundle.putString("unit", countEntity.getUnit());
+                        bundle.putBoolean("unused",true);
                         Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
                         intent.putExtras(bundle);
                         startActivity(intent);
@@ -769,6 +770,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused",true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         } else {
@@ -814,6 +816,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
             intent.putExtra("title", "病毒查杀");
             intent.putExtra("main", false);
+            intent.putExtra("unused",true);
             startActivity(intent);
         }
     }
@@ -842,6 +845,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused",true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -907,6 +911,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused",true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -936,6 +941,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_notification_clean));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused",true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -964,6 +970,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused",true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -984,6 +991,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             intent.putExtra("title", "网络加速");
             intent.putExtra("main", false);
             intent.putExtra("num", num);
+            intent.putExtra("unused",true);
             startActivity(intent);
         }
     }
