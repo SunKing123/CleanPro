@@ -53,13 +53,15 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/btnLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:padding="@dimen/dimen_17dp"
-        android:src="@drawable/common_icon_back_arrow_white" />
+        android:text="返回"
+        android:textColor="@color/white"
+        android:drawableStart="@drawable/common_icon_back_arrow_white" />
 
 
     <FrameLayout
