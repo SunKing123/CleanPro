@@ -194,6 +194,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         //金币前两个位置预加载
         mPresenter.goldAdprev();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
+        LogUtils.i("zz------22---"+System.currentTimeMillis());
 
     }
 
