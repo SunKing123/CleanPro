@@ -4,7 +4,7 @@
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/common_default"
         android:orientation="vertical"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_15dp"
-                    android:layout_marginTop="@dimen/dimen_62dp"
+                    android:layout_marginTop="@dimen/dimen_60dp"
                     android:layout_marginRight="@dimen/dimen_15dp">
 
                     <RelativeLayout
@@ -101,12 +101,14 @@
                             android:includeFontPadding="false"
                             android:text="我的金币"
                             android:textColor="@color/color_222222"
-                            android:textSize="@dimen/dimen_16sp" />
+                            android:textSize="@dimen/dimen_16sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="@dimen/dimen_60dp"
                             android:layout_height="@dimen/dimen_18dp"
                             android:layout_marginLeft="@dimen/dimen_6dp"
+                            android:background="@drawable/bg_eee_frame_fillet_9"
                             android:gravity="center"
                             android:includeFontPadding="false"
                             android:text="收入明细"
@@ -136,7 +138,7 @@
                             android:layout_marginLeft="@dimen/dimen_5dp"
                             android:layout_marginRight="@dimen/dimen_5dp"
                             android:text="≈"
-                            android:textColor="@color/color_FDBB1D"
+                            android:textColor="#FFE83C"
                             android:textSize="@dimen/dimen_24dp"
                             android:visibility="gone" />
 
@@ -145,7 +147,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="¥"
-                            android:textColor="@color/color_FDBB1D"
+                            android:textColor="#FFE83C"
                             android:textSize="@dimen/dimen_16dp"
                             android:visibility="gone" />
 
@@ -206,40 +208,41 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_15dp"
                 android:layout_marginTop="@dimen/dimen_10dp"
-                android:paddingLeft="@dimen/dimen_14dp"
-                android:paddingRight="@dimen/dimen_14dp">
+                android:layout_marginRight="@dimen/dimen_15dp"
+                android:background="@drawable/bg_white_fillet_06">
 
                 <ImageView
                     android:id="@+id/iv_more_action"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_15dp"
+                    android:layout_marginLeft="@dimen/dimen_14dp"
                     android:layout_marginTop="@dimen/dimen_11dp"
                     android:src="@mipmap/icon_more_function"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_4dp"
+                    android:layout_marginLeft="@dimen/dimen_14dp"
+                    android:layout_marginTop="@dimen/dimen_11dp"
                     android:text="更多功能"
                     android:textColor="@color/color_222222"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_more_action"
-                    app:layout_constraintLeft_toRightOf="@+id/iv_more_action"
-                    app:layout_constraintTop_toTopOf="@+id/iv_more_action" />
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <View
                     android:id="@+id/view_line_more"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_1dp"
                     android:layout_marginTop="@dimen/dimen_9dp"
-                    android:background="@color/color_C7CCD5_30"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_more_action" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_more" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -343,7 +346,9 @@
                 android:id="@+id/banner_ad_ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_15dp"
                 android:layout_marginTop="@dimen/dimen_20dp"
+                android:layout_marginRight="@dimen/dimen_15dp"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 

@@ -24,11 +24,8 @@ import com.xiaoniu.cleanking.utils.BitmapUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.lottie.AnimHelper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 
 /**
  * @author zhengzhihao
@@ -39,13 +36,13 @@ public class OneKeyCircleButtonView extends RelativeLayout {
 
     private Context mContext;
     private LottieAnimationView viewLottieGreen;
-    private RelativeLayout rel_bubble;
+    private RelativeLayout rel_bubble,rlayout_onekey;
     private TouchImageView ivCenter;
+
     private Map<Integer, LottiePathdata> lottiePathdataMap;
     private LuckBubbleView lftop,lfbotm,rttop,rtbotm;
     private TextView tv_file_total_size, tv_file_total_tag;
     private LinearLayout linear_text_tag;
-    private RelativeLayout rel_container;
     private ImageView iv_top_perview;
     private AnimHelper mAnimHelper = new AnimHelper();
     private static final int ANIML_COLOR_STATE_GREEN = 1;
@@ -85,9 +82,9 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         rel_bubble = (RelativeLayout)v.findViewById(R.id.rel_bubble);
         tv_file_total_size = (TextView) v.findViewById(R.id.tv_file_total_size);
         tv_file_total_tag = (TextView) v.findViewById(R.id.tv_file_total_tag);
-        rel_container = (RelativeLayout) v.findViewById(R.id.rel_parent);
         iv_top_perview = (ImageView)v.findViewById(R.id.tv_top_perview);
         ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
+        rlayout_onekey = (RelativeLayout)v.findViewById(R.id.rlayout_onekey);
         lftop = (LuckBubbleView)v.findViewById(R.id.lftop);
         lfbotm = (LuckBubbleView)v.findViewById(R.id.lfbotm);
         rttop = (LuckBubbleView)v.findViewById(R.id.rttop);
@@ -109,13 +106,13 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         layoutParams.setMargins(0, -Float.valueOf(screenWidth *0.9f* 0.1f).intValue(), 0, 0);
         viewLottieGreen.setLayoutParams(layoutParams);
 
-        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) ivCenter.getLayoutParams();
+        RelativeLayout.LayoutParams imglayoutParams = (RelativeLayout.LayoutParams) rlayout_onekey.getLayoutParams();
         imglayoutParams.height = Float.valueOf(screenWidth * 0.9f * 0.497f).intValue();
         imglayoutParams.width = Float.valueOf(screenWidth * 0.9f * 0.497f).intValue();
-        ivCenter.setLayoutParams(imglayoutParams);
-
+//        ivCenter.setLayoutParams(imglayoutParams);
+        rlayout_onekey.setLayoutParams(imglayoutParams);
 //        viewLottieGreen.animate().setDuration(3000).scaleX(1f).scaleY(1f).start();
-        ivCenter.animate().setDuration(3000).alpha(1f).scaleY(1f).scaleX(1f).setListener(new Animator.AnimatorListener() {
+        rlayout_onekey.animate().setDuration(3000).alpha(1f).scaleY(1f).scaleX(1f).setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -137,9 +134,9 @@ public class OneKeyCircleButtonView extends RelativeLayout {
             }
         }).start();
 
-        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
-        textLayout.height = Float.valueOf(screenWidth * 0.1f).intValue();
-        linear_text_tag.setLayoutParams(textLayout);
+//        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
+//        textLayout.height = Float.valueOf(screenWidth * 0.1f).intValue();
+//        linear_text_tag.setLayoutParams(textLayout);
         linear_text_tag.setVisibility(VISIBLE);
 
     }

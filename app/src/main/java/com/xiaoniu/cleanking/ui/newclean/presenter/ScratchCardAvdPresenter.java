@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
@@ -10,7 +9,6 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
@@ -42,7 +40,7 @@ public class ScratchCardAvdPresenter {
     //翻倍广告开关
     private static boolean isOpenThree;
     //激励视频是否点击
-    private boolean isVideoRequesting=false;
+    private boolean isVideoRequesting = false;
 
     private Activity activity;
     private int cardIndex;
@@ -66,24 +64,24 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-    public void showDialog(int cardIndex, int coinCount, int totalCoinCount,boolean isDouble) {
-        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount+"  isDouble"+isDouble);
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble) {
+        log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble" + isDouble);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
             return;
         }
         this.cardIndex = cardIndex;
         this.coinCount = coinCount;
-        if (parameter == null) {
-            parameter = new GoldCoinDialogParameter();
-            parameter.context = activity;
-            parameter.isDouble=isDouble;
-            parameter.isRewardOpen=isOpenTwo();
-            parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
-            parameter.onDoubleClickListener = v -> handlerDoubleClick();
-            parameter.closeClickListener = v -> handlerCloseClick();
-            parameter.totalCoinCount = totalCoinCount;
-        }
+//        if (parameter == null) {
+        parameter = new GoldCoinDialogParameter();
+        parameter.context = activity;
+        parameter.isDouble = isDouble;
+        parameter.isRewardOpen = isOpenTwo();
+        parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
+        parameter.onDoubleClickListener = v -> handlerDoubleClick();
+        parameter.closeClickListener = v -> handlerCloseClick();
+        parameter.totalCoinCount = totalCoinCount;
+//        }
         parameter.adId = isOpenOne() ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
 
@@ -93,7 +91,7 @@ public class ScratchCardAvdPresenter {
 
     //点击翻倍按钮事件
     private void handlerDoubleClick() {
-        if(isVideoRequesting){
+        if (isVideoRequesting) {
             return;
         }
         loadVideoAdv(getVideoAdvId(cardIndex));
@@ -128,7 +126,7 @@ public class ScratchCardAvdPresenter {
 
     //加载激励视屏广告
     private void loadVideoAdv(String advId) {
-        isVideoRequesting=true;
+        isVideoRequesting = true;
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(advId).setActivity(activity)
                 .setViewContainer((ViewGroup) activity.getWindow().getDecorView()).build();
@@ -158,7 +156,7 @@ public class ScratchCardAvdPresenter {
                 case ADV_FIRST_PREFIX:
                     break;
                 case ADV_VIDEO_PREFIX:
-                    isVideoRequesting=false;
+                    isVideoRequesting = false;
                     handlerVideoAdvError();
                     break;
             }
@@ -210,7 +208,7 @@ public class ScratchCardAvdPresenter {
             super.onAdVideoComplete(adInfo);
             log("onAdVideoComplete()====" + resNamePrefix);
             videoPlayed = true;
-            isVideoRequesting=false;
+            isVideoRequesting = false;
         }
     }
 
@@ -226,11 +224,11 @@ public class ScratchCardAvdPresenter {
             onVideoPlayedListener.onComplete();
         }
 
-        String adId=isOpenThree() ? getSecondAdvId(cardIndex) : "";
-        int coinNum=coinCount;
+        String adId = isOpenThree() ? getSecondAdvId(cardIndex) : "";
+        int coinNum = coinCount;
 
-        GoldCoinDoubleModel model=new GoldCoinDoubleModel(adId,coinNum,cardIndex, Points.ScratchCard.SUCCESS_PAGE);
-        GoldCoinSuccessActivity.Companion.start(activity,model);
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinNum, cardIndex, Points.ScratchCard.SUCCESS_PAGE);
+        GoldCoinSuccessActivity.Companion.start(activity, model);
 
         GoldCoinDialog.dismiss();
         StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
@@ -268,9 +266,9 @@ public class ScratchCardAvdPresenter {
         log("================================================检查刮刮卡的广告开关 start");
         hasInit = true;
 
-        isOpenOne=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_ONE_CODE);
-        isOpenTwo=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_TWO_CODE);
-        isOpenThree=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_THREE_CODE);
+        isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_ONE_CODE);
+        isOpenTwo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_TWO_CODE);
+        isOpenThree = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_THREE_CODE);
 
         log("第一个广告位开关信息:isOpen=" + isOpenOne());
         log("第二个广告位开关信息:isOpen=" + isOpenTwo());

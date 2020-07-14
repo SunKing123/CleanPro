@@ -15,6 +15,8 @@ import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.cleanking.widget.CommonTitleLayout;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.payshare.AuthorizedLogin;
 
@@ -51,11 +53,14 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
 
     @Override
     protected void initView() {
+        StatusBarCompat.translucentStatusBarForImage(this, true, true);
         mSbtnScreenTag = findViewById(R.id.s_btn_screen_tag);
+        CommonTitleLayout commonTitleLayout = findViewById(R.id.commonTitleLayout);
         ll_exit_login = findViewById(R.id.ll_exit_login);
         mSbtnNotificationTag = findViewById(R.id.s_notification_tag);
         mSbtnScreenTag.setChecked(PreferenceUtil.getScreenTag());
         mSbtnScreenTag.setOnCheckedChangeListener((view, isChecked) -> PreferenceUtil.saveScreenTag(isChecked));
+        commonTitleLayout.setMiddleTitle("设置").setTitleColor(R.color.white).setBgColor(R.color.green_02D086);
 
         mSbtnNotificationTag.setOnCheckedChangeListener((view, isChecked) -> {
             if (isChecked) {
@@ -82,13 +87,11 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
         }
     }
 
-    @OnClick({R.id.img_back, R.id.ll_install_package, R.id.ll_speed_list, R.id.ll_soft_package, R.id.ll_exit_login})
+    @OnClick({R.id.ll_install_package, R.id.ll_speed_list, R.id.ll_soft_package, R.id.ll_exit_login})
     public void onClickView(View view) {
         Intent intent = null;
         int ids = view.getId();
-        if (ids == R.id.img_back) {
-            finish();
-        } else if (ids == R.id.ll_install_package) {
+        if (ids == R.id.ll_install_package) {
             //安装包保护名单
             intent = new Intent(this, WhiteListInstallPackgeManageActivity.class);
             startActivity(intent);
