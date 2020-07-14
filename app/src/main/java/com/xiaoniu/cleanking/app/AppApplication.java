@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.jess.arms.base.BaseApplication;
+import com.xiaoniu.cleanking.lifecyler.ApplicationLifecycleListener;
 import com.xiaoniu.common.BuildConfig;
 
 import java.lang.reflect.Field;
@@ -68,6 +69,17 @@ public class AppApplication extends BaseApplication {
                     Log.e("lifeCycle", "onActivityDestroyed()" + activity.getLocalClassName());
             }
         });
+
+
+        applicationLifecycleListener = new ApplicationLifecycleListener();
+        registerActivityLifecycleCallbacks(applicationLifecycleListener);
+
+    }
+
+    ApplicationLifecycleListener applicationLifecycleListener;
+
+    public Activity getTopActivity(){
+        return applicationLifecycleListener.getTopActivity();
     }
 
     @Override
