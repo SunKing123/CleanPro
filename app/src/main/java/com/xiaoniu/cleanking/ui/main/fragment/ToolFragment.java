@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.comm.jksdk.utils.DisplayUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -95,7 +96,7 @@ public class ToolFragment extends SimpleFragment {
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
     private int mRamScale = 20; //使用内存占总RAM的比例
-   // private AdManager mAdManager;
+    // private AdManager mAdManager;
 
     private static final String TAG = "GeekSdk";
 
@@ -128,7 +129,6 @@ public class ToolFragment extends SimpleFragment {
         if (null == mAdManager)
             mAdManager = GeekAdSdk.getAdsManger();
     }*/
-
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
         Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{FileUtils.getFreeSpace(), FileUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
@@ -428,8 +428,10 @@ public class ToolFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
-                .setActivity(mActivity).setViewContainer(frameBottomLayout).build();
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
+                .setActivity(mActivity)
+                .setViewWidth(DisplayUtil.px2dp(mActivity, DisplayUtil.getScreenWidth(mActivity)) - 24)
+                .setViewContainer(frameBottomLayout).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onReadyToShow(AdInfo adInfo) {

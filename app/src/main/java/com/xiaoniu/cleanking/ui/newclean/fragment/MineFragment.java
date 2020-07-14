@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import androidx.databinding.DataBindingUtil;
 
+import com.comm.jksdk.utils.DisplayUtil;
 import com.jess.arms.utils.DeviceUtils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
@@ -286,6 +287,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(MidasConstants.ME_BOTTOM_ID)
                 .setActivity(getActivity())
+                .setViewWidth(DisplayUtil.px2dp(mActivity, DisplayUtil.getScreenWidth(mActivity)) - 30)
                 .setViewContainer(mBinding.bannerAdLl).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
