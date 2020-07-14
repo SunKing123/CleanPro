@@ -25,10 +25,10 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
+import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.statusview.StatusViewBuilder;
@@ -77,7 +77,8 @@ public class YuLeFragment extends SimpleFragment {
 //            Log.e("snow", "==" + AndroidUtil.getXnData());
             Log.e("snow", "=errorView.getVisibility=" + errorView.getVisibility());
         });
-//        netWorkAbout();
+        netWorkAbout();
+        new ScratchCardAvdPresenter(getActivity()).preLoadAd();
     }
 
     private void netWorkAbout() {
@@ -126,7 +127,7 @@ public class YuLeFragment extends SimpleFragment {
 //            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
             getWebView().loadUrl("javascript:refresh()");
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
-            StatusBarCompat.translucentStatusBarForImage(getActivity(), true, true);
+//            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "刮刮卡浏览");
         }

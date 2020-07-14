@@ -167,9 +167,6 @@ public class CustomWebViewLayout extends FrameLayout {
     public class JsInterface {
         @JavascriptInterface
         public String getXnData() {
-            LogUtils.e("=================================getXnData() start");
-            LogUtils.e(AndroidUtil.getXnData());
-            LogUtils.e("=================================getXnData() end");
             return AndroidUtil.getXnData();
         }
 

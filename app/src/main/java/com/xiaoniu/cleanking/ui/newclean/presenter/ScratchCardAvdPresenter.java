@@ -19,6 +19,8 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 
 /**
@@ -67,11 +69,11 @@ public class ScratchCardAvdPresenter {
 
     /**
      * 显示刮刮卡弹框
-     * @param cardIndex                卡片位置
-     * @param coinCount                金币数
-     * @param totalCoinCount           总金币数
-     * @param isDouble                 是否可以翻倍
-     * @param isAreaOne                是否是第一个刮刮卡
+     *
+     * @param coinCount      金币数
+     * @param totalCoinCount 总金币数
+     * @param isDouble       是否可以翻倍
+     * @param isAreaOne      是否是第一个刮刮卡
      */
     public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble, boolean isAreaOne) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble=" + isDouble);
@@ -327,5 +329,24 @@ public class ScratchCardAvdPresenter {
         }
         parameter = null;
         activity = null;
+    }
+
+    public void preLoadAd() {
+        if (isOpenOne()) {
+            adPrevData(getAdvId(ADV_FIRST_PREFIX, 1));
+        }
+        if (isOpenTwo()) {
+            adPrevData(getAdvId(ADV_SECOND_PREFIX, 1));
+        }
+    }
+
+    //广告预加载
+    private void adPrevData(String posId) {
+        if (TextUtils.isEmpty(posId)) {
+            return;
+        }
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(posId).setActivity(activity).build();
+        MidasRequesCenter.preLoad(params);
     }
 }

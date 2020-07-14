@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,8 @@ public class CommonTitleLayout extends FrameLayout {
     View topMiddle;
     @BindView(R.id.line_view)
     View line_view;
+    @BindView(R.id.content_rl)
+    RelativeLayout content_rl;
     private Context mContext;
     private boolean leftFinish = true;
 
@@ -122,6 +125,16 @@ public class CommonTitleLayout extends FrameLayout {
      */
     public CommonTitleLayout setLeftBackColor(int color) {
         imgBack.setColorFilter(getResources().getColor(color));
+        return this;
+    }
+
+    /**
+     * 隐藏内容布局，只显示状态栏高度占布局
+     *
+     * @return
+     */
+    public CommonTitleLayout hindContentView() {
+        content_rl.setVisibility(GONE);
         return this;
     }
 

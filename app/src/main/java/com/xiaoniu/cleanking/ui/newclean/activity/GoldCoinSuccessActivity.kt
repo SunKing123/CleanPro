@@ -22,7 +22,6 @@ import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xnad.sdk.ad.entity.AdInfo
 import com.xnad.sdk.ad.listener.AbsAdCallBack
-import kotlinx.android.synthetic.main.activity_finish_layout.btnLeft
 import kotlinx.android.synthetic.main.activity_gold_coin_success.*
 
 
