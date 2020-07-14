@@ -799,8 +799,20 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         bean.context = mView.getActivity();
         StatisticsUtils.customTrackEvent("home_page_gold_coin_pop_up_window_custom", "首页金币领取弹窗曝光", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
         GoldCoinDialog.showGoldCoinDialog(bean);
+        adPrevData(AdposUtil.getAdPos(1, 3));//位置三预加载
+    }
 
-//        MidasAdSdk.getAdsManger().preLoad();
+    //金币位置预加载
+    public void goldAdprev(){
+        adPrevData(AdposUtil.getAdPos(1, 0));//位置一预加载
+        adPrevData(AdposUtil.getAdPos(1, 1));//位置二预加载
+    }
+
+    //广告预加载
+    public void adPrevData(String posId){
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(posId).setActivity(mView.getActivity()).build();
+        MidasRequesCenter.preLoad(params);
     }
 
 

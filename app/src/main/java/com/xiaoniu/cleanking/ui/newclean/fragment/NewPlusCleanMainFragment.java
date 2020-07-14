@@ -191,6 +191,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         checkAndUploadPoint();
         initListener();
+        //金币前两个位置预加载
+        mPresenter.goldAdprev();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
 
     }
@@ -343,12 +345,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     private void refreshAdAll() {
-        if (!AndroidUtil.isFastDoubleClick()) {
-            refreshAd(MidasConstants.MAIN_ONE_AD_ID);
-            refreshAd(MidasConstants.MAIN_TWO_AD_ID);
-            refreshAd(MidasConstants.MAIN_THREE_AD_ID);
-            showAdVideo();
-        }
+        refreshAd(MidasConstants.MAIN_ONE_AD_ID);
+        refreshAd(MidasConstants.MAIN_TWO_AD_ID);
+        refreshAd(MidasConstants.MAIN_THREE_AD_ID);
+        showAdVideo();
     }
 
     private void refreshAd(String adId) {

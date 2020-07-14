@@ -184,17 +184,17 @@ public class GoldCoinDialog {
                 .setViewWidth(ScreenUtils.getScreenWidth(context) - DisplayUtil.dip2px(context, 45))
                 .setViewContainer(mRootRL).build();
 
-
-        //尝试预加载，丝滑般的体验...
+        if (dialog != null && !context.isFinishing()) {
+            dialog.show();
+            MidasRequesCenter.requestAd(params, callBack);
+        }
+     /*   //尝试预加载，丝滑般的体验...
         MidasAdSdk.getAdsManger().askIsReady(context, coinBean.adId, new AskReadyCallBack() {
             @Override
             public void onReady(boolean b) {
-                if (dialog != null && !context.isFinishing()) {
-                    dialog.show();
-                    MidasRequesCenter.requestAd(params, callBack);
-                }
+
             }
-        });
+        });*/
     }
 
     public static void dismiss() {
