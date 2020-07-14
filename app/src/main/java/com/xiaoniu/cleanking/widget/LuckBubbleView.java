@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
@@ -30,6 +31,7 @@ import java.util.Random;
 public class LuckBubbleView extends LinearLayout {
     private Activity activity;
     private TextView content;
+    private LottieAnimationView lottie_gold;
     private ObjectAnimator objar;
     private AnimationsContainer.FrameseAnim ballAnim;
     private int loact;
@@ -45,19 +47,23 @@ public class LuckBubbleView extends LinearLayout {
     private void initView(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.rubble);
         loact = typedArray.getInt(R.styleable.rubble_location, 1);
-        typ_RE = Typeface.createFromAsset(context.getAssets(), "fonts/D-DIN.otf");
+        typ_RE = Typeface.createFromAsset(context.getAssets(), "fonts/DIN-Bold.otf");
 
 
         activity = (Activity) context;
         inflate(activity, R.layout.luck_bubble, this);
+        lottie_gold = (LottieAnimationView)findViewById(R.id.lottie_gold);
         content = (TextView) findViewById(R.id.tvcon);
         content.setTypeface(typ_RE);
         ImageView imgbg = (ImageView) findViewById(R.id.imgbg);
         setVisibility(VISIBLE);
 
+        if (!lottie_gold.isAnimating()) {
+            lottie_gold.playAnimation();
+        }
+
 //        ImageView ivBallAnim = (ImageView) findViewById(R.id.iv_ball_anim);
 //        setAnim(ivBallAnim);
-
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(imgbg.getLayoutParams());
         imgbg.setImageResource(R.drawable.icon_kw00);
 //        lp.setMargins(50, 100, 0, 0);
@@ -66,6 +72,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 31.5f);
             lp.height = DisplayUtil.dip2px(context, 33f);
             imgbg.setLayoutParams(lp);
+            lottie_gold.setLayoutParams(lp);
         } else if (loact == 2) {//left-bom
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 //            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 30f);
@@ -73,7 +80,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 38.5f);
             lp.height = DisplayUtil.dip2px(context, 40.5f);
             imgbg.setLayoutParams(lp);
-
+            lottie_gold.setLayoutParams(lp);
 
         } else if (loact == 3) {//right-top
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
@@ -81,6 +88,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 38.5f);
             lp.height = DisplayUtil.dip2px(context, 40.5f);
             imgbg.setLayoutParams(lp);
+            lottie_gold.setLayoutParams(lp);
         } else if (loact == 4) {//right-bom
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
 //            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 60f);
@@ -88,6 +96,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 45.5f);
             lp.height = DisplayUtil.dip2px(context, 48.5f);
             imgbg.setLayoutParams(lp);
+            lottie_gold.setLayoutParams(lp);
         }
 //        ivBallAnim.setLayoutParams(lp);
         setVisibility(GONE);

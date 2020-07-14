@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ImageView
@@ -29,8 +30,17 @@
             android:shadowDx="0"
             android:shadowDy="1.0"
             android:shadowRadius="0"
-            android:textColor="#FFA110"
+            android:textColor="#E96401"
             android:textSize="13.0sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:lottie_fileName="home_top_scan/gold/data.json"
+            app:lottie_imageAssetsFolder="home_top_scan/gold/images/"
+            app:lottie_loop="true" />
     </FrameLayout>
 
 </LinearLayout>
