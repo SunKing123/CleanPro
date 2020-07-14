@@ -5,8 +5,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -94,11 +96,20 @@ public class BaseBrowserFragment extends SimpleFragment {
         cardAvdPresenter = new ScratchCardAvdPresenter(mActivity);
         Parameters parameter = UrlUtils.getParamsFromUrl(url);
         current_page_id = parameter.getParameter(SchemeConstant.AD_CURRENT_PAGE_ID);
+        View errorView = LayoutInflater.from(getContext()).inflate(R.layout.web_error_layout, null, false);
+        errorView.findViewById(R.id.sv_error_retry).setOnClickListener(v -> {
+            if (!AndroidUtil.isFastDoubleClick()) {
+                getWebView().loadUrl(url);
+            }
+        });
+        errorView.findViewById(R.id.text_go_to_setting).setOnClickListener(v -> {
+            getContext().startActivity(new Intent(Settings.ACTION_SETTINGS));
+        });
         baseWebViewClient = new MyBaseWebViewClient(this, cardAvdPresenter, getActivity(), loadIv, webPageNoNetwork);
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mRootView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-//                .setMainFrameErrorView(R.layout.web_error_layout, R.id.layout_not_net)
+                .setMainFrameErrorView(errorView)
                 .setWebChromeClient(new CustomWebChromeClient())
                 .setWebViewClient(baseWebViewClient)
                 .addJavascriptInterface("native", new JsInterface())
@@ -116,7 +127,7 @@ public class BaseBrowserFragment extends SimpleFragment {
 //            mActivity.finish();
             guaguaDouble();
         });
-        netWorkAbout();
+//        netWorkAbout();
     }
 
     /**

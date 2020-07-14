@@ -17,6 +17,8 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.TypefaceSpan;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
@@ -334,6 +336,10 @@ public class AndroidUtil {
         SpannableString spanString = new SpannableString(content);
         ForegroundColorSpan span = new ForegroundColorSpan(color);
         spanString.setSpan(span, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        TypefaceSpan typefaceSpan=new TypefaceSpan("default-bold");
+        spanString.setSpan(typefaceSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        RelativeSizeSpan relativeSizeSpan=new RelativeSizeSpan(1.1f);
+        spanString.setSpan(relativeSizeSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanString;
     }
 
