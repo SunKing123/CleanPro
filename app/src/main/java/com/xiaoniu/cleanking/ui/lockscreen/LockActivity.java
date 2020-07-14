@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
@@ -573,7 +575,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mLastTime = SystemClock.elapsedRealtime();
 
         StatisticsUtils.customTrackEvent("ad_request_sdk","锁屏页广告发起请求","lock_screen_page","lock_screen_page");
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.LOCK_PAGE_FEED_ID).setActivity(this).setViewContainer(relAd).build();
+        AdRequestParams params=new AdRequestParams.Builder()
+                .setAdId(MidasConstants.LOCK_PAGE_FEED_ID)
+                .setActivity(this)
+                .setViewWidth(DisplayUtil.px2dp(LockActivity.this, DisplayUtil.getScreenWidth(LockActivity.this)) - 28)//设置宽度；
+                .setViewContainer(relAd)
+                .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
