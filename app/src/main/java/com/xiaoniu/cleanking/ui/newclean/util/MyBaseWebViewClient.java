@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -34,6 +35,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statusview.StatusView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,19 +56,19 @@ import java.util.Set;
 public class MyBaseWebViewClient extends WebViewClient {
     private Activity mActivity;
     private ImageView mLoadImg;
-    private String current_page_id = "";
 
     BaseBrowserFragment mBaseBrowserFragment;
     AnimationsContainer.FrameseAnim animaDra;
     ScratchCardAvdPresenter cardAvdPresenter;
+    StatusView errorView;
 
-    public MyBaseWebViewClient(BaseBrowserFragment mBaseBrowserFragment, ScratchCardAvdPresenter cardAvdPresenter, Activity activity, ImageView mLoadImg, String current_page_id) {
+    public MyBaseWebViewClient(BaseBrowserFragment mBaseBrowserFragment, ScratchCardAvdPresenter cardAvdPresenter, Activity activity, ImageView mLoadImg, StatusView errorView) {
         if (activity != null) {
             this.mBaseBrowserFragment = mBaseBrowserFragment;
             this.mActivity = activity;
             this.mLoadImg = mLoadImg;
             this.cardAvdPresenter = cardAvdPresenter;
-            this.current_page_id = current_page_id;
+            this.errorView = errorView;
             animaDra = AnimationsContainer.getInstance(R.array.loading_coin, 100).createAnim(mLoadImg);
             showLoadAnim();
         }
@@ -105,9 +107,21 @@ public class MyBaseWebViewClient extends WebViewClient {
     };
 
     @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+        if (errorView != null) {
+            errorView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
         super.onReceivedError(view, request, error);
-        Log.e("snow","=====onReceivedError=========");
+        if (errorView != null) {
+            errorView.setVisibility(View.VISIBLE);
+            errorView.showErrorView();
+        }
+        Log.e("snow", "=====onReceivedError=========");
     }
 
     @Override
@@ -267,7 +281,7 @@ public class MyBaseWebViewClient extends WebViewClient {
         //签到天数
         String signDay = parameters.getParameter(SchemeConstant.SIGNDAY);
         String cardPosition = parameters.getParameter(SchemeConstant.CARD_POSITION);
-        if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin) && !TextUtils.isEmpty(cardPosition)) {
+        if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin) && !TextUtils.isEmpty(cardPosition) && cardAvdPresenter != null) {
             int obtainCoinCount = Integer.parseInt(coin);//获得的金币
             int totalCoinCount = Integer.parseInt(totalCoin);//用户总金币金额===这里totalCoinCount在h5已经添加过了
             cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, totalCoinCount, isDouble);

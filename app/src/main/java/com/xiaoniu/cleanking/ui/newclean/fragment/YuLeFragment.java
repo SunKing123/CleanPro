@@ -23,7 +23,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
-import com.xiaoniu.cleanking.ui.newclean.util.YuLeWebViewClient;
+import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -133,9 +133,9 @@ public class YuLeFragment extends SimpleFragment {
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mBinding.webFragment, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.common_view_no_network, R.id.no_network_tv)
+//                .setMainFrameErrorView(R.layout.common_view_no_network, R.id.no_network_tv)
                 .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())
-                .setWebViewClient(new YuLeWebViewClient(getActivity(), mBinding.loadIv))
+                .setWebViewClient(new MyBaseWebViewClient(null, null, getActivity(), mBinding.loadIv, mBinding.webPageNoNetwork))
                 .setWebChromeClient(mWebChromeClient)
                 .addJavascriptInterface("native", new JsInterface())
                 .addJavascriptInterface("android", new SdkJsInterface())

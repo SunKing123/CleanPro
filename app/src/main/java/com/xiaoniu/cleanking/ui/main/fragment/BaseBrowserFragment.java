@@ -94,11 +94,11 @@ public class BaseBrowserFragment extends SimpleFragment {
         cardAvdPresenter = new ScratchCardAvdPresenter(mActivity);
         Parameters parameter = UrlUtils.getParamsFromUrl(url);
         current_page_id = parameter.getParameter(SchemeConstant.AD_CURRENT_PAGE_ID);
-        baseWebViewClient = new MyBaseWebViewClient(this, cardAvdPresenter, getActivity(), loadIv, current_page_id);
+        baseWebViewClient = new MyBaseWebViewClient(this, cardAvdPresenter, getActivity(), loadIv, webPageNoNetwork);
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mRootView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.web_error_layout, R.id.layout_not_net)
+//                .setMainFrameErrorView(R.layout.web_error_layout, R.id.layout_not_net)
                 .setWebChromeClient(new CustomWebChromeClient())
                 .setWebViewClient(baseWebViewClient)
                 .addJavascriptInterface("native", new JsInterface())
@@ -157,7 +157,7 @@ public class BaseBrowserFragment extends SimpleFragment {
                 .setOnErrorRetryClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(AndroidUtil.isFastDoubleClick()){
+                        if (AndroidUtil.isFastDoubleClick()) {
                             return;
                         }
                         //错误页面重试点击
