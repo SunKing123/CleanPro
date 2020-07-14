@@ -12,7 +12,7 @@
         android:background="@drawable/bg_gradient_clean_finish_tobar">
 
         <ImageView
-            android:id="@+id/btnLeft"
+            android:id="@+id/gold_finish_btnLeft"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="@dimen/dimen_17dp"

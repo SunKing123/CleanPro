@@ -343,7 +343,6 @@ public class AndroidUtil {
         return spanString;
     }
 
-
     //数美接入
     private static String sDeviceID = "";
     //数美接入

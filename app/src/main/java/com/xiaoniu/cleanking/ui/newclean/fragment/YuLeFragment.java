@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
+import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -75,6 +76,8 @@ public class YuLeFragment extends SimpleFragment {
             Log.e("snow", "==" + AndroidUtil.getXnData());
         });
         netWorkAbout();
+
+        new ScratchCardAvdPresenter(getActivity()).preLoadAd();
     }
 
     private void netWorkAbout() {
