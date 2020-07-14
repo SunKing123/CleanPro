@@ -100,7 +100,7 @@ public class BaseBrowserFragment extends SimpleFragment {
         //播放视频完成的回调
         cardAvdPresenter.setOnVideoPlayedListener(() -> {
             LogUtils.e("==========================================================getXnData() JsonParams start");
-            LogUtils.e(videoRequestJsonParams);
+            LogUtils.e("h5下发的JsonParams: "+videoRequestJsonParams);
             LogUtils.e("==========================================================getXnData() JsonParams  end");
             getWebView().loadUrl("javascript:videoCallBack(" + videoRequestJsonParams + ")");
             mActivity.finish();
@@ -241,6 +241,9 @@ public class BaseBrowserFragment extends SimpleFragment {
     public class JsInterface {
         @JavascriptInterface
         public String getXnData() {
+            LogUtils.e("=================================getXnData() start");
+            LogUtils.e(AndroidUtil.getXnData());
+            LogUtils.e("=================================getXnData() end");
             return AndroidUtil.getXnData();
         }
 
