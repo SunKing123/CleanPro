@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
@@ -173,6 +174,7 @@ public class BindPhoneManualActivity extends BaseActivity<BindPhoneManualPresent
             UserHelper.init().saveUserInfo(infoBean);
             EventBus.getDefault().post(BIND_PHONE_SUCCESS);
             KeyboardUtils.closeKeyboard(inputCodeEt);
+            OneKeyLoginManager.getInstance().finishAuthActivity();
             KeyboardUtils.closeKeyboard(bindPhoneEt);
             finish();
         }

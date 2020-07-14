@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -102,6 +103,12 @@ public class MyBaseWebViewClient extends WebViewClient {
             ToastUtils.showShort("网络异常，请重试");
         }
     };
+
+    @Override
+    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+        super.onReceivedError(view, request, error);
+        Log.e("snow","=====onReceivedError=========");
+    }
 
     @Override
     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
