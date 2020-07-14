@@ -34,7 +34,7 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     private var coinNum: Int = 0
     private lateinit var model: GoldCoinDoubleModel
-    private  var extParam = HashMap<String, Any>()
+    private var extParam = HashMap<String, Any>()
 
     companion object {
         fun start(context: Context, model: GoldCoinDoubleModel) {
@@ -66,7 +66,7 @@ class GoldCoinSuccessActivity : BaseActivity() {
         loadAd()
     }
 
-    fun loadAd(){
+    fun loadAd() {
         //广告ID，如果广告位没有打开的话，不传这个ID即可（在进入ACTIVITY前自行判断是否打开了配置）
         if (!TextUtils.isEmpty(model.adId)) {
             val params = AdRequestParams.Builder().setAdId(model.adId).setViewContainer(ad_frameLayout)
@@ -80,11 +80,12 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
                 override fun onAdError(p0: AdInfo?, p1: Int, p2: String?) {
                     super.onAdError(p0, p1, p2)
-                    LogUtils.d("=====================goldCoinSuccess onAdError()"+p2)
+                    LogUtils.d("=====================goldCoinSuccess onAdError()" + p2)
                 }
             })
         }
     }
+
     override fun finish() {
         super.finish()
         returnBackPoint()

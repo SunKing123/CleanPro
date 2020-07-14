@@ -6,46 +6,50 @@
     android:background="#F4F4F4"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_203dp"
         android:background="@drawable/gradient_head">
 
-        <ImageView
-            android:id="@+id/image_coin"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="4dp"
-            android:src="@mipmap/iv_ad_coin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/tv_coin_title"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_coin_title"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="恭喜您翻倍成功"
-            android:layout_marginLeft="@dimen/dimen_6dp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_16dp"
-            app:layout_constraintLeft_toRightOf="@+id/image_coin"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/image_coin" />
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_coin_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="到账500个金币"
-            android:layout_marginTop="@dimen/dimen_6dp"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dimen_18dp"
-            app:layout_constraintBottom_toBottomOf="@+id/image_coin"
-            app:layout_constraintStart_toStartOf="@+id/tv_coin_title" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/image_coin"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/iv_ad_coin" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dimen_6dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_coin_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="恭喜您翻倍成功"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16dp" />
+
+                <TextView
+                    android:id="@+id/tv_coin_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_6dp"
+                    android:text="到账500个金币"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_18dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/btnLeft"
@@ -61,8 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/dimen_10dp"
+        android:layout_marginLeft="@dimen/dimen_15dp"
         android:layout_marginTop="@dimen/dimen_173dp"
-        android:layout_marginRight="@dimen/dimen_10dp"
+        android:layout_marginRight="@dimen/dimen_15dp"
         android:background="@color/white" />
 </RelativeLayout>
