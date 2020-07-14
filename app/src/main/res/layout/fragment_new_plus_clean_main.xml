@@ -104,6 +104,7 @@
                 <com.xiaoniu.cleanking.ui.view.HomeToolTableView
                     android:id="@+id/home_tool_table"
                     android:layout_width="match_parent"
+                    android:padding="4dp"
                     android:layout_height="wrap_content" />
 
             </FrameLayout>
@@ -141,6 +142,7 @@
                 android:id="@+id/clear_card_sound"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_13"
                 android:layout_marginTop="@dimen/dp_10" />
         </LinearLayout>
     </com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView>
