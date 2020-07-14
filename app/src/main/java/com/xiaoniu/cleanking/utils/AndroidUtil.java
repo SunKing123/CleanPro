@@ -167,11 +167,7 @@ public class AndroidUtil {
         String deviceId = SmAntiFraud.getDeviceId();
         map.put("sm-deviceid", deviceId);
         map.put("sdk-uid", NiuDataAPI.getUUID());
-
         String xnData = android.util.Base64.encodeToString(new Gson().toJson(map).getBytes(), android.util.Base64.NO_WRAP);
-        LogUtils.e("=================================getXnData() start");
-        LogUtils.e(xnData);
-        LogUtils.e("=================================getXnData() end");
         return xnData;
     }
 
