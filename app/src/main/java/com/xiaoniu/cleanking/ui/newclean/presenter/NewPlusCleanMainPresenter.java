@@ -494,18 +494,17 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
 
-    private boolean isReadSuccess;
-
-    public boolean getReadSuccess() {
-        return isReadSuccess;
-    }
 
     public void prepareVideoAd(ViewGroup viewGroup) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
         //尝试预加载，丝滑般的体验...
-        MidasAdSdk.getAdsManger().askIsReady(mView.getActivity(), MidasConstants.MAIN_THREE_AD_ID, result -> isReadSuccess = result);
+        AdRequestParams params = new AdRequestParams.Builder()
+                .setAdId(MidasConstants.MAIN_THREE_AD_ID).setActivity(mView.getActivity())
+                .setViewContainer(viewGroup).build();
+        MidasRequesCenter.preLoad(params);
+//        MidasAdSdk.getAdsManger().askIsReady(mView.getActivity(), MidasConstants.MAIN_THREE_AD_ID, result -> isReadSuccess = result);
     }
 
     public void fillVideoAd(ViewGroup viewGroup, IOnAdClickListener onAdClick) {
@@ -554,11 +553,11 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
         }
 
-        @Override
-        public void onAdError(AdInfo adInfo, int i, String s) {
-            super.onAdError(adInfo, i, s);
-            LogUtils.e("====首页广告" + title + "====:显示失败:" + s);
-        }
+//        @Override
+//        public void onAdError(AdInfo adInfo, int i, String s) {
+//            super.onAdError(adInfo, i, s);
+//            LogUtils.e("====首页广告" + title + "====:显示失败:" + s);
+//        }
 
         @Override
         public void onShowError(int i, String s) {

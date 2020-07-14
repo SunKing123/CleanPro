@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -57,6 +58,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
@@ -108,7 +110,7 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * Created by xinxiaolong on 2020/6/30.
  * email：xinxiaolong123@foxmail.com
  */
-public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener {
+public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener , FragmentOnFocusListenable {
 
     @BindView(R.id.view_lottie_top)
     OneKeyCircleButtonView view_lottie_top;
@@ -151,7 +153,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private AlertDialog dlg;
     private CompositeDisposable compositeDisposable;
-
+    //判断重新启动
+    boolean isFirstCreate = false;
     private boolean isDenied = false;
     private boolean isFirst = true;
     private boolean isSlide;//正在滑动
@@ -182,6 +185,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
         mFloatAnimManager = new FloatAnimManager(imageInteractive, DisplayUtils.dip2px(180));
+        isFirstCreate = true;
         initEvent();
         showHomeLottieView();
         initClearItemCard();
@@ -191,6 +195,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     }
 
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus && isFirstCreate) {
+            refreshAdAll();
+            isFirstCreate = false;
+        }
+
+    }
 
     private void initListener() {
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
@@ -322,6 +335,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         });
     }
 
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************load advInfo*********************************************************************************
@@ -381,9 +395,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
                 //子控件至少有一个像素在可视范围内
                 if (!isRequest) {
-                    if (mPresenter.getReadSuccess()) {
-                        mPresenter.fillVideoAd(adLayoutThree, adClick);
-                    }
+                    mPresenter.fillVideoAd(adLayoutThree, adClick);
                 }
                 isRequest = true;
             } else {
@@ -415,12 +427,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //重新检测头部扫描状态
             checkScanState();
             //刷新广告数据
-            refreshAdAll();
+            if(!isFirstCreate){
+                refreshAdAll();
+            }
             //金币配置刷新
             mPresenter.refBullList();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
+
+
+
     }
 
 
@@ -1032,9 +1049,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             ToastUtils.showShort(R.string.net_error);
             return;
         }
-        mPresenter.bullCollect(ballBean.getLocationNum());
-        StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
-
+        if (!AndroidUtil.isFastDoubleClick()) {
+            mPresenter.bullCollect(ballBean.getLocationNum());
+            StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
+        }
     }
 
 

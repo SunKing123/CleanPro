@@ -61,6 +61,7 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
+import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
@@ -320,11 +321,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
+        LogUtils.i("zzz-----"+hasFocus);
         if (hasFocus && isFirstCreate) {
             //检测版本更新
             mPresenter.queryAppVersion(() -> {
             });
             isFirstCreate = false;
+        }
+        //fragment中传递Focus方法；
+        if(mainFragment instanceof FragmentOnFocusListenable) {
+            ((FragmentOnFocusListenable) mainFragment).onWindowFocusChanged(hasFocus);
         }
     }
 
