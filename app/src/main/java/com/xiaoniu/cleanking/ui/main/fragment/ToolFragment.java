@@ -438,6 +438,12 @@ public class ToolFragment extends SimpleFragment {
                 .setActivity(mActivity).setViewContainer(frameBottomLayout).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
+            public void onReadyToShow(AdInfo adInfo) {
+                super.onReadyToShow(adInfo);
+                adInfo.getAdParameter().getViewContainer().setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public void onAdError(AdInfo adInfo, int i, String s) {
                 super.onAdError(adInfo, i, s);
             }

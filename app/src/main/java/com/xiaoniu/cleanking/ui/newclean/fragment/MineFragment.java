@@ -291,6 +291,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 .setViewContainer(mBinding.bannerAdLl).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
+            public void onReadyToShow(AdInfo adInfo) {
+                super.onReadyToShow(adInfo);
+                adInfo.getAdParameter().getViewContainer().setVisibility(View.VISIBLE);
+            }
+
+            @Override
             public void onAdShow(AdInfo adInfo) {
                 super.onAdShow(adInfo);
                 StatisticsUtils.customTrackEvent("ad_request", "我的页面广告请求（满足广告展现时机时向商业化sdk发起请求数）", "my_page", "my_page");
