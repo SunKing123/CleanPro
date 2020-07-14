@@ -123,6 +123,8 @@ public class MyBaseWebViewClient extends WebViewClient {
                 ToastUtils.showShort(url.contains("weixin://") ? "您未安装微信" : "您未安装支付宝");
             }
             return true;
+        } else if (url.contains("undefined")) {
+            return true;
         }
         return super.shouldOverrideUrlLoading(view, url);
     }
@@ -145,6 +147,8 @@ public class MyBaseWebViewClient extends WebViewClient {
             return true;
         } else if (url.contains("xianwan") && !url.contains("https://h5.17xianwan.com/androidten") && !url.contains("https://h5.17xianwan.com/try/try_list_plus")) {
             SchemeProxy.openScheme(mActivity, url);
+            return true;
+        } else if (url.contains("undefined")) {
             return true;
         }
         try {

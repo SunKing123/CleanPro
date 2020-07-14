@@ -360,4 +360,24 @@ public class ViewHelper {
         }
     }
 
+    /**
+     * 设置自定义字体
+     *
+     * @param textView
+     * @param fontPath "fonts/DIN-BoldItalic.otf"
+     */
+    public static void setTextViewCustomTypeFace(TextView textView, String fontPath) {
+        if (TextUtils.isEmpty(fontPath)) {
+            return;
+        }
+        Typeface typeface;
+        try {
+            typeface = Typeface.createFromAsset(textView.getContext().getAssets(), fontPath);
+        } catch (Exception e) {
+            typeface = null;
+        }
+        if (typeface != null) {
+            textView.setTypeface(typeface);
+        }
+    }
 }
