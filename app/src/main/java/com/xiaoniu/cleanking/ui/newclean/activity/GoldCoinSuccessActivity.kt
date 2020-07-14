@@ -71,7 +71,7 @@ class GoldCoinSuccessActivity : BaseActivity() {
         if (!TextUtils.isEmpty(model.adId)) {
             val params = AdRequestParams.Builder().setAdId(model.adId).setViewContainer(ad_frameLayout)
                     .setActivity(this)
-                    .setViewWidth(DisplayUtil.px2dp(context, (DisplayUtil.getScreenWidth(context)).toFloat()) - 50)//设置宽度；
+                    .setViewWidth((DisplayUtil.getScreenWidth(context)) - DisplayUtil.px2dp(context, 50f))//设置宽度；
                     .build()
             adRequestPoint()
             MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {

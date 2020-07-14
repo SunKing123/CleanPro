@@ -578,7 +578,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         AdRequestParams params=new AdRequestParams.Builder()
                 .setAdId(MidasConstants.LOCK_PAGE_FEED_ID)
                 .setActivity(this)
-                .setViewWidth(DisplayUtil.px2dp(LockActivity.this, DisplayUtil.getScreenWidth(LockActivity.this)) - 28)//设置宽度；
+                .setViewWidth( DisplayUtil.getScreenWidth(LockActivity.this) - DisplayUtil.dip2px(LockActivity.this,28))//设置宽度；
                 .setViewContainer(relAd)
                 .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
