@@ -1,20 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/layout_not_net"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlyTop"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#f3f3f3"
+    android:gravity="center">
+
     <ImageView
-        android:src="@mipmap/icon_no_net"
+        android:id="@+id/sv_error_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/image_no_net" />
 
     <TextView
-        android:layout_marginTop="@dimen/dimen_8dp"
-        android:textColor="@color/color_999999"
-        android:text="资讯列表获取失败～"
+        android:id="@+id/sv_error_tip"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sv_error_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-10dp"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:text="网络无法连接，\n请检查网络设置后刷新"
+        android:textColor="#999999"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/sv_error_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sv_error_tip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:background="@drawable/retry_background"
+        android:paddingLeft="48dp"
+        android:paddingTop="9dp"
+        android:paddingRight="48dp"
+        android:paddingBottom="9dp"
+        android:text="刷新"
+        android:textColor="#1E9DFF"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/text_go_to_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sv_error_retry"
+        android:layout_centerHorizontal="true"
+        android:drawableRight="@drawable/image_arrow_right_blue"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="立即检查网络设置"
+        android:textColor="#1E9DFF" />
+
+</RelativeLayout>

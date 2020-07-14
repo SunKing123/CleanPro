@@ -47,6 +47,9 @@ public class SchemeConstant {
     public static final String CARD_POSITION = "cardPosition";
     public static final String TARGET = "target";
     public static final String URL = "url";
+    //area=1  区域1
+    //area=2  区域2
+    public static final String AREA = "area";
     /**
      * 广告配置新增参数
      * source:广告来源
@@ -63,6 +66,7 @@ public class SchemeConstant {
     public static final String AD_CURRENT_PAGE_ID = "currentPageId";
     public static final String AD_AD_POSITION_ID = "adPosition";
     public static final String AD_AD_POSITION_ID2 = "adPosition2";
+
     /**
      * 本地push scheme
      */
