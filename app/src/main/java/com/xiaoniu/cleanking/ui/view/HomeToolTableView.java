@@ -108,7 +108,6 @@ public class HomeToolTableView extends LinearLayout {
         }
     }
 
-
     public void initViewState() {
         //wx
         if (PreferenceUtil.getWeChatCleanTime()) {

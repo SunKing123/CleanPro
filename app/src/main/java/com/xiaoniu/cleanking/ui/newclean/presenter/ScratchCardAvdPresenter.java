@@ -91,7 +91,7 @@ public class ScratchCardAvdPresenter {
         if (isOpenOne()) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("position_id", cardIndex);
-            StatisticsUtils.customTrackEvent("ad_request_sdk", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
+            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
         }
         StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
@@ -145,7 +145,7 @@ public class ScratchCardAvdPresenter {
     private void pointVideo() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("position_id", cardIndex);
-        StatisticsUtils.customTrackEvent("ad_request_sdk", "刮刮卡翻倍激励视频广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
+        StatisticsUtils.customTrackEvent("ad_request_sdk_2", "刮刮卡翻倍激励视频广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
     }
 
     private String getAdvId(String resNamePrefix, int index) {
