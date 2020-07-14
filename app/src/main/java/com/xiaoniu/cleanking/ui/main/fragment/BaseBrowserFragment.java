@@ -112,6 +112,8 @@ public class BaseBrowserFragment extends SimpleFragment {
                         //错误页面重试点击
                         if (getWebView() != null && checkNetWork()) {
                             getWebView().setVisibility(View.VISIBLE);
+                            //修改有时不显示加载内容，显示空白
+                            getWebView().bringToFront();
                             getWebView().loadUrl(url);
                         } else {
                             ToastUtils.showShort("网络连接异常，请检查网络设置");
