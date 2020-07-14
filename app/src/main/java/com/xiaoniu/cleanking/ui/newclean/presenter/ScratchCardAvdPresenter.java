@@ -87,13 +87,16 @@ public class ScratchCardAvdPresenter {
         parameter.obtainCoinCount = coinCount;
 
         GoldCoinDialog.showGoldCoinDialog(parameter);
-
+        pointAdOne();
+        StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
+    }
+    
+    private void pointAdOne() {
         if (isOpenOne()) {
             HashMap<String, Object> map = new HashMap<>();
             map.put("position_id", cardIndex);
             StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
         }
-        StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
     //点击翻倍按钮事件
