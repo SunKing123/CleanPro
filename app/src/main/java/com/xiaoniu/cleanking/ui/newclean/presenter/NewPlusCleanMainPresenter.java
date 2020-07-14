@@ -523,13 +523,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 .setAdId(adviceID).setActivity(mView.getActivity())
                 .setViewContainer(viewGroup).build();
 
-        MidasAdSdk.getAdsManger().askIsReady(mView.getActivity(), adviceID, new AskReadyCallBack() {
-            @Override
-            public void onReady(boolean b) {
-                viewGroup.setVisibility(View.VISIBLE);
-                MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
-            }
-        });
+        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
     }
 
     static class AdvCallBack extends CMAbsAdCallBack {
@@ -556,7 +550,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         @Override
         public void onAdLoadSuccess(AdInfo adInfo) {
             super.onAdLoadSuccess(adInfo);
-
         }
 
         @Override
@@ -589,6 +582,11 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             super.onAdClose(adInfo, templateView);
             LogUtils.e("====首页广告one====templateView:点击关闭按钮");
         }
+
+        public void onReadyToShow(AdInfo var1) {
+            var1.getAdParameter().getViewContainer().setVisibility(View.VISIBLE);
+        }
+
     }
 
 

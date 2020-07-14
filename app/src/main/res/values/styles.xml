@@ -363,6 +363,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/dimen_14sp</item>
         <item name="android:background">@drawable/clear_btn_bg</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="home_tool_item">

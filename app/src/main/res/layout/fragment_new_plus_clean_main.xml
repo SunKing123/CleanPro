@@ -85,8 +85,7 @@
             <com.xiaoniu.cleanking.ui.view.HomeMainTableView
                 android:id="@+id/home_main_table"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="-15dp" />
+                android:layout_height="wrap_content" />
 
             <FrameLayout
                 android:id="@+id/ad_one"
@@ -94,7 +93,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop"
                 android:padding="4dp"
-                android:visibility="gone" />
+                android:background="@drawable/shadow"
+                android:visibility="gone"
+                />
 
             <FrameLayout
                 android:layout_width="match_parent"
