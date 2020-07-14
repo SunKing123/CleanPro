@@ -49,6 +49,9 @@ dependencies {
     api fileTree(include: ['*.aar'], dir: 'libs')
     //穿山甲
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
+    //TopMob
+    implementation 'com.danikula:videocache:2.7.1'
+
     //穿山甲 为了适配下载和安装相关功能，在工程中引用的包 androidx.legacy:legacy-support-v4:1.0.0"
     //使用24.2.0以及以上版本。
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
