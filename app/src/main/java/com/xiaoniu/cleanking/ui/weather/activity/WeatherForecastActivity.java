@@ -206,6 +206,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
         LogUtils.debugInfo("zz----" + publishSource + "----" + new Gson().toJson(weatherForecastResponseEntity));
         rlWeatherForecastBack.setOnClickListener(v-> {
            finish();
+            NiuDataAPIUtil.onPageEnd("home_page", "weather_forecast_page", "weather_forecast_page_view_page", "用户在天气预报详情页浏览");
         });
         requestAd();
         if (weatherForecastResponseEntity != null) {
