@@ -263,7 +263,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
 
     private Map<String, Object> getStatisticsMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("gold_coin_position_id", 5);
+        map.put("position_id", 5);
         map.put("function_name", mView.getActivityTitle());
         return map;
     }
@@ -271,7 +271,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     private JSONObject getStatisticsJson() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("gold_coin_position_id", 5);
+            jsonObject.put("position_id", 5);
             jsonObject.put("function_name", mView.getActivityTitle());
         } catch (JSONException e) {
             e.printStackTrace();

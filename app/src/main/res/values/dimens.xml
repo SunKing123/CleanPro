@@ -873,4 +873,6 @@
     <dimen name="dimen_49sp">49sp</dimen>
     <dimen name="dimen_90sp">90sp</dimen>
     <dimen name="dimen_64sp">64sp</dimen>
+
+    <dimen name="main_home_marginTop">6dp</dimen>
 </resources>
