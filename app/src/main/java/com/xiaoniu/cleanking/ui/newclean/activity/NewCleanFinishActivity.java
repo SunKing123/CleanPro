@@ -193,6 +193,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
 
     private void requestScreenSwitch() {
         boolean unused = getIntent().getBooleanExtra("unused", false);
+        //没有使用功能直接到结果页弹出插屏广告和金币弹窗
         if (!unused) {
             mPresenter.getScreenSwitch();
         }
