@@ -4,6 +4,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -81,12 +82,19 @@ public class YuLeFragment extends SimpleFragment {
                 .setOnErrorRetryClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (AndroidUtil.isFastDoubleClick()) {
+                            return;
+                        }
                         //错误页面重试点击
                         if (getWebView() != null && checkNetWork()) {
-                            getWebView().setVisibility(View.VISIBLE);
-                            //修改有时不显示加载内容，显示空白
-                            getWebView().bringToFront();
                             getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+                            new Handler().postDelayed(() -> {//延迟显示布局，否则会有那个网络无法加载的页面
+                                mBinding.webPageNoNetwork.setVisibility(View.GONE);
+                                mBinding.webFragment.setVisibility(View.VISIBLE);
+                                getWebView().setVisibility(View.VISIBLE);
+                                //修改有时不显示加载内容，显示空白
+                                getWebView().bringToFront();
+                            }, 1500);
                         } else {
                             ToastUtils.showShort("网络连接异常，请检查网络设置");
                         }
@@ -97,8 +105,6 @@ public class YuLeFragment extends SimpleFragment {
 
     private boolean checkNetWork() {
         if (NetkUtils.isConnected(getContext())) {
-            mBinding.webPageNoNetwork.setVisibility(View.GONE);
-            mBinding.webFragment.setVisibility(View.VISIBLE);
             return true;
         } else if (mBinding.webPageNoNetwork.getVisibility() != View.VISIBLE) {
             mBinding.webPageNoNetwork.showErrorView();

@@ -188,7 +188,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             }
             PreferenceUtil.saveCoolStartTime();
         } else {//无网络状态
-            if (!PreferenceUtil.isNotFirstOpenApp()) {
+            if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
                 mStartView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.GONE);
             } else {
@@ -207,8 +207,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         //超时定时器
         rxTimer = new RxTimer();
         rxTimer.timer(SP_SHOW_OUT_TIME, number -> {
-            mCanJump = true;
-            jumpActivity();
+            if(PreferenceUtil.isNotFirstOpenApp()){//非第一次冷启动总超时逻辑；
+                mCanJump = true;
+                jumpActivity();
+            }
         });
 
     }
@@ -233,7 +235,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, auditSwitch.getData());
             MmkvUtil.saveString(SpCacheConfig.AuditSwitch, auditSwitch.getData());
         }
-        if (!PreferenceUtil.isNotFirstOpenApp()) {
+        if (!PreferenceUtil.isNotFirstOpenApp()) { //第一次冷启动
             mStartView.setVisibility(View.VISIBLE);
             mContentView.setVisibility(View.GONE);
             mPresenter.getSwitchInfoList();

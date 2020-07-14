@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
 import com.xiaoniu.cleanking.ui.main.bean.CheckUserTokenBean;
 import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
+import com.xiaoniu.cleanking.ui.main.bean.GuaGuaDoubleBean;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -235,6 +236,15 @@ public interface UserApiService {
 
     @POST("/bubble/collect/double")
     Flowable<BubbleDouble> bubbleDouble(@Body RequestBody body);
+
+    /**
+     * 刮刮卡翻倍
+     * @param id  活动Id
+     * @return
+     */
+
+    @POST("/guaGuaActivity/doubleAward")
+    Flowable<GuaGuaDoubleBean> guaGuaBubbleDouble(@Query("id") String id);
 
     /**
      * 退出登录

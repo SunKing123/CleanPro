@@ -21,6 +21,10 @@ import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.Parameters;
 import com.xiaoniu.cleanking.scheme.utils.UrlUtils;
+import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
+import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
+import com.xiaoniu.cleanking.ui.newclean.interfice.RequestResultListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
@@ -28,9 +32,14 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.common.utils.Points;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statusview.StatusView;
 import com.xiaoniu.statusview.StatusViewBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 
@@ -99,13 +108,48 @@ public class BaseBrowserFragment extends SimpleFragment {
                 .go(url);
         //播放视频完成的回调
         cardAvdPresenter.setOnVideoPlayedListener(() -> {
-            LogUtils.e("==========================================================getXnData() JsonParams start");
-            LogUtils.e("h5下发的JsonParams: "+videoRequestJsonParams);
-            LogUtils.e("==========================================================getXnData() JsonParams  end");
-            getWebView().loadUrl("javascript:videoCallBack(" + videoRequestJsonParams + ")");
-            mActivity.finish();
+
+//            LogUtils.e("==========================================================getXnData() JsonParams start");
+//            LogUtils.e("h5下发的JsonParams: " + videoRequestJsonParams);
+//            LogUtils.e("==========================================================getXnData() JsonParams  end");
+//            getWebView().loadUrl("javascript:videoCallBack(" + videoRequestJsonParams + ")");
+//            mActivity.finish();
+            guaguaDouble();
         });
         netWorkAbout();
+    }
+
+    /**
+     * 刮刮翻倍
+     */
+    private void guaguaDouble() {
+        String id = "";
+        if (!TextUtils.isEmpty(videoRequestJsonParams)) {
+            try {
+                JSONObject jsonObject = new JSONObject(videoRequestJsonParams);
+                id = jsonObject.optString("id");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        int cardIndex = cardAvdPresenter.cardIndex;
+        int coinCount = cardAvdPresenter.coinCount;
+        RequestUserInfoUtil.guaGuaBubbleDoubleRequest(getContext(), id, new RequestResultListener() {
+            @Override
+            public void requestSuccess() {
+                String adId = cardAvdPresenter.isOpenThree() ? cardAvdPresenter.getSecondAdvId(cardIndex) : "";
+                GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinCount, cardIndex, Points.ScratchCard.SUCCESS_PAGE);
+                GoldCoinSuccessActivity.Companion.start(getContext(), model);
+                GoldCoinDialog.dismiss();
+                StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
+                mActivity.finish();
+            }
+
+            @Override
+            public void requestFail() {
+
+            }
+        });
     }
 
     private void netWorkAbout() {
@@ -113,12 +157,19 @@ public class BaseBrowserFragment extends SimpleFragment {
                 .setOnErrorRetryClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(AndroidUtil.isFastDoubleClick()){
+                            return;
+                        }
                         //错误页面重试点击
                         if (getWebView() != null && checkNetWork()) {
-                            getWebView().setVisibility(View.VISIBLE);
-                            //修改有时不显示加载内容，显示空白
-                            getWebView().bringToFront();
                             getWebView().loadUrl(url);
+                            new Handler().postDelayed(() -> {//延迟显示布局，否则会有那个网络无法加载的页面
+                                webPageNoNetwork.setVisibility(View.GONE);
+                                mRootView.setVisibility(View.VISIBLE);
+                                getWebView().setVisibility(View.VISIBLE);
+                                //修改有时不显示加载内容，显示空白
+                                getWebView().bringToFront();
+                            }, 1500);
                         } else {
                             ToastUtils.showShort("网络连接异常，请检查网络设置");
                         }
@@ -129,8 +180,7 @@ public class BaseBrowserFragment extends SimpleFragment {
 
     private boolean checkNetWork() {
         if (NetkUtils.isConnected(getContext())) {
-            webPageNoNetwork.setVisibility(View.GONE);
-            mRootView.setVisibility(View.VISIBLE);
+
             return true;
         } else if (webPageNoNetwork.getVisibility() != View.VISIBLE) {
             webPageNoNetwork.showErrorView();
