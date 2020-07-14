@@ -117,6 +117,7 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
             EventBus.getDefault().post(EXIT_SUCCESS);
             ToastUtils.showShort("退出登录成功");
             ll_exit_login.setVisibility(View.GONE);
+            //
 
         }
     }

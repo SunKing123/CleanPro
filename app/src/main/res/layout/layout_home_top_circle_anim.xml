@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:alpha="0.5"
+        android:alpha="0.7"
         android:scaleX="0.8"
         android:scaleY="0.8">
 
@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/circle_shadow" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="18dp"
-            android:layout_marginBottom="27dp"
+            android:layout_marginBottom="32dp"
             app:location="2" />
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -120,7 +121,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="28dp"
+            android:layout_marginBottom="35dp"
             app:location="4" />
 
     </RelativeLayout>
