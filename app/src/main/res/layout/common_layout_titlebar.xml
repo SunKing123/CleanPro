@@ -12,6 +12,7 @@
         android:layout_height="@dimen/dimen_1dp" />
 
     <RelativeLayout
+        android:id="@+id/content_rl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_44dp">
 
