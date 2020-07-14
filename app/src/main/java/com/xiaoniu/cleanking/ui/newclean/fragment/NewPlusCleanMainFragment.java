@@ -202,7 +202,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         isSlide = false;
                         mFloatAnimManager.showFloatAdvertView();
                     }
-                }else {
+                } else {
                     isSlide = true;
                     mFloatAnimManager.hindFloatAdvertView();
                 }
@@ -350,13 +350,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
                 break;
             case MidasConstants.MAIN_THREE_AD_ID:
-                if (getAdLayoutThreeVisible()) {
-                    if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+                    if (getAdLayoutThreeVisible()) {
                         StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
                         mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
+                    } else {
+                        mPresenter.prepareVideoAd(adLayoutThree);
                     }
-                } else {
-                    mPresenter.prepareVideoAd(adLayoutThree);
                 }
                 break;
         }
