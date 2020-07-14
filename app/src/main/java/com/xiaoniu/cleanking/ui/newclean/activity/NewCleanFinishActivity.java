@@ -1131,7 +1131,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页广告位1发起请求", sourcePage, "success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
                 .setActivity(this)
-                .setViewContainer(ad_container_pos01)
+                .setViewContainer(ad_container_pos01).setViewWidthOffset(24)
                 .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
@@ -1227,7 +1227,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页广告位2发起请求", sourcePage, "success_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
                 .setActivity(this)
-                .setViewContainer(ad_container_pos02)
+                .setViewContainer(ad_container_pos02).setViewWidthOffset(24)
                 .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override

@@ -429,7 +429,7 @@ public class ToolFragment extends SimpleFragment {
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
         AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
-                .setActivity(mActivity).setViewContainer(frameBottomLayout).build();
+                .setActivity(mActivity).setViewContainer(frameBottomLayout).setViewWidthOffset(24).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onAdError(AdInfo adInfo, int i, String s) {

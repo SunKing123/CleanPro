@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.comm.jksdk.utils.DisplayUtil;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 
 import java.lang.ref.WeakReference;
@@ -356,7 +358,14 @@ public class AdRequestParams {
             this.viewWidth =width;
             return this;
         }
-
+        
+        public Builder setViewWidthOffset(int offset){
+            if(activityWeakReference.get()==null){
+                return this;
+            }
+            this.viewWidth = ScreenUtils.getScreenWidth(activityWeakReference.get()) - DisplayUtil.dip2px(activityWeakReference.get(),offset);
+            return this;
+        }
         public AdRequestParams build() {
             return new AdRequestParams(this);
         }

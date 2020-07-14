@@ -286,7 +286,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(MidasConstants.ME_BOTTOM_ID)
                 .setActivity(getActivity())
-                .setViewContainer(mBinding.bannerAdLl).build();
+                .setViewContainer(mBinding.bannerAdLl).setViewWidthOffset(30).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
             public void onAdShow(AdInfo adInfo) {
