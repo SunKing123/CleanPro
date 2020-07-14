@@ -662,7 +662,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     //金币翻倍
     public void bullDouble(String uuid, int locationNum, int goldCount) {
-        mModel.goleDouble(new Common3Subscriber<BubbleDouble>() {
+        mModel.goldDouble(new Common3Subscriber<BubbleDouble>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
                 ToastUtils.showShort(message);
