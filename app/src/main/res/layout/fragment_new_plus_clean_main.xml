@@ -25,25 +25,26 @@
 
         <TextView
             android:id="@+id/tv_withDraw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="19dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/gradient_button_bg"
-            android:paddingLeft="9dp"
-            android:paddingRight="9dp"
             android:text="提现"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="12dp"
-            android:visibility="gone" />
+            />
 
         <TextView
             android:id="@+id/tv_coin_num"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="19dp"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:layout_marginRight="6dp"
             android:layout_toLeftOf="@+id/tv_withDraw"
+            android:drawablePadding="4dp"
             android:drawableLeft="@drawable/icon_home_gold"
             android:text=""
             android:textColor="#26DFB0"
@@ -93,7 +94,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@drawable/shadow"
                 android:padding="4dp"/>
 
             <FrameLayout
@@ -117,6 +117,7 @@
                 android:layout_marginBottom="@dimen/dp_10"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shadow"
+                android:visibility="gone"
                 android:padding="4dp"/>
 
             <include layout="@layout/layout_weather_video" />

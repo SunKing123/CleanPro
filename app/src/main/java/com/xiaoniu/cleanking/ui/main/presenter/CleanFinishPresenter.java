@@ -153,7 +153,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     private void addDoubleGoldCoin(BubbleCollected bubbleCollected) {
-        mModel.goleDouble(new Common3Subscriber<BubbleDouble>() {
+        mModel.goldDouble(new Common3Subscriber<BubbleDouble>() {
                               @Override
                               public void showExtraOp(String code, String message) {  //关心错误码；
                                   ToastUtils.showShort(message);
