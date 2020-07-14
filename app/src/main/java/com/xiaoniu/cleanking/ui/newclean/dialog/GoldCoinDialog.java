@@ -62,7 +62,7 @@ public class GoldCoinDialog {
         }
         dialog = new BaseDialog(context, R.style.common_dialog_style);
         dialog.setContentView(R.layout.gold_coin_dialog);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);//所有的翻倍弹窗、奖励弹窗，支持物理键返回关闭弹窗。
         dialog.setCanceledOnTouchOutside(false);
         dialog.setGravityLayout(BaseDialog.CENTER);
         dialog.setFullScreen();

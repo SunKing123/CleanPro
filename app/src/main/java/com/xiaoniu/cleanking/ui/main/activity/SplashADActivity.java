@@ -433,6 +433,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_delete:
+                LogUtils.i("zz------11---"+System.currentTimeMillis());
                 PreferenceUtil.saveFirstOpenApp();
                 startActivity(MainActivity.class);
                 finish();
