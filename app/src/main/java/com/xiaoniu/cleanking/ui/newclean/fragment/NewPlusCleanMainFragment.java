@@ -109,7 +109,7 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * Created by xinxiaolong on 2020/6/30.
  * email：xinxiaolong123@foxmail.com
  */
-public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener , FragmentOnFocusListenable {
+public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener, FragmentOnFocusListenable {
 
     @BindView(R.id.view_lottie_top)
     OneKeyCircleButtonView view_lottie_top;
@@ -192,7 +192,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         //金币前两个位置预加载
         mPresenter.goldAdprev();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
-        LogUtils.i("zz------22---"+System.currentTimeMillis());
+        LogUtils.i("zz------22---" + System.currentTimeMillis());
 
     }
 
@@ -390,6 +390,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
 
     private void showAdVideo() {
+        if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+            return;
+        }
         mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             Rect scrollBounds = new Rect();
             mScrollView.getHitRect(scrollBounds);
@@ -428,7 +431,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //重新检测头部扫描状态
             checkScanState();
             //刷新广告数据
-            if(!isFirstCreate){
+            if (!isFirstCreate) {
                 refreshAdAll();
             }
             //金币配置刷新
@@ -436,7 +439,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
-
 
 
     }
@@ -666,7 +668,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
                         bundle.putString("num", countEntity.getTotalSize());
                         bundle.putString("unit", countEntity.getUnit());
-                        bundle.putBoolean("unused",true);
+                        bundle.putBoolean("unused", true);
                         Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
                         intent.putExtras(bundle);
                         startActivity(intent);
@@ -797,7 +799,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_one_key_speed));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                bundle.putBoolean("unused",true);
+                bundle.putBoolean("unused", true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         } else {
@@ -843,7 +845,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
             intent.putExtra("title", "病毒查杀");
             intent.putExtra("main", false);
-            intent.putExtra("unused",true);
+            intent.putExtra("unused", true);
             startActivity(intent);
         }
     }
@@ -872,7 +874,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_super_power_saving));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                bundle.putBoolean("unused",true);
+                bundle.putBoolean("unused", true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -883,9 +885,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * **********************************************************folder clean start*****************************************************************************
      * *********************************************************************************************************************************************************
      */
-
     public void onCleanFolderClick() {
-        StatisticsUtils.trackClick(Points.MainHome.DEEP_CLEANING_CLICK_CODE, Points.MainHome.DEEP_CLEANING_CLICK_NAME, AppHolder.getInstance().getSourcePageId(), "acceleration_page");
+        StatisticsUtils.trackClick(Points.MainHome.DEEP_CLEANING_CLICK_CODE, Points.MainHome.DEEP_CLEANING_CLICK_NAME, "home_page", "home_page");
         startActivity(RouteConstants.CLEAN_BIG_FILE_ACTIVITY);
     }
 
@@ -938,7 +939,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_chat_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                bundle.putBoolean("unused",true);
+                bundle.putBoolean("unused", true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -968,7 +969,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_notification_clean));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                bundle.putBoolean("unused",true);
+                bundle.putBoolean("unused", true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -997,7 +998,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 bundle.putString("title", getString(R.string.tool_phone_temperature_low));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
-                bundle.putBoolean("unused",true);
+                bundle.putBoolean("unused", true);
                 startActivity(NewCleanFinishActivity.class, bundle);
             }
         }
@@ -1018,7 +1019,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             intent.putExtra("title", "网络加速");
             intent.putExtra("main", false);
             intent.putExtra("num", num);
-            intent.putExtra("unused",true);
+            intent.putExtra("unused", true);
             startActivity(intent);
         }
     }

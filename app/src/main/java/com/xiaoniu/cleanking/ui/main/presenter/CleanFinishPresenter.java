@@ -1,13 +1,10 @@
 package com.xiaoniu.cleanking.ui.main.presenter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.view.ViewGroup;
 
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
@@ -27,7 +24,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
-import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
@@ -190,17 +186,16 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
     }
 
     private void startGoldSuccess(String adId, int num, String functionName) {
-        Activity activity = AppApplication.getInstance().getTopActivity();
+   /*     Activity activity = AppApplication.getInstance().getTopActivity();
         if (activity != null) {
             //TODO 判断条件：   1.应用在前台 2.非本应用报名前缀的activity
             if (AppLifecycleUtil.isAppOnForeground(mActivity) && !activity.getLocalClassName().contains(BuildConfig.APPLICATION_ID)) {
                 activity.finish();
             }
         }
-
+*/
         GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, Points.FunctionGoldCoin.SUCCESS_PAGE, functionName);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
-        mActivity.finish();
     }
 
     /**
@@ -326,12 +321,13 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 public void onAdClose(AdInfo adInfo) {
                     super.onAdClose(adInfo);
                     StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop-up_window_incentive_video_page", getStatisticsJson());
+                    addDoubleGoldCoin(bubbleCollected);
+                    videoAdRequesting = false;
                 }
 
                 @Override
                 public void onAdVideoComplete(AdInfo adInfo) {
                     super.onAdVideoComplete(adInfo);
-                    addDoubleGoldCoin(bubbleCollected);
                     videoAdRequesting = false;
                 }
             });
@@ -341,6 +337,5 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页金币领取弹窗上广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap());
         GoldCoinDialog.showGoldCoinDialog(bean);
     }
-
 
 }
