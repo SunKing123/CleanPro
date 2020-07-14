@@ -21,7 +21,7 @@
             <LinearLayout
                 android:id="@+id/ll_top_layout"
                 android:layout_width="match_parent"
-                android:layout_height="227dp"
+                android:layout_height="235dp"
                 android:background="@drawable/icon_tool_top_bg"
                 android:orientation="vertical">
 
@@ -29,7 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_16dp"
-                    android:layout_marginTop="@dimen/dimen_20dp"
+                    android:layout_marginTop="@dimen/dimen_28dp"
                     android:text="工具箱"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
