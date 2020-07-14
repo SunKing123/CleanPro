@@ -4,6 +4,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +23,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
-import com.xiaoniu.cleanking.ui.newclean.util.YuLeWebViewClient;
+import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
@@ -81,12 +82,19 @@ public class YuLeFragment extends SimpleFragment {
                 .setOnErrorRetryClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (AndroidUtil.isFastDoubleClick()) {
+                            return;
+                        }
                         //错误页面重试点击
                         if (getWebView() != null && checkNetWork()) {
-                            getWebView().setVisibility(View.VISIBLE);
-                            //修改有时不显示加载内容，显示空白
-                            getWebView().bringToFront();
                             getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+                            new Handler().postDelayed(() -> {//延迟显示布局，否则会有那个网络无法加载的页面
+                                mBinding.webPageNoNetwork.setVisibility(View.GONE);
+                                mBinding.webFragment.setVisibility(View.VISIBLE);
+                                getWebView().setVisibility(View.VISIBLE);
+                                //修改有时不显示加载内容，显示空白
+                                getWebView().bringToFront();
+                            }, 1500);
                         } else {
                             ToastUtils.showShort("网络连接异常，请检查网络设置");
                         }
@@ -97,8 +105,6 @@ public class YuLeFragment extends SimpleFragment {
 
     private boolean checkNetWork() {
         if (NetkUtils.isConnected(getContext())) {
-            mBinding.webPageNoNetwork.setVisibility(View.GONE);
-            mBinding.webFragment.setVisibility(View.VISIBLE);
             return true;
         } else if (mBinding.webPageNoNetwork.getVisibility() != View.VISIBLE) {
             mBinding.webPageNoNetwork.showErrorView();
@@ -127,9 +133,9 @@ public class YuLeFragment extends SimpleFragment {
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(mBinding.webFragment, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
                 .closeIndicator()
-                .setMainFrameErrorView(R.layout.common_view_no_network, R.id.no_network_tv)
+//                .setMainFrameErrorView(R.layout.common_view_no_network, R.id.no_network_tv)
                 .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())
-                .setWebViewClient(new YuLeWebViewClient(getActivity(), mBinding.loadIv))
+                .setWebViewClient(new MyBaseWebViewClient(null, null, getActivity(), mBinding.loadIv, mBinding.webPageNoNetwork))
                 .setWebChromeClient(mWebChromeClient)
                 .addJavascriptInterface("native", new JsInterface())
                 .addJavascriptInterface("android", new SdkJsInterface())

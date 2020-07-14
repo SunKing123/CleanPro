@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
@@ -11,8 +10,6 @@ import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
-import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -46,8 +43,8 @@ public class ScratchCardAvdPresenter {
     private boolean isVideoRequesting = false;
 
     private Activity activity;
-    private int cardIndex;
-    private int coinCount;
+    public int cardIndex;
+    public int coinCount;
     private GoldCoinDialogParameter parameter;
 
     public ScratchCardAvdPresenter(Activity activity) {
@@ -63,7 +60,7 @@ public class ScratchCardAvdPresenter {
         return isOpenTwo;
     }
 
-    private boolean isOpenThree() {
+    public boolean isOpenThree() {
         return isOpenThree;
     }
 
@@ -242,14 +239,14 @@ public class ScratchCardAvdPresenter {
             onVideoPlayedListener.onComplete();
         }
 
-        String adId = isOpenThree() ? getSecondAdvId(cardIndex) : "";
-        int coinNum = coinCount;
-
-        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinNum, cardIndex, Points.ScratchCard.SUCCESS_PAGE);
-        GoldCoinSuccessActivity.Companion.start(activity, model);
-
-        GoldCoinDialog.dismiss();
-        StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
+//        String adId = isOpenThree() ? getSecondAdvId(cardIndex) : "";
+//        int coinNum = coinCount;
+//
+//        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinNum, cardIndex, Points.ScratchCard.SUCCESS_PAGE);
+//        GoldCoinSuccessActivity.Companion.start(activity, model);
+//
+//        GoldCoinDialog.dismiss();
+//        StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
     }
 
     private String getAdvId(Context context, String resourceName) {

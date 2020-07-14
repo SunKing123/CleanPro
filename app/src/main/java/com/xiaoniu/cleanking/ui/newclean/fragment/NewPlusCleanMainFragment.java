@@ -245,7 +245,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearVideoLayout.setClearItemImage(R.mipmap.clear_image_video);
         clearVideoLayout.setClearItemContent("视频文件批量删除");
         clearVideoLayout.setClearItemSubContent("有效节省空间");
-        clearVideoLayout.getButton().setOnClickListener(view -> {
+        clearVideoLayout.setOnClickListener(view -> {
             StatisticsUtils.trackClick("video_file_click", "用户在首页点击【视频文件】", "home_page", "home_page");
             //跳转到视频清理
             startActivity(new Intent(getActivity(), CleanVideoManageActivity.class));
@@ -256,7 +256,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearImageLayout.setClearItemImage(R.mipmap.clear_image_pic);
         clearImageLayout.setClearItemContent("智能相册管理");
         clearImageLayout.setClearItemSubContent("一键删除无用照片");
-        clearImageLayout.getButton().setOnClickListener(view -> {
+        clearImageLayout.setOnClickListener(view -> {
             StatisticsUtils.trackClick("picture_file_Click", "用户在首页点击【图片文件】", "home_page", "home_page");
             Intent intent = new Intent(getActivity(), ImageActivity.class);
             startActivity(intent);
@@ -267,7 +267,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearSoundLayout.setClearItemImage(R.mipmap.clear_image_audio);
         clearSoundLayout.setClearItemContent("清除过期音频文件");
         clearSoundLayout.setClearItemSubContent("释放更多可用空间");
-        clearSoundLayout.getButton().setOnClickListener(view -> {
+        clearSoundLayout.setOnClickListener(view -> {
             StatisticsUtils.trackClick("audio_file_Click", "用户在首页点击音频文件", "home_page", "home_page");
             //跳转到音乐清理
             startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));

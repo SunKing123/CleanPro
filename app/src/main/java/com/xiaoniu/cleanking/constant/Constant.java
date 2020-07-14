@@ -87,7 +87,7 @@ public class Constant {
     public static final String APPLICATION_IDENTIFICATION = "default";         //应用标识
     /*****************************************************/
     //闪验appId
-    public static final String SHANYAN_APPID = "bSdGrkKB";
+    public static final String SHANYAN_APPID = "IQvuYr2e";
     //umeng   appKey
     public static final String UMENG_APPKEY = "5dcb9de5570df3121b000fbe";
     //微信  appid
