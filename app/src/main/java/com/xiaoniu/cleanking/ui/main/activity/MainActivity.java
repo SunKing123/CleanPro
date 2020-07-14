@@ -245,7 +245,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     showRedPacket(redPacketDataBean);
                 }
 
-                switch (position){
+                switch (position) {
                     case 0:
                         StatisticsUtils.trackClick(Points.Tab.CLEAN_CLICK_CODE, Points.Tab.CLEAN_CLICK_NAME, "home_page", "home_page");
                         break;
@@ -321,7 +321,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        LogUtils.i("zzz-----"+hasFocus);
+        LogUtils.i("zzz-----" + hasFocus);
         if (hasFocus && isFirstCreate) {
             //检测版本更新
             mPresenter.queryAppVersion(() -> {
@@ -329,9 +329,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             isFirstCreate = false;
         }
         //fragment中传递Focus方法；
-        if(mainFragment instanceof FragmentOnFocusListenable) {
-            ((FragmentOnFocusListenable) mainFragment).onWindowFocusChanged(hasFocus);
+        if (mainFragment != null) {
+            mainFragment.onWindowFocusChanged(hasFocus);
         }
+
     }
 
     private void checkReadPermission() {
@@ -412,7 +413,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void onNewIntent(Intent intent) {
         boolean backFromFinish = intent.getBooleanExtra("back_from_finish", false);
-        LogUtils.e("============从完成页返回的:"+backFromFinish);
+        LogUtils.e("============从完成页返回的:" + backFromFinish);
         if (backFromFinish) {
             StatisticsUtils.customTrackEvent("ad_request_sdk_5", "功能完成页广告位5发起请求", "", "success_page");
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
@@ -540,7 +541,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         AppHolder.getInstance().setSourcePageId(currentPage);
         //默认二级选中页面为当前页面
         AppHolder.getInstance().setOtherSourcePageId(currentPage);
-       // StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
+        // StatisticsUtils.trackClick(eventCode, "底部icon点击", sourcePage, currentPage);
         if (position == MINE)
             source_page = "wode";
         if (position == CLEAN) {
@@ -737,12 +738,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     public boolean isBadgeViewShow() {
-        return mBottomBarTab==null?false:mBottomBarTab.isBadgeViewShow();
+        return mBottomBarTab == null ? false : mBottomBarTab.isBadgeViewShow();
     }
 
     public void hideBadgeView() {
-        if(mBottomBarTab!=null)
-        mBottomBarTab.hideBadgeView();
+        if (mBottomBarTab != null)
+            mBottomBarTab.hideBadgeView();
     }
 
     /**
