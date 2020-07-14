@@ -300,7 +300,6 @@ public class MyBaseWebViewClient extends WebViewClient {
             SchemeUtils.openScheme(mActivity, target, null, ActivityUtils.REQUEST_CODE_FROM_BROWSER);
         }
         mActivity.finish();
-
     }
 
     /**

@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
@@ -64,7 +65,7 @@ public class ScratchCardAvdPresenter {
         return isOpenThree;
     }
 
-    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble,boolean isAreaOne) {
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble, boolean isAreaOne) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble=" + isDouble);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -74,26 +75,26 @@ public class ScratchCardAvdPresenter {
         this.coinCount = coinCount;
         parameter = new GoldCoinDialogParameter();
         parameter.context = activity;
-        parameter.isDouble = isDouble&&!isAreaOne;
+        parameter.isDouble = isDouble && !isAreaOne;
         parameter.isRewardOpen = isOpenTwo();
         parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
         parameter.onDoubleClickListener = v -> handlerDoubleClick();
         parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
-        parameter.adId = isOpenOne()&&!isAreaOne ? getFirstAdvId(cardIndex) : "";
+        parameter.adId = isOpenOne() && !isAreaOne ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
 
-        pointAdOne();
+        if (TextUtils.isEmpty(parameter.adId)) {
+            pointAdOne();
+        }
         GoldCoinDialog.showGoldCoinDialog(parameter);
         StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
     private void pointAdOne() {
-        if (isOpenOne()) {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("position_id", cardIndex);
-            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
-        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("position_id", cardIndex);
+        StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
     }
 
     //点击翻倍按钮事件
