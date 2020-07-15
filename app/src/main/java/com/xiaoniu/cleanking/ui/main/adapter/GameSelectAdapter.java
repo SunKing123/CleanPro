@@ -41,15 +41,15 @@ public class GameSelectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
+            if (position < mData.size()) {
+                ((ImageViewHolder) holder).iv_icon.setImageDrawable(mData.get(position).getGarbageIcon());
+                ((ImageViewHolder) holder).tv_name.setText(mData.get(position).getAppName());
 
-            ((ImageViewHolder) holder).iv_icon.setImageDrawable(mData.get(position).getGarbageIcon());
-            ((ImageViewHolder) holder).tv_name.setText(mData.get(position).getAppName());
-
-            ((ImageViewHolder) holder).iv_icon.setOnClickListener(v -> {
-                if (mOnCheckListener != null && mData.size() > 0 && position == mData.size() - 1)
-                    mOnCheckListener.onCheck(mData, position);
-            });
-
+                ((ImageViewHolder) holder).iv_icon.setOnClickListener(v -> {
+                    if (mOnCheckListener != null && mData.size() > 0 && position == mData.size() - 1)
+                        mOnCheckListener.onCheck(mData, position);
+                });
+            }
         }
     }
 
