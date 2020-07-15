@@ -274,7 +274,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearSoundLayout.setClearItemContent("清除过期音频文件");
         clearSoundLayout.setClearItemSubContent("释放更多可用空间");
         clearSoundLayout.setOnClickListener(view -> {
-            StatisticsUtils.trackClick("audio_file_Click", "用户在首页点击音频文件", "home_page", "home_page");
+            StatisticsUtils.trackClick("audio_file_click", "用户在首页点击音频文件", "home_page", "home_page");
             //跳转到音乐清理
             startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));
         });
