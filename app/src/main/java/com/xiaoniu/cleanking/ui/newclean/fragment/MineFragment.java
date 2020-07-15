@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import androidx.databinding.DataBindingUtil;
@@ -291,7 +292,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             @Override
             public void onReadyToShow(AdInfo adInfo) {
                 super.onReadyToShow(adInfo);
-                adInfo.getAdParameter().getViewContainer().setVisibility(View.VISIBLE);
+                ViewGroup viewGroup = adInfo.getAdParameter().getViewContainer();
+                if (viewGroup  != null){
+                    viewGroup.setVisibility(View.VISIBLE);
+                    ViewGroup.LayoutParams p = viewGroup.getLayoutParams();
+                    p.height = -2;
+                }
             }
 
             @Override
