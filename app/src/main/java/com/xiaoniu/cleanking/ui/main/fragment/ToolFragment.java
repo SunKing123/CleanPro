@@ -117,17 +117,11 @@ public class ToolFragment extends SimpleFragment {
             if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
-        //initGeekAdSdk();
+
         getAccessListBelow();
     }
 
-    /**
-     * 广告sdk
-     */
-  /*  private void initGeekAdSdk() {
-        if (null == mAdManager)
-            mAdManager = GeekAdSdk.getAdsManger();
-    }*/
+
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
         Observable.create((ObservableOnSubscribe<String[]>) e -> e.onNext(new String[]{FileUtils.getFreeSpace(), FileUtils.getTotalSpace()})).subscribeOn(Schedulers.io())
@@ -446,53 +440,7 @@ public class ToolFragment extends SimpleFragment {
                 super.onShowError(i, s);
             }
         });
-       /* GeekAdSdk.getAdsManger().loadNativeTemplateAd(mActivity, PositionId.AD_ACCELERATION_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(mContext, DisplayUtil.getScreenWidth(mContext)) - 24), new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Log.i(TAG, "adSuccess---=" + info.getAdId() + "---" + info.getAdSource());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "acceleration_page", "acceleration_page");
-                    if (null != frameBottomLayout && null != info.getAdView()) {
-                        frameBottomLayout.removeAllViews();
-                        frameBottomLayout.addView(info.getAdView());
-                        frameBottomLayout.setVisibility(View.VISIBLE);
-                    }
-                }
 
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                Log.i(TAG, "adExposed---1");
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "acceleration_page", "acceleration_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.i(TAG, "adClicked---1");
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "acceleration_page", "acceleration_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.i(TAG, "adError---1");
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "acceleration_page", "acceleration_page");
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(null!=frameBottomLayout){
-                            frameBottomLayout.setVisibility(View.GONE);
-                        }
-                    }
-                });
-
-
-            }
-        });*/
     }
 
 }
