@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -90,7 +91,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     private ImageView iv_quicken, iv_power, iv_notification;
     //  private boolean isScreenSwitchOpen; //插屏广告开关
     // private int mScreenShowCount; //插屏广告展示次数
-    private ViewGroup advContentView;
     private int mShowCount; //推荐显示的数量
     private int mRamScale; //所有应用所占内存大小
     public static String sourcePage = "";
@@ -107,7 +107,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     FileQueryUtils fileQueryUtils;
     int processNum = 0;
 
-    private FrameLayout ad_container_pos01, ad_container_pos02;
+    private LinearLayout ad_container_pos01, ad_container_pos02;
     private ImageView error_ad_iv1, error_ad_iv2;
 
     @Override
@@ -154,7 +154,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mTvSize.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvGb.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mTvQl = header.findViewById(R.id.tv_ql);
-        advContentView = headerTool.findViewById(R.id.finish_framelayout_ad);
         ad_container_pos02 = headerTool.findViewById(R.id.ad_container_pos02);
         error_ad_iv2 = headerTool.findViewById(R.id.error_ad_iv2);
         mRecommendV = headerTool.findViewById(R.id.v_recommend);
