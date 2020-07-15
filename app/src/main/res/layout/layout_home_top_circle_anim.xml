@@ -32,7 +32,7 @@
             android:id="@+id/iv_center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/circle_shadow" />
+            android:background="@drawable/icon_circle_btn_white" />
 
         <LinearLayout
             android:layout_width="wrap_content"

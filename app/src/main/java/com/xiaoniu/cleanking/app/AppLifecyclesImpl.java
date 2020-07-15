@@ -430,6 +430,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 long currentTimestamp = System.currentTimeMillis();
                 if (AppLifecycleUtil.isAppOnForeground(application)) {
                     MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
+                }else {
+                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
                 }
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");

@@ -103,6 +103,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         rel_bubble.setLayoutParams(layoutParams);
         iv_top_perview.setLayoutParams(layoutParams);//bitmap遮罩层；
 
+        //波纹
         layoutParams.setMargins(0, -Float.valueOf(screenWidth *0.9f* 0.1f).intValue(), 0, 0);
         viewLottieGreen.setLayoutParams(layoutParams);
 
@@ -111,28 +112,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         imglayoutParams.width = Float.valueOf(screenWidth * 0.9f * 0.497f).intValue();
 //        ivCenter.setLayoutParams(imglayoutParams);
         rlayout_onekey.setLayoutParams(imglayoutParams);
-//        viewLottieGreen.animate().setDuration(3000).scaleX(1f).scaleY(1f).start();
-//        rlayout_onekey.animate().setDuration(3000).alpha(1f).scaleY(1f).scaleX(1f).setListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-//                rel_bubble.setVisibility(VISIBLE);
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        }).start();
+        rel_bubble.setVisibility(VISIBLE);
 
 //        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
 //        textLayout.height = Float.valueOf(screenWidth * 0.1f).intValue();
