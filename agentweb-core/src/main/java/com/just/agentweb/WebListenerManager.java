@@ -16,6 +16,7 @@
 
 package com.just.agentweb;
 
+import android.app.Activity;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -27,7 +28,9 @@ import android.webkit.WebViewClient;
  * @since 1.0.0
  */
 public interface WebListenerManager {
-    WebListenerManager setWebChromeClient(WebView webview, WebChromeClient webChromeClient);
-    WebListenerManager setWebViewClient(WebView webView, WebViewClient webViewClient);
-    WebListenerManager setDownloader(WebView webView, DownloadListener downloadListener);
+    WebListenerManager setWebChromeClient(Activity mActivity, WebView webview, WebChromeClient webChromeClient);
+
+    WebListenerManager setWebViewClient(Activity mActivity, WebView webView, WebViewClient webViewClient);
+
+    WebListenerManager setDownloader(Activity mActivity, WebView webView, DownloadListener downloadListener);
 }
