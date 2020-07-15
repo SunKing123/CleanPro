@@ -32,9 +32,7 @@ import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.listener.AskReadyCallBack;
 
 /**
  * Created by zhaoyingtao
@@ -46,18 +44,22 @@ public class GoldCoinDialog {
     private static Dialog dialog;
 
     public static void showGoldCoinDialog(GoldCoinDialogParameter parameter) {
+        if (parameter == null) {
+            return;
+        }
         Activity context = parameter.context;
         AbsAdCallBack advCallBack = parameter.advCallBack;
         View.OnClickListener onDoubleClickListener = parameter.onDoubleClickListener;
 
-        if (context == null || advCallBack == null || onDoubleClickListener == null || parameter == null || parameter.obtainCoinCount < 0) {
+        if (context == null || advCallBack == null || onDoubleClickListener == null || parameter.obtainCoinCount < 0) {
             if (BuildConfig.DEBUG) {
                 ToastUtils.showShort("加载广告请求参数错误！！！");
             }
             return;
         }
         if (dialog != null && dialog.isShowing()) {
-            return;
+            dialog.dismiss();
+//            return;
         }
         dialog = new Dialog(context, R.style.dialog_2_button);
         dialog.setContentView(R.layout.gold_coin_dialog);
@@ -182,7 +184,6 @@ public class GoldCoinDialog {
                 .setAdId(coinBean.adId).setActivity(context)
                 .setViewWidth(ScreenUtils.getScreenWidth(context) - DisplayUtil.dip2px(context, 45))
                 .setViewContainer(mRootRL).build();
-
         if (dialog != null && !context.isFinishing()) {
             dialog.show();
             MidasRequesCenter.requestAd(params, callBack);

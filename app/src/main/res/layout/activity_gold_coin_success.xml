@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_203dp"
+        android:layout_height="@dimen/dimen_275dp"
         android:background="@drawable/gradient_head">
 
 
@@ -17,13 +17,13 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dimen_45dp"
+            android:layout_marginBottom="@dimen/dimen_80dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/image_coin"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:src="@mipmap/iv_ad_coin" />
 
             <LinearLayout
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:text="恭喜您翻倍成功"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_15dp" />
+                    android:textSize="@dimen/dimen_17dp" />
 
                 <TextView
                     android:id="@+id/tv_coin_content"
@@ -48,7 +48,7 @@
                     android:layout_marginTop="@dimen/dimen_6dp"
                     android:text="到账500个金币"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_18dp" />
+                    android:textSize="@dimen/dimen_20dp" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/dimen_15dp"
-        android:layout_marginTop="@dimen/dimen_173dp"
+        android:layout_marginTop="@dimen/dimen_230dp"
         android:layout_marginRight="@dimen/dimen_15dp"
         android:background="@color/white" />
 </RelativeLayout>
