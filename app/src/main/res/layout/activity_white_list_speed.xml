@@ -91,6 +91,7 @@
                 android:src="@mipmap/img_holder_empty_install" />
 
             <TextView
+                android:id="@+id/tv_default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="加速白名单为空～" />
