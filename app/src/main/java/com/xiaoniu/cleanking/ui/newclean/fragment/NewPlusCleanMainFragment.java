@@ -26,6 +26,7 @@ import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
@@ -183,8 +184,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         EventBus.getDefault().register(this);
         rxPermissions = new RxPermissions(requireActivity());
         compositeDisposable = new CompositeDisposable();
-        mPresenter.getInteractionSwitch();
-        mPresenter.refBullList();
+
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
         mFloatAnimManager = new FloatAnimManager(imageInteractive, DisplayUtils.dip2px(180));
@@ -192,13 +192,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initEvent();
         showHomeLottieView();
         initClearItemCard();
-        checkAndUploadPoint();
         initListener();
-        //金币前两个位置预加载
-        mPresenter.goldAdprev();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
-//        LogUtils.i("zz------22---" + System.currentTimeMillis());
-
+        checkAndUploadPoint();
+        AppLifecyclesImpl.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                mPresenter.getInteractionSwitch();
+                mPresenter.refBullList();
+                //金币前两个位置预加载
+                mPresenter.goldAdprev();
+            }
+        },2000);
     }
 
 
@@ -634,7 +639,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
             }
         } else {//未取得权限
-            LogUtils.i("--checkScanState()");
+//            LogUtils.i("--checkScanState()");
             //避免重复弹出
             new Handler().postDelayed(() -> {
                 if (!isDenied) {

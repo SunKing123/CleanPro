@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
@@ -804,13 +805,18 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     public void goldAdprev(){
         adPrevData(AdposUtil.getAdPos(1, 0));//位置一预加载
         adPrevData(AdposUtil.getAdPos(1, 1));//位置二预加载
+
     }
 
     //广告预加载
     public void adPrevData(String posId){
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(posId).setActivity(mView.getActivity()).build();
-        MidasRequesCenter.preLoad(params);
+        try {
+            AdRequestParams params = new AdRequestParams.Builder()
+                    .setAdId(posId).setActivity(mView.getActivity()).build();
+            MidasRequesCenter.preLoad(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
