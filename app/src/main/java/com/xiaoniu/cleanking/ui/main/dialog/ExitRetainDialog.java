@@ -77,7 +77,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
     public void initAdv() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "all_ad_request", "retain_the_pop_up_window", "retain_the_pop_up_window");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.EXIT_RETAIN_ID)
-                .setActivity(activity).setViewContainer(container).build();
+                .setActivity(activity).setViewWidthOffset(63).setViewContainer(container).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
         });
 
