@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
@@ -276,7 +277,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         return jsonObject;
     }
 
-    boolean videoAdRequesting = false;
 
     //金币领取广告弹窗
     public void showGetGoldCoinDialog(BubbleCollected bubbleCollected) {
@@ -292,7 +292,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         };
         bean.closeClickListener = view -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
         bean.onDoubleClickListener = (v) -> {
-            if (videoAdRequesting) {
+            if (AndroidUtil.isFastDoubleBtnClick(1000)) {
                 return;
             }
             StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
@@ -302,14 +302,12 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                     setActivity(mActivity).
                     setViewContainer(viewGroup).
                     setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build();
-            videoAdRequesting = true;
             MidasRequesCenter.requestAd(params, new VideoAbsAdCallBack() {
                 @Override
                 public void onShowError(int i, String s) {
                     super.onShowError(i, s);
                     ToastUtils.showLong("网络异常");
                     GoldCoinDialog.dismiss();
-                    videoAdRequesting = false;
                 }
 
                 @Override
@@ -330,14 +328,12 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                         //没有播放完成就关闭广告的话把弹窗关掉
                         GoldCoinDialog.dismiss();
                     }
-                    videoAdRequesting = false;
                 }
 
 
                 @Override
                 public void onAdVideoComplete(AdInfo adInfo) {
                     super.onAdVideoComplete(adInfo);
-                    videoAdRequesting = false;
                 }
             });
         };

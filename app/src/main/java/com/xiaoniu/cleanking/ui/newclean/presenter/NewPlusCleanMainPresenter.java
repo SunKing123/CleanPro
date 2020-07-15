@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.NewScanModel;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -687,8 +688,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount);
     }
 
-    boolean videoAdRequesting = false;
-
     //金币领取广告弹窗
     public void showGetGoldCoinDialog(BubbleCollected dataBean) {
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
@@ -719,7 +718,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         //翻倍回调
         bean.onDoubleClickListener = (v) -> {
             try {
-                if (videoAdRequesting) {
+                if(AndroidUtil.isFastDoubleBtnClick(1000)){
                     return;
                 }
                 //翻倍按钮点击
@@ -737,13 +736,12 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         setActivity(mView.getActivity()).
                         setViewContainer(viewGroup).
                         setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1)).build();
-                videoAdRequesting = true;
                 MidasRequesCenter.requestAdVideo(params, new VideoAbsAdCallBack() {
                     @Override
                     public void onShowError(int i, String s) {
                         ToastUtils.showLong("网络异常");
                         GoldCoinDialog.dismiss();
-                        videoAdRequesting = false;
+
                     }
 
                     @Override
@@ -758,7 +756,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         if (!mView.getActivity().isFinishing()) {
                             GoldCoinDialog.dismiss();
                         }
-                        videoAdRequesting = false;
                     }
 
                     @Override
