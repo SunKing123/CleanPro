@@ -26,10 +26,7 @@
         android:id="@+id/rlayout_onekey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:alpha="0.7"
-        android:scaleX="0.8"
-        android:scaleY="0.8">
+        android:layout_centerInParent="true">
 
         <com.xiaoniu.cleanking.widget.TouchImageView
             android:id="@+id/iv_center"
