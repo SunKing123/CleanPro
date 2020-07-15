@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.comm.jksdk.ad.entity.AdInfo;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
@@ -20,6 +19,7 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 /**
@@ -34,7 +34,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     private TextView progree_tv;
     private ImageView adClose;
     private int showTimeSecond = 3;
-    AdInfo adInfo;
+    private AdInfo mAdInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,19 +82,21 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
                 .setActivity(this).setViewWidthOffset(56).setAdId(MidasConstants.SCREEN_ON_ID).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
-            public void onReadyToShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+            public void onReadyToShow(AdInfo adInfo) {
                 super.onReadyToShow(adInfo);
                 full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);
+                adClose.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+            public void onAdShow(AdInfo adInfo) {
                 super.onAdShow(adInfo);
+                mAdInfo = adInfo;
                 LogUtils.e("===========桌面弹窗展示成功");
             }
 
             @Override
-            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo) {
+            public void onAdClose(AdInfo adInfo) {
                 super.onAdClose(adInfo);
                 finish();
             }
@@ -124,8 +126,8 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         finish();
-        if (null != adInfo) {
-            StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", adInfo.getAdId(), adInfo.getAdSource(), "external_advertising_page", "external_advertising_page", adInfo.getAdTitle());
+        if (null != mAdInfo) {
+            StatisticsUtils.trackClick("ad_close_click", "关闭点击", "external_advertising_page", "external_advertising_page");
         }
 
     }
