@@ -353,6 +353,7 @@
                 android:visibility="gone"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:layout_marginRight="@dimen/dimen_15dp"
+                android:background="@color/white"
                 android:gravity="center"
                 android:orientation="horizontal"
                 tools:visibility="visible"/>
