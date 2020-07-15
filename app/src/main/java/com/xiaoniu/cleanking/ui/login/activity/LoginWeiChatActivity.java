@@ -152,6 +152,9 @@ public class LoginWeiChatActivity extends BaseActivity<LoginWeiChatPresenter> im
                 paramsMap.put("openId", data.get("openid"));
                 paramsMap.put("nickname", data.get("name"));
                 paramsMap.put("userAvatar", data.get("iconurl"));
+                if (mPresenter == null) {
+                    return;
+                }
                 if (UserHelper.init().isLogin() && !UserHelper.init().isWxLogin()) {//微信登陆什么也不处理 步数不要清理
                     paramsMap.remove("userType");
                     mPresenter.bindingWeiChat(paramsMap);

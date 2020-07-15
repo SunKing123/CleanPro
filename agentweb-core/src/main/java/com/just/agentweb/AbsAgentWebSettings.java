@@ -17,6 +17,7 @@
 package com.just.agentweb;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.view.View;
@@ -143,19 +144,19 @@ public abstract class AbsAgentWebSettings implements IAgentWebSettings, WebListe
     }
 
     @Override
-    public WebListenerManager setWebChromeClient(WebView webview, WebChromeClient webChromeClient) {
+    public WebListenerManager setWebChromeClient(Activity mActivity, WebView webview, WebChromeClient webChromeClient) {
         webview.setWebChromeClient(webChromeClient);
         return this;
     }
 
     @Override
-    public WebListenerManager setWebViewClient(WebView webView, WebViewClient webViewClient) {
+    public WebListenerManager setWebViewClient(Activity mActivity, WebView webView, WebViewClient webViewClient) {
         webView.setWebViewClient(webViewClient);
         return this;
     }
 
     @Override
-    public WebListenerManager setDownloader(WebView webView, DownloadListener downloadListener) {
+    public WebListenerManager setDownloader(Activity mActivity, WebView webView, DownloadListener downloadListener) {
         webView.setDownloadListener(downloadListener);
         return this;
     }
