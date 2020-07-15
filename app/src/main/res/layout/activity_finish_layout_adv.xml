@@ -96,15 +96,17 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_finish" />
 
-            <FrameLayout
+            <LinearLayout
                 android:id="@+id/ad_container_pos03"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_12dp"
                 android:layout_marginTop="-60dp"
-                android:layout_marginRight="@dimen/dimen_12dp">
+                android:layout_marginRight="@dimen/dimen_12dp"
+                android:orientation="vertical"
+                android:gravity="center">
 
-            </FrameLayout>
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/iv_error"

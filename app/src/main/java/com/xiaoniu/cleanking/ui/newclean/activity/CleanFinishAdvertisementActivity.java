@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,7 +58,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     String createEventName = "";
     String returnEventName = "";
     String sysReturnEventName = "";
-    FrameLayout ad_container_pos03;
+    ViewGroup ad_container_pos03;
 
     private String TAG = "GeekSdk";
 
@@ -79,7 +80,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
         StatusBarUtil.setPaddingTop(mContext, toolBar);
         mErrorIv = (ImageView) findViewById(R.id.iv_error);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
-        ad_container_pos03 = (FrameLayout) findViewById(R.id.ad_container_pos03);
+        ad_container_pos03 = findViewById(R.id.ad_container_pos03);
         mTvSize = findViewById(R.id.tv_size);
         mTvGb = findViewById(R.id.tv_clear_finish_gb_title);
         mTvQl = findViewById(R.id.tv_ql);
