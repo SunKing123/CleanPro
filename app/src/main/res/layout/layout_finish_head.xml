@@ -61,8 +61,6 @@
                     android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
-
-
     </RelativeLayout>
 
     <ImageView
@@ -70,12 +68,14 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_finish" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/ad_container_pos01"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_12dp"
         android:layout_marginTop="-60dp"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_marginRight="@dimen/dimen_12dp"
         android:background="@drawable/ad_container_bg_white"/>
 
