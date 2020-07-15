@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -122,6 +123,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     TextView tvWithDraw;
     @BindView(R.id.tv_coin_num)
     TextView tvCoinNum;
+    @BindView(R.id.image_home_coin)
+    ImageView imageHomeCoin;
 
     @BindView(R.id.clear_card_video)
     ClearCardView clearVideoLayout;
@@ -526,9 +529,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppHolder.getInstance().getAuditSwitch()) {
             tvCoinNum.setVisibility(View.GONE);
             tvWithDraw.setVisibility(View.GONE);
+            imageHomeCoin.setVisibility(View.GONE);
         } else if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
+            imageHomeCoin.setVisibility(View.VISIBLE);
             tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
         }
     }
@@ -541,6 +546,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case EXIT_SUCCESS:
                 tvCoinNum.setVisibility(View.GONE);
                 tvWithDraw.setVisibility(View.GONE);
+                imageHomeCoin.setVisibility(View.GONE);
                 break;
             //登录成功
             case LOGIN_SUCCESS:
