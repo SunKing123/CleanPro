@@ -1299,8 +1299,6 @@ public class PreferenceUtil {
     }
 
 
-
-
     /**
      * 保存是否有版本更新
      *
@@ -1356,7 +1354,7 @@ public class PreferenceUtil {
     public static boolean saveCoolStartTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(SpCacheConfig.COOL_START_TIME, System.currentTimeMillis()).commit();
+        editor.putLong(SpCacheConfig.COOL_START_TIME + BuildConfig.VERSION_CODE, System.currentTimeMillis()).commit();
         return true;
     }
 
@@ -1367,7 +1365,7 @@ public class PreferenceUtil {
      */
     public static boolean getCoolStartTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        long time = sharedPreferences.getLong(SpCacheConfig.COOL_START_TIME, 0);
+        long time = sharedPreferences.getLong(SpCacheConfig.COOL_START_TIME + BuildConfig.VERSION_CODE, 0);
         if (time == 0 || System.currentTimeMillis() - time > 10 * 60 * 1000)
             return true;
         return false;
