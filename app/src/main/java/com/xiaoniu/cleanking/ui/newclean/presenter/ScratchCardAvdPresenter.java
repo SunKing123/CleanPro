@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -42,8 +43,6 @@ public class ScratchCardAvdPresenter {
     private static boolean isOpenTwo;
     //翻倍广告开关
     private static boolean isOpenThree;
-    //激励视频是否点击
-    private boolean isVideoRequesting = false;
 
     private Activity activity;
     public int cardIndex;
@@ -125,9 +124,6 @@ public class ScratchCardAvdPresenter {
      * 点击翻倍按钮事件
      */
     private void handlerDoubleClick() {
-        if (isVideoRequesting) {
-            return;
-        }
         loadVideoAdv(getVideoAdvId(cardIndex));
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
 
@@ -163,7 +159,9 @@ public class ScratchCardAvdPresenter {
 
     //加载激励视屏广告
     private void loadVideoAdv(String advId) {
-        isVideoRequesting = true;
+        if(AndroidUtil.isFastDoubleBtnClick(4000)){
+              return;
+        }
         pointVideo();
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(advId).setActivity(activity)
@@ -200,7 +198,6 @@ public class ScratchCardAvdPresenter {
                 case ADV_FIRST_PREFIX:
                     break;
                 case ADV_VIDEO_PREFIX:
-                    isVideoRequesting = false;
                     handlerVideoAdvError();
                     break;
             }
@@ -252,7 +249,6 @@ public class ScratchCardAvdPresenter {
             super.onAdVideoComplete(adInfo);
             log("onAdVideoComplete()====" + resNamePrefix);
             videoPlayed = true;
-            isVideoRequesting = false;
         }
     }
 
