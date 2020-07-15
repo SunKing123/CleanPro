@@ -263,11 +263,21 @@ public class AndroidUtil {
     //防连续点击
     private static long lastClickTime;
 
-
+    //防连续点击
     public static boolean isFastDoubleClick() {
         long time = System.currentTimeMillis();
         long timeD = time - lastClickTime;
         if (0 < timeD && timeD < 800) {
+            return true;
+        }
+        lastClickTime = time;
+        return false;
+    }
+    //防连续点击
+    public static boolean isFastDoubleBtnClick(long durastime) {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        if (0 < timeD && timeD < durastime) {
             return true;
         }
         lastClickTime = time;

@@ -228,9 +228,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      */
     public void getAuditSwitch(AuditSwitch auditSwitch) {
         if (auditSwitch == null) {
-            //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）
-            SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "1");
-            MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "1");
+            //如果接口异常，可以正常看资讯  状态（0=隐藏，1=显示）；
+            //0715戚雯确认，接口异常默认审核状态；
+            SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
+            MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
         } else {
             SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, auditSwitch.getData());
             MmkvUtil.saveString(SpCacheConfig.AuditSwitch, auditSwitch.getData());
@@ -256,6 +257,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 获取过审开关失败
      */
     public void getAuditSwitchFail() {
+        //0715戚雯确认，接口异常默认审核状态；
+        SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
+        MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -344,8 +348,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      */
     public void getSwitchInfoListFail() {
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "1");
-            MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "1");
             PreferenceUtil.saveFirstOpenApp();
             jumpActivity();
         });
