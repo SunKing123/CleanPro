@@ -858,7 +858,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onElectricClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.SUPER_POWER_SAVING);
-        StatisticsUtils.trackClick(Points.MainHome.POWERSAVE_CLICK_CODE, Points.MainHome.POWERSAVE_CLICK_NAME, "home_page", "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.POWER_SAVE_CLICK_CODE, Points.MainHome.POWER_SAVE_CLICK_NAME, "home_page", "home_page");
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
@@ -918,7 +918,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onCleanWxClick() {
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
-        StatisticsUtils.trackClick(Points.MainHome.WXCLEAN_CLICK_CODE, Points.MainHome.WXCLEAN_CLICK_NAME, "home_page", "home_page");
+        StatisticsUtils.trackClick(Points.MainHome.WX_CLEAN_CLICK_CODE, Points.MainHome.WX_CLEAN_CLICK_NAME, "home_page", "home_page");
         if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;

@@ -433,7 +433,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 SPUtil.setLong(PhoneAccessActivity.this, SPUtil.TOTLE_CLEAR_CATH, 0);
                 totalSizes = Long.parseLong(NumberUtils.mathRandom(200 * 1024 * 1024, 2 * 1024 * 1024 * 1024));
             }
+        }
 
+        double kb=totalSizes/1024/1024;
+
+        if(kb<=1){
+            totalSizes=1024*1024*NumberUtils.mathRandomInt(1,20);
         }
         setCleanSize(totalSizes, true);
         this.mTotalSizesCleaned = totalSizes;

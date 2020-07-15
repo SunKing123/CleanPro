@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -39,7 +38,6 @@ import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
-import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -255,7 +253,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         StatisticsUtils.trackClick(Points.Tab.SCRAPING_CARD_CLICK_CODE, Points.Tab.SCRAPING_CARD_CLICK_NAME, "home_page", "home_page");
                         break;
                     case 3:
-                        StatisticsUtils.trackClick(Points.Tab.MY_CLICK_CODE, Points.Tab.MY_CLICK_NAME, "home_page", "home_page");
+                        StatisticsUtils.trackClick(Points.Tab.MINE_CLICK_CODE, Points.Tab.MINE_CLICK_NAME, "home_page", "home_page");
                         break;
                 }
             }
