@@ -254,7 +254,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         StatisticsUtils.trackClick(Points.Tab.SCRAPING_CARD_CLICK_CODE, Points.Tab.SCRAPING_CARD_CLICK_NAME, "home_page", "home_page");
                         break;
                     case 3:
-                        StatisticsUtils.trackClick(Points.Tab.MY_CLICK_CODE, Points.Tab.MY_CLICK_NAME, "home_page", "home_page");
+                        StatisticsUtils.trackClick(Points.Tab.MINE_CLICK_CODE, Points.Tab.MINE_CLICK_NAME, "home_page", "home_page");
                         break;
                 }
             }
@@ -273,22 +273,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         checkReadPermission();
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
-        //从服务器获取本地推送的配置信息
-        mPresenter.getLocalPushConfigFromServer();
+
         //启动本地推送服务的Service(仅针对非华为手机的设备启动，因为在非华为设备在保活进程没有做适配)
       /*  if (!RomUtils.checkIsHuaWeiRom()) {
             LogUtils.e("====非华为设备，启动推送Service");
             startService(new Intent(this, LocalPushService.class));
         }*/
         //上报设备信息
-        if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
-            getDeviceInfo();
+//        if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
+//            getDeviceInfo();
+//        }
 
-        }
-        //初始插屏广告开关
-        mPresenter.getScreenSwitch();
-        //弹窗信息接口
-        mPresenter.getPopupData();
         //获取定位权限
         mPresenter.requestPhoneStatePermission();
         AndroidUtil.haveLiuhai = NotchUtils.hasNotchScreen(this);
@@ -298,6 +293,18 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        }
         //游客登录
         mPresenter.visitorLogin();
+
+        AppLifecyclesImpl.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                //从服务器获取本地推送的配置信息
+                mPresenter.getLocalPushConfigFromServer();
+                //初始插屏广告开关
+                mPresenter.getScreenSwitch();
+                //弹窗信息接口
+                mPresenter.getPopupData();
+            }
+        },2000);
 
         mainFragment.setOnInteractiveClickListener(v -> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
@@ -313,6 +320,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 mBottomBar.setCurrentItem(3);
             }
         });
+
+
+
     }
 
 
@@ -322,8 +332,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        LogUtils.i("zzz-----" + hasFocus);
         if (hasFocus && isFirstCreate) {
             //检测版本更新
-            mPresenter.queryAppVersion(() -> {
-            });
+            mPresenter.queryAppVersion();
+
             isFirstCreate = false;
         }
         //fragment中传递Focus方法；

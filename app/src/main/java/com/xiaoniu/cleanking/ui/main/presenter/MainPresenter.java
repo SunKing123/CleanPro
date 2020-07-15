@@ -166,7 +166,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /**
      * 版本更新
      */
-    public void queryAppVersion(final OnCancelListener onCancelListener) {
+    public void queryAppVersion() {
         mModel.queryAppVersion(new Common4Subscriber<AppVersion>() {
 
             @Override
