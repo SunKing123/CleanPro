@@ -601,13 +601,13 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             }
         }
-        if (!getString(R.string.game_quicken).contains(mTitle) && !PreferenceUtil.isCleanGameUsed()) {
+       /* if (!getString(R.string.game_quicken).contains(mTitle) && !PreferenceUtil.isCleanGameUsed()) {
             if (mShowCount >= 3) return;
             mShowCount++;
             v_game.setVisibility(View.VISIBLE);
             if (mShowCount >= 3) return;
             line_game.setVisibility(View.VISIBLE);
-        }
+        }*/
         if (!getString(R.string.tool_phone_temperature_low).contains(mTitle) && !PreferenceUtil.isCleanCoolUsed()) {
             // 手机降温间隔时间至少3分钟 否则隐藏
             if (mShowCount >= 3) return;
@@ -669,9 +669,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 weChatClean();
                 break;
             case R.id.v_game:
-                functionName = "游戏加速";
+               /* functionName = "游戏加速";
                 functionPosition = "6";
-                gameClean();
+                gameClean();*/
                 break;
             case R.id.v_cool:
                 //手机降温
@@ -710,14 +710,14 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         startActivity(NowCleanActivity.class);
     }
 
-    /**
+   /* *//**
      * 游戏加速
-     */
+     *//*
     public void gameClean() {
         AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.ONKEY);
         startActivity(GameActivity.class);
-    }
+    }*/
 
     /**
      * 一键加速
@@ -1158,63 +1158,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 super.onAdClose(adInfo, templateView);
             }
         });
-
-       /* AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadNativeTemplateAd(this, PositionId.AD_CLEAN_FINISH_POSITION_FOUR, Float.valueOf(DisplayUtil.px2dp(NewCleanFinishActivity.this, DisplayUtil.getScreenWidth(NewCleanFinishActivity.this)) - 28), new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (info == null) {
-                    Log.d(TAG, "DEMO>>>adSuccess1， AdInfo is empty");
-                } else {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
-                    Log.d(TAG, "DEMO>>>adSuccess1， " + info.toString());
-                    if (info.getAdView() != null && null != ad_container_pos01) {
-                        View adView = info.getAdView();
-                        ad_container_pos01.removeAllViews();
-                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(0, (int) DeviceUtils.dpToPixel(NewCleanFinishActivity.this, 12), 0, (int) DeviceUtils.dpToPixel(NewCleanFinishActivity.this, 12));
-                        adView.setLayoutParams(params);
-                        adView.setBackground(getResources().getDrawable(R.drawable.bg_btn_white12));
-                        ad_container_pos01.addView(adView);
-                    }
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                if (info == null) {
-                    Log.d(TAG, "DEMO>>>adExposed1， AdInfo is empty");
-                } else {
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-                    Log.d(TAG, "DEMO>>>adExposed1， ");
-                }
-
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "adClicked1");
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-                initPos01Ad();
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "adError 111： " + errorMsg);
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
-                }
-                //打底样式
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showBottomAd();
-                    }
-                });
-
-            }
-        });*/
     }
 
 
@@ -1275,192 +1218,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
-//   private int mBottomAdShowCount = 0;
-
-/**
- * 打底广告
- * <p>
- * 打底广告
- * <p>
- * 打底广告
- */
-   /* private void showBottomAd() {
-        if (null != AppHolder.getInstance().getBottomAdList() &&
-                AppHolder.getInstance().getBottomAdList().size() > 0) {
-            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
-                if (dataBean.getSwitcherKey().equals(PositionId.KEY_CLEAN_ALL)
-                        && dataBean.getAdvertPosition().equals(PositionId.DRAW_ONE_CODE)) {
-                    if (dataBean.getShowType() == 1) { //循环
-                        mBottomAdShowCount = PreferenceUtil.getFinishAdOneCount();
-                        if (mBottomAdShowCount >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
-                            PreferenceUtil.saveFinishAdOneCount(0);
-                        } else {
-                            PreferenceUtil.saveFinishAdOneCount(PreferenceUtil.getFinishAdOneCount() + 1);
-                        }
-                    } else { //随机
-                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
-                            mBottomAdShowCount = 0;
-                        } else {
-                            mBottomAdShowCount = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
-                        }
-                    }
-                    ad_container_pos01.setVisibility(View.GONE);
-                    error_ad_iv1.setVisibility(View.VISIBLE);
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
-                    GlideUtils.loadImage(this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getImgUrl(), error_ad_iv1);
-                    error_ad_iv1.setOnClickListener(v -> {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
-                        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
-                        startActivityForResult(new Intent(this, AgentWebViewActivity.class)
-                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount).getLinkUrl())
-                                .putExtra(ExtraConstant.WEB_FROM, "FinishActivity"), 100);
-                    });
-                }
-            }
-        }
-    }
-
-    public void initAd02() {
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "2", " ", " ", "all_ad_request", sourcePage, currentPage);
-        AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, PositionId.AD_CLEAN_FINISH_POSITION_TWO, new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Log.d(TAG, "DEMO>>>adSuccess2， " + info.toString());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "success", sourcePage, currentPage);
-                    if (info.getAdView() != null) {
-                        ad_container_pos02.removeAllViews();
-                        ad_container_pos02.addView(info.getAdView());
-                    }
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                Log.d(TAG, "adExposed");
-                if (null == info) return;
-                Log.d(TAG, "DEMO>>>adExposed2， ");
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "adClicked2");
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "2", info.getAdId(), info.getAdSource(), sourcePage, currentPage, info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "adError2222");
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "2", info.getAdId(), info.getAdSource(), "fail", sourcePage, currentPage);
-                }
-                showBottomAd2();
-            }
-        });
-    }
-
-    private int mBottomAdShowCount2 = 0;
-
-    */
-
-    /**
-     * 打底广告
-     *//*
-    private void showBottomAd2() {
-        if (null != AppHolder.getInstance().getBottomAdList() &&
-                AppHolder.getInstance().getBottomAdList().size() > 0) {
-            for (BottoomAdList.DataBean dataBean : AppHolder.getInstance().getBottomAdList()) {
-                if (dataBean.getSwitcherKey().equals(PositionId.KEY_CLEAN_ALL)
-                        && dataBean.getAdvertPosition().equals(PositionId.DRAW_TWO_CODE)) {
-                    if (dataBean.getShowType() == 1) { //循环
-                        mBottomAdShowCount2 = PreferenceUtil.getFinishAdTwoCount();
-                        if (mBottomAdShowCount2 >= dataBean.getAdvBottomPicsDTOS().size() - 1) {
-                            PreferenceUtil.saveFinishAdTwoCount(0);
-                        } else {
-                            PreferenceUtil.saveFinishAdTwoCount(PreferenceUtil.getFinishAdTwoCount() + 1);
-                        }
-                    } else { //随机
-                        if (dataBean.getAdvBottomPicsDTOS().size() == 1) {
-                            mBottomAdShowCount2 = 0;
-                        } else {
-                            mBottomAdShowCount2 = new Random().nextInt(dataBean.getAdvBottomPicsDTOS().size() - 1);
-                        }
-                    }
-                    ad_container_pos02.setVisibility(View.GONE);
-                    error_ad_iv2.setVisibility(View.VISIBLE);
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "2", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
-                    GlideUtils.loadImage(this, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount2).getImgUrl(), error_ad_iv2);
-                    error_ad_iv2.setOnClickListener(v -> {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "2", " ", "自定义广告", sourcePage, currentPage, dataBean.getSwitcherName());
-                        AppHolder.getInstance().setCleanFinishSourcePageId(currentPage);
-                        startActivityForResult(new Intent(this, AgentWebViewActivity.class)
-                                .putExtra(ExtraConstant.WEB_URL, dataBean.getAdvBottomPicsDTOS().get(mBottomAdShowCount2).getLinkUrl())
-                                .putExtra(ExtraConstant.WEB_FROM, "FinishActivity"), 200);
-                    });
-                }
-            }
-        }
-    }
-
-
-    private void initBottomAdv() {
-        boolean isOpen = false;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_ONE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isOpen = switchInfoList.isOpen();
-                    break;
-                }
-            }
-        }
-        if (!isOpen) return;
-        if (null == advContentView) return;
-        StatisticsUtils.customADRequest("ad_request", "广告请求", "3", "", "", "all_ad_request", "success_page_bottom_ad", "success_page_bottom_ad");
-        AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, PositionId.DRAW_FINISH_CODE
-                , new AdListener() {
-                    @Override
-                    public void adSuccess(AdInfo info) {
-                        if (null != info) {
-                            StatisticsUtils.customADRequest("ad_request", "广告请求", "3", info.getAdId(), info.getAdSource(), "success", "success_page_bottom_ad", "success_page_bottom_ad");
-                            if (null != advContentView && null != info.getAdView()) {
-                                advContentView.setVisibility(VISIBLE);
-                                advContentView.removeAllViews();
-                                advContentView.addView(info.getAdView());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void adExposed(AdInfo info) {
-                        if (null == info) return;
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "3", info.getAdId(), info.getAdSource(), "success_page_bottom_ad", "success_page_bottom_ad", info.getAdTitle());
-                    }
-
-                    @Override
-                    public void adClicked(AdInfo info) {
-                        if (null == info) return;
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "3", info.getAdId(), info.getAdSource(), "success_page_bottom_ad", "success_page_bottom_ad", info.getAdTitle());
-
-                    }
-
-                    @Override
-                    public void adClose(AdInfo info) {
-                        if (null == info) return;
-                        advContentView.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void adError(AdInfo info, int errorCode, String errorMsg) {
-                        if (null == info) return;
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "3", info.getAdId(), info.getAdSource(), "fail", "success_page_bottom_ad", "success_page_bottom_ad");
-                    }
-                });
-    }*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

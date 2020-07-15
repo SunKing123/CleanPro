@@ -287,7 +287,7 @@ public class DebugActivity extends BaseActivity {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_02);
-        context.startActivity(screenIntent);
+//        context.startActivity(screenIntent);
     }
 
 
