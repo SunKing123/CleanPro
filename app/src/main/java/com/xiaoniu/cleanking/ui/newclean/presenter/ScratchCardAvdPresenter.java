@@ -356,7 +356,10 @@ public class ScratchCardAvdPresenter {
             return;
         }
         AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(posId).setActivity(activity).build();
+                .setAdId(posId)
+                .setActivity(activity)
+                .setViewWidthOffset(45)
+                .build();
         MidasRequesCenter.preLoad(params);
     }
 }
