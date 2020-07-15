@@ -158,7 +158,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop" />
 
-
             <LinearLayout
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"

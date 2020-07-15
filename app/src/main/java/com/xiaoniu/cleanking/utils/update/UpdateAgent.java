@@ -420,7 +420,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
          */
         @Override
         public void onFinish() {
-            if (mDialog != null) {
+            if (mDialog != null&&mDialog.isShowing()) {
                 mDialog.dismiss();
                 mDialog = null;
             }
