@@ -809,7 +809,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     //广告预加载
     public void adPrevData(String posId){
         AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(posId).setActivity(mView.getActivity()).build();
+                .setAdId(posId).setActivity(mView.getActivity()).setViewWidthOffset(45).build();
         MidasRequesCenter.preLoad(params);
     }
 
