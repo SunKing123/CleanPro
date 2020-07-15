@@ -566,7 +566,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     //显示内部插屏广告
     public void showInsideScreenDialog(String appID) {
-        if (mActivity == null || TextUtils.isEmpty(appID) || AndroidUtil.isFastDoubleBtnClick(3000)) {
+        if (mActivity == null || TextUtils.isEmpty(appID)) {
             return;
         }
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");

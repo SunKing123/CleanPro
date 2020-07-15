@@ -23,8 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -39,7 +39,6 @@ import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
-import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -417,7 +416,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             StatisticsUtils.customTrackEvent("ad_request_sdk_5", "功能完成页广告位5发起请求", "", "success_page");
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
             if (configBean != null && configBean.isOpen()) {
-                mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+                AppLifecyclesImpl.postDelay(() -> {
+                    mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+                }, 1000);
+
             }
         }
         parsePushData(intent);
@@ -716,7 +718,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (event.getAction() == HotStartAction.RED_PACKET) {
             startActivity(new Intent(this, RedPacketHotActivity.class));
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
-            mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+            AppLifecyclesImpl.postDelay(() -> {
+                mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+            }, 1000);
         }
     }
 
