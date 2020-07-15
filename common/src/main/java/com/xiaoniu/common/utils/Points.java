@@ -58,8 +58,6 @@ public interface Points {
         String SUCCESS_RETURN_CLICK_NAME = "刮刮卡翻倍金币领取完成页返回";
         String SUCCESS_AD_REQUEST_SDK_NAME = "刮刮卡翻倍金币领取完成页广告发起请求";
         String SUCCESS_NUMBER_OF_GOLD_NAME = "刮刮卡翻倍金币领取完成页金币发放数";
-
-
     }
 
     interface FunctionGoldCoin {
@@ -95,11 +93,11 @@ public interface Points {
         String VIRUS_KILLING_CLICK_CODE = "virus_killing_click";
         String VIRUS_KILLING_CLICK_NAME = "用户在首页点击【病毒查杀】按钮";
 
-        String POWERSAVE_CLICK_CODE = "powersave_click";
-        String POWERSAVE_CLICK_NAME = "用户在首页点击【超强省电】按钮";
+        String POWER_SAVE_CLICK_CODE = "powersave_click";
+        String POWER_SAVE_CLICK_NAME = "用户在首页点击【超强省电】按钮";
 
-        String WXCLEAN_CLICK_CODE = "wxclean_click";
-        String WXCLEAN_CLICK_NAME = "用户在首页点击【微信专清】按钮";
+        String WX_CLEAN_CLICK_CODE = "wxclean_click";
+        String WX_CLEAN_CLICK_NAME = "用户在首页点击【微信专清】按钮";
 
         String COOLING_CLICK_CODE = "cooling_click";
         String COOLING_CLICK_NAME = "用户在首页点击【手机降温】按钮";
@@ -117,7 +115,6 @@ public interface Points {
         String SCRAPING_BUOY_CLICK_NAME="首页刮刮卡浮标点击";
     }
 
-
     interface Tab{
         String CLEAN_CLICK_CODE="tab_clean_click";
         String CLEAN_CLICK_NAME="底部tab栏清理点击";
@@ -128,8 +125,8 @@ public interface Points {
         String SCRAPING_CARD_CLICK_CODE="tab_scraping_card_click";
         String SCRAPING_CARD_CLICK_NAME="底部tab栏刮刮卡点击";
 
-        String MY_CLICK_CODE="tab_my_click";
-        String MY_CLICK_NAME="底部tab栏我的点击";
+        String MINE_CLICK_CODE ="tab_my_click";
+        String MINE_CLICK_NAME ="底部tab栏我的点击";
     }
 
 }

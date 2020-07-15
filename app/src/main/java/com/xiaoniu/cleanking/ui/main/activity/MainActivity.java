@@ -254,7 +254,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         StatisticsUtils.trackClick(Points.Tab.SCRAPING_CARD_CLICK_CODE, Points.Tab.SCRAPING_CARD_CLICK_NAME, "home_page", "home_page");
                         break;
                     case 3:
-                        StatisticsUtils.trackClick(Points.Tab.MY_CLICK_CODE, Points.Tab.MY_CLICK_NAME, "home_page", "home_page");
+                        StatisticsUtils.trackClick(Points.Tab.MINE_CLICK_CODE, Points.Tab.MINE_CLICK_NAME, "home_page", "home_page");
                         break;
                 }
             }
