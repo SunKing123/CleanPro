@@ -158,7 +158,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop" />
 
-
             <LinearLayout
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
@@ -181,12 +180,12 @@
     <com.xiaoniu.cleanking.ui.view.HomeInteractiveView
         android:id="@+id/image_interactive"
         android:layout_width="116dp"
-        android:layout_height="45dp"
+        android:layout_height="52dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp"
-        android:paddingRight="-10dp"
         android:src="@mipmap/icon_main_right_ad"
+        android:scaleType="fitXY"
         android:visibility="gone" />
 
 </com.xiaoniu.cleanking.ui.main.widget.MyRelativeLayout>
