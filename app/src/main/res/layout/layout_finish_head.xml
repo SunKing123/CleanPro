@@ -77,7 +77,8 @@
         android:layout_marginLeft="@dimen/dimen_12dp"
         android:layout_marginTop="-60dp"
         android:layout_marginRight="@dimen/dimen_12dp"
-        android:background="@drawable/ad_container_bg_white"></FrameLayout>
+        android:padding="6dp"
+        android:background="@drawable/ad_container_bg_white"/>
 
     <ImageView
         android:id="@+id/error_ad_iv1"

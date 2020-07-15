@@ -320,7 +320,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                 @Override
                 public void onAdClose(AdInfo adInfo, boolean isComplete) {
                     super.onAdClose(adInfo, isComplete);
-                    StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop-up_window_incentive_video_page", getStatisticsJson());
+                    StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop_up_window_incentive_video_page", getStatisticsJson());
                     if (isComplete) {
                         //播放完成的话去翻倍
                         addDoubleGoldCoin(bubbleCollected);

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -122,6 +123,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     TextView tvWithDraw;
     @BindView(R.id.tv_coin_num)
     TextView tvCoinNum;
+    @BindView(R.id.image_home_coin)
+    ImageView imageHomeCoin;
 
     @BindView(R.id.clear_card_video)
     ClearCardView clearVideoLayout;
@@ -271,7 +274,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         clearSoundLayout.setClearItemContent("清除过期音频文件");
         clearSoundLayout.setClearItemSubContent("释放更多可用空间");
         clearSoundLayout.setOnClickListener(view -> {
-            StatisticsUtils.trackClick("audio_file_Click", "用户在首页点击音频文件", "home_page", "home_page");
+            StatisticsUtils.trackClick("audio_file_click", "用户在首页点击音频文件", "home_page", "home_page");
             //跳转到音乐清理
             startActivity(new Intent(getActivity(), CleanMusicManageActivity.class));
         });
@@ -337,7 +340,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 onWithDrawListener.onClick(v);
         });
     }
-
 
     /*
      *********************************************************************************************************************************************************
@@ -526,9 +528,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppHolder.getInstance().getAuditSwitch()) {
             tvCoinNum.setVisibility(View.GONE);
             tvWithDraw.setVisibility(View.GONE);
+            imageHomeCoin.setVisibility(View.GONE);
         } else if (event != null && event.infoBean != null) {
             tvCoinNum.setVisibility(View.VISIBLE);
             tvWithDraw.setVisibility(View.VISIBLE);
+            imageHomeCoin.setVisibility(View.VISIBLE);
             tvCoinNum.setText(String.valueOf(event.infoBean.getGold()));
         }
     }
@@ -541,6 +545,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case EXIT_SUCCESS:
                 tvCoinNum.setVisibility(View.GONE);
                 tvWithDraw.setVisibility(View.GONE);
+                imageHomeCoin.setVisibility(View.GONE);
                 break;
             //登录成功
             case LOGIN_SUCCESS:
@@ -653,16 +658,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case R.id.iv_center:
                 StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
                 if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
-                    ToastUtils.showShort("清理已间隔5分钟");
                     if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
                         //读取扫描缓存
-                        ToastUtils.showShort("跳转清理页面");
                         startActivity(NowCleanActivity.class);
                     } else {    //scanState ==0: 扫描中
                         checkStoragePermission();
                     }
                 } else {
-                    ToastUtils.showShort("清理未间隔5分钟");
                     String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
                     CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                     if (null != countEntity && getActivity() != null && this.isAdded()) {
@@ -674,12 +676,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
                         intent.putExtras(bundle);
                         startActivity(intent);
-                        ToastUtils.showShort("跳转NewCleanFinishActivity.class");
                     } else {
                         //判断扫描缓存；
                         if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
                             //读取扫描缓存
-                            ToastUtils.showShort("跳转NowCleanActivity.class");
                             startActivity(NowCleanActivity.class);
                         } else {                //scanState ==0: 扫描中
                             checkStoragePermission();
@@ -701,22 +701,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * 检查文件存贮权限
      */
     private void checkStoragePermission() {
-        ToastUtils.showShort("清理checkStoragePermission()");
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         Disposable disposable = rxPermissions.request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
                         mPresenter.stopScanning();
-                        ToastUtils.showShort("跳转NowCleanActivity.class");
                         startActivity(NowCleanActivity.class);
                     } else {
                         if (hasPermissionDeniedForever()) {  //点击拒绝
-                            ToastUtils.showShort("跳转NowCleanActivity.class");
                             startActivity(NowCleanActivity.class);
                         } else {                            //点击永久拒绝
                             showPermissionDialog();
-                            ToastUtils.showShort("弹框提醒打开权限");
                         }
                     }
                 });
