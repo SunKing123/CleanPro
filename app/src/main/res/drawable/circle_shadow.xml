@@ -3,12 +3,12 @@
 <item>
     <shape android:shape="oval">
         <padding
-            android:bottom="1.4dp"
-            android:left="1.4dp"
-            android:right="1.4dp"
-            android:top="1.4dp" />
+            android:bottom="1.6dp"
+            android:left="1.6dp"
+            android:right="1.6dp"
+            android:top="1.6dp" />
 
-        <solid android:color="#00444444" />
+        <solid android:color="#00666666" />
 
         <corners android:radius="3dp" />
     </shape>
@@ -16,25 +16,12 @@
 <item>
 <shape android:shape="oval">
     <padding
-        android:bottom="1.4dp"
-        android:left="1.4dp"
-        android:right="1.4dp"
-        android:top="1.4dp" />
+        android:bottom="1.6dp"
+        android:left="1.6dp"
+        android:right="1.6dp"
+        android:top="1.6dp" />
 
-    <solid android:color="#10444444" />
-
-    <corners android:radius="3dp" />
-</shape>
-</item>
-<item>
-<shape android:shape="oval">
-    <padding
-        android:bottom="1.4dp"
-        android:left="1.4dp"
-        android:right="1.4dp"
-        android:top="1.4dp" />
-
-    <solid android:color="#20444444" />
+    <solid android:color="#10666666" />
 
     <corners android:radius="3dp" />
 </shape>
@@ -42,12 +29,12 @@
 <item>
 <shape android:shape="oval">
     <padding
-        android:bottom="1.4dp"
-        android:left="1.4dp"
-        android:right="1.4dp"
-        android:top="1.4dp" />
+        android:bottom="1.6dp"
+        android:left="1.6dp"
+        android:right="1.6dp"
+        android:top="1.6dp" />
 
-    <solid android:color="#30444444" />
+    <solid android:color="#20666666" />
 
     <corners android:radius="3dp" />
 </shape>
@@ -55,12 +42,25 @@
 <item>
 <shape android:shape="oval">
     <padding
-        android:bottom="1.4dp"
-        android:left="1.4dp"
-        android:right="1.4dp"
-        android:top="1.4dp" />
+        android:bottom="1.6dp"
+        android:left="1.6dp"
+        android:right="1.6dp"
+        android:top="1.6dp" />
 
-    <solid android:color="#50444444" />
+    <solid android:color="#30666666" />
+
+    <corners android:radius="3dp" />
+</shape>
+</item>
+<item>
+<shape android:shape="oval">
+    <padding
+        android:bottom="1.6dp"
+        android:left="1.6dp"
+        android:right="1.6dp"
+        android:top="1.6dp" />
+
+    <solid android:color="#50666666" />
 
     <corners android:radius="3dp" />
 </shape>

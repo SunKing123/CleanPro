@@ -553,11 +553,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if (position == TOOL) {
         }
         FragmentTransaction ft = mManager.beginTransaction();
-        ft.show(mFragments.get(position));
-        if (prePosition != -1) {
-            ft.hide(mFragments.get(prePosition));
+        if (position < mFragments.size()) {
+            ft.show(mFragments.get(position));
+            if (prePosition != -1) {
+                ft.hide(mFragments.get(prePosition));
+            }
+            ft.commitAllowingStateLoss();
         }
-        ft.commitAllowingStateLoss();
     }
 
     @Override
