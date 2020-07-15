@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.ImgBean;
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.QuestionReportLoadingDialogFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.QuestionReportPresenter;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -132,18 +133,18 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
             if (null != mTxtContent && null != mTxtLength) {
                 int length = mTxtContent.getText().toString().length();
 
-                    if (length > 200) {
-                        mTxtContent.removeTextChangedListener(textWatcherContent);
-                        SpannableString spannableString = new SpannableString(content);
-                        //设置字体背景色
-                        spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF3838")), 200
-                                , mTxtContent.length() , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        mTxtContent.getText().clear();
-                        mTxtContent.append(spannableString);
-                        mTxtContent.setSelection(content.length());
+                if (length > 200) {
+                    mTxtContent.removeTextChangedListener(textWatcherContent);
+                    SpannableString spannableString = new SpannableString(content);
+                    //设置字体背景色
+                    spannableString.setSpan(new ForegroundColorSpan(Color.parseColor("#FF3838")), 200
+                            , mTxtContent.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    mTxtContent.getText().clear();
+                    mTxtContent.append(spannableString);
+                    mTxtContent.setSelection(content.length());
 
-                        mTxtContent.addTextChangedListener(textWatcherContent);
-                    }
+                    mTxtContent.addTextChangedListener(textWatcherContent);
+                }
 
                 mTxtLength.setText(String.format("%s/200", String.valueOf(length)));
 
@@ -159,7 +160,6 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
         }
     };
-
 
 
     TextWatcher textWatcherContact = new TextWatcher() {
@@ -212,25 +212,29 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
         }
     }
 
-    private  Toast mToastContactHint;
+    private Toast mToastContactHint;
+
     @OnClick({R.id.img_back, R.id.btn_submit})
     public void onClickView(View view) {
+        if (AndroidUtil.isFastDoubleClick()) {
+            return;
+        }
         int ids = view.getId();
         if (ids == R.id.img_back) {
             finish();
         } else if (ids == R.id.btn_submit) {// 提交反馈
             String content = mTxtContent.getText().toString();
             String contact = mTxtContact.getText().toString();
-            if(TextUtils.isEmpty(contact) || contact.length()<5 || contact.length()>15){
-                if(mToastContactHint==null){
-                    mToastContactHint=Toast.makeText(mContext,"填写的联系方式有误",Toast.LENGTH_SHORT);
-                    mToastContactHint.setGravity(Gravity.CENTER,0,0);
-                }else {
+            if (TextUtils.isEmpty(contact) || contact.length() < 5 || contact.length() > 15) {
+                if (mToastContactHint == null) {
+                    mToastContactHint = Toast.makeText(mContext, "填写的联系方式有误", Toast.LENGTH_SHORT);
+                    mToastContactHint.setGravity(Gravity.CENTER, 0, 0);
+                } else {
                     mToastContactHint.show();
                 }
                 return;
             }
-            StatisticsUtils.trackClick("Submission_click","\"提交\"点击","personal_center_page","question_feedback_page");
+            StatisticsUtils.trackClick("Submission_click", "\"提交\"点击", "personal_center_page", "question_feedback_page");
 
             mLoading.show(getSupportFragmentManager(), "");
 
@@ -376,7 +380,7 @@ public class QuestionReportActivity extends BaseActivity<QuestionReportPresenter
 
     @Override
     public void onSelectImg() {
-        StatisticsUtils.trackClick("Upload_photos_click","\"上传照片\"点击","personal_center_page","question_feedback_page");
+        StatisticsUtils.trackClick("Upload_photos_click", "\"上传照片\"点击", "personal_center_page", "question_feedback_page");
 
         //跳转到照片选择页面
         startActivityForResult(new Intent(mContext, SimplePhotoActivity.class), CODE_IMG_SELECT);

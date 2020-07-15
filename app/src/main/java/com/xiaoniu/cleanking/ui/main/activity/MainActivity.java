@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
@@ -272,22 +273,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         checkReadPermission();
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
-        //从服务器获取本地推送的配置信息
-        mPresenter.getLocalPushConfigFromServer();
+
         //启动本地推送服务的Service(仅针对非华为手机的设备启动，因为在非华为设备在保活进程没有做适配)
       /*  if (!RomUtils.checkIsHuaWeiRom()) {
             LogUtils.e("====非华为设备，启动推送Service");
             startService(new Intent(this, LocalPushService.class));
         }*/
         //上报设备信息
-        if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
-            getDeviceInfo();
+//        if (!PreferenceUtil.getIsPushDeviceInfo()) {//第一次启动上报
+//            getDeviceInfo();
+//        }
 
-        }
-        //初始插屏广告开关
-        mPresenter.getScreenSwitch();
-        //弹窗信息接口
-        mPresenter.getPopupData();
         //获取定位权限
         mPresenter.requestPhoneStatePermission();
         AndroidUtil.haveLiuhai = NotchUtils.hasNotchScreen(this);
@@ -297,6 +293,18 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        }
         //游客登录
         mPresenter.visitorLogin();
+
+        AppLifecyclesImpl.postDelay(new Runnable() {
+            @Override
+            public void run() {
+                //从服务器获取本地推送的配置信息
+                mPresenter.getLocalPushConfigFromServer();
+                //初始插屏广告开关
+                mPresenter.getScreenSwitch();
+                //弹窗信息接口
+                mPresenter.getPopupData();
+            }
+        },2000);
 
         mainFragment.setOnInteractiveClickListener(v -> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
@@ -312,6 +320,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 mBottomBar.setCurrentItem(3);
             }
         });
+
+
+
     }
 
 
@@ -321,8 +332,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        LogUtils.i("zzz-----" + hasFocus);
         if (hasFocus && isFirstCreate) {
             //检测版本更新
-            mPresenter.queryAppVersion(() -> {
-            });
+            mPresenter.queryAppVersion();
+
             isFirstCreate = false;
         }
         //fragment中传递Focus方法；
@@ -415,7 +426,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             StatisticsUtils.customTrackEvent("ad_request_sdk_5", "功能完成页广告位5发起请求", "", "success_page");
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
             if (configBean != null && configBean.isOpen()) {
-                mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+                AppLifecyclesImpl.postDelay(() -> {
+                    mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+                }, 1000);
+
             }
         }
         parsePushData(intent);
@@ -549,11 +563,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if (position == TOOL) {
         }
         FragmentTransaction ft = mManager.beginTransaction();
-        ft.show(mFragments.get(position));
-        if (prePosition != -1) {
-            ft.hide(mFragments.get(prePosition));
+        if (position < mFragments.size()) {
+            ft.show(mFragments.get(position));
+            if (prePosition != -1) {
+                ft.hide(mFragments.get(prePosition));
+            }
+            ft.commitAllowingStateLoss();
         }
-        ft.commitAllowingStateLoss();
     }
 
     @Override
@@ -714,7 +730,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (event.getAction() == HotStartAction.RED_PACKET) {
             startActivity(new Intent(this, RedPacketHotActivity.class));
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
-            mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+            AppLifecyclesImpl.postDelay(() -> {
+                mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+            }, 1000);
         }
     }
 

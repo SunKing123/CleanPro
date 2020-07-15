@@ -28,6 +28,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -165,7 +166,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     /**
      * 版本更新
      */
-    public void queryAppVersion(final OnCancelListener onCancelListener) {
+    public void queryAppVersion() {
         mModel.queryAppVersion(new Common4Subscriber<AppVersion>() {
 
             @Override
@@ -181,7 +182,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             @Override
             public void showExtraOp(String message) {
-                checkAdviceOrRedPacketDialog();
+//                checkAdviceOrRedPacketDialog();
             }
 
             @Override
@@ -566,9 +567,11 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     //显示内部插屏广告
     public void showInsideScreenDialog(String appID) {
-        if (mActivity == null || TextUtils.isEmpty(appID) || AndroidUtil.isFastDoubleBtnClick(3000)) {
+        if (mActivity == null || TextUtils.isEmpty(appID)) {
             return;
         }
+        if(!mActivity.hasWindowFocus())
+            return;
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
         AdRequestParams params = new AdRequestParams.Builder()
                 .setActivity(mActivity).setAdId(appID).build();
@@ -586,7 +589,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 判断广告弹窗和红包弹窗
      */
     public void checkAdviceOrRedPacketDialog() {
-        if (!mView.hasWindowFocus())
+        if(!mActivity.hasWindowFocus())
             return;
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
@@ -1076,19 +1079,24 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void initShuMeiSDK() {
         // 如果 AndroidManifest.xml 中没有指定主进程名字，主进程名默认与 packagename 相同
         if (AppApplication.getInstance().getPackageName().equals(SystemUtils.getProcessName(AppApplication.getInstance()))) {
-            SmAntiFraud.SmOption option = new SmAntiFraud.SmOption();
+            AppLifecyclesImpl.postDelay(new Runnable() {
+                @Override
+                public void run() {
+                    SmAntiFraud.SmOption option = new SmAntiFraud.SmOption();
+                    //1.通用配置项
+                    option.setOrganization(Constant.SMANTIFRAUD_ORGANIZATION); //必填，组织标识，邮件中 organization 项
+                    option.setAppId(Constant.APPLICATION_IDENTIFICATION); //必填，应用标识，登录数美后台应用管理查看
+                    option.setPublicKey(Constant.SMANTIFRAUD_PUBLIC_KEY); //必填，加密 KEY，邮件中 android_public_key 附件内容
+                    option.setAinfoKey(Constant.SMANTIFRAUD_AINFOKEY); //必填，加密 KEY，邮件中 Android ainfo key 项
+                    option.setChannel(ChannelUtil.getChannel());//渠道代码
+                    //2.连接海外机房特殊配置项，仅供设备数据上报海外机房客户使用
+                    // option.setArea(SmAntiFraud.AREA_XJP); //连接新加坡机房客户使用此选项
+                    // option.setArea(SmAntiFraud.AREA_FJNY); //连接美国机房客户使用此选项
+                    //3.SDK 初始化
+                    SmAntiFraud.create(AppApplication.getInstance(), option);
+                }
+            },2000);
 
-            //1.通用配置项
-            option.setOrganization(Constant.SMANTIFRAUD_ORGANIZATION); //必填，组织标识，邮件中 organization 项
-            option.setAppId(Constant.APPLICATION_IDENTIFICATION); //必填，应用标识，登录数美后台应用管理查看
-            option.setPublicKey(Constant.SMANTIFRAUD_PUBLIC_KEY); //必填，加密 KEY，邮件中 android_public_key 附件内容
-            option.setAinfoKey(Constant.SMANTIFRAUD_AINFOKEY); //必填，加密 KEY，邮件中 Android ainfo key 项
-            option.setChannel(ChannelUtil.getChannel());//渠道代码
-            //2.连接海外机房特殊配置项，仅供设备数据上报海外机房客户使用
-            // option.setArea(SmAntiFraud.AREA_XJP); //连接新加坡机房客户使用此选项
-            // option.setArea(SmAntiFraud.AREA_FJNY); //连接美国机房客户使用此选项
-            //3.SDK 初始化
-            SmAntiFraud.create(AppApplication.getInstance(), option);
 
         }
     }
