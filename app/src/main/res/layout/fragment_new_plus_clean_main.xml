@@ -101,7 +101,7 @@
                     android:id="@+id/view_lottie_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="300dp" />
+                    android:minHeight="300dp"/>
 
             </RelativeLayout>
 
@@ -119,7 +119,6 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone" />
-
 
             <FrameLayout
                 android:layout_width="match_parent"
