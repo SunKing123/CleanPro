@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      **/
     private static final String KEY_EXTRAS = "n_extras";
 
-    private boolean isInsert = true;
+    private boolean isInsert = false;
 
     public void setInsert(boolean insert){
         isInsert = insert;
