@@ -136,6 +136,7 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
 
     //全局跳转全屏插屏页面
     private void startFullInsertPage(Context context,String adStyle) {
+
         if(ActivityCollector.isActivityExist(FullPopLayerActivity.class))
             return;
         Intent screenIntent = new Intent();
@@ -145,7 +146,8 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         screenIntent.putExtra("ad_style",adStyle);
-        context.startActivity(screenIntent);
+
+//        context.startActivity(screenIntent);
     }
 
 

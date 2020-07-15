@@ -604,7 +604,7 @@ public final class LocalService extends Service {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         screenIntent.putExtra("ad_style", adStyle);
-        context.startActivity(screenIntent);
+//        context.startActivity(screenIntent);
     }
 
     //    private String oldPackageName = "";
@@ -798,7 +798,7 @@ public final class LocalService extends Service {
 //            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
             screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_04);
-            context.startActivity(screenIntent);
+//            context.startActivity(screenIntent);
         } else {
 
         }

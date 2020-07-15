@@ -37,7 +37,6 @@ import com.baidu.mobstat.StatService;
 import com.bun.miitmdid.core.JLibrary;
 import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
 import com.chuanglan.shanyan_sdk.listener.InitListener;
-import com.comm.jksdk.GeekAdSdk;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.geek.push.GeekPush;
 import com.geek.push.core.PushConstants;
@@ -178,7 +177,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
 //        TTAdManagerHolder.init(application);
 //        LogUtils.i("GeekSdk--"+SystemUtils.getProcessName(application));
-        initAdSdk(application);
+//        initAdSdk(application);
         initJsBridge();
         homeCatch(application);
         /* if (RomUtils.checkIsHuaWeiRom()) {
@@ -247,17 +246,17 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
     //商业sdk初始化
-    public void initAdSdk(Application application) {
-        String processName = SystemUtils.getProcessName(application);
-        if (!processName.equals(application.getPackageName()))
-            return;
-        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, Constant.YLH_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
-        //广告sdk_Bid只设置一次
-        if (GeekAdSdk.getBid() < 0) {
-            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));
-        }
-        ContextUtils.initAdBid(GeekAdSdk.getBid());
-    }
+//    public void initAdSdk(Application application) {
+//        String processName = SystemUtils.getProcessName(application);
+//        if (!processName.equals(application.getPackageName()))
+//            return;
+//        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, Constant.YLH_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
+//        //广告sdk_Bid只设置一次
+//        if (GeekAdSdk.getBid() < 0) {
+//            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));
+//        }
+//        ContextUtils.initAdBid(GeekAdSdk.getBid());
+//    }
 
 
     /**
@@ -556,7 +555,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 if (SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {//当前主进程
                     MmkvUtil.saveInt("isback", 0);
                     LogUtils.i("-cgName-----进入前台");
-//                    GeekAdSdk.refAdConfig(application);
+
                 } else {//非当前主进程
                     return;
                 }

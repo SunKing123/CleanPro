@@ -12,15 +12,10 @@ import android.widget.FrameLayout;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdListener;
-import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
@@ -81,38 +76,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
         });
 
-       /* AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(activity, PositionId.AD_RETAIN_THE_POP_UP_WINDOW, new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "retain_the_pop_up_window", "retain_the_pop_up_window");
-                    if (info.getAdView() != null) {
-                        container.removeAllViews();
-                        container.addView(info.getAdView());
-                    }
-                }
-            }
 
-            @Override
-            public void adExposed(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "retain_the_pop_up_window", "retain_the_pop_up_window", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "retain_the_pop_up_window", "retain_the_pop_up_window", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "retain_the_pop_up_window", "retain_the_pop_up_window");
-                }
-            }
-        });*/
     }
 
     @Override

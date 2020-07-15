@@ -306,48 +306,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 StatisticsUtils.customTrackEvent("ad_request", "我的页面广告请求（满足广告展现时机时向商业化sdk发起请求数）", "my_page", "my_page");
             }
         });
-      /*  GeekAdSdk.getAdsManger().loadNativeTemplateAd(getActivity(), PositionId.AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB, Float.valueOf(DisplayUtil.px2dp(getContext(), DisplayUtil.getScreenWidth(getContext())) - 24), new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Logger.i("adSuccess---1==" + info.getAdId());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "my_page", "my_page");
-                    if (null != info.getAdView()) {
-                        mBinding.bannerAdLl.removeAllViews();
-                        mBinding.bannerAdLl.addView(info.getAdView());
-                        mBinding.bannerAdLl.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
 
-            @Override
-            public void adExposed(AdInfo info) {
-                Logger.i("adExposed---1");
-                if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "my_page", "my_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Logger.i("adClicked---1");
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "my_page", "my_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Logger.i("adError---1---" + errorMsg);
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "my_page", "my_page");
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mBinding.bannerAdLl.setVisibility(View.GONE);
-                    }
-                });
-            }
-        });*/
     }
 
 }

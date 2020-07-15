@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
@@ -193,6 +194,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     }
 
+
     /**
      * 检查文件存贮权限
      */
@@ -203,11 +205,13 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }
         //动画开始播放
 //        mView.startScan();
-        LogUtils.i("checkStoragePermission()");
+//        LogUtils.i("checkStoragePermission()");
+        ((MainActivity)mView.getActivity()).setInsert(false);
         String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         new RxPermissions(mView.getActivity()).request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
+                    ((MainActivity)mView.getActivity()).setInsert(true);
                     if (aBoolean) {
                         LogUtils.i("checkStoragePermission()---true");
                         readyScanningJunk();
