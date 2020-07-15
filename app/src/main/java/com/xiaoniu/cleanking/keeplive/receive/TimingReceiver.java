@@ -117,12 +117,10 @@ public class TimingReceiver extends BroadcastReceiver {
                         return;
                     }
                     long lastAppPressHome = MmkvUtil.getLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
-
                     if (lastAppPressHome == 0L) {
                         //由清理管家APP触发的home键不弹出广告
                         startDialogActivityOnLauncher(context, 10 * 1000);
                     }
-
                     if (lastAppPressHome > 0) {
                         long current = System.currentTimeMillis();
                         long period = current / 1000 - lastAppPressHome / 1000;
@@ -132,14 +130,6 @@ public class TimingReceiver extends BroadcastReceiver {
                             return;
                         }
                     }
-                  /*   if (!RomUtils.checkFloatWindowPermission(context)) {
-                        LogUtils.e("====TimingReceiver中 没有PopWindow权限===");
-                        return;
-                    }
-                   if (WindowUtil.getInstance().isShowing()) {
-                        LogUtils.e("====TimingReceiver中 PopWindow正在弹出===");
-                        return;
-                    }*/
                     long homePressTime = intent.getLongExtra("homePressed", 0L);
                     showLocalPushAlertWindow(context, homePressTime);
                     break;
@@ -251,8 +241,6 @@ public class TimingReceiver extends BroadcastReceiver {
 
     //悬浮广告页面
     public void startDialogActivityOnLauncher(Context context, int delay) {
-
-
         try {
             //判断是否进入后台
             int isBack = MmkvUtil.getInt("isback", -1);
@@ -262,23 +250,27 @@ public class TimingReceiver extends BroadcastReceiver {
             long currentTime = System.currentTimeMillis();
             long installTime = MmkvUtil.getLong(SpCacheConfig.KEY_FIRST_INSTALL_APP_TIME, currentTime);
             if (currentTime - installTime < 1000 * 60 * 60) {
+                LogUtils.e("==========新安装APP在1小时内，不弹出");
                 return;
             }
 
             //判断广告开关
             boolean isOpen = false;
-            //  int showTimes = 3;
-            //  int displayTime = 0;
+            int showTimes = 3;
+            int displayTime = 0;
             if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
-                isOpen = null != map.get("page_outside_screen") && map.get("page_outside_screen").isOpen();
-                // showTimes = null == map.get("page_outside_screen") ? 3 : map.get("page_outside_screen").getShowRate();
-                // displayTime = null == map.get("page_outside_screen") ? 0 : map.get("page_outside_screen").getDisplayTime();
+                InsertAdSwitchInfoList.DataBean data = map.get("page_outside_screen");
+                if (data != null) {
+                    isOpen = data.isOpen();
+                    showTimes = data.getShowRate();
+                    displayTime = data.getDisplayTime();
+                }
             }
             if (!isOpen)
                 return;
 
-/*
+
             String mPopLayerTime = PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME);
             long preTime = TextUtils.isEmpty(mPopLayerTime) ? 0 : Long.parseLong(mPopLayerTime);
             int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
@@ -288,17 +280,13 @@ public class TimingReceiver extends BroadcastReceiver {
                     PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, 0);
                 }
                 if (NetworkUtils.isNetConnected()) {
-                    Intent screenIntent = getIntent(context);
-                    context.startActivity(screenIntent);
+                    new Handler().postDelayed(() -> {
+                        Intent screenIntent = getIntent(context);
+                        context.startActivity(screenIntent);
+                    }, delay);
                 }
-            }*/
-
-            if (NetworkUtils.isNetConnected()) {
-                new Handler().postDelayed(() -> {
-                    Intent screenIntent = getIntent(context);
-                    context.startActivity(screenIntent);
-                }, delay);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
