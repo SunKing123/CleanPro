@@ -435,9 +435,9 @@ public final class AgentWeb {
             mJsInterfaceHolder.addJavaObjects(mJavaObjects);
         }
         if (mWebListenerManager != null) {
-            mWebListenerManager.setDownloader(mWebCreator.getWebView(), null);
-            mWebListenerManager.setWebChromeClient(mWebCreator.getWebView(), getChromeClient());
-            mWebListenerManager.setWebViewClient(mWebCreator.getWebView(), getWebViewClient());
+            mWebListenerManager.setDownloader(mActivity, mWebCreator.getWebView(), null);
+            mWebListenerManager.setWebChromeClient(mActivity, mWebCreator.getWebView(), getChromeClient());
+            mWebListenerManager.setWebViewClient(mActivity, mWebCreator.getWebView(), getWebViewClient());
         }
         return this;
     }

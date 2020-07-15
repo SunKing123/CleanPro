@@ -51,7 +51,6 @@ public interface Points {
         String VIDEO_PAGE_CLOSE_CLICK_CODE = "close_click";
         String VIDEO_PAGE_CLOSE_CLICK_NAME = "刮刮卡激励视频广告关闭点击";
 
-
         String SUCCESS_PAGE = "scratch_card_success_page";
         String SUCCESS_EXPOSURE_CODE = "scratch_card_success_page_custom";
         String SUCCESS_EXPOSURE_NAME = "刮刮卡翻倍金币领取完成页曝光";

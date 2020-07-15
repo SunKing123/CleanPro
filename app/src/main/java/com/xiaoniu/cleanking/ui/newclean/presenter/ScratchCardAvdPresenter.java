@@ -99,6 +99,17 @@ public class ScratchCardAvdPresenter {
         }
         GoldCoinDialog.showGoldCoinDialog(parameter);
         StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
+        goldPoint();
+    }
+
+    /**
+     * 金币领取埋点
+     */
+    private void goldPoint() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("position_id", cardIndex);
+        map.put("gold_number", coinCount);
+        StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.MainGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", Points.ScratchCard.WINDOW_PAGE, map);
     }
 
     /**

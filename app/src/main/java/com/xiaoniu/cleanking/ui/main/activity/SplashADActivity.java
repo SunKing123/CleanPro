@@ -191,6 +191,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
                 mStartView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.GONE);
+                //默认过审状态
+                SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
+                MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
             } else {
                 getAuditSwitchFail();
             }
