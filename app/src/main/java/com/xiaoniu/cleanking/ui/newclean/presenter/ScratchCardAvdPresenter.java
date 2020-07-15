@@ -109,7 +109,7 @@ public class ScratchCardAvdPresenter {
         HashMap<String, Object> map = new HashMap<>();
         map.put("position_id", cardIndex);
         map.put("gold_number", coinCount);
-        StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.MainGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", Points.ScratchCard.WINDOW_PAGE, map);
+        StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.ScratchCard.WINDOW_GOLD_NUM_NAME, "", Points.ScratchCard.WINDOW_PAGE, map);
     }
 
     /**

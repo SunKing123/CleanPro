@@ -46,6 +46,7 @@ public interface Points {
         String WINDOW_DOUBLE_CLICK_EVENT_NAME = "金币翻倍按钮点击";
         String WINDOW_CLOSE_CLICK_CODE = "close_click";
         String WINDOW_CLOSE_CLICK_NAME = "弹窗关闭点击";
+        String WINDOW_GOLD_NUM_NAME = "刮刮卡金币弹框金币发放数";
 
         String VIDEO_PAGE = "scratch_card_incentive_video_page";
         String VIDEO_PAGE_CLOSE_CLICK_CODE = "close_click";
@@ -57,6 +58,8 @@ public interface Points {
         String SUCCESS_RETURN_CLICK_NAME = "刮刮卡翻倍金币领取完成页返回";
         String SUCCESS_AD_REQUEST_SDK_NAME = "刮刮卡翻倍金币领取完成页广告发起请求";
         String SUCCESS_NUMBER_OF_GOLD_NAME = "刮刮卡翻倍金币领取完成页金币发放数";
+
+
     }
 
     interface FunctionGoldCoin {
