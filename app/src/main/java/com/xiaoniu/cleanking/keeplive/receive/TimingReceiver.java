@@ -543,102 +543,102 @@ public class TimingReceiver extends BroadcastReceiver {
      */
     @SuppressLint("CheckResult")
     public void startScanAll(PushSettingList.DataBean dataBean, Context mContext) {
-        HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
-        FileQueryUtils mFileQueryUtils = new FileQueryUtils();
-        mFileQueryUtils.setIsService(false);
-        Observable.create(e -> {
-            //扫描进程占用内存情况
-            mFileQueryUtils.setRandRamNum(true);
-            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
-            e.onNext(runningProcess);
-            //扫描apk安装包
-            List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
-            if (CollectionUtils.isEmpty(apkJunkInfos)) {
-                apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
-            }
-            e.onNext(apkJunkInfos);
-            //扫描卸载残余垃圾
-            ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
-            e.onNext(leaveDataInfo);
-
-            //扫描完成表示
-            e.onNext("FINISH");
-        }).compose(RxUtil.rxObservableSchedulerHelper()).subscribe(o -> {
-            if (o instanceof ArrayList) {
-                ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
-                //缓存垃圾
-                JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
-                if (cacheGroup == null) {
-                    cacheGroup = new JunkGroup();
-                    cacheGroup.mName = ContextUtils.getContext().getString(R.string.cache_clean);
-                    cacheGroup.isChecked = true;
-                    cacheGroup.isExpand = true;
-                    cacheGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_CACHE, cacheGroup);
-                    cacheGroup.mSize += 0;
-                }
-                //卸载残留
-                JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
-                if (uninstallGroup == null) {
-                    uninstallGroup = new JunkGroup();
-                    uninstallGroup.mName = ContextUtils.getContext().getString(R.string.uninstall_clean);
-                    uninstallGroup.isChecked = true;
-                    uninstallGroup.isExpand = true;
-                    uninstallGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
-                    uninstallGroup.mSize += 0;
-                }
-                //无用安装包
-                JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
-                if (apkGroup == null) {
-                    apkGroup = new JunkGroup();
-                    apkGroup.mName = ContextUtils.getContext().getString(R.string.apk_clean);
-                    apkGroup.isChecked = true;
-                    apkGroup.isExpand = true;
-                    apkGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
-                    apkGroup.mSize += 0;
-                }
-                //内存清理
-                JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
-                if (processGroup == null) {
-                    processGroup = new JunkGroup();
-                    processGroup.mName = ContextUtils.getContext().getString(R.string.process_clean);
-                    processGroup.isChecked = true;
-                    processGroup.isExpand = true;
-                    processGroup.mChildren = new ArrayList<>();
-                    mJunkGroups.put(JunkGroup.GROUP_PROCESS, processGroup);
-                    processGroup.mSize += 0;
-                }
-                for (FirstJunkInfo info : a) {
-                    if ("TYPE_CACHE".equals(info.getGarbageType())) {
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
-                            cacheGroup.mChildren.add(info);
-                            cacheGroup.mSize += info.getTotalSize();
-                        }
-                    } else if ("TYPE_PROCESS".equals(info.getGarbageType())) {
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
-                            processGroup.mChildren.add(info);
-                            processGroup.mSize += info.getTotalSize();
-                        }
-                    } else if ("TYPE_APK".equals(info.getGarbageType())) {
-                        apkGroup.mChildren.add(info);
-                        apkGroup.mSize += info.getTotalSize();
-
-                    } else if ("TYPE_LEAVED".equals(info.getGarbageType())) {
-                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
-                            uninstallGroup.mChildren.add(info);
-                            uninstallGroup.mSize += info.getTotalSize();
-                        }
-                    }
-                }
-            } else {
-                long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-                long mbNum = totalSize / (1024 * 1024);
+//        HashMap<Integer, JunkGroup> mJunkGroups = new HashMap<>();
+//        FileQueryUtils mFileQueryUtils = new FileQueryUtils();
+//        mFileQueryUtils.setIsService(false);
+//        Observable.create(e -> {
+//            //扫描进程占用内存情况
+//            mFileQueryUtils.setRandRamNum(true);
+//            ArrayList<FirstJunkInfo> runningProcess = mFileQueryUtils.getRunningProcess();
+//            e.onNext(runningProcess);
+//            //扫描apk安装包
+//            List<FirstJunkInfo> apkJunkInfos = mFileQueryUtils.queryAPkFile();
+//            if (CollectionUtils.isEmpty(apkJunkInfos)) {
+//                apkJunkInfos.addAll(mFileQueryUtils.queryAPkFile());
+//            }
+//            e.onNext(apkJunkInfos);
+//            //扫描卸载残余垃圾
+//            ArrayList<FirstJunkInfo> leaveDataInfo = mFileQueryUtils.getOmiteCache();
+//            e.onNext(leaveDataInfo);
+//
+//            //扫描完成表示
+//            e.onNext("FINISH");
+//        }).compose(RxUtil.rxObservableSchedulerHelper()).subscribe(o -> {
+//            if (o instanceof ArrayList) {
+//                ArrayList<FirstJunkInfo> a = (ArrayList<FirstJunkInfo>) o;
+//                //缓存垃圾
+//                JunkGroup cacheGroup = mJunkGroups.get(JunkGroup.GROUP_CACHE);
+//                if (cacheGroup == null) {
+//                    cacheGroup = new JunkGroup();
+//                    cacheGroup.mName = ContextUtils.getContext().getString(R.string.cache_clean);
+//                    cacheGroup.isChecked = true;
+//                    cacheGroup.isExpand = true;
+//                    cacheGroup.mChildren = new ArrayList<>();
+//                    mJunkGroups.put(JunkGroup.GROUP_CACHE, cacheGroup);
+//                    cacheGroup.mSize += 0;
+//                }
+//                //卸载残留
+//                JunkGroup uninstallGroup = mJunkGroups.get(JunkGroup.GROUP_UNINSTALL);
+//                if (uninstallGroup == null) {
+//                    uninstallGroup = new JunkGroup();
+//                    uninstallGroup.mName = ContextUtils.getContext().getString(R.string.uninstall_clean);
+//                    uninstallGroup.isChecked = true;
+//                    uninstallGroup.isExpand = true;
+//                    uninstallGroup.mChildren = new ArrayList<>();
+//                    mJunkGroups.put(JunkGroup.GROUP_UNINSTALL, uninstallGroup);
+//                    uninstallGroup.mSize += 0;
+//                }
+//                //无用安装包
+//                JunkGroup apkGroup = mJunkGroups.get(JunkGroup.GROUP_APK);
+//                if (apkGroup == null) {
+//                    apkGroup = new JunkGroup();
+//                    apkGroup.mName = ContextUtils.getContext().getString(R.string.apk_clean);
+//                    apkGroup.isChecked = true;
+//                    apkGroup.isExpand = true;
+//                    apkGroup.mChildren = new ArrayList<>();
+//                    mJunkGroups.put(JunkGroup.GROUP_APK, apkGroup);
+//                    apkGroup.mSize += 0;
+//                }
+//                //内存清理
+//                JunkGroup processGroup = mJunkGroups.get(JunkGroup.GROUP_PROCESS);
+//                if (processGroup == null) {
+//                    processGroup = new JunkGroup();
+//                    processGroup.mName = ContextUtils.getContext().getString(R.string.process_clean);
+//                    processGroup.isChecked = true;
+//                    processGroup.isExpand = true;
+//                    processGroup.mChildren = new ArrayList<>();
+//                    mJunkGroups.put(JunkGroup.GROUP_PROCESS, processGroup);
+//                    processGroup.mSize += 0;
+//                }
+//                for (FirstJunkInfo info : a) {
+//                    if ("TYPE_CACHE".equals(info.getGarbageType())) {
+//                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
+//                            cacheGroup.mChildren.add(info);
+//                            cacheGroup.mSize += info.getTotalSize();
+//                        }
+//                    } else if ("TYPE_PROCESS".equals(info.getGarbageType())) {
+//                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
+//                            processGroup.mChildren.add(info);
+//                            processGroup.mSize += info.getTotalSize();
+//                        }
+//                    } else if ("TYPE_APK".equals(info.getGarbageType())) {
+//                        apkGroup.mChildren.add(info);
+//                        apkGroup.mSize += info.getTotalSize();
+//
+//                    } else if ("TYPE_LEAVED".equals(info.getGarbageType())) {
+//                        if (!SpCacheConfig.CHAT_PACKAGE.equals(info.getAppPackageName()) && !SpCacheConfig.QQ_PACKAGE.equals(info.getAppPackageName())) {
+//                            uninstallGroup.mChildren.add(info);
+//                            uninstallGroup.mSize += info.getTotalSize();
+//                        }
+//                    }
+//                }
+//            } else {
+//                long totalSize = CleanUtil.getTotalSize(mJunkGroups);
+                long mbNum = NumberUtils.mathRandomInt(500, 1850);
                 //保存上一次扫秒出来的垃圾大小
                 //为了保证比扫描页面的数小，强制性的/2
-                long temp = mbNum / 2;
-                PreferenceUtil.saveLastScanRubbishSize(temp);
+//                long temp = mbNum / 2;
+                PreferenceUtil.saveLastScanRubbishSize(mbNum);
                 NotificationEvent event = new NotificationEvent();
                 event.setType("clean");
                 LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
@@ -656,10 +656,9 @@ public class TimingReceiver extends BroadcastReceiver {
                 }
                 btnInfo.setCheckResult(String.valueOf(mbNum));
                 PreferenceUtil.getInstants().save("lock_pos01", new Gson().toJson(btnInfo));
-
                 EventBus.getDefault().post(event);
-            }
-        });
+//            }
+//        });
 
     }
 
