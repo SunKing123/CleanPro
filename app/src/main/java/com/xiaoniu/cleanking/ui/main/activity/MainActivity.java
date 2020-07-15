@@ -163,10 +163,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      **/
     private static final String KEY_EXTRAS = "n_extras";
 
+    private boolean isInsert = true;
+
+    public void setInsert(boolean insert){
+        isInsert = insert;
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
     }
+
 
 
     private void parsePushData(Intent intent) {
@@ -427,7 +434,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
             if (configBean != null && configBean.isOpen()) {
                 AppLifecyclesImpl.postDelay(() -> {
-                    mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+                    if(isInsert){
+                        mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
+                    }
                 }, 1000);
 
             }
