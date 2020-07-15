@@ -127,7 +127,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         fileQueryUtils = new FileQueryUtils();
         processNum = fileQueryUtils.getRunningProcess().size();
         mTitle = getIntent().getStringExtra("title");
-        mBtnLeft = (ImageView) findViewById(R.id.gold_finish_btnLeft);
+        mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
         mRecyclerView = findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
