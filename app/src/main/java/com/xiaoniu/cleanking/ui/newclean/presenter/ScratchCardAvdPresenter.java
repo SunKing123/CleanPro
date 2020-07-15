@@ -343,6 +343,9 @@ public class ScratchCardAvdPresenter {
             adPrevData(getAdvId(ADV_FIRST_PREFIX, 1));
         }
         if (isOpenTwo()) {
+            adPrevData(getAdvId(ADV_VIDEO_PREFIX, 1));
+        }
+        if (isOpenThree()) {
             adPrevData(getAdvId(ADV_SECOND_PREFIX, 1));
         }
     }
