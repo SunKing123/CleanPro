@@ -16,6 +16,7 @@ import com.xiaoniu.common.utils.ContextUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by mazhuang on 16/1/14.
@@ -91,13 +92,13 @@ public class CleanUtil {
         }
         String value;
         if (result < 1) {
-            value = String.format("%.2f", result);
+            value = String.format(Locale.ENGLISH,"%.2f", result);
         } else if (result < 10) {
-            value = String.format("%.2f", result);
+            value = String.format(Locale.ENGLISH,"%.2f", result);
         } else if (result < 100) {
-            value = String.format("%.1f", result);
+            value = String.format(Locale.ENGLISH,"%.1f", result);
         } else {
-            value = String.format("%.0f", result);
+            value = String.format(Locale.ENGLISH,"%.0f", result);
         }
         countEntity.setTotalLong(number);
         countEntity.setTotalSize(value);
@@ -247,6 +248,4 @@ public class CleanUtil {
         }
         return size;
     }
-
-
 }

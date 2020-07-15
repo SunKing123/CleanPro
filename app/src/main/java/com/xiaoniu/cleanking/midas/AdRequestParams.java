@@ -360,7 +360,7 @@ public class AdRequestParams {
         }
         
         public Builder setViewWidthOffset(int offset){
-            if(activityWeakReference.get()==null){
+            if(activityWeakReference==null||activityWeakReference.get()==null){
                 return this;
             }
             this.viewWidth = ScreenUtils.getScreenWidth(activityWeakReference.get()) - DisplayUtil.dip2px(activityWeakReference.get(),offset);
