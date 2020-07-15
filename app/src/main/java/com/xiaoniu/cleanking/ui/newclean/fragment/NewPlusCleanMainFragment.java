@@ -195,22 +195,22 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initListener();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
         checkAndUploadPoint();
-        AppLifecyclesImpl.postDelay(new Runnable() {
-            @Override
-            public void run() {
-                mPresenter.getInteractionSwitch();
-                mPresenter.refBullList();
-                //金币前两个位置预加载
-                mPresenter.goldAdprev();
-            }
-        },2000);
     }
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && isFirstCreate) {
-            refreshAdAll();
+            AppLifecyclesImpl.postDelay(new Runnable() {
+                @Override
+                public void run() {
+                    mPresenter.getInteractionSwitch();
+                    mPresenter.refBullList();
+                    //金币前两个位置预加载
+                    mPresenter.goldAdprev();
+                    refreshAdAll();
+                }
+            },3000);
             isFirstCreate = false;
         }
 
@@ -353,10 +353,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
 
     private void refreshAdAll() {
-        refreshAd(MidasConstants.MAIN_ONE_AD_ID);
-        refreshAd(MidasConstants.MAIN_TWO_AD_ID);
-        refreshAd(MidasConstants.MAIN_THREE_AD_ID);
-        showAdVideo();
+        if (!AndroidUtil.isFastDoubleBtnClick(3000)) {
+            refreshAd(MidasConstants.MAIN_ONE_AD_ID);
+            refreshAd(MidasConstants.MAIN_TWO_AD_ID);
+            refreshAd(MidasConstants.MAIN_THREE_AD_ID);
+            showAdVideo();
+        }
     }
 
     private void refreshAd(String adId) {

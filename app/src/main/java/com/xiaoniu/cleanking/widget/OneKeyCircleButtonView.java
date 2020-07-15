@@ -103,6 +103,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         rel_bubble.setLayoutParams(layoutParams);
         iv_top_perview.setLayoutParams(layoutParams);//bitmap遮罩层；
 
+        //波纹
         layoutParams.setMargins(0, -Float.valueOf(screenWidth *0.9f* 0.1f).intValue(), 0, 0);
         viewLottieGreen.setLayoutParams(layoutParams);
 
