@@ -260,9 +260,12 @@ public class TimingReceiver extends BroadcastReceiver {
             int displayTime = 0;
             if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
                 Map<String, InsertAdSwitchInfoList.DataBean> map = AppHolder.getInstance().getInsertAdSwitchMap();
-                isOpen = null != map.get("page_outside_screen") && map.get("page_outside_screen").isOpen();
-                showTimes = null == map.get("page_outside_screen") ? 3 : map.get("page_outside_screen").getShowRate();
-                displayTime = null == map.get("page_outside_screen") ? 0 : map.get("page_outside_screen").getDisplayTime();
+                InsertAdSwitchInfoList.DataBean data = map.get("page_outside_screen");
+                if (data != null) {
+                    isOpen = data.isOpen();
+                    showTimes = data.getShowRate();
+                    displayTime = data.getDisplayTime();
+                }
             }
             if (!isOpen)
                 return;
