@@ -43,6 +43,8 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
     TextView mTvSubTitle;
     @BindView(R.id.tv_top_title)
     TextView mTvTopTitle;
+    @BindView(R.id.tv_default)
+    TextView tvDefault;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -69,10 +71,12 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
                 //白名单
                 mTvTopTitle.setText(getString(R.string.text_speed_white_list));
                 mTvSubTitle.setText(getString(R.string.txt_white_list_speed_title));
+                tvDefault.setText("加速白名单为空～");
             }else {
                 //软件管理白名单
                 mTvTopTitle.setText("软件管理白名单");
                 mTvSubTitle.setVisibility(View.GONE);
+                tvDefault.setText("软件白名单为空～");
             }
             //扫描已安装包的信息
             mPresenter.scanData(mType);

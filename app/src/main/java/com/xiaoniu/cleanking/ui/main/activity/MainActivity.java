@@ -294,9 +294,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mPresenter.requestPhoneStatePermission();
         AndroidUtil.haveLiuhai = NotchUtils.hasNotchScreen(this);
 //        测试入口
-        if (BuildConfig.DEBUG) {
-            AppConfig.showDebugWindow(mContext);
-        }
+//        if (BuildConfig.DEBUG) {
+//            AppConfig.showDebugWindow(mContext);
+//        }
         //游客登录
         mPresenter.visitorLogin();
 
@@ -320,7 +320,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        LogUtils.i("zzz-----" + hasFocus);
+//        LogUtils.i("zzz-----" + hasFocus);
         if (hasFocus && isFirstCreate) {
             //检测版本更新
             mPresenter.queryAppVersion(() -> {

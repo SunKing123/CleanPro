@@ -120,7 +120,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
             return;
         }
         super.onBackPressedSupport();
-        StatisticsUtils.trackClick("return_click", "用户在首页点击【天气预报】模板", "home_page", "weather_forecast_page");
+        StatisticsUtils.trackClick("return_click", "用户在天气预报详情页点击返回", "home_page", "weather_forecast_page");
     }
 
 
@@ -206,7 +206,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
         LogUtils.debugInfo("zz----" + publishSource + "----" + new Gson().toJson(weatherForecastResponseEntity));
         rlWeatherForecastBack.setOnClickListener(v-> {
            finish();
-            NiuDataAPIUtil.onPageEnd("home_page", "weather_forecast_page", "weather_forecast_page_view_page", "用户在天气预报详情页浏览");
+            StatisticsUtils.trackClick("return_click", "用户在天气预报详情页点击返回", "home_page", "weather_forecast_page");
         });
         requestAd();
         if (weatherForecastResponseEntity != null) {

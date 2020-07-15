@@ -49,7 +49,7 @@ public class PopPushActivity extends AppCompatActivity {
         }
 
         ActivityCollector.addActivity(this, PopPushActivity.class);
-        StatisticsUtils.customTrackEvent("local_push_window_shuow", "推送弹窗满足推送时机弹窗创建时", "", "local_push_window");
+        StatisticsUtils.customTrackEvent("local_push_window_shuow", "本地推送弹窗曝光时", "", "local_push_window");
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
