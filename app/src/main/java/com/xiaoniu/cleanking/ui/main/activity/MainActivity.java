@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     private boolean isInsert = false;
 
-    public void setInsert(boolean insert){
+    public void setInsert(boolean insert) {
         isInsert = insert;
     }
 
@@ -173,7 +173,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public int getLayoutId() {
         return R.layout.activity_main;
     }
-
 
 
     private void parsePushData(Intent intent) {
@@ -311,7 +310,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 //弹窗信息接口
                 mPresenter.getPopupData();
             }
-        },2000);
+        }, 2000);
 
         mainFragment.setOnInteractiveClickListener(v -> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
@@ -327,7 +326,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 mBottomBar.setCurrentItem(3);
             }
         });
-
 
 
     }
@@ -434,7 +432,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
             if (configBean != null && configBean.isOpen()) {
                 AppLifecyclesImpl.postDelay(() -> {
-                    if(isInsert){
+                    if (isInsert) {
                         mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
                     }
                 }, 1000);

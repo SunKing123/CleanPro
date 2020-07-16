@@ -34,6 +34,7 @@ import androidx.room.Room;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
 import com.baidu.mobstat.StatService;
+import com.blankj.utilcode.util.Utils;
 import com.bun.miitmdid.core.JLibrary;
 import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
 import com.chuanglan.shanyan_sdk.listener.InitListener;
@@ -197,6 +198,9 @@ public class AppLifecyclesImpl implements AppLifecycles {
         initBaiduSdk(application);
         initPermission(application);
         initShanYan(application);
+
+        //初始化utilCode
+        Utils.init(application);
 
     }
 

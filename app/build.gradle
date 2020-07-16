@@ -331,6 +331,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'com.blankj:utilcodex:1.29.0'
 
 }
 apply plugin: 'com.huawei.agconnect'

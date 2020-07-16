@@ -19,12 +19,12 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.blankj.utilcode.constant.PermissionConstants;
 import com.comm.jksdk.http.base.BaseResponse;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.ishumei.smantifraud.SmAntiFraud;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -72,7 +72,6 @@ import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
-import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
@@ -102,10 +101,11 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+
+//import com.tbruyelle.rxpermissions2.RxPermissions;
 
 /**
  * Created by tie on 2017/5/15.
@@ -570,7 +570,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mActivity == null || TextUtils.isEmpty(appID)) {
             return;
         }
-        if(!mActivity.hasWindowFocus())
+        if (!mActivity.hasWindowFocus())
             return;
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
         AdRequestParams params = new AdRequestParams.Builder()
@@ -589,7 +589,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 判断广告弹窗和红包弹窗
      */
     public void checkAdviceOrRedPacketDialog() {
-        if(!mActivity.hasWindowFocus())
+        if (!mActivity.hasWindowFocus())
             return;
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
@@ -685,6 +685,33 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mView == null) {
             return;
         }
+
+        com.blankj.utilcode.util.PermissionUtils.permission(PermissionConstants.LOCATION)
+                .callback(new com.blankj.utilcode.util.PermissionUtils.SimpleCallback() {
+                    @Override
+                    public void onGranted() {
+                        //开始
+                        if (mView == null)
+                            return;
+                        requestLocation();
+                    }
+
+                    @Override
+                    public void onDenied() {
+                        if (mView == null)
+                            return;
+                        if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                            //永久拒绝权限
+                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                        } else {
+                            //拒绝权限
+                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                        }
+
+                    }
+                });
+
+/*
         String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
         if (null == mView) return;
         new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
@@ -707,7 +734,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }
                 }
             }
-        });
+        });*/
     }
 
     //获取Imei
@@ -716,6 +743,32 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mView == null) {
             return;
         }
+        com.blankj.utilcode.util.PermissionUtils.permission(PermissionConstants.PHONE)
+                .callback(new com.blankj.utilcode.util.PermissionUtils.SimpleCallback() {
+                    @Override
+                    public void onGranted() {
+                        //开始
+                        if (mView == null)
+                            return;
+                        initNiuData();
+                    }
+
+                    @Override
+                    public void onDenied() {
+                        if (mView == null)
+                            return;
+                        if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.READ_PHONE_STATE)) {
+                            //永久拒绝权限
+                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                        } else {
+                            //拒绝权限
+                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                        }
+                    }
+                });
+
+
+     /*
         String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
         if (null == mView) return;
         new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
@@ -741,7 +794,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 //  requestPopWindowPermission();
 
             }
-        });
+        });*/
     }
 
     //获取本地推送弹框权限
@@ -1095,7 +1148,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     //3.SDK 初始化
                     SmAntiFraud.create(AppApplication.getInstance(), option);
                 }
-            },2000);
+            }, 2000);
 
 
         }
