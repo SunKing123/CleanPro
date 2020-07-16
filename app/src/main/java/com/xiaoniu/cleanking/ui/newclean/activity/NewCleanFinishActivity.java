@@ -404,7 +404,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快去体验其他功能");
                 }
-            } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
+            } else if (getString(R.string.tool_suggest_clean).contains(mTitle) || getString(R.string.tool_phone_clean).contains(mTitle)) {
                 if (PreferenceUtil.getIsCheckedAll()) {
                     CleanEvent cleanEvent = new CleanEvent();
                     cleanEvent.setCleanAminOver(true);
