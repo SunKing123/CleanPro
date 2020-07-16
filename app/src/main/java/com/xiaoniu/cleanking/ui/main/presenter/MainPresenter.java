@@ -19,12 +19,12 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.blankj.utilcode.constant.PermissionConstants;
 import com.comm.jksdk.http.base.BaseResponse;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.ishumei.smantifraud.SmAntiFraud;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -101,6 +101,7 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -686,32 +687,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         }
 
-        com.blankj.utilcode.util.PermissionUtils.permission(PermissionConstants.LOCATION)
-                .callback(new com.blankj.utilcode.util.PermissionUtils.SimpleCallback() {
-                    @Override
-                    public void onGranted() {
-                        //开始
-                        if (mView == null)
-                            return;
-                        requestLocation();
-                    }
 
-                    @Override
-                    public void onDenied() {
-                        if (mView == null)
-                            return;
-                        if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                            //永久拒绝权限
-                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                        } else {
-                            //拒绝权限
-                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                        }
-
-                    }
-                });
-
-/*
         String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
         if (null == mView) return;
         new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
@@ -734,7 +710,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     }
                 }
             }
-        });*/
+        });
     }
 
     //获取Imei
@@ -743,32 +719,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mView == null) {
             return;
         }
-        com.blankj.utilcode.util.PermissionUtils.permission(PermissionConstants.PHONE)
-                .callback(new com.blankj.utilcode.util.PermissionUtils.SimpleCallback() {
-                    @Override
-                    public void onGranted() {
-                        //开始
-                        if (mView == null)
-                            return;
-                        initNiuData();
-                    }
-
-                    @Override
-                    public void onDenied() {
-                        if (mView == null)
-                            return;
-                        if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.READ_PHONE_STATE)) {
-                            //永久拒绝权限
-                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                        } else {
-                            //拒绝权限
-                            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                        }
-                    }
-                });
 
 
-     /*
         String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
         if (null == mView) return;
         new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
@@ -794,7 +746,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 //  requestPopWindowPermission();
 
             }
-        });*/
+        });
     }
 
     //获取本地推送弹框权限

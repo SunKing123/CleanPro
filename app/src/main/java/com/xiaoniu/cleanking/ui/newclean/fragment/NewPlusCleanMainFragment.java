@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -211,7 +213,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     mPresenter.goldAdprev();
                     refreshAdAll();
                 }
-            },3000);
+            }, 3000);
             isFirstCreate = false;
         }
 
@@ -709,12 +711,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * 检查文件存贮权限
      */
     private void checkStoragePermission() {
-        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        ((MainActivity)this.getActivity()).setInsert(false);
+     /*   String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        ((MainActivity) this.getActivity()).setInsert(false);
         Disposable disposable = rxPermissions.request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
-                    ((MainActivity)this.getActivity()).setInsert(true);
+                    ((MainActivity) this.getActivity()).setInsert(true);
                     if (aBoolean) {
                         mPresenter.stopScanning();
                         startActivity(NowCleanActivity.class);
@@ -726,7 +728,25 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         }
                     }
                 });
-        compositeDisposable.add(disposable);
+        compositeDisposable.add(disposable);*/
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+                ((MainActivity) getActivity()).setInsert(true);
+                mPresenter.stopScanning();
+                startActivity(NowCleanActivity.class);
+            }
+
+            @Override
+            public void onDenied() {
+                ((MainActivity) getActivity()).setInsert(true);
+                if (hasPermissionDeniedForever()) {  //点击拒绝
+                    startActivity(NowCleanActivity.class);
+                } else {                            //点击永久拒绝
+                    showPermissionDialog();
+                }
+            }
+        }).request();
     }
 
     public void showPermissionDialog() {

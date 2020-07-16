@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
-import com.tbruyelle.rxpermissions2.RxPermissions;
+//import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -206,8 +208,30 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         //动画开始播放
 //        mView.startScan();
 //        LogUtils.i("checkStoragePermission()");
-        ((MainActivity)mView.getActivity()).setInsert(false);
-        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        ((MainActivity) mView.getActivity()).setInsert(false);
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+                ((MainActivity) mView.getActivity()).setInsert(true);
+                LogUtils.i("checkStoragePermission()---true");
+                readyScanningJunk();
+                scanningJunk();
+            }
+
+            @Override
+            public void onDenied() {
+                ((MainActivity) mView.getActivity()).setInsert(true);
+                if (hasPermissionDeniedForever()) {//点击拒绝
+                    LogUtils.i("checkStoragePermission()---denied");
+                    mView.permissionDenied();
+                } else {//点击永久拒绝
+                    LogUtils.i("checkStoragePermission()---denied--faile");
+                    //mView.showPermissionDialog();
+                }
+            }
+        }).request();
+
+     /*   String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         new RxPermissions(mView.getActivity()).request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
@@ -225,7 +249,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             //mView.showPermissionDialog();
                         }
                     }
-                });
+                });*/
     }
 
     /**
@@ -503,7 +527,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
 
-
     public void prepareVideoAd(ViewGroup viewGroup) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
@@ -529,7 +552,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
-                .setViewWidth(ScreenUtils.getScreenWidth(mView.getActivity()) - DisplayUtil.dip2px(mView.getActivity(),28))
+                .setViewWidth(ScreenUtils.getScreenWidth(mView.getActivity()) - DisplayUtil.dip2px(mView.getActivity(), 28))
                 .setViewContainer(viewGroup).build();
 
         MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
@@ -723,7 +746,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         //翻倍回调
         bean.onDoubleClickListener = (v) -> {
             try {
-                if(AndroidUtil.isFastDoubleBtnClick(1000)){
+                if (AndroidUtil.isFastDoubleBtnClick(1000)) {
                     return;
                 }
                 //翻倍按钮点击
@@ -806,14 +829,14 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
     //金币位置预加载
-    public void goldAdprev(){
+    public void goldAdprev() {
         adPrevData(AdposUtil.getAdPos(1, 0));//位置一预加载
         adPrevData(AdposUtil.getAdPos(1, 1));//位置二预加载
 
     }
 
     //广告预加载
-    public void adPrevData(String posId){
+    public void adPrevData(String posId) {
         try {
             AdRequestParams params = new AdRequestParams.Builder()
                     .setAdId(posId).setActivity(mView.getActivity()).setViewWidthOffset(45).build();
