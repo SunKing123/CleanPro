@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -181,11 +182,27 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         iv_power = headerTool.findViewById(R.id.iv_power);
         iv_notification = headerTool.findViewById(R.id.iv_notification);
         mTitleTv.setText(mTitle);
-        requestScreenSwitch();
         getPageData();
         setListener();
         loadData();
         initGeekAd();
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
+
+    boolean isFirstLoad = true;
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (isFirstLoad) {
+            isFirstLoad = false;
+            requestScreenSwitch();
+            return;
+        }
     }
 
     private void requestScreenSwitch() {
@@ -709,7 +726,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         startActivity(NowCleanActivity.class);
     }
 
-   /* *//**
+    /* *//**
      * 游戏加速
      *//*
     public void gameClean() {

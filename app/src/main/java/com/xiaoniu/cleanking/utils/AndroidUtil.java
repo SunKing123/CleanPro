@@ -73,16 +73,23 @@ public class AndroidUtil {
      * @return
      */
     public static boolean isAppInstalled(String packageName) {
-        final PackageManager packageManager = AppApplication.getInstance().getPackageManager();
-        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
-        List<String> pName = new ArrayList<String>();
-        if (pinfo != null) {
-            for (int i = 0; i < pinfo.size(); i++) {
-                String pn = pinfo.get(i).packageName;
-                pName.add(pn);
+        //修复友盟bug，添加【try catch】 参考：https://www.jianshu.com/p/2f25259a5a15
+        try {
+            final PackageManager packageManager = AppApplication.getInstance().getPackageManager();
+            List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+            List<String> pName = new ArrayList<>();
+            if (pinfo != null) {
+                for (int i = 0; i < pinfo.size(); i++) {
+                    String pn = pinfo.get(i).packageName;
+                    pName.add(pn);
+                }
             }
+            return pName.contains(packageName);
+        }catch (Exception e){
+
         }
-        return pName.contains(packageName);
+
+        return false;
     }
 
 

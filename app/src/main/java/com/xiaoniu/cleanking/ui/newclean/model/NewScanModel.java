@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.xiaoniu.cleanking.api.UserApiService;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
@@ -77,7 +78,7 @@ public class NewScanModel extends GoldModel {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("channel", ChannelUtil.getChannel());
-        map.put("appVersion", AppUtils.getVersionName(mRxFragment.getActivity(), mRxFragment.getActivity().getPackageName()));
+        map.put("appVersion", AppUtils.getVersionName(AppApplication.getInstance(), AppApplication.getInstance().getPackageName()));
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.getInteractionSwitch(body).compose(RxUtil.rxSchedulerHelper(mRxFragment)).subscribeWith(commonSubscriber);
