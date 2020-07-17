@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.mvp;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +17,7 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.xiaoniu.common.utils.AppActivityUtils;
 
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -41,6 +43,10 @@ public abstract class BaseActivity extends RxAppCompatActivity implements IBaseV
     @SuppressWarnings({"unchecked", "TryWithIdenticalCatches"})
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //透明activity在Android8.0上崩溃 解决方案
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && AppActivityUtils.isTranslucentOrFloating(this)) {
+            AppActivityUtils.fixOrientation(this);
+        }
         super.onCreate(savedInstanceState);
 
         initLayout(savedInstanceState);

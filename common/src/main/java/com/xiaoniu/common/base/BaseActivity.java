@@ -26,6 +26,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
 import com.xiaoniu.common.R;
+import com.xiaoniu.common.utils.AppActivityUtils;
 import com.xiaoniu.common.widget.LoadingDialog;
 import com.xiaoniu.common.widget.statusbarcompat.StatusBarCompat;
 
@@ -58,6 +59,10 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     /* 子类使用的时候无需再次调用onCreate(),如需要加载其他方法可重写该方法 */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //透明activity在Android8.0上崩溃 解决方案
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && AppActivityUtils.isTranslucentOrFloating(this)) {
+            AppActivityUtils.fixOrientation(this);
+        }
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//去掉ActionBar
         super.setContentView(R.layout.common_activity_base);

@@ -1,9 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -61,7 +59,30 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
-        if (null == AppHolder.getInstance() || null == AppHolder.getInstance().getPopupDataEntity()) {
+        if (null == AppHolder.getInstance()) {
+            return;
+        }
+        String activityName = getIntent().getStringExtra("activityName");
+        boolean isMainPage = activityName.contains(MainActivity.class.getSimpleName());
+        //1.先判断内部插屏
+        if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
+            InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);
+            if (null != dataBean && dataBean.isOpen()) {//内部插屏广告
+                if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
+                    List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
+                    InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
+                    int startCount = inside.getCount();
+                    if (internalList.contains(String.valueOf(startCount)) && isMainPage) {
+                        PreferenceUtil.saveScreenInsideTime();
+                        EventBus.getDefault().post(new HotStartEvent(HotStartAction.INSIDE_SCREEN));
+                        return;
+                    }
+                }
+
+            }
+        }
+        //如果内部插屏不展示再判断红包
+        if (AppHolder.getInstance().getPopupDataEntity() == null) {
             return;
         }
         RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
@@ -69,35 +90,13 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         );
         if (redPacketDataBean == null || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
             return;
-        switch (redPacketDataBean.getLocation()) {
-            case 5:
-                String activityName = getIntent().getStringExtra("activityName");
-                boolean isMainPage = activityName.contains(MainActivity.class.getSimpleName());
-                if (null != AppHolder.getInstance().getInsertAdSwitchMap()) {
-                    InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);
-                    if (null != dataBean && dataBean.isOpen()) {//内部插屏广告
-                        if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
-                            List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
-                            InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
-                            int startCount = inside.getCount();
-                            if (internalList.contains(String.valueOf(startCount)) && isMainPage) {
-                                PreferenceUtil.saveScreenInsideTime();
-                                EventBus.getDefault().post(new HotStartEvent(HotStartAction.INSIDE_SCREEN));
-
-                                return;
-                            }
-                        }
-
-                    }
+        if (redPacketDataBean.getLocation() == 5) {
+            //所有页面展示红包
+            if (redPacketDataBean.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % redPacketDataBean.getTrigger() == 0) {
+                if (isMainPage) {
+                    EventBus.getDefault().post(new HotStartEvent(HotStartAction.RED_PACKET));
                 }
-                //所有页面展示红包
-                if (redPacketDataBean.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % redPacketDataBean.getTrigger() == 0) {
-                    if (isMainPage) {
-                        EventBus.getDefault().post(new HotStartEvent(HotStartAction.RED_PACKET));
-                    }
-
-                }
-                break;
+            }
         }
 
     }
@@ -137,7 +136,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
     private void initGeekSdkAD() {
 
-        StatisticsUtils.customTrackEvent("ad_request_sdk","热启动页广告发起请求","hot_page","hot_page");
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "热启动页广告发起请求", "hot_page", "hot_page");
         AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
                 .setActivity(this).setViewContainer(container).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {

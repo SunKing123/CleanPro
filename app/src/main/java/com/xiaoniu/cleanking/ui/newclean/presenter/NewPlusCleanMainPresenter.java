@@ -306,7 +306,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     @SuppressLint("CheckResult")
     public void scanningJunk() {
-
         if (isScaning == true)
             return;
 
@@ -402,7 +401,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 //                //计算总的扫描时间，并回传记录
 //                long scanningCountTime = System.currentTimeMillis() - scanningStartTime;
 //                getView().setScanningCountTime(scanningCountTime);
-
 //                //计算扫描文件总数
 //                getView().setScanningFileCount(fileCount);
             }

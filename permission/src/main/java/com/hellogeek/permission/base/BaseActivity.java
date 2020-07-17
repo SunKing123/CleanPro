@@ -1,24 +1,24 @@
 package com.hellogeek.permission.base;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-
-
-
+import androidx.annotation.IdRes;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -78,6 +78,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //透明activity在Android8.0上崩溃 解决方案
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && isTranslucentOrFloating(this)) {
+            fixOrientation(this);
+        }
         super.onCreate(savedInstanceState);
         initParams(savedInstanceState);
         setContentView(getLayoutResID());
@@ -350,7 +354,45 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         return result;
     }
+    /**
+     * 透明activity在Android8.0上崩溃 解决方案
+     * 透明
+     * @param activity
+     * @return
+     */
+    public  boolean isTranslucentOrFloating(Activity activity) {
+        boolean isTranslucentOrFloating = false;
+        try {
+            int[] styleableRes = (int[]) Class.forName("com.android.internal.R$styleable").getField("Window").get(null);
+            final TypedArray ta = activity.obtainStyledAttributes(styleableRes);
+            Method m = ActivityInfo.class.getMethod("isTranslucentOrFloating", TypedArray.class);
+            m.setAccessible(true);
+            isTranslucentOrFloating = (boolean) m.invoke(null, ta);
+            m.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isTranslucentOrFloating;
+    }
 
+    /**
+     * 修改方向
+     * @param activity
+     * @return
+     */
+    public boolean fixOrientation(Activity activity) {
+        try {
+            Field field = Activity.class.getDeclaredField("mActivityInfo");
+            field.setAccessible(true);
+            ActivityInfo o = (ActivityInfo) field.get(activity);
+            o.screenOrientation = -1;
+            field.setAccessible(false);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public static boolean MIUISetStatusBarLightMode(Activity activity, boolean dark) {
         boolean result = false;
         Window window = activity.getWindow();

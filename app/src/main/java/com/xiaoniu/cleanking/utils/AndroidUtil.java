@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -25,12 +26,18 @@ import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
 import com.ishumei.smantifraud.SmAntiFraud;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.AppUtils;
@@ -85,13 +92,40 @@ public class AndroidUtil {
                 }
             }
             return pName.contains(packageName);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
         return false;
     }
 
+    /**
+     * 判断手机是否安装微信的两种方法：
+     * 1.通过判断手机上安装的应用的包名集合中是否包含微信的包名判断
+     * 2.通过集成微信sdk后，使用sdk提供的api进行判断
+     * 经测试，单独使用这两种方法中的其中一种都会出现不能适配所有机型的情况。
+     *
+     * @param mContext
+     * @return
+     */
+    public static boolean isInstallWeiXin(Context mContext) {
+        IWXAPI wxApi = WXAPIFactory.createWXAPI(mContext, Constant.WEICHAT_APPID);
+        //先用微信API判断一次，再用包名判断一次
+        if (wxApi.isWXAppInstalled()) {
+            return true;
+        } else {
+            return isAppInstalled(SpCacheConfig.CHAT_PACKAGE);
+        }
+    }
+
+    public static boolean isInstallQQ(Context mContext) {
+        UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+        if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QQ)) {
+            return true;
+        } else {
+            return isAppInstalled(SpCacheConfig.QQ_PACKAGE);
+        }
+    }
 
     //调用第三方程序uri版本兼容
     public static void fileUri(Context context, Intent intent, File file, String type) {
@@ -280,6 +314,7 @@ public class AndroidUtil {
         lastClickTime = time;
         return false;
     }
+
     //防连续点击
     public static boolean isFastDoubleBtnClick(long durastime) {
         long time = System.currentTimeMillis();
@@ -353,9 +388,9 @@ public class AndroidUtil {
         SpannableString spanString = new SpannableString(content);
         ForegroundColorSpan span = new ForegroundColorSpan(color);
         spanString.setSpan(span, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
-        TypefaceSpan typefaceSpan=new TypefaceSpan("default-bold");
+        TypefaceSpan typefaceSpan = new TypefaceSpan("default-bold");
         spanString.setSpan(typefaceSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        RelativeSizeSpan relativeSizeSpan=new RelativeSizeSpan(1.1f);
+        RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(1.1f);
         spanString.setSpan(relativeSizeSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanString;
     }
