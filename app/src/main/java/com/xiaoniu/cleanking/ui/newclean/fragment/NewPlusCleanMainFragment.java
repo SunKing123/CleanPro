@@ -442,14 +442,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 //            } else {
 //                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
 //            }
-            //重新检测头部扫描状态
-            checkScanState();
+
+            //金币配置刷新
+            mPresenter.refBullList();
             //刷新广告数据
             if (!isFirstCreate) {
                 refreshAdAll();
+                //重新检测头部扫描状态
+                checkScanState();
             }
-            //金币配置刷新
-            mPresenter.refBullList();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -461,11 +462,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onResume() {
         super.onResume();
-        checkScanState();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
-        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
+        checkScanState();
     }
 
     @Override
@@ -523,7 +523,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
         mPresenter.refBullList();//金币配置刷新；
+        checkScanState();
     }
+
 
     //完成页返回通知
     @Subscribe
@@ -627,22 +629,23 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     //重新检测头部扫描状态
     public void checkScanState() {
-        LogUtils.i("zz---" + System.currentTimeMillis());
         if (AppUtils.checkStoragePermission(getActivity())) {//已经获得权限
             if (PreferenceUtil.getNowCleanTime()) {  //清理结果五分钟以外
                 if (ScanDataHolder.getInstance().getScanState() > 0 && null != ScanDataHolder.getInstance().getmCountEntity() && ScanDataHolder.getInstance().getTotalSize() > 50 * 1024 * 1024) {//扫描缓存5分钟内_展示缓存结果
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
-                    mPresenter.readyScanningJunk();
-                    mPresenter.scanningJunk();
+                    if (!AndroidUtil.isFastDoubleBtnClick(2000)) {
+                        mPresenter.readyScanningJunk();
+                        mPresenter.scanningJunk();
+                    }
                 }
             } else { //清理结果五分钟以内
                 String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
                 CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                 view_lottie_top.setClendedState(countEntity);
             }
-        } else {//未取得权限            //避免重复弹出
+        } else {//未取得权限//避免重复弹出
             new Handler().postDelayed(() -> {
                 if (!isDenied) {
                     mPresenter.checkStoragePermission();  //重新开始扫描
@@ -652,6 +655,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //未授权默认样式——存在大量垃圾；
             if (null != view_lottie_top)
                 view_lottie_top.setNoSize();
+
 
         }
     }
@@ -945,7 +949,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
         StatisticsUtils.trackClick(Points.MainHome.WX_CLEAN_CLICK_CODE, Points.MainHome.WX_CLEAN_CLICK_NAME, "home_page", "home_page");
-        if (!AndroidUtil.isInstallWeiXin(mActivity)) {
+        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
         }
