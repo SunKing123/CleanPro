@@ -1,9 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -92,15 +90,13 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
         );
         if (redPacketDataBean == null || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
             return;
-        switch (redPacketDataBean.getLocation()) {
-            case 5:
-                //所有页面展示红包
-                if (redPacketDataBean.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % redPacketDataBean.getTrigger() == 0) {
-                    if (isMainPage) {
-                        EventBus.getDefault().post(new HotStartEvent(HotStartAction.RED_PACKET));
-                    }
+        if (redPacketDataBean.getLocation() == 5) {
+            //所有页面展示红包
+            if (redPacketDataBean.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % redPacketDataBean.getTrigger() == 0) {
+                if (isMainPage) {
+                    EventBus.getDefault().post(new HotStartEvent(HotStartAction.RED_PACKET));
                 }
-                break;
+            }
         }
 
     }
