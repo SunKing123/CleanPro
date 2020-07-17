@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -27,6 +28,8 @@ import com.google.gson.Gson;
 import com.ishumei.smantifraud.SmAntiFraud;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -115,6 +118,14 @@ public class AndroidUtil {
         }
     }
 
+    public static boolean isInstallQQ(Context mContext) {
+        UMShareAPI umShareAPI = UMShareAPI.get(mContext);
+        if (umShareAPI.isInstall((Activity) mContext, SHARE_MEDIA.QQ)) {
+            return true;
+        } else {
+            return isAppInstalled(SpCacheConfig.QQ_PACKAGE);
+        }
+    }
 
     //调用第三方程序uri版本兼容
     public static void fileUri(Context context, Intent intent, File file, String type) {

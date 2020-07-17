@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.umeng.qq.tencent.Tencent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
@@ -190,7 +191,7 @@ public class ToolFragment extends SimpleFragment {
     public void onCoolingViewClicked(View view) {
         int ids = view.getId();
         if (ids == R.id.rl_chat) {
-            if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+            if (!AndroidUtil.isInstallWeiXin(mActivity)) {
                 ToastUtils.showShort(R.string.tool_no_install_chat);
                 return;
             }
@@ -232,7 +233,9 @@ public class ToolFragment extends SimpleFragment {
                 }
             }
         } else if (ids == R.id.rl_qq) {
-            if (!AndroidUtil.isAppInstalled(SpCacheConfig.QQ_PACKAGE)) {
+
+
+            if (!AndroidUtil.isInstallQQ(mActivity)) {
                 ToastUtils.showShort(R.string.tool_no_install_qq);
                 return;
             }
@@ -421,7 +424,7 @@ public class ToolFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
+        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SPEED_BOTTOM_ID)
                 .setActivity(mActivity).setViewContainer(frameBottomLayout).setViewWidthOffset(24).build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
             @Override
