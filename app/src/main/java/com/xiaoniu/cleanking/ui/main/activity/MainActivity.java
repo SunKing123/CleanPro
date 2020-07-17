@@ -164,6 +164,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     private static final String KEY_EXTRAS = "n_extras";
 
 
+
+    public boolean getInsert(){
+        return isInsert;
+    }
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -722,6 +726,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             startActivity(new Intent(this, RedPacketHotActivity.class));
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
             AppLifecyclesImpl.postDelay(() -> {
+
                 mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
             }, 1000);
         }
