@@ -35,11 +35,10 @@ import androidx.annotation.RequiresApi;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.bean.AppPackageNameList;
 import com.xiaoniu.cleanking.bean.AppPackageNameListDB;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
@@ -342,6 +341,7 @@ public final class LocalService extends Service {
                 i.putExtra("temp", temp);
                 i.putExtra("battery", mBatteryPower);
                 i.putExtra("isCharged", isCharged);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
@@ -361,6 +361,7 @@ public final class LocalService extends Service {
                 inten.putExtra("temp", temp);
                 inten.putExtra("battery", mBatteryPower);
                 inten.putExtra("isCharged", isCharged);
+                inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pi = PendingIntent.getBroadcast(this, NumberUtils.mathRandomInt(0, 100), inten, 0);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
@@ -383,6 +384,7 @@ public final class LocalService extends Service {
                 inten.putExtra("battery", mBatteryPower);
                 inten.putExtra("isCharged", isCharged);
                 inten.putExtra("homePressed", homeTime);
+                inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent pi = PendingIntent.getBroadcast(this, NumberUtils.mathRandomInt(0, 100), inten, 0);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
@@ -770,6 +772,7 @@ public final class LocalService extends Service {
         if (!isOpen && MmkvUtil.isShowFullInsert()) {
             isOpen = true;
             Intent inten = new Intent(this, TimingReceiver.class);
+            inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             inten.putExtra("action", "app_add_full");
             new Handler().postDelayed(new Runnable() {
                 @Override

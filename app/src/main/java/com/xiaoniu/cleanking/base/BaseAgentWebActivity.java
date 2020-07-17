@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.base;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.just.agentweb.MiddlewareWebClientBase;
 import com.just.agentweb.PermissionInterceptor;
 import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
+import com.xiaoniu.common.utils.AppActivityUtils;
 
 /**
  * @author XiLei
@@ -40,6 +42,10 @@ public abstract class BaseAgentWebActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        //透明activity在Android8.0上崩溃 解决方案
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && AppActivityUtils.isTranslucentOrFloating(this)) {
+            AppActivityUtils.fixOrientation(this);
+        }
         super.onCreate(savedInstanceState);
 
     }

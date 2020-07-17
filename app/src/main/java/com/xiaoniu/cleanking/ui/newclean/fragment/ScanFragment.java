@@ -23,14 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.adapter.ScanningJunkAdapter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
@@ -45,8 +44,6 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
