@@ -36,7 +36,6 @@ import com.xiaoniu.cleanking.ui.newclean.adapter.ScanningJunkAdapter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanningContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanningPresenter;
-import com.xiaoniu.cleanking.ui.tool.notify.event.ScanStateEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.widget.ArgbEvaluator;

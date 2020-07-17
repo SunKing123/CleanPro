@@ -686,7 +686,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         }
 
-
         String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
         if (null == mView) return;
         new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
