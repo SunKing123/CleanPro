@@ -163,11 +163,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      **/
     private static final String KEY_EXTRAS = "n_extras";
 
-
-
-    public boolean getInsert(){
-        return isInsert;
-    }
+    
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;

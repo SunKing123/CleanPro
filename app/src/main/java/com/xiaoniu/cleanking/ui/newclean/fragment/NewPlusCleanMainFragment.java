@@ -633,7 +633,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
-//                    mPresenter.cleanData();
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
                 }
@@ -641,16 +640,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
                 CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                 view_lottie_top.setClendedState(countEntity);
-
             }
-        } else {//未取得权限
-//            LogUtils.i("--checkScanState()");
-            //避免重复弹出
+        } else {//未取得权限            //避免重复弹出
             new Handler().postDelayed(() -> {
                 if (!isDenied) {
                     mPresenter.checkStoragePermission();  //重新开始扫描
                 }
             }, 200);
+
             //未授权默认样式——存在大量垃圾；
             if (null != view_lottie_top)
                 view_lottie_top.setNoSize();
