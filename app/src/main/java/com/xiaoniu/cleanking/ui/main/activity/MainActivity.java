@@ -163,16 +163,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      **/
     private static final String KEY_EXTRAS = "n_extras";
 
-    private boolean isInsert = false;
 
-    public void setInsert(boolean insert) {
-        isInsert = insert;
-    }
-
-
-    public boolean getInsert(){
-        return isInsert;
-    }
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -287,8 +278,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //            getDeviceInfo();
 //        }
 
-        //获取定位权限
-        mPresenter.requestPhoneStatePermission();
         AndroidUtil.haveLiuhai = NotchUtils.hasNotchScreen(this);
 //        测试入口
 //        if (BuildConfig.DEBUG) {
@@ -429,9 +418,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
             if (configBean != null && configBean.isOpen()) {
                 AppLifecyclesImpl.postDelay(() -> {
-                    if (isInsert) {
-                        mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
-                    }
+                    mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
                 }, 1000);
 
             }

@@ -627,13 +627,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     //重新检测头部扫描状态
     public void checkScanState() {
+        LogUtils.i("zz---"+System.currentTimeMillis());
         if (AppUtils.checkStoragePermission(getActivity())) {//已经获得权限
             if (PreferenceUtil.getNowCleanTime()) {  //清理结果五分钟以外
                 if (ScanDataHolder.getInstance().getScanState() > 0 && null != ScanDataHolder.getInstance().getmCountEntity() && ScanDataHolder.getInstance().getTotalSize() > 50 * 1024 * 1024) {//扫描缓存5分钟内_展示缓存结果
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
-//                    mPresenter.cleanData();
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
                 }
@@ -641,16 +641,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
                 CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                 view_lottie_top.setClendedState(countEntity);
-
             }
-        } else {//未取得权限
-//            LogUtils.i("--checkScanState()");
-            //避免重复弹出
+        } else {//未取得权限            //避免重复弹出
             new Handler().postDelayed(() -> {
                 if (!isDenied) {
                     mPresenter.checkStoragePermission();  //重新开始扫描
                 }
             }, 200);
+
             //未授权默认样式——存在大量垃圾；
             if (null != view_lottie_top)
                 view_lottie_top.setNoSize();
@@ -732,14 +730,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
             @Override
             public void onGranted() {
-                ((MainActivity) getActivity()).setInsert(true);
                 mPresenter.stopScanning();
                 startActivity(NowCleanActivity.class);
             }
 
             @Override
             public void onDenied() {
-                ((MainActivity) getActivity()).setInsert(true);
                 if (hasPermissionDeniedForever()) {  //点击拒绝
                     startActivity(NowCleanActivity.class);
                 } else {                            //点击永久拒绝
