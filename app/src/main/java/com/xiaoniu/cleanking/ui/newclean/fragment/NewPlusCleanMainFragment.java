@@ -732,14 +732,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
             @Override
             public void onGranted() {
-                ((MainActivity) getActivity()).setInsert(true);
                 mPresenter.stopScanning();
                 startActivity(NowCleanActivity.class);
             }
 
             @Override
             public void onDenied() {
-                ((MainActivity) getActivity()).setInsert(true);
                 if (hasPermissionDeniedForever()) {  //点击拒绝
                     startActivity(NowCleanActivity.class);
                 } else {                            //点击永久拒绝

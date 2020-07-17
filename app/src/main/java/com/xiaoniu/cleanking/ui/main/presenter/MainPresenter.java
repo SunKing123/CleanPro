@@ -116,8 +116,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     private final RxAppCompatActivity mActivity;
 
     private UpdateAgent mUpdateAgent;
-    @Inject
-    NoClearSPHelper mPreferencesHelper;
+
     private AMapLocationClient mLocationClient = null;
     private AMapLocationClientOption mLocationOption = null;
 
@@ -713,41 +712,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
-    //获取Imei
-    @SuppressLint("CheckResult")
-    public void requestPhoneStatePermission() {
-        if (mView == null) {
-            return;
-        }
 
-
-        String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
-        if (null == mView) return;
-        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    //开始
-                    if (mView == null)
-                        return;
-                    initNiuData();
-                } else {
-                    if (mView == null)
-                        return;
-                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.READ_PHONE_STATE)) {
-                        //永久拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    } else {
-                        //拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    }
-                }
-
-                //  requestPopWindowPermission();
-
-            }
-        });
-    }
 
     //获取本地推送弹框权限
     @SuppressLint("CheckResult")
@@ -1060,23 +1025,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     }
 
-    /**
-     * 埋点事件
-     */
-    private void initNiuData() {
-        if (!mPreferencesHelper.isUploadImei()) {
-            //有没有传过imei
-            String imei = PhoneInfoUtils.getIMEI(mActivity);
-            LogUtils.i("--zzh--" + imei);
-            if (TextUtils.isEmpty(imei)) {
-                NiuDataAPI.setIMEI("");
-                mPreferencesHelper.setUploadImeiStatus(false);
-            } else {
-                NiuDataAPI.setIMEI(imei);
-                mPreferencesHelper.setUploadImeiStatus(true);
-            }
-        }
-    }
 
     /**
      * 数美SDK初始化；
