@@ -627,7 +627,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     //重新检测头部扫描状态
     public void checkScanState() {
-        LogUtils.i("zz---"+System.currentTimeMillis());
+        LogUtils.i("zz---" + System.currentTimeMillis());
         if (AppUtils.checkStoragePermission(getActivity())) {//已经获得权限
             if (PreferenceUtil.getNowCleanTime()) {  //清理结果五分钟以外
                 if (ScanDataHolder.getInstance().getScanState() > 0 && null != ScanDataHolder.getInstance().getmCountEntity() && ScanDataHolder.getInstance().getTotalSize() > 50 * 1024 * 1024) {//扫描缓存5分钟内_展示缓存结果
@@ -945,7 +945,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
         StatisticsUtils.trackClick(Points.MainHome.WX_CLEAN_CLICK_CODE, Points.MainHome.WX_CLEAN_CLICK_NAME, "home_page", "home_page");
-        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+        if (!AndroidUtil.isInstallWeiXin(mActivity)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
         }
