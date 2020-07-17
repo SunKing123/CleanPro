@@ -73,6 +73,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -589,7 +590,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 判断广告弹窗和红包弹窗
      */
     public void checkAdviceOrRedPacketDialog() {
-        if (!mActivity.hasWindowFocus())
+        if (!mActivity.hasWindowFocus())//未获取焦点
+            return;
+        if (!AppUtils.checkStoragePermission(mActivity))//未授权谭庄
             return;
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
@@ -679,37 +682,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
-    //获取定位权限
-    @SuppressLint("CheckResult")
-    public void requestLocationPermission() {
-        if (mView == null) {
-            return;
-        }
 
-        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
-        if (null == mView) return;
-        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    //开始
-                    if (mView == null)
-                        return;
-                    requestLocation();
-                } else {
-                    if (mView == null)
-                        return;
-                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                        //永久拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    } else {
-                        //拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    }
-                }
-            }
-        });
-    }
 
 
 
@@ -743,7 +716,37 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
     }
 
+    //获取定位权限
+    @SuppressLint("CheckResult")
+    public void requestLocationPermission() {
+        if (mView == null) {
+            return;
+        }
 
+        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (null == mView) return;
+        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    //开始
+                    if (mView == null)
+                        return;
+                    requestLocation();
+                } else {
+                    if (mView == null)
+                        return;
+                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        //永久拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    } else {
+                        //拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    }
+                }
+            }
+        });
+    }
     /**
      * 执行定位操作
      */
