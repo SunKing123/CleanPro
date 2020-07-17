@@ -219,7 +219,8 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
     //计算删除文件大小
     public void compulateDeleteSize() {
-        if (null == imageAdapter) return;
+        if (null == imageAdapter)
+            return;
         List<FileEntity> listF = new ArrayList<>();
         List<FileEntity> listData = imageAdapter.getListImage();
         for (int i = 0; i < listData.size(); i++) {
@@ -272,7 +273,9 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
             if (CleanAllFileScanUtil.clean_image_list == null)
                 return;
             listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
-            imageAdapter.setListImage(listTemp);
+            if (null != imageAdapter) {
+                imageAdapter.setListImage(listTemp);
+            }
 
             int selectCount = 0;
             for (int i = 0; i < listTemp.size(); i++) {
@@ -280,6 +283,8 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
                     selectCount++;
                 }
             }
+            if (null == tv_delete || null == cb_checkall)
+                return;
             tv_delete.setBackgroundResource(selectCount == 0 ? R.drawable.delete_unselect_bg : R.drawable.delete_select_bg);
             tv_delete.setSelected(selectCount == 0 ? false : true);
             cb_checkall.setBackgroundResource(selectCount == listTemp.size() ? R.drawable.icon_select : R.drawable.icon_unselect);

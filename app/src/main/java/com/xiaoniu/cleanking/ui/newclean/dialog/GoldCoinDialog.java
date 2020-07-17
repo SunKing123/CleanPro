@@ -57,9 +57,13 @@ public class GoldCoinDialog {
             }
             return;
         }
-        if (dialog != null && dialog.isShowing()) {
-            dialog.dismiss();
-//            return;
+        try {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+    //            return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         dialog = new Dialog(context, R.style.dialog_2_button);
         dialog.setContentView(R.layout.gold_coin_dialog);
