@@ -1,5 +1,8 @@
 package com.geek.webpage.web.activity;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -33,11 +36,12 @@ import com.geek.webpage.web.WebViewListener;
 import com.geek.webpage.web.coolindicator.CoolIndicator;
 import com.geek.webpage.web.webview.LWWebView;
 
-
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,6 +69,10 @@ public class BaseWebpageActivity extends AppCompatActivity implements WebViewLis
     protected int pageType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //透明activity在Android8.0上崩溃 解决方案
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O && isTranslucentOrFloating(this)) {
+            fixOrientation(this);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webpage);
         EventBus.getDefault().register(this);
@@ -261,5 +269,44 @@ public class BaseWebpageActivity extends AppCompatActivity implements WebViewLis
         if (mJsBridge == null)
             return;
         mJsBridge.release();
+    }
+    /**
+     * 透明activity在Android8.0上崩溃 解决方案
+     * 透明
+     * @param activity
+     * @return
+     */
+    public boolean isTranslucentOrFloating(Activity activity) {
+        boolean isTranslucentOrFloating = false;
+        try {
+            int[] styleableRes = (int[]) Class.forName("com.android.internal.R$styleable").getField("Window").get(null);
+            final TypedArray ta = activity.obtainStyledAttributes(styleableRes);
+            Method m = ActivityInfo.class.getMethod("isTranslucentOrFloating", TypedArray.class);
+            m.setAccessible(true);
+            isTranslucentOrFloating = (boolean) m.invoke(null, ta);
+            m.setAccessible(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isTranslucentOrFloating;
+    }
+
+    /**
+     * 修改方向
+     * @param activity
+     * @return
+     */
+    public boolean fixOrientation(Activity activity) {
+        try {
+            Field field = Activity.class.getDeclaredField("mActivityInfo");
+            field.setAccessible(true);
+            ActivityInfo o = (ActivityInfo) field.get(activity);
+            o.screenOrientation = -1;
+            field.setAccessible(false);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
