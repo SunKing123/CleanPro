@@ -30,11 +30,13 @@ import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.adapter.ScanningJunkAdapter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanningContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanningPresenter;
+import com.xiaoniu.cleanking.ui.tool.notify.event.ScanStateEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.widget.ArgbEvaluator;
@@ -44,6 +46,8 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
