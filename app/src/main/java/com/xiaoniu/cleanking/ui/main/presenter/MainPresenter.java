@@ -591,8 +591,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     public void checkAdviceOrRedPacketDialog() {
         if (!mActivity.hasWindowFocus())
             return;
-        if(!mView.getInsert())
-            return;
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
             InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);
