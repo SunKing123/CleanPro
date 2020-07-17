@@ -949,7 +949,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
         StatisticsUtils.trackClick(Points.MainHome.WX_CLEAN_CLICK_CODE, Points.MainHome.WX_CLEAN_CLICK_NAME, "home_page", "home_page");
-        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+        if (!AndroidUtil.isInstallWeiXin(mActivity)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
         }
