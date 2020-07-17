@@ -756,7 +756,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_click");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
 
-        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+        if (!AndroidUtil.isInstallWeiXin(this)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
         }
