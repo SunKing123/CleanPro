@@ -92,7 +92,6 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
             } else {
                 ToastUtils.showShort("当前已是最新版本");
             }
-
         });
         //隐私政策
         line_zc.setOnClickListener(new View.OnClickListener() {

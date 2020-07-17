@@ -32,13 +32,14 @@ import androidx.appcompat.app.AppCompatActivity;
 public class FullPopLayerActivity extends AppCompatActivity implements View.OnClickListener {
     RelativeLayout flayoutAdContainer;
     RelativeLayout full_screen_insert_ad_header_layout;
-    private AdManager adManager;
     private TextView adShowTime;
     private ImageView adClose;
     private CountDownTimer countDownTimer;
     private AdInfo adInfo;
     private String adStyle = PositionId.AD_EXTERNAL_ADVERTISING_03;
     private String currentPage ="";
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,43 +83,6 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
 
     public void adInit() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", currentPage, currentPage);
-        AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadAd(this, adStyle, new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                Logger.i(SystemUtils.getProcessName(FullPopLayerActivity.this) +"---zz---success---"+info.getAdSource());
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", currentPage, currentPage);
-                adInfo = info;
-                View adView = info.getAdView();
-                if (adView != null && flayoutAdContainer != null && full_screen_insert_ad_header_layout != null) {
-                    full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);
-                    flayoutAdContainer.removeAllViews();
-                    flayoutAdContainer.addView(adView);
-                    MmkvUtil.saveFullInsert();
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-//                Logger.i("zz---adExposed---"+info.getAdSource());
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), currentPage, currentPage, info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-//                Logger.i("zz---adClicked---"+info.getAdSource());
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), currentPage, currentPage, info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-//                Logger.i("zz---adError"+info.getAdSource());
-                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "fail", currentPage, currentPage);
-                finish();
-            }
-
-        });
-
     }
 
     @Override

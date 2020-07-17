@@ -251,7 +251,6 @@ public class NativeAdManger implements AdManager {
             case "successpage_ad_4":
                 Log.e("advInfo", mConfigInfoBean.getAdPosition() + "    " + mConfigInfoBean.getAdStyle() + "   " + mConfigInfoBean.getAdsInfos().get(0).getAdId());
                 break;
-
         }
 
         adInfo.setAdStyle(mConfigInfoBean.getAdStyle());

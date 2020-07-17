@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdListener;
 import com.comm.jksdk.ad.listener.AdManager;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -38,7 +36,6 @@ import cn.jzvd.JzvdStd;
  * 头条资讯适配器
  */
 public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
-    AdManager adManager;
     Activity mActivity;
     String pageName = "";
 
@@ -46,9 +43,8 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
         super(context, new NewsItemTypeSupport());
     }
 
-    public NewsListAdapter(Context context, AdManager am, Activity ac, String name) {
+    public NewsListAdapter(Context context,Activity ac, String name) {
         super(context, new NewsItemTypeSupport());
-        adManager = am;
         mActivity = ac;
         pageName = name;
     }
@@ -83,7 +79,6 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 public void completed() {
                     //newlist_2_1   第二屏幕广告样式
                     if (NetworkUtils.isNetConnected()) {
-                        insertAd(linAdContainer, "newlist_2_1", closeBtn, View.VISIBLE);
                     }
 
                 }
@@ -98,8 +93,6 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                         showRate = map.get("page_video_end_screen").getShowRate();
                         if ((position + 1) % (showRate + 1) == 0) {//每间隔showRate播放
                             //newlist_2_1   第二屏幕广告样式
-                            if (NetworkUtils.isNetConnected())
-                                insertAd(linAdContainer, "newlist_2_1", closeBtn, View.GONE);
                         } else {
                             linAdContainer.removeAllViews();
                             linAdContainer.setVisibility(View.GONE);
@@ -139,8 +132,6 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
                 RelativeLayout linAdContainer = commonHolder.getView(R.id.lin_ad_container);//广告加载
                 //newlist_2_1   第二屏幕广告样式
                 String positionId = pageName.equals(NewsType.TOUTIAO.getName()) ? "newlist_1_1" : "newlist_other_1";
-                if (NetworkUtils.isNetConnected())
-                    insertAd(linAdContainer, positionId, null, View.GONE);
 //                LogUtils.i("---zzh--" + positionId);
             }
 
@@ -211,93 +202,4 @@ public class NewsListAdapter extends CommonRecyclerAdapter<Object> {
             return 0;
         }
     }
-
-    /**
-     * 插入广告
-     */
-    public void insertAd(RelativeLayout container, String positionId, CountDownView closeBtn, int visiable) {
-
-        if (null != container && null != adManager && null != mActivity) {
-            adManager.loadAd(mActivity, positionId, new AdListener() {
-                @Override
-                public void adSuccess(AdInfo info) {
-                    if (positionId.equals("newlist_2_1")) {//视频类型
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "video_information_page", "video_information_page");
-                        StatisticsUtils.customTrackEvent("ad_vue_custom", "视频页广告vue创建", "video_information_page", "video_information_page");
-                    } else {
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "information_page", "information_page");
-                        StatisticsUtils.customTrackEvent("ad_vue_custom", "资讯页广告vue创建", "information_page", "information_page");
-                    }
-                    if (null != container && null != info) {
-                        View adView = info.getAdView();
-                        if (adView != null) {
-                            if (adView.getParent() != null) {
-                                ((ViewGroup) adView.getParent()).removeView(adView);
-                            }
-                            container.removeAllViews();
-                            container.addView(adView);
-                            container.setVisibility(View.VISIBLE);
-                            if (null != closeBtn) {
-                                if (visiable == View.VISIBLE) {
-                                    closeBtn.setMillis(15000, 1000);
-                                    closeBtn.setVisibility(visiable);
-                                    closeBtn.start();
-                                    closeBtn.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            if (closeBtn != null)
-                                                closeBtn.setVisibility(View.GONE);
-                                            if (container != null)
-                                                container.removeAllViews();
-                                            container.setVisibility(View.GONE);
-
-                                            StatisticsUtils.clickAD("ad_close_click", "关闭点击", "1", info.getAdId(), info.getAdSource(), "video_information_page", "video_information_page", info.getAdTitle());
-                                        }
-                                    });
-                                    closeBtn.setOnCountDownListener(new CountDownView.OnCountDownListener() {
-                                        @Override
-                                        public void onCountDownFinish() {
-                                            if (closeBtn != null)
-                                                closeBtn.setVisibility(View.GONE);
-                                            if (container != null)
-                                                container.removeAllViews();
-                                            container.setVisibility(View.GONE);
-                                        }
-                                    });
-
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-                @Override
-                public void adExposed(AdInfo info) {
-                    if (positionId.equals("newlist_2_1")) {
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "video_information_page", "video_information_page", info.getAdTitle());
-                    } else {
-                        StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "information_page", "information_page", info.getAdTitle());
-                    }
-                }
-
-                @Override
-                public void adClicked(AdInfo info) {
-                    if (positionId.equals("newlist_2_1")) {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "video_information_page", "video_information_page", info.getAdTitle());
-                    } else {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "information_page", "information_page", info.getAdTitle());
-                    }
-                }
-
-                @Override
-                public void adError(AdInfo info, int errorCode, String errorMsg) {
-                    if (null == info) return;
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "lock_screen", "lock_screen");
-                }
-            });
-        }
-    }
-
-
 }
