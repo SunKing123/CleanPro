@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
@@ -55,6 +56,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -74,6 +76,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     TextView mBtn;
     @BindView(R.id.tv_qx)
     TextView mAgreement;
+    @BindView(R.id.tv_xy)
+    TextView tv_xy;
     @BindView(R.id.error_ad_iv)
     ImageView mErrorAdIv;
     @Inject
@@ -125,68 +129,46 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         container = this.findViewById(R.id.splash_container);
         mBtn.setOnClickListener(this);
         mAgreement.setOnClickListener(this);
-        findViewById(R.id.tv_xy).setOnClickListener(this);
-        PreferenceUtil.saveCleanAllUsed(false);
-        PreferenceUtil.saveCleanJiaSuUsed(false);
-        PreferenceUtil.saveCleanPowerUsed(false);
-        PreferenceUtil.saveCleanNotifyUsed(false);
-        PreferenceUtil.saveCleanWechatUsed(false);
-        PreferenceUtil.saveCleanCoolUsed(false);
-        PreferenceUtil.saveCleanGameUsed(false);
-        if (PreferenceUtil.getScreenInsideTime()) {
-            PreferenceUtil.saveRedPacketShowCount(1);
-            PreferenceUtil.saveScreenInsideTime();
-        } else {
-            PreferenceUtil.saveRedPacketShowCount(PreferenceUtil.getRedPacketShowCount() + 1);
-        }
-        /*保存冷、热启动的次数*/
-        InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
-        if (DateUtils.isSameDay(inside.getTime(), System.currentTimeMillis())) {
-            inside.setCount(inside.getCount() + 1);
-        } else {
-            inside.setCount(1);
-        }
-        inside.setTime(System.currentTimeMillis());
-        PreferenceUtil.saveColdAndHotStartCount(inside);
+        tv_xy.setOnClickListener(this);
+        mPresenter.spDataInit();
         if (NetworkUtils.isNetConnected()) {//正常网络
-            if (PreferenceUtil.getCoolStartTime()) {
-                mPresenter.getAuditSwitch();
-            } else { //小于10分钟不获取开关直接请求广告
-                //        状态（0=隐藏，1=显示）
-                String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
-                if (auditSwitch.equals("0")) {
-                    mStartView.setVisibility(View.GONE);
-                    mContentView.setVisibility(View.VISIBLE);
-                    this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                        jumpActivity();
-                    });
-                } else if (auditSwitch.equals("1")) {
-                    mStartView.setVisibility(View.GONE);
-                    mContentView.setVisibility(View.VISIBLE);
-                    if (PreferenceUtil.isNotFirstOpenApp()) {
-                        if (PreferenceUtil.getCoolStartADStatus()) {
-                            initGeekSdkAD();
-                        } else {
-                            jumpActivity();
-                        }
-                        String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
-                        if (!TextUtils.isEmpty(switchInfo)) {
-                            SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
-                            if (null != switchInfoList) {
-                                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-                            } else {
-                                mPresenter.getSwitchInfoListNew();
-                            }
-                        } else {
-                            mPresenter.getSwitchInfoListNew();
-                        }
-
-                    } else {
-                        jumpActivity();
-                    }
-                }
-            }
-            PreferenceUtil.saveCoolStartTime();
+            mPresenter.getAuditSwitch();
+//            if (PreferenceUtil.getCoolStartTime()) {
+//            } else { //小于10分钟不获取开关直接请求广告
+//                //状态（0=隐藏，1=显示）
+//                String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
+//                if (auditSwitch.equals("0")) {
+//                    mStartView.setVisibility(View.GONE);
+//                    mContentView.setVisibility(View.VISIBLE);
+//                    this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+//                        jumpActivity();
+//                    });
+//                } else if (auditSwitch.equals("1")) {
+//                    mStartView.setVisibility(View.GONE);
+//                    mContentView.setVisibility(View.VISIBLE);
+//                    if (PreferenceUtil.isNotFirstOpenApp()) {
+//                        if (PreferenceUtil.getCoolStartADStatus()) {
+//                            initGeekSdkAD();
+//                        } else {
+//                            jumpActivity();
+//                        }
+//                        String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
+//                        if (!TextUtils.isEmpty(switchInfo)) {
+//                            SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
+//                            if (null != switchInfoList) {
+//                                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
+//                            } else {
+//                                mPresenter.getSwitchInfoListNew();
+//                            }
+//                        } else {
+//                            mPresenter.getSwitchInfoListNew();
+//                        }
+//
+//                    } else {
+//                        jumpActivity();
+//                    }
+//                }
+//            }
         } else {//无网络状态
             if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
                 mStartView.setVisibility(View.VISIBLE);
@@ -195,7 +177,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
                 MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
             } else {
-                getAuditSwitchFail();
+                delayJump();
             }
         }
 
@@ -243,16 +225,18 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             mStartView.setVisibility(View.VISIBLE);
             mContentView.setVisibility(View.GONE);
             mPresenter.getSwitchInfoList();
-        } else if (auditSwitch.getData().equals("0")) {
-            mStartView.setVisibility(View.GONE);
-            mContentView.setVisibility(View.VISIBLE);
-            this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                jumpActivity();
-            });
-        } else if (auditSwitch.getData().equals("1")) {
-            mStartView.setVisibility(View.GONE);
-            mContentView.setVisibility(View.VISIBLE);
-            mPresenter.getSwitchInfoList();
+        } else {//非第一次冷启动_
+            if (auditSwitch.getData().equals("0")) {//过审中
+                mStartView.setVisibility(View.GONE);
+                mContentView.setVisibility(View.VISIBLE);
+                this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                    jumpActivity();
+                });
+            } else if (auditSwitch.getData().equals("1")) {//过审已通过
+                mStartView.setVisibility(View.GONE);
+                mContentView.setVisibility(View.VISIBLE);
+                mPresenter.getSwitchInfoList();
+            }
         }
     }
 
@@ -263,24 +247,26 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         //0715戚雯确认，接口异常默认审核状态；
         SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
         MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
-        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    jumpActivity();
-                }
-            }, 100);
-        });
+        delayJump();
     }
 
+    //延迟跳转
+    public void delayJump(){
+        this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+            jumpActivity();
+        });
+    }
+    //页面跳转
     public void jumpActivity() {
         if (mCanJump) {
-            Intent intent = new Intent(SplashADActivity.this, MainActivity.class);
-            if (!TextUtils.isEmpty(pushData)) {
-                intent.putExtra("push_uri", pushData);
+            if(!AndroidUtil.isFastDoubleClick()){
+                Intent intent = new Intent(SplashADActivity.this, MainActivity.class);
+                if (!TextUtils.isEmpty(pushData)) {
+                    intent.putExtra("push_uri", pushData);
+                }
+                startActivity(intent);
+                finish();
             }
-            startActivity(intent);
-            finish();
             mCanJump = false;
         } else {
             mCanJump = true;
@@ -336,8 +322,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 }
             }
         }
-        if (!PreferenceUtil.isNotFirstOpenApp()) return;
-        if (PreferenceUtil.isNotFirstOpenApp() && mIsOpen) {
+        if (!PreferenceUtil.isNotFirstOpenApp()){//第一次冷启动
+            return;
+        }
+        if (mIsOpen) {//开屏开关已开
             initGeekSdkAD();
         } else {
             jumpActivity();
