@@ -299,7 +299,6 @@ dependencies {
 
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
-
     //无网络等空页面
     implementation 'com.xiaoniuhy.toolkit:statusview-repo:1.0.0'
     api project(':otherlib:jksdk')

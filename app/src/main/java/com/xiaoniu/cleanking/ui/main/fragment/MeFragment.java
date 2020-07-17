@@ -62,8 +62,6 @@ public class MeFragment extends SimpleFragment {
     FrameLayout frameBottomLayout;
     @BindView(R.id.iv_icon)
     ImageView ivIcon;
-    private AdManager mAdManager;
-
     public static MeFragment getIntance() {
         return new MeFragment();
     }
@@ -98,22 +96,12 @@ public class MeFragment extends SimpleFragment {
         ConstraintLayout.LayoutParams clpt = (ConstraintLayout.LayoutParams) viewmid.getLayoutParams();
         clpt.topMargin = DisplayUtils.getScreenHeight() * 26 / 100 - DisplayUtils.dip2px(15);
         viewmid.setLayoutParams(clpt);
-        initGeekAdSdk();
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         tagNum = 0;
-    }
-
-    /**
-     * 广告sdk
-     */
-    private void initGeekAdSdk() {
-        if (null == mAdManager)
-            mAdManager = GeekAdSdk.getAdsManger();
     }
 
     public long e = 0;
@@ -285,50 +273,6 @@ public class MeFragment extends SimpleFragment {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_MINE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
-        GeekAdSdk.getAdsManger().loadNativeTemplateAd(mActivity,PositionId.AD_PERSONAL_CENTER_PAGE_BELOW_AD_MB, Float.valueOf (DisplayUtil.px2dp(mContext,DisplayUtil.getScreenWidth(mContext)) -24), new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null != info) {
-                    Logger.i("adSuccess---1==" + info.getAdId());
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "my_page", "my_page");
-                    if (null != frameBottomLayout && null != info.getAdView()) {
-                        frameBottomLayout.removeAllViews();
-                        frameBottomLayout.addView(info.getAdView());
-                        frameBottomLayout.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                Logger.i("adExposed---1");
-                if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "my_page", "my_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Logger.i("adClicked---1");
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "my_page", "my_page", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Logger.i("adError---1---"+errorMsg);
-                if (null != info) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "my_page", "my_page");
-                }
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(null!=frameBottomLayout){
-                            frameBottomLayout.setVisibility(View.GONE);
-                        }
-                    }
-                });
-            }
-        });
     }
 
 }

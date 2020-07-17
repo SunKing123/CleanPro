@@ -317,97 +317,9 @@ public class DebugActivity extends BaseActivity {
 
     //获取广告配置
     public void gotoPop(View view) {
-//        startPop(this);
-//        AdManager adManager = GeekAdSdk.getAdsManger();
-//
-//        adManager.loadSplashAd(this, PositionId.AD_POSITION_COLD_KP, new AdListener() { //暂时这样
-//            @Override
-//            public void adSuccess(AdInfo info) {
-//                if (null != info) {
-//                    Log.d(TAG, "adSuccess---home--top =" + info.toString());
-//                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "home_page", "home_page");
-//                    if (null != frame_layout && null != info.getAdView()) {
-//                        frame_layout.setVisibility(VISIBLE);
-//                        frame_layout.removeAllViews();
-//                        frame_layout.addView(info.getAdView());
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void adExposed(AdInfo info) {
-//                if (null == info) return;
-//                Log.d(TAG, "adExposed---home--top");
-//
-//                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "home_page", "home_page", info.getAdTitle());
-//            }
-//
-//            @Override
-//            public void adClicked(AdInfo info) {
-//                Log.d(TAG, "adClicked---home--top");
-//                if (null == info) return;
-//
-//            }
-//
-//            @Override
-//            public void adClose(AdInfo info) {
-//                if (null == info) return;
-//
-//                frame_layout.setVisibility(View.GONE);
-//                frame_layout.removeAllViews();
-////                StatisticsUtils.clickAD("close_click", "病毒查杀激励视频结束页关闭点击", "1", info.getAdId(), info.getAdSource(), "home_page", "virus_killing_video_end_page", info.getAdTitle());
-//            }
-//
-//            @Override
-//            public void adError(AdInfo info, int errorCode, String errorMsg) {
-//                if (null == info) return;
-//                Log.d(TAG, "adError---home--top=" + info.toString());
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "home_page", "home_page");
-//            }
-//        });
-
         String cFileName = "ad_config_gj_1.4.5_c1.json";
         ConfigBean assetConfig = new Gson().fromJson(JsonUtils.readJSONFromAsset(DebugActivity.this, cFileName),ConfigBean.class);
         AdsConfig.setAdsInfoslist(assetConfig);
-        AdManager adManager = GeekAdSdk.getAdsManger();
-        adManager.loadCustomInsertScreenAd(this, PositionId.AD_CLEAN_FINISH_POSITION_CP_AD_2, 3, new AdListener() {
-            @Override
-            public void adSuccess(AdInfo info) {
-                if (null == info) return;
-                Log.d(TAG, "-----adSuccess 完成页返回插屏-----=" + info.toString());
-                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "success", NewCleanFinishActivity.currentPage, "screen_advertising");
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                Log.d(TAG, "-----adExposed 完成页返回插屏-----");
-                if (null == info) return;
-                StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "-----adClicked 完成页返回插屏-----");
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                Log.d(TAG, "adClose 完成页返回插屏---");
-                finish();
-                if (null == info) return;
-                StatisticsUtils.clickAD("ad_click", "关闭点击", "1", info.getAdId(), info.getAdSource(), NewCleanFinishActivity.currentPage, "screen_advertising", info.getAdTitle());
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "-----adError 完成页返回插屏-----");
-                finish();
-                if (null == info) return;
-                StatisticsUtils.customADRequest("ad_request", "完成页插屏广告请求", "1", info.getAdId(), info.getAdSource(), "fail", NewCleanFinishActivity.currentPage, "screen_advertising");
-            }
-        });
     }
 
 
