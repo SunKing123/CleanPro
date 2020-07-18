@@ -299,7 +299,6 @@ dependencies {
 
     annotationProcessor rootProject.ext.dependencies["arouter-compiler"]
 
-
     //无网络等空页面
     implementation 'com.xiaoniuhy.toolkit:statusview-repo:1.0.0'
     api project(':otherlib:jksdk')
@@ -331,6 +330,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'com.blankj:utilcodex:1.29.0'
 
 }
 apply plugin: 'com.huawei.agconnect'

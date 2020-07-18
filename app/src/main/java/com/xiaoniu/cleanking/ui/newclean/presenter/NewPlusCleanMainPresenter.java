@@ -12,7 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
+//import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
@@ -50,13 +53,16 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
+import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
@@ -79,6 +85,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragment, NewScanModel> {
@@ -88,6 +95,8 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
     private AdParameter mAdParameter;
+    @Inject
+    NoClearSPHelper mPreferencesHelper;
 
     @Inject
     public NewPlusCleanMainPresenter() {
@@ -203,29 +212,48 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (mView.getActivity() == null || mView.getActivity().isFinishing()) {
             return;
         }
-        //动画开始播放
-//        mView.startScan();
-//        LogUtils.i("checkStoragePermission()");
-        ((MainActivity)mView.getActivity()).setInsert(false);
-        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        new RxPermissions(mView.getActivity()).request(permissions)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aBoolean -> {
-                    ((MainActivity)mView.getActivity()).setInsert(true);
-                    if (aBoolean) {
-                        LogUtils.i("checkStoragePermission()---true");
-                        readyScanningJunk();
-                        scanningJunk();
-                    } else {
-                        if (hasPermissionDeniedForever()) {//点击拒绝
-                            LogUtils.i("checkStoragePermission()---denied");
-                            mView.permissionDenied();
-                        } else {//点击永久拒绝
-                            LogUtils.i("checkStoragePermission()---denied--faile");
-                            //mView.showPermissionDialog();
-                        }
-                    }
-                });
+
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+                LogUtils.i("checkStoragePermission()---true");
+                readyScanningJunk();
+                scanningJunk();
+                requestPhoneStatePermission();
+            }
+
+            @Override
+            public void onDenied() {
+                if (hasPermissionDeniedForever()) {//点击拒绝
+                    LogUtils.i("checkStoragePermission()---denied");
+                    mView.permissionDenied();
+                } else {//点击永久拒绝
+                    LogUtils.i("checkStoragePermission()---denied--faile");
+                }
+                requestPhoneStatePermission();
+            }
+        }).request();
+
+    }
+
+    //获取Imei
+    @SuppressLint("WrongConstant")
+    public void requestPhoneStatePermission() {
+        if (null == mView) return;
+        PermissionUtils.permission(Manifest.permission.READ_PHONE_STATE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+                //开始
+                if (mView == null)
+                    return;
+                initNiuData();
+            }
+            @Override
+            public void onDenied() {
+
+            }
+        }).request();
+
     }
 
     /**
@@ -278,7 +306,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     @SuppressLint("CheckResult")
     public void scanningJunk() {
-
         if (isScaning == true)
             return;
 
@@ -374,7 +401,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 //                //计算总的扫描时间，并回传记录
 //                long scanningCountTime = System.currentTimeMillis() - scanningStartTime;
 //                getView().setScanningCountTime(scanningCountTime);
-
 //                //计算扫描文件总数
 //                getView().setScanningFileCount(fileCount);
             }
@@ -503,7 +529,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
 
-
     public void prepareVideoAd(ViewGroup viewGroup) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
@@ -529,7 +554,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         }
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(adviceID).setActivity(mView.getActivity())
-                .setViewWidth(ScreenUtils.getScreenWidth(mView.getActivity()) - DisplayUtil.dip2px(mView.getActivity(),28))
+                .setViewWidth(ScreenUtils.getScreenWidth(mView.getActivity()) - DisplayUtil.dip2px(mView.getActivity(), 28))
                 .setViewContainer(viewGroup).build();
 
         MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
@@ -723,7 +748,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         //翻倍回调
         bean.onDoubleClickListener = (v) -> {
             try {
-                if(AndroidUtil.isFastDoubleBtnClick(1000)){
+                if (AndroidUtil.isFastDoubleBtnClick(1000)) {
                     return;
                 }
                 //翻倍按钮点击
@@ -806,20 +831,39 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
     //金币位置预加载
-    public void goldAdprev(){
+    public void goldAdprev() {
         adPrevData(AdposUtil.getAdPos(1, 0));//位置一预加载
         adPrevData(AdposUtil.getAdPos(1, 1));//位置二预加载
 
     }
 
     //广告预加载
-    public void adPrevData(String posId){
+    public void adPrevData(String posId) {
         try {
             AdRequestParams params = new AdRequestParams.Builder()
                     .setAdId(posId).setActivity(mView.getActivity()).setViewWidthOffset(45).build();
             MidasRequesCenter.preLoad(params);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 埋点事件
+     */
+    private void initNiuData() {
+        if (!mPreferencesHelper.isUploadImei()) {
+            //有没有传过imei
+            String imei = PhoneInfoUtils.getIMEI(mView.getActivity());
+            LogUtils.i("--zzh--" + imei);
+            if (TextUtils.isEmpty(imei)) {
+                NiuDataAPI.setIMEI("");
+                mPreferencesHelper.setUploadImeiStatus(false);
+            } else {
+                NiuDataAPI.setIMEI(imei);
+                mPreferencesHelper.setUploadImeiStatus(true);
+            }
         }
     }
 

@@ -72,8 +72,8 @@ import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
-import com.xiaoniu.cleanking.utils.update.listener.OnCancelListener;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -107,6 +107,8 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
+//import com.tbruyelle.rxpermissions2.RxPermissions;
+
 /**
  * Created by tie on 2017/5/15.
  */
@@ -115,8 +117,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     private final RxAppCompatActivity mActivity;
 
     private UpdateAgent mUpdateAgent;
-    @Inject
-    NoClearSPHelper mPreferencesHelper;
+
     private AMapLocationClient mLocationClient = null;
     private AMapLocationClientOption mLocationOption = null;
 
@@ -570,7 +571,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (mActivity == null || TextUtils.isEmpty(appID)) {
             return;
         }
-        if(!mActivity.hasWindowFocus())
+        if (!mActivity.hasWindowFocus())
             return;
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
         AdRequestParams params = new AdRequestParams.Builder()
@@ -589,9 +590,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 判断广告弹窗和红包弹窗
      */
     public void checkAdviceOrRedPacketDialog() {
-        if(!mActivity.hasWindowFocus())
+        if (!mActivity.hasWindowFocus())//未获取焦点
             return;
-        if(!mView.getInsert())
+        if (!AppUtils.checkStoragePermission(mActivity))//未授权谭庄
             return;
         //展示内部插屏广告
         if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
@@ -681,70 +682,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
-    //获取定位权限
-    @SuppressLint("CheckResult")
-    public void requestLocationPermission() {
-        if (mView == null) {
-            return;
-        }
-        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
-        if (null == mView) return;
-        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    //开始
-                    if (mView == null)
-                        return;
-                    requestLocation();
-                } else {
-                    if (mView == null)
-                        return;
-                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                        //永久拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    } else {
-                        //拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    }
-                }
-            }
-        });
-    }
 
-    //获取Imei
-    @SuppressLint("CheckResult")
-    public void requestPhoneStatePermission() {
-        if (mView == null) {
-            return;
-        }
-        String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
-        if (null == mView) return;
-        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    //开始
-                    if (mView == null)
-                        return;
-                    initNiuData();
-                } else {
-                    if (mView == null)
-                        return;
-                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.READ_PHONE_STATE)) {
-                        //永久拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    } else {
-                        //拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    }
-                }
 
-                //  requestPopWindowPermission();
 
-            }
-        });
-    }
 
     //获取本地推送弹框权限
     @SuppressLint("CheckResult")
@@ -776,7 +716,37 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
     }
 
+    //获取定位权限
+    @SuppressLint("CheckResult")
+    public void requestLocationPermission() {
+        if (mView == null) {
+            return;
+        }
 
+        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (null == mView) return;
+        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    //开始
+                    if (mView == null)
+                        return;
+                    requestLocation();
+                } else {
+                    if (mView == null)
+                        return;
+                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        //永久拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    } else {
+                        //拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    }
+                }
+            }
+        });
+    }
     /**
      * 执行定位操作
      */
@@ -1057,23 +1027,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
     }
 
-    /**
-     * 埋点事件
-     */
-    private void initNiuData() {
-        if (!mPreferencesHelper.isUploadImei()) {
-            //有没有传过imei
-            String imei = PhoneInfoUtils.getIMEI(mActivity);
-            LogUtils.i("--zzh--" + imei);
-            if (TextUtils.isEmpty(imei)) {
-                NiuDataAPI.setIMEI("");
-                mPreferencesHelper.setUploadImeiStatus(false);
-            } else {
-                NiuDataAPI.setIMEI(imei);
-                mPreferencesHelper.setUploadImeiStatus(true);
-            }
-        }
-    }
 
     /**
      * 数美SDK初始化；
@@ -1097,7 +1050,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     //3.SDK 初始化
                     SmAntiFraud.create(AppApplication.getInstance(), option);
                 }
-            },2000);
+            }, 2000);
 
 
         }

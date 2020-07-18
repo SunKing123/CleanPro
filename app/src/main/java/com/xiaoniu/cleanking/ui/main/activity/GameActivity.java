@@ -20,10 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.comm.jksdk.GeekAdSdk;
-import com.comm.jksdk.ad.entity.AdInfo;
-import com.comm.jksdk.ad.listener.AdManager;
-import com.comm.jksdk.ad.listener.VideoAdListener;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -107,7 +103,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
     private boolean mIsStartClean; //是否开始加速
     private boolean mIsAdError; //激励视频加载失败
     private boolean mIsYinDaoFinish; //引导动画是否结束
-    private AdManager mAdManager;
     private ImageView[] ivs;
     private boolean mIsFromHomeMain; //是否来自首页主功能区
     private boolean mAdExposed; //广告是否曝光
@@ -159,7 +154,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         } else {
             StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "gameboost_add_page", "gameboost_incentive_video_page");
         }
-        mAdManager = GeekAdSdk.getAdsManger();
         if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                 && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
@@ -377,7 +371,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                         NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
                         StatisticsUtils.trackClick("gameboost_open_click", "游戏加速视频弹窗页开启点击", "gameboost_add_page", "gameboost_video_popup_page");
                     }
-                    loadGeekAd();
                     saveSelectApp();
                     return;
                 }
@@ -418,7 +411,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
                                 NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_video_popup_page", "gameboost_video_popup_page_view_page", "游戏加速视频弹窗页浏览");
                                 StatisticsUtils.trackClick("gameboost_open_click", "游戏加速视频弹窗页开启点击", "gameboost_add_page", "gameboost_video_popup_page");
                             }
-                            loadGeekAd();
                             saveSelectApp();
                         }
                         dialog.dismiss();
@@ -503,110 +495,6 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
-    }
-
-    /**
-     * 激励视频
-     */
-    private void loadGeekAd() {
-        if (null == mAdManager) return;
-        if (mIsFromHomeMain) {
-            NiuDataAPI.onPageStart("main_function_area_gameboost_incentive_video_page_view_page", "主功能区游戏加速激励视频页浏览");
-            NiuDataAPIUtil.onPageEnd("main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page", "main_function_area_gameboost_incentive_video_page_view_page", "主功能区游戏加速激励视频页浏览");
-        } else {
-            NiuDataAPI.onPageStart("gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
-            NiuDataAPIUtil.onPageEnd("gameboost_add_page", "gameboost_incentive_video_page", "gameboost_incentive_video_page_view_page", "游戏加速激励视频页浏览");
-        }
-        mAdManager.loadRewardVideoAd(this, PositionId.AD_GAMEBOOST_VIDEO_AD, "user123", 1, new VideoAdListener() {
-            @Override
-            public void onVideoResume(AdInfo info) {
-
-            }
-
-            @Override
-            public void onVideoRewardVerify(AdInfo info, boolean rewardVerify, int rewardAmount, String rewardName) {
-
-            }
-
-            @Override
-            public void onVideoComplete(AdInfo info) {
-                if (mIsFromHomeMain) {
-                    NiuDataAPI.onPageStart("main_function_area_gameboost_incentive_video_end_page_view_page", "主功能区游戏加速激励视频结束页浏览");
-                } else {
-                    NiuDataAPI.onPageStart("gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
-                }
-            }
-
-            @Override
-            public void adSuccess(AdInfo info) {
-                Log.d(TAG, "-----adSuccess-----");
-                if (null == info) return;
-                if (mIsFromHomeMain) {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page");
-                } else {
-                    StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "gameboost_add_page", "gameboost_incentive_video_page");
-                }
-            }
-
-            @Override
-            public void adExposed(AdInfo info) {
-                Log.d(TAG, "-----adExposed-----");
-
-                if (null == info) return;
-                mAdExposed = true;
-                if (mIsFromHomeMain) {
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page", info.getAdTitle());
-                } else {
-                    StatisticsUtils.customAD("ad_show", "广告展示曝光", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", info.getAdTitle());
-                }
-            }
-
-            @Override
-            public void adClicked(AdInfo info) {
-                Log.d(TAG, "-----adClicked-----");
-                if (null == info) return;
-                if (mIsFromHomeMain) {
-                    if (mAdExposed) {
-                        StatisticsUtils.clickAD("ad_click", "主功能区游戏加速激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_incentive_video_page", "main_function_area_gameboost_incentive_video_end_page", info.getAdTitle());
-                    } else {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page", info.getAdTitle());
-                    }
-                } else {
-                    if (mAdExposed) {
-                        StatisticsUtils.clickAD("ad_click", "游戏加速激励视频结束页下载点击", "1", info.getAdId(), info.getAdSource(), "gameboost_incentive_video_page", "gameboost_incentive_video_end_page", info.getAdTitle());
-                    } else {
-                        StatisticsUtils.clickAD("ad_click", "广告点击", "1", info.getAdId(), info.getAdSource(), "gameboost_add_page", "gameboost_incentive_video_page", info.getAdTitle());
-                    }
-                }
-            }
-
-            @Override
-            public void adClose(AdInfo info) {
-                Log.d(TAG, "-----adClose-----");
-                if (mIsFromHomeMain) {
-                    StatisticsUtils.trackClick("close_click", "主功能区游戏加速激励视频结束页关闭点击", "main_function_area_gameboost_incentive_video_page", "gmain_function_area_ameboost_incentive_video_end_page");
-                    NiuDataAPIUtil.onPageEnd("main_function_area_gameboost_incentive_video_page", "main_function_area_gameboost_incentive_video_end_page", "main_function_area_gameboost_incentive_video_end_page_view_page", "主功能区游戏加速激励视频结束页浏览");
-                } else {
-                    StatisticsUtils.trackClick("close_click", "游戏加速激励视频结束页关闭点击", "gameboost_incentive_video_page", "gameboost_incentive_video_end_page");
-                    NiuDataAPIUtil.onPageEnd("gameboost_incentive_video_page", "gameboost_incentive_video_end_page", "gameboost_incentive_video_end_page_view_page", "游戏加速激励视频结束页浏览");
-                }
-                startClean();
-            }
-
-            @Override
-            public void adError(AdInfo info, int errorCode, String errorMsg) {
-                Log.d(TAG, "-----adError-----" + errorMsg);
-                if (null != info) {
-                    if (mIsFromHomeMain) {
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "main_function_area_gameboost_add_page", "main_function_area_gameboost_incentive_video_page");
-                    } else {
-                        StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "fail", "gameboost_add_page", "gameboost_incentive_video_page");
-                    }
-                }
-                startClean();
-            }
-
-        });
     }
 
     /**

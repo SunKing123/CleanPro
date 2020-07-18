@@ -18,50 +18,6 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label">
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/gdt_inmobi_file_path" />
-        </provider>
-
-        <provider
-            android:name="com.meishu.sdk.core.service.MeishuFileProvider"
-            android:authorities="${applicationId}.MeishuFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/meishu_file_path" />
-        </provider>
-
-        <provider
-            android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
-            android:authorities="${applicationId}.TTFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-        <provider
-            android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
-            android:authorities="${applicationId}.TTMultiProvider"
-            android:exported="false" />
-
-        <provider
-            android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
-            android:authorities="${applicationId}.mtgFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/mtg_provider_paths" />
-        </provider>
-
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
@@ -248,7 +204,7 @@
             android:name=".ui.usercenter.activity.PermissionDetailActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
+            android:screenOrientation="unspecified"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.main.activity.QuestionReportActivity"
@@ -865,14 +821,14 @@
             android:name="com.chuanglan.shanyan_sdk.view.CmccLoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="behind"
+            android:screenOrientation="unspecified"
             android:theme="@style/shanyanDialogStyle" />
 
         <activity-alias
             android:name="com.cmic.sso.sdk.activity.LoginAuthActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="behind"
+            android:screenOrientation="unspecified"
             android:targetActivity="com.chuanglan.shanyan_sdk.view.CmccLoginActivity"
             android:theme="@style/shanyanDialogStyle" />
 
@@ -880,13 +836,13 @@
             android:name="com.chuanglan.shanyan_sdk.view.ShanYanOneKeyActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="behind"
+            android:screenOrientation="unspecified"
             android:theme="@style/shanyanDialogStyle" />
         <activity
             android:name="com.chuanglan.shanyan_sdk.view.CTCCPrivacyProtocolActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop"
-            android:screenOrientation="behind"
+            android:screenOrientation="unspecified"
             android:theme="@style/shanyanDialogStyle" />
         <!--闪验集成配置==============结束============-->
     </application>

@@ -68,7 +68,7 @@ public class NewsListFragment extends BaseFragment {
             mType = (NewsType) arguments.getSerializable(KEY_TYPE);
 
         }
-        mNewsAdapter = new NewsListAdapter(getContext(), GeekAdSdk.getAdsManger(),getActivity(),mType.getName());
+        mNewsAdapter = new NewsListAdapter(getContext(),getActivity(),mType.getName());
 
         setSupportLazy(true);
     }

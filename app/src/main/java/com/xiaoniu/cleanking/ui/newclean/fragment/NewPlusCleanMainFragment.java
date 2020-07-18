@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -211,7 +213,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     mPresenter.goldAdprev();
                     refreshAdAll();
                 }
-            },3000);
+            }, 3000);
             isFirstCreate = false;
         }
 
@@ -440,14 +442,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 //            } else {
 //                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
 //            }
-            //重新检测头部扫描状态
-            checkScanState();
+
+            //金币配置刷新
+            mPresenter.refBullList();
             //刷新广告数据
             if (!isFirstCreate) {
                 refreshAdAll();
+                //重新检测头部扫描状态
+                checkScanState();
             }
-            //金币配置刷新
-            mPresenter.refBullList();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -459,11 +462,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onResume() {
         super.onResume();
-        checkScanState();
         mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
         mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
-        NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
+        checkScanState();
     }
 
     @Override
@@ -521,7 +523,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
         mPresenter.refBullList();//金币配置刷新；
+        checkScanState();
     }
+
 
     //完成页返回通知
     @Subscribe
@@ -631,27 +635,27 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
-//                    mPresenter.cleanData();
+//                    if (!AndroidUtil.isFastDoubleBtnClick(2000)) {
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
+//                    }
                 }
             } else { //清理结果五分钟以内
                 String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
                 CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                 view_lottie_top.setClendedState(countEntity);
-
             }
-        } else {//未取得权限
-//            LogUtils.i("--checkScanState()");
-            //避免重复弹出
+        } else {//未取得权限//避免重复弹出
             new Handler().postDelayed(() -> {
                 if (!isDenied) {
                     mPresenter.checkStoragePermission();  //重新开始扫描
                 }
             }, 200);
+
             //未授权默认样式——存在大量垃圾；
             if (null != view_lottie_top)
                 view_lottie_top.setNoSize();
+
 
         }
     }
@@ -709,12 +713,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * 检查文件存贮权限
      */
     private void checkStoragePermission() {
-        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        ((MainActivity)this.getActivity()).setInsert(false);
+     /*   String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        ((MainActivity) this.getActivity()).setInsert(false);
         Disposable disposable = rxPermissions.request(permissions)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
-                    ((MainActivity)this.getActivity()).setInsert(true);
+                    ((MainActivity) this.getActivity()).setInsert(true);
                     if (aBoolean) {
                         mPresenter.stopScanning();
                         startActivity(NowCleanActivity.class);
@@ -726,7 +730,23 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         }
                     }
                 });
-        compositeDisposable.add(disposable);
+        compositeDisposable.add(disposable);*/
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+                mPresenter.stopScanning();
+                startActivity(NowCleanActivity.class);
+            }
+
+            @Override
+            public void onDenied() {
+                if (hasPermissionDeniedForever()) {  //点击拒绝
+                    startActivity(NowCleanActivity.class);
+                } else {                            //点击永久拒绝
+                    showPermissionDialog();
+                }
+            }
+        }).request();
     }
 
     public void showPermissionDialog() {
@@ -929,7 +949,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
         AppHolder.getInstance().setOtherSourcePageId(SpCacheConfig.WETCHAT_CLEAN);
         StatisticsUtils.trackClick(Points.MainHome.WX_CLEAN_CLICK_CODE, Points.MainHome.WX_CLEAN_CLICK_NAME, "home_page", "home_page");
-        if (!AndroidUtil.isAppInstalled(SpCacheConfig.CHAT_PACKAGE)) {
+        if (!AndroidUtil.isInstallWeiXin(mActivity)) {
             ToastUtils.showShort(R.string.tool_no_install_chat);
             return;
         }

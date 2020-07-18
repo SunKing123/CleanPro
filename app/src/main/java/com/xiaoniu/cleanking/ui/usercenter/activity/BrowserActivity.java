@@ -86,7 +86,7 @@ public class BrowserActivity extends BaseActivity {
     protected void onDestroy() {
         //去刷新刮刮乐的h5
         EventBus.getDefault().unregister(this);
-        EventBus.getDefault().post("refreshGuaGuaLeH5");
+//        EventBus.getDefault().post("refreshGuaGuaLeH5");
         super.onDestroy();
     }
 }
