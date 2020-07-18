@@ -282,6 +282,7 @@ public class YuLeFragment extends SimpleFragment {
     public void onResume() {
         mAgentWeb.getWebLifeCycle().onResume();
         super.onResume();
+        getWebView().loadUrl("javascript:refresh()");
     }
 
     @Override
