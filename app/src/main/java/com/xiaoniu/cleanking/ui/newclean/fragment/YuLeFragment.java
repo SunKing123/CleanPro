@@ -167,7 +167,7 @@ public class YuLeFragment extends SimpleFragment {
     public void refreshUserInfo(String string) {
         if (LOGIN_SUCCESS.equals(string) || EXIT_SUCCESS.equals(string) || "refreshGuaGuaLeH5".equals(string)) {
 //            mBinding.phoneNumTv.setText("UserHelper.init().getPhoneNum()");
-            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+            getWebView().loadUrl("javascript:refresh()");
         }
     }
 
