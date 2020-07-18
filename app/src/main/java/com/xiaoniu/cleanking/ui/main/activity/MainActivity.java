@@ -582,7 +582,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-    private long firstTime;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
