@@ -54,7 +54,7 @@ public class YuLeFragment extends SimpleFragment {
 //    private String url = "https://www.baidu.com/";
 
     AgentWeb mAgentWeb;
-    private static boolean isFirstLoad = true;
+//    private static boolean isFirstLoad = true;
 
     public static YuLeFragment getInstance() {
         return new YuLeFragment();
@@ -128,10 +128,10 @@ public class YuLeFragment extends SimpleFragment {
             getWebView().loadUrl("javascript:refresh()");
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
 //            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
-            if (isFirstLoad) {
-                new ScratchCardAvdPresenter(getActivity()).preLoadAd();
-                isFirstLoad = false;
-            }
+//            if (isFirstLoad) {
+//                new ScratchCardAvdPresenter(getActivity()).preLoadAd();
+//                isFirstLoad = false;
+//            }
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "刮刮卡浏览");
         }
