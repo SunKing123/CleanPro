@@ -227,15 +227,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     }
                 }
 
-                RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
-                        AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
-                );
-                if (null == redPacketDataBean || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
-                    return;
-                if (!mShowRedFirst && mCurrentPosition == redPacketDataBean.getLocation()) {
-                    showRedPacket(redPacketDataBean);
-                }
-
                 switch (position) {
                     case 0:
                         StatisticsUtils.trackClick(Points.Tab.CLEAN_CLICK_CODE, Points.Tab.CLEAN_CLICK_NAME, "home_page", "home_page");
@@ -249,6 +240,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     case 3:
                         StatisticsUtils.trackClick(Points.Tab.MINE_CLICK_CODE, Points.Tab.MINE_CLICK_NAME, "home_page", "home_page");
                         break;
+                }
+
+                RedPacketEntity.DataBean redPacketDataBean = AppHolder.getInstance().getPopupDataFromListByType(
+                        AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RED_PACKET
+                );
+                if (null == redPacketDataBean || null == redPacketDataBean.getImgUrls() || redPacketDataBean.getImgUrls().size() <= 0)
+                    return;
+                if (!mShowRedFirst && mCurrentPosition == redPacketDataBean.getLocation()) {
+                    showRedPacket(redPacketDataBean);
                 }
             }
 
