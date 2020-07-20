@@ -284,8 +284,8 @@ dependencies {
     implementation project(':qsvideoplayer')
 
 
-    //百度统计sdk
-    implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
+//    //百度统计sdk
+//    implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
 
     implementation 'me.jessyan:retrofit-url-manager:1.4.0'
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'

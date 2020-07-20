@@ -40,7 +40,6 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -79,7 +78,6 @@ import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
@@ -102,9 +100,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
@@ -165,6 +161,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private boolean isDenied = false;
     private boolean isSlide;//正在滑动
     FloatAnimManager mFloatAnimManager;
+    private MyRunnable myRunnable = new MyRunnable();
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -204,19 +201,22 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && isFirstCreate) {
-            AppLifecyclesImpl.postDelay(new Runnable() {
-                @Override
-                public void run() {
-                    mPresenter.getInteractionSwitch();
-                    mPresenter.refBullList();
-                    //金币前两个位置预加载
-                    mPresenter.goldAdprev();
-                    refreshAdAll();
-                }
-            }, 3000);
+            AppLifecyclesImpl.postDelay(myRunnable, 3000);
             isFirstCreate = false;
         }
 
+    }
+
+    private class MyRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            mPresenter.getInteractionSwitch();
+            mPresenter.refBullList();
+            //金币前两个位置预加载
+            mPresenter.goldAdprev();
+            refreshAdAll();
+        }
     }
 
     private void initListener() {
@@ -395,6 +395,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
 
     private boolean getAdLayoutThreeVisible() {
+        if (mScrollView == null) {
+            return false;
+        }
         Rect scrollBounds = new Rect();
         mScrollView.getHitRect(scrollBounds);
         return adLayoutThree.getLocalVisibleRect(scrollBounds);
@@ -404,7 +407,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
 
     private void showAdVideo() {
-        if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
+        if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD) || mScrollView == null) {
             return;
         }
         mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
@@ -472,6 +475,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        AppLifecyclesImpl.removeTask(myRunnable);
     }
 
     /*
@@ -842,15 +846,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         }
         hasInitThreeAdvOnOff = true;
-        if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                if (PositionId.KEY_AD_PAGE_FINISH.equals(switchInfoList.getConfigKey()) && PositionId.DRAW_THREE_CODE.equals(switchInfoList.getAdvertPosition())) {
-                    isThreeAdvOpen = switchInfoList.isOpen();
-                    break;
-                }
-            }
-        }
+        isThreeAdvOpen=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH,PositionId.DRAW_THREE_CODE);
     }
 
     /*
