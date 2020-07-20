@@ -127,7 +127,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         mIsFromHomeMain = getIntent().getBooleanExtra("main", false);
         fileQueryUtils = new FileQueryUtils();
         processNum = fileQueryUtils.getRunningProcess().size();
-        mTitle = getIntent().getStringExtra("title");
+        mTitle = getIntent().hasExtra("title") ? getIntent().getStringExtra("title") : getString(R.string.app_name);
         mBtnLeft = (ImageView) findViewById(R.id.btnLeft);
         mTitleTv = (TextView) findViewById(R.id.tvTitle);
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -233,6 +233,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     //获取埋点参数
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
+
         if (getString(R.string.app_name).contains(mTitle)) {
             //悟空清理
             currentPage = "clean_success_page";

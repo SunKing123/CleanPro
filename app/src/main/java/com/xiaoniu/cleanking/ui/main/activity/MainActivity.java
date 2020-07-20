@@ -163,6 +163,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      **/
     private static final String KEY_EXTRAS = "n_extras";
 
+    private MyRunnable myRunnable = new MyRunnable();
 
     @Override
     public int getLayoutId() {
@@ -201,8 +202,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     protected void initView() {
         parsePushData(getIntent());
         refBottomState();
-        //数美sdk初始化
-        mPresenter.initShuMeiSDK();
         mPresenter.getIconList();
         isFirstCreate = true;
         initFragments();
@@ -286,17 +285,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //游客登录
         mPresenter.visitorLogin();
 
-        AppLifecyclesImpl.postDelay(new Runnable() {
-            @Override
-            public void run() {
-                //从服务器获取本地推送的配置信息
-                mPresenter.getLocalPushConfigFromServer();
-                //初始插屏广告开关
-                mPresenter.getScreenSwitch();
-                //弹窗信息接口
-                mPresenter.getPopupData();
-            }
-        }, 2000);
+        AppLifecyclesImpl.postDelay(myRunnable, 2000);
 
         mainFragment.setOnInteractiveClickListener(v -> {
             AppHolder.getInstance().setCleanFinishSourcePageId("home_page");
@@ -314,6 +303,23 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
 
 
+    }
+
+
+
+    private class MyRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            //数美sdk初始化
+            mPresenter.initShuMeiSDK();
+            //从服务器获取本地推送的配置信息
+            mPresenter.getLocalPushConfigFromServer();
+            //初始插屏广告开关
+            mPresenter.getScreenSwitch();
+            //弹窗信息接口
+            mPresenter.getPopupData();
+        }
     }
 
 
@@ -580,6 +586,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             layout.removeAllViews();
         } catch (Exception e) {
         }
+        AppLifecyclesImpl.removeTask(myRunnable);
     }
 
 
