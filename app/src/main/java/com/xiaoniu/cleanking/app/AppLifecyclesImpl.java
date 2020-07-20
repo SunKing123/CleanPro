@@ -33,7 +33,6 @@ import androidx.room.Room;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
-import com.baidu.mobstat.StatService;
 import com.blankj.utilcode.util.Utils;
 import com.bun.miitmdid.core.JLibrary;
 import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
@@ -195,7 +194,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         });
         String rootDir = MMKV.initialize(application);
 
-        initBaiduSdk(application);
         initPermission(application);
         initShanYan(application);
 
