@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.main.fragment.BaseBrowserFragment;
 import com.xiaoniu.cleanking.ui.newclean.bean.H5EventBean;
+import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
@@ -58,6 +59,7 @@ public class BrowserActivity extends BaseActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     mBrowserFragment).commitAllowingStateLoss();
         }
+        new ScratchCardAvdPresenter(this).preLoadAd();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
