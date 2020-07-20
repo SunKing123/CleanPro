@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill;
+package com.xiaoniu.cleanking.ui.viruskill.old;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 
 import butterknife.BindView;
 
-import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.PAGE_VIEW;
+import static com.xiaoniu.cleanking.ui.viruskill.old.VirusKillStatus.PAGE_VIEW;
 
 /**
  * Author: lvdongdong

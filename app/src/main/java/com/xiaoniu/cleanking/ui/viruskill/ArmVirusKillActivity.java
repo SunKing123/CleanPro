@@ -32,9 +32,13 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.utils.ArmsUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.viruskill.contract.VirusKillContract;
-import com.xiaoniu.cleanking.ui.viruskill.di.component.DaggerVircusKillComponent;
-import com.xiaoniu.cleanking.ui.viruskill.presenter.VirusKillPresenter;
+import com.xiaoniu.cleanking.ui.viruskill.old.FragmentCallBack;
+import com.xiaoniu.cleanking.ui.viruskill.old.VirusKillOneFragment;
+import com.xiaoniu.cleanking.ui.viruskill.old.VirusKillTwoFragment;
+import com.xiaoniu.cleanking.ui.viruskill.old.contract.VirusKillContract;
+import com.xiaoniu.cleanking.ui.viruskill.old.di.component.DaggerVircusKillComponent;
+import com.xiaoniu.cleanking.ui.viruskill.old.VirusKillStatus;
+import com.xiaoniu.cleanking.ui.viruskill.old.presenter.VirusKillPresenter;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
@@ -47,9 +51,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
-import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.COMPLETE;
-import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.PAGE_VIEW;
-import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.SCAN;
+import static com.xiaoniu.cleanking.ui.viruskill.old.VirusKillStatus.COMPLETE;
+import static com.xiaoniu.cleanking.ui.viruskill.old.VirusKillStatus.PAGE_VIEW;
+import static com.xiaoniu.cleanking.ui.viruskill.old.VirusKillStatus.SCAN;
 
 
 /**

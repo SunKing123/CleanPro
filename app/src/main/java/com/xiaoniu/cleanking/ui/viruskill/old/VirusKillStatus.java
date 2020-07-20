@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill;
+package com.xiaoniu.cleanking.ui.viruskill.old;
 
 /**
  * Created by xinxiaolong on 2020/6/12.

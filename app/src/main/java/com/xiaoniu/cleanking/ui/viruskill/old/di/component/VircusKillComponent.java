@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xiaoniu.cleanking.ui.viruskill.di.component;
+package com.xiaoniu.cleanking.ui.viruskill.old.di.component;
 
 import android.app.Activity;
 
 import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.di.scope.ActivityScope;
-import com.xiaoniu.cleanking.ui.viruskill.contract.VirusKillContract;
-import com.xiaoniu.cleanking.ui.viruskill.di.module.UserModule;
+import com.xiaoniu.cleanking.ui.viruskill.old.contract.VirusKillContract;
+import com.xiaoniu.cleanking.ui.viruskill.old.di.module.UserModule;
 
 import dagger.BindsInstance;
 import dagger.Component;
