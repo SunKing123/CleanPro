@@ -227,13 +227,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
 
-    public void initBaiduSdk(Application application) {
-        //接入百度统计sdk
-        StatService.setAppChannel(application, ChannelUtil.getChannel(), true);
-        StatService.autoTrace(application);
-
-
-    }
 
 
     public void initPermission(Application application) {
