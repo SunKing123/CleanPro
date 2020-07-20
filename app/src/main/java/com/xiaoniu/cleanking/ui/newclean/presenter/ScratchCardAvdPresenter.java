@@ -339,14 +339,18 @@ public class ScratchCardAvdPresenter {
     }
 
     public void preLoadAd() {
-        if (isOpenOne()) {
-            adPrevData(getAdvId(ADV_FIRST_PREFIX, 1));
-        }
-        if (isOpenTwo()) {
-            adPrevData(getAdvId(ADV_VIDEO_PREFIX, 1));
-        }
-        if (isOpenThree()) {
-            adPrevData(getAdvId(ADV_SECOND_PREFIX, 1));
+        try {
+            if (isOpenOne()) {
+                adPrevData(getAdvId(ADV_FIRST_PREFIX, 1));
+            }
+            if (isOpenTwo()) {
+                adPrevData(getAdvId(ADV_VIDEO_PREFIX, 1));
+            }
+            if (isOpenThree()) {
+                adPrevData(getAdvId(ADV_SECOND_PREFIX, 1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
