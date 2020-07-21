@@ -21,6 +21,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.widget.LeiDaView;
 import com.jess.arms.widget.RotationLoadingView;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -62,9 +63,10 @@ public class VirusKillOneFragment extends SimpleFragment {
     public void initData(@Nullable Bundle savedInstanceState) {
         VirusKillStatus.code = PAGE_VIEW;
         StatisticsUtils.onPageStart(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME);
-        timer = new CountDownTimer(3000, 30) {
+        timer = new CountDownTimer(10000, 100) {
             public void onTick(long millisUntilFinished) {
-                if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 30) + "%");
+                LogUtils.e("========CountDownTimer()=============="+millisUntilFinished);
+                if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 100) + "%");
             }
 
             public void onFinish() {

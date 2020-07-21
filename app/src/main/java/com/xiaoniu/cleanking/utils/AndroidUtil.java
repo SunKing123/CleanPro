@@ -386,11 +386,24 @@ public class AndroidUtil {
 
     public static SpannableString inertColorText(String content, int startColorIndex, int endColorIndex, int color) {
         SpannableString spanString = new SpannableString(content);
+        //add color
         ForegroundColorSpan span = new ForegroundColorSpan(color);
         spanString.setSpan(span, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
+        //add bold style
         TypefaceSpan typefaceSpan = new TypefaceSpan("default-bold");
         spanString.setSpan(typefaceSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //zoom size
         RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(1.1f);
+        spanString.setSpan(relativeSizeSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spanString;
+    }
+
+    public static SpannableString zoomText(String content,float rate,int startColorIndex, int endColorIndex){
+        SpannableString spanString = new SpannableString(content);
+        TypefaceSpan typefaceSpan = new TypefaceSpan("default-bold");
+        spanString.setSpan(typefaceSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(rate);
         spanString.setSpan(relativeSizeSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanString;
     }
@@ -398,7 +411,6 @@ public class AndroidUtil {
     //数美接入
     private static String sDeviceID = "";
     //数美接入
-
     /**
      * 热云方法[暂时只做IMEI调用时使用]
      *

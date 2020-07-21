@@ -36,7 +36,7 @@ public interface NewVirusKillContract {
     /**
      * 病毒扫描present
      */
-    interface VirusScanPresent extends IPresenter {
+    interface VirusScanPresenter extends IPresenter {
         //扫描进度回调
         void onScanLoadingProgress(int num);
     }
