@@ -65,7 +65,8 @@ public class VirusKillOneFragment extends SimpleFragment {
         StatisticsUtils.onPageStart(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME);
         timer = new CountDownTimer(10000, 100) {
             public void onTick(long millisUntilFinished) {
-                LogUtils.e("========CountDownTimer()=============="+millisUntilFinished);
+                int num=(int)(100 - millisUntilFinished / 100);
+                LogUtils.e("========CountDownTimer()=============="+num);
                 if (txtPro != null) txtPro.setText((100 - millisUntilFinished / 100) + "%");
             }
 

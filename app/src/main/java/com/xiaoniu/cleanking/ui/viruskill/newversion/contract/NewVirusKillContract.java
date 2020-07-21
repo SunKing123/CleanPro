@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.viruskill.newversion.contract;
 
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.mvp.IView;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyItemModel;
 
 /**
  * Created by xinxiaolong on 2020/7/20.
@@ -20,7 +21,7 @@ public interface NewVirusKillContract {
         //设置隐私条目
         void setPrivacyCount(int count);
         //添加隐私扫描条目
-        void addScanItem(String text);
+        void addScanPrivacyItem(PrivacyItemModel model);
 
         //显示查杀病毒的应用列表
         void showScanVirusIcons();
@@ -37,6 +38,7 @@ public interface NewVirusKillContract {
      * 病毒扫描present
      */
     interface VirusScanPresenter extends IPresenter {
+        void onCreate();
         //扫描进度回调
         void onScanLoadingProgress(int num);
     }

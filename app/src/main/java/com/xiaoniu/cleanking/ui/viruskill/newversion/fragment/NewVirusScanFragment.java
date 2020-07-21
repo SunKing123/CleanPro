@@ -12,6 +12,8 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.widget.LeiDaView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.contract.NewVirusKillContract;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyItemModel;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.presenter.VirusScanPresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.Points;
@@ -45,12 +47,12 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     @BindView(R.id.image_virus_network)
     ImageView imgNetwork;
 
-
     private CountDownTimer timer;
 
+    long millisInFuture = 10000;
+    long countDownInterval = 100;
 
-    long millisInFuture=10000;
-    long countDownInterval=100;
+    NewVirusKillContract.VirusScanPresenter presenter;
 
     @Override
     protected int getLayoutId() {
@@ -64,6 +66,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        presenter=new VirusScanPresenter(this);
 
     }
 
@@ -78,10 +81,12 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         lottie.startRotationAnimation();
     }
 
-    private void startCountDown(){
+    private void startCountDown() {
         timer = new CountDownTimer(millisInFuture, countDownInterval) {
             public void onTick(long millisUntilFinished) {
-                if (txtPro != null) txtPro.setText((100 - millisUntilFinished / countDownInterval) + "%");
+                int progress = (int) (100 - millisUntilFinished / 100);
+                if (txtPro != null) txtPro.setText(progress + "%");
+                presenter.onScanLoadingProgress(progress);
             }
 
             public void onFinish() {
@@ -93,6 +98,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         };
         timer.start();
     }
+
     @Override
     public void setScanTitle(String title) {
 
@@ -110,7 +116,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
 
     @Override
-    public void addScanItem(String text) {
+    public void addScanPrivacyItem(PrivacyItemModel model) {
 
     }
 
