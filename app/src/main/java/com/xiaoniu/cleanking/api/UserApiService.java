@@ -143,14 +143,7 @@ public interface UserApiService {
     @POST("/activity/share/succeed")
     Flowable<BaseEntity> shareSuccess(@Body RequestBody body);
 
-    /**
-     * 获取后台WebView URL
-     *
-     * @param body
-     * @return
-     */
-    @POST("/finish/page/query")
-    Flowable<WebUrlEntity> getWebUrl(@Body RequestBody body);
+
 
     /**
      * 保存JPush Alias
@@ -205,15 +198,6 @@ public interface UserApiService {
      */
     @GET("/operate/list")
     Flowable<HomeRecommendEntity> getRecommendList(@Query("positionCode") String positionCode);
-
-    /**
-     * 上报Device_info Alias
-     *
-     * @param body
-     * @return
-     */
-    @POST("/device/save")
-    Flowable<BaseEntity> pushDeviceInfo(@Body RequestBody body);
 
 
     /**

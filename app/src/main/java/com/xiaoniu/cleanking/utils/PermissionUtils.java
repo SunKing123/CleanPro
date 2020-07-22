@@ -3,6 +3,8 @@ package com.xiaoniu.cleanking.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AppOpsManager;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.os.Build;
 
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
 
@@ -181,6 +184,19 @@ public class PermissionUtils {
             }
         }
         return hasDeniedForever;
+    }
+
+
+    //判断用户对应的安全权限有没有打开
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static boolean isSecurityPermissionOpen(Context context) {
+        long endTime = System.currentTimeMillis();
+        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
+        List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, 0, endTime);
+        if (queryUsageStats == null || queryUsageStats.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -78,13 +78,7 @@ public class MainModel extends GoldModel {
         mService.loginApi(body).compose(RxUtil.<LoginDataBean>rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
-    public void getWebUrl(Common4Subscriber<WebUrlEntity> commonSubscriber) {
-        Gson gson = new Gson();
-        Map<String, Object> map = new HashMap<>();
-        String json = gson.toJson(map);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.getWebUrl(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
-    }
+
 
     /**
      * 激活极光推送
@@ -199,17 +193,7 @@ public class MainModel extends GoldModel {
         mService.getRecommendList("opearte_page_add_game").compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
     }
 
-    /**
-     * 上报Device消息
-     *
-     * @param commonSubscriber
-     */
-    public void pushDeviceInfo(DeviceInfo deviceInfo, Common4Subscriber<BaseEntity> commonSubscriber) {
-        Gson gson = new Gson();
-        String json = gson.toJson(deviceInfo);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.pushDeviceInfo(body).compose(RxUtil.rxSchedulerHelper(mActivity)).subscribeWith(commonSubscriber);
-    }
+
 
 
     /**

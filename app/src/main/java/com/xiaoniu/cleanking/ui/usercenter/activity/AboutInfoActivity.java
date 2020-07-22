@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.constant.Constant;
+import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.usercenter.contract.AboutInfoContract;
 import com.xiaoniu.cleanking.ui.usercenter.di.component.DaggerAboutInfoComponent;
@@ -57,7 +58,11 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
     LinearLayout line_xy;
     @BindView(R.id.line_share)
     LinearLayout line_share;
+    @BindView(R.id.iv_logos)
+    ImageView ivLogos;
 
+    private static final int TIMES_TO_SWITCH = 5;
+    private int mClickTimes = 0;
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
         DaggerAboutInfoComponent //如找不到该类,请编译一下项目
@@ -98,9 +103,9 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
             @Override
             public void onClick(View v) {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/agree.html","隐私政策");
+                    jumpXieyiActivity("file:///android_asset/agree.html", "隐私政策");
                 } else {
-                    jumpXieyiActivity(H5Urls.PRIVACY_CLAUSE_URL,"隐私政策");
+                    jumpXieyiActivity(H5Urls.PRIVACY_CLAUSE_URL, "隐私政策");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
             }
@@ -110,9 +115,9 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
             @Override
             public void onClick(View v) {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/userAgreement.html","用户协议");
+                    jumpXieyiActivity("file:///android_asset/userAgreement.html", "用户协议");
                 } else {
-                    jumpXieyiActivity(H5Urls.USER_AGREEMENT_URL,"用户协议");
+                    jumpXieyiActivity(H5Urls.USER_AGREEMENT_URL, "用户协议");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
             }
@@ -126,6 +131,24 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
                 StatisticsUtils.trackClick("Sharing_friends_click", "分享好友", "mine_page", "about_page");
             }
         });
+        ivLogos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dubugPanelShow();
+            }
+        });
+    }
+
+
+    //测试入口
+    public void dubugPanelShow() {
+        if (BuildConfig.DEBUG) {
+            mClickTimes++;
+            if (mClickTimes >= TIMES_TO_SWITCH) {
+                mClickTimes = 0;
+                AppConfig.showDebugWindow(AboutInfoActivity.this);
+            }
+        }
     }
 
     @Override

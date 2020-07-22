@@ -134,43 +134,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         mPresenter.spDataInit();
         if (NetworkUtils.isNetConnected()) {//正常网络
             mPresenter.getAuditSwitch();
-//            if (PreferenceUtil.getCoolStartTime()) {
-//            } else { //小于10分钟不获取开关直接请求广告
-//                //状态（0=隐藏，1=显示）
-//                String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
-//                if (auditSwitch.equals("0")) {
-//                    mStartView.setVisibility(View.GONE);
-//                    mContentView.setVisibility(View.VISIBLE);
-//                    this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-//                        jumpActivity();
-//                    });
-//                } else if (auditSwitch.equals("1")) {
-//                    mStartView.setVisibility(View.GONE);
-//                    mContentView.setVisibility(View.VISIBLE);
-//                    if (PreferenceUtil.isNotFirstOpenApp()) {
-//                        if (PreferenceUtil.getCoolStartADStatus()) {
-//                            initGeekSdkAD();
-//                        } else {
-//                            jumpActivity();
-//                        }
-//                        String switchInfo = PreferenceUtil.getInstants().get(Constant.SWITCH_INFO);
-//                        if (!TextUtils.isEmpty(switchInfo)) {
-//                            SwitchInfoList switchInfoList = new Gson().fromJson(switchInfo, SwitchInfoList.class);
-//                            if (null != switchInfoList) {
-//                                AppHolder.getInstance().setSwitchInfoList(switchInfoList);
-//                            } else {
-//                                mPresenter.getSwitchInfoListNew();
-//                            }
-//                        } else {
-//                            mPresenter.getSwitchInfoListNew();
-//                        }
-//
-//                    } else {
-//                        jumpActivity();
-//                    }
-//                }
-//            }
-        } else {//无网络状态
+        } else {                            //无网络状态
             if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
                 mStartView.setVisibility(View.VISIBLE);
                 mContentView.setVisibility(View.GONE);
@@ -184,12 +148,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
 
         initNiuData();
         initFileRelation();
-
+        //数美sdk初始化
+        mPresenter.initShuMeiSDK();
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
-        if (PreferenceUtil.getInstants().getInt(Constant.CLEAN_DB_SAVE) != 1) {
-            readyWeatherExternalDb();
-        }
+
         //超时定时器
         rxTimer = new RxTimer();
         rxTimer.timer(SP_SHOW_OUT_TIME, number -> {
@@ -274,40 +237,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         }
 
     }
-
-    /**
-     * 拷贝数据库表
-     */
-    public void readyWeatherExternalDb() {
-        new AsyncTask<String, Integer, Boolean>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onProgressUpdate(Integer... values) {
-                super.onProgressUpdate(values);
-            }
-
-            @Override
-            protected Boolean doInBackground(String... strings) {
-                FileUtils.copyDbFile(ContextUtils.getApplication(), Constant.WEATHER_DB_NAME);
-                PreferenceUtil.getInstants().saveInt(Constant.CLEAN_DB_SAVE, 1);
-                return true;
-            }
-
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                super.onPostExecute(aBoolean);
-
-
-            }
-        }.execute();
-
-
-    }
-
 
     /**
      * 拉取广告开关成功
