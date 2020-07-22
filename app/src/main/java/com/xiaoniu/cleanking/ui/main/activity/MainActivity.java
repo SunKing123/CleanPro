@@ -307,8 +307,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
         @Override
         public void run() {
-            //数美sdk初始化
-            mPresenter.initShuMeiSDK();
             //从服务器获取本地推送的配置信息
             mPresenter.getLocalPushConfigFromServer();
             //初始插屏广告开关
@@ -793,45 +791,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             e.printStackTrace();
         }
 
-    }
-
-    //获取设备信息
-    public void getDeviceInfo() {
-        try {
-            int permissionCheck = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE);
-            DeviceInfo deviceInfo = new DeviceInfo();
-            deviceInfo.setAndroidId(DeviceUtil.getAndroidId(mContext));
-            deviceInfo.setWlanMac(DeviceUtil.getWLANMAC(mContext) + ", " + DeviceUtil.getWLANMACShell());
-            deviceInfo.setBtMac(DeviceUtil.getBTMAC());
-            deviceInfo.setUdId(DeviceUtil.getPseudoID());
-            deviceInfo.setBoard(Build.BOARD);
-            deviceInfo.setBrand(Build.BRAND);
-            deviceInfo.setCpuAbi(Build.CPU_ABI);
-            deviceInfo.setDevice(Build.DEVICE);
-            deviceInfo.setDisplay(Build.DISPLAY);
-            deviceInfo.setHost(Build.HOST);
-            deviceInfo.setPhoneId(Build.ID);
-            deviceInfo.setManufacturer(Build.MANUFACTURER);
-            deviceInfo.setModel(Build.MODEL);
-            deviceInfo.setProduct(Build.PRODUCT);
-            deviceInfo.setTags(Build.TAGS);
-            deviceInfo.setType(Build.TYPE);
-            deviceInfo.setSerial(Build.SERIAL);
-            deviceInfo.setUser(Build.USER);
-            deviceInfo.setSystemVersion(DeviceUtil.getSystemVersion());
-            deviceInfo.setSystemLanguage(Locale.getDefault().getDisplayLanguage());
-            if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-                deviceInfo.setDeviceId(DeviceUtil.getDeviceId(mContext));
-                deviceInfo.setDeviceId2(DeviceUtil.getDeviceId2(mContext));
-            } else {
-                //            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_STATE);
-                deviceInfo.setDeviceId("");
-                deviceInfo.setDeviceId2("");
-            }
-            mPresenter.pushDeviceInfo(deviceInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
