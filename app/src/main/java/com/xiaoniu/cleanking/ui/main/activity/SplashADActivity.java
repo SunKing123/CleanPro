@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.NewVirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;

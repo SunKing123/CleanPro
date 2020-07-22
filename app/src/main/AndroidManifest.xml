@@ -611,6 +611,14 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
+        <activity
+            android:name=".ui.viruskill.newversion.NewVirusKillActivity"
+            android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task"
+            />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->

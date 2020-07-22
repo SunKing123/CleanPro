@@ -1,8 +1,13 @@
 package com.xiaoniu.cleanking.ui.viruskill.newversion.contract;
 
+import android.content.Context;
+
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.mvp.IView;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyItemModel;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
+
+import java.util.ArrayList;
 
 /**
  * Created by xinxiaolong on 2020/7/20.
@@ -18,20 +23,26 @@ public interface NewVirusKillContract {
         void startScanLoading();
         //设置扫描标题
         void setScanTitle(String title);
+
         //设置隐私条目
         void setPrivacyCount(int count);
         //添加隐私扫描条目
-        void addScanPrivacyItem(PrivacyItemModel model);
+        void addScanPrivacyItem(ScanTextItemModel model);
+        //隐私扫描完成
+        void setScanPrivacyComplete();
 
         //显示查杀病毒的应用列表
-        void showScanVirusIcons();
+        void showScanVirusIcons(ArrayList<FirstJunkInfo> list);
         //病毒扫描完成
         void setScanVirusComplete();
 
+        void startScanNetwork();
         //添加网络扫描条目
-        void addScanNetWorkItem(String text);
+        void addScanNetWorkItem(ScanTextItemModel model);
         //扫描完毕
-        void scanComplete();
+        void scanAllComplete();
+
+        Context getContext();
     }
 
     /**

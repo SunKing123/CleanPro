@@ -1786,11 +1786,23 @@ public class PreferenceUtil {
     public static void savePrivacyItemRandomIds(String ids) {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SpCacheConfig.WARNED_RANDOM_IDS, ids).commit();
+        editor.putString(SpCacheConfig.WARNED_PRIVACY_RANDOM_IDS, ids).commit();
     }
 
     public static String getPrivacyItemRandomIds() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(SpCacheConfig.WARNED_RANDOM_IDS, "");
+        return sharedPreferences.getString(SpCacheConfig.WARNED_PRIVACY_RANDOM_IDS, "");
     }
+
+    public static void saveNetworkItemRandomIds(String ids) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.WARNED_NETWORK_RANDOM_IDS, ids).commit();
+    }
+
+    public static String getNetworkItemRandomIds() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.IS_NOTIFICATION_ENABLED, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.WARNED_NETWORK_RANDOM_IDS, "");
+    }
+
 }

@@ -46,11 +46,21 @@
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_virus_scan"
+        android:id="@+id/recycle_virus_scan_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_virus_scan_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginLeft="80dp"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

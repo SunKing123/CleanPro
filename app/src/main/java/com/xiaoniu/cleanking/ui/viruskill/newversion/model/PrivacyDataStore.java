@@ -20,7 +20,7 @@ public class PrivacyDataStore {
     private final String[] items = new String[]{"手机IP泄露", "通讯录泄露", "信息被偷窥", "支付环境安全", "摄像头防窥", "麦克风防窃听", "相册安全保密", "聊天信息加密"};
 
     private List<String> listIds = new ArrayList<>(items.length);
-    private List<PrivacyItemModel> itemList = new ArrayList<>(items.length);
+    private List<ScanTextItemModel> itemList = new ArrayList<>(items.length);
 
     private static PrivacyDataStore store;
     private String[] mCacheMarksWarnIds;
@@ -43,7 +43,7 @@ public class PrivacyDataStore {
     private void initData() {
         int index = 0;
         for (String item : items) {
-            PrivacyItemModel itemData = new PrivacyItemModel();
+            ScanTextItemModel itemData = new ScanTextItemModel();
             itemData.id = index;
             itemData.name = item;
 
@@ -60,7 +60,7 @@ public class PrivacyDataStore {
     /**
      * 随机打上警告标签
      */
-    public List<PrivacyItemModel> randomMarkWarning() {
+    public List<ScanTextItemModel> randomMarkWarning() {
         mCacheMarksWarnIds = mCacheMarksWarnIds ==null?getRandomNeedMarksIds(): mCacheMarksWarnIds;
         return markWarning(mCacheMarksWarnIds);
     }
@@ -141,13 +141,13 @@ public class PrivacyDataStore {
      *
      * @param needMarksIds 需要标记风险的id列表
      */
-    private List<PrivacyItemModel> markWarning(String[] needMarksIds) {
+    private List<ScanTextItemModel> markWarning(String[] needMarksIds) {
         SparseArray<String> map = new SparseArray<>(needMarksIds.length);
         for (String id : needMarksIds) {
             map.put(Integer.parseInt(id), id);
         }
 
-        for (PrivacyItemModel model : itemList) {
+        for (ScanTextItemModel model : itemList) {
             String id = map.get(model.id);
             model.warning = !TextUtils.isEmpty(id);
         }

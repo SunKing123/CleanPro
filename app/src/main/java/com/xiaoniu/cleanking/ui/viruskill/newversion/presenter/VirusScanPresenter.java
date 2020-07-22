@@ -1,14 +1,17 @@
 package com.xiaoniu.cleanking.ui.viruskill.newversion.presenter;
 
 import com.jess.arms.mvp.BasePresenter;
+import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.contract.NewVirusKillContract;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.model.LieModel;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.model.NetworkDataStore;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyDataStore;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyItemModel;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
 import com.xiaoniu.cleanking.ui.viruskill.old.contract.VirusKillContract;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Created by xinxiaolong on 2020/7/20.
@@ -16,23 +19,40 @@ import javax.inject.Inject;
  */
 public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, NewVirusKillContract.VirusScanView> implements NewVirusKillContract.VirusScanPresenter {
 
-    private final int PRIVACY_PROGRESS = 40;
-    private final int VIRUS_PROGRESS = 60;
-    private final int NETWORK_PROGRESS = 100;
+    private final int[] P_START_RANGE = {0, 2};
+    private final int[] P_PROCESS_RANGE = {3, 36};
+    private final int[] P_END_RANGE = {36, 40};
+
+    private final int[] V_START_RANGE = {41, 43};
+    private final int[] V_PROCESS_RANGE = {44, 58};
+
+    private final int[] N_START_RANGE = {59, 61};
+    private final int[] N_PROCESS_RANGE = {62, 96};
+
+    private final int P_START = 1;
+    private final int P_PROCESS = 2;
+    private final int P_END = 3;
+    private final int V_START = 4;
+    private final int V_PROCESS = 5;
+    private final int N_START = 6;
+    private final int N_PROCESS = 7;
+    private final int COMPLETE = 8;
 
     //隐私扫描文案下标
     private int p_index = -1;
     //网络扫描文案下标
     private int n_index = -1;
+    //隐私条目数据
+    private PrivacyDataStore pStore;
+    private List<ScanTextItemModel> pList;
+    //网络条目数据
+    private NetworkDataStore nStore;
+    private List<ScanTextItemModel> nList;
+    //病毒条目数据
+    private ArrayList<FirstJunkInfo> iconList;
 
-    private int privacyWarnNum = 0;
-    private PrivacyDataStore store;
-    private List<PrivacyItemModel> pList;
-
-
-    @Inject
     public VirusScanPresenter(NewVirusKillContract.VirusScanView rootView) {
-        super(null, rootView);
+        super(new LieModel(), rootView);
     }
 
     @Override
@@ -40,15 +60,22 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
         p_index = -1;
         n_index = -1;
 
-        store = PrivacyDataStore.getInstance();
+        pStore = PrivacyDataStore.getInstance();
         //随机标记隐私风险
-        pList= store.randomMarkWarning();
-        //获取标记风险个数
-        privacyWarnNum = store.getCacheNeedMarksIds().length;
+        pList = pStore.randomMarkWarning();
+
+        nStore = NetworkDataStore.getInstance();
+        //随机标记隐私风险
+        nList = nStore.randomMarkWarning();
+
+        //初始化图标信息
+        iconList = AndroidUtil.getRandomMaxCountInstallApp(mRootView.getContext(), 10);
+
     }
 
     /**
      * 扫描进度监听
+     *
      * @param progress
      */
     @Override
@@ -62,34 +89,64 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      * @param progress
      */
     private void dispatchHandle(int progress) {
-        if (progress == 0) {
-            //开始扫描隐私风险
-            handleStartPrivacy();
-        } else if (progress < PRIVACY_PROGRESS) {
-            //隐私风想扫描中
-            handlePrivacy(progress);
-        } else if (progress == PRIVACY_PROGRESS) {
-            //隐私风险扫描结束
-            handlePrivacyEnd();
-            //病毒查杀扫描开始
-            handleVirusStart();
-        } else if (progress < VIRUS_PROGRESS) {
-            //病毒查杀扫描中
-            handleVirus(progress);
-        } else if (progress == VIRUS_PROGRESS) {
-            //病毒查杀结束
-            handleVirusEnd();
-            //网络风险扫描开始
-            handleNetworkStart();
-        } else if (progress > NETWORK_PROGRESS) {
-            //网络风险扫描中
-            handleNetwork(progress);
-        } else {
-            //所有扫描任务结束
-            handleAllComplete();
+        int range = getRange(progress);
+        switch (range) {
+            case P_START:
+                handlePrivacyStart();
+                break;
+            case P_PROCESS:
+                handlePrivacyProcess(progress);
+                break;
+            case P_END:
+                handlePrivacyEnd();
+                break;
+            case V_START:
+                handleVirusStart();
+                break;
+            case V_PROCESS:
+                handleVirusProcess(progress);
+                break;
+            case N_START:
+                handleVirusEnd();
+                handleNetworkStart();
+                break;
+            case N_PROCESS:
+                handleNetworkProcess(progress);
+                break;
+            default:
+                handleAllComplete();
+                break;
         }
     }
 
+    /**
+     * 获取当前进度属于哪个阶段
+     * @param progress
+     * @return
+     */
+    private int getRange(int progress) {
+        if (inRange(progress, P_START_RANGE)) {
+            return P_START;
+        } else if (inRange(progress, P_PROCESS_RANGE)) {
+            return P_PROCESS;
+        }  else if (inRange(progress, P_END_RANGE)) {
+            return P_END;
+        } else if (inRange(progress, V_START_RANGE)) {
+            return V_START;
+        } else if (inRange(progress, V_PROCESS_RANGE)) {
+            return V_PROCESS;
+        } else if (inRange(progress, N_START_RANGE)) {
+            return N_START;
+        } else if (inRange(progress, N_PROCESS_RANGE)) {
+            return N_PROCESS;
+        } else {
+            return COMPLETE;
+        }
+    }
+
+    private boolean inRange(int progress, int[] range) {
+        return progress >= range[0] && progress <= range[1];
+    }
 
     /*
      * *********************************************************************************************************************************************************
@@ -97,10 +154,13 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      * *********************************************************************************************************************************************************
      */
 
+    int warningCount = 0;
+
     /**
      * 开始扫描隐私风险
      */
-    private void handleStartPrivacy() {
+    private void handlePrivacyStart() {
+        warningCount = 0;
         mRootView.setScanTitle("隐私风险扫描中...");
     }
 
@@ -110,12 +170,19 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      *
      * @param progress 0~40
      */
-    private void handlePrivacy(int progress) {
-        int thisIndex = progress / 5;
-        if (thisIndex > p_index) {
+    private void handlePrivacyProcess(int progress) {
+        progress=progress-P_START_RANGE[1];
+        int thisIndex =(progress / 4);
+        if (thisIndex > p_index && thisIndex < pList.size()) {
             //添加扫描文案
             p_index = thisIndex;
-            mRootView.addScanPrivacyItem(pList.get(p_index));
+            ScanTextItemModel model = pList.get(p_index);
+            mRootView.addScanPrivacyItem(model);
+
+            if (model.warning) {
+                warningCount++;
+                mRootView.setPrivacyCount(warningCount);
+            }
         }
     }
 
@@ -123,7 +190,7 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      * 隐私扫描完成
      */
     private void handlePrivacyEnd() {
-        mRootView.setPrivacyCount(privacyWarnNum);
+        mRootView.setScanPrivacyComplete();
     }
 
     /*
@@ -137,6 +204,7 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      */
     private void handleVirusStart() {
         mRootView.setScanTitle("病毒应用扫描中...");
+        mRootView.showScanVirusIcons(iconList);
     }
 
     /**
@@ -144,18 +212,16 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      *
      * @param progress 40~60
      */
-    private void handleVirus(int progress) {
+    private void handleVirusProcess(int progress) {
 
     }
-
 
     /**
      * 病毒扫描完成
      */
     private void handleVirusEnd() {
-
+        mRootView.setScanVirusComplete();
     }
-
 
     /*
      * *********************************************************************************************************************************************************
@@ -168,6 +234,7 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      */
     private void handleNetworkStart() {
         mRootView.setScanTitle("网络安全描中...");
+        mRootView.startScanNetwork();
     }
 
     /**
@@ -175,15 +242,22 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      *
      * @param progress 60~100
      */
-    private void handleNetwork(int progress) {
-
+    private void handleNetworkProcess(int progress) {
+        progress = progress - N_START_RANGE[1];
+        int thisIndex = progress / 4;
+        if (thisIndex > n_index && thisIndex < nList.size()) {
+            //添加扫描文案
+            n_index = thisIndex;
+            ScanTextItemModel model = nList.get(n_index);
+            mRootView.addScanNetWorkItem(model);
+        }
     }
 
     /**
      * 所有扫描完成
      */
     private void handleAllComplete() {
-
+         mRootView.scanAllComplete();
     }
 
 }
