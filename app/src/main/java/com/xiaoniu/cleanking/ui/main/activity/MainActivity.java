@@ -278,10 +278,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        }
 
         AndroidUtil.haveLiuhai = NotchUtils.hasNotchScreen(this);
-//        测试入口
-//        if (BuildConfig.DEBUG) {
-//            AppConfig.showDebugWindow(mContext);
-//        }
         //游客登录
         mPresenter.visitorLogin();
 
