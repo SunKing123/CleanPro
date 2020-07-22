@@ -6,8 +6,6 @@ import android.util.SparseArray;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,7 +23,7 @@ public class PrivacyDataStore {
     private List<PrivacyItemModel> itemList = new ArrayList<>(items.length);
 
     private static PrivacyDataStore store;
-    private String[] mCacheNeedMarksIds;
+    private String[] mCacheMarksWarnIds;
 
     public static PrivacyDataStore getInstance() {
         if (store == null) {
@@ -34,9 +32,8 @@ public class PrivacyDataStore {
         return store;
     }
 
-
     public String[] getCacheNeedMarksIds() {
-        return mCacheNeedMarksIds;
+        return mCacheMarksWarnIds;
     }
 
     private PrivacyDataStore() {
@@ -64,8 +61,8 @@ public class PrivacyDataStore {
      * 随机打上警告标签
      */
     public List<PrivacyItemModel> randomMarkWarning() {
-        mCacheNeedMarksIds=mCacheNeedMarksIds==null?getRandomNeedMarksIds():mCacheNeedMarksIds;
-        return markWarning(mCacheNeedMarksIds);
+        mCacheMarksWarnIds = mCacheMarksWarnIds ==null?getRandomNeedMarksIds(): mCacheMarksWarnIds;
+        return markWarning(mCacheMarksWarnIds);
     }
 
     /**
@@ -94,15 +91,15 @@ public class PrivacyDataStore {
     /**
      * 在清理完成够调用此方法，对标记过风险的数据项进行排除
      */
-    public void removeMarkedInRandomTable() {
+    public void removeMarkedIdsInRandomTable() {
 
         String[] ids = PreferenceUtil.getPrivacyItemRandomIds().split(",");
 
-        if (mCacheNeedMarksIds == null || mCacheNeedMarksIds.length <= 0) {
+        if (mCacheMarksWarnIds == null || mCacheMarksWarnIds.length <= 0) {
             return;
         }
 
-        int count = mCacheNeedMarksIds.length;
+        int count = mCacheMarksWarnIds.length;
 
         if (ids.length <= count) {
             //需要全部清除，重新生成随机表
@@ -114,7 +111,7 @@ public class PrivacyDataStore {
             System.arraycopy(ids, count, remainIds, 0, size);
             saveRandomIds(new ArrayList<>(Arrays.asList(remainIds)));
         }
-        mCacheNeedMarksIds = null;
+        mCacheMarksWarnIds = null;
     }
 
     private void randomIds() {
@@ -136,7 +133,6 @@ public class PrivacyDataStore {
             builder.append(id).append(",");
         }
         String ids = builder.delete(builder.length() - 1, builder.length()).toString();
-
         PreferenceUtil.savePrivacyItemRandomIds(ids);
     }
 

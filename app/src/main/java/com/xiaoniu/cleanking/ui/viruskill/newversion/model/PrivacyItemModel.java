@@ -11,5 +11,6 @@ public class PrivacyItemModel {
     public int id;
     public String name;
     public boolean warning;
-
+    //扫描状态 0：加载中 1：无风险 2：有风险
+    public int state;
 }

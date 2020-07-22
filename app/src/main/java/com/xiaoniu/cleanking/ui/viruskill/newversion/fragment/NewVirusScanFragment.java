@@ -15,7 +15,6 @@ import com.xiaoniu.cleanking.ui.viruskill.newversion.contract.NewVirusKillContra
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyItemModel;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.presenter.VirusScanPresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -127,7 +126,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     @Override
     public void setScanVirusComplete() {
-        imgVirusScan.setImageResource(R.drawable.icon_virus_complete);
+        imgVirusScan.setImageResource(R.drawable.icon_virus_ok);
     }
 
     @Override

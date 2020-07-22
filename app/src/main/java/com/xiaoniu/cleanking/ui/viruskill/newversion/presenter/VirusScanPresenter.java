@@ -39,7 +39,7 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
     public void onCreate() {
         p_index = -1;
         n_index = -1;
-        
+
         store = PrivacyDataStore.getInstance();
         //随机标记隐私风险
         pList= store.randomMarkWarning();
