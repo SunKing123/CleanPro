@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xiaoniu.cleanking.ui.viruskill.di.module;
+package com.xiaoniu.cleanking.ui.viruskill.old.di.module;
 
 
 import androidx.fragment.app.FragmentActivity;
@@ -23,9 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jess.arms.di.scope.ActivityScope;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.bean.User;
-import com.xiaoniu.cleanking.ui.viruskill.adapter.UserAdapter;
-import com.xiaoniu.cleanking.ui.viruskill.contract.UserContract;
-import com.xiaoniu.cleanking.ui.viruskill.model.UserModelArm;
+import com.xiaoniu.cleanking.ui.viruskill.old.adapter.UserAdapter;
+import com.xiaoniu.cleanking.ui.viruskill.old.contract.UserContract;
+import com.xiaoniu.cleanking.ui.viruskill.old.model.UserModelArm;
 
 import java.util.ArrayList;
 import java.util.List;

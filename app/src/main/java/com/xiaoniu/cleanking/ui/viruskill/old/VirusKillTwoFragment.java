@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill;
+package com.xiaoniu.cleanking.ui.viruskill.old;
 
 import android.animation.Animator;
 import android.content.Intent;
@@ -36,8 +36,8 @@ import androidx.annotation.Nullable;
 import butterknife.BindView;
 
 import static android.view.View.VISIBLE;
-import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.COMPLETE;
-import static com.xiaoniu.cleanking.ui.viruskill.VirusKillStatus.SCAN;
+import static com.xiaoniu.cleanking.ui.viruskill.old.VirusKillStatus.COMPLETE;
+import static com.xiaoniu.cleanking.ui.viruskill.old.VirusKillStatus.SCAN;
 
 /**
  * Author: lvdongdong
