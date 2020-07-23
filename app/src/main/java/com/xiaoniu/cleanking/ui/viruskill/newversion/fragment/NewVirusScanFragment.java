@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.view.View;
 import android.view.ViewGroup;
@@ -240,7 +241,8 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     @Override
     public void scanAllComplete(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
         textAdapter.updateState();
-        transferPagePerformer.onTransferResultPage(pList, nList);
+        txtPro.setText(100 + "%");
+        new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList),1000);
     }
 
     /**

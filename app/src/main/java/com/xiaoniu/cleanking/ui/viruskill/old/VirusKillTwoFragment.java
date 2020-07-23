@@ -51,7 +51,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
     LeiDaView lottie;
     @BindView(R.id.txtPro)
     TextView txtPro;
-    @BindView(R.id.txtTips)
+    @BindView(R.id.tv_clean_item)
     TextView txtTips;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
@@ -68,7 +68,7 @@ public class VirusKillTwoFragment extends SimpleFragment {
     
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_viruskill_two;
+        return R.layout.fragment_viruskill_clean_layout;
     }
 
     public static VirusKillTwoFragment getIntance() {

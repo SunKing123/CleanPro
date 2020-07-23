@@ -257,7 +257,8 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      * 所有扫描完成
      */
     private void handleAllComplete() {
-         mRootView.scanAllComplete(pStore.getMarkedList(),nStore.getMarkedList());
+        mRootView.setScanTitle("扫描完成！");
+        mRootView.scanAllComplete(pStore.getMarkedList(),nStore.getMarkedList());
     }
 
 }

@@ -112,9 +112,10 @@
         </LinearLayout>
 
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtTips"
+            android:id="@+id/tv_clean_item"
             android:textColor="@color/white"
             android:text="@string/vircuskill_fg_two_tip_one"
             android:textSize="14sp" />

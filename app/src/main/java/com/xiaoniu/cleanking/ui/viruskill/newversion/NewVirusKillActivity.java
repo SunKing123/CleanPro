@@ -6,6 +6,7 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.NewVirusScanFragment;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusCleanFragment;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusScanResultFragment;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
 import com.xiaoniu.common.utils.StatusBarUtil;
@@ -66,6 +67,20 @@ public class NewVirusKillActivity extends BaseActivity implements ITransferPageP
 
     @Override
     public void onTransferCleanPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
+        VirusCleanFragment cleanFragment = new VirusCleanFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(VirusCleanFragment.IntentKey.P_LIST, pList);
+        bundle.putParcelableArrayList(VirusCleanFragment.IntentKey.N_LIST, nList);
+        cleanFragment.setArguments(bundle);
+        cleanFragment.setTransferPagePerformer(this);
 
+        mManager.beginTransaction()
+                .replace(R.id.frame_layout, cleanFragment)
+                .commitAllowingStateLoss();
+    }
+
+    @Override
+    public void cleanComplete() {
+        finish();
     }
 }
