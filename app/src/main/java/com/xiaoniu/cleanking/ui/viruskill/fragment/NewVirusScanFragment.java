@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.viruskill.contract.NewVirusKillContract;
 import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel;
 import com.xiaoniu.cleanking.ui.viruskill.presenter.VirusScanPresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -84,7 +85,6 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private VirusScanTextItemAdapter textAdapter;
     private VirusScanIconItemAdapter iconAdapter;
     private ITransferPagePerformer transferPagePerformer;
-    boolean isFinishing = false;
 
     public static NewVirusScanFragment getInstance() {
         return new NewVirusScanFragment();
@@ -137,8 +137,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private void startCountDown() {
         timer = new CountDownTimer(millisInFuture, countDownInterval) {
             public void onTick(long millisUntilFinished) {
-                if (isFinishing)
+                if(isFinishing()){
                     return;
+                }
                 int progress = (int) (100 - millisUntilFinished / countDownInterval);
                 if (txtPro != null) txtPro.setText(progress + "%");
                 presenter.onScanLoadingProgress(progress);
@@ -161,6 +162,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setScanTitle(String title) {
+        if(isFinishing()){
+            return;
+        }
         tvScanTitle.setText(title);
     }
 
@@ -171,6 +175,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setPrivacyCount(int count) {
+        if(isFinishing()){
+            return;
+        }
         tvPrivacy.setVisibility(View.VISIBLE);
         imgPrivacy.setVisibility(View.GONE);
         String head = count + "";
@@ -186,6 +193,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void addScanPrivacyItem(ScanTextItemModel model) {
+        if(isFinishing()){
+            return;
+        }
         if (textAdapter.getItemCount() == 4) {
             textAdapter.removeTop();
         }
@@ -197,6 +207,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setScanPrivacyComplete() {
+        if(isFinishing()){
+            return;
+        }
         textAdapter.updateState();
         transitionBackgroundVirus();
     }
@@ -208,6 +221,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void showScanVirusIcons(ArrayList<FirstJunkInfo> list) {
+        if(isFinishing()){
+            return;
+        }
         recycleViewText.setVisibility(View.GONE);
         recycleViewIcon.setVisibility(View.VISIBLE);
         iconAdapter.setDataList(list);
@@ -218,6 +234,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setScanVirusComplete() {
+        if(isFinishing()){
+            return;
+        }
         imgVirusScan.setImageResource(R.drawable.icon_virus_ok);
         transitionBackgroundNet();
     }
@@ -227,6 +246,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void startScanNetwork() {
+        if(isFinishing()){
+            return;
+        }
         textAdapter.clean();
         recycleViewText.setVisibility(View.VISIBLE);
         recycleViewIcon.setVisibility(View.GONE);
@@ -239,6 +261,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void addScanNetWorkItem(ScanTextItemModel model) {
+        if(isFinishing()){
+            return;
+        }
         if (textAdapter.getItemCount() == 4) {
             textAdapter.removeTop();
         }
@@ -250,6 +275,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void scanAllComplete(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
+        if(isFinishing()){
+            return;
+        }
         textAdapter.updateState();
         txtPro.setText(100 + "%");
         new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList), 1000);
@@ -259,6 +287,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      * 过渡到病毒查杀背景
      */
     private void transitionBackgroundVirus() {
+        if(isFinishing()){
+            return;
+        }
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", pBackGround, vBackGround);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(500);
@@ -269,6 +300,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      * 过渡到网络安全背景
      */
     private void transitionBackgroundNet() {
+        if(isFinishing()){
+            return;
+        }
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", vBackGround, nBackGround);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(500);
@@ -284,9 +318,13 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         this.transferPagePerformer = transferPagePerformer;
     }
 
+    private boolean isFinishing(){
+        return tvScanTitle==null;
+    }
+
     public void finish() {
-        isFinishing=true;
         timer.cancel();
         getActivity().finish();
+
     }
 }
