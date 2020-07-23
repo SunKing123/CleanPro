@@ -7,7 +7,6 @@ import com.xiaoniu.cleanking.ui.viruskill.newversion.model.LieModel;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.NetworkDataStore;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyDataStore;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
-import com.xiaoniu.cleanking.ui.viruskill.old.contract.VirusKillContract;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.List;
  * Created by xinxiaolong on 2020/7/20.
  * email：xinxiaolong123@foxmail.com
  */
-public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, NewVirusKillContract.VirusScanView> implements NewVirusKillContract.VirusScanPresenter {
+public class VirusScanPresenter extends BasePresenter<NewVirusKillContract.LieModel, NewVirusKillContract.VirusScanView> implements NewVirusKillContract.VirusScanPresenter {
 
     private final int[] P_START_RANGE = {0, 2};
     private final int[] P_PROCESS_RANGE = {3, 36};
@@ -257,7 +256,8 @@ public class VirusScanPresenter extends BasePresenter<VirusKillContract.Model, N
      * 所有扫描完成
      */
     private void handleAllComplete() {
-         mRootView.scanAllComplete(pStore.getMarkedList(),nStore.getMarkedList());
+        mRootView.setScanTitle("扫描完成！");
+        mRootView.scanAllComplete(pStore.getMarkedList(),nStore.getMarkedList());
     }
 
 }

@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.viruskill.newversion.contract;
 
 import android.content.Context;
 
+import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.mvp.IView;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -46,6 +47,9 @@ public interface NewVirusKillContract {
         Context getContext();
     }
 
+    interface LieModel extends IModel{
+
+    }
     /**
      * 病毒扫描present
      */

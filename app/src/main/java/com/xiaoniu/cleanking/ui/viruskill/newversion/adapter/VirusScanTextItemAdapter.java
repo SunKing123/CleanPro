@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.ybq.android.spinkit.SpinKitView;
 import com.jess.arms.widget.RotationLoadingView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
@@ -106,7 +105,5 @@ public class VirusScanTextItemAdapter extends RecyclerView.Adapter<VirusScanText
                     break;
             }
         }
-
     }
-
 }
