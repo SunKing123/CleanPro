@@ -58,6 +58,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -209,7 +210,7 @@ public final class LocalService extends Service {
                 InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_IMPLANTATION_FULL_SCREEN, adSwitch);
                 if (dataBean != null && dataBean.isOpen()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        if (isSecurityPermissionOpen(this)) {
+                        if (PermissionUtils.isSecurityPermissionOpen(this)) {
                             JsonToBean(dataBean.getShowRate(), dataBean.getDisplayTime());
                         }
                     } else {
@@ -609,7 +610,7 @@ public final class LocalService extends Service {
 //        context.startActivity(screenIntent);
     }
 
-    //    private String oldPackageName = "";
+  /*----------------------------------------应用内植入插屏-----------------------------------------------------------------------------------------------------*/
     private long runTime = 0;
     @SuppressLint("HandlerLeak")
     Runnable mTask = new Runnable() {
@@ -721,12 +722,6 @@ public final class LocalService extends Service {
         }
     };
 
-    private final static ThreadLocal<SimpleDateFormat> dateFormater2 = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        }
-    };
 
 
     private UsageStatsManager mUsageStatsManager;
@@ -802,23 +797,11 @@ public final class LocalService extends Service {
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
             screenIntent.putExtra("ad_style", PositionId.AD_EXTERNAL_ADVERTISING_04);
 //            context.startActivity(screenIntent);
-        } else {
-
         }
     }
 
 
-    //判断用户对应的安全权限有没有打开
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private static boolean isSecurityPermissionOpen(Context context) {
-        long endTime = System.currentTimeMillis();
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
-        List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, 0, endTime);
-        if (queryUsageStats == null || queryUsageStats.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
+
 
 
     List<String> appMap = new ArrayList<>();
@@ -868,7 +851,7 @@ public final class LocalService extends Service {
 //        Log.e("dong", "dispalyTime==" + hour);
         setAppPackageName();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isSecurityPermissionOpen(this)) {
+            if (PermissionUtils.isSecurityPermissionOpen(this)) {
                 if (getAppProcessName(this)) {
                     int newIndex = MmkvUtil.getInt("appicon", 0);
                     int oldIndex = MmkvUtil.getInt("odlappicon", -1);

@@ -102,7 +102,9 @@ class GoldCoinSuccessActivity : BaseActivity() {
         tv_coin_content.setText(sp)
     }
 
-    //广告请求埋点
+    /**
+     * 广告请求埋点
+     */
     fun adRequestPoint() {
         var adRequestName = ""
         when (model.currentPage) {
@@ -116,7 +118,9 @@ class GoldCoinSuccessActivity : BaseActivity() {
         StatisticsUtils.customTrackEvent("ad_request_sdk", adRequestName, "", model.currentPage, extParam())
     }
 
-    //曝光埋点
+    /**
+     * 曝光埋点
+     */
     fun exposurePoint() {
         when (model.currentPage) {
             Points.ScratchCard.SUCCESS_PAGE ->
@@ -125,11 +129,12 @@ class GoldCoinSuccessActivity : BaseActivity() {
                 StatisticsUtils.customTrackEvent(Points.FunctionGoldCoin.SUCCESS_EXPOSURE_CODE, Points.FunctionGoldCoin.SUCCESS_EXPOSURE_NAME, "", model.currentPage, extParam())
             Points.MainGoldCoin.SUCCESS_PAGE ->
                 StatisticsUtils.customTrackEvent(Points.MainGoldCoin.SUCCESS_EXPOSURE_CODE, Points.MainGoldCoin.SUCCESS_EXPOSURE_NAME, "", model.currentPage, extParam())
-
         }
     }
 
-    //金币翻倍数量埋点
+    /**
+     * 金币翻倍数量埋点
+     */
     fun goldCoinsNumPoint() {
         when (model.currentPage) {
             Points.ScratchCard.SUCCESS_PAGE ->
@@ -138,11 +143,12 @@ class GoldCoinSuccessActivity : BaseActivity() {
                 StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.FunctionGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", model.currentPage, extParam())
             Points.MainGoldCoin.SUCCESS_PAGE ->
                 StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.MainGoldCoin.SUCCESS_NUMBER_OF_GOLD_NAME, "", model.currentPage, extParam())
-
         }
     }
 
-    //返回事件埋点
+    /**
+     * 返回事件埋点
+     */
     fun returnBackPoint() {
         when (model.currentPage) {
             Points.ScratchCard.SUCCESS_PAGE ->
@@ -151,7 +157,6 @@ class GoldCoinSuccessActivity : BaseActivity() {
                 StatisticsUtils.trackClickNew("return_click", Points.FunctionGoldCoin.SUCCESS_RETURN_CLICK_NAME, "", model.currentPage, extParam())
             Points.MainGoldCoin.SUCCESS_PAGE ->
                 StatisticsUtils.trackClickNew("return_click", Points.MainGoldCoin.SUCCESS_RETURN_CLICK_NAME, "", model.currentPage, extParam())
-
         }
     }
 

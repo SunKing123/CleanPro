@@ -622,6 +622,14 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
 
+        <activity
+            android:name=".ui.viruskill.newversion.NewVirusKillActivity"
+            android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task"
+            />
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
@@ -695,44 +703,44 @@
             android:value="com.geek.push.jpush.JPushClient" />
 
 
-        <!-- 您从百度网站获取的APP KEY，根据实际您的APP申请的APP_KEY进行修改 -->
-        <meta-data
-            android:name="BaiduMobAd_STAT_ID"
-            android:value="1e37f31fbf" />
-        <!--        &lt;!&ndash; 渠道商编号 &ndash;&gt;-->
-        <!--        <meta-data-->
-        <!--            android:name="BaiduMobAd_CHANNEL"-->
-        <!--            android:value="Baidu Market" />-->
-        <!-- 是否开启错误日志统计，默认为false -->
-        <meta-data
-            android:name="BaiduMobAd_EXCEPTION_LOG"
-            android:value="true" />
+<!--        &lt;!&ndash; 您从百度网站获取的APP KEY，根据实际您的APP申请的APP_KEY进行修改 &ndash;&gt;-->
+<!--        <meta-data-->
+<!--            android:name="BaiduMobAd_STAT_ID"-->
+<!--            android:value="1e37f31fbf" />-->
+<!--        &lt;!&ndash;        &lt;!&ndash; 渠道商编号 &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;        <meta-data&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:name="BaiduMobAd_CHANNEL"&ndash;&gt;-->
+<!--        &lt;!&ndash;            android:value="Baidu Market" />&ndash;&gt;-->
+<!--        &lt;!&ndash; 是否开启错误日志统计，默认为false &ndash;&gt;-->
+<!--        <meta-data-->
+<!--            android:name="BaiduMobAd_EXCEPTION_LOG"-->
+<!--            android:value="true" />-->
 
-        <!-- 日志仅在wifi网络下发送，默认为false -->
-        <meta-data
-            android:name="BaiduMobAd_ONLY_WIFI"
-            android:value="false" />
+<!--        &lt;!&ndash; 日志仅在wifi网络下发送，默认为false &ndash;&gt;-->
+<!--        <meta-data-->
+<!--            android:name="BaiduMobAd_ONLY_WIFI"-->
+<!--            android:value="false" />-->
 
-        <!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
+       <!-- &lt;!&ndash; 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START &ndash;&gt;
         <meta-data
             android:name="BaiduMobAd_SEND_STRATEGY"
             android:value="APP_START" />
 
 
-        <!-- 是否获取基站位置信息 ,默认为true -->
+        &lt;!&ndash; 是否获取基站位置信息 ,默认为true &ndash;&gt;
         <meta-data
             android:name="BaiduMobAd_CELL_LOCATION"
             android:value="true" />
 
-        <!-- 是否获取GPS位置信息，默认为true -->
+        &lt;!&ndash; 是否获取GPS位置信息，默认为true &ndash;&gt;
         <meta-data
             android:name="BaiduMobAd_GPS_LOCATION"
             android:value="true" />
 
-        <!-- 是否获取WIFI位置信息，默认为true -->
+        &lt;!&ndash; 是否获取WIFI位置信息，默认为true &ndash;&gt;
         <meta-data
             android:name="BaiduMobAd_WIFI_LOCATION"
-            android:value="true" />
+            android:value="true" />-->
 
 
         <provider

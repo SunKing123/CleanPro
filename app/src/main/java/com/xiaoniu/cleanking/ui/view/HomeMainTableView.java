@@ -1,12 +1,7 @@
 package com.xiaoniu.cleanking.ui.view;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.bean.MainTableItem;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
-import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerDetailActivity;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
-import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
-import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -52,7 +36,6 @@ public class HomeMainTableView extends ConstraintLayout {
     TextView tvOneKey;
     TextView tvKillVirus;
     TextView tvElectric;
-
 
     public HomeMainTableView(Context context) {
         super(context);
@@ -184,7 +167,6 @@ public class HomeMainTableView extends ConstraintLayout {
         SpannableString text = AndroidUtil.inertColorText(tColor + "应用正在耗电", 0, tColor.length(), getRedColor());
         tvElectric.setText(text);
     }
-
 
     //used electric style
     public void electricUsedStyle() {

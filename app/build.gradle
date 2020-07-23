@@ -269,7 +269,6 @@ dependencies {
 
     implementation project(':payshare')
     implementation project(':common')
-    implementation project(':otherlib:asmhelp')
     implementation project(':otherlib:xrecyclerview')
     implementation project(':jpush')
     //闪验aar
@@ -284,8 +283,8 @@ dependencies {
     implementation project(':qsvideoplayer')
 
 
-    //百度统计sdk
-    implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
+//    //百度统计sdk
+//    implementation 'com.baidu.mobstat:mtj-sdk-circle:latest.integration'
 
     implementation 'me.jessyan:retrofit-url-manager:1.4.0'
     implementation 'com.yqritc:recyclerview-flexibledivider:1.4.0'
@@ -331,7 +330,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'com.blankj:utilcodex:1.29.0'
-
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }
 apply plugin: 'com.huawei.agconnect'
 

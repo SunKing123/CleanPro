@@ -213,13 +213,13 @@ public class OneKeyCircleButtonView extends RelativeLayout {
             return;
 
         if (currentState != state) {//红黄绿状态切换;
-            long delay = 1000;
+          /*  long delay = 500;
             if (!AndroidUtil.isFastDoubleClick()) {
-                delay = 500;
+                delay = 200;
             }
             AppLifecyclesImpl.postDelay(new Runnable() {
                 @Override
-                public void run() {
+                public void run() {*/
                     // 设置预览图
                     // 保留上一次图片动画-位图
                     Bitmap bitmap = BitmapUtil.convertViewToBitmap(viewLottieGreen);
@@ -234,8 +234,8 @@ public class OneKeyCircleButtonView extends RelativeLayout {
                         viewLottieGreen.playAnimation();
                     }
                     mAnimHelper.changeAnim(iv_top_perview, viewLottieGreen);
-                }
-            }, delay);
+          /*      }
+            }, delay);*/
         }
 
 
@@ -295,6 +295,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         lottiePathdataMap.put(11, new LottiePathdata("home_top_scan/anim02b/data.json", "home_top_scan/anim02b/images"));
         lottiePathdataMap.put(12, new LottiePathdata("home_top_scan/anim03b/data.json", "home_top_scan/anim03b/images"));
     }
+
 
 
 }

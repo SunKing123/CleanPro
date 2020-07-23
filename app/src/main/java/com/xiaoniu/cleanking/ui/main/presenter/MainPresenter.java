@@ -194,37 +194,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
 
-    //动态获取后台WebUrl+
-    @Deprecated
-    public void getWebUrl() {
-        mModel.getWebUrl(new Common4Subscriber<WebUrlEntity>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-
-            }
-
-            @Override
-            public void getData(WebUrlEntity webUrlEntity) {
-                if (webUrlEntity == null)
-                    return;
-                if (!TextUtils.isEmpty(webUrlEntity.getData())) {
-                    //保存后台webView URL
-                    PreferenceUtil.saveWebViewUrl(webUrlEntity.getData());
-                }
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-
-            }
-
-            @Override
-            public void netConnectError() {
-
-            }
-        });
-    }
-
     /**
      * 激活极光
      */
@@ -651,40 +620,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
-    /**
-     * 上报设备信息
-     *
-     * @param deviceInfo
-     */
-    public void pushDeviceInfo(DeviceInfo deviceInfo) {
-        mModel.pushDeviceInfo(deviceInfo, new Common4Subscriber<BaseEntity>() {
-            @Override
-            public void showExtraOp(String code, String message) {
-//                LogUtils.i("--zzh---"+message);
-                PreferenceUtil.saveIsPushDeviceInfo();
-
-            }
-
-            @Override
-            public void getData(BaseEntity baseEntity) {
-//                LogUtils.i("--zzh---"+baseEntity.code);
-            }
-
-            @Override
-            public void showExtraOp(String message) {
-//                LogUtils.i("--zzh---"+message);
-            }
-
-            @Override
-            public void netConnectError() {
-
-            }
-        });
-    }
-
-
-
-
 
     //获取本地推送弹框权限
     @SuppressLint("CheckResult")
@@ -716,260 +651,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
     }
 
-    //获取定位权限
-    @SuppressLint("CheckResult")
-    public void requestLocationPermission() {
-        if (mView == null) {
-            return;
-        }
-
-        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
-        if (null == mView) return;
-        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
-            @Override
-            public void accept(Boolean aBoolean) throws Exception {
-                if (aBoolean) {
-                    //开始
-                    if (mView == null)
-                        return;
-                    requestLocation();
-                } else {
-                    if (mView == null)
-                        return;
-                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                        //永久拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    } else {
-                        //拒绝权限
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    }
-                }
-            }
-        });
-    }
-    /**
-     * 执行定位操作
-     */
-    public void requestLocation() {
-        //初始化定位
-        mLocationClient = new AMapLocationClient(ContextUtils.getApplication());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(MainPresenter.this);
-        mLocationOption = new AMapLocationClientOption();
-
-        AMapLocationClientOption option = new AMapLocationClientOption();
-        if (null != mLocationClient) {
-            mLocationClient.setLocationOption(option);
-            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
-            //todo
-//            mLocationClient.stopLocation();
-//            mLocationClient.startLocation();
-        }
-        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //获取一次定位结果：
-        //该方法默认为false。
-        mLocationOption.setOnceLocation(true);
-
-        //获取最近3s内精度最高的一次定位结果：
-        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
-        mLocationOption.setOnceLocationLatest(true);
-
-        //设置是否返回地址信息（默认返回地址信息）
-        mLocationOption.setNeedAddress(true);
-
-        //给定位客户端对象设置定位参数
-        mLocationClient.setLocationOption(mLocationOption);
-        //启动定位
-        mLocationClient.startLocation();
-    }
-
-    @Override
-    public void onLocationChanged(AMapLocation location) {
-//        StringBuffer sb = new StringBuffer();
-        //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
-        if (location.getErrorCode() == 0) {//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
-            LogUtils.i("-zzh-" + location.getProvince());
-            //获取到地理位置后关掉定位
-            mLocationClient.stopLocation();
-            String province = location.getProvince();
-            String city = location.getCity();
-            String district = location.getDistrict();
-            String latitude = String.valueOf(location.getLatitude());
-            String longitude = String.valueOf(location.getLongitude());
-            LogUtils.d("->aMapLocation:" + location.toStr());
-            LogUtils.d("->xiangzhenbiao->高德定位->latitude:" + latitude + ",longitude:" + longitude);
-            LocationCityInfo cityInfo = new LocationCityInfo(longitude,
-                    latitude,
-                    location.getCountry(),
-                    province,
-                    city,
-                    district,
-                    location.getStreet(),
-                    location.getPoiName(),
-                    location.getAoiName(),
-                    location.getAddress()
-            );
-            LogUtils.i("zz--" + new Gson().toJson(location));
-            if (!TextUtils.isEmpty(city))
-                PreferenceUtil.getInstants().save("city", city);
-            dealLocationSuccess(cityInfo);
-        } else {
-            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-        }
-    }
-
-
-    private void dealLocationSuccess(LocationCityInfo locationCityInfo) {
-
-        if (locationCityInfo == null) {
-            return;
-        }
-        WeatherCity weatherCity = requestUpdateTableLocation(locationCityInfo);
-        String positionArea = "";
-        if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
-            //高德
-            positionArea = locationCityInfo.getDistrict() + locationCityInfo.getAoiName();
-            LogUtils.i("zz--" + positionArea);
-        }
-        uploadPositionCity(weatherCity, locationCityInfo.getLatitude(), locationCityInfo.getLongitude(), positionArea);
-    }
-
-
-    /**
-     * 用户定位信息上报
-     *
-     * @param positionCity 定位城市
-     * @param latitude
-     * @param longitude
-     * @param positionArea 定位城市的详细地址，如“申江路...”
-     */
-    public void uploadPositionCity(@NonNull WeatherCity positionCity, @NonNull String latitude,
-                                   @NonNull String longitude, @NonNull String positionArea) {
-        LogUtils.d("uploadPositionCity");
-        if (positionCity == null) {
-            return;
-        }
-
-        if (mModel == null || mView == null) {
-            return;
-        }
-        if (AndroidUtil.isFastDoubleClick()) {
-            return;
-        }
-        requestWeatherVideo(positionCity.getAreaCode());
-
-      /*  mModel.getWeather72HourList(positionCity.getAreaCode(), new Common2Subscriber<WeatherResponseContent>() {
-            @Override
-            public void getData(WeatherResponseContent weatherResponseContent) {
-                try {
-                    if (null != weatherResponseContent && null != weatherResponseContent.getContent()) {
-                        String responeStr = WeatherResponeUtils.getResponseStr(weatherResponseContent.getContent());
-                        Weather72HEntity weather72HEntity = new Gson().fromJson(responeStr, Weather72HEntity.class);
-                        String skycon = "";
-                        String temperature = "";
-                        if (!CollectionUtils.isEmpty(weather72HEntity.getSkycon())) {
-                            skycon = WeatherUtils.getWeather(weather72HEntity.getSkycon().get(0).getValue());
-                        }
-                        if (!CollectionUtils.isListNullOrEmpty(weather72HEntity.getTemperature())) {
-                            temperature = weather72HEntity.getTemperature().get(0).getValue();
-                        }
-                        PreferenceUtil.getInstants().save("skycon", skycon);
-                        PreferenceUtil.getInstants().save("temperature", temperature);
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 1);
-                        LogUtils.d("-zzh-isGetWeatherInfo");
-                    } else {
-                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    }
-                } catch (JsonSyntaxException e) {
-                    PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void netConnectError() {
-
-            }
-        });*/
-      /*  mModel.uploadPositionCity(requestBody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxLifecycleUtils.bindToLifecycle(mRootView))
-                .subscribe(new ErrorHandleSubscriber<BaseResponse<String>>(mErrorHandler) {
-                    @Override
-                    public void onNext(BaseResponse<String> unloadPositionCityRainRemindBaseResponse) {
-                        if (unloadPositionCityRainRemindBaseResponse.isSuccess()){
-                            String content = unloadPositionCityRainRemindBaseResponse.getData();
-
-                        }
-                    }
-                });*/
-    }
-
-    /**
-     * 获取天气视频
-     *
-     * @param areaCode
-     */
-    public void requestWeatherVideo(String areaCode) {
-        String cacheData = MmkvUtil.getString(Constant.DEFAULT_WEATHER_VIDEO_INFO, "");
-        if (!TextUtils.isEmpty(cacheData)) {
-            WeatherForecastResponseEntity cacheBean = new Gson().fromJson(cacheData, WeatherForecastResponseEntity.class);
-            if (null != cacheBean && (System.currentTimeMillis() - cacheBean.getResponseTime()) < 60 * 60 * 1000) {//一小时内用缓存数据
-                WeatherForecastActivity.launch(mActivity, cacheBean, cacheBean.getPublishSource());
-                return;
-            }
-        }
-        mModel.getWeatherVideo(areaCode, new Common2Subscriber<BaseResponse<WeatherForecastResponseEntity>>() {
-            @Override
-            public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
-                try {
-                    LogUtils.i("zz--" + new Gson().toJson(entityBaseResponse));
-                    WeatherForecastResponseEntity weatherForecastResponseEntity = entityBaseResponse.getData();
-                    weatherForecastResponseEntity.setResponseTime(System.currentTimeMillis());
-                    MmkvUtil.saveString(Constant.DEFAULT_WEATHER_VIDEO_INFO, new Gson().toJson(weatherForecastResponseEntity));
-                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(), entityBaseResponse.getData().getPublishSource());
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void netConnectError() {
-                LogUtils.i("zz--网络异常");
-            }
-        });
-    }
-
-    /************************************* 定位相关 **************************************/
-    /**
-     * 定位成功之后调用该方法，更新数据库表定位状态，处理完成后回调 updateTableLocationComplete
-     *
-     * @param locationCityInfo
-     */
-    public WeatherCity requestUpdateTableLocation(LocationCityInfo locationCityInfo) {
-        if (mModel == null || mView == null) {
-            return null;
-        }
-        WeatherCity weatherCity = mModel.updateTableLocation(locationCityInfo);
-        if (weatherCity != null) {
-            String detailAddress;
-            if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
-                //高德,优先用aoi
-                detailAddress = locationCityInfo.getAoiName();
-            } else if (!TextUtils.isEmpty(locationCityInfo.getPoiName())) {
-                //高德,再用poi
-                detailAddress = locationCityInfo.getPoiName();
-            } else {
-                //百度，用街道地址
-                detailAddress = locationCityInfo.getStreet();
-            }
-            weatherCity.setDetailAddress(detailAddress);
-        }
-        return weatherCity;
-    }
 
     /**
      * 插屏广告开关
@@ -1028,33 +709,214 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
 
-    /**
-     * 数美SDK初始化；
-     */
-    public void initShuMeiSDK() {
-        // 如果 AndroidManifest.xml 中没有指定主进程名字，主进程名默认与 packagename 相同
-        if (AppApplication.getInstance().getPackageName().equals(SystemUtils.getProcessName(AppApplication.getInstance()))) {
-            AppLifecyclesImpl.postDelay(new Runnable() {
-                @Override
-                public void run() {
-                    SmAntiFraud.SmOption option = new SmAntiFraud.SmOption();
-                    //1.通用配置项
-                    option.setOrganization(Constant.SMANTIFRAUD_ORGANIZATION); //必填，组织标识，邮件中 organization 项
-                    option.setAppId(Constant.APPLICATION_IDENTIFICATION); //必填，应用标识，登录数美后台应用管理查看
-                    option.setPublicKey(Constant.SMANTIFRAUD_PUBLIC_KEY); //必填，加密 KEY，邮件中 android_public_key 附件内容
-                    option.setAinfoKey(Constant.SMANTIFRAUD_AINFOKEY); //必填，加密 KEY，邮件中 Android ainfo key 项
-                    option.setChannel(ChannelUtil.getChannel());//渠道代码
-                    //2.连接海外机房特殊配置项，仅供设备数据上报海外机房客户使用
-                    // option.setArea(SmAntiFraud.AREA_XJP); //连接新加坡机房客户使用此选项
-                    // option.setArea(SmAntiFraud.AREA_FJNY); //连接美国机房客户使用此选项
-                    //3.SDK 初始化
-                    SmAntiFraud.create(AppApplication.getInstance(), option);
+/*--*/
+
+    //获取定位权限
+    @SuppressLint("CheckResult")
+    public void requestLocationPermission() {
+        if (mView == null) {
+            return;
+        }
+
+        String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
+        if (null == mView) return;
+        new RxPermissions(mView).request(permissions).subscribe(new Consumer<Boolean>() {
+            @Override
+            public void accept(Boolean aBoolean) throws Exception {
+                if (aBoolean) {
+                    //开始
+                    if (mView == null)
+                        return;
+                    requestLocation();
+                } else {
+                    if (mView == null)
+                        return;
+                    if (PermissionUtils.hasPermissionDeniedForever(mView, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        //永久拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    } else {
+                        //拒绝权限
+                        PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
+                    }
                 }
-            }, 2000);
+            }
+        });
+    }
+    /**
+     * 执行定位操作
+     */
+    @Deprecated
+    public void requestLocation() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(ContextUtils.getApplication());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(MainPresenter.this);
+        mLocationOption = new AMapLocationClientOption();
 
+        AMapLocationClientOption option = new AMapLocationClientOption();
+        if (null != mLocationClient) {
+            mLocationClient.setLocationOption(option);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            //todo
+//            mLocationClient.stopLocation();
+//            mLocationClient.startLocation();
+        }
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //获取一次定位结果：
+        //该方法默认为false。
+        mLocationOption.setOnceLocation(true);
 
+        //获取最近3s内精度最高的一次定位结果：
+        //设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        mLocationOption.setOnceLocationLatest(true);
+
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+
+        //给定位客户端对象设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        //启动定位
+        mLocationClient.startLocation();
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation location) {
+//        StringBuffer sb = new StringBuffer();
+        //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+        if (location.getErrorCode() == 0) {//errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+            //获取到地理位置后关掉定位
+            mLocationClient.stopLocation();
+            String province = location.getProvince();
+            String city = location.getCity();
+            String district = location.getDistrict();
+            String latitude = String.valueOf(location.getLatitude());
+            String longitude = String.valueOf(location.getLongitude());
+
+            LocationCityInfo cityInfo = new LocationCityInfo(longitude,
+                    latitude,
+                    location.getCountry(),
+                    province,
+                    city,
+                    district,
+                    location.getStreet(),
+                    location.getPoiName(),
+                    location.getAoiName(),
+                    location.getAddress()
+            );
+            if (!TextUtils.isEmpty(city))
+                PreferenceUtil.getInstants().save("city", city);
+            dealLocationSuccess(cityInfo);
+        } else {
+            PreferenceUtil.getInstants().saveInt("isGetWeatherInfo", 0);
         }
     }
+
+
+    private void dealLocationSuccess(LocationCityInfo locationCityInfo) {
+
+        if (locationCityInfo == null) {
+            return;
+        }
+        WeatherCity weatherCity = requestUpdateTableLocation(locationCityInfo);
+        String positionArea = "";
+        if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
+            //高德
+            positionArea = locationCityInfo.getDistrict() + locationCityInfo.getAoiName();
+
+        }
+        uploadPositionCity(weatherCity, locationCityInfo.getLatitude(), locationCityInfo.getLongitude(), positionArea);
+    }
+
+
+    /**
+     * 用户定位信息上报
+     *
+     * @param positionCity 定位城市
+     * @param latitude
+     * @param longitude
+     * @param positionArea 定位城市的详细地址，如“申江路...”
+     */
+    public void uploadPositionCity(@NonNull WeatherCity positionCity, @NonNull String latitude,
+                                   @NonNull String longitude, @NonNull String positionArea) {
+        LogUtils.d("uploadPositionCity");
+        if (positionCity == null) {
+            return;
+        }
+
+        if (mModel == null || mView == null) {
+            return;
+        }
+        if (AndroidUtil.isFastDoubleClick()) {
+            return;
+        }
+        requestWeatherVideo(positionCity.getAreaCode());
+    }
+
+    /**
+     * 获取天气视频
+     *
+     * @param areaCode
+     */
+    public void requestWeatherVideo(String areaCode) {
+        String cacheData = MmkvUtil.getString(Constant.DEFAULT_WEATHER_VIDEO_INFO, "");
+        if (!TextUtils.isEmpty(cacheData)) {
+            WeatherForecastResponseEntity cacheBean = new Gson().fromJson(cacheData, WeatherForecastResponseEntity.class);
+            if (null != cacheBean && (System.currentTimeMillis() - cacheBean.getResponseTime()) < 60 * 60 * 1000) {//一小时内用缓存数据
+                WeatherForecastActivity.launch(mActivity, cacheBean, cacheBean.getPublishSource());
+                return;
+            }
+        }
+        mModel.getWeatherVideo(areaCode, new Common2Subscriber<BaseResponse<WeatherForecastResponseEntity>>() {
+            @Override
+            public void getData(BaseResponse<WeatherForecastResponseEntity> entityBaseResponse) {
+                try {
+                    LogUtils.i("zz--" + new Gson().toJson(entityBaseResponse));
+                    WeatherForecastResponseEntity weatherForecastResponseEntity = entityBaseResponse.getData();
+                    weatherForecastResponseEntity.setResponseTime(System.currentTimeMillis());
+                    MmkvUtil.saveString(Constant.DEFAULT_WEATHER_VIDEO_INFO, new Gson().toJson(weatherForecastResponseEntity));
+                    WeatherForecastActivity.launch(mActivity, entityBaseResponse.getData(), entityBaseResponse.getData().getPublishSource());
+                } catch (JsonSyntaxException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void netConnectError() {
+
+            }
+        });
+    }
+
+    /************************************* 定位相关 **************************************/
+    /**
+     * 定位成功之后调用该方法，更新数据库表定位状态，处理完成后回调 updateTableLocationComplete
+     *
+     * @param locationCityInfo
+     */
+    public WeatherCity requestUpdateTableLocation(LocationCityInfo locationCityInfo) {
+        if (mModel == null || mView == null) {
+            return null;
+        }
+        WeatherCity weatherCity = mModel.updateTableLocation(locationCityInfo);
+        if (weatherCity != null) {
+            String detailAddress;
+            if (!TextUtils.isEmpty(locationCityInfo.getAoiName())) {
+                //高德,优先用aoi
+                detailAddress = locationCityInfo.getAoiName();
+            } else if (!TextUtils.isEmpty(locationCityInfo.getPoiName())) {
+                //高德,再用poi
+                detailAddress = locationCityInfo.getPoiName();
+            } else {
+                //百度，用街道地址
+                detailAddress = locationCityInfo.getStreet();
+            }
+            weatherCity.setDetailAddress(detailAddress);
+        }
+        return weatherCity;
+    }
+
+
 
 
 }
