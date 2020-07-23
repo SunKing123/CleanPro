@@ -1,9 +1,13 @@
 package com.xiaoniu.cleanking.ui.viruskill.newversion.fragment;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.SpannableString;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +40,8 @@ import butterknife.BindView;
  */
 public class NewVirusScanFragment extends SimpleFragment implements NewVirusKillContract.VirusScanView {
 
+    @BindView(R.id.root_view)
+    ViewGroup rootView;
     @BindView(R.id.lottie)
     LeiDaView lottie;
     @BindView(R.id.txtPro)
@@ -57,8 +63,8 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     private CountDownTimer timer;
 
-    private long millisInFuture = 10000;
-    private long countDownInterval = 100;
+    private long millisInFuture = 5000;
+    private long countDownInterval = 50;
 
     private NewVirusKillContract.VirusScanPresenter presenter;
     private VirusScanTextItemAdapter textAdapter;
@@ -113,7 +119,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private void startCountDown() {
         timer = new CountDownTimer(millisInFuture, countDownInterval) {
             public void onTick(long millisUntilFinished) {
-                int progress = (int) (100 - millisUntilFinished / 100);
+                int progress = (int) (100 - millisUntilFinished / countDownInterval);
                 if (txtPro != null) txtPro.setText(progress + "%");
                 presenter.onScanLoadingProgress(progress);
             }
@@ -154,6 +160,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     @Override
     public void setScanPrivacyComplete() {
         textAdapter.updateState();
+        transitionBackgroundVirus();
     }
 
     @Override
@@ -166,8 +173,12 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     @Override
     public void setScanVirusComplete() {
         imgVirusScan.setImageResource(R.drawable.icon_virus_ok);
+        transitionBackgroundNet();
     }
 
+    /**
+     * 开始网络安全扫描
+     */
     @Override
     public void startScanNetwork() {
         textAdapter.clean();
@@ -186,6 +197,27 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     @Override
     public void scanAllComplete() {
         textAdapter.updateState();
+    }
+
+    //隐私风险背景颜色
+    private static final int FirstLevel = 0xff02D086;
+    //病毒查杀背景颜色
+    private static final int SecondLevel = 0xffFFAD00;
+    //网络安全扫描背景颜色
+    private static final int ThirdLevel = 0xffFF6D58;
+
+    private void transitionBackgroundVirus() {
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", FirstLevel, SecondLevel);
+        colorAnim1.setEvaluator(new ArgbEvaluator());
+        colorAnim1.setDuration(500);
+        colorAnim1.start();
+    }
+
+    private void transitionBackgroundNet() {
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", SecondLevel, ThirdLevel);
+        colorAnim1.setEvaluator(new ArgbEvaluator());
+        colorAnim1.setDuration(500);
+        colorAnim1.start();
     }
 
     @Override
