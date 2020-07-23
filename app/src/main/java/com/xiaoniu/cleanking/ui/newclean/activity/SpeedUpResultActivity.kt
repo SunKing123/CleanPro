@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.newclean.activity
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -15,9 +16,13 @@ import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener
 import com.xiaoniu.cleanking.ui.newclean.presenter.SpeedUpResultPresenter
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil
-import com.xiaoniu.cleanking.utils.*
+import com.xiaoniu.cleanking.utils.AndroidUtil
+import com.xiaoniu.cleanking.utils.LayoutAnimationHelper
+import com.xiaoniu.cleanking.utils.NumberUtils
+import com.xiaoniu.cleanking.utils.OnItemClickListener
 import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger
 import com.xiaoniu.common.utils.StatusBarUtil
+import com.xiaoniu.common.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_speedup_result.*
 import java.util.*
 import kotlin.collections.LinkedHashMap
@@ -46,30 +51,41 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
         SpeedUpResultAdapter(this)
     }
 
+    private val randomValue = NumberUtils.mathRandom(10, 30)
+
     override fun initView() {
         mAppSize = intent.getIntExtra(SPEEDUP_APP_SIZE, 0)
         rv_content_list.layoutManager = CustomLinearLayoutManger(this)
         rv_content_list.adapter = mScanResultAdapter
         //计算用户选中需要清理的垃圾文件，并且跳转清理界面
-        tv_clean_junk.setOnClickListener { }
+        tv_clean_junk.setOnClickListener {
+
+            if (mScanResultAdapter.allDataList.none { it.firstJunkInfo.isAllchecked }) {
+                ToastUtils.showShort("至少选择一个APP进行加速")
+            } else {
+                ScanDataHolder.getInstance().junkResultWrapperList = mScanResultAdapter.allDataList.filter { it.firstJunkInfo.isAllchecked }
+                val intent = Intent(this@SpeedUpResultActivity, SpeedUpClearActivity::class.java)
+                intent.putExtra(SpeedUpClearActivity.SPEED_UP_NUM, randomValue)
+                startActivity(intent)
+                finish()
+            }
+        }
 
         tv_back.setOnClickListener {
             backClick()
         }
-
-        speed_up_value.text = "强力加速彻底清理后速度可提升${NumberUtils.mathRandom(10, 30)}%"
-
+        speed_up_value.text = "强力加速彻底清理后速度可提升$randomValue%"
         initData()
     }
 
 
     private fun backClick() {
-       /* if (isBackClick) {
-            return
-        }*/
+        /* if (isBackClick) {
+             return
+         }*/
         AlertDialogUtil.alertBanLiveDialog(this, "确认要退出吗？", "常驻软件过多会造成手机卡顿！", "一键加速", "确认退出", object : ClickListener {
             override fun clickOKBtn() {
-
+                tv_clean_junk.performClick()
             }
 
             override fun cancelBtn() {
@@ -85,7 +101,7 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
     fun initData() {
         //只扫描内存垃圾
         //构造清理数据模型
-        val groupLinkedHashMap = ScanDataHolder.getInstance().getmJunkGroups().filterKeys { it.type == 5 }
+         val groupLinkedHashMap = ScanDataHolder.getInstance().getmJunkGroups().filterKeys { it.type == 5 }
         if (groupLinkedHashMap.isEmpty()) {
             //伪造数据
             val un: Long = 80886656
@@ -98,7 +114,6 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
             val junkGroup = JunkGroup(ScanningResultType.MEMORY_JUNK.title, ScanningResultType.MEMORY_JUNK.type)
             junkGroup.mChildren = appList
             counterfeit[ScanningResultType.MEMORY_JUNK] = junkGroup
-            LogUtils.e("===========用的假数据==")
             mPresenter.buildJunkResultModel(counterfeit, mAppSize)
         } else {
             mPresenter.buildJunkResultModel(groupLinkedHashMap as LinkedHashMap<ScanningResultType, JunkGroup>, mAppSize)

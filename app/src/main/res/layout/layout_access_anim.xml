@@ -9,7 +9,7 @@
         android:id="@+id/rl_anim_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_FD6F46"
+        android:background="@color/color_06C581"
         android:paddingTop="@dimen/dimen_56dp">
 
         <!--一键加速按钮-->

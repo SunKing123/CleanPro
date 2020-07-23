@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.base;
 
+import com.xiaoniu.cleanking.bean.JunkResultWrapper;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -7,6 +8,8 @@ import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author zhengzhihao
@@ -39,6 +42,16 @@ public class ScanDataHolder {
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();   //扫描缓存
     private LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap;
 
+    private List<JunkResultWrapper> mJunkResultWrapperList = new LinkedList<>();
+
+    public void setJunkResultWrapperList(List<JunkResultWrapper> mJunkResultWrapperList) {
+        this.mJunkResultWrapperList.clear();
+        this.mJunkResultWrapperList = mJunkResultWrapperList;
+    }
+
+    public List<JunkResultWrapper> getJunkResultWrapperList() {
+        return mJunkResultWrapperList;
+    }
 
     public int getScanState() {
         if (System.currentTimeMillis() - prevScanTime > 5 * 60 * 1000) {  //五分钟缓存

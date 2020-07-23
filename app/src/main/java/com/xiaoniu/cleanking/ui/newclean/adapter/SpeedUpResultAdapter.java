@@ -73,6 +73,11 @@ public class SpeedUpResultAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+    public List<JunkResultWrapper> getAllDataList() {
+        return junkResultWrapperList;
+    }
+
+
     @Override
     public int getItemViewType(int position) {
         return junkResultWrapperList.get(position).itemTye;
@@ -83,54 +88,54 @@ public class SpeedUpResultAdapter extends RecyclerView.Adapter<RecyclerView.View
         return junkResultWrapperList != null ? junkResultWrapperList.size() : 0;
     }
 
-      static class ScanResultTypeViewHolder extends RecyclerView.ViewHolder {
+    static class ScanResultTypeViewHolder extends RecyclerView.ViewHolder {
 
-          private TextView tv_junk_type_title;
-          private TextView tv_checked_junk_total;
-          private ImageView iv_check_junk_state;
-          private RelativeLayout rl_type_root;
+        private TextView tv_junk_type_title;
+        private TextView tv_checked_junk_total;
+        private ImageView iv_check_junk_state;
+        private RelativeLayout rl_type_root;
 
-          private OnItemClickListener<JunkResultWrapper> mOnItemClickListener;
+        private OnItemClickListener<JunkResultWrapper> mOnItemClickListener;
 
-          ScanResultTypeViewHolder(@NonNull View itemView, OnItemClickListener<JunkResultWrapper> onItemClickListener) {
-              super(itemView);
-              this.mOnItemClickListener = onItemClickListener;
-              tv_junk_type_title = itemView.findViewById(R.id.tv_junk_type_title);
-              tv_checked_junk_total = itemView.findViewById(R.id.tv_checked_junk_total);
-              iv_check_junk_state = itemView.findViewById(R.id.iv_check_junk_state);
-              rl_type_root = itemView.findViewById(R.id.rl_type_root);
-          }
+        ScanResultTypeViewHolder(@NonNull View itemView, OnItemClickListener<JunkResultWrapper> onItemClickListener) {
+            super(itemView);
+            this.mOnItemClickListener = onItemClickListener;
+            tv_junk_type_title = itemView.findViewById(R.id.tv_junk_type_title);
+            tv_checked_junk_total = itemView.findViewById(R.id.tv_checked_junk_total);
+            iv_check_junk_state = itemView.findViewById(R.id.iv_check_junk_state);
+            rl_type_root = itemView.findViewById(R.id.rl_type_root);
+        }
 
-          public void bind(JunkResultWrapper wrapper) {
-              JunkGroup junkGroup = wrapper.junkGroup;
-              tv_junk_type_title.setText(junkGroup.mName);
-              if (junkGroup.isExpand) {
-                  tv_junk_type_title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_arrow_down, 0);
-              } else {
-                  tv_junk_type_title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_arrow_up, 0);
-              }
-              CountEntity mCountEntity = CleanUtil.formatShortFileSize(junkGroup.mSize);
-              tv_checked_junk_total.setText(itemView.getResources().getString(R.string.scan_result_check, mCountEntity.getResultSize()));
-              iv_check_junk_state.setOnClickListener(v -> {
-                  if (mOnItemClickListener != null) {
-                      mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
-                  }
-              });
+        public void bind(JunkResultWrapper wrapper) {
+            JunkGroup junkGroup = wrapper.junkGroup;
+            tv_junk_type_title.setText(junkGroup.mName);
+            if (junkGroup.isExpand) {
+                tv_junk_type_title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_arrow_down, 0);
+            } else {
+                tv_junk_type_title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.icon_arrow_up, 0);
+            }
+            CountEntity mCountEntity = CleanUtil.formatShortFileSize(junkGroup.mSize);
+            tv_checked_junk_total.setText(itemView.getResources().getString(R.string.scan_result_check, mCountEntity.getResultSize()));
+            iv_check_junk_state.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
+                }
+            });
 
-              if (junkGroup.isCheckPart) {
-                  iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_check);
-              } else if (junkGroup.isChecked) {
-                  iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_checked);
-              } else {
-                  iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_nomal);
-              }
-              rl_type_root.setOnClickListener(v -> {
-                  if (mOnItemClickListener != null) {
-                      mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
-                  }
-              });
-          }
-      }
+            if (junkGroup.isCheckPart) {
+                iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_check);
+            } else if (junkGroup.isChecked) {
+                iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_checked);
+            } else {
+                iv_check_junk_state.setImageResource(R.drawable.ic_scan_result_nomal);
+            }
+            rl_type_root.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(v, wrapper, getAdapterPosition());
+                }
+            });
+        }
+    }
 
     static class ScanResultContentViewHolder extends RecyclerView.ViewHolder {
 

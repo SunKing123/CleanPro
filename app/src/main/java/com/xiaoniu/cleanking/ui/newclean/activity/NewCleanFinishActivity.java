@@ -438,8 +438,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                     mTvGb.setTextSize(20);
                     mTvQl.setText("快试试其他功能吧！");
                 } else {
-                    mTvSize.setText(num);
-                    mTvQl.setText("垃圾已清理");
+                    mTvSize.setText("");
+                    mTvGb.setText("运行速度已提升" + num + "%");
+                    mTvGb.setTextSize(18);
+                    mTvQl.setText("快试试其他功能吧！");
+                    mTvQl.setTextSize(14);
+                    mTvSize.setText("");
                 }
             } else if (getString(R.string.tool_super_power_saving).contains(mTitle)) {
                 //超强省电

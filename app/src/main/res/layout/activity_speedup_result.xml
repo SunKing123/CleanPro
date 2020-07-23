@@ -118,7 +118,7 @@
                     android:layout_alignParentBottom="true"
                     android:background="#26000000"
                     android:gravity="center"
-                    android:text="强力加速彻底清理后速度可提升20%"
+                    tools:text="强力加速彻底清理后速度可提升20%"
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_14sp" />
             </RelativeLayout>

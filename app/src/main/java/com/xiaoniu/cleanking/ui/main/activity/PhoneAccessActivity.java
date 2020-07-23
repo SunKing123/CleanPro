@@ -45,7 +45,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
@@ -248,7 +247,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             acceview.setVisibility(View.GONE);
         }
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");*/
-        LogUtils.e("===============showCleanButton被调用");
         if (acceview != null) {
             acceview.cancelYuAnims();
         }
@@ -256,7 +254,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     }
 
     private void showCleanFinishUI(String num, String unit) {
-        LogUtils.e("===============进入了showCleanFinishUI");
         //加速完成 更新通知栏状态
         NotificationEvent event = new NotificationEvent();
         event.setType("speed");
@@ -283,18 +280,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");
 
 
-        Intent mIntent = new Intent();
-        mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
-        mIntent.putExtra(ExtraConstant.NUM, tv_size != null ? tv_size.getText().toString() : num);
-        mIntent.putExtra(ExtraConstant.UNIT, unit);
-        if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
-            mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
-        }
-        LogUtils.e("=============跳往finish页面");
-        //StartFinishActivityUtil.Companion.gotoFinish(this, mIntent);
         Intent in = new Intent(this, SpeedUpResultActivity.class);
         int size = mPresenter.getRandomSize();
-        LogUtils.e("==============size：" + size);
         in.putExtra(SpeedUpResultActivity.SPEEDUP_APP_SIZE, size);
         startActivity(in);
         finish();
@@ -343,12 +330,8 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             //设置默认值
             strNum = "521";
             strUnit = "MB";
-            LogUtils.e("=========进入了startClean中====== if");
             showCleanFinishUI(strNum, strUnit);
         } else {
-
-            LogUtils.e("=========进入了startClean中====== else");
-
             //        mTvSpeed.setVisibility(View.GONE);
 //        mLineAccess.setCompoundDrawables(null, null, null, null);
 //        mLineAccess.setText(getString(R.string.tool_speed_now));
@@ -415,7 +398,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
-        LogUtils.e("==========computeTotalSize被调用");
         long totalSizes = 0;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             for (FirstJunkInfo firstJunkInfo : listInfo) {
@@ -467,13 +449,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     public void setCleanSize(long totalSizes, boolean canPlayAnim) {
         if (acceview == null) return;
-        LogUtils.e("==========setCleanSize被调用");
         String str_totalSize = CleanAllFileScanUtil.getFileSize(totalSizes);
         if (str_totalSize.endsWith("KB")) return;
         //数字动画转换，GB转成Mb播放，kb太小就不扫描
-
-        LogUtils.e("=================str_totalSize:" + str_totalSize);
-
         int sizeMb = 0;
         if (str_totalSize.endsWith("MB")) {
             if (str_totalSize.contains(",")) {
@@ -483,7 +461,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
             if (canPlayAnim) {
-                LogUtils.e("==========setNumAnim===11111");
                 mPresenter.setNumAnim(mRlAnimBg, tv_size, tv_size_show, tv_delete, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
             } else
                 acceview.getTv_gb().setText("MB");
@@ -494,7 +471,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             sizeMb = NumberUtils.getRoundCeilingInt(gbnum * 1024);
             strNum = String.valueOf(sizeMb);
             if (canPlayAnim) {
-                LogUtils.e("==========setNumAnim===22222");
                 mPresenter.setNumAnim(mRlAnimBg, tv_size, tv_size_show, tv_delete, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
             } else
                 acceview.getTv_gb().setText("MB");

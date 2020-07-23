@@ -242,14 +242,11 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     boolean canPlaying = true;
 
     public void setNumAnim(View view, TextView tv_size, TextView tv_size_show, TextView tv_delete, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
-        LogUtils.e("===========startNum before" + startNum + "  endNum:" + endNum);
         ArrayList<FirstJunkInfo> installAppList = AndroidUtil.getRandomMaxCountInstallApp(mActivity, 30);
         int maxSize = installAppList.size();
-        LogUtils.e("========maxSize:" + maxSize);
         mRandomSize = NumberUtils.mathRandomInt(5, maxSize);
         startNum = 1;
         endNum = mRandomSize;
-        LogUtils.e("===========startNum after" + startNum + "  endNum:" + endNum);
         ValueAnimator anim = ValueAnimator.ofInt(startNum, mRandomSize);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -278,12 +275,12 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             Log.d("currentValue", type + "  type = " + tv_gb.getText().toString() + "  setNumAnim:" + currentValue + " ---- " + (currentValue < 1024 ? "MB" : "GB"));*/
         });
 
-        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(2000);
         // colorAnim1.setStartDelay(1200);
 
-        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(view, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
+        ValueAnimator colorAnim2 = ObjectAnimator.ofInt(view, "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         colorAnim2.setEvaluator(new ArgbEvaluator());
         colorAnim2.setDuration(2000);
         // colorAnim2.setStartDelay(1200);
@@ -313,7 +310,6 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
         animatorSetTimer.playTogether(anim, colorAnim1, colorAnim2);
-        LogUtils.e("=============数字扫描动画启动====");
         animatorSetTimer.start();
 
     }
