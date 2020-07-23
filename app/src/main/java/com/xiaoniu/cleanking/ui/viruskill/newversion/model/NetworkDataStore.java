@@ -21,6 +21,7 @@ public class NetworkDataStore {
 
     private List<String> listIds = new ArrayList<>(items.length);
     private List<ScanTextItemModel> itemList = new ArrayList<>(items.length);
+    private ArrayList<ScanTextItemModel> markedList = new ArrayList<>();
 
     private static NetworkDataStore store;
     private String[] mCacheMarksWarnIds;
@@ -35,6 +36,11 @@ public class NetworkDataStore {
     public String[] getCacheNeedMarksIds() {
         return mCacheMarksWarnIds;
     }
+
+    public ArrayList<ScanTextItemModel> getMarkedList() {
+        return markedList;
+    }
+
 
     private NetworkDataStore() {
         initData();
@@ -61,7 +67,7 @@ public class NetworkDataStore {
      * 随机打上警告标签
      */
     public List<ScanTextItemModel> randomMarkWarning() {
-        mCacheMarksWarnIds = mCacheMarksWarnIds ==null?getRandomNeedMarksIds(): mCacheMarksWarnIds;
+        mCacheMarksWarnIds = mCacheMarksWarnIds == null ? getRandomNeedMarksIds() : mCacheMarksWarnIds;
         return markWarning(mCacheMarksWarnIds);
     }
 
@@ -112,6 +118,7 @@ public class NetworkDataStore {
             saveRandomIds(new ArrayList<>(Arrays.asList(remainIds)));
         }
         mCacheMarksWarnIds = null;
+        markedList.clear();
     }
 
     private void randomIds() {
@@ -142,6 +149,7 @@ public class NetworkDataStore {
      * @param needMarksIds 需要标记风险的id列表
      */
     private List<ScanTextItemModel> markWarning(String[] needMarksIds) {
+        markedList.clear();
         SparseArray<String> map = new SparseArray<>(needMarksIds.length);
         for (String id : needMarksIds) {
             map.put(Integer.parseInt(id), id);
@@ -150,6 +158,9 @@ public class NetworkDataStore {
         for (ScanTextItemModel model : itemList) {
             String id = map.get(model.id);
             model.warning = !TextUtils.isEmpty(id);
+            if (!TextUtils.isEmpty(id)) {
+                markedList.add(model);
+            }
         }
         return itemList;
     }

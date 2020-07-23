@@ -43,12 +43,11 @@
             android:src="@drawable/icon_virus_ok"
             android:visibility="gone" />
 
-        <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/spin_kit"
-            style="@style/SpinKitView.Large.Circle"
+        <com.jess.arms.widget.RotationLoadingView
+            android:id="@+id/rotationLoading"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_gravity="center"
-            app:SpinKit_Color="@color/white" />
+            android:layout_gravity="center" />
+
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

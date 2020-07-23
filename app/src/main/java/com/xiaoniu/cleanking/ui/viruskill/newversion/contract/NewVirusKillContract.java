@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by xinxiaolong on 2020/7/20.
@@ -40,7 +41,7 @@ public interface NewVirusKillContract {
         //添加网络扫描条目
         void addScanNetWorkItem(ScanTextItemModel model);
         //扫描完毕
-        void scanAllComplete();
+        void scanAllComplete(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList);
 
         Context getContext();
     }

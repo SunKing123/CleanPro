@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.jess.arms.widget.RotationLoadingView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
 
@@ -76,12 +77,13 @@ public class VirusScanTextItemAdapter extends RecyclerView.Adapter<VirusScanText
         TextView tvText;
         @BindView(R.id.image_virus_complete)
         ImageView imageState;
-        @BindView(R.id.spin_kit)
-        SpinKitView spinKit;
+        @BindView(R.id.rotationLoading)
+        RotationLoadingView loadingView;
 
         public MineViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            loadingView.setResId(R.mipmap.icon_dengdai_white);
         }
 
         public void bindData(ScanTextItemModel model) {
@@ -89,17 +91,18 @@ public class VirusScanTextItemAdapter extends RecyclerView.Adapter<VirusScanText
             switch (model.state) {
                 case 0:
                     imageState.setVisibility(View.GONE);
-                    spinKit.setVisibility(View.VISIBLE);
+                    loadingView.setVisibility(View.VISIBLE);
+                    loadingView.startRotationAnimation();
                     break;
                 case 1:
                     imageState.setImageResource(R.drawable.icon_virus_ok);
                     imageState.setVisibility(View.VISIBLE);
-                    spinKit.setVisibility(View.GONE);
+                    loadingView.setVisibility(View.GONE);
                     break;
                 case 2:
-                    imageState.setImageResource(R.drawable.icon_home_network);
+                    imageState.setImageResource(R.drawable.icon_virus_no_ok);
                     imageState.setVisibility(View.VISIBLE);
-                    spinKit.setVisibility(View.GONE);
+                    loadingView.setVisibility(View.GONE);
                     break;
             }
         }

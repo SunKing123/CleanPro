@@ -71,14 +71,12 @@
             android:layout_marginTop="10dp"
             android:background="#F7F8FA" />
 
-        <TextView
-            android:id="@+id/tv_virus_result_risk_detail_privacy"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_virus_result_risk_detail_privacy"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="*信息被偷窥"
-            android:textColor="@color/home_title"
-            android:textSize="@dimen/dimen_14dp" />
+            android:orientation="vertical"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -115,14 +113,29 @@
             android:layout_marginTop="10dp"
             android:background="#F7F8FA" />
 
-        <TextView
-            android:id="@+id/tv_virus_result_risk_detail_network"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_virus_result_risk_detail_network"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="*ARP攻击"
-            android:textColor="@color/home_title"
-            android:textSize="@dimen/dimen_14dp" />
+            android:orientation="vertical"/>
+
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn_clear_virus_result"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="@drawable/clear_virus_btn_bg"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:textSize="@dimen/dp_16"
+            android:layout_alignParentBottom="true"
+            android:text="一键优化" />
+
+    </RelativeLayout>
 </LinearLayout>

@@ -1,34 +1,28 @@
 package com.xiaoniu.cleanking.ui.viruskill.newversion;
 
 import android.os.Bundle;
-import android.widget.FrameLayout;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.NewVirusScanFragment;
-import com.xiaoniu.cleanking.ui.viruskill.old.VirusKillOneFragment;
-import com.xiaoniu.cleanking.ui.viruskill.old.VirusKillTwoFragment;
-import com.xiaoniu.cleanking.ui.viruskill.old.presenter.VirusKillPresenter;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusScanResultFragment;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
 import com.xiaoniu.common.utils.StatusBarUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import butterknife.BindView;
 
 /**
  * Created by xinxiaolong on 2020/7/20.
  * email：xinxiaolong123@foxmail.com
  */
-public class NewVirusKillActivity extends BaseActivity {
+public class NewVirusKillActivity extends BaseActivity implements ITransferPagePerformer {
 
     private NewVirusScanFragment scanFragment;
-    private List<Fragment> mFragments = new ArrayList<>();
     private FragmentManager mManager = getSupportFragmentManager();
 
     @Override
@@ -48,14 +42,30 @@ public class NewVirusKillActivity extends BaseActivity {
     }
 
     private void initFragments() {
-
         scanFragment = NewVirusScanFragment.getInstance();
-        mFragments.add(scanFragment);
-
+        scanFragment.setTransferPagePerformer(this);
         mManager.beginTransaction()
                 .add(R.id.frame_layout, scanFragment)
                 .commitAllowingStateLoss();
-
     }
 
+
+    @Override
+    public void onTransferResultPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
+        VirusScanResultFragment resultFragment = new VirusScanResultFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(VirusScanResultFragment.IntentKey.P_LIST, pList);
+        bundle.putParcelableArrayList(VirusScanResultFragment.IntentKey.N_LIST, nList);
+        resultFragment.setArguments(bundle);
+        resultFragment.setTransferPagePerformer(this);
+
+        mManager.beginTransaction()
+                .replace(R.id.frame_layout, resultFragment)
+                .commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onTransferCleanPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
+
+    }
 }

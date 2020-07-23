@@ -16,6 +16,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.widget.LeiDaView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.ITransferPagePerformer;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.adapter.VirusScanIconItemAdapter;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.adapter.VirusScanTextItemAdapter;
 import com.xiaoniu.cleanking.ui.viruskill.newversion.contract.NewVirusKillContract;
@@ -76,6 +77,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private NewVirusKillContract.VirusScanPresenter presenter;
     private VirusScanTextItemAdapter textAdapter;
     private VirusScanIconItemAdapter iconAdapter;
+    private ITransferPagePerformer transferPagePerformer;
 
     public static NewVirusScanFragment getInstance() {
         return new NewVirusScanFragment();
@@ -143,6 +145,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     /**
      * 更新扫描的标题
+     *
      * @param title
      */
     @Override
@@ -152,6 +155,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     /**
      * 设置扫描的风险项
+     *
      * @param count
      */
     @Override
@@ -166,6 +170,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     /**
      * 添加隐私风险扫描条目
+     *
      * @param model
      */
     @Override
@@ -187,6 +192,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     /**
      * 设置病毒查杀扫描图标
+     *
      * @param list
      */
     @Override
@@ -217,6 +223,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     /**
      * 添加网络安全扫描条目
+     *
      * @param model
      */
     @Override
@@ -231,8 +238,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      * 所有扫描已结束
      */
     @Override
-    public void scanAllComplete() {
+    public void scanAllComplete(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
         textAdapter.updateState();
+        transferPagePerformer.onTransferResultPage(pList, nList);
     }
 
     /**
@@ -258,5 +266,10 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     @Override
     public void showMessage(@NonNull String message) {
 
+    }
+
+
+    public void setTransferPagePerformer(ITransferPagePerformer transferPagePerformer) {
+        this.transferPagePerformer = transferPagePerformer;
     }
 }

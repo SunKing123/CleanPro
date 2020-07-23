@@ -24,6 +24,7 @@ public class PrivacyDataStore {
 
     private static PrivacyDataStore store;
     private String[] mCacheMarksWarnIds;
+    private ArrayList<ScanTextItemModel> markedList = new ArrayList<>();
 
     public static PrivacyDataStore getInstance() {
         if (store == null) {
@@ -34,6 +35,10 @@ public class PrivacyDataStore {
 
     public String[] getCacheNeedMarksIds() {
         return mCacheMarksWarnIds;
+    }
+
+    public ArrayList<ScanTextItemModel> getMarkedList() {
+        return markedList;
     }
 
     private PrivacyDataStore() {
@@ -61,7 +66,7 @@ public class PrivacyDataStore {
      * 随机打上警告标签
      */
     public List<ScanTextItemModel> randomMarkWarning() {
-        mCacheMarksWarnIds = mCacheMarksWarnIds ==null?getRandomNeedMarksIds(): mCacheMarksWarnIds;
+        mCacheMarksWarnIds = mCacheMarksWarnIds == null ? getRandomNeedMarksIds() : mCacheMarksWarnIds;
         return markWarning(mCacheMarksWarnIds);
     }
 
@@ -112,6 +117,7 @@ public class PrivacyDataStore {
             saveRandomIds(new ArrayList<>(Arrays.asList(remainIds)));
         }
         mCacheMarksWarnIds = null;
+        markedList.clear();
     }
 
     private void randomIds() {
@@ -142,6 +148,7 @@ public class PrivacyDataStore {
      * @param needMarksIds 需要标记风险的id列表
      */
     private List<ScanTextItemModel> markWarning(String[] needMarksIds) {
+        markedList.clear();
         SparseArray<String> map = new SparseArray<>(needMarksIds.length);
         for (String id : needMarksIds) {
             map.put(Integer.parseInt(id), id);
@@ -150,6 +157,9 @@ public class PrivacyDataStore {
         for (ScanTextItemModel model : itemList) {
             String id = map.get(model.id);
             model.warning = !TextUtils.isEmpty(id);
+            if (!TextUtils.isEmpty(id)) {
+                markedList.add(model);
+            }
         }
         return itemList;
     }
