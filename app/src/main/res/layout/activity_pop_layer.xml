@@ -4,11 +4,11 @@
     android:id="@+id/full_screen_insert_ad_header_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/translucent"
-    android:visibility="gone">
+    android:background="@android:color/transparent"
+    android:visibility="visible">
 
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:id="@+id/rel_ad_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         </LinearLayout>
 
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
     <LinearLayout
         android:id="@+id/ad_container"
@@ -62,29 +62,28 @@
         android:orientation="horizontal" />
 
 
-    <TextView
-        android:id="@+id/full_screen_insert_ad_show_time_txt"
-        android:layout_width="23dp"
-        android:layout_height="23dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="9dp"
-        android:layout_marginRight="9dp"
-        android:background="@drawable/insert_ad_time_count_bg"
-        android:gravity="center"
-        android:text="3s"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:visibility="gone" />
-
+    <!--  <TextView
+          android:id="@+id/full_screen_insert_ad_show_time_txt"
+          android:layout_width="23dp"
+          android:layout_height="23dp"
+          android:layout_alignParentTop="true"
+          android:layout_alignParentRight="true"
+          android:layout_marginTop="9dp"
+          android:layout_marginRight="9dp"
+          android:background="@drawable/insert_ad_time_count_bg"
+          android:gravity="center"
+          android:text="3s"
+          android:textColor="@color/white"
+          android:textSize="12sp"
+          android:visibility="gone" />
+  -->
     <ImageView
         android:id="@+id/full_screen_insert_ad_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:padding="9dp"
+        android:layout_below="@+id/ad_container"
+        android:layout_centerHorizontal="true"
         android:scaleType="fitCenter"
-        android:src="@mipmap/insert_screen_ad_close"
-        android:visibility="gone" />
+        android:src="@mipmap/close_btn"
+        android:visibility="visible" />
 </RelativeLayout>
