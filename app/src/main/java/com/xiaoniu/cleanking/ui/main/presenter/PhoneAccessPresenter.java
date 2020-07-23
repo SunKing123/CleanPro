@@ -22,7 +22,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Process;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -45,6 +46,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 
@@ -53,7 +55,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -117,7 +118,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     @SuppressLint("CheckResult")
     public void getAccessAbove22() {
         Observable.create((ObservableOnSubscribe<ArrayList<FirstJunkInfo>>) e -> {
-            e.onNext(AndroidUtil.getRandomMaxCountInstallApp(mView.getBaseContext(),20));
+            e.onNext(AndroidUtil.getRandomMaxCountInstallApp(mView.getBaseContext(), 20));
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(strings -> {
@@ -223,6 +224,13 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         recyclerView.scheduleLayoutAnimation();
     }
 
+
+    private int mRandomSize;
+
+    public int getRandomSize() {
+        return mRandomSize;
+    }
+
     /**
      * 数字动画
      *
@@ -234,7 +242,15 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     boolean canPlaying = true;
 
     public void setNumAnim(View view, TextView tv_size, TextView tv_size_show, TextView tv_delete, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
-        ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
+        LogUtils.e("===========startNum before" + startNum + "  endNum:" + endNum);
+        ArrayList<FirstJunkInfo> installAppList = AndroidUtil.getRandomMaxCountInstallApp(mActivity, 30);
+        int maxSize = installAppList.size();
+        LogUtils.e("========maxSize:" + maxSize);
+        mRandomSize = NumberUtils.mathRandomInt(5, maxSize);
+        startNum = 1;
+        endNum = mRandomSize;
+        LogUtils.e("===========startNum after" + startNum + "  endNum:" + endNum);
+        ValueAnimator anim = ValueAnimator.ofInt(startNum, mRandomSize);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
         canPlaying = true;
@@ -244,9 +260,9 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
             tv_size.setText(currentValue + "");
             tv_size_show.setText(currentValue + "");
             tv_delete.setText("一键加速 " + currentValue + (currentValue < 1024 ? "MB" : "GB"));
-            if (currentValue == endNum) {
+           /* if (currentValue == endNum) {
                 tv_size.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue) / Double.valueOf(1024))));
-                tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue) / Double.valueOf(1024))));
+                // tv_size_show.setText(type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue) / Double.valueOf(1024))));
                 tv_delete.setText("一键加速 " + (type == 1 ? String.valueOf(currentValue) : String.valueOf(NumberUtils.getFloatStr2(Double.valueOf(currentValue) / Double.valueOf(1024))))
                         + (currentValue < 1024 ? "MB" : "GB"));
 
@@ -259,16 +275,18 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
                 }
             }
 
-            Log.d("currentValue", type + "  type = " + tv_gb.getText().toString() + "  setNumAnim:" + currentValue + " ---- " + (currentValue < 1024 ? "MB" : "GB"));
+            Log.d("currentValue", type + "  type = " + tv_gb.getText().toString() + "  setNumAnim:" + currentValue + " ---- " + (currentValue < 1024 ? "MB" : "GB"));*/
         });
+
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
-        colorAnim1.setDuration(800);
-        colorAnim1.setStartDelay(1200);
+        colorAnim1.setDuration(2000);
+        // colorAnim1.setStartDelay(1200);
+
         ValueAnimator colorAnim2 = ObjectAnimator.ofInt(view, "backgroundColor", FirstLevel, SecondLevel, ThirdLevel);
         colorAnim2.setEvaluator(new ArgbEvaluator());
-        colorAnim2.setDuration(800);
-        colorAnim2.setStartDelay(1200);
+        colorAnim2.setDuration(2000);
+        // colorAnim2.setStartDelay(1200);
 
         colorAnim1.addUpdateListener(animation -> {
             int animatedValue = (int) animation.getAnimatedValue();
@@ -277,18 +295,25 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
 
         });
 
+
         anim.addListener(new AnimatorListenerAdapter() { //扫描数字动画结束
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                mView.setCanClickDelete(true);
-                mView.showCleanButton();
+
+                if (!mView.isFinishing()) {
+                    mView.setCanClickDelete(true);
+                    mView.showCleanButton();
+                }
+
+
             }
         });
 //        anim.start();
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
         animatorSetTimer.playTogether(anim, colorAnim1, colorAnim2);
+        LogUtils.e("=============数字扫描动画启动====");
         animatorSetTimer.start();
 
     }
@@ -297,13 +322,18 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     /**
      * 第一阶段  红色
      */
-    private static final int FirstLevel = 0xff06C581;
 
+    private static final int FirstLevel = 0xffFD6F46;
+    /**
+     * 第二阶段  黄色
+     */
     private static final int SecondLevel = 0xffF1D53B;
+
     /**
      * 第三阶段 绿色
      */
-    private static final int ThirdLevel = 0xffFD6F46;
+    private static final int ThirdLevel = 0xff06C581;
+
 
     public void setBgChanged(View viewt, View view_top) {
 

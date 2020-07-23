@@ -9,7 +9,7 @@
         android:id="@+id/rl_anim_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_06C581"
+        android:background="@color/color_FD6F46"
         android:paddingTop="@dimen/dimen_56dp">
 
         <!--一键加速按钮-->
@@ -66,9 +66,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="90dp"
+            android:layout_marginTop="70dp"
             android:orientation="vertical"
-            android:visibility="invisible">
+            android:visibility="visible">
 
             <LinearLayout
                 android:id="@+id/line_size"
@@ -94,6 +94,8 @@
                     android:textColor="@color/white"
                     android:textSize="55sp" />
 
+
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -104,20 +106,28 @@
                         android:id="@+id/tv_gb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dimen_10dp"
                         android:text="MB"
-                        android:textColor="@color/white"
+                        android:visibility="invisible"
+                        android:textColor="@color/black"
                         android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="内"
+                        android:text="款"
                         android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:visibility="invisible" />
+                        android:textSize="16sp"
+                        android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="正在检测常驻后台软件"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textSize="@dimen/dimen_12sp"
+                android:textColor="@color/white" />
 
             <!--<TextView
                 android:id="@+id/line_access"
@@ -187,14 +197,14 @@
         <ImageView
             android:id="@+id/iv_back"
             style="@style/top_iv_back"
-            android:visibility="gone"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_title_name"
             style="@style/top_tv_title"
-            android:visibility="gone"
             android:layout_gravity="center_vertical"
-            android:text="@string/tool_one_key_speed" />
+            android:text="@string/tool_one_key_speed"
+            android:visibility="gone" />
     </LinearLayout>
 </RelativeLayout>

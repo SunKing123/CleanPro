@@ -332,6 +332,17 @@
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
+        <activity
+            android:name=".ui.newclean.activity.SpeedUpResultActivity"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
+
+        <activity
+            android:name=".ui.newclean.activity.SpeedUpClearActivity"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
         <!--            android:launchMode="singleTask"-->
         <activity
             android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
@@ -418,7 +429,7 @@
 
         <activity
             android:name=".ui.weather.activity.WeatherForecastActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
 
         <activity

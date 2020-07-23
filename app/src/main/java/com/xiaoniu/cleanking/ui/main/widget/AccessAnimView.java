@@ -28,6 +28,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.interfac.AnimationEnd;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -39,7 +40,7 @@ public class AccessAnimView extends RelativeLayout {
     private Context mContext;
     RelativeLayout mRlAnimBg;
     LinearLayout line_hj;
-//    TextView line_access;
+    //    TextView line_access;
     LinearLayout line_size;
     LinearLayout line_title;
     ImageView iv_bot;
@@ -172,6 +173,7 @@ public class AccessAnimView extends RelativeLayout {
      * @param b 是否需要展开 由应用换场清理页面动画
      */
     public void startTopAnim(boolean b) {
+        LogUtils.e("============startTopAnim==");
         int startHeight = DisplayUtils.dip2px(150);
         int endHeight = DisplayUtils.getScreenHeight();
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
@@ -190,6 +192,7 @@ public class AccessAnimView extends RelativeLayout {
 
     //中间的控件高度变化
     public void startMiddleAnim(boolean b) {
+        LogUtils.e("============startMiddleAnim==");
         int startHeight = DisplayUtils.dip2px(30);
         int endHeight = DisplayUtils.dip2px(300);
         ValueAnimator anim = ValueAnimator.ofInt(startHeight, endHeight);
@@ -215,6 +218,7 @@ public class AccessAnimView extends RelativeLayout {
 
     //Step2:高度下降完毕，中间的火箭缩放动画开始，动画播放完毕后火箭底部的帧动画开始播放
     public void setHjAnim() {
+        LogUtils.e("============setHjAnim==");
         PropertyValuesHolder anim4 = PropertyValuesHolder.ofFloat("scaleX",
                 1.0f, 1.0f);
         PropertyValuesHolder anim5 = PropertyValuesHolder.ofFloat("scaleY",
@@ -251,7 +255,9 @@ public class AccessAnimView extends RelativeLayout {
     private static final int ThirdLevel = 0xff06C581;
 
     public void setNumAnim(TextView tv_size, TextView tv_gb, View viewt, int startNum, int endNum, int type) {
-        ObjectAnimator oa1 = setYuAnim(iv_yu1, 0);
+
+        LogUtils.e("============进入了setNumAnim==");
+    /*    ObjectAnimator oa1 = setYuAnim(iv_yu1, 0);
         ObjectAnimator oa2 = setYuAnim(iv_yu2, 80);
         ObjectAnimator oa3 = setYuAnim(iv_yu3, 160);
         ObjectAnimator oa4 = setYuAnim(iv_yu4, 240);
@@ -259,7 +265,7 @@ public class AccessAnimView extends RelativeLayout {
         ObjectAnimator oa5 = setYuAnim(iv_yu5, 320);
         ObjectAnimator oa6 = setYuAnim(iv_yu6, 400);
         ObjectAnimator oa7 = setYuAnim(iv_yu7, 480);
-        ObjectAnimator oa8 = setYuAnim(iv_yu8, 540);
+        ObjectAnimator oa8 = setYuAnim(iv_yu8, 540);*/
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(3000);
         anim.setInterpolator(new DecelerateInterpolator());
@@ -273,7 +279,7 @@ public class AccessAnimView extends RelativeLayout {
             Log.d("asdf", "cuurent time " + animation.getCurrentPlayTime());
             if (canPlaying && animation.getAnimatedFraction() > 0.933) {
                 canPlaying = false;
-                cancelYuAnims(oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8);
+                //  cancelYuAnims(oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8);
                 //播放的后500ms，背景色改变
 //                    setBgChanged(viewt, 200);
             }
@@ -309,6 +315,7 @@ public class AccessAnimView extends RelativeLayout {
 
         AnimatorSet animatorSetTimer = new AnimatorSet();
         animatorSetTimer.playTogether(anim, colorAnim1);
+        animatorSetTimer.playTogether(anim);
         animatorSetTimer.start();
     }
 
@@ -407,10 +414,25 @@ public class AccessAnimView extends RelativeLayout {
         return animator;
     }
 
+    ObjectAnimator oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8;
+
+    private void startYuAnim() {
+        LogUtils.e("==========开始下雨动画==");
+        oa1 = setYuAnim(iv_yu1, 0);
+        oa2 = setYuAnim(iv_yu2, 80);
+        oa3 = setYuAnim(iv_yu3, 160);
+        oa4 = setYuAnim(iv_yu4, 240);
+        oa5 = setYuAnim(iv_yu5, 320);
+        oa6 = setYuAnim(iv_yu6, 400);
+        oa7 = setYuAnim(iv_yu7, 480);
+        oa8 = setYuAnim(iv_yu8, 540);
+    }
+
     /**
      * @return 火箭向上飞进
      */
     public ObjectAnimator createStartFadeAnimator() {
+
 
         PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + (1) * DisplayUtils.dip2px(990), line_hj.getTranslationY());
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.5f, 1f);
@@ -424,6 +446,11 @@ public class AccessAnimView extends RelativeLayout {
 
             @Override
             public void onAnimationEnd(Animator animator) {
+
+                LogUtils.e("==========小火箭从底部上升到中间结束");
+                //  cancelYuAnims(oa1, oa2, oa3, oa4, oa5, oa6, oa7, oa8);
+                startYuAnim();
+
                 animator.cancel();
                 iv_bot.setVisibility(VISIBLE);
                 iv_bot.setImageResource(R.drawable.anim_hj);
@@ -494,6 +521,26 @@ public class AccessAnimView extends RelativeLayout {
         iv_yu8.setVisibility(GONE);
     }
 
+    public void cancelYuAnims() {
+        if (oa1 != null) oa1.cancel();
+        if (oa2 != null) oa2.cancel();
+        if (oa3 != null) oa3.cancel();
+        if (oa4 != null) oa4.cancel();
+        if (oa5 != null) oa5.cancel();
+        if (oa6 != null) oa6.cancel();
+        if (oa7 != null) oa7.cancel();
+        if (oa8 != null) oa8.cancel();
+        iv_yu1.setVisibility(GONE);
+        iv_yu2.setVisibility(GONE);
+        iv_yu3.setVisibility(GONE);
+        iv_yu4.setVisibility(GONE);
+        iv_yu5.setVisibility(GONE);
+        iv_yu6.setVisibility(GONE);
+        iv_yu7.setVisibility(GONE);
+        iv_yu8.setVisibility(GONE);
+    }
+
+
     public void startFinishAnimator() {
         mFlAnim.setVisibility(VISIBLE);
 //        mAnimationView.useHardwareAcceleration();
@@ -534,13 +581,17 @@ public class AccessAnimView extends RelativeLayout {
      * 显示lottie动画 火箭从底部飞入
      */
     public void planFlyInAnimator() {
+        //小火箭图片显示
         line_hj.setVisibility(VISIBLE);
-        //小飞机 上升动画
+        //小火箭从底部上升到中间的动画
         createStartFadeAnimator();
 //        mAnimationCloudView.useHardwareAcceleration();
+        //小火箭底部的云彩动画
         mAnimationCloudView.setImageAssetsFolder("images");
         mAnimationCloudView.setAnimation("data_one_key_speed_up.json");
         mAnimationCloudView.playAnimation();
+
+
     }
 
     /**
