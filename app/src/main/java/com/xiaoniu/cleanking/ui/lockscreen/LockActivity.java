@@ -34,7 +34,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;

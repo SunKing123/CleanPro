@@ -617,7 +617,7 @@
 
 
         <activity
-            android:name=".ui.viruskill.newversion.VirusKillActivity"
+            android:name=".ui.viruskill.VirusKillActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"

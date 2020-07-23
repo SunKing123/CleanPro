@@ -1,10 +1,6 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.model;
+package com.xiaoniu.cleanking.ui.viruskill.model;
 
-import com.xiaoniu.cleanking.ui.viruskill.newversion.contract.NewVirusKillContract;
-
-import java.util.List;
-
-import io.reactivex.Observable;
+import com.xiaoniu.cleanking.ui.viruskill.contract.NewVirusKillContract;
 
 /**
  * Created by xinxiaolong on 2020/7/22.

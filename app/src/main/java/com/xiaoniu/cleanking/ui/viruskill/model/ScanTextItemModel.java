@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.model;
+package com.xiaoniu.cleanking.ui.viruskill.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

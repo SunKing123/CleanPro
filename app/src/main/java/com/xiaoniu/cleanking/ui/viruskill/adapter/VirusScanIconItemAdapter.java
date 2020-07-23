@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.adapter;
+package com.xiaoniu.cleanking.ui.viruskill.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,10 +7,8 @@ import android.widget.ImageView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

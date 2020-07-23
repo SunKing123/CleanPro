@@ -1,12 +1,12 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.presenter;
+package com.xiaoniu.cleanking.ui.viruskill.presenter;
 
 import com.jess.arms.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.contract.NewVirusKillContract;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.LieModel;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.NetworkDataStore;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.PrivacyDataStore;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
+import com.xiaoniu.cleanking.ui.viruskill.contract.NewVirusKillContract;
+import com.xiaoniu.cleanking.ui.viruskill.model.LieModel;
+import com.xiaoniu.cleanking.ui.viruskill.model.NetworkDataStore;
+import com.xiaoniu.cleanking.ui.viruskill.model.PrivacyDataStore;
+import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 
 import java.util.ArrayList;

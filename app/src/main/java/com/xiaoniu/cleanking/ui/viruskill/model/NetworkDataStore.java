@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.model;
+package com.xiaoniu.cleanking.ui.viruskill.model;
 
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -15,20 +15,20 @@ import java.util.List;
  * Created by xinxiaolong on 2020/7/21.
  * email：xinxiaolong123@foxmail.com
  */
-public class PrivacyDataStore {
+public class NetworkDataStore {
 
-    private final String[] items = new String[]{"手机IP泄露", "通讯录泄露", "信息被偷窥", "支付环境安全", "摄像头防窥", "麦克风防窃听", "相册安全保密", "聊天信息加密"};
+    private final String[] items = new String[]{"SSL安全", "ARP攻击", "WIFI加密", "DNS安全", "QoS质量", "防火墙服务", "IP保护", "网络防拦截"};
 
     private List<String> listIds = new ArrayList<>(items.length);
     private List<ScanTextItemModel> itemList = new ArrayList<>(items.length);
-
-    private static PrivacyDataStore store;
-    private String[] mCacheMarksWarnIds;
     private ArrayList<ScanTextItemModel> markedList = new ArrayList<>();
 
-    public static PrivacyDataStore getInstance() {
+    private static NetworkDataStore store;
+    private String[] mCacheMarksWarnIds;
+
+    public static NetworkDataStore getInstance() {
         if (store == null) {
-            store = new PrivacyDataStore();
+            store = new NetworkDataStore();
         }
         return store;
     }
@@ -41,7 +41,8 @@ public class PrivacyDataStore {
         return markedList;
     }
 
-    private PrivacyDataStore() {
+
+    private NetworkDataStore() {
         initData();
     }
 
@@ -57,7 +58,7 @@ public class PrivacyDataStore {
             index++;
         }
 
-        if (TextUtils.isEmpty(PreferenceUtil.getPrivacyItemRandomIds())) {
+        if (TextUtils.isEmpty(PreferenceUtil.getNetworkItemRandomIds())) {
             randomIds();
         }
     }
@@ -76,7 +77,7 @@ public class PrivacyDataStore {
      */
     private String[] getRandomNeedMarksIds() {
         //取出可用的随机id列表
-        String[] ids = PreferenceUtil.getPrivacyItemRandomIds().split(",");
+        String[] ids = PreferenceUtil.getNetworkItemRandomIds().split(",");
         //这次提示几个风险项
         int riskCount = NumberUtils.mathRandomInt(1, 3);
         //需要标记风险的id集合
@@ -98,7 +99,7 @@ public class PrivacyDataStore {
      */
     public void removeMarkedIdsInRandomTable() {
 
-        String[] ids = PreferenceUtil.getPrivacyItemRandomIds().split(",");
+        String[] ids = PreferenceUtil.getNetworkItemRandomIds().split(",");
 
         if (mCacheMarksWarnIds == null || mCacheMarksWarnIds.length <= 0) {
             return;
@@ -139,7 +140,7 @@ public class PrivacyDataStore {
             builder.append(id).append(",");
         }
         String ids = builder.delete(builder.length() - 1, builder.length()).toString();
-        PreferenceUtil.savePrivacyItemRandomIds(ids);
+        PreferenceUtil.saveNetworkItemRandomIds(ids);
     }
 
     /**

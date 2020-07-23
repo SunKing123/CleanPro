@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.fragment;
+package com.xiaoniu.cleanking.ui.viruskill.fragment;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
@@ -10,6 +10,7 @@ import android.text.SpannableString;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jess.arms.base.SimpleFragment;
@@ -17,12 +18,12 @@ import com.jess.arms.di.component.AppComponent;
 import com.jess.arms.widget.LeiDaView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.ITransferPagePerformer;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.adapter.VirusScanIconItemAdapter;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.adapter.VirusScanTextItemAdapter;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.contract.NewVirusKillContract;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.presenter.VirusScanPresenter;
+import com.xiaoniu.cleanking.ui.viruskill.ITransferPagePerformer;
+import com.xiaoniu.cleanking.ui.viruskill.adapter.VirusScanIconItemAdapter;
+import com.xiaoniu.cleanking.ui.viruskill.adapter.VirusScanTextItemAdapter;
+import com.xiaoniu.cleanking.ui.viruskill.contract.NewVirusKillContract;
+import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel;
+import com.xiaoniu.cleanking.ui.viruskill.presenter.VirusScanPresenter;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -69,6 +70,10 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     ImageView imgVirusScan;
     @BindView(R.id.image_virus_network)
     ImageView imgNetwork;
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
+    @BindView(R.id.toolBar)
+    LinearLayout toolBar;
 
     private CountDownTimer timer;
 
@@ -79,6 +84,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private VirusScanTextItemAdapter textAdapter;
     private VirusScanIconItemAdapter iconAdapter;
     private ITransferPagePerformer transferPagePerformer;
+    boolean isFinishing = false;
 
     public static NewVirusScanFragment getInstance() {
         return new NewVirusScanFragment();
@@ -100,6 +106,8 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         presenter.onCreate();
         initRecycleView();
         startScanLoading();
+        tvTitle.setText("病毒查杀");
+        toolBar.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -129,6 +137,8 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private void startCountDown() {
         timer = new CountDownTimer(millisInFuture, countDownInterval) {
             public void onTick(long millisUntilFinished) {
+                if (isFinishing)
+                    return;
                 int progress = (int) (100 - millisUntilFinished / countDownInterval);
                 if (txtPro != null) txtPro.setText(progress + "%");
                 presenter.onScanLoadingProgress(progress);
@@ -242,7 +252,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     public void scanAllComplete(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
         textAdapter.updateState();
         txtPro.setText(100 + "%");
-        new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList),1000);
+        new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList), 1000);
     }
 
     /**
@@ -270,8 +280,13 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     }
 
-
     public void setTransferPagePerformer(ITransferPagePerformer transferPagePerformer) {
         this.transferPagePerformer = transferPagePerformer;
+    }
+
+    public void finish() {
+        isFinishing=true;
+        timer.cancel();
+        getActivity().finish();
     }
 }

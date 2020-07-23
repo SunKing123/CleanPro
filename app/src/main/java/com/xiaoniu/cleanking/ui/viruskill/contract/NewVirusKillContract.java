@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.contract;
+package com.xiaoniu.cleanking.ui.viruskill.contract;
 
 import android.content.Context;
 
@@ -6,10 +6,9 @@ import com.jess.arms.mvp.IModel;
 import com.jess.arms.mvp.IPresenter;
 import com.jess.arms.mvp.IView;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
+import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by xinxiaolong on 2020/7/20.

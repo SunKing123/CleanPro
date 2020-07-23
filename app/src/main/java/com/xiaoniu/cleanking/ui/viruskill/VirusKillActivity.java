@@ -1,8 +1,9 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion;
+package com.xiaoniu.cleanking.ui.viruskill;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 
 import com.google.gson.Gson;
 import com.jess.arms.base.BaseActivity;
@@ -12,10 +13,12 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.NewVirusScanFragment;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusCleanFragment;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusScanResultFragment;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
+import com.xiaoniu.cleanking.ui.viruskill.fragment.NewVirusScanFragment;
+import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusCleanFragment;
+import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusScanResultFragment;
+import com.xiaoniu.cleanking.ui.viruskill.model.NetworkDataStore;
+import com.xiaoniu.cleanking.ui.viruskill.model.PrivacyDataStore;
+import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatusBarUtil;
@@ -36,6 +39,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
 
     private NewVirusScanFragment scanFragment;
     private FragmentManager mManager = getSupportFragmentManager();
+    private boolean isCleaning = false;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -78,6 +82,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
 
     @Override
     public void onTransferCleanPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
+        isCleaning = true;
         VirusCleanFragment cleanFragment = new VirusCleanFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(VirusCleanFragment.IntentKey.P_LIST, pList);
@@ -103,7 +108,6 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
         PreferenceUtil.saveVirusKillTime();
 
         AppHolder.getInstance().setCleanFinishSourcePageId("virus_killing_animation_page");
-
         EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.virus_kill)));
 
         Intent mIntent = new Intent();
@@ -113,5 +117,16 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
         }
         StartFinishActivityUtil.Companion.gotoFinish(this, mIntent);
         finish();
+
+        PrivacyDataStore.getInstance().removeMarkedIdsInRandomTable();
+        NetworkDataStore.getInstance().removeMarkedIdsInRandomTable();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && isCleaning) {
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

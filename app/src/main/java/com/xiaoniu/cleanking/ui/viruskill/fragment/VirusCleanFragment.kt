@@ -1,10 +1,10 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.fragment
+package com.xiaoniu.cleanking.ui.viruskill.fragment
 
 import android.os.Bundle
 import com.jess.arms.di.component.AppComponent
 import com.xiaoniu.cleanking.R
-import com.xiaoniu.cleanking.ui.viruskill.newversion.ITransferPagePerformer
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel
+import com.xiaoniu.cleanking.ui.viruskill.ITransferPagePerformer
+import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_viruskill_clean_layout.*
@@ -92,4 +92,5 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
     fun setTransferPagePerformer(transfer: ITransferPagePerformer) {
         this.transfer = transfer
     }
+
 }

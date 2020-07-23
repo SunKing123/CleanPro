@@ -1,9 +1,8 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion;
+package com.xiaoniu.cleanking.ui.viruskill;
 
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel;
+import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by xinxiaolong on 2020/7/23.

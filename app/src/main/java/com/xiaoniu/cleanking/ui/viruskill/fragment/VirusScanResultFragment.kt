@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.viruskill.newversion.fragment
+package com.xiaoniu.cleanking.ui.viruskill.fragment
 
 import android.os.Bundle
 import android.text.Spannable
@@ -12,10 +12,10 @@ import android.widget.TextView
 import com.jess.arms.base.SimpleFragment
 import com.jess.arms.di.component.AppComponent
 import com.xiaoniu.cleanking.R
-import com.xiaoniu.cleanking.ui.viruskill.newversion.ITransferPagePerformer
-import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusScanResultFragment.IntentKey.N_LIST
-import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusScanResultFragment.IntentKey.P_LIST
-import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel
+import com.xiaoniu.cleanking.ui.viruskill.ITransferPagePerformer
+import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusScanResultFragment.IntentKey.N_LIST
+import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusScanResultFragment.IntentKey.P_LIST
+import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel
 import kotlinx.android.synthetic.main.fragment_virus_scan_result_layout.*
 
 /**
@@ -69,6 +69,9 @@ class VirusScanResultFragment : SimpleFragment() {
 
         initPItemView()
         initNItemView()
+
+        tvTitle.setText("病毒查杀")
+        toolBar.setOnClickListener({ finish() })
     }
 
     private fun initEvent() {
@@ -115,4 +118,7 @@ class VirusScanResultFragment : SimpleFragment() {
         this.transfer = transfer
     }
 
+    fun finish() {
+        activity!!.finish()
+    }
 }

@@ -73,7 +73,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
-import com.xiaoniu.cleanking.ui.viruskill.newversion.VirusKillActivity;
+import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
