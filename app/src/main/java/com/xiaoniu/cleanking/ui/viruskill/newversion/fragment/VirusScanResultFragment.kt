@@ -17,7 +17,6 @@ import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusScanResultFra
 import com.xiaoniu.cleanking.ui.viruskill.newversion.fragment.VirusScanResultFragment.IntentKey.P_LIST
 import com.xiaoniu.cleanking.ui.viruskill.newversion.model.ScanTextItemModel
 import kotlinx.android.synthetic.main.fragment_virus_scan_result_layout.*
-import kotlinx.android.synthetic.main.layout_notivition.*
 
 /**
  * Created by xinxiaolong on 2020/7/23.
