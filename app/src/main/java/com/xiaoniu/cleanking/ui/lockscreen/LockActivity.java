@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,23 +24,18 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
-import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
-import com.xiaoniu.cleanking.ui.main.activity.AgentWebViewActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
-import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.viruskill.newversion.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.GlideUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
-import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.ViewUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -50,9 +44,7 @@ import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -422,7 +414,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void startVirUsKill() {
-        Intent virusIntent = new Intent(this, ArmVirusKillActivity.class);
+        Intent virusIntent = new Intent(this, VirusKillActivity.class);
         virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         virusIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         virusIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -434,9 +426,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         PreferenceUtil.getInstants().save("lock_action", "virus");//埋点逻辑
         startActivity(virusIntent);
     }
-
-
-
 
     protected UIChangingReceiver mUIChangingReceiver;
 
