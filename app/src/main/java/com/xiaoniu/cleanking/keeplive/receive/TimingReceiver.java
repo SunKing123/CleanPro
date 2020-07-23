@@ -130,6 +130,10 @@ public class TimingReceiver extends BroadcastReceiver {
                             return;
                         }
                     }
+                    //app在前台的时候不弹出
+                    if (AppLifecycleUtil.isAppOnForeground(context.getApplicationContext())) {
+                        return;
+                    }
                     long homePressTime = intent.getLongExtra("homePressed", 0L);
                     showLocalPushAlertWindow(context, homePressTime);
                     break;
@@ -622,29 +626,29 @@ public class TimingReceiver extends BroadcastReceiver {
 //                }
 //            } else {
 //                long totalSize = CleanUtil.getTotalSize(mJunkGroups);
-                long mbNum = NumberUtils.mathRandomInt(500, 1850);
-                //保存上一次扫秒出来的垃圾大小
-                //为了保证比扫描页面的数小，强制性的/2
+        long mbNum = NumberUtils.mathRandomInt(500, 1850);
+        //保存上一次扫秒出来的垃圾大小
+        //为了保证比扫描页面的数小，强制性的/2
 //                long temp = mbNum / 2;
-                PreferenceUtil.saveLastScanRubbishSize(mbNum);
-                NotificationEvent event = new NotificationEvent();
-                event.setType("clean");
-                LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
-                if (dataBean != null && mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
-                    event.setFlag(2);
-                    String push_content = mContext.getString(R.string.push_content_scan_all, mbNum);
-                    //cheme跳转路径
-                    Map<String, String> actionMap = new HashMap<>();
-                    actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
-                    createNotify(mContext, push_content, actionMap, mContext.getString(R.string.tool_now_clean));
-                    btnInfo.setNormal(false);
-                } else {
-                    event.setFlag(0);
-                    btnInfo.setNormal(true);
-                }
-                btnInfo.setCheckResult(String.valueOf(mbNum));
-                PreferenceUtil.getInstants().save("lock_pos01", new Gson().toJson(btnInfo));
-                EventBus.getDefault().post(event);
+        PreferenceUtil.saveLastScanRubbishSize(mbNum);
+        NotificationEvent event = new NotificationEvent();
+        event.setType("clean");
+        LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(0);
+        if (dataBean != null && mbNum > dataBean.getThresholdNum()) {//超过阀值，发送push
+            event.setFlag(2);
+            String push_content = mContext.getString(R.string.push_content_scan_all, mbNum);
+            //cheme跳转路径
+            Map<String, String> actionMap = new HashMap<>();
+            actionMap.put("url", SchemeConstant.LocalPushScheme.SCHEME_NOWCLEANACTIVITY);
+            createNotify(mContext, push_content, actionMap, mContext.getString(R.string.tool_now_clean));
+            btnInfo.setNormal(false);
+        } else {
+            event.setFlag(0);
+            btnInfo.setNormal(true);
+        }
+        btnInfo.setCheckResult(String.valueOf(mbNum));
+        PreferenceUtil.getInstants().save("lock_pos01", new Gson().toJson(btnInfo));
+        EventBus.getDefault().post(event);
 //            }
 //        });
 
