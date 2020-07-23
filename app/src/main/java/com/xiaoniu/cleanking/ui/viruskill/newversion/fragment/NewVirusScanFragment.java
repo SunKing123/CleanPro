@@ -40,6 +40,13 @@ import butterknife.BindView;
  */
 public class NewVirusScanFragment extends SimpleFragment implements NewVirusKillContract.VirusScanView {
 
+    //隐私风险背景颜色
+    private static final int pBackGround = 0xff02D086;
+    //病毒查杀背景颜色
+    private static final int vBackGround = 0xffFFAD00;
+    //网络安全扫描背景颜色
+    private static final int nBackGround = 0xffFF6D58;
+
     @BindView(R.id.root_view)
     ViewGroup rootView;
     @BindView(R.id.lottie)
@@ -134,11 +141,19 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         timer.start();
     }
 
+    /**
+     * 更新扫描的标题
+     * @param title
+     */
     @Override
     public void setScanTitle(String title) {
         tvScanTitle.setText(title);
     }
 
+    /**
+     * 设置扫描的风险项
+     * @param count
+     */
     @Override
     public void setPrivacyCount(int count) {
         tvPrivacy.setVisibility(View.VISIBLE);
@@ -149,6 +164,10 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         tvPrivacy.setText(spannable);
     }
 
+    /**
+     * 添加隐私风险扫描条目
+     * @param model
+     */
     @Override
     public void addScanPrivacyItem(ScanTextItemModel model) {
         if (textAdapter.getItemCount() == 4) {
@@ -157,12 +176,19 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         textAdapter.addData(model);
     }
 
+    /**
+     * 隐私风险扫描完毕
+     */
     @Override
     public void setScanPrivacyComplete() {
         textAdapter.updateState();
         transitionBackgroundVirus();
     }
 
+    /**
+     * 设置病毒查杀扫描图标
+     * @param list
+     */
     @Override
     public void showScanVirusIcons(ArrayList<FirstJunkInfo> list) {
         recycleViewText.setVisibility(View.GONE);
@@ -170,6 +196,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         iconAdapter.setDataList(list);
     }
 
+    /**
+     * 病毒查杀扫描完毕
+     */
     @Override
     public void setScanVirusComplete() {
         imgVirusScan.setImageResource(R.drawable.icon_virus_ok);
@@ -186,6 +215,10 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         recycleViewIcon.setVisibility(View.GONE);
     }
 
+    /**
+     * 添加网络安全扫描条目
+     * @param model
+     */
     @Override
     public void addScanNetWorkItem(ScanTextItemModel model) {
         if (textAdapter.getItemCount() == 4) {
@@ -194,27 +227,29 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         textAdapter.addData(model);
     }
 
+    /**
+     * 所有扫描已结束
+     */
     @Override
     public void scanAllComplete() {
         textAdapter.updateState();
     }
 
-    //隐私风险背景颜色
-    private static final int FirstLevel = 0xff02D086;
-    //病毒查杀背景颜色
-    private static final int SecondLevel = 0xffFFAD00;
-    //网络安全扫描背景颜色
-    private static final int ThirdLevel = 0xffFF6D58;
-
+    /**
+     * 过渡到病毒查杀背景
+     */
     private void transitionBackgroundVirus() {
-        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", FirstLevel, SecondLevel);
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", pBackGround, vBackGround);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(500);
         colorAnim1.start();
     }
 
+    /**
+     * 过渡到网络安全背景
+     */
     private void transitionBackgroundNet() {
-        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", SecondLevel, ThirdLevel);
+        ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", vBackGround, nBackGround);
         colorAnim1.setEvaluator(new ArgbEvaluator());
         colorAnim1.setDuration(500);
         colorAnim1.start();
