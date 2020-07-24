@@ -69,7 +69,12 @@ public class VirusScanPresenter extends BasePresenter<NewVirusKillContract.LieMo
 
         //初始化图标信息
         iconList = AndroidUtil.getRandomMaxCountInstallApp(mRootView.getContext(), 10);
-
+        int size=iconList.size();
+        int needSystemSize=10-size;
+        if(needSystemSize>0){
+            iconList.addAll(AndroidUtil.getSystemInstallApps(mRootView.getContext(),needSystemSize));
+        }
+        iconList.size();
     }
 
     /**

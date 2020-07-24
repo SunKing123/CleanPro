@@ -658,8 +658,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             //未授权默认样式——存在大量垃圾；
             if (null != view_lottie_top)
                 view_lottie_top.setNoSize();
-
-
         }
     }
 
@@ -857,11 +855,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //click kill virus
     private void onKillVirusClick() {
         StatisticsUtils.trackClick(Points.MainHome.VIRUS_KILLING_CLICK_CODE, Points.MainHome.VIRUS_KILLING_CLICK_NAME, "home_page", "home_page");
-     //   startKillVirusActivity();
-
-        Intent intent=new Intent();
-        intent.setClass(getActivity(), VirusKillActivity.class);
-        startActivity(intent);
+        startKillVirusActivity();
     }
 
     //start kill virus page

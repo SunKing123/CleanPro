@@ -150,15 +150,9 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btn_clear_virus_result"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:background="@drawable/clear_virus_btn_bg"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
+            style="@style/large_blue_button_style"
             android:layout_margin="10dp"
-            android:textSize="@dimen/dp_16"
             android:layout_alignParentBottom="true"
             android:text="一键优化" />
-
     </RelativeLayout>
 </LinearLayout>

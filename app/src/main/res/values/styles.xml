@@ -383,4 +383,14 @@
         <!--dialog的整个屏幕的背景是否有遮障层-->
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="large_blue_button_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/large_blue_btn_bg</item>
+        <item name="android:textSize">@dimen/dp_16</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

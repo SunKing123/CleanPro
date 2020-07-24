@@ -415,9 +415,8 @@ public class PreferenceUtil {
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_SPEED_NETWORK_TIME, 0);
         if (System.currentTimeMillis() - time > 3 * 60 * 1000)
             return true;
-        return false;
+        return true;
     }
-
 
     /**
      * whether display the kill virus warning?

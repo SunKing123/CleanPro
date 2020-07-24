@@ -368,6 +368,33 @@ public class AndroidUtil {
     }
 
     /**
+     * 获取
+     *
+     * @param context
+     * @return
+     */
+    public static ArrayList<FirstJunkInfo> getSystemInstallApps(Context context, int maxCount) {
+        ArrayList<FirstJunkInfo> aboveListInfo = new ArrayList<>();
+        List<PackageInfo> packages = context.getPackageManager().getInstalledPackages(0);
+        for (int i = 0; i < packages.size(); i++) {
+            PackageInfo packageInfo = packages.get(i);
+            //判断是否系统应用
+            if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) { //系统应用
+                if ((i + 1) > maxCount) {
+                    break;
+                }
+                FirstJunkInfo tmpInfo = new FirstJunkInfo();
+                tmpInfo.setAppName(packageInfo.applicationInfo.loadLabel(context.getPackageManager()).toString());
+                tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(context.getPackageManager()));
+                tmpInfo.setAppPackageName(packageInfo.applicationInfo.packageName);
+                tmpInfo.setAppProcessName(packageInfo.applicationInfo.processName);
+                aboveListInfo.add(tmpInfo);
+            }
+        }
+        return aboveListInfo;
+    }
+
+    /**
      * 取本地已安装app信息
      *
      * @param context
@@ -399,7 +426,7 @@ public class AndroidUtil {
         return spanString;
     }
 
-    public static SpannableString zoomText(String content,float rate,int startColorIndex, int endColorIndex){
+    public static SpannableString zoomText(String content, float rate, int startColorIndex, int endColorIndex) {
         SpannableString spanString = new SpannableString(content);
         TypefaceSpan typefaceSpan = new TypefaceSpan("default-bold");
         spanString.setSpan(typefaceSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -411,6 +438,7 @@ public class AndroidUtil {
     //数美接入
     private static String sDeviceID = "";
     //数美接入
+
     /**
      * 热云方法[暂时只做IMEI调用时使用]
      *
