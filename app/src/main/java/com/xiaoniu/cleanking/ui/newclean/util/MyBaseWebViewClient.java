@@ -102,7 +102,7 @@ public class MyBaseWebViewClient extends WebViewClient {
 
         @Override
         public void onFinish() {
-            ToastUtils.showShort("网络异常，请重试");
+//            ToastUtils.showShort("网络异常，请重试");
         }
     };
 

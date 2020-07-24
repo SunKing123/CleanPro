@@ -16,20 +16,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical" >
-
-            <Button
-                android:id="@+id/splash_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="开屏"
-                android:textSize="16sp"/>
-            <FrameLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="500dp">
-
-            </FrameLayout>
-
             <Button
                 android:id="@+id/banner_type"
                 android:layout_width="wrap_content"
@@ -39,10 +25,19 @@
             <FrameLayout
                 android:id="@+id/fragment_banner_type"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="500dp">
 
             </FrameLayout>
-
+            <Button
+                android:id="@+id/splash_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开屏"
+                android:textSize="16sp"/>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+            </FrameLayout>
 
             <Button
                 android:id="@+id/feed_video_type"
