@@ -118,7 +118,8 @@ class SpeedUpClearActivity : BaseActivity() {
         //  if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
         //   mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))
         //  }
-        StartFinishActivityUtil.gotoFinish(this, mIntent);
+        StartFinishActivityUtil.gotoFinish(this, mIntent)
+        finish()
     }
 
 

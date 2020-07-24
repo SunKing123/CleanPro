@@ -101,7 +101,7 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
     fun initData() {
         //只扫描内存垃圾
         //构造清理数据模型
-         val groupLinkedHashMap = ScanDataHolder.getInstance().getmJunkGroups().filterKeys { it.type == 5 }
+        val groupLinkedHashMap = ScanDataHolder.getInstance().getmJunkGroups().filterKeys { it.type == 5 }
         if (groupLinkedHashMap.isEmpty()) {
             //伪造数据
             val un: Long = 80886656
@@ -116,6 +116,9 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
             counterfeit[ScanningResultType.MEMORY_JUNK] = junkGroup
             mPresenter.buildJunkResultModel(counterfeit, mAppSize)
         } else {
+            groupLinkedHashMap[ScanningResultType.MEMORY_JUNK]?.mChildren?.forEach {
+                it.isAllchecked = true
+            }
             mPresenter.buildJunkResultModel(groupLinkedHashMap as LinkedHashMap<ScanningResultType, JunkGroup>, mAppSize)
         }
 
