@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.lockscreen;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,7 +33,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     LinearLayout adContainer;
     RelativeLayout full_screen_insert_ad_header_layout;
     //private TextView adShowTime;
-    private TextView progree_tv;
+   // private TextView progree_tv;
     private ImageView adClose;
     private int showTimeSecond = 3;
     private AdInfo mAdInfo;
@@ -39,6 +41,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         LogUtils.e("==========进入了PopLayerActivity");
         StatisticsUtils.customTrackEvent("lock_screen_page_custom", "锁屏页面创建时", "", "lock_screen_page");
         StatisticsUtils.customTrackEvent("ad_request_sdk", "外部插屏发起请求", "", "external_advertising_page");
@@ -48,10 +51,10 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         adContainer = (LinearLayout) findViewById(R.id.ad_container);
         full_screen_insert_ad_header_layout = (RelativeLayout) findViewById(R.id.full_screen_insert_ad_header_layout);
         adClose = findViewById(R.id.full_screen_insert_ad_close);
-        progree_tv = findViewById(R.id.progree_tv);
+      //  progree_tv = findViewById(R.id.progree_tv);
         // adShowTime.setText(showTimeSecond + "s");
         // adShowTime.setVisibility(View.VISIBLE);
-        progree_tv.setText("已提速" + NumberUtils.mathRandom(25, 50) + "%");
+     //   progree_tv.setText("已提速" + NumberUtils.mathRandom(25, 50) + "%");
         showTimeSecond = NumberUtils.mathRandomInt(25, 50);
       /*  countDownTimer = new CountDownTimer(5 * 1000, 1000) {
             @Override

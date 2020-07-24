@@ -3,6 +3,7 @@ package com.jess.arms.widget;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
@@ -27,7 +28,7 @@ public class RotationLoadingView extends View {
     /** 是否逆时针转动，默认是 **/
     private boolean mClockwise = true;
     private PaintFlagsDrawFilter mPaintFlagsDrawFilter;
-
+    private int resId=-1;
     /**
      * 构造函数，初始化前景图片和背景图片
      */
@@ -102,8 +103,17 @@ public class RotationLoadingView extends View {
         invalidate();
     }
 
+    public void setResId(int resId) {
+        this.resId = resId;
+        init();
+        invalidate();
+    }
+
     private int getResID() {
-        return R.mipmap.icon_dengdai;
+        if(resId==-1){
+            return R.mipmap.icon_dengdai;
+        }
+        return resId;
     }
 }
 

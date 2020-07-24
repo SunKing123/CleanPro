@@ -377,7 +377,7 @@ public class AndroidUtil {
     public static ArrayList<FirstJunkInfo> getRandomMaxCountInstallApp(Context context, int maxCount) {
         ArrayList<FirstJunkInfo> list = getAllReadyInstallApps(context);
         Collections.shuffle(list);
-        int count = list.size() > maxCount ? maxCount : list.size();
+        int count = Math.min(list.size(), maxCount);
         if (count < 0) {
             count = 0;
         }

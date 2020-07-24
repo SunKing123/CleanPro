@@ -182,6 +182,8 @@ public class SpCacheConfig {
 
     public final static String AuditSwitch = "AuditSwitch";
 
-    public final static String WARNED_RANDOM_IDS = "warned_random_ids";
+    public final static String WARNED_PRIVACY_RANDOM_IDS = "warned_privacy_random_ids";
+
+    public final static String WARNED_NETWORK_RANDOM_IDS = "warned_network_random_ids";
 
 }

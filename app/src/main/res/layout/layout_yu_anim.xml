@@ -13,7 +13,7 @@
         android:layout_width="@dimen/dimen_2dp"
         android:layout_height="112dp"
         android:visibility="gone"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"
@@ -24,7 +24,7 @@
         android:visibility="gone"
         android:layout_width="@dimen/dimen_2dp"
         android:layout_height="112dp"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"
@@ -39,7 +39,7 @@
         android:visibility="gone"
         android:layout_width="@dimen/dimen_2dp"
         android:layout_height="112dp"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"
@@ -50,7 +50,7 @@
         android:visibility="gone"
         android:layout_width="@dimen/dimen_2dp"
         android:layout_height="112dp"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"
@@ -65,7 +65,7 @@
         android:visibility="gone"
         android:layout_width="@dimen/dimen_2dp"
         android:layout_height="112dp"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"
@@ -76,7 +76,7 @@
         android:layout_width="@dimen/dimen_2dp"
         android:visibility="gone"
         android:layout_height="112dp"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"
@@ -91,7 +91,7 @@
         android:visibility="gone"
         android:layout_width="@dimen/dimen_2dp"
         android:layout_height="112dp"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"
@@ -102,7 +102,7 @@
         android:layout_width="@dimen/dimen_2dp"
         android:visibility="gone"
         android:layout_height="112dp"
-        android:src="@mipmap/icon_yu" />
+        android:src="@mipmap/icon_yu_white" />
     <View
         android:layout_width="0px"
         android:layout_height="1dp"

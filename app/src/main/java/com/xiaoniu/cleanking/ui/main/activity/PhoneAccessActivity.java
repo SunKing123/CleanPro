@@ -17,6 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.umeng.socialize.UMShareAPI;
@@ -35,13 +40,13 @@ import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneAccessPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.AccessAnimView;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
+import com.xiaoniu.cleanking.ui.newclean.activity.SpeedUpResultActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -56,11 +61,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -247,7 +247,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             acceview.setVisibility(View.GONE);
         }
         NiuDataAPI.onPageStart("clean_up_immediately_view_page", "立即一键加速浏览页");*/
-
+        if (acceview != null) {
+            acceview.cancelYuAnims();
+        }
         startClean(false);
     }
 
@@ -278,16 +280,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         AppHolder.getInstance().setCleanFinishSourcePageId("boost_animation_page");
 
 
-
-        Intent mIntent = new Intent();
-        mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
-        mIntent.putExtra(ExtraConstant.NUM, tv_size != null ? tv_size.getText().toString() : num);
-        mIntent.putExtra(ExtraConstant.UNIT, unit);
-        if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
-            mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
-        }
-        StartFinishActivityUtil.Companion.gotoFinish(this, mIntent);
-
+        Intent in = new Intent(this, SpeedUpResultActivity.class);
+        int size = mPresenter.getRandomSize();
+        in.putExtra(SpeedUpResultActivity.SPEEDUP_APP_SIZE, size);
+        startActivity(in);
         finish();
     }
 
@@ -399,16 +395,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         NiuDataAPI.onPageEnd("accelerate_access_to_details_view_page", "加速查看详情页浏览");
     }
 
-    //低于Android O
-    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
-        if (listInfo == null || acceview == null) return;
-        acceview.setListInfoSize(listInfo.size());
-        if (listInfo.size() != 0) {
-            computeTotalSize(listInfo);
-            setAdapter(listInfo);
-        }
-    }
-
 
     //计算总的缓存大小
     public void computeTotalSize(ArrayList<FirstJunkInfo> listInfo) {
@@ -435,10 +421,10 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             }
         }
 
-        double kb=totalSizes/1024/1024;
+        double kb = totalSizes / 1024 / 1024;
 
-        if(kb<=1){
-            totalSizes=1024*1024*NumberUtils.mathRandomInt(1,20);
+        if (kb <= 1) {
+            totalSizes = 1024 * 1024 * NumberUtils.mathRandomInt(1, 20);
         }
         setCleanSize(totalSizes, true);
         this.mTotalSizesCleaned = totalSizes;
@@ -474,9 +460,9 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             sizeMb = Double.valueOf(str_totalSize.substring(0, str_totalSize.length() - 2).trim()).intValue();
             strNum = String.valueOf(sizeMb);
             strUnit = "MB";
-            if (canPlayAnim)
+            if (canPlayAnim) {
                 mPresenter.setNumAnim(mRlAnimBg, tv_size, tv_size_show, tv_delete, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 1);
-            else
+            } else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
         } else if (str_totalSize.endsWith("GB")) {
@@ -484,11 +470,22 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
             strUnit = "GB";
             sizeMb = NumberUtils.getRoundCeilingInt(gbnum * 1024);
             strNum = String.valueOf(sizeMb);
-            if (canPlayAnim)
+            if (canPlayAnim) {
                 mPresenter.setNumAnim(mRlAnimBg, tv_size, tv_size_show, tv_delete, tv_gb, acceview.getTv_gb(), viewt, line_title, 0, sizeMb, 2);
-            else
+            } else
                 acceview.getTv_gb().setText("MB");
             acceview.setData(sizeMb);
+        }
+    }
+
+
+    //低于Android O
+    public void getAccessListBelow(ArrayList<FirstJunkInfo> listInfo) {
+        if (listInfo == null || acceview == null) return;
+        acceview.setListInfoSize(listInfo.size());
+        if (listInfo.size() != 0) {
+            computeTotalSize(listInfo);
+            // setAdapter(listInfo);
         }
     }
 
@@ -501,12 +498,12 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         if (total == 0) {
             un = 80886656;
         } else {
-            un = total / aboveListInfo.size()==0?1:aboveListInfo.size();
+            un = total / aboveListInfo.size() == 0 ? 1 : aboveListInfo.size();
         }
 
         setAppInfo(aboveListInfo, FileQueryUtils.getInstalledList(), un);
         computeTotalSize(aboveListInfo);
-        setAdapter(aboveListInfo);
+        //setAdapter(aboveListInfo);
     }
 
     private void setAppInfo(ArrayList<FirstJunkInfo> aboveListInfo, List<PackageInfo> listP, long un) {
@@ -545,6 +542,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     public void setAdapter(ArrayList<FirstJunkInfo> listInfos) {
         if (null == recycle_view)
             return;
+        LogUtils.e("=======setAdapter被调用");
         ArrayList<FirstJunkInfo> listInfoData = new ArrayList<>();
         for (FirstJunkInfo firstJunkInfo : listInfos) {
             if (!isCacheWhite(firstJunkInfo.getAppPackageName()))

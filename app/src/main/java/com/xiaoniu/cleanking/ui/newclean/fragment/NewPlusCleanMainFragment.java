@@ -49,7 +49,6 @@ import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
@@ -74,7 +73,7 @@ import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
-import com.xiaoniu.cleanking.ui.viruskill.ArmVirusKillActivity;
+import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -858,13 +857,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //click kill virus
     private void onKillVirusClick() {
         StatisticsUtils.trackClick(Points.MainHome.VIRUS_KILLING_CLICK_CODE, Points.MainHome.VIRUS_KILLING_CLICK_NAME, "home_page", "home_page");
-        startKillVirusActivity();
+     //   startKillVirusActivity();
+
+        Intent intent=new Intent();
+        intent.setClass(getActivity(), VirusKillActivity.class);
+        startActivity(intent);
     }
 
     //start kill virus page
     private void startKillVirusActivity() {
         if (PreferenceUtil.getVirusKillTime()) {
-            startActivity(ArmVirusKillActivity.class);
+            startActivity(VirusKillActivity.class);
         } else {
             Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
             intent.putExtra("title", "病毒查杀");

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.base;
 
+import com.xiaoniu.cleanking.bean.JunkResultWrapper;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -7,6 +8,8 @@ import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author zhengzhihao
@@ -15,9 +18,10 @@ import java.util.LinkedHashMap;
  */
 public class ScanDataHolder {
 
-    private volatile static  ScanDataHolder scanDataHolder;
+    private volatile static ScanDataHolder scanDataHolder;
 
-    private ScanDataHolder(){}
+    private ScanDataHolder() {
+    }
 
     public static ScanDataHolder getInstance() {
         if (scanDataHolder == null) {
@@ -31,13 +35,23 @@ public class ScanDataHolder {
     }
 
     private int scanState = 0;
-    private long totalSize =0;
+    private long totalSize = 0;
     private CountEntity mCountEntity;
     private int scanningFileCount = 0;
     private long prevScanTime = 0;  //扫描缓存时间
-    private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups;   //扫描缓存
+    private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();   //扫描缓存
     private LinkedHashMap<ScanningResultType, ArrayList<FirstJunkInfo>> junkContentMap;
 
+    private List<JunkResultWrapper> mJunkResultWrapperList = new LinkedList<>();
+
+    public void setJunkResultWrapperList(List<JunkResultWrapper> mJunkResultWrapperList) {
+        this.mJunkResultWrapperList.clear();
+        this.mJunkResultWrapperList = mJunkResultWrapperList;
+    }
+
+    public List<JunkResultWrapper> getJunkResultWrapperList() {
+        return mJunkResultWrapperList;
+    }
 
     public int getScanState() {
         if (System.currentTimeMillis() - prevScanTime > 5 * 60 * 1000) {  //五分钟缓存
@@ -71,7 +85,8 @@ public class ScanDataHolder {
     }
 
     public void setmJunkGroups(LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups) {
-        this.mJunkGroups = mJunkGroups;
+        this.mJunkGroups.clear();
+        this.mJunkGroups.putAll(mJunkGroups);
         prevScanTime = System.currentTimeMillis();
     }
 
