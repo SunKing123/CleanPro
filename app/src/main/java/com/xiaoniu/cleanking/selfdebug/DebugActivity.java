@@ -13,7 +13,10 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ import com.comm.jksdk.bean.ConfigBean;
 import com.comm.jksdk.config.AdsConfig;
 import com.comm.jksdk.utils.JsonUtils;
 import com.google.gson.Gson;
+import com.jess.arms.utils.FileUtils;
 import com.orhanobut.logger.Logger;
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.clean.deviceinfo.EasyCpuMod;
@@ -48,6 +52,9 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.ToastUtils;
+
+import java.io.File;
+import java.util.Locale;
 
 /**
  * deprecation:调试页面
@@ -382,7 +389,6 @@ public class DebugActivity extends BaseActivity {
     }*/
 
     StringBuffer deviceinfo = new StringBuffer();
-    ;
 
     /**
      * 电池温度
@@ -401,43 +407,80 @@ public class DebugActivity extends BaseActivity {
         deviceinfo = new StringBuffer();
         deviceinfo.append("电量:" + String.valueOf(easyBatteryMod.getBatteryPercentage()) + "\n");
         deviceinfo.append("剩余充电时间:" + easyBatteryMod.getFullTime() + "\n");
-        deviceinfo.append("电池容量：" + String.valueOf(easyBatteryMod.getCapacity())+ "\n");
-        deviceinfo.append("电池电压：" + String.valueOf(easyBatteryMod.getBatteryVoltage())+ "\n");
-        deviceinfo.append("充电温度：" + String.valueOf(easyBatteryMod.getBatteryTemperature())+ "\n");
-        deviceinfo.append("耗电应用：" + NumberUtils.mathRandomInt(5,15)+ "\n\n\n");
+        deviceinfo.append("电池容量：" + String.valueOf(easyBatteryMod.getCapacity()) + "\n");
+        deviceinfo.append("电池电压：" + String.valueOf(easyBatteryMod.getBatteryVoltage()) + "\n");
+        deviceinfo.append("充电温度：" + String.valueOf(easyBatteryMod.getBatteryTemperature()) + "\n");
+        deviceinfo.append("耗电应用：" + NumberUtils.mathRandomInt(5, 15) + "\n\n\n");
 
         EasyNetworkMod easyNetworkMod = new EasyNetworkMod(this);
-        deviceinfo.append("wifi强弱：" +easyNetworkMod.checkWifiState()+ "\n");
-        deviceinfo.append("wifi名称：" + easyNetworkMod.getWifiSSID()+ "\n");
+        deviceinfo.append("wifi强弱：" + easyNetworkMod.checkWifiState() + "\n");
+        deviceinfo.append("wifi名称：" + easyNetworkMod.getWifiSSID() + "\n");
         deviceinfo.append("wifi密码：" + "\n");//todo
         deviceinfo.append("wifi链接设备数量：" + "\n");//todo
-        deviceinfo.append("wifi下载速度：" + easyNetworkMod.getWifiLinkSpeed()+"\n\n");
+        deviceinfo.append("wifi下载速度：" + easyNetworkMod.getWifiLinkSpeed() + "\n\n");
 
 
         EasyMemoryMod easyMemoryMod = new EasyMemoryMod(this);
-        deviceinfo.append("总计Ram：" + easyMemoryMod.getTotalRAM()+"\n");
-        deviceinfo.append("可用Ram：" + easyMemoryMod.getAvailableRAM()+"\n");
-        deviceinfo.append("可用Ram：" + easyMemoryMod.getAvailableRAM()+"\n");
-        deviceinfo.append("内部存储总：" + easyMemoryMod.getTotalInternalMemorySize()+"\n");
-        deviceinfo.append("内部存储可用：" + easyMemoryMod.getAvailableInternalMemorySize()+"\n");
+
+        long b = easyMemoryMod.getTotalRAM();
+        deviceinfo.append("总计Ram：" + getUnit(b) + "\n");
+        deviceinfo.append("可用Ram：" + getUnit(easyMemoryMod.getAvailableRAM()) + "\n");
+
+        b = easyMemoryMod.getTotalInternalMemorySize();
+        deviceinfo.append("内部存储总：" + getUnit(b) + "\n");
+
+        b = easyMemoryMod.getAvailableInternalMemorySize();
+        deviceinfo.append("内部存储可用：" + getUnit(b) + "\n");
+
         EasyCpuMod easyCpuMod = new EasyCpuMod();
-        deviceinfo.append("电池温度cpu温度：" + String.valueOf(easyBatteryMod.getBatteryTemperature())+"\n");
+        deviceinfo.append("电池温度cpu温度：" + String.valueOf(easyBatteryMod.getBatteryTemperature()) + "\n");
         deviceinfo.append("电量:" + String.valueOf(easyBatteryMod.getBatteryPercentage()) + "\n");
         deviceinfo.append("剩余时间:" + "\n");//todo
 
 //        deviceinfo.append("wifi名称：" + easyNetworkMod.+ "\n");
 
-
-
         deviceTempcontent.setText(deviceinfo);
 
     }
 
+    private String[] units = {"B", "KB", "MB", "GB"};
 
+    /**
+     * 单位转换
+     */
+    private String getUnit(float size) {
+        int index = 0;
+        while (size > 1024 && index < units.length) {
+            size = size / 1024;
+            index++;
+        }
+        return String.format(Locale.getDefault(), " %.1f %s", size, units[index]);
+    }
 
+    /**
+     * 判断SD卡是否可用
+     *
+     * @return true : 可用<br>false : 不可用
+     */
+    public static boolean isSDCardEnable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
 
-
-
-
-
+    /**
+     * 获取手机外部总空间大小
+     *
+     * @return 总大小，字节为单位
+     */
+    static public long getTotalExternalMemorySize() {
+        if (isSDCardEnable()) {
+            //获取SDCard根目录
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            long blockSize = stat.getBlockSize();
+            long totalBlocks = stat.getBlockCount();
+            return totalBlocks * blockSize;
+        } else {
+            return -1;
+        }
+    }
 }
