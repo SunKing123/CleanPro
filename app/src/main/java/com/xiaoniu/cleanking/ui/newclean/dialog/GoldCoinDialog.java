@@ -60,7 +60,7 @@ public class GoldCoinDialog {
         try {
             if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
-    //            return;
+                //            return;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,6 +81,7 @@ public class GoldCoinDialog {
         totalCoinCountTv.setTypeface(typ_RE);
         RelativeLayout CoinDoubleRL = dialog.findViewById(R.id.coin_double_rl);
         TextView tv_coin_str = dialog.findViewById(R.id.tv_coin_str);
+        TextView double_x2_tv = dialog.findViewById(R.id.double_x2_tv);//倍数
         // ImageView mLlAdAnim = dialog.findViewById(R.id.ll_ad_anim);
         FrameLayout mRootRL = dialog.findViewById(R.id.root_fl);
         RelativeLayout ll_top = dialog.findViewById(R.id.ll_top);
@@ -135,8 +136,9 @@ public class GoldCoinDialog {
             totalCoin = parameter.obtainCoinCount;
             AnimationRotateUtils.getInstance().playRotateAnim(ivAnim, 10000);
         }
-        if (parameter.isDouble && parameter.isRewardOpen) {
+        if (parameter.doubleNums > 0 && parameter.isRewardOpen) {
             CoinDoubleRL.setVisibility(View.VISIBLE);
+            double_x2_tv.setText("X" + parameter.doubleNums);
             AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
         }
         if (parameter.dialogType == 3) {

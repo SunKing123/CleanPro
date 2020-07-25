@@ -39,6 +39,15 @@ public class BubbleCollected extends BaseEntity {
         private int goldCount;
         private int canDouble;
         private int totalGoldCount;
+        private int doubledMagnification;
+
+        public int getDoubledMagnification() {
+            return doubledMagnification;
+        }
+
+        public void setDoubledMagnification(int doubledMagnification) {
+            this.doubledMagnification = doubledMagnification;
+        }
 
         public int getTotalGoldCount() {
             return totalGoldCount;
