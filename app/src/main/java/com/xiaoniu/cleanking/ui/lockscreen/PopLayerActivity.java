@@ -45,7 +45,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         LogUtils.e("==========进入了PopLayerActivity");
         StatisticsUtils.customTrackEvent("lock_screen_page_custom", "锁屏页面创建时", "", "lock_screen_page");
         StatisticsUtils.customTrackEvent("ad_request_sdk", "外部插屏发起请求", "", "external_advertising_page");
-        ActivityCollector.addActivity(this, PopLayerActivity.class);
+
         setContentView(R.layout.activity_pop_layer);
         //adShowTime = findViewById(R.id.full_screen_insert_ad_show_time_txt);
         adContainer = (LinearLayout) findViewById(R.id.ad_container);
@@ -113,11 +113,6 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
-    }
 
 
     @Override

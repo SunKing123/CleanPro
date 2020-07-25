@@ -196,7 +196,17 @@ public class EasyBatteryMod {
     float defAll = 3f;
     if (getBatteryHealth() == com.xiaoniu.clean.deviceinfo.BatteryHealth.GOOD || getBatteryHealth() == com.xiaoniu.clean.deviceinfo.BatteryHealth.HAVING_ISSUES) {
       int chargType = getChargingSource();
-
+      switch (chargType){
+        case BatteryManager.BATTERY_PLUGGED_AC:
+          defAll = 3f;
+          break;
+        case BatteryManager.BATTERY_PLUGGED_USB:
+          defAll = 4f;
+          break;
+        case BatteryManager.BATTERY_PLUGGED_WIRELESS:
+          defAll = 2f;
+          break;
+      }
     }
     float minute = defAll * ((100f - (float) getBatteryPercentage()) / 100f) * 60f;
     return (long) minute;
