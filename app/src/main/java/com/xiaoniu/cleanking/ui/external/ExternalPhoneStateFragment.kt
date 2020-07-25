@@ -18,12 +18,12 @@ import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
  */
 class ExternalPhoneStateFragment : SimpleFragment() {
 
-    var low: Array<Int> = arrayOf(0, 20)
-    var medium: Array<Int> = arrayOf(21, 60)
-    var high: Array<Int> = arrayOf(80, 99)
+    private var low: Array<Int> = arrayOf(0, 20)
+    private var medium: Array<Int> = arrayOf(21, 60)
+    private var high: Array<Int> = arrayOf(80, 99)
 
-    var easyMemoryMod = EasyMemoryMod(mContext)
-    var easyBatteryMod = EasyBatteryMod(mContext)
+    private lateinit var easyMemoryMod: EasyMemoryMod
+    private lateinit var easyBatteryMod: EasyBatteryMod
 
     override fun setupFragmentComponent(appComponent: AppComponent) {
 
@@ -38,6 +38,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        easyMemoryMod = EasyMemoryMod(mContext)
+        easyBatteryMod = EasyBatteryMod(mContext)
         initView()
         initEvent()
     }
@@ -60,6 +62,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_memory_content.setText("可用运行内存：" + FileUtils.getUnitGB(available.toFloat()))
         tv_memory_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
+        
+        if(inTheRange(percent.toInt(),low)){
+
+        }
     }
 
     /**
@@ -73,6 +79,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_storage_content.setText("可用内部存储：" + FileUtils.getUnitGB(available.toFloat()))
         tv_storage_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
+
+        if(inTheRange(percent.toInt(),low)){
+
+        }
     }
 
     /**
@@ -82,6 +92,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_temperature_title.setText("电池温度：" + easyBatteryMod.getBatteryTemperature() + "°C")
         tv_temperature_content.setText("CPU温度：" + (easyBatteryMod.getBatteryTemperature() + NumberUtils.mathRandomInt(5, 10).toFloat()) + "°C")
     }
+
 
     /**
      * 电量信息

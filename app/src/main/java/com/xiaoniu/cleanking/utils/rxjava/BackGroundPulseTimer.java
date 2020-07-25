@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by xinxiaolong on 2020/7/25.
  * email：xinxiaolong123@foxmail.com
- * 后台心跳回调，2秒一次
+ * 后台心跳回调，15秒一次
  */
 public class BackGroundPulseTimer {
 
@@ -26,7 +26,7 @@ public class BackGroundPulseTimer {
     }
 
     public void startTimer() {
-        timer.interval(15000, number -> callBack(number));
+        timer.interval(15000, this::callBack);
     }
 
     private void callBack(long number) {
@@ -54,6 +54,5 @@ public class BackGroundPulseTimer {
         unRegisterAll();
         timer.cancel();
         timer = null;
-        backGroundPulseTimer = null;
     }
 }
