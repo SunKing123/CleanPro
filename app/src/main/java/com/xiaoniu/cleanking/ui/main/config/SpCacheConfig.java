@@ -186,4 +186,6 @@ public class SpCacheConfig {
 
     public final static String WARNED_NETWORK_RANDOM_IDS = "warned_network_random_ids";
 
+    public final static String MAIN_GUIDE_VIEW_KEY = "main_guide_view";
+
 }

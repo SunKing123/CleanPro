@@ -501,6 +501,18 @@
             android:theme="@style/pop_layer_style_2"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
+        <activity
+            android:name=".ui.external.ExternalPhoneStateActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style_2"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+
+
         <!--     android:screenOrientation="portrait"-->
 
         <!-- Since JCore2.0.0 Required SDK核心功能 -->

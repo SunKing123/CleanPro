@@ -15,10 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
-//import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
@@ -31,7 +28,6 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
@@ -63,10 +59,8 @@ import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.MidasAdSdk;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.listener.AskReadyCallBack;
 import com.xnad.sdk.ad.widget.TemplateView;
 import com.xnad.sdk.config.AdParameter;
 
@@ -85,8 +79,9 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+//import com.tbruyelle.rxpermissions2.RxPermissions;
 
 public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragment, NewScanModel> {
 
@@ -723,6 +718,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         GoldCoinDialogParameter bean = new GoldCoinDialogParameter();
         bean.dialogType = 1;
         bean.obtainCoinCount = dataBean.getData().getGoldCount();
+        bean.doubleNums = dataBean.getData().getDoubledMagnification();
         //广告位1开关控制
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE)) {
             bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 0);

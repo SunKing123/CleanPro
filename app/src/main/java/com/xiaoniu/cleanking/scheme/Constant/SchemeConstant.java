@@ -42,6 +42,7 @@ public class SchemeConstant {
     public static final String COIN = "coin";
     public static final String IS_DOUBLE = "isDouble";
     public static final String TASK_ID = "taskId";
+    public static final String DOUBLEDMAGNIFICATION = "doubledMagnification";
     public static final String IS_REFRESH = "isRefresh";
     public static final String SIGNDAY = "signDay";
     public static final String CARD_POSITION = "cardPosition";
