@@ -16,9 +16,9 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver{
     public void onCreate() {
         startTime=System.currentTimeMillis();
     }
-
+    
     @Override
-    public void onPulse() {
+    public void onPulse(long progress) {
         long diff=System.currentTimeMillis()-startTime;
         diff=diff/1000;
         if(diff>10){

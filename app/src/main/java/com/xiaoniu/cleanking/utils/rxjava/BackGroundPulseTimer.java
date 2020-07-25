@@ -26,12 +26,12 @@ public class BackGroundPulseTimer {
     }
 
     public void startTimer() {
-        timer.interval(15000, number -> callBack());
+        timer.interval(15000, number -> callBack(number));
     }
 
-    private void callBack() {
+    private void callBack(long number) {
         for (BackGroundIPulseObserver observer : observers) {
-            observer.onPulse();
+            observer.onPulse(number);
         }
     }
 

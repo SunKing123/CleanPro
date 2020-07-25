@@ -8,7 +8,7 @@ public interface BackGroundIPulseObserver {
 
     void onCreate();
 
-    void onPulse();
+    void onPulse(long progress);
 
     void onDestroy();
 }
