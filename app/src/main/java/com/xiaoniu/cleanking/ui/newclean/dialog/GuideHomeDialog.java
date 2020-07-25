@@ -81,26 +81,34 @@ public class GuideHomeDialog extends Dialog {
         animationFirst();
     }
 
-    @OnClick(R.id.iv_guide_next)
-    public void onViewClicked() {
-        switch (clickPosition) {
-            case 0:
-                guideLl01.setVisibility(View.GONE);
-                animationSecond();
+    @OnClick({R.id.iv_guide_next, R.id.iv_close})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_guide_next:
+                switch (clickPosition) {
+                    case 0:
+                        guideLl01.setVisibility(View.GONE);
+                        animationSecond();
+                        break;
+                    case 1:
+                        guideLl02.setVisibility(View.GONE);
+                        animationThird();
+                        break;
+                    case 2:
+                        guideLl03.setVisibility(View.GONE);
+                        animationFour();
+                        break;
+                    default:
+                        dismiss();
+                        break;
+                }
+                clickPosition++;
                 break;
-            case 1:
-                guideLl02.setVisibility(View.GONE);
-                animationThird();
-                break;
-            case 2:
-                guideLl03.setVisibility(View.GONE);
-                animationFour();
-                break;
-            default:
+            case R.id.iv_close:
                 dismiss();
                 break;
         }
-        clickPosition++;
+
     }
 
     private void animationFirst() {
