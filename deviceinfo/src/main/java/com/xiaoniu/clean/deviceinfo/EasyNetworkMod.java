@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -29,6 +30,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.RequiresPermission;
 
 import com.google.gson.Gson;
 
@@ -40,8 +42,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
-
-import androidx.annotation.RequiresPermission;
 
 /**
  * EasyNetwork Mod Class
@@ -428,7 +428,7 @@ public class EasyNetworkMod {
     public int checkWifiState() {
         WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-        LogUtils.i(mWifiInfo.getSSID()+"------zzz--" + new Gson().toJson(mWifiInfo));
+        LogUtils.i(mWifiInfo.getSSID() + "------zzz--" + new Gson().toJson(mWifiInfo));
 
         int wifi = mWifiInfo.getRssi();//获取wifi信号强度
         int state = 3;
@@ -442,4 +442,51 @@ public class EasyNetworkMod {
         return state;
     }
 
+
+    /**
+     * 利用WifiConfiguration.KeyMgmt的管理机制，来判断当前wifi是否需要连接密码
+     *
+     * @return true：需要密码连接，false：不需要密码连接
+     */
+    @RequiresPermission(allOf = {
+            Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.ACCESS_NETWORK_STATE
+    })
+    public boolean checkIsCurrentWifiHasPassword() {
+        try {
+            WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            // 得到当前连接的wifi热点的信息
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            // 得到当前WifiConfiguration列表，此列表包含所有已经连过的wifi的热点信息，未连过的热点不包含在此表中
+            List<WifiConfiguration> wifiConfiguration = wifiManager.getConfiguredNetworks();
+
+            String currentSSID = wifiInfo.getSSID();
+            if (currentSSID != null && currentSSID.length() > 2) {
+                if (currentSSID.startsWith("\"") && currentSSID.endsWith("\"")) {
+                    currentSSID = currentSSID.substring(1, currentSSID.length() - 1);
+                }
+
+                if (wifiConfiguration != null && wifiConfiguration.size() > 0) {
+                    for (WifiConfiguration configuration : wifiConfiguration) {
+                        if (configuration != null && configuration.status == WifiConfiguration.Status.CURRENT) {
+                            String ssid = null;
+                            if (!TextUtils.isEmpty(configuration.SSID)) {
+                                ssid = configuration.SSID;
+                                if (configuration.SSID.startsWith("\"") && configuration.SSID.endsWith("\"")) {
+                                    ssid = configuration.SSID.substring(1, configuration.SSID.length() - 1);
+                                }
+                            }
+                            if (TextUtils.isEmpty(currentSSID) || currentSSID.equalsIgnoreCase(ssid)) {
+                                //KeyMgmt.NONE表示无需密码
+                                return (!configuration.allowedKeyManagement.get(WifiConfiguration.KeyMgmt.NONE));
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //默认为需要连接密码
+        return true;
+    }
 }

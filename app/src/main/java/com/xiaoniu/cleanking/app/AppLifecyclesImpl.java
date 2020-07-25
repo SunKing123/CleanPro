@@ -21,6 +21,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -55,9 +57,9 @@ import com.xiaoniu.cleanking.app.injector.component.DaggerAppComponent;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
 import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
+import com.xiaoniu.cleanking.keeplive.receive.NetworkCallbackImpl;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.keeplive.utils.HomeWatcher;
 import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
@@ -79,11 +81,11 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
+import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.MiitHelper;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
-import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -163,7 +165,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
 //        initNiuData(application);
 
 
-
         String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
             //商业化初始化
@@ -200,6 +201,23 @@ public class AppLifecyclesImpl implements AppLifecycles {
         //初始化utilCode
         Utils.init(application);
 
+        registerWifiConnect(application);
+
+    }
+
+
+    private void registerWifiConnect(Application application) {
+        String processName = SystemUtils.getProcessName(application);
+        if (processName.equals(application.getPackageName())) {
+            NetworkCallbackImpl networkCallback = new NetworkCallbackImpl(application);
+            NetworkRequest.Builder builder = new NetworkRequest.Builder();
+            NetworkRequest request = builder.build();
+            ConnectivityManager connMgr = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+            if (connMgr != null) {
+                connMgr.registerNetworkCallback(request, networkCallback);
+            }
+        }
+
     }
 
     /**
@@ -223,8 +241,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         mAppComponent.inject(application);
 
     }
-
-
 
 
     public void initPermission(Application application) {
@@ -424,7 +440,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 long currentTimestamp = System.currentTimeMillis();
                 if (AppLifecycleUtil.isAppOnForeground(application)) {
                     MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
-                }else {
+                } else {
                     MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
                 }
                 Intent i = new Intent(application, LocalService.class);
@@ -560,6 +576,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                         || ActivityCollector.isActivityExist(SplashADHotActivity.class)
                         || ActivityCollector.isActivityExist(FullPopLayerActivity.class)
                         || ActivityCollector.isActivityExist(PopPushActivity.class)
+                        || ActivityCollector.isActivityExist(ExternalSceneActivity.class)
                         || activity.getLocalClassName().contains(".wx")
                         || activity.getLocalClassName().contains(".aqy")
                         || activity.getLocalClassName().contains(".ks")

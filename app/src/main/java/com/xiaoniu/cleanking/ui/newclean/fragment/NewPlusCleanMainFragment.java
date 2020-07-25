@@ -59,6 +59,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GuideHomeDialog;
 import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
@@ -194,6 +195,19 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initListener();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
         checkAndUploadPoint();
+        showGuideView();
+    }
+
+    /**
+     * 引导弹窗
+     */
+    private void showGuideView() {
+        boolean isAudit = AppHolder.getInstance().getAuditSwitch();
+        boolean isShowed = MmkvUtil.getBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, false);
+        if (!isAudit && !isShowed) {
+            new GuideHomeDialog(getContext()).show();
+            MmkvUtil.saveBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, true);
+        }
     }
 
 
@@ -843,7 +857,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         }
         hasInitThreeAdvOnOff = true;
-        isThreeAdvOpen=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH,PositionId.DRAW_THREE_CODE);
+        isThreeAdvOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_THREE_CODE);
     }
 
     /*

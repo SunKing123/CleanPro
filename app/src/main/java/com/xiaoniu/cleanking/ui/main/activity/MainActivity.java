@@ -57,9 +57,11 @@ import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
+import com.xiaoniu.cleanking.ui.newclean.model.WifiModel;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
@@ -300,7 +302,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
 
     }
-
 
 
     private class MyRunnable implements Runnable {
@@ -737,6 +738,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
+    @Subscribe
+    public void onEventWifiConnection(WifiModel wifiModel) {
+        LogUtils.e("=======收到了wifi的EventBus");
+        Intent screenIntent = new Intent(this, ExternalSceneActivity.class);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        screenIntent.putExtra(ExternalSceneActivity.SCENE,ExternalSceneActivity.SCENE_WIFI);
+        startActivity(screenIntent);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
