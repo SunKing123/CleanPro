@@ -12,7 +12,6 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
-import com.xiaoniu.cleanking.ui.outfield.OutfieldPhoneStateFragment;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.viruskill.fragment.NewVirusScanFragment;
 import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusCleanFragment;
@@ -62,7 +61,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
         scanFragment = NewVirusScanFragment.getInstance();
         scanFragment.setTransferPagePerformer(this);
         mManager.beginTransaction()
-                .add(R.id.frame_layout, new OutfieldPhoneStateFragment())
+                .add(R.id.frame_layout, scanFragment)
                 .commitAllowingStateLoss();
     }
 
@@ -125,6 +124,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //如果是处于清理，用户点击返回键无效
         if (keyCode == KeyEvent.KEYCODE_BACK && isCleaning) {
             return false;
         }

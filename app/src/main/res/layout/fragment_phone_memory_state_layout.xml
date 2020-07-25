@@ -8,9 +8,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginRight="23dp">
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp">
 
         <ImageView
             android:id="@+id/image_memory"
@@ -76,9 +75,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginRight="23dp">
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="24dp">
 
         <ImageView
             android:id="@+id/image_storage"
@@ -143,9 +142,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginRight="23dp">
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="24dp">
 
         <ImageView
             android:id="@+id/image_temperature"
@@ -211,9 +210,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginRight="23dp">
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="24dp">
 
         <ImageView
             android:id="@+id/image_battery"
