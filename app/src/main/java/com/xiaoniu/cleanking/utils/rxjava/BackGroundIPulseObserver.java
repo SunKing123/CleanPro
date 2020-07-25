@@ -6,9 +6,9 @@ package com.xiaoniu.cleanking.utils.rxjava;
  */
 public interface BackGroundIPulseObserver {
 
-    void start();
+    void onCreate();
 
-    void pulse();
+    void onPulse();
 
     void onDestroy();
 }
