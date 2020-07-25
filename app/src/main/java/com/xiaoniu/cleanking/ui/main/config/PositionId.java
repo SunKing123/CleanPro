@@ -89,6 +89,8 @@ public class PositionId {
     public static final String KEY_GOLD_DIALOG_SHOW_VIDEO = "page_gold_dialog_show_video_gj_3.0";
     //完成页金币弹窗中激励视频播放完毕后进入的领取成功页面广告开关
     public static final String KEY_GET_DOUBLE_GOLD_COIN_SUCCESS = "page_get_double_gold_coin_success_gj_3.0";
+    //首页引导开关
+    public static final String KEY_MAIN_GUIDE_VIEW = "key_main_guide_view_gj_3.0";
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";
@@ -159,7 +161,6 @@ public class PositionId {
 
     //网赚Header_DeviceId存储
     public static final String HEAD_DEVICE_ID = "head_device_id";//锁屏互动式广告
-
 
 
 }

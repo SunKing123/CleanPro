@@ -1,8 +1,16 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +22,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -28,6 +38,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
+import com.xiaoniu.cleanking.ui.newclean.dialog.LaunchPermissionRemindDialog;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -59,7 +70,6 @@ import io.reactivex.disposables.Disposable;
  * <p>
  */
 public class SplashADActivity extends BaseActivity<SplashPresenter> implements View.OnClickListener {
-
     @BindView(R.id.v_start)
     View mStartView;
     @BindView(R.id.v_content)
@@ -123,20 +133,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         mAgreement.setOnClickListener(this);
         tv_xy.setOnClickListener(this);
         mPresenter.spDataInit();
-        if (NetworkUtils.isNetConnected()) {//正常网络
-            mPresenter.getAuditSwitch();
-        } else {                            //无网络状态
-            if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
-                mStartView.setVisibility(View.VISIBLE);
-                mContentView.setVisibility(View.GONE);
-                //默认过审状态
-                SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
-                MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
-            } else {
-                delayJump();
-            }
-        }
 
+        if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
+            //默认过审状态
+            SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
+            MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
+            permissionRemind();
+        } else {
+            checkReadPermission();
+        }
         initNiuData();
         initFileRelation();
         //数美sdk初始化
@@ -144,6 +149,24 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         //页面创建事件埋点
         StatisticsUtils.customTrackEvent("clod_splash_page_custom", "冷启动创建时", "clod_splash_page", "clod_splash_page");
 
+
+    }
+
+
+    /**
+     * 第一次启动权限说明
+     */
+    private void permissionRemind() {
+        new LaunchPermissionRemindDialog(this).setLaunchPermissionListener(() -> {
+            checkReadPermission();
+            PreferenceUtil.saveFirstOpenApp();
+        }).show();
+    }
+
+    /**
+     * 之前的页面执行逻辑==现在在权限之后再调用
+     */
+    private void oldOptionAction() {
         //超时定时器
         rxTimer = new RxTimer();
         rxTimer.timer(SP_SHOW_OUT_TIME, number -> {
@@ -152,7 +175,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 jumpActivity();
             }
         });
-
+        if (NetworkUtils.isNetConnected()) {//正常网络
+            mPresenter.getAuditSwitch();
+        } else {
+            checkReadPermission();
+        }
     }
 
 
@@ -176,22 +203,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, auditSwitch.getData());
             MmkvUtil.saveString(SpCacheConfig.AuditSwitch, auditSwitch.getData());
         }
-        if (!PreferenceUtil.isNotFirstOpenApp()) { //第一次冷启动
-            mStartView.setVisibility(View.VISIBLE);
-            mContentView.setVisibility(View.GONE);
+
+        if (auditSwitch.getData().equals("0")) {//过审中
+            this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
+                jumpActivity();
+            });
+        } else if (auditSwitch.getData().equals("1")) {//过审已通过
             mPresenter.getSwitchInfoList();
-        } else {//非第一次冷启动_
-            if (auditSwitch.getData().equals("0")) {//过审中
-                mStartView.setVisibility(View.GONE);
-                mContentView.setVisibility(View.VISIBLE);
-                this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                    jumpActivity();
-                });
-            } else if (auditSwitch.getData().equals("1")) {//过审已通过
-                mStartView.setVisibility(View.GONE);
-                mContentView.setVisibility(View.VISIBLE);
-                mPresenter.getSwitchInfoList();
-            }
         }
     }
 
@@ -414,4 +432,76 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
 
+    private void checkReadPermission() {
+        PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.PHONE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+                oldOptionAction();
+            }
+
+            @Override
+            public void onDenied() {
+                oldOptionAction();
+//                if (hasPermissionDeniedForever()) {  //点击拒绝
+//                    jumpActivity();
+//                } else {                            //点击永久拒绝
+//                    showPermissionDialog();
+//                }
+            }
+        }).request();
+    }
+
+
+    /**
+     * 是否有权限被永久拒绝
+     */
+    private boolean hasPermissionDeniedForever() {
+        boolean hasDeniedForever = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                hasDeniedForever = true;
+            }
+        }
+        return hasDeniedForever;
+    }
+
+    public void showPermissionDialog() {
+        AlertDialog dlg = new AlertDialog.Builder(this).create();
+        if (isFinishing()) {
+            return;
+        }
+        dlg.show();
+        Window window = dlg.getWindow();
+        if (window != null) {
+            window.setContentView(R.layout.alite_redp_send_dialog);
+            WindowManager.LayoutParams lp = window.getAttributes();
+            //这里设置居中
+            lp.gravity = Gravity.CENTER;
+            window.setAttributes(lp);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView btnOk = window.findViewById(R.id.btnOk);
+
+            TextView btnCancle = window.findViewById(R.id.btnCancle);
+            TextView tipTxt = window.findViewById(R.id.tipTxt);
+            TextView content = window.findViewById(R.id.content);
+            btnCancle.setText("取消");
+            btnOk.setText("去设置");
+            tipTxt.setText("提示!");
+            content.setText("清理功能无法使用，请先开启文件读写权限。");
+            btnOk.setOnClickListener(v -> {
+                dlg.dismiss();
+                goSetting();
+            });
+            btnCancle.setOnClickListener(v -> dlg.dismiss());
+        }
+    }
+
+    public void goSetting() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + getPackageName()));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
 }
