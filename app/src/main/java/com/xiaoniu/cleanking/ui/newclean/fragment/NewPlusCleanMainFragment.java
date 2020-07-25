@@ -206,8 +206,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     private void showGuideView() {
         boolean isAudit = AppHolder.getInstance().getAuditSwitch();
+        boolean guideOpen = AppHolder.getInstance().checkSwitchIsOpen(PositionId.KEY_MAIN_GUIDE_VIEW);
         boolean isShowed = MmkvUtil.getBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, false);
-        if (!isAudit && !isShowed) {
+        if (!isAudit && !isShowed && guideOpen) {
             new GuideHomeDialog(getContext()).show();
             MmkvUtil.saveBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, true);
         }

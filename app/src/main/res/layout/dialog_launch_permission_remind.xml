@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="@dimen/dimen_333dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_white_fillet_06"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dimen_42dp"
+        android:paddingRight="@dimen/dimen_42dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_30"
+            android:text="清理管家极速版使用指引"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dp_20"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="尊敬的用户，因功能需要，向您申请获得以下权限。"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/dp_12"
+            android:drawableLeft="@mipmap/icon_launch_permission_storage"
+            android:drawablePadding="@dimen/dp_10"
+            android:text="存储权限：深度清理手机垃圾"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/dp_12"
+            android:drawableLeft="@mipmap/icon_launch_permission_status"
+            android:drawablePadding="@dimen/dp_10"
+            android:text="设备信息权限：保障您的手机安全"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:id="@+id/tv_use_agreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="@dimen/dp_12"
+            android:text=""
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dp_14" />
+
+        <TextView
+            android:id="@+id/tv_next"
+            android:layout_width="@dimen/dimen_256dp"
+            android:layout_height="@dimen/dimen_46dp"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginBottom="@dimen/dp_30"
+            android:background="@drawable/bg_green_confirm_fillet_6"
+            android:gravity="center"
+            android:text="立即体验"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp_18" />
+    </LinearLayout>
+</RelativeLayout>
