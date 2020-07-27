@@ -706,7 +706,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 EventBus.getDefault().post(new WeatherInfoRequestEvent(0));
                 break;
         }
-
     }
 
 
