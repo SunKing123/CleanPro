@@ -5,12 +5,14 @@ import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
+import com.google.gson.Gson
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.config.PositionId
-import com.xiaoniu.cleanking.ui.newclean.model.WifiModel
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil
 import com.xiaoniu.cleanking.utils.LogUtils
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
+import com.xiaoniu.common.utils.DateUtils
 import org.greenrobot.eventbus.EventBus
 
 class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.NetworkCallback() {
@@ -71,8 +73,33 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
         }
         //判断WIFI插屏是否打开
         val configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIFI_EXTERNAL_SCREEN)
+        LogUtils.e("=========wifi config:${Gson().toJson(configBean)}")
+        //1.先判断是否打开了WIFI弹窗的开关
         if (configBean != null && configBean.isOpen) {
-            EventBus.getDefault().post(WifiModel(""))
+            val currentTime = System.currentTimeMillis()
+            val wifiEntity = PreferenceUtil.getPopupWifi()
+            //2.判断是否同是一天
+            if (DateUtils.isSameDay(wifiEntity.popupTime, currentTime)) {
+                //判断当前时间是否满足上次一次的弹窗间隔
+                val elapseUsedTime = DateUtils.getMinuteBetweenTimestamp(currentTime, wifiEntity.popupTime)
+                if (elapseUsedTime < configBean.displayTime) {
+                    LogUtils.e("==========不满足wifi展示的间隔时间")
+                    return
+                }
+                //判断已经展示的交数是否超过最大次数
+                if (wifiEntity.popupCount >= configBean.showRate) {
+                    LogUtils.e("==========不满足wifi展示的总次数")
+                    return
+                }
+                PreferenceUtil.updatePopupWifi(false)
+                EventBus.getDefault().post(PopEventModel("wifi"))
+            } else {
+                //不是同一天，重置数据
+                PreferenceUtil.updatePopupWifi(true)
+                EventBus.getDefault().post(PopEventModel("wifi"))
+            }
+
+
         }
     }
 
