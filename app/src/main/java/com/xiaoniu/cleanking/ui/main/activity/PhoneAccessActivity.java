@@ -260,10 +260,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         event.setAppendValue(2);
         EventBus.getDefault().post(event);
 
-        //保存本次清理完成时间 保证每次清理时间间隔为3分钟
-        if (PreferenceUtil.getCleanTime()) {
-            PreferenceUtil.saveCleanTime();
-        }
 
         EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_one_key_speed)));
 
