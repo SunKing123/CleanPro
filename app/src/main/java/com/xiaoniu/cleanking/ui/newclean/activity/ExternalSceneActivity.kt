@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
+import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.activity_external_scene.*
 import kotlinx.android.synthetic.main.view_scene_wifi.*
 
@@ -61,6 +62,7 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
         mCurrentScene = intent.getStringExtraNotNull(SCENE)
         when (mCurrentScene) {
             SCENE_WIFI -> {//wifi
+                StatisticsUtils.customTrackEvent("wifi_plug_screen_custom", "wifi插屏曝光", "wifi_plug_screen", "wifi_plug_screen")
                 wifi_stub.inflate()
                 showWifiScene()
             }
@@ -71,7 +73,10 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
 
             }
         }
-        scene_close.setOnClickListener { finish() }
+        scene_close.setOnClickListener {
+            StatisticsUtils.trackClick("close_click", "wifi插屏关闭按钮点击", "wifi_plug_screen", "wifi_plug_screen")
+            finish()
+        }
 
     }
 
@@ -122,6 +127,7 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
             }
         }
         scene_button.setOnClickListener {
+            StatisticsUtils.trackClick("wifi_plug_screen_button_click", "wifi插屏按钮点击", "wifi_plug_screen", "wifi_plug_screen")
             if (wifi_state.text.contains("弱")) {
                 startNetSpeed()
             } else {

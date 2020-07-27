@@ -1752,7 +1752,7 @@ public class PreferenceUtil {
         String json = sharedPreferences.getString(SpCacheConfig.KEY_LAST_POPUP_WIFI, "");
         WifiEntity entity;
         if (TextUtils.isEmpty(json)) {
-            entity = new WifiEntity(System.currentTimeMillis(), 0);
+            entity = new WifiEntity(0L, 0);
         } else {
             entity = new Gson().fromJson(json, WifiEntity.class);
         }
