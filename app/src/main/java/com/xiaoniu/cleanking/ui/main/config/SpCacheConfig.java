@@ -50,6 +50,11 @@ public class SpCacheConfig {
     //保存挽留弹窗的次数
     public static final String KEY_EXIT_RETAIN_DIALOG_COUNT = "exit_retain_dialog_count";
 
+
+    //上一次弹出wifi插屏的时间
+    public static final String KEY_LAST_POPUP_WIFI="last_popup_wifi";
+    public static final String KEY_LAST_POPUP_WIFI_COUNT="last_popup_wifi_count";
+
     public static final String IS_PUSH_DEVICE_INFO = "is_push_device_info";
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";
 

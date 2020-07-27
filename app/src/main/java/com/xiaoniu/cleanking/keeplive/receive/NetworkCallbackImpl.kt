@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
+import com.xiaoniu.cleanking.base.AppHolder
+import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.newclean.model.WifiModel
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil
 import com.xiaoniu.cleanking.utils.LogUtils
@@ -62,13 +64,15 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
     }
 
     private fun startExternalSceneActivity() {
+        //应用在前台不弹出
         if (AppLifecycleUtil.isAppOnForeground(mContext)) {
-            LogUtils.e("==========应用在前台，不弹出wifi插屏")
             return
         }
-        LogUtils.e("=====应用在后台====，弹出wifi插屏")
-        EventBus.getDefault().post(WifiModel(""))
-
+        //判断WIFI插屏是否打开
+        val configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIFI_EXTERNAL_SCREEN)
+        if (configBean != null && configBean.isOpen) {
+            EventBus.getDefault().post(WifiModel(""))
+        }
     }
 
 }
