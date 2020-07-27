@@ -1,14 +1,12 @@
-package com.xiaoniu.cleanking.ui.external;
+package com.xiaoniu.cleanking.ui.deskpop.state;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 
 import androidx.annotation.NonNull;

@@ -1,6 +1,5 @@
-package com.xiaoniu.cleanking.ui.external
+package com.xiaoniu.cleanking.ui.deskpop.state
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
@@ -12,11 +11,9 @@ import com.xiaoniu.clean.deviceinfo.EasyBatteryMod
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
-import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
-import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.utils.NumberUtils
 import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*

@@ -1,12 +1,9 @@
-package com.xiaoniu.cleanking.ui.external;
+package com.xiaoniu.cleanking.ui.deskpop.state;
 
-import com.jess.arms.base.App;
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
-import com.xiaoniu.common.utils.ToastUtils;
 
 /**
  * Created by xinxiaolong on 2020/7/25.

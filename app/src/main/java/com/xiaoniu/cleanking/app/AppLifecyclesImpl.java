@@ -70,8 +70,8 @@ import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.PowerStatePopChecker;
-import com.xiaoniu.cleanking.ui.external.PhoneStatePopChecker;
-import com.xiaoniu.cleanking.ui.external.PhoneStateSwitch;
+import com.xiaoniu.cleanking.ui.deskpop.state.PhoneStatePopChecker;
+import com.xiaoniu.cleanking.ui.deskpop.state.PhoneStateSwitch;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
@@ -90,7 +90,6 @@ import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.MiitHelper;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
-import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -622,7 +621,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     mIsBack = true;
                     MmkvUtil.saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
-                   
+
                     BackGroundPulseTimer timer = BackGroundPulseTimer.getInstance();
                     if (PhoneStateSwitch.isOpen()) {
                         timer.register(new PhoneStatePopChecker());

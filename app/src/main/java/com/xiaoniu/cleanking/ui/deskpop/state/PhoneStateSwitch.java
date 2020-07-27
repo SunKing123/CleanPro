@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.external;
+package com.xiaoniu.cleanking.ui.deskpop.state;
 
 import com.xiaoniu.cleanking.base.AppHolder;
 
