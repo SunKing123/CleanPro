@@ -511,8 +511,6 @@
             android:theme="@style/pop_layer_style_2"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
-
-
         <!--     android:screenOrientation="portrait"-->
 
         <!-- Since JCore2.0.0 Required SDK核心功能 -->

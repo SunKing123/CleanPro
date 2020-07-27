@@ -4,9 +4,12 @@ import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
+import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by xinxiaolong on 2020/7/25.
@@ -23,8 +26,8 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
     @Override
     public void onPulse(long progress) {
-        int time= DeskPopConfig.getStateConfig().getDisplayTime();
-        if(time==0){
+        int displayTime= DeskPopConfig.getStateConfig().getDisplayTime();
+        if(displayTime==0){
             unRegister();
             return;
         }
@@ -32,9 +35,9 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
         diff = diff / 1000;
         diff = diff / 60;
 
-        boolean canPop=diff >=time;
+        boolean canPop=diff >=displayTime;
 
-        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diff+"    displayTime="+time);
+        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diff+"    displayTime="+displayTime);
         if (canPop) {
             checkAndPop();
         }
@@ -43,7 +46,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
     private void checkAndPop() {
         if (needPop()) {
             unRegister();
-            ExternalPhoneStateActivity.start(AppApplication.getInstance());
+            EventBus.getDefault().post(new PopEventModel("deviceInfo"));
         }
     }
 
@@ -63,6 +66,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
         double total = easyMemoryMod.getTotalRAM();
         double available = easyMemoryMod.getAvailableRAM();
         double percent = (available/total) * 100;
+        percent=100-percent;
         if (percent >= 70) {
             return true;
         }
@@ -71,6 +75,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
         total = easyMemoryMod.getTotalInternalMemorySize();
         available = easyMemoryMod.getAvailableInternalMemorySize();
         percent = (available / total) * 100;
+        percent=100-percent;
         if (percent >= 70) {
             return true;
         }

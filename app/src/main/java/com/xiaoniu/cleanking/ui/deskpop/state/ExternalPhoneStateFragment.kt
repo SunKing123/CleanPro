@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.deskpop.state
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatTextView
 import com.alibaba.android.arouter.launcher.ARouter
 import com.jess.arms.base.SimpleFragment
 import com.jess.arms.di.component.AppComponent
@@ -37,7 +38,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     }
 
 
-
     override fun setData(data: Any?) {
 
     }
@@ -67,14 +67,12 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         var total = easyMemoryMod.getTotalRAM()
         var available = easyMemoryMod.getAvailableRAM()
         var percent = (available.toDouble() / total.toDouble()) * 100
+        percent = 100 - percent
         tv_memory_title.setText("运行总内存：" + FileUtils.getUnitGB(total.toFloat()))
         tv_memory_content.setText("可用运行内存：" + FileUtils.getUnitGB(available.toFloat()))
         tv_memory_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
-
-        if (inTheRange(percent.toInt(), low)) {
-
-        }
+        updateBtnBackGround(btn_clean_memory, percent.toInt())
     }
 
     /**
@@ -84,20 +82,21 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         var total = easyMemoryMod.getTotalInternalMemorySize().toFloat()
         var available = easyMemoryMod.getAvailableInternalMemorySize().toFloat()
         var percent = (available.toDouble() / total.toDouble()) * 100
+        percent = 100 - percent
+
         tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total))
         tv_storage_content.setText("可用内部存储：" + FileUtils.getUnitGB(available))
         tv_storage_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
-
-        if (inTheRange(percent.toInt(), low)) {
-
-        }
+        updateBtnBackGround(btn_clean_storage, percent.toInt())
     }
 
     /**
      * 温度信息
      */
     private fun initCoolView() {
+        updateCoolImage(easyBatteryMod.getBatteryTemperature())
+        updateBtn(easyBatteryMod.getBatteryTemperature())
         tv_temperature_title.setText("电池温度：" + easyBatteryMod.getBatteryTemperature() + "°C")
         tv_temperature_content.setText("CPU温度：" + (easyBatteryMod.getBatteryTemperature() + NumberUtils.mathRandomInt(5, 10).toFloat()) + "°C")
     }
@@ -108,8 +107,11 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun initBatteryView() {
         tv_battery_title.setText("当前电量：" + easyBatteryMod.getBatteryPercentage() + "%")
         tv_battery_content.setText("待机时间" + NumberUtils.mathRandomInt(5, 10) + "小时")
-        updateBatteryImage(easyBatteryMod.getBatteryPercentage())
         tv_battery_percent.setText(easyBatteryMod.getBatteryPercentage().toString() + "%")
+
+        updateBatteryImage(easyBatteryMod.getBatteryPercentage())
+        updateBtnBackGround(btn_clean_battery,easyBatteryMod.getBatteryPercentage())
+
     }
 
     private fun initEvent() {
@@ -125,10 +127,9 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun goCleanMemory() {
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
-        var intent=Intent(mContext,PhoneAccessActivity::class.java)
+        var intent = Intent(mContext, PhoneAccessActivity::class.java)
         intent.putExtras(bundle)
         mContext.startActivity(intent)
-
         mActivity.finish()
     }
 
@@ -147,7 +148,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun goCool() {
         ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation()
         mActivity.finish()
-
     }
 
     /**
@@ -163,6 +163,23 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         mContext.startActivity(intent)
     }
 
+
+    /**
+     * 更新按钮背景
+     */
+    private fun updateBtnBackGround(textView: AppCompatTextView, percent: Int) {
+        if (inTheRange(percent, low)) {
+            textView.setBackgroundResource(R.drawable.clear_btn_green_bg)
+        } else if (inTheRange(percent, medium)) {
+            textView.setBackgroundResource(R.drawable.clear_btn_yellow_bg)
+        } else {
+            textView.setBackgroundResource(R.drawable.clear_btn_red_bg)
+        }
+    }
+
+    /**
+     * 更新图标颜色
+     */
     private fun updateMemoryOrStorageImage(image: ImageView, percent: Int) {
         if (inTheRange(percent, low)) {
             image.setImageResource(R.drawable.icon_memory_percent_low)
@@ -174,6 +191,23 @@ class ExternalPhoneStateFragment : SimpleFragment() {
             image.setImageResource(R.drawable.icon_memory_percent_max)
         }
     }
+
+    private fun updateCoolImage(temperature: Float) {
+        if (temperature > 37) {
+            image_temperature.setImageResource(R.drawable.icon_temperature_percent_high)
+        } else {
+            image_temperature.setImageResource(R.drawable.icon_temperature_percent_normal)
+        }
+    }
+
+    private fun updateBtn(temperature: Float) {
+        if (temperature > 37) {
+            btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_red_bg)
+        } else {
+            btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_green_bg)
+        }
+    }
+
 
     private fun updateBatteryImage(percent: Int) {
         if (inTheRange(percent, low)) {
