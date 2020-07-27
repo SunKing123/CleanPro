@@ -32,8 +32,9 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
     }
 
     private void checkAndPop() {
-        if (needPop())
+        if (needPop()) {
             ExternalPhoneStateActivity.start(AppApplication.getInstance());
+        }
     }
 
     @Override
@@ -41,6 +42,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
     }
 
+    //条件判断
     private boolean needPop() {
         EasyMemoryMod easyMemoryMod = new EasyMemoryMod(AppApplication.getInstance());
         double total = easyMemoryMod.getTotalRAM();
@@ -64,7 +66,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
         EasyBatteryMod easyBatteryMod = new EasyBatteryMod(AppApplication.getInstance());
 
         //当电池电量＜20%
-        if (easyBatteryMod.getBatteryPercentage() <= 20) {
+        if (easyBatteryMod.getBatteryPercentage() < 20) {
             return true;
         }
 
