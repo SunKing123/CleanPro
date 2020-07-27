@@ -291,11 +291,10 @@
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/view_lottie_bottom"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_width="@dimen/dimen_208dp"
+                android:layout_height="@dimen/dimen_86dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
-
                 app:lottie_loop="true" />
             <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
                 android:id="@+id/view_top"

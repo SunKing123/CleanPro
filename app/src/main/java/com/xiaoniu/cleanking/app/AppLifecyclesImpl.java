@@ -621,7 +621,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     mIsBack = true;
                     MmkvUtil.saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
-                    BackGroundPulseTimer.getInstance().register(new PhoneStatePopChecker()).startTimer();
+                    BackGroundPulseTimer.getInstance().register(new PhoneStatePopChecker()).register(new PowerStatePopChecker()).startTimer();
 
                 }
             }

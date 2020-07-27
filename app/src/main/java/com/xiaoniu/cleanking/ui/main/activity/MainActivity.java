@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -56,7 +57,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
-import com.xiaoniu.cleanking.ui.newclean.model.WifiModel;
+import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
@@ -258,7 +259,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         });
 
-       // checkReadPermission();
+        // checkReadPermission();
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
 
@@ -700,20 +701,37 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     @Subscribe
-    public void onEventWifiConnection(WifiModel wifiModel) {
-        LogUtils.e("=======收到了wifi的EventBus");
-        Intent screenIntent = new Intent(this, ExternalSceneActivity.class);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        screenIntent.putExtra(ExternalSceneActivity.SCENE,ExternalSceneActivity.SCENE_WIFI);
-        PendingIntent intent=PendingIntent.getActivity(this,0,screenIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-        try {
-            intent.send();
-        } catch (PendingIntent.CanceledException e) {
-            e.printStackTrace();
+    public void onEventWifiConnection(PopEventModel popEventModel) {
+        if (TextUtils.isEmpty(popEventModel.getAction()))
+            return;
+        if (popEventModel.getAction().equals("wifi")) {
+            LogUtils.e("=======收到了wifi的EventBus");
+            Intent screenIntent = new Intent(this, ExternalSceneActivity.class);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+            screenIntent.putExtra(ExternalSceneActivity.SCENE, ExternalSceneActivity.SCENE_WIFI);
+            PendingIntent intent = PendingIntent.getActivity(this, 0, screenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            try {
+                intent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+        }else if(popEventModel.getAction().equals("power")){
+            Intent powerIntent = new Intent(this, BatteryPopActivity.class);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+            PendingIntent intent = PendingIntent.getActivity(this, 0, powerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            try {
+                intent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     @Override
