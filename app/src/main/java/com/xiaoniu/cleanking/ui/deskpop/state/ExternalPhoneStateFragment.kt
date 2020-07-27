@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.external
+package com.xiaoniu.cleanking.ui.deskpop.state
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,10 @@ import com.xiaoniu.clean.deviceinfo.EasyBatteryMod
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
+import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.utils.NumberUtils
 import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
 
@@ -32,6 +35,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     override fun setupFragmentComponent(appComponent: AppComponent) {
 
     }
+
+
 
     override fun setData(data: Any?) {
 
@@ -67,11 +72,11 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_memory_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
 
-        if(inTheRange(percent.toInt(),low)){
+        if (inTheRange(percent.toInt(), low)) {
 
         }
     }
-    
+
     /**
      * 内部存储信息
      */
@@ -84,7 +89,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_storage_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
 
-        if(inTheRange(percent.toInt(),low)){
+        if (inTheRange(percent.toInt(), low)) {
 
         }
     }
@@ -114,20 +119,47 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         btn_clean_battery.setOnClickListener({ goCleanBattery() })
     }
 
+    /**
+     * 一键加速
+     */
     private fun goCleanMemory() {
+        val bundle = Bundle()
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
+        var intent=Intent(mContext,PhoneAccessActivity::class.java)
+        intent.putExtras(bundle)
+        mContext.startActivity(intent)
 
+        mActivity.finish()
     }
 
+    /**
+     * 垃圾清理
+     */
     private fun goCleanStorage() {
+        startActivity(NowCleanActivity::class.java)
+        mActivity.finish()
 
     }
 
+    /**
+     * 手机降温
+     */
     private fun goCool() {
         ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation()
+        mActivity.finish()
+
     }
 
+    /**
+     * 电池优化
+     */
     private fun goCleanBattery() {
-        var intent=Intent(mContext, PhoneSuperPowerActivity::class.java)
+        startActivity(PhoneSuperPowerActivity::class.java)
+        mActivity.finish()
+    }
+
+    private fun startActivity(cls: Class<*>?) {
+        var intent = Intent(mContext, cls)
         mContext.startActivity(intent)
     }
 

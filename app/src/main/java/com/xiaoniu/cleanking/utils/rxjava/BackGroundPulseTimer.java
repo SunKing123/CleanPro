@@ -31,7 +31,6 @@ public class BackGroundPulseTimer {
     public void startTimer() {
         timer.interval(15000,this::callBack);
         LogUtils.e("===============pulseTimer  startTimer()==========");
-
     }
 
     private void callBack(long number) {

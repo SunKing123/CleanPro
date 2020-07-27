@@ -17,6 +17,8 @@ import com.jess.arms.integration.lifecycle.FragmentLifecycleable;
 import com.jess.arms.utils.ArmsUtils;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
+import org.jetbrains.annotations.NotNull;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.subjects.BehaviorSubject;
