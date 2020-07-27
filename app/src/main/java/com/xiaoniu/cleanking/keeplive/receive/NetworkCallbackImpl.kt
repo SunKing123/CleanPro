@@ -22,7 +22,7 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
     //网络连接时调用
     override fun onAvailable(network: Network?) {
         super.onAvailable(network)
-        LogUtils.e("=======onAvailable: 网络已连接");
+        LogUtils.e("=======onAvailable: 网络已连接")
     }
 
     //网络即将断开时调用
@@ -49,7 +49,7 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
         if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
             if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI_AWARE)) {
-                LogUtils.e("======onCapabilitiesChanged: 网络类型为wifi");
+                LogUtils.e("======onCapabilitiesChanged: 网络类型为wifi")
                 startExternalSceneActivity()
             } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
                     || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
@@ -69,6 +69,7 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
     private fun startExternalSceneActivity() {
         //应用在前台不弹出
         if (AppLifecycleUtil.isAppOnForeground(mContext)) {
+            LogUtils.e("======APP在前台")
             return
         }
         //判断WIFI插屏是否打开
@@ -78,6 +79,7 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
         if (configBean != null && configBean.isOpen) {
             val currentTime = System.currentTimeMillis()
             val wifiEntity = PreferenceUtil.getPopupWifi()
+            LogUtils.e("=========wifi entity:${Gson().toJson(wifiEntity)}")
             //2.判断是否同是一天
             if (DateUtils.isSameDay(wifiEntity.popupTime, currentTime)) {
                 //判断当前时间是否满足上次一次的弹窗间隔

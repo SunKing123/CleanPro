@@ -705,6 +705,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (TextUtils.isEmpty(popEventModel.getAction()))
             return;
         if (popEventModel.getAction().equals("wifi")) {
+            LogUtils.e("======收到了wifi的event bus");
             StatisticsUtils.customTrackEvent("wifi_plug_screen_meets_opportunity", "wifi插屏满足时机", "wifi_plug_screen", "wifi_plug_screen");
             Intent screenIntent = new Intent(this, ExternalSceneActivity.class);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
