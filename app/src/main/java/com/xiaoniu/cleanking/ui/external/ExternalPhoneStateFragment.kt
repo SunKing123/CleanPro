@@ -107,14 +107,13 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_battery_percent.setText(easyBatteryMod.getBatteryPercentage().toString() + "%")
     }
 
-
     private fun initEvent() {
         btn_clean_memory.setOnClickListener({ goCleanMemory() })
         btn_clean_storage.setOnClickListener({ goCleanStorage() })
         btn_clean_temperature.setOnClickListener({ goCool() })
         btn_clean_battery.setOnClickListener({ goCleanBattery() })
     }
-  
+
     private fun goCleanMemory() {
 
     }

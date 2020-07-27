@@ -30,7 +30,6 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver{
         ToastUtils.showShort("弹出手机状态activity");
     }
 
-
     @Override
     public void onDestroy() {
 

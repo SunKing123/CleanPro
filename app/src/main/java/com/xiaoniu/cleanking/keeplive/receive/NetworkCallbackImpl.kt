@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.newclean.model.WifiModel
+import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil
 import com.xiaoniu.cleanking.utils.LogUtils
 import org.greenrobot.eventbus.EventBus

@@ -779,7 +779,12 @@
              android:name="BaiduMobAd_WIFI_LOCATION"
              android:value="true" />-->
 
-
+   <!--     <receiver android:name=".ui.deskpop.PowerConnectionReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>-->
         <provider
             android:name=".utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

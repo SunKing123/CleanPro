@@ -69,6 +69,7 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.PowerStatePopChecker;
 import com.xiaoniu.cleanking.ui.external.PhoneStatePopChecker;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
@@ -88,6 +89,7 @@ import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.MiitHelper;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
+import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ChannelUtil;
@@ -611,13 +613,16 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
             @Override
             public void onBecameBackground(Activity activity) {
+                if (!SystemUtils.getProcessName(application).equals(BuildConfig.APPLICATION_ID)) {//当前主进程
+                    return;
+                }
                 if (!AppLifecycleUtil.isAppOnForeground(application)) {
                     //app 进入后台
                     mIsBack = true;
                     MmkvUtil.saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
+                    BackGroundPulseTimer.getInstance().register(new PhoneStatePopChecker()).register(new PowerStatePopChecker()).startTimer();
 
-                    BackGroundPulseTimer.getInstance().register(new PhoneStatePopChecker()).startTimer();
                 }
             }
         });
