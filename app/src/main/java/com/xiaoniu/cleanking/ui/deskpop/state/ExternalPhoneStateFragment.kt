@@ -64,12 +64,12 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 运行信息
      */
     private fun initMemoryView() {
-        var total = easyMemoryMod.getTotalRAM()
-        var available = easyMemoryMod.getAvailableRAM()
+        var total = easyMemoryMod.getTotalRAM().toFloat()
+        var available = easyMemoryMod.getAvailableRAM().toFloat()
         var percent = (available.toDouble() / total.toDouble()) * 100
         percent = 100 - percent
-        tv_memory_title.setText("运行总内存：" + FileUtils.getUnitGB(total.toFloat()))
-        tv_memory_content.setText("可用运行内存：" + FileUtils.getUnitGB(available.toFloat()))
+        tv_memory_title.setText("运行总内存：" + FileUtils.getUnitGB(total))
+        tv_memory_content.setText("可用运行内存：" + FileUtils.getUnitGB(available))
         tv_memory_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
         updateBtnBackGround(btn_clean_memory, percent.toInt())
@@ -139,7 +139,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun goCleanStorage() {
         startActivity(NowCleanActivity::class.java)
         mActivity.finish()
-
     }
 
     /**
@@ -178,6 +177,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     }
 
     /**
+     *  todo 图片需要换
      * 更新图标颜色
      */
     private fun updateMemoryOrStorageImage(image: ImageView, percent: Int) {
@@ -208,7 +208,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         }
     }
 
-
+    //todo 图片需要换
     private fun updateBatteryImage(percent: Int) {
         if (inTheRange(percent, low)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_low)
