@@ -124,6 +124,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //如果是处于清理，用户点击返回键无效
         if (keyCode == KeyEvent.KEYCODE_BACK && isCleaning) {
             return false;
         }

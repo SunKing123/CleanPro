@@ -43,7 +43,6 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityCollector.addActivity(this, FullPopLayerActivity.class);
         Log.e("dong","FullPopLayerActivity");
         setContentView(R.layout.activity_full_pop_layer);
         adStyle = getIntent().getStringExtra("ad_style");
@@ -91,11 +90,6 @@ public class FullPopLayerActivity extends AppCompatActivity implements View.OnCl
         finish();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
-    }
 
     @Override
     public void onClick(View v) {

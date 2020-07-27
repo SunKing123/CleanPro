@@ -59,10 +59,12 @@ import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.dialog.GuideHomeDialog;
 import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
+import com.xiaoniu.cleanking.ui.external.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
@@ -77,7 +79,9 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
+import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
@@ -194,6 +198,20 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initListener();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
         checkAndUploadPoint();
+        showGuideView();
+    }
+
+    /**
+     * 引导弹窗
+     */
+    private void showGuideView() {
+        boolean isAudit = AppHolder.getInstance().getAuditSwitch();
+        boolean guideOpen = AppHolder.getInstance().checkSwitchIsOpen(PositionId.KEY_MAIN_GUIDE_VIEW);
+        boolean isShowed = MmkvUtil.getBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, false);
+        if (!isAudit && !isShowed && guideOpen) {
+            new GuideHomeDialog(getContext()).show();
+            MmkvUtil.saveBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, true);
+        }
     }
 
 
@@ -236,16 +254,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
             @Override
             public void onScrollState(int scrollState) {
-//                if (scrollState == STATE_SLIDING) {//正在滑动
-//                    isSlide = true;
-//                    mFloatAnimManager.hindFloatAdvertView();
-//                } else {
-//                    if (isSlide) {
-//                        //滑动过到静止状态
-//                        isSlide = false;
-//                        mFloatAnimManager.showFloatAdvertView();
-//                    }
-//                }
             }
         });
     }
@@ -436,15 +444,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-
         if (!hidden && getActivity() != null) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), true);
-//            } else {
-//                StatusBarCompat.setStatusBarColor(getActivity(), getResources().getColor(R.color.color_fff7f8fa), false);
-//            }
-
             //金币配置刷新
             mPresenter.refBullList();
             //刷新广告数据
@@ -510,7 +511,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
             case "网络加速":
                 //文案一直显示“有效提高20%”,暂不做刷新
-
                 break;
         }
     }
@@ -706,7 +706,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 EventBus.getDefault().post(new WeatherInfoRequestEvent(0));
                 break;
         }
-
     }
 
 
@@ -843,7 +842,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         }
         hasInitThreeAdvOnOff = true;
-        isThreeAdvOpen=AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH,PositionId.DRAW_THREE_CODE);
+        isThreeAdvOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_THREE_CODE);
     }
 
     /*
@@ -855,7 +854,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //click kill virus
     private void onKillVirusClick() {
         StatisticsUtils.trackClick(Points.MainHome.VIRUS_KILLING_CLICK_CODE, Points.MainHome.VIRUS_KILLING_CLICK_NAME, "home_page", "home_page");
-        startKillVirusActivity();
+      //  startKillVirusActivity();
+        ExternalPhoneStateActivity.start(getContext());
     }
 
     //start kill virus page

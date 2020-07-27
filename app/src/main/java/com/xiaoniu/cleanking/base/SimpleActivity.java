@@ -64,7 +64,6 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
             AppActivityUtils.fixOrientation(this);
         }
         super.onCreate(savedInstanceState);
-        ActivityCollector.addActivity(this, getClass());
         AppManager.getAppManager().addActivityName(this);
         mHandler = new MHandler(this);
 
@@ -117,7 +116,6 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         cancelLoadingDialog();
         this.mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 
     @Override

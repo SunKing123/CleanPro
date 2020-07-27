@@ -20,8 +20,6 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xnad.sdk.ad.entity.AdInfo;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 
 /**
@@ -74,7 +72,7 @@ public class ScratchCardAvdPresenter {
      * @param isDouble       是否可以翻倍
      * @param isAreaOne      是否是第一个刮刮卡
      */
-    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble, boolean isAreaOne) {
+    public void showDialog(int cardIndex, int coinCount, int totalCoinCount, boolean isDouble, boolean isAreaOne, int doubledmagnification) {
         log("================================================刮刮卡调用弹框 showDialog()  cardIndex=" + cardIndex + "    coinCount=" + coinCount + "  isDouble=" + isDouble);
         if (activity == null) {
             log("activity 对象为空，不能弹框");
@@ -90,6 +88,7 @@ public class ScratchCardAvdPresenter {
         parameter.onDoubleClickListener = v -> handlerDoubleClick();
         parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
+        parameter.doubleNums = doubledmagnification;
         parameter.adId = isOpenOne() && !isAreaOne ? getFirstAdvId(cardIndex) : "";
         parameter.obtainCoinCount = coinCount;
 
@@ -159,8 +158,8 @@ public class ScratchCardAvdPresenter {
 
     //加载激励视屏广告
     private void loadVideoAdv(String advId) {
-        if(AndroidUtil.isFastDoubleBtnClick(4000)){
-              return;
+        if (AndroidUtil.isFastDoubleBtnClick(4000)) {
+            return;
         }
         pointVideo();
         AdRequestParams params = new AdRequestParams.Builder()

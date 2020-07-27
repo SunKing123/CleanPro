@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.view.View;
 
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
-
 import androidx.annotation.NonNull;
+
+import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
 /**
  * Created by zhaoyingtao
@@ -19,6 +19,7 @@ public class GoldCoinDialogParameter {
     public int dialogType;
     public int obtainCoinCount;
     public double totalCoinCount;
+    public int doubleNums;//翻的倍数
     //当传进来的id为空时，不加载广告
     public String adId;
     public boolean fbTip;

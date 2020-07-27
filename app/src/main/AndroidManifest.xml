@@ -461,6 +461,16 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
 
         <activity
+            android:name=".ui.deskpop.BatteryPopActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style_2"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+
+        <activity
             android:name=".ui.lockscreen.FullPopLayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
@@ -490,6 +500,18 @@
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style_2"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+        <activity
+            android:name=".ui.external.ExternalPhoneStateActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.pop.new.task"
+            android:theme="@style/pop_layer_style_2"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
+
 
         <!--     android:screenOrientation="portrait"-->
 

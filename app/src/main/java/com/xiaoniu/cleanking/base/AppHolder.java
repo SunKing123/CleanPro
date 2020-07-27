@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -12,7 +11,6 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.HashMap;
@@ -194,12 +192,33 @@ public class AppHolder {
         return isOpen;
     }
 
+    /**
+     * 根据configKey判断开关是否打开
+     *
+     * @param configKey
+     * @return
+     */
+    public boolean checkSwitchIsOpen(String configKey) {
+        boolean isOpen = false;
+        //过审开关是否打开
+        String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1") && null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey)) {
+            for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                if (configKey.equals(switchInfoList.getConfigKey())) {
+                    isOpen = switchInfoList.isOpen();
+                    break;
+                }
+            }
+        }
+        return isOpen;
+    }
 
     /**
      * 过审开关是否打开
-     * @return  true 打开
+     *
+     * @return true 打开
      */
-    public boolean getAuditSwitch(){
+    public boolean getAuditSwitch() {
         return !MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1").equals("1");
     }
 
@@ -213,7 +232,7 @@ public class AppHolder {
         boolean isOpen = false;
         //过审开关是否打开
         String auditSwitch = MmkvUtil.getString(SpCacheConfig.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "1") &&null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey)) {
+        if (TextUtils.equals(auditSwitch, "1") && null != getSwitchInfoList() && null != getSwitchInfoList().getData() && getSwitchInfoList().getData().size() > 0 && !TextUtils.isEmpty(configKey)) {
             for (SwitchInfoList.DataBean switchInfoList : AppHolder.getInstance().getSwitchInfoList().getData()) {
                 if (configKey.equals(switchInfoList.getConfigKey())) {
                     isOpen = switchInfoList.isOpen();

@@ -83,7 +83,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         setLockerWindow(getWindow());
         StatusBarUtil.setTransparentForWindow(this);
         setContentView(R.layout.activity_lock);
-        ActivityCollector.addActivity(this, LockActivity.class);
 
         //获取总开关数据
         String switchString = MmkvUtil.getSwitchInfo();
@@ -472,7 +471,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         unregisterLockerReceiver();
         EventBus.getDefault().unregister(this);
-        ActivityCollector.removeActivity(this);
 //
      /*   executorService.execute(() -> {
             FileUtils.writeTextFile("stop");

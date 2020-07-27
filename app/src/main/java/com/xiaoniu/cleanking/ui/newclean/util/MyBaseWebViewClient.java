@@ -282,13 +282,19 @@ public class MyBaseWebViewClient extends WebViewClient {
         boolean isDouble = TextUtils.equals("1", parameters.getParameter(SchemeConstant.IS_DOUBLE));
         //h5 可能需要传这个id
         String taskId = parameters.getParameter(SchemeConstant.TASK_ID);
+        //翻倍的倍率
+        String doubledmagnification = parameters.getParameter(SchemeConstant.DOUBLEDMAGNIFICATION);
         //签到天数
         String signDay = parameters.getParameter(SchemeConstant.SIGNDAY);
         String cardPosition = parameters.getParameter(SchemeConstant.CARD_POSITION);
         if (!TextUtils.isEmpty(totalCoin) && !TextUtils.isEmpty(coin) && !TextUtils.isEmpty(cardPosition) && cardAvdPresenter != null) {
             int obtainCoinCount = Integer.parseInt(coin);//获得的金币
             int totalCoinCount = Integer.parseInt(totalCoin);//用户总金币金额===这里totalCoinCount在h5已经添加过了
-            cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, totalCoinCount, isDouble, "1".equals(area));
+            int doubleNum = 2;
+            if (!TextUtils.isEmpty(doubledmagnification)) {
+                doubleNum = Integer.parseInt(doubledmagnification);
+            }
+            cardAvdPresenter.showDialog(Integer.parseInt(cardPosition), obtainCoinCount, totalCoinCount, isDouble, "1".equals(area), doubleNum);
         }
     }
 

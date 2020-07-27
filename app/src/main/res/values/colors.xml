@@ -122,6 +122,7 @@
     <color name="color_FF8D41">#FF8D41</color>
     <color name="color_FF6862">#FF6862</color>
     <color name="color_27D599">#27D599</color>
+    <color name="color_02D086">#FF02D086</color>
     <color name="black_a80">#CC000000</color>
     <color name="color_f2f2f2">#F2F2F2</color>
 
@@ -152,5 +153,9 @@
     <color name="home_content_green">#ff06c581</color>
     <color name="home_content_red">#FF2028</color>
     <color name="home_content_yellow">#FFAC01</color>
+    <color name="color_00cfec">#00cfec</color>
+    <color name="color_ffad00">#ffad00</color>
+
+
 
 </resources>

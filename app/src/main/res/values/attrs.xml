@@ -134,4 +134,8 @@
     <declare-styleable name="rubble">
         <attr name="location" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="circleRound">
+        <attr name="index" format="integer"/>
+    </declare-styleable>
 </resources>

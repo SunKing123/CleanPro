@@ -1,11 +1,9 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,10 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -40,7 +35,6 @@ import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
-import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -76,7 +70,6 @@ import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.DateUtils;
-import com.xiaoniu.common.utils.DeviceUtil;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -88,7 +81,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -266,7 +258,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
         });
 
-        checkReadPermission();
+       // checkReadPermission();
         //极光推送 设备激活接口
         mPresenter.commitJPushAlias();
 
@@ -334,38 +326,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mainFragment.onWindowFocusChanged(hasFocus);
         }
 
-    }
-
-    private void checkReadPermission() {
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED) {
-            System.out.println();
-        } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.PACKAGE_USAGE_STATS)) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, REQUEST_STORAGE_PERMISSION);
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PACKAGE_USAGE_STATS}, REQUEST_STORAGE_PERMISSION);
-            }
-        }
-    }
-
-    /**
-     * 检查权限后的回调
-     *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_STORAGE_PERMISSION:
-                if (permissions.length != 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-//                    Toast.makeText(this, "打开相册失败，请允许存储权限后再试", Toast.LENGTH_SHORT).showShort();
-                } else {
-                    //TODO 请求权限弹窗 允许后回调返回的成功回调 在此写业务逻辑
-                }
-                break;
-        }
     }
 
     /**

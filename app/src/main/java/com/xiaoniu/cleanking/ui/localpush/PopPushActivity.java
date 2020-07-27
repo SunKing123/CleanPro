@@ -48,7 +48,6 @@ public class PopPushActivity extends AppCompatActivity {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(android.R.color.transparent), false);
         }
 
-        ActivityCollector.addActivity(this, PopPushActivity.class);
         StatisticsUtils.customTrackEvent("local_push_window_shuow", "本地推送弹窗曝光时", "", "local_push_window");
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
@@ -168,7 +167,6 @@ public class PopPushActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivityCollector.removeActivity(this);
     }
 
 }

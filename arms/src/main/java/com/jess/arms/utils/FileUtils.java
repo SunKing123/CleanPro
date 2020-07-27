@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import io.reactivex.exceptions.UndeliverableException;
 
@@ -50,7 +51,6 @@ public final class FileUtils {
      * 得到SD卡根目录
      */
     public static String getSDCardPath() {
-
         return Environment.getExternalStorageDirectory().getAbsolutePath();
     }
 
@@ -641,4 +641,20 @@ public final class FileUtils {
 
         return mFreeS;
     }
+
+    private static String[] units = {"B", "KB", "MB", "GB"};
+
+    /**
+     * 单位转换
+     */
+    public static String getUnitGB(float size) {
+        int index = 0;
+        while (size > 1024 && index < units.length) {
+            size = size / 1024;
+            index++;
+        }
+        return String.format(Locale.getDefault(), " %.1f %s", size, units[index]);
+    }
+
+
 }
