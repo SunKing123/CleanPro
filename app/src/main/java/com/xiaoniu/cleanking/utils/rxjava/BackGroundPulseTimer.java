@@ -15,7 +15,7 @@ public class BackGroundPulseTimer {
 
     private List<BackGroundIPulseObserver> observers = new ArrayList<>();
     private RxTimer timer;
-
+    final int MILLI_SECONDS = 15000;
     private static BackGroundPulseTimer backGroundPulseTimer;
 
     public static BackGroundPulseTimer getInstance() {
@@ -30,16 +30,18 @@ public class BackGroundPulseTimer {
     }
 
     public void startTimer() {
-        timer.interval(15000,this::callBack);
+        timer.interval(MILLI_SECONDS, this::callBack);
         LogUtils.e("===============pulseTimer  startTimer()==========");
     }
 
-
     private void callBack(long number) {
+
+        LogUtils.e("===============pulseTimer  callBack()==========");
+
         for (BackGroundIPulseObserver observer : observers) {
             observer.onPulse(number);
-            LogUtils.e("===============pulseTimer  callBack()==========");
         }
+
     }
 
     public BackGroundPulseTimer register(BackGroundIPulseObserver observer) {
@@ -53,16 +55,17 @@ public class BackGroundPulseTimer {
 
     public void unRegister(BackGroundIPulseObserver observer) {
         observers.remove(observer);
+        LogUtils.e("===============pulseTimer  unRegister(observer)==========");
     }
 
-    public boolean hasObserver(){
-        return observers.size()>0;
+    public boolean hasObserver() {
+        return observers.size() > 0;
     }
 
     private void unRegisterAll() {
-        Iterator<BackGroundIPulseObserver>  iterator=observers.iterator();
-        while (iterator.hasNext()){
-            BackGroundIPulseObserver observer= iterator.next();
+        Iterator<BackGroundIPulseObserver> iterator = observers.iterator();
+        while (iterator.hasNext()) {
+            BackGroundIPulseObserver observer = iterator.next();
             observer.onDestroy();
             iterator.remove();
         }

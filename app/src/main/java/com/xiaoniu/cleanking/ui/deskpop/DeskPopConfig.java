@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.deskpop.state;
+package com.xiaoniu.cleanking.ui.deskpop;
 
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -13,6 +13,7 @@ public class DeskPopConfig {
         InsertAdSwitchInfoList.DataBean dataBean=getStateConfig();
         return dataBean.isOpen();
     }
+
     public static boolean isBatteryOpen(){
         InsertAdSwitchInfoList.DataBean dataBean= getBatteryConfig();
         return dataBean.isOpen();

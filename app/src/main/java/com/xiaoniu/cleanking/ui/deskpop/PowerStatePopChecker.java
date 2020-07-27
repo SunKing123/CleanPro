@@ -110,7 +110,6 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
 //          Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
         //更新sp当前充电状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
-
     }
 
     /**
@@ -131,8 +130,6 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
             if (lastShowNum <= showTimes && (System.currentTimeMillis() - lastShowTime) >= 1000 * 60 * displayTim) {
                 EventBus.getDefault().post(new PopEventModel("power"));
             }
-
         }
-
     }
 }

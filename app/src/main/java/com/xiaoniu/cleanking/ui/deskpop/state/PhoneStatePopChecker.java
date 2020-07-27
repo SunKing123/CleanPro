@@ -3,6 +3,8 @@ package com.xiaoniu.cleanking.ui.deskpop.state;
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod;
 import com.xiaoniu.cleanking.app.AppApplication;
+import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
 
@@ -21,23 +23,32 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
     @Override
     public void onPulse(long progress) {
-        int time=DeskPopConfig.getStateConfig().getDisplayTime();
+        int time= DeskPopConfig.getStateConfig().getDisplayTime();
         if(time==0){
+            unRegister();
             return;
         }
         long diff = System.currentTimeMillis() - startTime;
         diff = diff / 1000;
         diff = diff / 60;
-        if (diff >=time) {
+
+        boolean canPop=diff >=time;
+
+        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diff+"    displayTime="+time);
+        if (canPop) {
             checkAndPop();
         }
     }
 
     private void checkAndPop() {
         if (needPop()) {
+            unRegister();
             ExternalPhoneStateActivity.start(AppApplication.getInstance());
-            BackGroundPulseTimer.getInstance().unRegister(this);
         }
+    }
+
+    private void unRegister(){
+        BackGroundPulseTimer.getInstance().unRegister(this);
     }
 
     @Override
