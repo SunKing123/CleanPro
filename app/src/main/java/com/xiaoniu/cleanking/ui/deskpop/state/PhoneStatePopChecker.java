@@ -4,6 +4,7 @@ import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
+import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
 
 /**
  * Created by xinxiaolong on 2020/7/25.
@@ -35,6 +36,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
     private void checkAndPop() {
         if (needPop()) {
             ExternalPhoneStateActivity.start(AppApplication.getInstance());
+            BackGroundPulseTimer.getInstance().unRegister(this);
         }
     }
 
