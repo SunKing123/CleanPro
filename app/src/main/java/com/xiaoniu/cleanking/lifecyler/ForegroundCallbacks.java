@@ -94,6 +94,7 @@ public class ForegroundCallbacks implements Application.ActivityLifecycleCallbac
                 try {
                     l.onBecameForeground(activity);
                 } catch (Exception exc) {
+                    exc.getMessage();
 //                    L.d("Listener threw exception!:" + exc.toString());
                 }
             }

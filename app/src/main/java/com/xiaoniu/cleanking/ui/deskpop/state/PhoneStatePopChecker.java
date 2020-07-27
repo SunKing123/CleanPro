@@ -49,7 +49,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
         EasyMemoryMod easyMemoryMod = new EasyMemoryMod(AppApplication.getInstance());
         double total = easyMemoryMod.getTotalRAM();
         double available = easyMemoryMod.getAvailableRAM();
-        double percent = (total / available) * 100;
+        double percent = (available/total) * 100;
         if (percent >= 70) {
             return true;
         }

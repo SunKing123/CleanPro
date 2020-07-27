@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.utils.rxjava;
 import com.xiaoniu.cleanking.utils.LogUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,6 +34,7 @@ public class BackGroundPulseTimer {
         LogUtils.e("===============pulseTimer  startTimer()==========");
     }
 
+
     private void callBack(long number) {
         for (BackGroundIPulseObserver observer : observers) {
             observer.onPulse(number);
@@ -53,14 +55,19 @@ public class BackGroundPulseTimer {
         observers.remove(observer);
     }
 
+    public boolean hasObserver(){
+        return observers.size()>0;
+    }
+
     private void unRegisterAll() {
-        for (BackGroundIPulseObserver observer : observers) {
+        Iterator<BackGroundIPulseObserver>  iterator=observers.iterator();
+        while (iterator.hasNext()){
+            BackGroundIPulseObserver observer= iterator.next();
             observer.onDestroy();
-            observers.remove(observer);
+            iterator.remove();
         }
         LogUtils.e("===============pulseTimer  unRegisterAll()==========");
     }
-
 
     public void destroy() {
         unRegisterAll();
