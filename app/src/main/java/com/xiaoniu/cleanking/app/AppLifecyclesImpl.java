@@ -71,7 +71,7 @@ import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.PowerStatePopChecker;
 import com.xiaoniu.cleanking.ui.deskpop.state.PhoneStatePopChecker;
-import com.xiaoniu.cleanking.ui.deskpop.state.DeskPopConfig;
+import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
@@ -422,8 +422,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 }
             }
         }
-
     }
+
 
     //home键监听
     private long mLastClickTime = 0;  //只在local 进程中生效
@@ -500,7 +500,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 if (isMainProcess(application)) {
                     bindLocalPushService(application, currentTimestamp);
                 }
-
             }
 
             @Override
@@ -521,7 +520,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         });
         mHomeWatcher.startWatch();
     }
-
 
     private void bindLocalPushService(Application application, long pressTime) {
         if (!RomUtils.checkIsHuaWeiRom()) {

@@ -23,12 +23,10 @@ import com.comm.jksdk.http.base.BaseResponse;
 import com.geek.push.GeekPush;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.ishumei.smantifraud.SmAntiFraud;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
@@ -44,7 +42,6 @@ import com.xiaoniu.cleanking.ui.login.bean.LoginDataBean;
 import com.xiaoniu.cleanking.ui.login.bean.UserInfoBean;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
-import com.xiaoniu.cleanking.ui.main.bean.DeviceInfo;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
@@ -52,7 +49,6 @@ import com.xiaoniu.cleanking.ui.main.bean.Patch;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherForecastResponseEntity;
-import com.xiaoniu.cleanking.ui.main.bean.WebUrlEntity;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.LocationCityInfo;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.WeatherCity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -63,24 +59,19 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
-import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
-import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
@@ -138,8 +129,13 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
         Gson gson = new Gson();
         Map<String, Object> paramsMap = new HashMap<>();
-        paramsMap.put("userType", 2);
-        paramsMap.put("openId", AndroidUtil.getDeviceID());
+        if (UserHelper.init().isWxLogin()) {
+            paramsMap.put("userType", 1);
+            paramsMap.put("openId", UserHelper.init().getOpenID());
+        } else {
+            paramsMap.put("userType", 2);
+            paramsMap.put("openId", AndroidUtil.getDeviceID());
+        }
         String json = gson.toJson(paramsMap);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mModel.visitorLogin(body, new CommonSubscriber<LoginDataBean>() {
@@ -709,7 +705,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
 
-/*--*/
+    /*--*/
 
     //获取定位权限
     @SuppressLint("CheckResult")
@@ -742,6 +738,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             }
         });
     }
+
     /**
      * 执行定位操作
      */
@@ -915,8 +912,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
         return weatherCity;
     }
-
-
 
 
 }

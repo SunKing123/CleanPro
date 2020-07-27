@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
     android:background="@android:color/transparent">
 
 
@@ -27,8 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dimen_20dp"
-            android:layout_marginBottom="@dimen/dimen_40dp"
+            android:layout_marginBottom="@dimen/dimen_20dp"
             android:textColor="@color/color_262626"
             android:textSize="@dimen/dimen_20sp"
             tools:text="WiFi已链接" />
@@ -37,7 +37,7 @@
         <ViewStub
             android:id="@+id/wifi_stub"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout="@layout/view_scene_wifi" />
 
 
@@ -48,9 +48,9 @@
             android:id="@+id/scene_button"
             style="@style/large_blue_button_style"
             android:layout_marginStart="@dimen/dimen_53dp"
-            android:layout_marginTop="@dimen/dimen_40dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
             android:layout_marginEnd="@dimen/dimen_53dp"
-            android:layout_marginBottom="@dimen/common_ad_img_width_40dp"
+            android:layout_marginBottom="@dimen/dp_20"
             tools:text="网络加速" />
 
     </LinearLayout>

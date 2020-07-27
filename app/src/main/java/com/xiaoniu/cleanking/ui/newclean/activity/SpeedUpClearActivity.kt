@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.common.base.BaseActivity
 import com.xiaoniu.common.utils.AppUtils
 import com.xiaoniu.common.utils.DisplayUtils
+import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_speedup_clear.*
 import java.util.*
@@ -48,6 +49,12 @@ class SpeedUpClearActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StatusBarUtil.setTransparentForWindow(this)
+        StatisticsUtils.onPageStart("boost_animation_page_view_page", "加速动画页浏览")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        StatisticsUtils.onPageEnd("boost_animation_page_view_page", "加速动画页浏览", "boost_animation_page", "boost_animation_page")
     }
 
     private var mTotalSize = 0
