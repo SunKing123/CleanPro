@@ -62,6 +62,7 @@ public class BackGroundPulseTimer {
         LogUtils.e("===============pulseTimer  unRegisterAll()==========");
     }
 
+    
     public void destroy() {
         unRegisterAll();
         timer.cancel();
