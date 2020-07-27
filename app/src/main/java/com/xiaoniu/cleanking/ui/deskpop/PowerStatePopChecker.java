@@ -128,7 +128,7 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
             displayTim = dataBean.getDisplayTime();
             long lastShowTime = MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, 0);
             int lastShowNum = MmkvUtil.getInt(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, 0);
-            if (lastShowNum <= showTimes && (System.currentTimeMillis() - lastShowTime) <= 1000 * 60 * displayTim) {
+            if (lastShowNum <= showTimes && (System.currentTimeMillis() - lastShowTime) >= 1000 * 60 * displayTim) {
                 EventBus.getDefault().post(new PopEventModel("power"));
             }
 
