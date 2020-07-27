@@ -42,12 +42,7 @@ public class ExternalPhoneStateActivity extends BaseActivity {
     }
 
     private void initView(){
-        sceneClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                  finish();
-            }
-        });
+        sceneClose.setOnClickListener(v -> finish());
     }
 
     private void initFragment(){

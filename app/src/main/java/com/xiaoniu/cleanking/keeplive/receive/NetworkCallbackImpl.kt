@@ -1,12 +1,10 @@
 package com.xiaoniu.cleanking.keeplive.receive
 
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant
 import com.xiaoniu.cleanking.ui.newclean.model.WifiModel
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil
 import com.xiaoniu.cleanking.utils.LogUtils
@@ -33,7 +31,6 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
     override fun onLost(network: Network?) {
         super.onLost(network)
         LogUtils.e("=======onLost: 网络已断开")
-        startExternalSceneActivity()
     }
 
     //网络缺失network时调用
@@ -70,7 +67,6 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
             return
         }
         LogUtils.e("=====应用在后台====，弹出wifi插屏")
-
         EventBus.getDefault().post(WifiModel(""))
 
     }

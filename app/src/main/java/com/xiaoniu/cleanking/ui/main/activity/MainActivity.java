@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
@@ -707,7 +708,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         screenIntent.putExtra(ExternalSceneActivity.SCENE,ExternalSceneActivity.SCENE_WIFI);
-        startActivity(screenIntent);
+        PendingIntent intent=PendingIntent.getActivity(this,0,screenIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        try {
+            intent.send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

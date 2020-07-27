@@ -393,17 +393,14 @@ public class EasyNetworkMod {
                     (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             if (cm != null) {
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-                if (networkInfo == null) {
-                    result = null;
-                }
-
                 if (networkInfo != null && networkInfo.isConnected()) {
                     final WifiManager wifiManager =
                             (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     if (wifiManager != null) {
                         final WifiInfo connectionInfo = wifiManager.getConnectionInfo();
                         if (connectionInfo != null && !TextUtils.isEmpty(connectionInfo.getSSID())) {
-                            result = connectionInfo.getLinkSpeed() + " Mbps";
+                            // 链接速度
+                            result = connectionInfo.getLinkSpeed() +WifiInfo.LINK_SPEED_UNITS;
                         }
                     }
                 }
@@ -426,7 +423,7 @@ public class EasyNetworkMod {
      * 检查wifi强弱并更改图标显示
      */
     public int checkWifiState() {
-        WifiManager mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
         LogUtils.i(mWifiInfo.getSSID() + "------zzz--" + new Gson().toJson(mWifiInfo));
 
