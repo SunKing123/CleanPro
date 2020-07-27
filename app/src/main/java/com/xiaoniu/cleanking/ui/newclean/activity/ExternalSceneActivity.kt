@@ -23,7 +23,6 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        ActivityCollector.addActivity(this, PopPushActivity::class.java)
     }
 
     override fun getLayoutId() = R.layout.activity_external_scene
@@ -93,10 +92,6 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        ActivityCollector.removeActivity(this)
-    }
 
     override fun netError() {
     }

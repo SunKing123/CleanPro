@@ -22,6 +22,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import timber.log.Timber;
@@ -37,38 +40,37 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         Timber.i(activity + " - onActivityCreated");
+        ActivityCollector.addActivity(activity, activity.getClass());
     }
 
 
     @Override
     public void onActivityStarted(Activity activity) {
-        Timber.i(activity + " - onActivityStarted");
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Timber.i("zz--"+ activity.getLocalClassName() + " - onActivityResumed");
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-        Timber.i("zz--"+ activity.getLocalClassName()+" - onActivityPaused");
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        Timber.i(activity + " - onActivityStopped");
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        Timber.i(activity + " - onActivitySaveInstanceState");
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
+
         Timber.i(activity + " - onActivityDestroyed");
+        ActivityCollector.removeActivity(activity);
         //横竖屏切换或配置改变时, Activity 会被重新创建实例, 但 Bundle 中的基础数据会被保存下来,移除该数据是为了保证重新创建的实例可以正常工作
         activity.getIntent().removeExtra(EXTRA_ISINITTOOLBAR);
+
     }
 }

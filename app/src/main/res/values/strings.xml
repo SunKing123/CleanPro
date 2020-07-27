@@ -210,6 +210,26 @@
     <string name="notwork_error">网络异常</string>
     <string name="weather_video">天气预报视频</string>
     <string name="weather_video_date">中国气象局</string>
+    <string name="tv_title_power_pop">充电助手</string>
+
+    <string name="fast_charging">快速充电</string>
+    <string name="cycle_charging">循环充电 </string>
+    <string name="vortex_charging">涡流充电</string>
+
+    <string name="power_capacity">电池容量</string>
+    <string name="power_voltage">电池电压</string>
+    <string name="power_temp">充电温度</string>
+    <string name="power_app">耗电应用</string>
+    <string name="power_time_content">还需%1$s时%2$s分充满</string>
+    <string name="power_num_voltage">%1$sV</string>
+    <string name="power_num_capacity">%1$smAh</string>
+    <string name="power_num_temp">%1$s°C</string>
+    <string name="power_num_app">%1$s个</string>
+    <string name="power_cut_temp">电池降温</string>
+    <string name="power_charging">极致快充</string>
+
+
+
 
 
 

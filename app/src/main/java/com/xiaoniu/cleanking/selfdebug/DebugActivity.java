@@ -41,11 +41,13 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -127,13 +129,14 @@ public class DebugActivity extends BaseActivity {
 
     public void toHomeClean(View view) {
         //原生带参数 native协议
-//        "cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=0"
+//        "cleankingmajor://com.xiaoniu.cleanking/native?name=main&main_index=2"
         String nativeHeader = SchemeConstant.SCHEME + "://" +
                 SchemeConstant.HOST + SchemeConstant.NATIVE + "?name=";
         String nativeName = SchemeConstant.NATIVE_MAIN;
         String nativeParams = "&" + SchemeConstant.EXTRA_MAIN_INDEX + "=4";
         String scheme = nativeHeader + nativeName + nativeParams;
-        SchemeProxy.openScheme(this, scheme);
+        String mainNav = "cleankingmajor://com.hellogeek.cleanking/native?name=main&main_index=2";
+        SchemeProxy.openScheme(this, mainNav);
     }
 
     public void toHomeTools(View view) {
@@ -442,6 +445,19 @@ public class DebugActivity extends BaseActivity {
         deviceTempcontent.setText(deviceinfo);
 
     }
+
+    public void powerClick(View view){
+        Intent screenIntent = new Intent(this, BatteryPopActivity.class);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        screenIntent.putExtra(ExternalSceneActivity.SCENE,ExternalSceneActivity.SCENE_WIFI);
+        startActivity(screenIntent);
+    }
+
+
+
 
     private String[] units = {"B", "KB", "MB", "GB"};
 

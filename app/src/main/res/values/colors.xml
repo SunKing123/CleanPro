@@ -153,5 +153,9 @@
     <color name="home_content_green">#ff06c581</color>
     <color name="home_content_red">#FF2028</color>
     <color name="home_content_yellow">#FFAC01</color>
+    <color name="color_00cfec">#00cfec</color>
+    <color name="color_ffad00">#ffad00</color>
+
+
 
 </resources>
