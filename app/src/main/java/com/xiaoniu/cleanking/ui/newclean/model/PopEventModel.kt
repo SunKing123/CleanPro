@@ -1,3 +1,3 @@
 package com.xiaoniu.cleanking.ui.newclean.model
 
-data class WifiModel(val action: String)
+data class PopEventModel(val action: String)

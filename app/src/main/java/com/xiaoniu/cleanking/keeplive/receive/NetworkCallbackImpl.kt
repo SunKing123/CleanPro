@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
-import com.xiaoniu.cleanking.ui.newclean.model.WifiModel
+import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil
 import com.xiaoniu.cleanking.utils.LogUtils
 import org.greenrobot.eventbus.EventBus
@@ -67,7 +67,7 @@ class NetworkCallbackImpl constructor(context: Context) : ConnectivityManager.Ne
             return
         }
         LogUtils.e("=====应用在后台====，弹出wifi插屏")
-        EventBus.getDefault().post(WifiModel(""))
+        EventBus.getDefault().post(PopEventModel("wifi"))
 
     }
 
