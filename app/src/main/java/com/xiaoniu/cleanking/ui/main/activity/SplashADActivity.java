@@ -91,7 +91,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private boolean mCanJump;
     RxTimer rxTimer;
     private static final int SP_SHOW_OUT_TIME = 9 * 1000;//开屏总超时时间
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -170,7 +169,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         //超时定时器
         rxTimer = new RxTimer();
         rxTimer.timer(SP_SHOW_OUT_TIME, number -> {
-            if(PreferenceUtil.isNotFirstOpenApp()){//非第一次冷启动总超时逻辑；
+            if (PreferenceUtil.isNotFirstOpenApp()) {//非第一次冷启动总超时逻辑；
                 mCanJump = true;
                 jumpActivity();
             }
@@ -178,7 +177,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         if (NetworkUtils.isNetConnected()) {//正常网络
             mPresenter.getAuditSwitch();
         } else {
-            checkReadPermission();
+            delayJump();
         }
     }
 
@@ -224,15 +223,16 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
     //延迟跳转
-    public void delayJump(){
+    public void delayJump() {
         this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
             jumpActivity();
         });
     }
+
     //页面跳转
     public void jumpActivity() {
         if (mCanJump) {
-            if(!AndroidUtil.isFastDoubleClick()){
+            if (!AndroidUtil.isFastDoubleClick()) {
                 Intent intent = new Intent(SplashADActivity.this, MainActivity.class);
                 if (!TextUtils.isEmpty(pushData)) {
                     intent.putExtra("push_uri", pushData);
@@ -261,7 +261,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 }
             }
         }
-        if (!PreferenceUtil.isNotFirstOpenApp()){//第一次冷启动
+        if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
             return;
         }
         if (mIsOpen) {//开屏开关已开
@@ -430,7 +430,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         super.onPause();
         mCanJump = false;
     }
-
 
     private void checkReadPermission() {
         PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.PHONE).callback(new PermissionUtils.SimpleCallback() {
