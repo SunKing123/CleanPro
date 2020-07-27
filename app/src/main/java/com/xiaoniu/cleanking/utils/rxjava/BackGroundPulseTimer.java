@@ -29,7 +29,7 @@ public class BackGroundPulseTimer {
     }
 
     public void startTimer() {
-        timer.interval(2000,this::callBack);
+        timer.interval(15000,this::callBack);
         LogUtils.e("===============pulseTimer  startTimer()==========");
 
     }
@@ -62,7 +62,7 @@ public class BackGroundPulseTimer {
         LogUtils.e("===============pulseTimer  unRegisterAll()==========");
     }
 
-    
+
     public void destroy() {
         unRegisterAll();
         timer.cancel();
