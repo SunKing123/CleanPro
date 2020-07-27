@@ -649,11 +649,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 view_lottie_top.setClendedState(countEntity);
             }
         } else {//未取得权限//避免重复弹出
-            new Handler().postDelayed(() -> {
-                if (!isDenied) {
-                    mPresenter.checkStoragePermission();  //重新开始扫描
-                }
-            }, 200);
+//            new Handler().postDelayed(() -> {
+//                if (!isDenied) {
+//                    mPresenter.checkStoragePermission();  //重新开始扫描
+//                }
+//            }, 200);
 
             //未授权默认样式——存在大量垃圾；
             if (null != view_lottie_top)
@@ -713,24 +713,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      * 检查文件存贮权限
      */
     private void checkStoragePermission() {
-     /*   String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        ((MainActivity) this.getActivity()).setInsert(false);
-        Disposable disposable = rxPermissions.request(permissions)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aBoolean -> {
-                    ((MainActivity) this.getActivity()).setInsert(true);
-                    if (aBoolean) {
-                        mPresenter.stopScanning();
-                        startActivity(NowCleanActivity.class);
-                    } else {
-                        if (hasPermissionDeniedForever()) {  //点击拒绝
-                            startActivity(NowCleanActivity.class);
-                        } else {                            //点击永久拒绝
-                            showPermissionDialog();
-                        }
-                    }
-                });
-        compositeDisposable.add(disposable);*/
         PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
             @Override
             public void onGranted() {

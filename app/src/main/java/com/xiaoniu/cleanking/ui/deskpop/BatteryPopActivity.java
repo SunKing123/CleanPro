@@ -18,7 +18,9 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
 
 import androidx.annotation.NonNull;
@@ -66,6 +68,9 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initView() {
+        MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, System.currentTimeMillis());
+        MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, (MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, 0) + 1));
+
         sceneClose = findViewById(R.id.scene_close);
         sceneTitle = findViewById(R.id.scene_title);
         sceneButton = findViewById(R.id.scene_button);

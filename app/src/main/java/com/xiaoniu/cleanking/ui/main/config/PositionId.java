@@ -162,5 +162,12 @@ public class PositionId {
     //网赚Header_DeviceId存储
     public static final String HEAD_DEVICE_ID = "head_device_id";//锁屏互动式广告
 
+    public static final String PAGE_DESK_BATTERY_INFO = "page_desk_battery_info";//桌面插屏电池信息；
+
+    public static final String PAGE_DESK_BATTERY_INFO_SHOW_NUM = "page_desk_battery_info_show_num";//桌面插屏电池信息；
+
+    public static final String PAGE_DESK_BATTERY_INFO_TIME = "page_desk_battery_info_time";//桌面插屏电池信息；
+
+
 
 }
