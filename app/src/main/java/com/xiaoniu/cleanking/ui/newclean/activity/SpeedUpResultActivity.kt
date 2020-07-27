@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil
 import com.xiaoniu.cleanking.utils.LayoutAnimationHelper
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.OnItemClickListener
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.common.utils.ToastUtils
@@ -63,6 +64,10 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
             if (mScanResultAdapter.allDataList.none { it.firstJunkInfo.isAllchecked }) {
                 ToastUtils.showShort("至少选择一个APP进行加速")
             } else {
+                //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+                if (PreferenceUtil.getCleanTime()) {
+                    PreferenceUtil.saveCleanTime()
+                }
                 ScanDataHolder.getInstance().junkResultWrapperList = mScanResultAdapter.allDataList.filter { it.firstJunkInfo.isAllchecked }
                 val intent = Intent(this@SpeedUpResultActivity, SpeedUpClearActivity::class.java)
                 intent.putExtra(SpeedUpClearActivity.SPEED_UP_NUM, randomValue)

@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.utils.CollectionUtils
 import com.xiaoniu.cleanking.utils.FileUtils
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class SpeedUpResultPresenter @Inject constructor(activity: RxAppCompatActivity) : RxPresenter<SpeedUpResultActivity, MainModel>() {
     var mActivity: RxAppCompatActivity = activity
@@ -54,7 +55,13 @@ class SpeedUpResultPresenter @Inject constructor(activity: RxAppCompatActivity) 
                     !FileUtils.isSystemApK(it.appPackageName)
                 }
                 val max = if (data.size >= appSize) appSize else data.size
-                junkContentMap[key] = data.slice(IntRange(0, max-1)) as ArrayList<FirstJunkInfo>
+
+                val newData= ArrayList<FirstJunkInfo>()
+                for(index in 0 until  max){
+                  newData.add(data[index])
+                }
+                junkContentMap[key] = newData
+                //junkContentMap[key] = data.slice(IntRange(0, max-1)) as ArrayList<FirstJunkInfo>
             }
         }
     }

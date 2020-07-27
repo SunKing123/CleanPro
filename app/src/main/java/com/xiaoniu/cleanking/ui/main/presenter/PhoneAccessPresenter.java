@@ -247,7 +247,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         mRandomSize = NumberUtils.mathRandomInt(5, maxSize);
         startNum = 1;
         endNum = mRandomSize;
-        ValueAnimator anim = ValueAnimator.ofInt(startNum, mRandomSize);
+        ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
         anim.setDuration(2000);
         anim.setInterpolator(new DecelerateInterpolator());
         canPlaying = true;

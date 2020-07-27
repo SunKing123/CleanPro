@@ -23,6 +23,8 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
 
+import java.text.DecimalFormat;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -113,7 +115,7 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
             }
         }
         tvPowerCapacity.setText(getString(R.string.power_num_capacity, String.valueOf(easyBatteryMod.getCapacity())));
-        tvPowerVoltage.setText(getString(R.string.power_num_voltage, String.valueOf(easyBatteryMod.getBatteryVoltage())));
+        tvPowerVoltage.setText(getString(R.string.power_num_voltage, new DecimalFormat(".0").format(Float.valueOf(easyBatteryMod.getBatteryVoltage()) / 1000f)));
         tvPowerTemp.setText(getString(R.string.power_num_temp, String.valueOf(easyBatteryMod.getBatteryTemperature())));
         tvPowerApp.setText(getString(R.string.power_num_app, String.valueOf(NumberUtils.mathRandomInt(5, 15))));
 
