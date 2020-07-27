@@ -26,7 +26,7 @@ public class BackGroundPulseTimer {
     }
 
     public void startTimer() {
-        timer.interval(15000, this::callBack);
+        timer.interval(1000, this::callBack);
     }
 
     private void callBack(long number) {
@@ -40,7 +40,7 @@ public class BackGroundPulseTimer {
             observers.add(observer);
             observer.onCreate();
         }
-        return this;
+        return backGroundPulseTimer;
     }
 
     private void unRegisterAll() {
