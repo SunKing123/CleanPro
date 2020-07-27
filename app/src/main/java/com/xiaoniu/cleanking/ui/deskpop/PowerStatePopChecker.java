@@ -32,8 +32,9 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
     long startTime;
     private BroadcastReceiver batteryReceiver;
     private int mBatteryPower = 50;  //当前电量监控
-    private int temp = 30;           //点前电池温度
+
     private boolean isCharged = false;  //是否为充电状态
+
     @Override
     public void onCreate() {
         startTime = System.currentTimeMillis();
@@ -41,13 +42,7 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
 
     @Override
     public void onPulse(long progress) {
-//        ToastUtils.showShort("心跳");
         checkCharge();
-//        long diff = System.currentTimeMillis() - startTime;
-//        diff = diff / 1000;
-//        if (diff > 10) {
-//            checkAndPop();
-//        }
     }
 
     private void checkAndPop() {
@@ -75,15 +70,11 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
                 batteryReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        //获取当前电量，如未获取具体数值，则默认为0
-                        int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                        //获取最大电量，如未获取到具体数值，则默认为100
-                        int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-                        mBatteryPower = (batteryLevel * 100 / batteryScale);
-                        //获取当前电池温度
-                        temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-                        int i = temp / 10;
-                        temp = i > 0 ? i : 30 + NumberUtils.mathRandomInt(1, 3);
+//                        //获取当前电量，如未获取具体数值，则默认为0
+//                        int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+//                        //获取最大电量，如未获取到具体数值，则默认为100
+//                        int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+//                        mBatteryPower = (batteryLevel * 100 / batteryScale);
                     }
                 };
             }
@@ -98,7 +89,7 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
                 wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
             }
 
-//            Logger.i(SystemUtils.getProcessName(this) + "zz--" + (usb ? "usb" : ac ? "ac" : wireless ? "wireless" : ""));
+//          Logger.i(SystemUtils.getProcessName(this) + "zz--" + (usb ? "usb" : ac ? "ac" : wireless ? "wireless" : ""));
             isCharged = usb || ac || wireless;
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,22 +97,22 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
         }
 
         //充电状态变更
-        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged ) {
+        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged) {
             startPowerInfo();
-        } else if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged ) {//拔电状态变更
+        } else if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged) {//拔电状态变更
         }
         if (!BuildConfig.SYSTEM_EN.contains("prod"))
             ToastUtils.showLong("charge--" + (isCharged ? "充电中" : "未充电"));
 //          Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
-            //更新sp当前充电状态
-            PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
+        //更新sp当前充电状态
+        PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
 
     }
 
     /**
      * 跳转电池页面；
      */
-    public void startPowerInfo(){
+    public void startPowerInfo() {
         if (AppLifecycleUtil.isAppOnForeground(AppApplication.getInstance())) {
             return;
         }
