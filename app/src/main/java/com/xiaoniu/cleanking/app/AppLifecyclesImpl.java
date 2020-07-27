@@ -623,15 +623,15 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     PreferenceUtil.saveHomeBackTime();
 
                     BackGroundPulseTimer timer = BackGroundPulseTimer.getInstance();
-
                     if (DeskPopConfig.isStateOpen()) {
                         timer.register(new PhoneStatePopChecker());
                     }
                     if (DeskPopConfig.isBatteryOpen()) {
                         timer.register(new PowerStatePopChecker());
                     }
-
-                    timer.startTimer();
+                    if (timer.hasObserver()) {
+                        timer.startTimer();
+                    }
                 }
             }
         });
