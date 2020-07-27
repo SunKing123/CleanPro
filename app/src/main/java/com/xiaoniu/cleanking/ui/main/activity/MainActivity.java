@@ -705,7 +705,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (TextUtils.isEmpty(popEventModel.getAction()))
             return;
         if (popEventModel.getAction().equals("wifi")) {
-            LogUtils.e("=======收到了wifi的EventBus");
             Intent screenIntent = new Intent(this, ExternalSceneActivity.class);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -718,7 +717,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             } catch (PendingIntent.CanceledException e) {
                 e.printStackTrace();
             }
-        }else if(popEventModel.getAction().equals("power")){
+        } else if (popEventModel.getAction().equals("power")) {
             Intent powerIntent = new Intent(this, BatteryPopActivity.class);
             powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

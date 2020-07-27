@@ -502,7 +502,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
         <activity
-            android:name=".ui.external.ExternalPhoneStateActivity"
+            android:name="com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:hardwareAccelerated="true"

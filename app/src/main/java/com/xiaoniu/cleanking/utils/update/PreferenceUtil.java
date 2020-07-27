@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
+import com.xiaoniu.cleanking.ui.main.bean.WifiEntity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -1726,6 +1727,36 @@ public class PreferenceUtil {
     public static Long getLastScanRubbishSize() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_LOCAL_PUSH_CONFIG, Context.MODE_PRIVATE);
         return sharedPreferences.getLong(SpCacheConfig.KEY_LAST_BACKGROUND_SCAN_SIZE, 0L);
+    }
+
+
+    //更新当天WIFI插屏弹出的次数
+    public static void updatePopupWifi(boolean isRest) {
+        long currentTime = System.currentTimeMillis();
+        WifiEntity wifiEntity;
+        if (isRest) {
+            wifiEntity = new WifiEntity(currentTime, 1);
+        } else {
+            wifiEntity = getPopupWifi();
+            wifiEntity.setPopupCount(wifiEntity.getPopupCount() + 1);
+        }
+        wifiEntity.setPopupTime(currentTime);
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(SpCacheConfig.KEY_LAST_POPUP_WIFI, new Gson().toJson(wifiEntity)).apply();
+    }
+
+
+    //获取当天wifi插屏的次数
+    public static WifiEntity getPopupWifi() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString(SpCacheConfig.KEY_LAST_POPUP_WIFI, "");
+        WifiEntity entity;
+        if (TextUtils.isEmpty(json)) {
+            entity = new WifiEntity(System.currentTimeMillis(), 0);
+        } else {
+            entity = new Gson().fromJson(json, WifiEntity.class);
+        }
+        return entity;
     }
 
 
