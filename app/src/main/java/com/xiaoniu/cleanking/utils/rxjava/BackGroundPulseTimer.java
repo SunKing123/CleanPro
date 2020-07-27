@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.utils.rxjava;
 
+import com.xiaoniu.cleanking.utils.LogUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +12,9 @@ import java.util.List;
  */
 public class BackGroundPulseTimer {
 
-    List<BackGroundIPulseObserver> observers = new ArrayList<>();
-    RxTimer timer;
+    private List<BackGroundIPulseObserver> observers = new ArrayList<>();
+    private RxTimer timer;
+
     private static BackGroundPulseTimer backGroundPulseTimer;
 
     public static BackGroundPulseTimer getInstance() {
@@ -26,12 +29,15 @@ public class BackGroundPulseTimer {
     }
 
     public void startTimer() {
-        timer.interval(15000, this::callBack);
+        timer.interval(2000,this::callBack);
+        LogUtils.e("===============pulseTimer  startTimer()==========");
+
     }
 
     private void callBack(long number) {
         for (BackGroundIPulseObserver observer : observers) {
             observer.onPulse(number);
+            LogUtils.e("===============pulseTimer  callBack()==========");
         }
     }
 
@@ -40,7 +46,12 @@ public class BackGroundPulseTimer {
             observers.add(observer);
             observer.onCreate();
         }
+        LogUtils.e("===============pulseTimer  register()==========");
         return this;
+    }
+
+    public void unRegister(BackGroundIPulseObserver observer) {
+        observers.remove(observer);
     }
 
     private void unRegisterAll() {
@@ -48,11 +59,11 @@ public class BackGroundPulseTimer {
             observer.onDestroy();
             observers.remove(observer);
         }
+        LogUtils.e("===============pulseTimer  unRegisterAll()==========");
     }
 
     public void destroy() {
         unRegisterAll();
         timer.cancel();
-        timer = null;
     }
 }
