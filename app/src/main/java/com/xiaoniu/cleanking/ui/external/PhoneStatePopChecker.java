@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.ui.external;
 
+import com.jess.arms.base.App;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -27,7 +29,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver{
     }
 
     private void checkAndPop(){
-        ToastUtils.showShort("弹出手机状态activity");
+        ExternalPhoneStateActivity.start(AppApplication.getInstance());
     }
 
     @Override
