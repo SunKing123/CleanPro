@@ -20,10 +20,14 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
     @Override
     public void onPulse(long progress) {
+        int time=DeskPopConfig.getStateConfig().getDisplayTime();
+        if(time==0){
+            return;
+        }
         long diff = System.currentTimeMillis() - startTime;
         diff = diff / 1000;
         diff = diff / 60;
-        if (diff > 30) {
+        if (diff >=time) {
             checkAndPop();
         }
     }

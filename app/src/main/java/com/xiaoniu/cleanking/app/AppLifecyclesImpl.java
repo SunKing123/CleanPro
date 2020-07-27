@@ -71,7 +71,7 @@ import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.PowerStatePopChecker;
 import com.xiaoniu.cleanking.ui.deskpop.state.PhoneStatePopChecker;
-import com.xiaoniu.cleanking.ui.deskpop.state.PhoneStateSwitch;
+import com.xiaoniu.cleanking.ui.deskpop.state.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
@@ -623,10 +623,15 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     PreferenceUtil.saveHomeBackTime();
 
                     BackGroundPulseTimer timer = BackGroundPulseTimer.getInstance();
-                    if (PhoneStateSwitch.isOpen()) {
+
+                    if (DeskPopConfig.isStateOpen()) {
                         timer.register(new PhoneStatePopChecker());
                     }
-                    timer.register(new PowerStatePopChecker()).startTimer();
+                    if (DeskPopConfig.isBatteryOpen()) {
+                        timer.register(new PowerStatePopChecker());
+                    }
+
+                    timer.startTimer();
                 }
             }
         });
