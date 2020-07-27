@@ -10,15 +10,19 @@ import android.os.Build;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -116,7 +120,19 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
         if (AppLifecycleUtil.isAppOnForeground(AppApplication.getInstance())) {
             return;
         }
+        int showTimes = 0;
+        int displayTim = 0;
+        InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.PAGE_DESK_BATTERY_INFO);
+        if (null != dataBean && dataBean.isOpen()) {
+            showTimes = dataBean.getShowRate();
+            displayTim = dataBean.getDisplayTime();
+            long lastShowTime = MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, 0);
+            int lastShowNum = MmkvUtil.getInt(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, 0);
+            if (lastShowNum <= showTimes && (System.currentTimeMillis() - lastShowTime) <= 1000 * 60 * displayTim) {
+                EventBus.getDefault().post(new PopEventModel("power"));
+            }
 
-        EventBus.getDefault().post(new PopEventModel("power"));
+        }
+
     }
 }
