@@ -80,6 +80,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
+import com.xiaoniu.cleanking.ui.notifition.NoticicationInfoCheker;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.MiitHelper;
@@ -542,6 +543,9 @@ public class AppLifecyclesImpl implements AppLifecycles {
         if (DeskPopConfig.getInstance().isBatteryCanPop()) {
             timer.register(new PowerStatePopChecker());
         }
+
+        timer.register(new NoticicationInfoCheker());
+
         if (timer.hasObserver()) {
             timer.startTimer();
         }

@@ -154,8 +154,9 @@ public interface Points {
 
         String CLICK_BATTERY_QUANTITY_BTN_CODE="electricity_quantity_button_click";
         String CLICK_BATTERY_QUANTITY_BTN_NAME="电量按钮点击";
-        
-        String CLICK_CLOSE="";
+
+        String CLICK_CLOSE_CODE="close_click";
+        String CLICK_CLOSE_NAME="手机状态插屏关闭按钮点击";
     }
 
 }

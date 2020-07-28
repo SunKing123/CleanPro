@@ -17,6 +17,8 @@ import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.utils.NumberUtils
+import com.xiaoniu.common.utils.Points
+import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
 
 
@@ -58,6 +60,9 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         initStorageView()
         initCoolView()
         initBatteryView()
+
+        StatisticsUtils.customTrackEvent(Points.ExternalDevice.MEET_CONDITION_CODE,Points.ExternalDevice.MEET_CONDITION_NAME,"",Points.ExternalDevice.PAGE)
+        StatisticsUtils.customTrackEvent(Points.ExternalDevice.PAGE_EVENT_CODE,Points.ExternalDevice.PAGE_EVENT_NAME,"",Points.ExternalDevice.PAGE)
     }
 
     /**
@@ -122,6 +127,9 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 一键加速
      */
     private fun goCleanMemory() {
+
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_MEMORY_BTN_CODE,Points.ExternalDevice.CLICK_MEMORY_BTN_NAME,"",Points.ExternalDevice.PAGE)
+
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
         var intent = Intent(mContext, PhoneAccessActivity::class.java)
@@ -134,6 +142,9 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 垃圾清理
      */
     private fun goCleanStorage() {
+
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE,Points.ExternalDevice.CLICK_STORAGE_BTN_NAME,"",Points.ExternalDevice.PAGE)
+
         startActivity(NowCleanActivity::class.java)
         mActivity.finish()
     }
@@ -142,6 +153,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 手机降温
      */
     private fun goCool() {
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE,Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME,"",Points.ExternalDevice.PAGE)
+
         ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation()
         mActivity.finish()
     }
@@ -150,6 +163,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 电池优化
      */
     private fun goCleanBattery() {
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_CODE,Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_NAME,"",Points.ExternalDevice.PAGE)
         startActivity(PhoneSuperPowerActivity::class.java)
         mActivity.finish()
     }

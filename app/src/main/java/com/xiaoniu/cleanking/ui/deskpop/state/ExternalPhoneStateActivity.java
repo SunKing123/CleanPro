@@ -9,6 +9,8 @@ import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
+import com.xiaoniu.common.utils.Points;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,18 +46,24 @@ public class ExternalPhoneStateActivity extends BaseActivity {
         DeskPopConfig.getInstance().saveAndDecreaseStatePopNum();
     }
 
-    private void initView(){
-        sceneClose.setOnClickListener(v -> finish());
+    private void initView() {
+        sceneClose.setOnClickListener(v -> close());
     }
 
-    private void initFragment(){
+    private void close() {
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_CLOSE_CODE, Points.ExternalDevice.CLICK_CLOSE_NAME, "", Points.ExternalDevice.PAGE);
+        finish();
+    }
+
+
+    private void initFragment() {
         mManager.beginTransaction()
                 .add(R.id.frame_layout, new ExternalPhoneStateFragment())
                 .commitAllowingStateLoss();
 
     }
 
-    public static void start(Context context){
+    public static void start(Context context) {
         Intent screenIntent = new Intent(context, ExternalPhoneStateActivity.class);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

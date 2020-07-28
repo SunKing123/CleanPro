@@ -724,7 +724,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-
     private void startPopActivity(Class<? extends AppCompatActivity> target) {
         Intent powerIntent = new Intent(this, target);
         powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
