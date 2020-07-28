@@ -634,10 +634,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
-//                    if (!AndroidUtil.isFastDoubleBtnClick(2000)) {
+                    view_lottie_top.startAnimation();
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
-//                    }
                 }
             } else { //清理结果五分钟以内
                 String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
