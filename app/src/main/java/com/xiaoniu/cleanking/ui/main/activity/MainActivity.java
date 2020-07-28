@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
+import com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushDispatcher;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -713,7 +714,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if (popEventModel.getAction().equals("power")) {
             startPopActivity(BatteryPopActivity.class);
         } else if (popEventModel.getAction().equals("deviceInfo")) {
-            startPopActivity(BatteryPopActivity.class);
+            startPopActivity(ExternalPhoneStateActivity.class);
         } else if (popEventModel.getAction().equals("localPush")) {
             LocalPushDispatcher dispatcher = new LocalPushDispatcher(this);
             dispatcher.showLocalPushDialog();
