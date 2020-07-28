@@ -194,7 +194,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="30C"
-                android:textColor="@color/color_262626"
+                android:textColor="@color/home_content_red"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -220,7 +220,7 @@
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="5个"
-                android:textColor="@color/color_262626"
+                android:textColor="@color/home_content_red"
                 android:textSize="16sp" />
         </LinearLayout>
 

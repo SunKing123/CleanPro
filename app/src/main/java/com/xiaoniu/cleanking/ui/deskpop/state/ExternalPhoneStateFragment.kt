@@ -29,7 +29,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private var low: Array<Int> = arrayOf(0, 20)
     private var medium: Array<Int> = arrayOf(21, 60)
     private var high: Array<Int> = arrayOf(80, 99)
-
+    private var TEMPERATURE_VPT=37
     private lateinit var easyMemoryMod: EasyMemoryMod
     private lateinit var easyBatteryMod: EasyBatteryMod
 
@@ -65,11 +65,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun initMemoryView() {
         var total = easyMemoryMod.getTotalRAM().toFloat()
-        var available = easyMemoryMod.getAvailableRAM().toFloat()
-        var percent = (available.toDouble() / total.toDouble()) * 100
-        percent = 100 - percent
+        var used =total- easyMemoryMod.getAvailableRAM().toFloat()
+        var percent = (used.toDouble() / total.toDouble()) * 100
         tv_memory_title.setText("运行总内存：" + FileUtils.getUnitGB(total))
-        tv_memory_content.setText("可用运行内存：" + FileUtils.getUnitGB(available))
+        tv_memory_content.setText("已用运行内存：" + FileUtils.getUnitGB(used))
         tv_memory_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
         updateBtnBackGround(btn_clean_memory, percent.toInt())
@@ -80,12 +79,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun initStorageView() {
         var total = easyMemoryMod.getTotalInternalMemorySize().toFloat()
-        var available = easyMemoryMod.getAvailableInternalMemorySize().toFloat()
-        var percent = (available.toDouble() / total.toDouble()) * 100
-        percent = 100 - percent
-
+        var used =total- easyMemoryMod.getAvailableInternalMemorySize().toFloat()
+        var percent = (used.toDouble() / total.toDouble()) * 100
         tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total))
-        tv_storage_content.setText("可用内部存储：" + FileUtils.getUnitGB(available))
+        tv_storage_content.setText("可用内部存储：" + FileUtils.getUnitGB(used))
         tv_storage_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
         updateBtnBackGround(btn_clean_storage, percent.toInt())
@@ -177,7 +174,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     }
 
     /**
-     *  todo 图片需要换
      * 更新图标颜色
      */
     private fun updateMemoryOrStorageImage(image: ImageView, percent: Int) {
@@ -188,12 +184,12 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         } else if (inTheRange(percent, high)) {
             image.setImageResource(R.drawable.icon_memory_percent_high)
         } else {
-            image.setImageResource(R.drawable.icon_memory_percent_max)
+            image.setImageResource(R.drawable.icon_memory_percent_high)
         }
     }
 
     private fun updateCoolImage(temperature: Float) {
-        if (temperature > 37) {
+        if (temperature > TEMPERATURE_VPT) {
             image_temperature.setImageResource(R.drawable.icon_temperature_percent_high)
         } else {
             image_temperature.setImageResource(R.drawable.icon_temperature_percent_normal)
@@ -201,14 +197,13 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     }
 
     private fun updateBtn(temperature: Float) {
-        if (temperature > 37) {
+        if (temperature > TEMPERATURE_VPT) {
             btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_red_bg)
         } else {
             btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_green_bg)
         }
     }
 
-    //todo 图片需要换
     private fun updateBatteryImage(percent: Int) {
         if (inTheRange(percent, low)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_low)
