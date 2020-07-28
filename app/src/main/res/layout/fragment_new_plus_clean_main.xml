@@ -101,8 +101,7 @@
                 <com.xiaoniu.cleanking.widget.OneKeyCircleBtnView
                     android:id="@+id/view_lottie_top"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="300dp"/>
+                    android:layout_height="wrap_content"/>
 
             </RelativeLayout>
 

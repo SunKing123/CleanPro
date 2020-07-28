@@ -53,7 +53,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
+import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -73,7 +73,7 @@ public class DebugActivity extends BaseActivity {
     private LottieAnimationView lottieAnimationView;
     private ImageView icon_app;
     private TextView deviceTempcontent;
-    private OneKeyCircleButtonView oneKeyCircleButtonView;
+    private OneKeyCircleBtnView oneKeyCircleButtonView;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -123,6 +123,7 @@ public class DebugActivity extends BaseActivity {
 ////        String test02 ="cleankingmajor://com.hellogeek.cleanking/jump?isfullscreen=1&amp;need_login=&amp;url=http%3A%2F%2F192.168.85.61";
 //        SchemeProxy.openScheme(this, test);
 //        oneKeyCircleButtonView.startLottie();
+        lottieAnimationView.setMinAndMaxFrame(0,33);
         lottieAnimationView.setAnimation("home_top_scan/state01/data.json");
         lottieAnimationView.setImageAssetsFolder("home_top_scan/state01/images");
         lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {

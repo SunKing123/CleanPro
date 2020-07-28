@@ -10,12 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@color/green_02D086"
         android:scaleType="centerCrop"
         app:lottie_autoPlay="true"
         app:lottie_fileName="home_top_scan/state01/data.json"
         app:lottie_imageAssetsFolder="home_top_scan/state01/images/"
-        app:lottie_loop="true" />
+       />
 
 
     <ImageView
@@ -55,6 +54,7 @@
         android:id="@+id/rel_bubble"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:visibility="gone">
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
