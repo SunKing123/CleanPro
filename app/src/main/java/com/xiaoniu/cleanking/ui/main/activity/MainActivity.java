@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
+import com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -720,6 +721,18 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 e.printStackTrace();
             }
         } else if (popEventModel.getAction().equals("power")) {
+            Intent powerIntent = new Intent(this, BatteryPopActivity.class);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+            PendingIntent intent = PendingIntent.getActivity(this, 0, powerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            try {
+                intent.send();
+            } catch (PendingIntent.CanceledException e) {
+                e.printStackTrace();
+            }
+        }else if (popEventModel.getAction().equals("deviceInfo")) {
             Intent powerIntent = new Intent(this, BatteryPopActivity.class);
             powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

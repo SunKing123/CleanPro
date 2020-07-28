@@ -156,7 +156,11 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
      * 第一次启动权限说明
      */
     private void permissionRemind() {
+        //引导使用说明埋点
+        StatisticsUtils.customTrackEvent("use_guide_page_custom", "使用指引页曝光", "use_guide_page", "use_guide_page");
         new LaunchPermissionRemindDialog(this).setLaunchPermissionListener(() -> {
+            StatisticsUtils.trackClick("experience_it_now_button_click", "立即体验按钮点击", "use_guide_page", "use_guide_page");
+
             checkReadPermission();
             PreferenceUtil.saveFirstOpenApp();
         }).show();
