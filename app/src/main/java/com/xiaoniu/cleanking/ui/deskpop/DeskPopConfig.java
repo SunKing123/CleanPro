@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.deskpop;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.ExternalPopNumEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -49,6 +50,9 @@ public class DeskPopConfig {
         return stateConfig.isOpen();
     }
 
+    public int getStateDisplayTime(){
+       return stateConfig.getDisplayTime();
+    }
     /**
      * 手机状态是否可以弹出
      * @return
@@ -118,5 +122,48 @@ public class DeskPopConfig {
             batteryConfig.setOpen(false);
         }
         return batteryConfig;
+    }
+
+    /**
+     * 电量状态是否可以弹出
+     * @return
+     */
+    public boolean isBatteryCanPop() {
+        if(isBatteryOpen()){
+            ExternalPopNumEntity externalPopNumEntity= getLastSameDayExternalBatteryPop();
+            return externalPopNumEntity.getPopupCount()>0;
+        }
+        return false;
+    }
+
+    /**
+     * 获取服务端配置，每日可弹次数。
+     * @return
+     */
+    public int getBatteryPopCount(){
+        return batteryConfig.getShowRate();
+    }
+
+    /**
+     * 存储递减弹框次数
+     */
+    public void saveAndDecreaseBatteryPopNum() {
+        ExternalPopNumEntity externalPopNumEntity= getLastSameDayExternalBatteryPop();
+        externalPopNumEntity.setPopupTime(System.currentTimeMillis());
+        externalPopNumEntity.setPopupCount(externalPopNumEntity.getPopupCount()-1);
+        PreferenceUtil.saveBatteryExternalPopNumEntity(externalPopNumEntity);
+    }
+
+    /**
+     * 获取相同天内的弹框次数信息
+     * @return
+     */
+    private ExternalPopNumEntity getLastSameDayExternalBatteryPop(){
+        ExternalPopNumEntity externalPopNumEntity= PreferenceUtil.getBatteryExternalPopNumEntity();
+        if(externalPopNumEntity==null||!DateUtils.isSameDay(externalPopNumEntity.getPopupTime(), System.currentTimeMillis())){
+            //如果已隔天，则重新开始计算弹出次数
+            externalPopNumEntity=new ExternalPopNumEntity(System.currentTimeMillis(),getBatteryPopCount());
+        }
+        return externalPopNumEntity;
     }
 }

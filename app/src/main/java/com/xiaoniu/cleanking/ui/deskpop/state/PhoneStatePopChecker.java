@@ -26,18 +26,15 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
     @Override
     public void onPulse(long progress) {
-        int displayTime= DeskPopConfig.getStateConfig().getDisplayTime();
+        int displayTime= DeskPopConfig.getInstance().getStateDisplayTime();
         if(displayTime==0){
             unRegister();
             return;
         }
-        long diff = System.currentTimeMillis() - startTime;
-        diff = diff / 1000;
-        diff = diff / 60;
+        long diffMinutes = (System.currentTimeMillis() - startTime)/1000/60;
+        boolean canPop=diffMinutes >=displayTime;
 
-        boolean canPop=diff >=displayTime;
-
-        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diff+"    displayTime="+displayTime);
+        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diffMinutes+"    displayTime="+displayTime);
         if (canPop) {
             checkAndPop();
         }

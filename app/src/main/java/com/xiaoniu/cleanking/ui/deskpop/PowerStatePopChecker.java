@@ -112,7 +112,7 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
         //更新sp当前充电状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
     }
-    
+
     /**
      * 跳转电池页面；
      */
@@ -120,15 +120,12 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
         if (AppLifecycleUtil.isAppOnForeground(AppApplication.getInstance())) {
             return;
         }
-        int showTimes = 0;
         int displayTim = 0;
         InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.PAGE_DESK_BATTERY_INFO);
-        if (null != dataBean && dataBean.isOpen()) {
-            showTimes = dataBean.getShowRate();
+        if (DeskPopConfig.getInstance().isBatteryCanPop()) {
             displayTim = dataBean.getDisplayTime();
             long lastShowTime = MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, 0);
-            int lastShowNum = MmkvUtil.getInt(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, 0);
-            if (lastShowNum < showTimes && (System.currentTimeMillis() - lastShowTime) >= 1000 * 60 * displayTim) {
+            if ((System.currentTimeMillis() - lastShowTime) >= 1000 * 60 * displayTim) {
                 EventBus.getDefault().post(new PopEventModel("power"));
             }
         }

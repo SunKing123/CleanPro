@@ -1779,6 +1779,26 @@ public class PreferenceUtil {
         return entity;
     }
 
+    /**
+     * 保存手机电量信息弹框次数信息
+     * @param externalPopNumEntity
+     */
+    public static void saveBatteryExternalPopNumEntity(ExternalPopNumEntity externalPopNumEntity) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(SpCacheConfig.KEY_LAST_POPUP_BATTERY_INFO, new Gson().toJson(externalPopNumEntity)).apply();
+    }
+
+    /**
+     * 获取手机电量信息弹框次数信息
+     */
+    public static ExternalPopNumEntity getBatteryExternalPopNumEntity() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString(SpCacheConfig.KEY_LAST_POPUP_BATTERY_INFO, "");
+        ExternalPopNumEntity entity;
+        entity = new Gson().fromJson(json, ExternalPopNumEntity.class);
+        return entity;
+    }
+
 
     //保存最近一次操作记录
     public static void saveCleanLog(String cleanlog) {

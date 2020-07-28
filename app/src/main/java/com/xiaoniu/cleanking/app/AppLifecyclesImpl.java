@@ -569,7 +569,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     MmkvUtil.saveInt("isback", 0);
                     LogUtils.i("-cgName-----进入前台");
 
-                    BackGroundPulseTimer.getInstance().destroy();
+                    destroyBackgroundTimer();
 
                 } else {//非当前主进程
                     return;
@@ -620,21 +620,34 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     MmkvUtil.saveInt("isback", 1);
                     PreferenceUtil.saveHomeBackTime();
 
-                    BackGroundPulseTimer timer = BackGroundPulseTimer.getInstance();
-                    if (DeskPopConfig.getInstance().isStateCanPop()) {
-                        timer.register(new PhoneStatePopChecker());
-                    }
-                    if (DeskPopConfig.getInstance().isBatteryOpen()) {
-                        timer.register(new PowerStatePopChecker());
-                    }
-                    if (timer.hasObserver()) {
-                        timer.startTimer();
-                    }
+                    startBackgroundTimer();
                 }
             }
         });
     }
 
+    /**
+     * 启动后台心跳
+     */
+    private void startBackgroundTimer(){
+        BackGroundPulseTimer timer = BackGroundPulseTimer.getInstance();
+        if (DeskPopConfig.getInstance().isStateCanPop()) {
+            timer.register(new PhoneStatePopChecker());
+        }
+        if (DeskPopConfig.getInstance().isBatteryCanPop()) {
+            timer.register(new PowerStatePopChecker());
+        }
+        if (timer.hasObserver()) {
+            timer.startTimer();
+        }
+    }
+
+    /**
+     * 关闭后台心跳
+     */
+    private void destroyBackgroundTimer(){
+        BackGroundPulseTimer.getInstance().destroy();
+    }
 
     public static void post(Runnable runnable) {
         if (sHandler != null && runnable != null) {
