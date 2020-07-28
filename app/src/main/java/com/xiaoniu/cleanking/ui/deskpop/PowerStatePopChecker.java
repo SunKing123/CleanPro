@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -126,6 +127,7 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
             displayTim = dataBean.getDisplayTime();
             long lastShowTime = MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, 0);
             if ((System.currentTimeMillis() - lastShowTime) >= 1000 * 60 * displayTim) {
+                StatisticsUtils.customTrackEvent("charging_plug_screen_meets _opportunity", "充电插屏满足时机", "charging_plug_screen", "charging_plug_screen");
                 EventBus.getDefault().post(new PopEventModel("power"));
             }
         }
