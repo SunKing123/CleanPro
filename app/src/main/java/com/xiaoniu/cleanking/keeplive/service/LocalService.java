@@ -43,7 +43,6 @@ import com.xiaoniu.cleanking.keeplive.KeepAliveRuning;
 import com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig;
 import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.config.RunMode;
-import com.xiaoniu.cleanking.keeplive.receive.NetWorkStateReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
@@ -79,7 +78,6 @@ public final class LocalService extends Service {
     private OnepxReceiver mOnepxReceiver;
     private ScreenStateReceiver screenStateReceiver;
     private BroadcastReceiver batteryReceiver;
-    private NetWorkStateReceiver netWorkStateReceiver;
 
     private boolean isPause = true;//控制暂停
     private MediaPlayer mediaPlayer;
@@ -161,8 +159,6 @@ public final class LocalService extends Service {
         }
         //定时循环任务_位置注意
         sendTimingReceiver(intent, !(null == mOnepxReceiver));
-        //网络状态监听
-        netWorkStateListener();
         //像素保活
         if (mOnepxReceiver == null) {
             mOnepxReceiver = new OnepxReceiver();
@@ -200,44 +196,7 @@ public final class LocalService extends Service {
         } catch (Exception e) {
             Log.i("HideForegroundService--", e.getMessage());
         }
-        if (!isExeTask || System.currentTimeMillis() - runTime > 15 * 1000) {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
-            //过审开关打开状态
-            //!PreferenceUtil.isShowAD()广告展示状态
-            if (TextUtils.equals(auditSwitch, "1")) {
-                String adSwitch = MmkvUtil.getInsertSwitchInfo();
-                //应用植入插屏全屏广告
-                InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_IMPLANTATION_FULL_SCREEN, adSwitch);
-                if (dataBean != null && dataBean.isOpen()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        if (PermissionUtils.isSecurityPermissionOpen(this)) {
-                            JsonToBean(dataBean.getShowRate(), dataBean.getDisplayTime());
-                        }
-                    } else {
-                        JsonToBean(dataBean.getShowRate(), dataBean.getDisplayTime());
-                    }
-                }
-            }
-        }
-        String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
-        //过审开关打开状态
-        //!PreferenceUtil.isShowAD()广告展示状态
-        if (TextUtils.equals(auditSwitch, "1")) {
-            String adSwitch = MmkvUtil.getInsertSwitchInfo();
-            //应用植入插屏全屏广告
-            InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_DESK_ICON, adSwitch);
-            if (dataBean != null && dataBean.isOpen()) {
-                int min = 120;
-                if (MmkvUtil.getBool("isExecute", false)) {
-                    min = dataBean.getShowRate();
-                } else {
-                    min = dataBean.getDisplayTime();
-                }
-                isTimeSucess(min);
-            }
-        }
-
-
+//        otherAppInsertAd();
         if (mKeepAliveRuning == null)
             mKeepAliveRuning = new KeepAliveRuning();
         mKeepAliveRuning.onRuning();
@@ -500,17 +459,7 @@ public final class LocalService extends Service {
         }
     }
 
-    /**
-     * 注册网络状态监听
-     */
-    public void netWorkStateListener() {
-        if (netWorkStateReceiver == null) {
-            netWorkStateReceiver = new NetWorkStateReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            registerReceiver(netWorkStateReceiver, filter);
-        }
-    }
+
 
     @Override
     public void onDestroy() {
@@ -521,8 +470,6 @@ public final class LocalService extends Service {
         if (batteryReceiver != null)
             unregisterReceiver(batteryReceiver);
 
-        if (netWorkStateReceiver != null)
-            unregisterReceiver(netWorkStateReceiver);
         if (mKeepAliveRuning != null) {
             mKeepAliveRuning.onStop();
         }
@@ -911,6 +858,48 @@ public final class LocalService extends Service {
             }
         }
         return false;
+    }
+
+
+    public void otherAppInsertAd(){
+        if (!isExeTask || System.currentTimeMillis() - runTime > 15 * 1000) {
+            String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
+            //过审开关打开状态
+            //!PreferenceUtil.isShowAD()广告展示状态
+            if (TextUtils.equals(auditSwitch, "1")) {
+                String adSwitch = MmkvUtil.getInsertSwitchInfo();
+                //应用植入插屏全屏广告
+                InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_IMPLANTATION_FULL_SCREEN, adSwitch);
+                if (dataBean != null && dataBean.isOpen()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (PermissionUtils.isSecurityPermissionOpen(this)) {
+                            JsonToBean(dataBean.getShowRate(), dataBean.getDisplayTime());
+                        }
+                    } else {
+                        JsonToBean(dataBean.getShowRate(), dataBean.getDisplayTime());
+                    }
+                }
+            }
+        }
+        String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
+        //过审开关打开状态
+        //!PreferenceUtil.isShowAD()广告展示状态
+        if (TextUtils.equals(auditSwitch, "1")) {
+            String adSwitch = MmkvUtil.getInsertSwitchInfo();
+            //应用植入插屏全屏广告
+            InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_PAGE_DESK_ICON, adSwitch);
+            if (dataBean != null && dataBean.isOpen()) {
+                int min = 120;
+                if (MmkvUtil.getBool("isExecute", false)) {
+                    min = dataBean.getShowRate();
+                } else {
+                    min = dataBean.getDisplayTime();
+                }
+                isTimeSucess(min);
+            }
+        }
+
+
     }
 
 }
