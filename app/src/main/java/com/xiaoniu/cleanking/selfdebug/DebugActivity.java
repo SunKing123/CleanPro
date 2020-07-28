@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.selfdebug;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ApplicationErrorReport;
 import android.content.BroadcastReceiver;
@@ -121,8 +123,39 @@ public class DebugActivity extends BaseActivity {
 ////        String test02 ="cleankingmajor://com.hellogeek.cleanking/jump?isfullscreen=1&amp;need_login=&amp;url=http%3A%2F%2F192.168.85.61";
 //        SchemeProxy.openScheme(this, test);
 //        oneKeyCircleButtonView.startLottie();
-        lottieAnimationView.setAnimation("charging/charging_state01/data.json");
-        lottieAnimationView.setImageAssetsFolder("charging/charging_state01/images");
+        lottieAnimationView.setAnimation("home_top_scan/state01/data.json");
+        lottieAnimationView.setImageAssetsFolder("home_top_scan/state01/images");
+        lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+//        lottieAnimationView.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                animation.
+//                LogUtils.i("zz--"+animation.getAnimatedFraction());
+//            }
+//        });
+//        lottieAnimationView.setMinAndMaxFrame(10,20);
+//        lottieAnimationView.setmin
         lottieAnimationView.playAnimation();
         lottieAnimationView.setVisibility(View.VISIBLE);
     }
