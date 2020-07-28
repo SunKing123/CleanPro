@@ -850,7 +850,6 @@
         </receiver>
 
         <receiver android:name=".keeplive.receive.TimingReceiver"></receiver>
-        <receiver android:name=".keeplive.receive.NetWorkStateReceiver"></receiver>
 
         <activity android:name=".keeplive.onepx.OnePixelActivity"></activity>
 

@@ -45,7 +45,6 @@ import com.xiaoniu.cleanking.keeplive.config.NotificationUtils;
 import com.xiaoniu.cleanking.keeplive.config.RunMode;
 import com.xiaoniu.cleanking.keeplive.receive.NotificationClickReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.OnepxReceiver;
-import com.xiaoniu.cleanking.keeplive.receive.TimingReceiver;
 import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
@@ -70,14 +69,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.xiaoniu.cleanking.constant.Constant.SCAN_SPACE_LONG;
 import static com.xiaoniu.cleanking.keeplive.config.KeepAliveConfig.SP_NAME;
 
 
 public final class LocalService extends Service {
     private OnepxReceiver mOnepxReceiver;
     private ScreenStateReceiver screenStateReceiver;
-    private BroadcastReceiver batteryReceiver;
+
 
     private boolean isPause = true;//控制暂停
     private MediaPlayer mediaPlayer;
@@ -85,9 +83,6 @@ public final class LocalService extends Service {
     private Handler handler;
     private String TAG = getClass().getSimpleName();
     private KeepAliveRuning mKeepAliveRuning;
-    private int mBatteryPower = 50;  //当前电量监控
-    private int temp = 30;           //点前电池温度
-    private boolean isCharged = false;  //是否为充电状态
 
     @Override
     public void onCreate() {
@@ -103,8 +98,6 @@ public final class LocalService extends Service {
         }
         //默认连接状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.WIFI_STATE, 1);
-
-
     }
 
     @Override
@@ -112,29 +105,7 @@ public final class LocalService extends Service {
         return mBilder;
     }
 
-    //    private AppPackageNameListDB appPackageNameList;
-//    private AppPackageNameListDB.DataBean mDataBean;
-    private int mShowRoate = 0;
-    private int mDispalyTime = 0;
 
-    private void JsonToBean(int showRoate, int dispalyTime) {
-        isExeTask = true;
-        mShowRoate = showRoate;
-        mDispalyTime = dispalyTime;
-        if (GreenDaoManager.getInstance().isAppListNull()) {
-            String json = FileUtils.readJSONFromAsset(this, "applist.json");
-            try {
-                AppPackageNameList appPackageNameList = new Gson().fromJson(json, AppPackageNameList.class);
-                if (appPackageNameList != null) {
-                    for (AppPackageNameListDB appPackageNameListDB : appPackageNameList.getData()) {
-                        GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
-                    }
-                }
-            } catch (Exception e) {
-            }
-        }
-        handler.postDelayed(mTask, 1000);
-    }
 
 
     private boolean isExeTask;
@@ -157,8 +128,6 @@ public final class LocalService extends Service {
             });
             play();
         }
-        //定时循环任务_位置注意
-        sendTimingReceiver(intent, !(null == mOnepxReceiver));
         //像素保活
         if (mOnepxReceiver == null) {
             mOnepxReceiver = new OnepxReceiver();
@@ -282,84 +251,6 @@ public final class LocalService extends Service {
         }
     };
 
-    /**
-     * 启动定时器
-     *
-     * @param intent
-     * @param islaunched 判断是否已经启动
-     */
-    public void sendTimingReceiver(Intent intent, boolean islaunched) {
-        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("heartbeat"))) {//心跳action
-            checkCharge();
-            watchingBattery();
-
-            try {
-                long triggerAtTime = SystemClock.elapsedRealtime() + (SCAN_SPACE_LONG * 1000);
-                Intent i = new Intent(this, TimingReceiver.class);
-                i.putExtra("action", "scan_heart");
-                i.putExtra("temp", temp);
-                i.putExtra("battery", mBatteryPower);
-                i.putExtra("isCharged", isCharged);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent pi = PendingIntent.getBroadcast(this, 0, i, 0);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                } else {
-                    manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if ((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("unlock_screen")))) { //解锁操作action
-            try {
-                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 3000);
-                Intent inten = new Intent(this, TimingReceiver.class);
-                inten.putExtra("action", "unlock_screen");
-                inten.putExtra("temp", temp);
-                inten.putExtra("battery", mBatteryPower);
-                inten.putExtra("isCharged", isCharged);
-                inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent pi = PendingIntent.getBroadcast(this, NumberUtils.mathRandomInt(0, 100), inten, 0);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                } else {
-                    manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else if ((!islaunched || (null != intent && intent.getStringExtra("action") != null && intent.getStringExtra("action").equals("home")))) { //home_键监听
-            try {
-                long triggerAtTime = SystemClock.elapsedRealtime() + (Constant.UNLOCK_SPACE_LONG * 1000);
-                Long homeTime = intent.getLongExtra("homePressed", 0L);
-                Intent inten = new Intent(this, TimingReceiver.class);
-                inten.putExtra("action", "home");
-                inten.putExtra("temp", temp);
-                inten.putExtra("battery", mBatteryPower);
-                inten.putExtra("isCharged", isCharged);
-                inten.putExtra("homePressed", homeTime);
-                inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent pi = PendingIntent.getBroadcast(this, NumberUtils.mathRandomInt(0, 100), inten, 0);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    manager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    manager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                } else {
-                    manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, pi);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
 
     //开启前台通知
     private void shouDefNotify() {
@@ -385,77 +276,6 @@ public final class LocalService extends Service {
             startForeground(KeepAliveConfig.FOREGROUD_NOTIFICATION_ID, notification);
             Log.d("JOB-->", TAG + "显示通知栏");
 //            }
-        }
-    }
-
-
-    //判断是否充电
-    public void checkCharge() {
-        try {
-            boolean usb = false;//usb充电
-            boolean ac = false;//交流电
-            boolean wireless = false; //无线充电
-            int chargePlug = -1;
-
-            IntentFilter iFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-            if (batteryReceiver == null) {
-                batteryReceiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        //获取当前电量，如未获取具体数值，则默认为0
-                        int batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-                        //获取最大电量，如未获取到具体数值，则默认为100
-                        int batteryScale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-                        mBatteryPower = (batteryLevel * 100 / batteryScale);
-                        //获取当前电池温度
-                        temp = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-                        int i = temp / 10;
-                        temp = i > 0 ? i : 30 + NumberUtils.mathRandomInt(1, 3);
-                    }
-                };
-            }
-            //注册接收器以获取电量信息
-            Intent powerIntent = registerReceiver(batteryReceiver, iFilter);
-            //----判断是否为充电状态-------------------------------
-            chargePlug = powerIntent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-            usb = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
-            ac = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
-            //无线充电---API>=17
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                wireless = chargePlug == BatteryManager.BATTERY_PLUGGED_WIRELESS;
-            }
-
-//            Logger.i(SystemUtils.getProcessName(this) + "zz--" + (usb ? "usb" : ac ? "ac" : wireless ? "wireless" : ""));
-            isCharged = usb || ac || wireless;
-        } catch (Exception e) {
-            e.printStackTrace();
-            isCharged = false;
-        }
-
-        //充电状态变更
-        if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 0 && isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {
-            startFullInsertAd(this);
-        } else if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged && !ActivityCollector.isActivityExist(FullPopLayerActivity.class)) {//拔电状态变更
-            startFullInsertAd(this);
-        }
-        if (!BuildConfig.SYSTEM_EN.contains("prod"))
-//            ToastUtils.showShort("charge--" + (isCharged ? "充电中" : "未充电"));
-//        Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
-            //更新sp当前充电状态
-            PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
-
-    }
-
-    //当前电量监控
-    public void watchingBattery() {
-        try {
-            BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mBatteryPower = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
-            }
-        } catch (Exception e) {
-            mBatteryPower = 50;
-            e.printStackTrace();
         }
     }
 
@@ -569,7 +389,7 @@ public final class LocalService extends Service {
             if (!TextUtils.equals(packageName, LocalService.this.getPackageName())) {
 //                if (!TextUtils.equals(oldPackageName, packageName)) {
                 if (MmkvUtil.isShowFullInsert() && isContains(packageName)) {
-                    addCPAD();
+//                    addCPAD();
                 }
 //                }
             }
@@ -706,26 +526,26 @@ public final class LocalService extends Service {
 
     private boolean isOpen;
 
-
-    /**
-     * 进行插入开屏广告
-     */
-    private void addCPAD() {
-        if (!isOpen && MmkvUtil.isShowFullInsert()) {
-            isOpen = true;
-            Intent inten = new Intent(this, TimingReceiver.class);
-            inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            inten.putExtra("action", "app_add_full");
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    LocalService.this.sendBroadcast(inten);
-                    isOpen = false;
-                }
-            }, 2000);
-        } else {
-        }
-    }
+//
+//    /**
+//     * 进行插入开屏广告
+//     */
+//    private void addCPAD() {
+//        if (!isOpen && MmkvUtil.isShowFullInsert()) {
+//            isOpen = true;
+//            Intent inten = new Intent(this, TimingReceiver.class);
+//            inten.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            inten.putExtra("action", "app_add_full");
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    LocalService.this.sendBroadcast(inten);
+//                    isOpen = false;
+//                }
+//            }, 2000);
+//        } else {
+//        }
+//    }
 
     private void startFullActivty(Context context) {
         //判断是否进入后台
@@ -900,6 +720,30 @@ public final class LocalService extends Service {
         }
 
 
+    }
+
+    //    private AppPackageNameListDB appPackageNameList;
+//    private AppPackageNameListDB.DataBean mDataBean;
+    private int mShowRoate = 0;
+    private int mDispalyTime = 0;
+
+    private void JsonToBean(int showRoate, int dispalyTime) {
+        isExeTask = true;
+        mShowRoate = showRoate;
+        mDispalyTime = dispalyTime;
+        if (GreenDaoManager.getInstance().isAppListNull()) {
+            String json = FileUtils.readJSONFromAsset(this, "applist.json");
+            try {
+                AppPackageNameList appPackageNameList = new Gson().fromJson(json, AppPackageNameList.class);
+                if (appPackageNameList != null) {
+                    for (AppPackageNameListDB appPackageNameListDB : appPackageNameList.getData()) {
+                        GreenDaoManager.getInstance().updateAppList(appPackageNameListDB);
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
+        handler.postDelayed(mTask, 1000);
     }
 
 }
