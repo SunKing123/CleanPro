@@ -19,6 +19,7 @@
             android:id="@+id/top_animation"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimen_40dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop" />
 

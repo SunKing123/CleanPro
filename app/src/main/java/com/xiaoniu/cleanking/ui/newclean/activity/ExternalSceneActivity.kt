@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.xiaoniu.clean.deviceinfo.EasyNetworkMod
 import com.xiaoniu.cleanking.R
-import com.xiaoniu.cleanking.app.getStringExtraNotNull
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector
@@ -48,31 +47,10 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
     override fun getLayoutId() = R.layout.activity_external_scene
 
 
-    companion object {
-        const val SCENE = "scene"
-        const val SCENE_WIFI = "scene_wifi"
-        const val SCENE_PHONE_STATE = "scene_phone_state"
-        const val SCENE_CHARGE = "scene_charge"
-    }
-
-    //当前弹窗场景
-    private var mCurrentScene = ""
-
     override fun initView() {
-        mCurrentScene = intent.getStringExtraNotNull(SCENE)
-        when (mCurrentScene) {
-            SCENE_WIFI -> {//wifi
-                StatisticsUtils.customTrackEvent("wifi_plug_screen_custom", "wifi插屏曝光", "wifi_plug_screen", "wifi_plug_screen")
-                wifi_stub.inflate()
-                showWifiScene()
-            }
-            SCENE_PHONE_STATE -> {//手机状态
-
-            }
-            SCENE_CHARGE -> {//充电
-
-            }
-        }
+        StatisticsUtils.customTrackEvent("wifi_plug_screen_custom", "wifi插屏曝光", "wifi_plug_screen", "wifi_plug_screen")
+        wifi_stub.inflate()
+        showWifiScene()
         scene_close.setOnClickListener {
             StatisticsUtils.trackClick("close_click", "wifi插屏关闭按钮点击", "wifi_plug_screen", "wifi_plug_screen")
             finish()
