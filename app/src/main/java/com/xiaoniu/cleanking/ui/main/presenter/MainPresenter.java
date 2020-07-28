@@ -427,10 +427,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
 
                     /*-------------测试专用 start----------------*/
-/*
+
                     pushConfigList.clear();
                     LocalPushConfigModel.Item item = new LocalPushConfigModel.Item();
-                    item.setOnlyCode(LocalPushType.TYPE_SUPER_POWER);
+                    item.setOnlyCode(LocalPushType.TYPE_SPEED_UP);
                     item.setIconUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591777551401&di=7c53ecd102576214fee3076839555207&imgtype=0&src=http%3A%2F%2Fa3.att.hudong.com%2F68%2F61%2F300000839764127060614318218_950.jpg");
                     item.setDailyLimit(3);
                     //阈值 降温和省电专用
@@ -439,7 +439,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     item.setPopWindowInterval(1);
                     item.setTitle("手机内存占用#快假数据的的的的假数据的");
                     item.setContent("假数据的content假数据的content假数据的content假数据的content");
-                    pushConfigList.add(item);*/
+                    pushConfigList.add(item);
 
 
 

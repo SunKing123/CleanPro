@@ -21,6 +21,7 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
@@ -34,6 +35,7 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
+import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -161,6 +163,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     LockActivity.this.startService(i);
                 }
+                AppLifecyclesImpl.postDelay(() -> EventBus.getDefault().post(new PopEventModel("desktopPop")), 3000);
                 finish();
             }
 
@@ -277,8 +280,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private long mLastTime = 0;
 
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -288,7 +289,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mUnlockView.startAnim();
         updateTimeUI();
         boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
-        if(lock_sw){
+        if (lock_sw) {
             adInit();
         }
     }
@@ -561,11 +562,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
         mLastTime = SystemClock.elapsedRealtime();
 
-        StatisticsUtils.customTrackEvent("ad_request_sdk","锁屏页广告发起请求","lock_screen_page","lock_screen_page");
-        AdRequestParams params=new AdRequestParams.Builder()
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "锁屏页广告发起请求", "lock_screen_page", "lock_screen_page");
+        AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(MidasConstants.LOCK_PAGE_FEED_ID)
                 .setActivity(this)
-                .setViewWidth( DisplayUtil.getScreenWidth(LockActivity.this) - DisplayUtil.dip2px(LockActivity.this,28))//设置宽度；
+                .setViewWidth(DisplayUtil.getScreenWidth(LockActivity.this) - DisplayUtil.dip2px(LockActivity.this, 28))//设置宽度；
                 .setViewContainer(relAd)
                 .build();
         MidasRequesCenter.requestAd(params, new AbsAdCallBack() {

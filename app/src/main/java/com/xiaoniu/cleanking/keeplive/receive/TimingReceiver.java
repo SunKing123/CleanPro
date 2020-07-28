@@ -112,7 +112,7 @@ public class TimingReceiver extends BroadcastReceiver {
                         context.startService(i);
                     }
                     break;
-                case "home"://home按键触发
+              /*  case "home"://home按键触发
                     if (null == context) {
                         return;
                     }
@@ -147,7 +147,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     startDialogActivityOnLauncher(context, 3000);
                     break;
                 default:
-                    break;
+                    break;*/
             }
         }
 

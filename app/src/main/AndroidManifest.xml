@@ -815,7 +815,6 @@
             </intent-filter>
         </service>
 
-        <service android:name=".ui.localpush.LocalPushService" />
         <!-- vivo start -->
         <service android:name=".ui.notifition.NotificationService" />
         <service android:name=".ui.usercenter.service.FloatingImageDisplayService" /> <!-- vivo end -->
