@@ -17,15 +17,12 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkRequest;
 import android.os.Build;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
 import android.os.SystemClock;
 
@@ -69,12 +66,11 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.deskpop.PowerStatePopChecker;
 import com.xiaoniu.cleanking.ui.deskpop.state.PhoneStatePopChecker;
-import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
-import com.xiaoniu.cleanking.ui.localpush.LocalPushService;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushSchedule;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
-import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
@@ -82,7 +78,6 @@ import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADHotActivity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
@@ -174,6 +169,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
             //商业化初始化
             MidasRequesCenter.init(application);
             initOaid(application);
+            homeCatch(application);
         }
 
 
@@ -184,12 +180,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
 //        LogUtils.i("GeekSdk--"+SystemUtils.getProcessName(application));
 //        initAdSdk(application);
         initJsBridge();
-        homeCatch(application);
-        /* if (RomUtils.checkIsHuaWeiRom()) {
-            homeCatch(application);
-        } else if (isMainProcess(application)) {
-            homeCatchOtherDevice(application);
-        }*/
         initLifecycle(application);
         Logger.addLogAdapter(new AndroidLogAdapter() {
             @Override
@@ -429,9 +419,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
     private long mLastClickTime = 0;  //只在local 进程中生效
 
     public void homeCatch(Application application) {
-        if (!SystemUtils.getProcessName(application).contains("local")) {  //只在local进程中监听home按键，避免重复调用
-            return;
-        }
         HomeWatcher mHomeWatcher = new HomeWatcher(application);
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
             @Override
@@ -441,20 +428,17 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                long currentTimestamp = System.currentTimeMillis();
-                if (AppLifecycleUtil.isAppOnForeground(application)) {
-                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
-                } else {
-                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L);
-                }
+                boolean flag = AppLifecycleUtil.isAppOnForeground(application);
+                LocalPushSchedule.Companion.getInstance().popPush(flag);
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
-                i.putExtra("homePressed", currentTimestamp);
+                // i.putExtra("homePressed", currentTimestamp);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
                 } else {
                     application.startService(i);
                 }
+
             }
 
             @Override
@@ -464,13 +448,11 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     return;
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
-                long currentTimestamp = System.currentTimeMillis();
-                if (AppLifecycleUtil.isAppOnForeground(application)) {
-                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
-                }
+                boolean flag = AppLifecycleUtil.isAppOnForeground(application);
+                LocalPushSchedule.Companion.getInstance().popPush(flag);
                 Intent i = new Intent(application, LocalService.class);
                 i.putExtra("action", "home");
-                i.putExtra("homePressed", currentTimestamp);
+                //  i.putExtra("homePressed", currentTimestamp);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     application.startForegroundService(i);
                 } else {
@@ -481,83 +463,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         mHomeWatcher.startWatch();
     }
 
-    private LocalPushService.PushBinder mLocalBinder;
-
-    public void homeCatchOtherDevice(Application application) {
-        HomeWatcher mHomeWatcher = new HomeWatcher(application);
-        mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
-            @Override
-            public void onHomePressed() {
-                LogUtils.e("====localPushService onHomePressed键被触发====");
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                long currentTimestamp = System.currentTimeMillis();
-                if (AppLifecycleUtil.isAppOnForeground(application)) {
-                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
-                }
-                if (isMainProcess(application)) {
-                    bindLocalPushService(application, currentTimestamp);
-                }
-            }
-
-            @Override
-            public void onHomeLongPressed() {  //部分手机不走 onHomePressed();
-                LogUtils.e("=====localPushService onHomeLongPressed键被触发====");
-                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                    return;
-                }
-                mLastClickTime = SystemClock.elapsedRealtime();
-                long currentTimestamp = System.currentTimeMillis();
-                if (AppLifecycleUtil.isAppOnForeground(application)) {
-                    MmkvUtil.saveLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, currentTimestamp);
-                }
-                if (isMainProcess(application)) {
-                    bindLocalPushService(application, currentTimestamp);
-                }
-            }
-        });
-        mHomeWatcher.startWatch();
-    }
-
-    private void bindLocalPushService(Application application, long pressTime) {
-        if (!RomUtils.checkIsHuaWeiRom()) {
-            if (mLocalBinder != null) {
-                mLocalBinder.getService().showPopActivity(pressTime);
-            } else {
-                Intent intent = new Intent(application, LocalPushService.class);
-                LocalPushConnection connection = new LocalPushConnection(pressTime);
-                application.bindService(intent, connection, Context.BIND_ABOVE_CLIENT);
-            }
-        }
-    }
-
-
-    private class LocalPushConnection implements ServiceConnection {
-
-        private long mHomePressHomeTime;
-
-
-        public LocalPushConnection(long time) {
-            this.mHomePressHomeTime = time;
-
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mLocalBinder = (LocalPushService.PushBinder) service;
-            if (mLocalBinder != null) {
-                mLocalBinder.getService().showPopActivity(mHomePressHomeTime);
-            }
-
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    }
 
     private boolean mIsBack; //mIsBack = true 记录当前已经进入后台
 

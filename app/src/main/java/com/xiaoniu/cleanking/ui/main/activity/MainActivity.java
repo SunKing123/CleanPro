@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,6 +38,7 @@ import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity;
+import com.xiaoniu.cleanking.ui.localpush.LocalPushDispatcher;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -705,46 +707,38 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public void onEventWifiConnection(PopEventModel popEventModel) {
         if (TextUtils.isEmpty(popEventModel.getAction()))
             return;
+        LogUtils.e("======MainActivity 的event bus:" + popEventModel.getAction());
         if (popEventModel.getAction().equals("wifi")) {
-            LogUtils.e("======收到了wifi的event bus");
             StatisticsUtils.customTrackEvent("wifi_plug_screen_meets_opportunity", "wifi插屏满足时机", "wifi_plug_screen", "wifi_plug_screen");
-            Intent screenIntent = new Intent(this, ExternalSceneActivity.class);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-            screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-            PendingIntent intent = PendingIntent.getActivity(this, 0, screenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            try {
-                intent.send();
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
-            }
+            startPopActivity(ExternalSceneActivity.class);
         } else if (popEventModel.getAction().equals("power")) {
-            Intent powerIntent = new Intent(this, BatteryPopActivity.class);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-            PendingIntent intent = PendingIntent.getActivity(this, 0, powerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            try {
-                intent.send();
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
-            }
-        }else if (popEventModel.getAction().equals("deviceInfo")) {
-            Intent powerIntent = new Intent(this, ExternalPhoneStateActivity.class);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-            powerIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-            PendingIntent intent = PendingIntent.getActivity(this, 0, powerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            try {
-                intent.send();
-            } catch (PendingIntent.CanceledException e) {
-                e.printStackTrace();
-            }
+            startPopActivity(BatteryPopActivity.class);
+        } else if (popEventModel.getAction().equals("deviceInfo")) {
+            startPopActivity(ExternalPhoneStateActivity.class);
+        } else if (popEventModel.getAction().equals("localPush")) {
+            LocalPushDispatcher dispatcher = new LocalPushDispatcher(this);
+            dispatcher.showLocalPushDialog();
+        } else if (popEventModel.getAction().equals("desktopPop")) {
+            LocalPushDispatcher dispatcher = new LocalPushDispatcher(this);
+            dispatcher.startDialogActivityOnLauncher();
         }
     }
+
+
+    private void startPopActivity(Class<? extends AppCompatActivity> target) {
+        Intent powerIntent = new Intent(this, target);
+        powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        powerIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        powerIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        PendingIntent intent = PendingIntent.getActivity(this, 0, powerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        try {
+            intent.send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
