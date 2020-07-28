@@ -122,11 +122,10 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
         val groupLinkedHashMap = ScanDataHolder.getInstance().getmJunkGroups().filterKeys { it.type == 5 }
         if (groupLinkedHashMap.isEmpty()) {
             //伪造数据
-            val un: Long = 80886656
             val counterfeit = LinkedHashMap<ScanningResultType, JunkGroup>(mAppSize)
             val appList = AndroidUtil.getRandomMaxCountInstallApp(this, mAppSize)
             appList.forEach {
-                it.totalSize = (Math.random() * un).toLong() + un
+                it.totalSize = AndroidUtil.getCounterfeitMemorySize()
                 it.isAllchecked = true
             }
             val junkGroup = JunkGroup(ScanningResultType.MEMORY_JUNK.title, ScanningResultType.MEMORY_JUNK.type)
