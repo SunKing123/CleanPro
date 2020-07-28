@@ -11,8 +11,6 @@ import com.xiaoniu.clean.deviceinfo.EasyNetworkMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
-import com.xiaoniu.cleanking.scheme.utils.ActivityCollector
-import com.xiaoniu.cleanking.ui.localpush.PopPushActivity
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity
 import com.xiaoniu.cleanking.ui.newclean.presenter.ExternalScenePresenter
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
@@ -36,7 +34,6 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
             StatusBarCompat.setStatusBarColor(this, resources.getColor(android.R.color.transparent), false)
         }
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        ActivityCollector.addActivity(this, PopPushActivity::class.java)
         window.addFlags(
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -130,10 +127,6 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        ActivityCollector.removeActivity(this)
-    }
 
     override fun netError() {
     }

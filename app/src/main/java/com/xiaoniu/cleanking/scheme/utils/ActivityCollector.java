@@ -9,6 +9,7 @@ import com.orhanobut.logger.Logger;
 import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
@@ -44,13 +45,15 @@ public class ActivityCollector {
     private static void toSingleExternalActivity(Activity activity) {
         if (activities.containsKey(ExternalPhoneStateActivity.class) ||
                 activities.containsKey(BatteryPopActivity.class) ||
-                activities.containsKey(ExternalSceneActivity.class)||
+                activities.containsKey(ExternalSceneActivity.class) ||
+                activities.containsKey(PopLayerActivity.class) ||
                 activities.containsKey(PopPushActivity.class)) {
 
-            if(activity instanceof ExternalPhoneStateActivity
-                    ||activity instanceof BatteryPopActivity
-            ||activity instanceof ExternalSceneActivity
-            ||activity instanceof PopPushActivity){
+            if (activity instanceof ExternalPhoneStateActivity
+                    || activity instanceof BatteryPopActivity ||
+                    activities.containsKey(PopLayerActivity.class)
+                    || activity instanceof ExternalSceneActivity
+                    || activity instanceof PopPushActivity) {
                 activity.finish();
             }
         }
