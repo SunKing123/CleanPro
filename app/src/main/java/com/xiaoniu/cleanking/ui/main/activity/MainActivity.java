@@ -721,9 +721,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if (popEventModel.getAction().equals("desktopPop")) {
             LocalPushDispatcher dispatcher = new LocalPushDispatcher(this);
             dispatcher.startDialogActivityOnLauncher();
-
         }
-
     }
 
 
