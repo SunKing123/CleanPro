@@ -24,17 +24,21 @@ public interface Points {
         String SCAN_PAGE_EVENT_NAME = "病毒查杀扫描页浏览";
         String SCAN_SYSTEM_RETURN_EVENT_NAME = "用户在病毒查杀页返回";
 
-        //病毒查杀动画页
-        String ANIMATION_PAGE = "virus_killing_animation_page";
-        String ANIMATION_PAGE_EVENT_CODE = "virus_killing_animation_page_view_page";
-        String ANIMATION_PAGE_EVENT_NAME = "病毒查杀动画页浏览";
-        String ANIMATION_SYSTEM_RETURN_EVENT_NAME = "病毒查杀动画页返回";
+        //病毒扫描结果页面
+        String RESULT_PAGE = "virus_killing_scan_result_page";
+        String RESULT_PAGE_EVENT_CODE = "virus_killing_scan_result_page_view_page";
+        String RESULT_PAGE_EVENT_NAME = "用户在病毒查杀诊断页浏览";
+        String RESULT_TO_CLEAN_EVENT_CODE = "virus_killing_scan_result_page_click";
+        String RESULT_TO_CLEAN_EVENT_NAME = "用户在病毒查杀诊断页点击【一键优化】按钮";
+
+        String RESULT_RETURN_EVENT_NAME = "用户在病毒查杀诊断页返回";
+
 
         //病毒查杀完成页
-        String ANIMATION_FINISH_PAGE = "virus_killing_finish_animation_page";
-        String ANIMATION_FINISH_PAGE_EVENT_CODE = "virus_killing_finish_animation_page_view_page";
-        String ANIMATION_FINISH_PAGE_EVENT_NAME = "病毒查杀动画完成页浏览";
-        String ANIMATION_FINISH_SYSTEM_RETURN_EVENT_NAME = "病毒查杀动画完成页返回";
+        String CLEAN_FINISH_PAGE = "virus_killing_animation_page";
+        String CLEAN_FINISH_PAGE_EVENT_CODE = "virus_killing_animation_page_view_page";
+        String CLEAN_FINISH_PAGE_EVENT_NAME = "病毒查杀动画页浏览";
+        String CLEAN_FINISH_SYSTEM_RETURN_EVENT_NAME = "病毒查杀动画完成页返回";
     }
 
     interface ScratchCard {
@@ -127,6 +131,31 @@ public interface Points {
 
         String MINE_CLICK_CODE ="tab_my_click";
         String MINE_CLICK_NAME ="底部tab栏我的点击";
+    }
+
+    interface ExternalDevice{
+
+        String PAGE = "mobile_phone_status_insertion_screen";
+
+        String PAGE_EVENT_CODE = "mobile_phone_status_insertion_screen_custom";
+        String PAGE_EVENT_NAME = "手机状态插屏曝光";
+
+        String MEET_CONDITION_CODE = "mobile_phone_status_insertion_screen_custom";
+        String MEET_CONDITION_NAME = "手机状态插屏满足时机";
+
+        String CLICK_MEMORY_BTN_CODE="running_memory_button_click";
+        String CLICK_MEMORY_BTN_NAME="运行内存按钮点击";
+
+        String CLICK_STORAGE_BTN_CODE="internal_storage_button_click";
+        String CLICK_STORAGE_BTN_NAME="内存储存按钮点击";
+
+        String CLICK_BATTERY_TEMPERATURE_BTN_CODE="battery_temperature_button_click";
+        String CLICK_BATTERY_TEMPERATURE_BTN_NAME="电池温度按钮点击";
+
+        String CLICK_BATTERY_QUANTITY_BTN_CODE="electricity_quantity_button_click";
+        String CLICK_BATTERY_QUANTITY_BTN_NAME="电量按钮点击";
+        
+        String CLICK_CLOSE="";
     }
 
 }

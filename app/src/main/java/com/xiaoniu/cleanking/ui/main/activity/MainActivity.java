@@ -732,7 +732,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 e.printStackTrace();
             }
         }else if (popEventModel.getAction().equals("deviceInfo")) {
-            Intent powerIntent = new Intent(this, BatteryPopActivity.class);
+            Intent powerIntent = new Intent(this, ExternalPhoneStateActivity.class);
             powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             powerIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -744,7 +744,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 e.printStackTrace();
             }
         }
-
     }
 
     @Override
