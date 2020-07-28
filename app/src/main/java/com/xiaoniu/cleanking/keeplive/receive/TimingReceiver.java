@@ -128,7 +128,7 @@ public class TimingReceiver extends BroadcastReceiver {
                     if (null != context) {
                         startFullActivity(context.getApplicationContext());
                     }
-                    break;*/
+                    break;
                 case "unlock_screen"://锁屏打开页面
                     LogUtils.e("================监听到锁屏打开页面");
                     startDialogActivityOnLauncher(context, 3000);
