@@ -214,7 +214,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 LogUtils.i("checkStoragePermission()---true");
                 readyScanningJunk();
                 scanningJunk();
-                requestPhoneStatePermission();
+
             }
 
             @Override
@@ -225,26 +225,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 } else {//点击永久拒绝
                     LogUtils.i("checkStoragePermission()---denied--faile");
                 }
-                requestPhoneStatePermission();
-            }
-        }).request();
-
-    }
-
-    //获取Imei
-    @SuppressLint("WrongConstant")
-    public void requestPhoneStatePermission() {
-        if (null == mView) return;
-        PermissionUtils.permission(Manifest.permission.READ_PHONE_STATE).callback(new PermissionUtils.SimpleCallback() {
-            @Override
-            public void onGranted() {
-                //开始
-                if (mView == null)
-                    return;
-                initNiuData();
-            }
-            @Override
-            public void onDenied() {
 
             }
         }).request();

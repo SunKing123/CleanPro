@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,10 +20,13 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
@@ -55,6 +59,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import com.xnad.sdk.ad.entity.AdInfo;
 import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -132,7 +137,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         mAgreement.setOnClickListener(this);
         tv_xy.setOnClickListener(this);
         mPresenter.spDataInit();
-
+        initNiuData();
         if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
             //默认过审状态===权限只在第一次冷启时调用，后面冷启不需要检验
             SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
@@ -140,9 +145,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             permissionRemind();
         } else {
             oldOptionAction();
-//            checkReadPermission();
         }
-        initNiuData();
         initFileRelation();
         //数美sdk初始化
         mPresenter.initShuMeiSDK();
@@ -162,7 +165,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         new LaunchPermissionRemindDialog(this).setLaunchPermissionListener(() -> {
             StatisticsUtils.trackClick("experience_it_now_button_click", "立即体验按钮点击", "use_guide_page", "use_guide_page");
 
-            checkReadPermission();
+            requestPhoneStatePermission();
             PreferenceUtil.saveFirstOpenApp();
         }).show();
     }
@@ -209,9 +212,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         }
 
         if (auditSwitch.getData().equals("0")) {//过审中
-            this.mSubscription = Observable.timer(300, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(aLong -> {
-                jumpActivity();
-            });
+            delayJump();
         } else if (auditSwitch.getData().equals("1")) {//过审已通过
             mPresenter.getSwitchInfoList();
         }
@@ -410,7 +411,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         if (!mSPHelper.isUploadImei()) {
             //有没有传过imei
             String imei = PhoneInfoUtils.getIMEI(mContext);
-            LogUtils.i("--zzh--" + imei);
             if (TextUtils.isEmpty(imei)) {
                 NiuDataAPI.setIMEI("");
                 mSPHelper.setUploadImeiStatus(false);
@@ -419,6 +419,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 mSPHelper.setUploadImeiStatus(true);
             }
         }
+
+
     }
 
     @Override
@@ -436,9 +438,27 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         mCanJump = false;
     }
 
+
+    //获取Imei
+    @SuppressLint("WrongConstant")
+    public void requestPhoneStatePermission() {
+        PermissionUtils.permission(Manifest.permission.READ_PHONE_STATE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+                initNiuData();
+                checkReadPermission();
+            }
+
+            @Override
+            public void onDenied() {
+                checkReadPermission();
+            }
+        }).request();
+
+    }
+
     private void checkReadPermission() {
-//        String[] permissionArr = new String[]{"android.permission.READ_PHONE_STATE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
-        PermissionUtils.permission(new String[]{"android.permission.READ_PHONE_STATE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"}).callback(new PermissionUtils.SimpleCallback() {
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
             @Override
             public void onGranted() {
                 oldOptionAction();
@@ -447,66 +467,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
             @Override
             public void onDenied() {
                 oldOptionAction();
-//                if (hasPermissionDeniedForever()) {  //点击拒绝
-//                    jumpActivity();
-//                } else {                            //点击永久拒绝
-//                    showPermissionDialog();
-//                }
             }
         }).request();
+
     }
 
 
-    /**
-     * 是否有权限被永久拒绝
-     */
-    private boolean hasPermissionDeniedForever() {
-        boolean hasDeniedForever = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                hasDeniedForever = true;
-            }
-        }
-        return hasDeniedForever;
-    }
-
-    public void showPermissionDialog() {
-        AlertDialog dlg = new AlertDialog.Builder(this).create();
-        if (isFinishing()) {
-            return;
-        }
-        dlg.show();
-        Window window = dlg.getWindow();
-        if (window != null) {
-            window.setContentView(R.layout.alite_redp_send_dialog);
-            WindowManager.LayoutParams lp = window.getAttributes();
-            //这里设置居中
-            lp.gravity = Gravity.CENTER;
-            window.setAttributes(lp);
-            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            TextView btnOk = window.findViewById(R.id.btnOk);
-
-            TextView btnCancle = window.findViewById(R.id.btnCancle);
-            TextView tipTxt = window.findViewById(R.id.tipTxt);
-            TextView content = window.findViewById(R.id.content);
-            btnCancle.setText("取消");
-            btnOk.setText("去设置");
-            tipTxt.setText("提示!");
-            content.setText("清理功能无法使用，请先开启文件读写权限。");
-            btnOk.setOnClickListener(v -> {
-                dlg.dismiss();
-                goSetting();
-            });
-            btnCancle.setOnClickListener(v -> dlg.dismiss());
-        }
-    }
-
-    public void goSetting() {
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        intent.setData(Uri.parse("package:" + getPackageName()));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
-    }
 }

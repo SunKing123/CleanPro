@@ -644,13 +644,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
                 view_lottie_top.setClendedState(countEntity);
             }
-        } else {//未取得权限//避免重复弹出
-//            new Handler().postDelayed(() -> {
-//                if (!isDenied) {
-//                    mPresenter.checkStoragePermission();  //重新开始扫描
-//                }
-//            }, 200);
-
+        } else {
             //未授权默认样式——存在大量垃圾；
             if (null != view_lottie_top)
                 view_lottie_top.setNoSize();
