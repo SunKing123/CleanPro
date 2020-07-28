@@ -134,12 +134,13 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
         mPresenter.spDataInit();
 
         if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
-            //默认过审状态
+            //默认过审状态===权限只在第一次冷启时调用，后面冷启不需要检验
             SPUtil.setString(SplashADActivity.this, SpCacheConfig.AuditSwitch, "0");
             MmkvUtil.saveString(SpCacheConfig.AuditSwitch, "0");
             permissionRemind();
         } else {
-            checkReadPermission();
+            oldOptionAction();
+//            checkReadPermission();
         }
         initNiuData();
         initFileRelation();
