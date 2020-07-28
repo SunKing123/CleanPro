@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup
 import com.xiaoniu.cleanking.ui.main.model.MainModel
 import com.xiaoniu.cleanking.ui.newclean.activity.SpeedUpResultActivity
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType
+import com.xiaoniu.cleanking.utils.AndroidUtil
 import com.xiaoniu.cleanking.utils.CleanUtil
 import com.xiaoniu.cleanking.utils.CollectionUtils
 import com.xiaoniu.cleanking.utils.FileUtils
@@ -46,19 +47,26 @@ class SpeedUpResultPresenter @Inject constructor(activity: RxAppCompatActivity) 
         if (scanningResultMap != null && scanningResultMap.size > 0) {
             junkTitleMap.clear()
             junkContentMap.clear()
+            //拆分清理内容
             for ((key, value) in scanningResultMap) {
-                //拆分清理类型
                 junkTitleMap[key] = value
-                //拆分清理内容
                 //过滤掉系统应用
                 val data = value.mChildren.filter {
                     !FileUtils.isSystemApK(it.appPackageName)
                 }
-                val max = if (data.size >= appSize) appSize else data.size
-
-                val newData= ArrayList<FirstJunkInfo>()
-                for(index in 0 until  max){
-                  newData.add(data[index])
+                //val max = if (data.size >= appSize) appSize else data.size
+                val newData = ArrayList<FirstJunkInfo>()
+                //当第三方应用不满足个数的时候，取系统应用
+                if (data.size >= appSize) {
+                    for (index in 0 until appSize) {
+                        newData.add(data[index])
+                    }
+                } else {
+                    newData.addAll(data)
+                    newData.addAll(AndroidUtil.getSystemInstallApps(mActivity, appSize - newData.size))
+                    newData.forEach {
+                        it.isAllchecked = true
+                    }
                 }
                 junkContentMap[key] = newData
                 //junkContentMap[key] = data.slice(IntRange(0, max-1)) as ArrayList<FirstJunkInfo>

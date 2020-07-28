@@ -38,6 +38,16 @@ public class BubbleConfig extends BaseEntity {
         private int goldCount;
         private int locationNum;
         private int goldMaxTotalCount;
+        private String iconUrl;
+
+
+        public String getIconUrl() {
+            return iconUrl;
+        }
+
+        public void setIconUrl(String iconUrl) {
+            this.iconUrl = iconUrl;
+        }
 
         public int getId() {
             return id;

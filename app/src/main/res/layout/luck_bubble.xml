@@ -33,14 +33,14 @@
             android:textColor="#E96401"
             android:textSize="13.0sp" />
 
-        <com.airbnb.lottie.LottieAnimationView
+  <!--      <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             app:lottie_fileName="home_top_scan/gold/data.json"
             app:lottie_imageAssetsFolder="home_top_scan/gold/images/"
-            app:lottie_loop="true" />
+            app:lottie_loop="true" />-->
     </FrameLayout>
 
 </LinearLayout>

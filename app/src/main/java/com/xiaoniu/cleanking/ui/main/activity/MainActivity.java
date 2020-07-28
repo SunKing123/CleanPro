@@ -713,7 +713,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
             screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-            screenIntent.putExtra(ExternalSceneActivity.SCENE, ExternalSceneActivity.SCENE_WIFI);
             PendingIntent intent = PendingIntent.getActivity(this, 0, screenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             try {
                 intent.send();

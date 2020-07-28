@@ -57,7 +57,6 @@ public class ExternalPhoneStateActivity extends BaseActivity {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        screenIntent.putExtra(ExternalSceneActivity.SCENE,ExternalSceneActivity.SCENE_WIFI);
         context.startActivity(screenIntent);
     }
 

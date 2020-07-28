@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.selfdebug;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ApplicationErrorReport;
 import android.content.BroadcastReceiver;
@@ -51,7 +53,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
+import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
@@ -71,7 +73,7 @@ public class DebugActivity extends BaseActivity {
     private LottieAnimationView lottieAnimationView;
     private ImageView icon_app;
     private TextView deviceTempcontent;
-    private OneKeyCircleButtonView oneKeyCircleButtonView;
+    private OneKeyCircleBtnView oneKeyCircleButtonView;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -121,8 +123,40 @@ public class DebugActivity extends BaseActivity {
 ////        String test02 ="cleankingmajor://com.hellogeek.cleanking/jump?isfullscreen=1&amp;need_login=&amp;url=http%3A%2F%2F192.168.85.61";
 //        SchemeProxy.openScheme(this, test);
 //        oneKeyCircleButtonView.startLottie();
-        lottieAnimationView.setAnimation("charging/charging_state01/data.json");
-        lottieAnimationView.setImageAssetsFolder("charging/charging_state01/images");
+        lottieAnimationView.setMinAndMaxFrame(0,33);
+        lottieAnimationView.setAnimation("home_top_scan/state01/data.json");
+        lottieAnimationView.setImageAssetsFolder("home_top_scan/state01/images");
+        lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+//        lottieAnimationView.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                animation.
+//                LogUtils.i("zz--"+animation.getAnimatedFraction());
+//            }
+//        });
+//        lottieAnimationView.setMinAndMaxFrame(10,20);
+//        lottieAnimationView.setmin
         lottieAnimationView.playAnimation();
         lottieAnimationView.setVisibility(View.VISIBLE);
     }
@@ -452,7 +486,6 @@ public class DebugActivity extends BaseActivity {
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        screenIntent.putExtra(ExternalSceneActivity.SCENE,ExternalSceneActivity.SCENE_WIFI);
         startActivity(screenIntent);
     }
 

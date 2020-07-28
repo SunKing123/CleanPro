@@ -388,10 +388,17 @@ public class AndroidUtil {
                 tmpInfo.setGarbageIcon(packageInfo.applicationInfo.loadIcon(context.getPackageManager()));
                 tmpInfo.setAppPackageName(packageInfo.applicationInfo.packageName);
                 tmpInfo.setAppProcessName(packageInfo.applicationInfo.processName);
+                tmpInfo.setAllchecked(true);
+                tmpInfo.setTotalSize(getCounterfeitMemorySize());
                 aboveListInfo.add(tmpInfo);
             }
         }
         return aboveListInfo;
+    }
+
+    public static Long getCounterfeitMemorySize() {
+        int un = 80886656;
+        return (long) (Math.random() * un) + un;
     }
 
     /**
