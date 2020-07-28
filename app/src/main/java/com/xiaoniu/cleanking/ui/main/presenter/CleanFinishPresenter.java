@@ -185,7 +185,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                                   GoldCoinDialog.dismiss();
                               }
                           }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), bubbleCollected.getData().getUuid(), bubbleCollected.getData().getLocationNum(),
-                bubbleCollected.getData().getGoldCount());
+                bubbleCollected.getData().getGoldCount(),String.valueOf(bubbleCollected.getData().getDoubledMagnification()));
     }
 
     private void startGoldSuccess(String adId, int num, String functionName) {
