@@ -57,6 +57,11 @@ class SpeedUpClearActivity : BaseActivity() {
         StatisticsUtils.onPageEnd("boost_animation_page_view_page", "加速动画页浏览", "boost_animation_page", "boost_animation_page")
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        StatisticsUtils.trackClick("system_return_click", "加速动画页返回", "boost_animation_page", "boost_animation_page")
+    }
+
     private var mTotalSize = 0
 
     override fun initViews(savedInstanceState: Bundle?) {

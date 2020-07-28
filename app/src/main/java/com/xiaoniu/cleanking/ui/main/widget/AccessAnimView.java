@@ -167,6 +167,10 @@ public class AccessAnimView extends RelativeLayout {
         tv_title_name.setText(name);
     }
 
+    public View getLineTitle() {
+        return line_title;
+    }
+
     /**
      * Step1:上面红色布局和中间1dp的布局动画开始
      *

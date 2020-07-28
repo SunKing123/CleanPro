@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.OnItemClickListener
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.CustomLinearLayoutManger
+import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.common.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_speedup_result.*
@@ -55,6 +56,7 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
     private val randomValue = NumberUtils.mathRandom(10, 30)
 
     override fun initView() {
+        StatisticsUtils.onPageStart("boost_scan_result_page_view_page", "用户在加速诊断页浏览")
         mAppSize = intent.getIntExtra(SPEEDUP_APP_SIZE, 0)
         rv_content_list.layoutManager = CustomLinearLayoutManger(this)
         rv_content_list.adapter = mScanResultAdapter
@@ -65,6 +67,10 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
                 ToastUtils.showShort("至少选择一个APP进行加速")
             } else {
                 //保存本次清理完成时间 保证每次清理时间间隔为3分钟
+
+                StatisticsUtils.trackClick("accelerate_clean_button_click", "用户在加速诊断页点击【一键加速】按钮",
+                        "boost_scan_result_page", "boost_scan_result_page")
+
                 if (PreferenceUtil.getCleanTime()) {
                     PreferenceUtil.saveCleanTime()
                 }
@@ -77,14 +83,14 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
         }
 
         tv_back.setOnClickListener {
-            backClick()
+            backClick(false)
         }
         speed_up_value.text = "强力加速彻底清理后速度可提升$randomValue%"
         initData()
     }
 
 
-    private fun backClick() {
+    private fun backClick(isSystemBack: Boolean) {
         /* if (isBackClick) {
              return
          }*/
@@ -94,13 +100,20 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
             }
 
             override fun cancelBtn() {
+                if (isSystemBack) {
+                    StatisticsUtils.trackClick("system_return_back_click", "用户在加速诊断页返回",
+                            "boost_scan_result_page", "boost_scan_result_page")
+                } else {
+                    StatisticsUtils.trackClick("return_click", "用户在加速诊断页返回",
+                            "boost_scan_result_page", "boost_scan_result_page")
+                }
                 finish()
             }
         }, Color.parseColor("#06C581"), Color.parseColor("#727375"))
     }
 
     override fun onBackPressed() {
-        backClick()
+        backClick(true)
     }
 
     fun initData() {
@@ -179,4 +192,8 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
         mScanResultAdapter.submitList(buildJunkDataModel)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        StatisticsUtils.onPageEnd("boost_scan_result_page_view_page", "用户在加速诊断页浏览", "boost_scan_result_page", "boost_scan_result_page")
+    }
 }
