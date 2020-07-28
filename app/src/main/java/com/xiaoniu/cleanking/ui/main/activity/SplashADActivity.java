@@ -22,7 +22,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
-import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
@@ -91,6 +90,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private boolean mCanJump;
     RxTimer rxTimer;
     private static final int SP_SHOW_OUT_TIME = 9 * 1000;//开屏总超时时间
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -436,7 +436,8 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     }
 
     private void checkReadPermission() {
-        PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.PHONE).callback(new PermissionUtils.SimpleCallback() {
+//        String[] permissionArr = new String[]{"android.permission.READ_PHONE_STATE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
+        PermissionUtils.permission(new String[]{"android.permission.READ_PHONE_STATE", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"}).callback(new PermissionUtils.SimpleCallback() {
             @Override
             public void onGranted() {
                 oldOptionAction();
