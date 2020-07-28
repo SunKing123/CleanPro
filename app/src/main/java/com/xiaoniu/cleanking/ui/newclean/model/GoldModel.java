@@ -3,21 +3,12 @@ package com.xiaoniu.cleanking.ui.newclean.model;
 import android.annotation.SuppressLint;
 
 import com.google.gson.Gson;
-import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
-import com.xiaoniu.cleanking.ui.main.bean.HomeRecommendEntity;
-import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
-import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
-import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
-import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
-import com.xiaoniu.cleanking.utils.net.RxUtil;
-import com.xiaoniu.common.utils.AppUtils;
-import com.xiaoniu.common.utils.ChannelUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +40,7 @@ public class GoldModel extends BaseModel {
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
-    public void goleCollect(CommonSubscriber<BubbleCollected> commonSubscriber, FlowableTransformer tt,int locationNum) {
+    public void goleCollect(CommonSubscriber<BubbleCollected> commonSubscriber, FlowableTransformer tt, int locationNum) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("locationNum", locationNum);
@@ -66,23 +57,18 @@ public class GoldModel extends BaseModel {
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
-    public void goldDouble(CommonSubscriber<BubbleDouble> commonSubscriber, FlowableTransformer tt, String uuid, int locationNum, int goldCount) {
+    public void goldDouble(CommonSubscriber<BubbleDouble> commonSubscriber, FlowableTransformer tt, String uuid, int locationNum, int goldCount, String doubledMagnification) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("locationNum", locationNum);
         map.put("uuid", uuid);
         map.put("goldCount", goldCount);
+        map.put("doubledMagnification", doubledMagnification);
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         mService.bubbleDouble(body).compose(tt)
                 .subscribeWith(commonSubscriber);
     }
-
-
-
-
-
-
 
 
 }
