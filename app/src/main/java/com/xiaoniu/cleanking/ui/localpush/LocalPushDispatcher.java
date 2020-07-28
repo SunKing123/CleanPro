@@ -2,15 +2,12 @@ package com.xiaoniu.cleanking.ui.localpush;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.text.TextUtils;
 
 import androidx.collection.SparseArrayCompat;
 
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
-import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
-import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
@@ -119,12 +116,6 @@ public class LocalPushDispatcher {
 
             if (currentTime - installTime < 1000 * 60 * 60) {
                 LogUtils.e("==========新安装APP在1小时内，不弹出");
-
-                LogUtils.e("======弹出activity");
-
-                Intent screenIntent = getIntent(mContext);
-                mContext.startActivity(screenIntent);
-
                 return;
             }
 

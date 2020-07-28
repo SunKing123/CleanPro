@@ -7,7 +7,6 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.TextView
 import com.jess.arms.base.SimpleFragment
 import com.jess.arms.di.component.AppComponent
@@ -16,6 +15,8 @@ import com.xiaoniu.cleanking.ui.viruskill.ITransferPagePerformer
 import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusScanResultFragment.IntentKey.N_LIST
 import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusScanResultFragment.IntentKey.P_LIST
 import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel
+import com.xiaoniu.common.utils.Points
+import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_virus_scan_result_layout.*
 
 /**
@@ -51,6 +52,9 @@ class VirusScanResultFragment : SimpleFragment() {
         nList = arguments!!.getParcelableArrayList(N_LIST)
         initView()
         initEvent();
+
+        StatisticsUtils.onPageStart(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME)
+
     }
 
     private fun initView() {
@@ -77,6 +81,8 @@ class VirusScanResultFragment : SimpleFragment() {
     private fun initEvent() {
         btn_clear_virus_result.setOnClickListener({
             transfer.onTransferCleanPage(pList, nList)
+            StatisticsUtils.onPageEnd(Points.Virus.RESULT_PAGE_EVENT_CODE, Points.Virus.RESULT_PAGE_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
+            StatisticsUtils.trackClick(Points.Virus.RESULT_TO_CLEAN_EVENT_CODE,Points.Virus.RESULT_TO_CLEAN_EVENT_NAME,"",Points.Virus.RESULT_PAGE)
         })
     }
 
@@ -117,8 +123,10 @@ class VirusScanResultFragment : SimpleFragment() {
     fun setTransferPagePerformer(transfer: ITransferPagePerformer) {
         this.transfer = transfer
     }
-
+    
     fun finish() {
         activity!!.finish()
+        StatisticsUtils.trackClick("return_click", Points.Virus.RESULT_RETURN_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
+
     }
 }

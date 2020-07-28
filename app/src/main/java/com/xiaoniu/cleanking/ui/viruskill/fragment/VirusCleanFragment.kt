@@ -53,6 +53,7 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
 
     fun initView() {
         lottie.startRotationAnimation()
+        StatisticsUtils.onPageStart(Points.Virus.CLEAN_FINISH_PAGE_EVENT_CODE, Points.Virus.CLEAN_FINISH_PAGE_EVENT_NAME)
         timer = object : AndroidOsCountDownTimer(5000, 50) {
             override fun onTick(millisUntilFinished: Long) {
                 if (null != tv_clean_item && null != txtPro && null != progressBar) {
@@ -65,7 +66,7 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
 
             override fun onFinish() {
                 transfer.cleanComplete()
-                StatisticsUtils.onPageEnd(Points.Virus.ANIMATION_PAGE_EVENT_CODE, Points.Virus.ANIMATION_PAGE_EVENT_NAME, Points.Virus.SCAN_PAGE, Points.Virus.ANIMATION_PAGE)
+                StatisticsUtils.onPageEnd(Points.Virus.CLEAN_FINISH_PAGE_EVENT_CODE, Points.Virus.CLEAN_FINISH_PAGE_EVENT_NAME,"",Points.Virus.CLEAN_FINISH_PAGE)
             }
         }
         timer.start()

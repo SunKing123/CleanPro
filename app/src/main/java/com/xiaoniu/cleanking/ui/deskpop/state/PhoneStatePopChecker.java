@@ -27,7 +27,6 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
     @Override
     public void onPulse(long progress) {
         int displayTime= DeskPopConfig.getInstance().getStateDisplayTime();
-
         if(displayTime==0){
             unRegister();
             return;

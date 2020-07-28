@@ -46,9 +46,16 @@ public class ActivityCollector {
                 activities.containsKey(BatteryPopActivity.class) ||
                 activities.containsKey(ExternalSceneActivity.class)||
                 activities.containsKey(PopPushActivity.class)) {
-            activity.finish();
+
+            if(activity instanceof ExternalPhoneStateActivity
+                    ||activity instanceof BatteryPopActivity
+            ||activity instanceof ExternalSceneActivity
+            ||activity instanceof PopPushActivity){
+                activity.finish();
+            }
         }
     }
+
 
     /**
      * 判断一个Activity 是否存在

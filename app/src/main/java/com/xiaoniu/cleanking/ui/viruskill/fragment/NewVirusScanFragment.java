@@ -120,7 +120,6 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         recycleViewText.setLayoutManager(layoutManager);
         textAdapter = new VirusScanTextItemAdapter();
         recycleViewText.setAdapter(textAdapter);
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 5);
         recycleViewIcon.setLayoutManager(gridLayoutManager);
         iconAdapter = new VirusScanIconItemAdapter();
@@ -134,6 +133,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     }
 
     private void startCountDown() {
+
+        StatisticsUtils.onPageStart(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME);
+
         timer = new CountDownTimer(millisInFuture, countDownInterval) {
             public void onTick(long millisUntilFinished) {
                 if(isFinishing()){
@@ -351,6 +353,6 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     public void finish() {
         timer.cancel();
         getActivity().finish();
-
+        StatisticsUtils.trackClick("return_click",Points.Virus.SCAN_SYSTEM_RETURN_EVENT_NAME,"", Points.Virus.SCAN_PAGE);
     }
 }

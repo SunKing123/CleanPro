@@ -21,6 +21,8 @@ import com.xiaoniu.cleanking.ui.viruskill.model.PrivacyDataStore;
 import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.Points;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +42,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
     private NewVirusScanFragment scanFragment;
     private FragmentManager mManager = getSupportFragmentManager();
     private boolean isCleaning = false;
-
+    private int pageIndex=0;
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
 
@@ -68,6 +70,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
 
     @Override
     public void onTransferResultPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
+        pageIndex=1;
         VirusScanResultFragment resultFragment = new VirusScanResultFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(VirusScanResultFragment.IntentKey.P_LIST, pList);
@@ -83,6 +86,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
     @Override
     public void onTransferCleanPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
         isCleaning = true;
+        pageIndex=2;
         VirusCleanFragment cleanFragment = new VirusCleanFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(VirusCleanFragment.IntentKey.P_LIST, pList);
@@ -125,8 +129,19 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         //如果是处于清理，用户点击返回键无效
-        if (keyCode == KeyEvent.KEYCODE_BACK && isCleaning) {
-            return false;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            switch (pageIndex){
+                case 0:
+                    StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, Points.Virus.SCAN_SYSTEM_RETURN_EVENT_NAME,"",Points.Virus.SCAN_PAGE);
+                    break;
+                case 1:
+                    StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, Points.Virus.RESULT_RETURN_EVENT_NAME,Points.Virus.SCAN_PAGE,Points.Virus.RESULT_PAGE);
+                    break;
+                case 2:
+                    StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, Points.Virus.CLEAN_FINISH_SYSTEM_RETURN_EVENT_NAME,Points.Virus.SCAN_PAGE,Points.Virus.CLEAN_FINISH_PAGE);
+                    break;
+            }
+            return isCleaning?false:super.onKeyDown(keyCode, event);
         }
         return super.onKeyDown(keyCode, event);
     }
