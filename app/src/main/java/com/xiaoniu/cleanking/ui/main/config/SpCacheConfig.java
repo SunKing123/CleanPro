@@ -53,6 +53,11 @@ public class SpCacheConfig {
 
     //上一次弹出wifi插屏的时间
     public static final String KEY_LAST_POPUP_WIFI="last_popup_wifi";
+    //外部手机状态弹框信息
+    public static final String KEY_LAST_POPUP_DEVICE_INFO="last_popup_deviceInfo";
+    //外部电量信息弹框
+    public static final String KEY_LAST_POPUP_BATTERY_INFO="last_popup_battery_info";
+
 
     public static final String IS_PUSH_DEVICE_INFO = "is_push_device_info";
     public static final String IS_NOTIFICATION_ENABLED = "is_notification_enabled";

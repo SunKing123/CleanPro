@@ -24,6 +24,8 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.DateUtils;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -119,15 +121,13 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
         if (AppLifecycleUtil.isAppOnForeground(AppApplication.getInstance())) {
             return;
         }
-        int showTimes = 0;
         int displayTim = 0;
         InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.PAGE_DESK_BATTERY_INFO);
-        if (null != dataBean && dataBean.isOpen()) {
-            showTimes = dataBean.getShowRate();
+        if (DeskPopConfig.getInstance().isBatteryCanPop()) {
             displayTim = dataBean.getDisplayTime();
             long lastShowTime = MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, 0);
-            int lastShowNum = MmkvUtil.getInt(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, 0);
-            if (lastShowNum <= showTimes && (System.currentTimeMillis() - lastShowTime) >= 1000 * 60 * displayTim) {
+            if ((System.currentTimeMillis() - lastShowTime) >= 1000 * 60 * displayTim) {
+                StatisticsUtils.customTrackEvent("charging_plug_screen_meets _opportunity", "充电插屏满足时机", "charging_plug_screen", "charging_plug_screen");
                 EventBus.getDefault().post(new PopEventModel("power"));
             }
         }

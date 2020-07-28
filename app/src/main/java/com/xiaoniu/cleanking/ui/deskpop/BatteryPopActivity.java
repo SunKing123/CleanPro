@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
+import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.text.DecimalFormat;
 
@@ -71,8 +72,9 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
 
     private void initView() {
         MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, System.currentTimeMillis());
-        MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, (MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, 0) + 1));
+        DeskPopConfig.getInstance().saveAndDecreaseBatteryPopNum();
 
+        StatisticsUtils.customTrackEvent("charging_plug_screen_custom", "充电插屏曝光", "charging_plug_screen", "charging_plug_screen");
         sceneClose = findViewById(R.id.scene_close);
         sceneTitle = findViewById(R.id.scene_title);
         sceneButton = findViewById(R.id.scene_button);
@@ -133,9 +135,11 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.scene_close:
+                StatisticsUtils.trackClick("close_click", "充电插屏关闭按钮点击", "charging_plug_screen", "charging_plug_screen");
                 finish();
                 break;
             case R.id.scene_button:
+                StatisticsUtils.trackClick("charging_plug_screen_button_click", "充电插屏按钮点击", "charging_plug_screen", "charging_plug_screen");
                 if (sceneButton.getText().toString().equals(getString(R.string.power_cut_temp))) {
                     ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation();
                 } else if (sceneButton.getText().toString().equals(getString(R.string.power_charging))) {

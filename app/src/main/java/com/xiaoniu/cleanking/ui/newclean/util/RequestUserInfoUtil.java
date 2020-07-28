@@ -120,7 +120,7 @@ public class RequestUserInfoUtil {
                             UserHelper.init().clearCurrentUserInfo();
                             EventBus.getDefault().post(EXIT_SUCCESS);
                             if (resultListener != null) {
-                                resultListener.requestSuccess();
+                                resultListener.requestSuccess("");
                             }
                         }
                     }
@@ -157,7 +157,7 @@ public class RequestUserInfoUtil {
                         RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
                         int num = dataBean.getData().getGold();
                         if (resultListener != null) {
-                            resultListener.requestSuccess();
+                            resultListener.requestSuccess(String.valueOf(num));
                         }
                     }
 

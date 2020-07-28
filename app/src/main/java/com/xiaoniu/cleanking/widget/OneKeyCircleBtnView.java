@@ -104,6 +104,13 @@ public class OneKeyCircleBtnView extends RelativeLayout {
         textLayout.topMargin = Float.valueOf((screenWidth / 1.43f / 1.81f)).intValue();
         linear_text_tag.setLayoutParams(textLayout);
         linear_text_tag.setVisibility(VISIBLE);
+        startAnimation();
+
+    }
+
+
+
+    public void startAnimation(){
         viewLottie.setMinAndMaxFrame(0, 74);
         viewLottie.playAnimation();
         viewLottie.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -117,13 +124,12 @@ public class OneKeyCircleBtnView extends RelativeLayout {
                 }
             }
         });
-
     }
 
     //根据扫描垃圾总数
     public void setTotalSize(long totalSize) {
         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalSize);
-        if (null != countEntity) {
+        if (null != countEntity&&null!= tv_file_total_size) {
             tv_file_total_size.setText(countEntity.getTotalSize() + countEntity.getUnit());
             tv_file_total_size.setVisibility(VISIBLE);
             tv_file_total_tag.setVisibility(VISIBLE);
@@ -178,7 +184,7 @@ public class OneKeyCircleBtnView extends RelativeLayout {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         if (animation.getAnimatedFraction() >= 1f && null != viewLottie) {
                             Bitmap bitmap = BitmapUtil.convertViewToBitmap(viewLottie);
-                            if (bitmap != null) {
+                            if (bitmap != null && null != iv_top_perview) {
                                 iv_top_perview.setImageBitmap(bitmap);
                                 iv_top_perview.setVisibility(VISIBLE);
                             }
@@ -187,6 +193,7 @@ public class OneKeyCircleBtnView extends RelativeLayout {
                             viewLottie.setAnimation("home_top_scan/state02/data.json");
                             viewLottie.setImageAssetsFolder("home_top_scan/state02/images");
                             viewLottie.playAnimation();
+
                             mAnimHelper.changeAnim(iv_top_perview, viewLottie);
                         }
                     }

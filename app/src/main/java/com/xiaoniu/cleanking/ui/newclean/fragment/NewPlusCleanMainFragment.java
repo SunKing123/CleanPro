@@ -79,6 +79,7 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
@@ -94,6 +95,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -193,6 +195,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         initClearItemCard();
         initListener();
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
+        Map<String, Object> extParam = new HashMap<>();
+        extParam.put("testing_status", UserHelper.init().isWxLogin() ? "yes" : "no");
+        StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态",
+                "home_page", "home_page", extParam);
         checkAndUploadPoint();
         showGuideView();
     }
@@ -634,10 +640,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
-//                    if (!AndroidUtil.isFastDoubleBtnClick(2000)) {
+                    view_lottie_top.startAnimation();
                     mPresenter.readyScanningJunk();
                     mPresenter.scanningJunk();
-//                    }
                 }
             } else { //清理结果五分钟以内
                 String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
