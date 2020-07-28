@@ -113,7 +113,7 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
         //更新sp当前充电状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
     }
-
+    
     /**
      * 跳转电池页面；
      */

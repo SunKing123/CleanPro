@@ -1,7 +1,10 @@
 package com.xiaoniu.cleanking.ui.deskpop;
 
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.main.bean.ExternalPopNumEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.common.utils.DateUtils;
 
 /**
  * Created by xinxiaolong on 2020/7/27.
@@ -9,31 +12,111 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
  */
 public class DeskPopConfig {
 
-    public static boolean isStateOpen(){
-        InsertAdSwitchInfoList.DataBean dataBean=getStateConfig();
-        return dataBean.isOpen();
-    }
+    private static DeskPopConfig config;
 
-    public static boolean isBatteryOpen(){
-        InsertAdSwitchInfoList.DataBean dataBean= getBatteryConfig();
-        return dataBean.isOpen();
-    }
+    private InsertAdSwitchInfoList.DataBean stateConfig;
+    private InsertAdSwitchInfoList.DataBean batteryConfig;
 
-    public static InsertAdSwitchInfoList.DataBean getStateConfig(){
-        InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo("page_desk_device_info");
-        if(dataBean==null){
-            dataBean=new InsertAdSwitchInfoList.DataBean();
-            dataBean.setOpen(false);
+
+    public static DeskPopConfig getInstance() {
+        if (config == null) {
+            config = new DeskPopConfig();
         }
-        return dataBean;
+        return config;
     }
 
-    public static InsertAdSwitchInfoList.DataBean getBatteryConfig(){
-        InsertAdSwitchInfoList.DataBean dataBean= AppHolder.getInstance().getInsertAdInfo("page_desk_battery_info");
-        if(dataBean==null){
-            dataBean=new InsertAdSwitchInfoList.DataBean();
-            dataBean.setOpen(false);
+    private DeskPopConfig() {
+        initData();
+    }
+
+    private void initData() {
+        initStateConfig();
+        initBatteryConfig();
+    }
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************state config*********************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+    /**
+     * 开关是否打开
+     *
+     * @return
+     */
+    public boolean isStateOpen() {
+        return stateConfig.isOpen();
+    }
+
+    /**
+     * 手机状态是否可以弹出
+     * @return
+     */
+    public boolean isStateCanPop() {
+        if(isStateOpen()){
+            ExternalPopNumEntity externalPopNumEntity= getLastSameDayExternalPop();
+            return externalPopNumEntity.getPopupCount()>0;
         }
-        return dataBean;
+        return false;
+    }
+
+    /**
+     * 获取服务端配置，每日可弹次数。
+     * @return
+     */
+    public int getStatePopCount(){
+        return stateConfig.getShowRate();
+    }
+
+    /**
+     * 存储递减弹框次数
+     */
+    public void saveAndDecreaseStatePopNum() {
+        ExternalPopNumEntity externalPopNumEntity= getLastSameDayExternalPop();
+        externalPopNumEntity.setPopupTime(System.currentTimeMillis());
+        externalPopNumEntity.setPopupCount(externalPopNumEntity.getPopupCount()-1);
+        PreferenceUtil.saveStateExternalPopNumEntity(externalPopNumEntity);
+    }
+
+    /**
+     * 获取相同天内的弹框次数信息
+     * @return
+     */
+    private ExternalPopNumEntity getLastSameDayExternalPop(){
+        ExternalPopNumEntity externalPopNumEntity= PreferenceUtil.getStateExternalPopNumEntity();
+        if(externalPopNumEntity==null||!DateUtils.isSameDay(externalPopNumEntity.getPopupTime(), System.currentTimeMillis())){
+            //如果已隔天，则重新开始计算弹出次数
+            externalPopNumEntity=new ExternalPopNumEntity(System.currentTimeMillis(),getStatePopCount());
+        }
+        return externalPopNumEntity;
+    }
+
+    private InsertAdSwitchInfoList.DataBean initStateConfig() {
+        stateConfig = AppHolder.getInstance().getInsertAdInfo("page_desk_device_info");
+        if (stateConfig == null) {
+            stateConfig = new InsertAdSwitchInfoList.DataBean();
+            stateConfig.setOpen(false);
+        }
+        return stateConfig;
+    }
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************battery config*******************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+    public boolean isBatteryOpen() {
+        return batteryConfig.isOpen();
+    }
+
+    private InsertAdSwitchInfoList.DataBean initBatteryConfig() {
+        batteryConfig = AppHolder.getInstance().getInsertAdInfo("page_desk_battery_info");
+        if (batteryConfig == null) {
+            batteryConfig = new InsertAdSwitchInfoList.DataBean();
+            batteryConfig.setOpen(false);
+        }
+        return batteryConfig;
     }
 }
