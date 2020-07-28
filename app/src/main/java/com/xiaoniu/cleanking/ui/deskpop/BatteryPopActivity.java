@@ -72,7 +72,7 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
 
     private void initView() {
         MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, System.currentTimeMillis());
-        MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, (MmkvUtil.getLong(PositionId.PAGE_DESK_BATTERY_INFO_SHOW_NUM, 0) + 1));
+        DeskPopConfig.getInstance().saveAndDecreaseBatteryPopNum();
 
         StatisticsUtils.customTrackEvent("charging_plug_screen_custom", "充电插屏曝光", "charging_plug_screen", "charging_plug_screen");
         sceneClose = findViewById(R.id.scene_close);

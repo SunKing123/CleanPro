@@ -6,7 +6,7 @@ package com.xiaoniu.cleanking.ui.newclean.interfice;
  * Describe:请求结果回调接口
  */
 public interface RequestResultListener {
-    void requestSuccess();
+    void requestSuccess(String coin);
 
     void requestFail();
 }

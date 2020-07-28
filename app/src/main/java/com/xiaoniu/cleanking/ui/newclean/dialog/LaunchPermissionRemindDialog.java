@@ -79,11 +79,11 @@ public class LaunchPermissionRemindDialog extends Dialog {
             @Override
             public void onClick(View widget) {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/agree.html");
+                    jumpXieyiActivity("file:///android_asset/userAgreement.html", "用户协议");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/agree.html");
+                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/userAgreement.html", "用户协议");
                 }
-                StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
+                StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
 
             }
 
@@ -100,12 +100,11 @@ public class LaunchPermissionRemindDialog extends Dialog {
             @Override
             public void onClick(View widget) {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/userAgreement.html");
+                    jumpXieyiActivity("file:///android_asset/agree.html", "隐私政策");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/userAgreement.html");
+                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/agree.html", "隐私政策");
                 }
-                StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
-
+                StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
             }
 
             @Override
@@ -131,11 +130,11 @@ public class LaunchPermissionRemindDialog extends Dialog {
         void nextOption();
     }
 
-    public void jumpXieyiActivity(String url) {
+    public void jumpXieyiActivity(String url, String title) {
         Intent intent = new Intent(mContext, UserLoadH5Activity.class);
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
-        bundle.putString(Constant.Title, "服务协议");
+        bundle.putString(Constant.Title, title);
         bundle.putBoolean(Constant.NoTitle, false);
         intent.putExtras(bundle);
         mContext.startActivity(intent);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,8 @@ public class ExternalPhoneStateActivity extends BaseActivity {
     public void initData(@Nullable Bundle savedInstanceState) {
         initFragment();
         initView();
+        //当打开时，将弹框数量递减
+        DeskPopConfig.getInstance().saveAndDecreaseStatePopNum();
     }
 
     private void initView(){
@@ -49,6 +52,7 @@ public class ExternalPhoneStateActivity extends BaseActivity {
         mManager.beginTransaction()
                 .add(R.id.frame_layout, new ExternalPhoneStateFragment())
                 .commitAllowingStateLoss();
+
     }
 
     public static void start(Context context){

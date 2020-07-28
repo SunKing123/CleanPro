@@ -6,6 +6,10 @@ import android.os.Build;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.logger.Logger;
+import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
+import com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity;
+import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
+import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.ArrayList;
@@ -32,8 +36,18 @@ public class ActivityCollector {
      * @param activity
      */
     public static void addActivity(Activity activity, Class<?> clz) {
+        toSingleExternalActivity(activity);
         activities.put(clz, activity);
         spSave(activities);
+    }
+
+    private static void toSingleExternalActivity(Activity activity) {
+        if (activities.containsKey(ExternalPhoneStateActivity.class) ||
+                activities.containsKey(BatteryPopActivity.class) ||
+                activities.containsKey(ExternalSceneActivity.class)||
+                activities.containsKey(PopPushActivity.class)) {
+            activity.finish();
+        }
     }
 
     /**
@@ -64,7 +78,6 @@ public class ActivityCollector {
         }
         return res;
     }
-
 
 
     /**
@@ -112,28 +125,29 @@ public class ActivityCollector {
         return activity;
     }
 
-    public static void spSave(HashMap<Class<?>, Activity> activities){
-        List<String> acNameList= new ArrayList<>();
-        if(activities!=null && activities.size()>0){
+    public static void spSave(HashMap<Class<?>, Activity> activities) {
+        List<String> acNameList = new ArrayList<>();
+        if (activities != null && activities.size() > 0) {
             for (Map.Entry<Class<?>, Activity> activityEntry : activities.entrySet()) {
-                acNameList.add(((Activity)activityEntry.getValue()).getLocalClassName());
+                acNameList.add(((Activity) activityEntry.getValue()).getLocalClassName());
             }
         }
 
         if (acNameList.size() > 0) {
-            Logger.i("zz-activity-"+new Gson().toJson(acNameList));
+            Logger.i("zz-activity-" + new Gson().toJson(acNameList));
             MmkvUtil.saveString("activity_list", new Gson().toJson(acNameList));
         }
     }
 
-    public static boolean isActivityExistMkv(Class cla){
-        boolean isExist =false;
-        String activity_list = MmkvUtil.getString("activity_list","");
-        TypeToken<List<String>> token = new TypeToken<List<String>>() {};
+    public static boolean isActivityExistMkv(Class cla) {
+        boolean isExist = false;
+        String activity_list = MmkvUtil.getString("activity_list", "");
+        TypeToken<List<String>> token = new TypeToken<List<String>>() {
+        };
         List<String> acNameList = new Gson().fromJson(activity_list, token.getType());
         if (null != acNameList && acNameList.size() > 0) {
-            for(String name:acNameList){
-                if(name.contains(cla.getName())){
+            for (String name : acNameList) {
+                if (name.contains(cla.getName())) {
                     isExist = true;
                 }
             }
