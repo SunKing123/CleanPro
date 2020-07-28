@@ -243,6 +243,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                     return;
                 initNiuData();
             }
+
             @Override
             public void onDenied() {
 
@@ -688,7 +689,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
 
     //金币翻倍
-    public void bullDouble(String uuid, int locationNum, int goldCount) {
+    public void bullDouble(String uuid, int locationNum, int goldCount, String doubledMagnification) {
         mModel.goldDouble(new Common3Subscriber<BubbleDouble>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
@@ -710,7 +711,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             public void netConnectError() {
                 ToastUtils.showShort(R.string.notwork_error);
             }
-        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount);
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount, doubledMagnification);
     }
 
     //金币领取广告弹窗

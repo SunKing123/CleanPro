@@ -1073,7 +1073,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     public void bubbleDouble(BubbleCollected dataBean) {
         if (null != dataBean) {
-            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount());//刷新金币列表；
+            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount(), String.valueOf(dataBean.getData().getDoubledMagnification()));//刷新金币列表；
         }
     }
 
