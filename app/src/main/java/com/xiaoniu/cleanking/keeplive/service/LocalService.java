@@ -287,8 +287,6 @@ public final class LocalService extends Service {
         unbindService(connection);
         unregisterReceiver(mOnepxReceiver);
         unregisterReceiver(screenStateReceiver);
-        if (batteryReceiver != null)
-            unregisterReceiver(batteryReceiver);
 
         if (mKeepAliveRuning != null) {
             mKeepAliveRuning.onStop();
