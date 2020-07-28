@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.xiaoniu.cleanking.widget.OneKeyCircleButtonView
+                <com.xiaoniu.cleanking.widget.OneKeyCircleBtnView
                     android:id="@+id/view_lottie_top"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

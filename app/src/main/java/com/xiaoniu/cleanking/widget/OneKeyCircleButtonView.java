@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.widget;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -14,12 +13,10 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.bean.LottiePathdata;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.BitmapUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.lottie.AnimHelper;
@@ -37,7 +34,7 @@ public class OneKeyCircleButtonView extends RelativeLayout {
     private Context mContext;
     private LottieAnimationView viewLottieGreen;
     private RelativeLayout rel_bubble,rlayout_onekey;
-    private TouchImageView ivCenter;
+
 
     private Map<Integer, LottiePathdata> lottiePathdataMap;
     private LuckBubbleView lftop,lfbotm,rttop,rtbotm;
@@ -78,13 +75,12 @@ public class OneKeyCircleButtonView extends RelativeLayout {
         mContext = context;
         View v = LayoutInflater.from(mContext).inflate(R.layout.layout_home_top_circle_anim, this, true);
         linear_text_tag = (LinearLayout) v.findViewById(R.id.linear_text_tag);
-        viewLottieGreen = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_green);
+        viewLottieGreen = (LottieAnimationView) v.findViewById(R.id.view_lottie_top_center);
         rel_bubble = (RelativeLayout)v.findViewById(R.id.rel_bubble);
         tv_file_total_size = (TextView) v.findViewById(R.id.tv_file_total_size);
         tv_file_total_tag = (TextView) v.findViewById(R.id.tv_file_total_tag);
         iv_top_perview = (ImageView)v.findViewById(R.id.tv_top_perview);
-        ivCenter = (TouchImageView) v.findViewById(R.id.iv_center);
-        rlayout_onekey = (RelativeLayout)v.findViewById(R.id.rlayout_onekey);
+
         lftop = (LuckBubbleView)v.findViewById(R.id.lftop);
         lfbotm = (LuckBubbleView)v.findViewById(R.id.lfbotm);
         rttop = (LuckBubbleView)v.findViewById(R.id.rttop);

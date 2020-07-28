@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
@@ -83,7 +82,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
-import com.xiaoniu.cleanking.widget.OneKeyCircleButtonView;
+import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.Points;
@@ -112,7 +111,7 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener, FragmentOnFocusListenable {
 
     @BindView(R.id.view_lottie_top)
-    OneKeyCircleButtonView view_lottie_top;
+    OneKeyCircleBtnView view_lottie_top;
     @BindView(R.id.home_main_table)
     HomeMainTableView homeMainTableView;
     @BindView(R.id.home_tool_table)
@@ -662,10 +661,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 点击立即清理
      */
-    @OnClick({R.id.iv_center, R.id.layout_temp})
+    @OnClick({R.id.view_lottie_top_center, R.id.layout_temp})
     public void nowClean(View view) {
         switch (view.getId()) {
-            case R.id.iv_center:
+            case R.id.view_lottie_top_center:
                 StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
                 if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
                     if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
