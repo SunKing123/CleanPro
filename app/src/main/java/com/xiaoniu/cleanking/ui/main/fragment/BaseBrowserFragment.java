@@ -31,7 +31,6 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.user.ShanYanManager;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.Points;
@@ -147,9 +146,10 @@ public class BaseBrowserFragment extends SimpleFragment {
         int coinCount = cardAvdPresenter.coinCount;
         RequestUserInfoUtil.guaGuaBubbleDoubleRequest(getContext(), id, new RequestResultListener() {
             @Override
-            public void requestSuccess() {
+            public void requestSuccess(String coin) {
                 String adId = cardAvdPresenter.isOpenThree() ? cardAvdPresenter.getSecondAdvId(cardIndex) : "";
-                GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinCount, cardIndex, Points.ScratchCard.SUCCESS_PAGE);
+                int coinC = TextUtils.isEmpty(coin) ? coinCount : Integer.parseInt(coin);
+                GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinC, cardIndex, Points.ScratchCard.SUCCESS_PAGE);
                 GoldCoinSuccessActivity.Companion.start(getContext(), model);
                 GoldCoinDialog.dismiss();
                 StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
