@@ -36,12 +36,12 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
         boolean canPop=diffMinutes >=displayTime;
 
-        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diffMinutes+"    displayTime="+displayTime);
+        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diffMinutes+"    displayTime="+displayTime+"     needPop()"+needPop());
         if (canPop) {
             checkAndPop();
         }
     }
-    
+
     private void checkAndPop() {
         if (needPop()) {
             EventBus.getDefault().post(new PopEventModel("deviceInfo"));

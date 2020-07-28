@@ -4,6 +4,7 @@ import com.google.gson.internal.$Gson$Preconditions;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.ExternalPopNumEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 
@@ -77,10 +78,13 @@ public class DeskPopConfig {
      * 存储递减弹框次数
      */
     public void saveAndDecreaseStatePopNum() {
+        LogUtils.e("=======================pulseTimer   in saveAndDecreaseStatePopNum()========================");
         ExternalPopNumEntity externalPopNumEntity= getLastSameDayExternalPop();
         externalPopNumEntity.setPopupTime(System.currentTimeMillis());
         externalPopNumEntity.setPopupCount(externalPopNumEntity.getPopupCount()-1);
+        LogUtils.e("pulseTimer:  thisPopNum: "+externalPopNumEntity.getPopupCount()+"    "+externalPopNumEntity.getPopupTime());
         PreferenceUtil.saveStateExternalPopNumEntity(externalPopNumEntity);
+        LogUtils.e("=======================pulseTimer   in saveAndDecreaseStatePopNum()========================");
     }
 
     /**
@@ -93,6 +97,7 @@ public class DeskPopConfig {
             //如果已隔天，则重新开始计算弹出次数
             externalPopNumEntity=new ExternalPopNumEntity(System.currentTimeMillis(),getStatePopCount());
         }
+        LogUtils.e("pulseTimer:  lastPopNum: "+externalPopNumEntity.getPopupCount()+"    "+externalPopNumEntity.getPopupTime());
         return externalPopNumEntity;
     }
 

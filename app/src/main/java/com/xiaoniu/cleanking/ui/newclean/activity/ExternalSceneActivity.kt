@@ -55,7 +55,6 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
             StatisticsUtils.trackClick("close_click", "wifi插屏关闭按钮点击", "wifi_plug_screen", "wifi_plug_screen")
             finish()
         }
-
     }
 
     private fun startNetSpeed() {
