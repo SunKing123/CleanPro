@@ -198,13 +198,13 @@
             android:id="@+id/iv_back"
             style="@style/top_iv_back"
             android:layout_height="match_parent"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_title_name"
             style="@style/top_tv_title"
             android:layout_gravity="center_vertical"
             android:text="@string/tool_one_key_speed"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>
