@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.BallRewardBean;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
+import com.xiaoniu.cleanking.utils.GlideUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -38,6 +39,7 @@ public class LuckBubbleView extends LinearLayout {
     private IBullClickListener iBullClickListener;
     private BubbleConfig.DataBean listBean;
     private Typeface typ_RE;
+    private ImageView imgbg;
 
     public LuckBubbleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -52,15 +54,15 @@ public class LuckBubbleView extends LinearLayout {
 
         activity = (Activity) context;
         inflate(activity, R.layout.luck_bubble, this);
-        lottie_gold = (LottieAnimationView)findViewById(R.id.lottie_gold);
+//        lottie_gold = (LottieAnimationView) findViewById(R.id.lottie_gold);
         content = (TextView) findViewById(R.id.tvcon);
         content.setTypeface(typ_RE);
-        ImageView imgbg = (ImageView) findViewById(R.id.imgbg);
+        imgbg = (ImageView) findViewById(R.id.imgbg);
         setVisibility(VISIBLE);
 
-        if (!lottie_gold.isAnimating()) {
-            lottie_gold.playAnimation();
-        }
+//        if (!lottie_gold.isAnimating()) {
+//            lottie_gold.playAnimation();
+//        }
 
 //        ImageView ivBallAnim = (ImageView) findViewById(R.id.iv_ball_anim);
 //        setAnim(ivBallAnim);
@@ -72,7 +74,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 31.5f);
             lp.height = DisplayUtil.dip2px(context, 33f);
             imgbg.setLayoutParams(lp);
-            lottie_gold.setLayoutParams(lp);
+//            lottie_gold.setLayoutParams(lp);
         } else if (loact == 2) {//left-bom
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 //            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 30f);
@@ -80,7 +82,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 38.5f);
             lp.height = DisplayUtil.dip2px(context, 40.5f);
             imgbg.setLayoutParams(lp);
-            lottie_gold.setLayoutParams(lp);
+//            lottie_gold.setLayoutParams(lp);
 
         } else if (loact == 3) {//right-top
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
@@ -88,7 +90,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 38.5f);
             lp.height = DisplayUtil.dip2px(context, 40.5f);
             imgbg.setLayoutParams(lp);
-            lottie_gold.setLayoutParams(lp);
+//            lottie_gold.setLayoutParams(lp);
         } else if (loact == 4) {//right-bom
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
 //            AnimationRotateUtils.setRotationAnimator(ivBallAnim, 60f);
@@ -96,7 +98,7 @@ public class LuckBubbleView extends LinearLayout {
             lp.width = DisplayUtil.dip2px(context, 45.5f);
             lp.height = DisplayUtil.dip2px(context, 48.5f);
             imgbg.setLayoutParams(lp);
-            lottie_gold.setLayoutParams(lp);
+//            lottie_gold.setLayoutParams(lp);
         }
 //        ivBallAnim.setLayoutParams(lp);
         setVisibility(GONE);
@@ -136,6 +138,11 @@ public class LuckBubbleView extends LinearLayout {
         }
         setVisibility(VISIBLE);
         content.setText(String.valueOf(listBean.getGoldCount()));
+        try {
+            GlideUtils.loadImage(activity, listBean.getIconUrl(), imgbg,R.drawable.icon_kw00);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         /*if (listBean.getLocationNum() == 1.contains("randomShowNum")) {//随机可见金币 randomShowNum1 randomShowNum2 randomShowNum3
             content.setText(String.valueOf(listBean.getGoldAmount()));
         } else if (TextUtils.equals("randomHideNum", listBean.getCode())) {

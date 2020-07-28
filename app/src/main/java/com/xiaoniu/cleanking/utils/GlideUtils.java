@@ -29,6 +29,24 @@ import com.bumptech.glide.util.Util;
  */
 public class GlideUtils {
 
+
+
+
+    public static void loadImage(Activity context, String url, ImageView imageView,int sourceId) {
+        if (null != context && !context.isDestroyed()) {
+            try {
+                Glide.with(context)
+                        .load(url)
+                        .error(sourceId)
+                        .placeholder(sourceId)
+                        .fallback(sourceId)
+                        .into(imageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void loadImage(Activity context, String url, ImageView imageView) {
         if (null != context && !context.isDestroyed()) {
             try {
