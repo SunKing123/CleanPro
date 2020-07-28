@@ -27,11 +27,13 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
     @Override
     public void onPulse(long progress) {
         int displayTime= DeskPopConfig.getInstance().getStateDisplayTime();
+
         if(displayTime==0){
             unRegister();
             return;
         }
         long diffMinutes = (System.currentTimeMillis() - startTime)/1000/60;
+
         boolean canPop=diffMinutes >=displayTime;
 
         LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diffMinutes+"    displayTime="+displayTime);
@@ -39,11 +41,11 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
             checkAndPop();
         }
     }
-
+    
     private void checkAndPop() {
         if (needPop()) {
-            unRegister();
             EventBus.getDefault().post(new PopEventModel("deviceInfo"));
+            startTime = System.currentTimeMillis();
         }
     }
 
