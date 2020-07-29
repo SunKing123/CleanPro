@@ -339,11 +339,12 @@ public class PreferenceUtil {
      * @return true 3分钟以上 false 小于3分钟
      */
     public static boolean getCleanTime() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+       /* SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_CLEAN_TIME, 0);
         if (System.currentTimeMillis() - time > 3 * 60 * 1000)
             return true;
-        return false;
+        return false;*/
+       return true;
     }
 
 

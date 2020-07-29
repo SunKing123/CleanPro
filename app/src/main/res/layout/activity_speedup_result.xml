@@ -47,7 +47,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dip"
-                android:background="@color/color_FF5454">
+                android:background="@color/color_ff6d58">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
