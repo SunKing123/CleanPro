@@ -6,44 +6,52 @@
     android:background="@android:color/transparent">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@drawable/scene_bg"
-        android:orientation="vertical">
+        android:background="@drawable/scene_bg">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/scene_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/color_262626"
+                android:textSize="@dimen/dimen_20sp"
+                tools:text="@string/tv_title_power_pop" />
+
+            <include layout="@layout/view_scene_power"></include>
+
+            <!--使用ViewStub引入自己的布局即可  end-->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/scene_button"
+                style="@style/large_blue_button_style"
+                android:layout_marginStart="@dimen/dimen_53dp"
+                android:layout_marginTop="@dimen/dimen_40dp"
+                android:layout_marginEnd="@dimen/dimen_53dp"
+                android:layout_marginBottom="@dimen/common_ad_img_width_40dp"
+                tools:text="@string/power_cut_temp" />
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/scene_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/dimen_12dp"
             android:layout_marginEnd="@dimen/dimen_12dp"
             android:src="@mipmap/scene_close" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/scene_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/color_262626"
-            android:textSize="@dimen/dimen_20sp"
-            tools:text="@string/tv_title_power_pop" />
-
-        <include
-            layout="@layout/view_scene_power"></include>
-
-        <!--使用ViewStub引入自己的布局即可  end-->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/scene_button"
-            style="@style/large_blue_button_style"
-            android:layout_marginStart="@dimen/dimen_53dp"
-            android:layout_marginTop="@dimen/dimen_40dp"
-            android:layout_marginEnd="@dimen/dimen_53dp"
-            android:layout_marginBottom="@dimen/common_ad_img_width_40dp"
-            tools:text="@string/power_cut_temp" />
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>
