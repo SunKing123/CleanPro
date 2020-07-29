@@ -68,8 +68,10 @@ import com.xiaoniu.cleanking.receiver.LockActivityStarReceiver;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.deskpop.PowerStatePopChecker;
+import com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.deskpop.state.PhoneStatePopChecker;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushSchedule;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
@@ -487,13 +489,13 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 } else {//非当前主进程
                     return;
                 }
-                if (null == application || !mIsBack || ActivityCollector.isActivityExist(LockActivity.class)
+
+                if (null == application || !mIsBack
                         || ActivityCollector.isActivityExist(PopLayerActivity.class)
                         || ActivityCollector.isActivityExist(SplashADActivity.class)
                         || ActivityCollector.isActivityExist(SplashADHotActivity.class)
                         || ActivityCollector.isActivityExist(FullPopLayerActivity.class)
-                        || ActivityCollector.isActivityExist(PopPushActivity.class)
-                        || ActivityCollector.isActivityExist(ExternalSceneActivity.class)
+                        || ActivityCollector.hasExternalActivity()
                         || activity.getLocalClassName().contains(".wx")
                         || activity.getLocalClassName().contains(".aqy")
                         || activity.getLocalClassName().contains(".ks")
@@ -516,7 +518,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                             mIsBack = false;
                             //only hot launch to send LifecycleEvent
                             EventBus.getDefault().post(new LifecycEvent(true));
-
                         }
                     }
                 }

@@ -722,8 +722,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
-    private void startPopActivity(Class<? extends AppCompatActivity> target) {
 
+    private void startPopActivity(Class<? extends AppCompatActivity> target) {
         if(ActivityCollector.hasExternalActivity()){
             return;
         }
