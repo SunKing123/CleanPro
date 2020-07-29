@@ -49,6 +49,7 @@ class SpeedUpClearActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StatusBarUtil.setTransparentForWindow(this)
+        toolBar.setBackgroundResource(R.color.color_02D086)
         StatisticsUtils.onPageStart("boost_animation_page_view_page", "加速动画页浏览")
     }
 
