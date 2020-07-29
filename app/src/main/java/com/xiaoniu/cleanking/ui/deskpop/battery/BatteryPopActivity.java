@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.deskpop.battery;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
@@ -82,6 +84,7 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
         chargeState01 = findViewById(R.id.charge_state01);
         chargeState02 = findViewById(R.id.charge_state02);
         chargeState03 = findViewById(R.id.charge_state03);
+
         tvPowerCapacity = findViewById(R.id.tv_power_capacity);
         tvPowerVoltage = findViewById(R.id.tv_power_voltage);
         tvPowerTemp = findViewById(R.id.tv_power_temp);
@@ -89,6 +92,12 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
         view_power_lottie = findViewById(R.id.view_power_lottie);
         EasyBatteryMod easyBatteryMod = new EasyBatteryMod(this);
         tvCurrentValue.setText(String.valueOf(easyBatteryMod.getBatteryPercentage()));
+
+        tvCurrentValue.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
+        tvPowerCapacity.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
+        tvPowerVoltage.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
+        tvPowerTemp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
+        tvPowerApp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
 
         if (easyBatteryMod.getBatteryPercentage() == 100) {
             tvFullTime.setVisibility(View.GONE);
@@ -128,6 +137,14 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
             sceneButton.setText(getString(R.string.power_charging));
         }
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!hasFocus){
+            finish();
+        }
     }
 
     @Override

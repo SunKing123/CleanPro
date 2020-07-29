@@ -18,7 +18,6 @@ import org.greenrobot.eventbus.EventBus;
 public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
     long startTime;
-
     @Override
     public void onCreate() {
         startTime = System.currentTimeMillis();
@@ -27,6 +26,7 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
     @Override
     public void onPulse(long progress) {
         int displayTime= DeskPopConfig.getInstance().getStateDisplayTime();
+        displayTime=1;
         if(displayTime==0){
             unRegister();
             return;

@@ -69,6 +69,7 @@ import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.cleanking.ui.deskpop.battery.PowerStatePopChecker;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.PhoneStatePopChecker;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushSchedule;
@@ -540,6 +541,9 @@ public class AppLifecyclesImpl implements AppLifecycles {
      */
     private void startBackgroundTimer(){
         BackGroundPulseTimer timer = BackGroundPulseTimer.getInstance();
+
+        DeskPopLogger.log("startBackgroundTimer()   isStateCanPop="+DeskPopConfig.getInstance().isStateCanPop()+"    isBatteryCanPop="+DeskPopConfig.getInstance().isBatteryCanPop());
+
         if (DeskPopConfig.getInstance().isStateCanPop()) {
             timer.register(new PhoneStatePopChecker());
         }
