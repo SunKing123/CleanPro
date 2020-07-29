@@ -90,25 +90,28 @@ public class PhoneThinResultActivity extends BaseActivity<PhoneThinResultPresent
         }
         setData();
         ViewHelper.setTextViewToDDINOTF(mTxtSpaceSize);
+        //软件管理_检测设备信息权限
+        if (!getString(R.string.tool_phone_thin).equals(mTitleName)){
+            //8.0权限判断
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!hasUsageStatsPermission(this)) {
+                    //没有权限
+                    try {
+                        //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
+                        startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
+                    } catch (Exception e) {
+                    }
+                } else {
+                    //有权限
+                    mPresenter.scanData();
 
-        //8.0权限判断
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (!hasUsageStatsPermission(this)) {
-                //没有权限
-                try {
-                    //solve umeng error ->No Activity found to handle Intent { act=android.settings.USAGE_ACCESS_SETTINGS }
-                    startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY), 0x111);
-                } catch (Exception e) {
                 }
             } else {
-                //有权限
                 mPresenter.scanData();
 
             }
-        } else {
-            mPresenter.scanData();
-
         }
+
     }
 
     private void setData() {
