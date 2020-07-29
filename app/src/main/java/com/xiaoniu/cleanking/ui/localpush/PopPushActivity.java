@@ -159,7 +159,6 @@ public class PopPushActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
 
