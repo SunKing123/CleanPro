@@ -89,7 +89,7 @@ class SpeedUpClearActivity : BaseActivity() {
 
 
     private fun playIconAnim1(ivIcon: ImageView, time: Long) {
-        val distance = DisplayUtils.dip2px(167F).toFloat()
+        val distance = DisplayUtils.dip2px(165F).toFloat()
         val anim1 = ValueAnimator.ofFloat(0f, distance)
         anim1.duration = time
         ivIcon.translationY = 0f
@@ -99,7 +99,7 @@ class SpeedUpClearActivity : BaseActivity() {
             val currentValue = animation.animatedValue as Float
             val percent = currentValue / distance
             val scale = 1 - percent
-            if (scale > 0.2) {
+            if (scale > 0.4) {
                 ivIcon.scaleX = scale
                 ivIcon.scaleY = scale
             }

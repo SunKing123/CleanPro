@@ -52,6 +52,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -158,6 +159,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
+        StatusBarUtil.setTransparentForWindow(this);
         StatisticsUtils.onPageStart("boost_scan_page_view_page", "用户在加速扫描页浏览");
         tv_size.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mAppBarLayout.setExpanded(true);
