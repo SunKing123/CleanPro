@@ -452,10 +452,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 }
 
                 //限制华为设置启动包活；
-                if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
+//                if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
                     //启动保活进程
                     mView.start();
-                }
+//                }
             }
 
             @Override
@@ -511,12 +511,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {//网络配置异常时读取本地
                     PreferenceUtil.saveCleanLog(FileUtils.readJSONFromAsset(mActivity, "action_log.json"));
                 }
-                //限制华为设置启动包活；
-                if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
-                    //启动保活进程
-                    mView.start();
-                }
-
             }
 
             @Override
