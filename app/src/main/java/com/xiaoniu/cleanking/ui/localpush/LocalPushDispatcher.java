@@ -8,6 +8,7 @@ import androidx.collection.SparseArrayCompat;
 
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
@@ -85,6 +86,11 @@ public class LocalPushDispatcher {
 
 
     private void startPopActivity(LocalPushConfigModel.Item item) {
+
+        if (ActivityCollector.hasExternalActivity()) {
+            return;
+        }
+
         StatisticsUtils.customTrackEvent("local_push_window_custom", "推送弹窗满足展示时机", "", "local_push_window");
         Intent screenIntent = new Intent();
         screenIntent.setClassName(mContext.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCAL_PUSH_ACTIVITY);
@@ -145,6 +151,9 @@ public class LocalPushDispatcher {
                     PreferenceUtil.getInstants().saveInt(SpCacheConfig.POP_LAYER_NUMBERS, 0);
                 }
                 if (NetworkUtils.isNetConnected()) {
+                    if (ActivityCollector.hasExternalActivity()) {
+                        return;
+                    }
                     Intent screenIntent = getIntent(mContext);
                     mContext.startActivity(screenIntent);
                 }

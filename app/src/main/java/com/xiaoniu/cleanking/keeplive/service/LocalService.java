@@ -304,6 +304,10 @@ public final class LocalService extends Service {
             String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
             boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
             if (TextUtils.equals(auditSwitch, "1") && lock_sw) { //过审开关打开状态
+
+                if(ActivityCollector.hasExternalActivity()){
+                    return;
+                }
                 Intent screenIntent = new Intent();
                 screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCKACTIVITY);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
