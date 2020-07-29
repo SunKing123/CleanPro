@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.utils.rxjava;
 
+import com.xiaoniu.cleanking.ui.deskpop.DeskPopLogger;
 import com.xiaoniu.cleanking.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -31,13 +32,11 @@ public class BackGroundPulseTimer {
 
     public void startTimer() {
         timer.interval(MILLI_SECONDS, this::callBack);
-        LogUtils.e("===============pulseTimer  startTimer()==========");
+        DeskPopLogger.log("===============startTimer()==========");
     }
 
     private void callBack(long number) {
-
-        LogUtils.e("===============pulseTimer  callBack()==========");
-
+        DeskPopLogger.log("===============callBack()==============");
         for (BackGroundIPulseObserver observer : observers) {
             observer.onPulse(number);
         }
@@ -45,17 +44,17 @@ public class BackGroundPulseTimer {
     }
 
     public BackGroundPulseTimer register(BackGroundIPulseObserver observer) {
+        DeskPopLogger.log("===============register()==============");
         if (!observers.contains(observer)) {
             observers.add(observer);
             observer.onCreate();
         }
-        LogUtils.e("===============pulseTimer  register()==========");
         return this;
     }
 
     public void unRegister(BackGroundIPulseObserver observer) {
+        DeskPopLogger.log("===============unRegister(observer)==============");
         observers.remove(observer);
-        LogUtils.e("===============pulseTimer  unRegister(observer)==========");
     }
 
     public boolean hasObserver() {
@@ -69,10 +68,11 @@ public class BackGroundPulseTimer {
             observer.onDestroy();
             iterator.remove();
         }
-        LogUtils.e("===============pulseTimer  unRegisterAll()==========");
+        DeskPopLogger.log("===============unRegisterAll()==============");
     }
 
     public void destroy() {
+        DeskPopLogger.log("===============backgroundTimer destroy()==============");
         unRegisterAll();
         timer.cancel();
     }

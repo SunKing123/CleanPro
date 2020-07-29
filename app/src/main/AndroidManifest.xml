@@ -461,7 +461,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
 
         <activity
-            android:name=".ui.deskpop.BatteryPopActivity"
+            android:name=".ui.deskpop.battery.BatteryPopActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:hardwareAccelerated="true"

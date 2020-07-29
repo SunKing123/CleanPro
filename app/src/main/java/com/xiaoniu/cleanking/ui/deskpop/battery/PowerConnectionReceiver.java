@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.deskpop;
+package com.xiaoniu.cleanking.ui.deskpop.battery;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

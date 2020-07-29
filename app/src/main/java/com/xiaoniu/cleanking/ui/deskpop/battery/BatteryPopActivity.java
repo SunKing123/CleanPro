@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.deskpop;
+package com.xiaoniu.cleanking.ui.deskpop.battery;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +17,7 @@ import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.NumberUtils;

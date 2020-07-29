@@ -79,13 +79,14 @@ public class DeskPopConfig {
      * 存储递减弹框次数
      */
     public void saveAndDecreaseStatePopNum() {
-        LogUtils.e("=======================pulseTimer   in saveAndDecreaseStatePopNum()========================");
+        DeskPopLogger.log("=======================in saveAndDecreaseStatePopNum()========================");
         ExternalPopNumEntity externalPopNumEntity= getLastSameDayExternalPop();
         externalPopNumEntity.setPopupTime(System.currentTimeMillis());
         externalPopNumEntity.setPopupCount(externalPopNumEntity.getPopupCount()-1);
-        LogUtils.e("pulseTimer:  thisPopNum: "+externalPopNumEntity.getPopupCount()+"    "+externalPopNumEntity.getPopupTime());
+        DeskPopLogger.log("thisPopNum: "+externalPopNumEntity.getPopupCount()+"    "+externalPopNumEntity.getPopupTime());
         PreferenceUtil.saveStateExternalPopNumEntity(externalPopNumEntity);
-        LogUtils.e("=======================pulseTimer   in saveAndDecreaseStatePopNum()========================");
+        DeskPopLogger.log("=======================in saveAndDecreaseStatePopNum()========================");
+
     }
 
     /**
