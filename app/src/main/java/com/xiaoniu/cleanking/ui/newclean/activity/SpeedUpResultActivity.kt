@@ -83,14 +83,16 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
         }
 
         tv_back.setOnClickListener {
-            backClick(false)
+            StatisticsUtils.trackClick("return_click", "用户在加速诊断页返回",
+                    "boost_scan_result_page", "boost_scan_result_page")
+            backClick()
         }
         speed_up_value.text = "强力加速彻底清理后速度可提升$randomValue%"
         initData()
     }
 
 
-    private fun backClick(isSystemBack: Boolean) {
+    private fun backClick() {
         /* if (isBackClick) {
              return
          }*/
@@ -100,20 +102,15 @@ class SpeedUpResultActivity : BaseActivity<SpeedUpResultPresenter>(), OnItemClic
             }
 
             override fun cancelBtn() {
-                if (isSystemBack) {
-                    StatisticsUtils.trackClick("system_return_back_click", "用户在加速诊断页返回",
-                            "boost_scan_result_page", "boost_scan_result_page")
-                } else {
-                    StatisticsUtils.trackClick("return_click", "用户在加速诊断页返回",
-                            "boost_scan_result_page", "boost_scan_result_page")
-                }
                 finish()
             }
         }, Color.parseColor("#06C581"), Color.parseColor("#727375"))
     }
 
     override fun onBackPressed() {
-        backClick(true)
+        StatisticsUtils.trackClick("system_return_back_click", "用户在加速诊断页返回",
+                "boost_scan_result_page", "boost_scan_result_page")
+        backClick()
     }
 
     fun initData() {

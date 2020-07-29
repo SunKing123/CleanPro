@@ -252,7 +252,10 @@ public class AccessAnimView extends RelativeLayout {
      */
     private static final int FirstLevel = 0xffFD6F46;
 
-    private static final int SecondLevel = 0xffF1D53B;
+    /**
+     * 第二阶段黄色
+     */
+    private static final int SecondLevel = 0xffFFAD00;
     /**
      * 第三阶段 绿色
      */
