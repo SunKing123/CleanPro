@@ -50,7 +50,7 @@
             android:layout_marginStart="@dimen/dimen_53dp"
             android:layout_marginTop="@dimen/dimen_20dp"
             android:layout_marginEnd="@dimen/dimen_53dp"
-            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_40"
             tools:text="网络加速" />
 
     </LinearLayout>
