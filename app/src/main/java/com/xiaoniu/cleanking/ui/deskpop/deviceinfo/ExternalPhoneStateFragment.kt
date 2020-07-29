@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
 class ExternalPhoneStateFragment : SimpleFragment() {
 
     private var low: Array<Int> = arrayOf(0, 20)
-    private var medium: Array<Int> = arrayOf(21, 60)
+    private var medium: Array<Int> = arrayOf(21, 80)
     private var high: Array<Int> = arrayOf(80, 99)
     private var TEMPERATURE_VPT=37
     private lateinit var easyMemoryMod: EasyMemoryMod

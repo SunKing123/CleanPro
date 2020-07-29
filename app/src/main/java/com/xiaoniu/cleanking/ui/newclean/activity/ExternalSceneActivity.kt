@@ -127,6 +127,12 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
 
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (!hasFocus) {
+            finish()
+        }
+    }
 
     override fun netError() {
     }

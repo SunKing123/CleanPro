@@ -65,4 +65,12 @@ public class ExternalPhoneStateActivity extends BaseActivity {
         super.onDestroy();
         DeskPopLogger.log("=======================in ExternalPhoneStateActivity onDestroy()========================");
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!hasFocus){
+            finish();
+        }
+    }
 }
