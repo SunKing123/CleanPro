@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.keeplive.config.ForegroundNotification;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.state.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushDispatcher;
@@ -725,6 +726,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void startPopActivity(Class<? extends AppCompatActivity> target) {
+
+        if(ActivityCollector.hasExternalActivity()){
+            return;
+        }
         Intent powerIntent = new Intent(this, target);
         powerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         powerIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

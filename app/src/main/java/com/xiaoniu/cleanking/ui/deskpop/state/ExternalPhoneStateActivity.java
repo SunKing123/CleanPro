@@ -55,21 +55,10 @@ public class ExternalPhoneStateActivity extends BaseActivity {
         finish();
     }
 
-
     private void initFragment() {
         mManager.beginTransaction()
                 .add(R.id.frame_layout, new ExternalPhoneStateFragment())
                 .commitAllowingStateLoss();
 
     }
-
-    public static void start(Context context) {
-        Intent screenIntent = new Intent(context, ExternalPhoneStateActivity.class);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        context.startActivity(screenIntent);
-    }
-
 }

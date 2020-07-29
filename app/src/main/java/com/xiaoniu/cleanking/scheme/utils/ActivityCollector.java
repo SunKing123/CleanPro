@@ -36,26 +36,16 @@ public class ActivityCollector {
      * @param activity
      */
     public static void addActivity(Activity activity, Class<?> clz) {
-        toSingleExternalActivity(activity);
         activities.put(clz, activity);
         spSave(activities);
     }
 
-    private static void toSingleExternalActivity(Activity activity) {
-        if (activities.containsKey(ExternalPhoneStateActivity.class) ||
+    public static boolean hasExternalActivity(){
+        return activities.containsKey(ExternalPhoneStateActivity.class) ||
                 activities.containsKey(BatteryPopActivity.class) ||
                 activities.containsKey(ExternalSceneActivity.class)||
-                activities.containsKey(PopPushActivity.class)) {
-
-            if(activity instanceof ExternalPhoneStateActivity
-                    ||activity instanceof BatteryPopActivity
-            ||activity instanceof ExternalSceneActivity
-            ||activity instanceof PopPushActivity){
-                activity.finish();
-            }
-        }
+                activities.containsKey(PopPushActivity.class);
     }
-
 
     /**
      * 判断一个Activity 是否存在

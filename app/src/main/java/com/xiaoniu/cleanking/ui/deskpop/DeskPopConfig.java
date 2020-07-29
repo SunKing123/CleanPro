@@ -54,6 +54,7 @@ public class DeskPopConfig {
     public int getStateDisplayTime(){
        return stateConfig.getDisplayTime();
     }
+
     /**
      * 手机状态是否可以弹出
      * @return
