@@ -137,7 +137,12 @@ public class LuckBubbleView extends LinearLayout {
             return;
         }
         setVisibility(VISIBLE);
-        content.setText(String.valueOf(listBean.getGoldCount()));
+        if (listBean.getIsShowNum() == 0) {
+            content.setVisibility(GONE);
+        } else if (listBean.getIsShowNum() == 1) {
+            content.setVisibility(VISIBLE);
+            content.setText(String.valueOf(listBean.getGoldCount()));
+        }
         try {
             GlideUtils.loadImage(activity, listBean.getIconUrl(), imgbg,R.drawable.icon_kw00);
         } catch (Exception e) {

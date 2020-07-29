@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="86%"
                 android:textColor="@color/white"
-                android:textSize="60sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_scan_title"

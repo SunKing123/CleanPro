@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -143,7 +142,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             public void getData(LoginDataBean loginDataBean) {
                 UserInfoBean infoBean = loginDataBean.getData();
                 if (infoBean != null) {
-                    infoBean.userType = 2;
+//                    infoBean.userType = 2;
                     UserHelper.init().saveUserInfo(infoBean);
                 }
             }

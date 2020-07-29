@@ -87,7 +87,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         var used =total- easyMemoryMod.getAvailableInternalMemorySize().toFloat()
         var percent = (used.toDouble() / total.toDouble()) * 100
         tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total))
-        tv_storage_content.setText("可用内部存储：" + FileUtils.getUnitGB(used))
+        tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used))
         tv_storage_percent.setText(percent.toInt().toString() + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
         updateBtnBackGround(btn_clean_storage, percent.toInt())
@@ -112,7 +112,15 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_battery_percent.setText(easyBatteryMod.getBatteryPercentage().toString() + "%")
 
         updateBatteryImage(easyBatteryMod.getBatteryPercentage())
-        updateBtnBackGround(btn_clean_battery,easyBatteryMod.getBatteryPercentage())
+
+        var percent=easyBatteryMod.getBatteryPercentage();
+        if (inTheRange(percent, low)) {
+            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
+        } else if (inTheRange(percent, medium)) {
+            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_yellow_bg)
+        } else {
+            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_green_bg)
+        }
 
     }
 
