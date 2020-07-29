@@ -107,9 +107,10 @@ public class PowerStatePopChecker implements BackGroundIPulseObserver {
             startPowerInfo();
         } else if (PreferenceUtil.getInstants().getInt(SpCacheConfig.CHARGE_STATE) == 1 && !isCharged) {//拔电状态变更
         }
-        if (!BuildConfig.SYSTEM_EN.contains("prod"))
-            ToastUtils.showLong("charge--" + (isCharged ? "充电中" : "未充电"));
-//          Logger.i("zz---charge--" + (isCharged ? "充电中" : "未充电"));
+
+        if (BuildConfig.DEBUG){
+            LogUtils.i("---charging--" + (isCharged ? "充电中" : "未充电"));
+        }
         //更新sp当前充电状态
         PreferenceUtil.getInstants().saveInt(SpCacheConfig.CHARGE_STATE, isCharged ? 1 : 0);
     }
