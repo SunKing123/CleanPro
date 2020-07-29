@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
@@ -128,6 +129,14 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
             sceneButton.setText(getString(R.string.power_charging));
         }
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if(!hasFocus){
+            finish();
+        }
     }
 
     @Override
