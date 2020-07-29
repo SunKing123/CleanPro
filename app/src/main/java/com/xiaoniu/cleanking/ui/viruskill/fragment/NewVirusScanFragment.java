@@ -142,7 +142,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
                     return;
                 }
                 int progress = (int) (100 - millisUntilFinished / countDownInterval);
-                if (txtPro != null) txtPro.setText(progress + "%");
+                if (txtPro != null) txtPro.setText(getProgressText(progress));
                 presenter.onScanLoadingProgress(progress);
             }
 
@@ -156,6 +156,11 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         timer.start();
     }
 
+    private SpannableString getProgressText(int progress){
+        String head=String.valueOf(progress);
+        String text=head+" %";
+        return  AndroidUtil.zoomText(text,4,0,head.length());
+    }
     /**
      * 更新扫描的标题
      *

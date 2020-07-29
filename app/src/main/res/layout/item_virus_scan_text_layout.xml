@@ -19,9 +19,9 @@
     <View
         android:id="@+id/line"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_margin="5dp"
-        android:background="@color/white"
+        android:background="#CCffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/tv_virus_scan_text"
         app:layout_constraintRight_toLeftOf="@+id/frame_virus_scan_state"

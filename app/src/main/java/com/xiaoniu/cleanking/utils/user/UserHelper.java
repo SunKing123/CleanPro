@@ -102,8 +102,10 @@ public class UserHelper {
         }
         implPreferencesHelper.setClientId(userInfo.userId);
         implPreferencesHelper.setCustomerId(userInfo.userId);
-        implPreferencesHelper.setUserName(userInfo.nickname);
-        implPreferencesHelper.setNickName(userInfo.nickname);
+        if (!TextUtils.isEmpty(userInfo.nickname)) {
+            implPreferencesHelper.setUserName(userInfo.nickname);
+            implPreferencesHelper.setNickName(userInfo.nickname);
+        }
         implPreferencesHelper.setToken(userInfo.token);
         if (userInfo.userType == 1) {//微信登录
             implPreferencesHelper.setWxLoginSuccess(true);
