@@ -161,6 +161,8 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         String text=head+" %";
         return  AndroidUtil.zoomText(text,4,0,head.length());
     }
+
+
     /**
      * 更新扫描的标题
      *

@@ -31,7 +31,7 @@ import timber.log.Timber;
 
 
 /**
- * ================================================
+ *
  * 展示 {@link Application.ActivityLifecycleCallbacks} 的用法
  */
 public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifecycleCallbacks {

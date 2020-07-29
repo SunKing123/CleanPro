@@ -12,10 +12,12 @@ import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,17 @@ public class ActivityCollector {
     }
 
     public static boolean hasExternalActivity() {
+
+        Iterator it = activities.entrySet().iterator();
+        LogUtils.e("====================pulseTimer  activities()=======================");
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            Class<?> key = (Class<?>) entry.getKey();
+            Object value = entry.getValue();
+            LogUtils.e("================pulseTimer： class="+key);
+        }
+        LogUtils.e("====================pulseTimer  activities()=======================");
+
         return activities.containsKey(ExternalPhoneStateActivity.class) ||
                 activities.containsKey(BatteryPopActivity.class) ||
                 activities.containsKey(ExternalSceneActivity.class) ||

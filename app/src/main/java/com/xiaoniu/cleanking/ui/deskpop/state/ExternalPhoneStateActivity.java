@@ -9,6 +9,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -35,6 +36,7 @@ public class ExternalPhoneStateActivity extends BaseActivity {
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
+        LogUtils.e("=======================pulseTimer   in ExternalPhoneStateActivity create()========================");
         return R.layout.activity_external_phone_state_layout;
     }
 
@@ -59,6 +61,11 @@ public class ExternalPhoneStateActivity extends BaseActivity {
         mManager.beginTransaction()
                 .add(R.id.frame_layout, new ExternalPhoneStateFragment())
                 .commitAllowingStateLoss();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LogUtils.e("=======================pulseTimer in ExternalPhoneStateActivity onDestroy()========================");
     }
 }
