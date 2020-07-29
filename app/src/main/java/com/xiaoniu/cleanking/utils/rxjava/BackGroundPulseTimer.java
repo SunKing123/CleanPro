@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.utils.rxjava;
 
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
+import com.xiaoniu.common.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +16,7 @@ public class BackGroundPulseTimer {
 
     private List<BackGroundIPulseObserver> observers = new ArrayList<>();
     private RxTimer timer;
-    final int MILLI_SECONDS = 15000;
+    final int MILLI_SECONDS = 5000;
     private static BackGroundPulseTimer backGroundPulseTimer;
 
     public static BackGroundPulseTimer getInstance() {
@@ -35,15 +36,15 @@ public class BackGroundPulseTimer {
     }
 
     private void callBack(long number) {
+        ToastUtils.showShort("callBack(long number)"+number);
         DeskPopLogger.log("===============callBack()==============");
         for (BackGroundIPulseObserver observer : observers) {
             observer.onPulse(number);
         }
-
     }
 
     public BackGroundPulseTimer register(BackGroundIPulseObserver observer) {
-        DeskPopLogger.log("===============register()==============");
+        DeskPopLogger.log("===============register()=============="+observer.getClass().getName());
         if (!observers.contains(observer)) {
             observers.add(observer);
             observer.onCreate();
@@ -67,11 +68,10 @@ public class BackGroundPulseTimer {
             observer.onDestroy();
             iterator.remove();
         }
-        DeskPopLogger.log("===============unRegisterAll()==============");
     }
 
     public void destroy() {
-        DeskPopLogger.log("===============backgroundTimer destroy()==============");
+        ToastUtils.showShort("backgroundTimer destroy()");
         unRegisterAll();
         timer.cancel();
     }

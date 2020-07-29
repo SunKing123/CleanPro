@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushDispatcher;
@@ -705,7 +706,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     public void onEventWifiConnection(PopEventModel popEventModel) {
         if (TextUtils.isEmpty(popEventModel.getAction()) || AppLifecycleUtil.isAppOnForeground(mContext))
             return;
-        LogUtils.e("======MainActivity 的event bus:" + popEventModel.getAction());
+        DeskPopLogger.log("======MainActivity 的event bus:" + popEventModel.getAction());
         if (popEventModel.getAction().equals("wifi")) {
             StatisticsUtils.customTrackEvent("wifi_plug_screen_meets_opportunity", "wifi插屏满足时机", "wifi_plug_screen", "wifi_plug_screen");
             startPopActivity(ExternalSceneActivity.class);
