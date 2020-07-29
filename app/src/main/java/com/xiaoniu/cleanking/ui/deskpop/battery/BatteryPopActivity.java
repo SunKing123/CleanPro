@@ -1,12 +1,10 @@
-package com.xiaoniu.cleanking.ui.deskpop;
+package com.xiaoniu.cleanking.ui.deskpop.battery;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewStub;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -16,7 +14,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.constant.RouteConstants;
-import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -28,7 +26,6 @@ import java.text.DecimalFormat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;

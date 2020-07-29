@@ -1,15 +1,12 @@
-package com.xiaoniu.cleanking.ui.deskpop.state;
+package com.xiaoniu.cleanking.ui.deskpop.deviceinfo;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
-import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
-import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -36,7 +33,7 @@ public class ExternalPhoneStateActivity extends BaseActivity {
 
     @Override
     public int initView(@Nullable Bundle savedInstanceState) {
-        LogUtils.e("=======================pulseTimer   in ExternalPhoneStateActivity create()========================");
+        DeskPopLogger.log("=======================in ExternalPhoneStateActivity create()========================");
         return R.layout.activity_external_phone_state_layout;
     }
 
@@ -66,6 +63,6 @@ public class ExternalPhoneStateActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtils.e("=======================pulseTimer in ExternalPhoneStateActivity onDestroy()========================");
+        DeskPopLogger.log("=======================in ExternalPhoneStateActivity onDestroy()========================");
     }
 }

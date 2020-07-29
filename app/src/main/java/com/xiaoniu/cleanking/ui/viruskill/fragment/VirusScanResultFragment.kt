@@ -42,11 +42,12 @@ class VirusScanResultFragment : SimpleFragment() {
 
     }
 
+
     override fun getLayoutId(): Int {
         return R.layout.fragment_virus_scan_result_layout
     }
 
-    
+
     override fun initData(savedInstanceState: Bundle?) {
         pList = arguments!!.getParcelableArrayList(P_LIST)
         nList = arguments!!.getParcelableArrayList(N_LIST)

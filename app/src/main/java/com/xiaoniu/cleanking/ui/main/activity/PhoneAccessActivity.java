@@ -159,8 +159,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     @Override
     public void initView() {
         StatisticsUtils.onPageStart("boost_scan_page_view_page", "用户在加速扫描页浏览");
-        NiuDataAPI.onPageStart("boost_scan_page_view_page", "用户在加速扫描页浏览");
-        NiuDataAPIUtil.onPageEnd(AppHolder.getInstance().getCleanFinishSourcePageId(), "boost_scan_page", "boost_scan_page_view_page", "用户在加速扫描页浏览");
         tv_size.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mAppBarLayout.setExpanded(true);
         Bundle bundle = getIntent().getExtras();
@@ -606,7 +604,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
     protected void onDestroy() {
         super.onDestroy();
         StatisticsUtils.onPageEnd("boost_scan_page_view_page", "用户在加速扫描页浏览", "boost_scan_page", "boost_scan_page");
-        NiuDataAPI.onPageEnd("one_click_acceleration_view_page", "一键加速页浏览");
     }
 
     public void setHasCleaned(long sized) {

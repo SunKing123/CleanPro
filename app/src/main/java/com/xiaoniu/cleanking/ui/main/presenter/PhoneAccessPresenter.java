@@ -243,6 +243,10 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
 
     public void setNumAnim(View view, TextView tv_size, TextView tv_size_show, TextView tv_delete, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
         ArrayList<FirstJunkInfo> installAppList = AndroidUtil.getRandomMaxCountInstallApp(mActivity, 30);
+        //第三方应用不足5个从系统应用中拿
+        if (installAppList.size() < 5) {
+            installAppList.addAll(AndroidUtil.getSystemInstallApps(mActivity, 10));
+        }
         int maxSize = installAppList.size();
         mRandomSize = NumberUtils.mathRandomInt(5, maxSize);
         startNum = 1;

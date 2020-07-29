@@ -17,16 +17,11 @@ package com.xiaoniu.cleanking.app;
 
 import android.app.Activity;
 import android.app.Application;
-import android.os.Build;
 import android.os.Bundle;
-import android.widget.TextView;
 
 
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
-import com.xiaoniu.cleanking.ui.deskpop.BatteryPopActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import timber.log.Timber;
 
 

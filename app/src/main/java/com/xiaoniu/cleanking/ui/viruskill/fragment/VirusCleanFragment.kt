@@ -39,6 +39,7 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
     }
 
     override fun setData(data: Any?) {
+
     }
 
     override fun initData(savedInstanceState: Bundle?) {

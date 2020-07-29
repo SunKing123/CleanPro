@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.base.ScanDataHolder
 import com.xiaoniu.cleanking.bean.JunkResultWrapper
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
 import com.xiaoniu.cleanking.utils.ExtraConstant
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.common.base.BaseActivity
 import com.xiaoniu.common.utils.AppUtils
 import com.xiaoniu.common.utils.DisplayUtils
@@ -88,7 +89,7 @@ class SpeedUpClearActivity : BaseActivity() {
 
 
     private fun playIconAnim1(ivIcon: ImageView, time: Long) {
-        val distance = DisplayUtils.dip2px(190F).toFloat()
+        val distance = DisplayUtils.dip2px(167F).toFloat()
         val anim1 = ValueAnimator.ofFloat(0f, distance)
         anim1.duration = time
         ivIcon.translationY = 0f
@@ -97,8 +98,11 @@ class SpeedUpClearActivity : BaseActivity() {
         anim1.addUpdateListener { animation: ValueAnimator ->
             val currentValue = animation.animatedValue as Float
             val percent = currentValue / distance
-            ivIcon.scaleX = 1 - percent
-            ivIcon.scaleY = 1 - percent
+            val scale = 1 - percent
+            if (scale > 0.2) {
+                ivIcon.scaleX = scale
+                ivIcon.scaleY = scale
+            }
             ivIcon.translationY = -currentValue
         }
         anim1.addListener(object : AnimatorListenerAdapter() {

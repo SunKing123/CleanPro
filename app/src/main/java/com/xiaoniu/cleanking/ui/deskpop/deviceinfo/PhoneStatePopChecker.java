@@ -1,11 +1,11 @@
-package com.xiaoniu.cleanking.ui.deskpop.state;
+package com.xiaoniu.cleanking.ui.deskpop.deviceinfo;
 
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
 
@@ -35,7 +35,8 @@ public class PhoneStatePopChecker implements BackGroundIPulseObserver {
 
         boolean canPop=diffMinutes >=displayTime;
 
-        LogUtils.e("===============pulseTimer   in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diffMinutes+"    displayTime="+displayTime+"     needPop()"+needPop());
+        DeskPopLogger.log("===============in the PhoneStatePopChecker: canPop="+canPop+"   diff="+diffMinutes+"    displayTime="+displayTime+"     needPop()"+needPop());
+
         if (canPop) {
             checkAndPop();
         }
