@@ -46,14 +46,14 @@ class VirusScanResultFragment : SimpleFragment() {
         return R.layout.fragment_virus_scan_result_layout
     }
 
-
+    
     override fun initData(savedInstanceState: Bundle?) {
         pList = arguments!!.getParcelableArrayList(P_LIST)
         nList = arguments!!.getParcelableArrayList(N_LIST)
         initView()
         initEvent();
 
-        StatisticsUtils.onPageStart(Points.Virus.SCAN_PAGE_EVENT_CODE, Points.Virus.SCAN_PAGE_EVENT_NAME)
+        StatisticsUtils.onPageStart(Points.Virus.RESULT_PAGE_EVENT_CODE, Points.Virus.RESULT_PAGE_EVENT_NAME)
 
     }
 
