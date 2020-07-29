@@ -704,7 +704,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Subscribe
     public void onEventWifiConnection(PopEventModel popEventModel) {
-        if (TextUtils.isEmpty(popEventModel.getAction()))
+        if (TextUtils.isEmpty(popEventModel.getAction()) || AppLifecycleUtil.isAppOnForeground(mContext))
             return;
         DeskPopLogger.log("======MainActivity 的event bus:" + popEventModel.getAction());
         if (popEventModel.getAction().equals("wifi")) {
@@ -725,7 +725,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
 
     private void startPopActivity(Class<? extends AppCompatActivity> target) {
-        if(ActivityCollector.hasExternalActivity()){
+        if (ActivityCollector.hasExternalActivity()) {
             return;
         }
         Intent powerIntent = new Intent(this, target);

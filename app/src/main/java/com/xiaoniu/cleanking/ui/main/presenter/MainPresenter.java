@@ -131,6 +131,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (UserHelper.init().isWxLogin()) {
             paramsMap.put("userType", 1);
             paramsMap.put("openId", UserHelper.init().getOpenID());
+            paramsMap.put("nickname", UserHelper.init().getNickName());
+            paramsMap.put("userAvatar", UserHelper.init().getUserHeadPortraitUrl());
         } else {
             paramsMap.put("userType", 2);
             paramsMap.put("openId", AndroidUtil.getDeviceID());
@@ -452,8 +454,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
                 //限制华为设置启动包活；
 //                if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
-                    //启动保活进程
-                    mView.start();
+                //启动保活进程
+                mView.start();
 //                }
             }
 
