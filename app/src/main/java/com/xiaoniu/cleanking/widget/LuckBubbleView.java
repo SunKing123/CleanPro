@@ -67,7 +67,7 @@ public class LuckBubbleView extends LinearLayout {
 //        ImageView ivBallAnim = (ImageView) findViewById(R.id.iv_ball_anim);
 //        setAnim(ivBallAnim);
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(imgbg.getLayoutParams());
-        imgbg.setImageResource(R.drawable.icon_kw00);
+
 //        lp.setMargins(50, 100, 0, 0);
         if (loact == 1) {//left-top
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
@@ -142,9 +142,10 @@ public class LuckBubbleView extends LinearLayout {
         } else if (listBean.getIsShowNum() == 1) {
             content.setVisibility(VISIBLE);
             content.setText(String.valueOf(listBean.getGoldCount()));
+            imgbg.setImageResource(R.drawable.icon_kw00);
         }
         try {
-            GlideUtils.loadImage(activity, listBean.getIconUrl(), imgbg,R.drawable.icon_kw00);
+            GlideUtils.loadImage(activity, listBean.getIconUrl(), imgbg);
         } catch (Exception e) {
             e.printStackTrace();
         }
