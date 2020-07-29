@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:textSize="55sp"
+                android:textSize="50sp"
                 tools:text="5" />
 
             <androidx.appcompat.widget.AppCompatTextView
