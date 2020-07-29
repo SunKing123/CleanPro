@@ -330,7 +330,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (mainFragment != null) {
             mainFragment.onWindowFocusChanged(hasFocus);
         }
-
     }
 
     /**
@@ -387,7 +386,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 AppLifecyclesImpl.postDelay(() -> {
                     mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
                 }, 1000);
-
             }
         }
         parsePushData(intent);
@@ -671,7 +669,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     protected void setStatusBar() {
     }
-
 
     /**
      * 重新扫描文件

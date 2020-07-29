@@ -433,12 +433,12 @@ public class AndroidUtil {
         return spanString;
     }
 
-    public static SpannableString zoomText(String content, float rate, int startColorIndex, int endColorIndex) {
+    public static SpannableString zoomText(String content, float rate, int startIndex, int endIndex) {
         SpannableString spanString = new SpannableString(content);
         TypefaceSpan typefaceSpan = new TypefaceSpan("default-bold");
-        spanString.setSpan(typefaceSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanString.setSpan(typefaceSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(rate);
-        spanString.setSpan(relativeSizeSpan, startColorIndex, endColorIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanString.setSpan(relativeSizeSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanString;
     }
 

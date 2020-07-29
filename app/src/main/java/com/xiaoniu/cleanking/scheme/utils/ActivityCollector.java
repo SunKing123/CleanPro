@@ -49,7 +49,6 @@ public class ActivityCollector {
                 activities.containsKey(PopPushActivity.class)||
                 activities.containsKey(PopLayerActivity.class)||
                 activities.containsKey(LockActivity.class);
-
     }
 
     /**
