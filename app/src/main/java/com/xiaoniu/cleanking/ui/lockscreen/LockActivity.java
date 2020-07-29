@@ -411,6 +411,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
+//        onDestroy();
+
     }
 
     public void startVirUsKill() {
