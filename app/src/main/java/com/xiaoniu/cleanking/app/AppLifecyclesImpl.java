@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkRequest;
 import android.os.Build;
@@ -63,6 +64,7 @@ import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
 import com.xiaoniu.cleanking.lifecyler.LifecycleHelper;
 import com.xiaoniu.cleanking.lifecyler.LifecycleListener;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.receiver.LockActivityStarReceiver;
 import com.xiaoniu.cleanking.room.AppDataBase;
 import com.xiaoniu.cleanking.room.clean.AppPathDataBase;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
@@ -164,13 +166,18 @@ public class AppLifecyclesImpl implements AppLifecycles {
         initRoom(application);
 //        initNiuData(application);
 
-
         String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
             //商业化初始化
             MidasRequesCenter.init(application);
             initOaid(application);
             homeCatch(application);
+
+            //锁屏广播监听
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+            intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+            application.registerReceiver(new LockActivityStarReceiver(), intentFilter);
         }
 
 

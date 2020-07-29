@@ -49,6 +49,7 @@ import com.xiaoniu.cleanking.keeplive.utils.SPUtils;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
+import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.weatherdao.GreenDaoManager;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -104,8 +105,6 @@ public final class LocalService extends Service {
     public IBinder onBind(Intent intent) {
         return mBilder;
     }
-
-
 
 
     private boolean isExeTask;
@@ -280,7 +279,6 @@ public final class LocalService extends Service {
     }
 
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -301,21 +299,20 @@ public final class LocalService extends Service {
     //全局跳转锁屏页面
     public void startActivity(Context context) {
         try {
-            String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
-            boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
-            if (TextUtils.equals(auditSwitch, "1") && lock_sw) { //过审开关打开状态
-
-                if(ActivityCollector.hasExternalActivity()){
-                    return;
+            if (!(ActivityCollector.currentActivity() instanceof LockActivity)) {
+                String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
+                boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
+                if (TextUtils.equals(auditSwitch, "1") && lock_sw) { //过审开关打开状态
+                    Intent screenIntent = new Intent();
+                    screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCKACTIVITY);
+                    screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                    context.startActivity(screenIntent);
                 }
-                Intent screenIntent = new Intent();
-                screenIntent.setClassName(context.getPackageName(), SchemeConstant.StartFromClassName.CLASS_LOCKACTIVITY);
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-                context.startActivity(screenIntent);
             }
+
         } catch (Exception e) {
             Log.e("LockerService", "start lock activity error:" + e.getMessage());
         }
@@ -379,7 +376,7 @@ public final class LocalService extends Service {
 //        context.startActivity(screenIntent);
     }
 
-  /*----------------------------------------应用内植入插屏-----------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------应用内植入插屏-----------------------------------------------------------------------------------------------------*/
     private long runTime = 0;
     @SuppressLint("HandlerLeak")
     Runnable mTask = new Runnable() {
@@ -492,7 +489,6 @@ public final class LocalService extends Service {
     };
 
 
-
     private UsageStatsManager mUsageStatsManager;
 
     public String getAppInfo() {
@@ -568,9 +564,6 @@ public final class LocalService extends Service {
 //            context.startActivity(screenIntent);
         }
     }
-
-
-
 
 
     List<String> appMap = new ArrayList<>();
@@ -683,7 +676,7 @@ public final class LocalService extends Service {
     }
 
 
-    public void otherAppInsertAd(){
+    public void otherAppInsertAd() {
         if (!isExeTask || System.currentTimeMillis() - runTime > 15 * 1000) {
             String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
             //过审开关打开状态
