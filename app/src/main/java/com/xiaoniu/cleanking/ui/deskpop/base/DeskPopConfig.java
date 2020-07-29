@@ -1,6 +1,5 @@
-package com.xiaoniu.cleanking.ui.deskpop;
+package com.xiaoniu.cleanking.ui.deskpop.base;
 
-import com.google.gson.internal.$Gson$Preconditions;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.bean.ExternalPopNumEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;

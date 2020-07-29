@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.deskpop;
+package com.xiaoniu.cleanking.ui.deskpop.base;
 
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.utils.LogUtils;

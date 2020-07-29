@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.utils.rxjava;
 
-import com.xiaoniu.cleanking.ui.deskpop.DeskPopLogger;
-import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 
 import java.util.ArrayList;
 import java.util.Iterator;

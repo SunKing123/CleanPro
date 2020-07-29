@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.deskpop.state
+package com.xiaoniu.cleanking.ui.deskpop.deviceinfo
 
 import android.content.Intent
 import android.os.Bundle

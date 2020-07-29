@@ -1,16 +1,12 @@
-package com.xiaoniu.cleanking.ui.deskpop.state;
+package com.xiaoniu.cleanking.ui.deskpop.deviceinfo;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.ui.deskpop.DeskPopConfig;
-import com.xiaoniu.cleanking.ui.deskpop.DeskPopLogger;
-import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
-import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
+import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
