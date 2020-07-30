@@ -110,7 +110,7 @@ public class PopPushActivity extends AppCompatActivity {
         LocalPushConfigModel.Item item = (LocalPushConfigModel.Item) getIntent().getSerializableExtra("config");
 
         AppCompatImageView icon = mView.findViewById(R.id.logo);
-        if (!TextUtils.isEmpty(item.getIconUrl())) {
+        if (null != item && !TextUtils.isEmpty(item.getIconUrl())) {
             GlideUtils.loadRoundImage(this, item.getIconUrl(), icon, 20);
         }
 
