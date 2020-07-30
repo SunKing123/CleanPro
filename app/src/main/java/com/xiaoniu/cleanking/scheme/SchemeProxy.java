@@ -47,6 +47,7 @@ public class SchemeProxy {
         bundle.putString(Constant.URL, scheme);
         bundle.putBoolean(Constant.NoTitle, false);
         Intent intent = new Intent(context, UserLoadH5Activity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
