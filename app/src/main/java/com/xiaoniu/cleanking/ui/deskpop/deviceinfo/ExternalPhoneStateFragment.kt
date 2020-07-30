@@ -53,6 +53,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     override fun initData(savedInstanceState: Bundle?) {
         easyMemoryMod = EasyMemoryMod(mContext)
         easyBatteryMod = EasyBatteryMod(mContext)
+
         initView()
         initEvent()
     }
@@ -62,7 +63,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         initStorageView()
         initCoolView()
         initBatteryView()
-
         StatisticsUtils.customTrackEvent(Points.ExternalDevice.MEET_CONDITION_CODE,Points.ExternalDevice.MEET_CONDITION_NAME,"",Points.ExternalDevice.PAGE)
         StatisticsUtils.customTrackEvent(Points.ExternalDevice.PAGE_EVENT_CODE,Points.ExternalDevice.PAGE_EVENT_NAME,"",Points.ExternalDevice.PAGE)
     }

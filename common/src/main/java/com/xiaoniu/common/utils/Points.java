@@ -140,7 +140,7 @@ public interface Points {
         String PAGE_EVENT_CODE = "mobile_phone_status_insertion_screen_custom";
         String PAGE_EVENT_NAME = "手机状态插屏曝光";
 
-        String MEET_CONDITION_CODE = "mobile_phone_status_insertion_screen_custom";
+        String MEET_CONDITION_CODE = "mobile_phone_status_insertion_screen_meets_opportunity";
         String MEET_CONDITION_NAME = "手机状态插屏满足时机";
 
         String CLICK_MEMORY_BTN_CODE="running_memory_button_click";
