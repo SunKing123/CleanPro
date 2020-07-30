@@ -8,6 +8,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
+import android.widget.Toast
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
@@ -37,6 +38,10 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     companion object {
         fun start(context: Context, model: GoldCoinDoubleModel) {
+            if (model == null) {
+                Toast.makeText(context, "非法参数", Toast.LENGTH_LONG).show()
+                return
+            }
             var intent = Intent(context, GoldCoinSuccessActivity::class.java);
             intent.putExtra("model", model)
             context.startActivity(intent)
@@ -46,6 +51,11 @@ class GoldCoinSuccessActivity : BaseActivity() {
     override fun initLayout(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_gold_coin_success)
         model = intent.getParcelableExtra("model")
+        if (model == null) {
+            Toast.makeText(context, "非法参数", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
         coinNum = model.goldCoinsNum
         exposurePoint()
         goldCoinsNumPoint()

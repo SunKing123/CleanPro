@@ -145,7 +145,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 100:
-                    if (!isShow) {
+                    if (!isShow&&mNetNumTv!=null) {
                         isShow = true;
                         mStartNetNumber = msg.obj.toString();
                         if (null != mNetNumTv && null != mStartNetNumber)
