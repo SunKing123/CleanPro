@@ -14,7 +14,9 @@ import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity
 import com.xiaoniu.cleanking.ui.newclean.presenter.ExternalScenePresenter
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.NumberUtils
+import com.xiaoniu.cleanking.utils.update.MmkvUtil
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -39,6 +41,9 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
                         or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 //  or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
+        val reset = MmkvUtil.getBool("isResetWiFi", false)
+        PreferenceUtil.updatePopupWifi(reset)
+
     }
 
     override fun getLayoutId() = R.layout.activity_external_scene
@@ -127,11 +132,9 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
 
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (!hasFocus) {
-            finish()
-        }
+    override fun onPause() {
+        super.onPause()
+        finish()
     }
 
     override fun netError() {
