@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.ui.main.fragment.dialog.FileCopyProgressDialogFragm
 import com.xiaoniu.cleanking.ui.main.fragment.dialog.MFullDialogStyleFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.WXCleanImgPresenter;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileSizeUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -271,7 +272,9 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_IMG_VIEW) {
             List<FileEntity> listTemp = new ArrayList<>();
-            listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
+            if(!CollectionUtils.isEmpty(CleanAllFileScanUtil.clean_image_list)){
+                listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
+            }
             refreshData(listTemp);
         }
 

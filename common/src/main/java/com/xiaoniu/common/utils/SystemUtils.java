@@ -88,7 +88,7 @@ public class SystemUtils {
         }
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> list=manager.getRunningAppProcesses();
-        if(list!=null&&list.size()>0){
+        if(null!=list&&list.size()>0){
             for (ActivityManager.RunningAppProcessInfo processInfo : list) {
                 if (processInfo.pid == android.os.Process.myPid()) {
                     return processInfo.processName;
