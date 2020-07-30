@@ -314,7 +314,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
             return;
         }
         textAdapter.updateState();
-        txtPro.setText(100 + "%");
+        txtPro.setText(getProgressText(100));
 
         if(isFirst){
             isFirst=false;
