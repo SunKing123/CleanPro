@@ -653,7 +653,7 @@ public final class FileUtils {
             size = size / 1024;
             index++;
         }
-        return String.format(Locale.getDefault(), " %.1f %s", size, units[index]);
+        return String.format(Locale.getDefault(), " %.1f", size);
     }
 
 

@@ -20,6 +20,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
+import java.lang.Exception
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -33,7 +34,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private var low: Array<Int> = arrayOf(0, 20)
     private var medium: Array<Int> = arrayOf(21, 80)
     private var high: Array<Int> = arrayOf(80, 99)
-    private var TEMPERATURE_VPT=37
+    private var TEMPERATURE_VPT = 37
     private lateinit var easyMemoryMod: EasyMemoryMod
     private lateinit var easyBatteryMod: EasyBatteryMod
 
@@ -53,8 +54,13 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     override fun initData(savedInstanceState: Bundle?) {
         easyMemoryMod = EasyMemoryMod(mContext)
         easyBatteryMod = EasyBatteryMod(mContext)
-        initView()
-        initEvent()
+
+        try {
+            initView()
+            initEvent()
+        } catch (e: Exception) {
+
+        }
     }
 
     private fun initView() {
@@ -62,9 +68,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         initStorageView()
         initCoolView()
         initBatteryView()
-
-        StatisticsUtils.customTrackEvent(Points.ExternalDevice.MEET_CONDITION_CODE,Points.ExternalDevice.MEET_CONDITION_NAME,"",Points.ExternalDevice.PAGE)
-        StatisticsUtils.customTrackEvent(Points.ExternalDevice.PAGE_EVENT_CODE,Points.ExternalDevice.PAGE_EVENT_NAME,"",Points.ExternalDevice.PAGE)
+        StatisticsUtils.customTrackEvent(Points.ExternalDevice.MEET_CONDITION_CODE, Points.ExternalDevice.MEET_CONDITION_NAME, "", Points.ExternalDevice.PAGE)
+        StatisticsUtils.customTrackEvent(Points.ExternalDevice.PAGE_EVENT_CODE, Points.ExternalDevice.PAGE_EVENT_NAME, "", Points.ExternalDevice.PAGE)
     }
 
     /**
@@ -72,14 +77,18 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun initMemoryView() {
         var total = easyMemoryMod.getTotalRAM().toFloat()
-        var used =total- easyMemoryMod.getAvailableRAM().toFloat()
+        var used = total - easyMemoryMod.getAvailableRAM().toFloat()
+        total = FileUtils.getUnitGB(total).toFloat()
+        used = FileUtils.getUnitGB(used).toFloat()
+
         var percent = (used.toDouble() / total.toDouble()) * 100
-        tv_memory_title.setText("运行总内存：" + FileUtils.getUnitGB(total))
-        tv_memory_content.setText("已用运行内存：" + FileUtils.getUnitGB(used))
-        tv_memory_percent.setText(format(percent)+ "%")
+        tv_memory_title.setText("运行总内存：" + total + " GB")
+        tv_memory_content.setText("已用运行内存：" + used + " GB")
+        tv_memory_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
         updateBtnBackGround(btn_clean_memory, percent.toInt())
     }
+
 
     fun format(value: Double): String? {
         var bd = BigDecimal(value)
@@ -92,10 +101,13 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun initStorageView() {
         var total = easyMemoryMod.getTotalInternalMemorySize().toFloat()
-        var used =total- easyMemoryMod.getAvailableInternalMemorySize().toFloat()
+        var used = total - easyMemoryMod.getAvailableInternalMemorySize().toFloat()
+        total = FileUtils.getUnitGB(total).toFloat()
+        used = FileUtils.getUnitGB(used).toFloat()
+
         var percent = (used.toDouble() / total.toDouble()) * 100
-        tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total))
-        tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used))
+        tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total) + " GB")
+        tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used) + " GB")
         tv_storage_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
         updateBtnBackGround(btn_clean_storage, percent.toInt())
@@ -121,7 +133,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
 
         updateBatteryImage(easyBatteryMod.getBatteryPercentage())
 
-        var percent=easyBatteryMod.getBatteryPercentage();
+        var percent = easyBatteryMod.getBatteryPercentage();
         if (inTheRange(percent, low)) {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
         } else if (inTheRange(percent, medium)) {
@@ -144,7 +156,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun goCleanMemory() {
 
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_MEMORY_BTN_CODE,Points.ExternalDevice.CLICK_MEMORY_BTN_NAME,"",Points.ExternalDevice.PAGE)
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_MEMORY_BTN_CODE, Points.ExternalDevice.CLICK_MEMORY_BTN_NAME, "", Points.ExternalDevice.PAGE)
 
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
@@ -159,7 +171,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun goCleanStorage() {
 
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE,Points.ExternalDevice.CLICK_STORAGE_BTN_NAME,"",Points.ExternalDevice.PAGE)
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE, Points.ExternalDevice.CLICK_STORAGE_BTN_NAME, "", Points.ExternalDevice.PAGE)
 
         startActivity(NowCleanActivity::class.java)
         mActivity.finish()
@@ -169,7 +181,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 手机降温
      */
     private fun goCool() {
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE,Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME,"",Points.ExternalDevice.PAGE)
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
 
         ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation()
         mActivity.finish()
@@ -179,7 +191,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 电池优化
      */
     private fun goCleanBattery() {
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_CODE,Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_NAME,"",Points.ExternalDevice.PAGE)
+        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_NAME, "", Points.ExternalDevice.PAGE)
         startActivity(PhoneSuperPowerActivity::class.java)
         mActivity.finish()
     }

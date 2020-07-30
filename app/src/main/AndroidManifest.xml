@@ -493,7 +493,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />-->
 
         <activity
-            android:name=".ui.newclean.activity.ExternalSceneActivity"
+            android:name=".ui.deskpop.wifi.ExternalSceneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:hardwareAccelerated="true"

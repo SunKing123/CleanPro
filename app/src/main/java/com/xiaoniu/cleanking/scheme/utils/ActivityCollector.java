@@ -11,7 +11,7 @@ import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.localpush.PopPushActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.LockActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
+import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
 import java.util.ArrayList;
