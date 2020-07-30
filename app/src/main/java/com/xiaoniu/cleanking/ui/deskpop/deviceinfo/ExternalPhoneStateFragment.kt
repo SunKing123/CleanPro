@@ -73,13 +73,17 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun initMemoryView() {
         var total = easyMemoryMod.getTotalRAM().toFloat()
         var used =total- easyMemoryMod.getAvailableRAM().toFloat()
+        total=FileUtils.getUnitGB(total).toFloat()
+        used=FileUtils.getUnitGB(used).toFloat()
+
         var percent = (used.toDouble() / total.toDouble()) * 100
-        tv_memory_title.setText("运行总内存：" + FileUtils.getUnitGB(total))
-        tv_memory_content.setText("已用运行内存：" + FileUtils.getUnitGB(used))
+        tv_memory_title.setText("运行总内存：" + total+" GB")
+        tv_memory_content.setText("已用运行内存：" + used+" GB")
         tv_memory_percent.setText(format(percent)+ "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
         updateBtnBackGround(btn_clean_memory, percent.toInt())
     }
+
 
     fun format(value: Double): String? {
         var bd = BigDecimal(value)
@@ -93,9 +97,12 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun initStorageView() {
         var total = easyMemoryMod.getTotalInternalMemorySize().toFloat()
         var used =total- easyMemoryMod.getAvailableInternalMemorySize().toFloat()
+        total=FileUtils.getUnitGB(total).toFloat()
+        used=FileUtils.getUnitGB(used).toFloat()
+
         var percent = (used.toDouble() / total.toDouble()) * 100
-        tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total))
-        tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used))
+        tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total)+" GB")
+        tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used)+" GB")
         tv_storage_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
         updateBtnBackGround(btn_clean_storage, percent.toInt())
