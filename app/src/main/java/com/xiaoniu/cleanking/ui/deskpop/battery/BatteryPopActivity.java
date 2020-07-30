@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.text.DecimalFormat;
@@ -66,10 +67,13 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        StatusBarCompat.translucentStatusBarForImage(this, true, true);
         initView();
     }
 
     private void initView() {
+        StatusBarCompat.translucentStatusBarForImage(this, true, true);
+
         MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, System.currentTimeMillis());
         DeskPopConfig.getInstance().saveAndDecreaseBatteryPopNum();
 

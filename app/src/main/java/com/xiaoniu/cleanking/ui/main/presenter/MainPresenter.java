@@ -471,7 +471,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     @Override
     public void detachView() {
         super.detachView();
-        LogUtils.i("----detachView()");
         removeTimer();
     }
 
