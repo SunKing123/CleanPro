@@ -63,7 +63,7 @@ class SpeedUpResultPresenter @Inject constructor(activity: RxAppCompatActivity) 
                     }
                 } else {
                     newData.addAll(data)
-                    newData.addAll(AndroidUtil.getSystemInstallApps(mActivity, appSize - newData.size))
+                    newData.addAll(AndroidUtil.getSystemInstallApps(mActivity, appSize - data.size))
                     newData.forEach {
                         it.isAllchecked = true
                     }
