@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.SimpleFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.widget.LeiDaView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -102,6 +103,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) toolBar.getLayoutParams();
+        layoutParams.topMargin= DeviceUtils.getStatusBarHeight(mContext);
+
         presenter = new VirusScanPresenter(this);
         presenter.onCreate();
         initRecycleView();

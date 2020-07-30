@@ -836,17 +836,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     //start kill virus page
     private void startKillVirusActivity() {
-        if (PreferenceUtil.getVirusKillTime()) {
-            startActivity(VirusKillActivity.class);
-        } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-            intent.putExtra("title", "病毒查杀");
-            intent.putExtra("main", false);
-            intent.putExtra("unused", true);
-            startActivity(intent);
-        }
-    }
+//        if (PreferenceUtil.getVirusKillTime()) {
+//            startActivity(VirusKillActivity.class);
+//        } else {
+//            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+//            intent.putExtra("title", "病毒查杀");
+//            intent.putExtra("main", false);
+//            intent.putExtra("unused", true);
+//            startActivity(intent);
+//        }
 
+        startActivity(VirusKillActivity.class);
+    }
 
     /*
      * *********************************************************************************************************************************************************
@@ -902,8 +903,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             imageInteractive.setVisibility(View.GONE);
         }
     }
-
-
 
     /*
      * *********************************************************************************************************************************************************

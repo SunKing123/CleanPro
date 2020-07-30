@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.viruskill.fragment
 
 import android.os.Bundle
 import com.jess.arms.di.component.AppComponent
+import com.jess.arms.utils.DeviceUtils
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.ui.viruskill.ITransferPagePerformer
 import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel

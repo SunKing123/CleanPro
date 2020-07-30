@@ -7,9 +7,11 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.jess.arms.base.SimpleFragment
 import com.jess.arms.di.component.AppComponent
+import com.jess.arms.utils.DeviceUtils
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.ui.viruskill.ITransferPagePerformer
 import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusScanResultFragment.IntentKey.N_LIST
@@ -47,18 +49,19 @@ class VirusScanResultFragment : SimpleFragment() {
         return R.layout.fragment_virus_scan_result_layout
     }
 
-
     override fun initData(savedInstanceState: Bundle?) {
         pList = arguments!!.getParcelableArrayList(P_LIST)
         nList = arguments!!.getParcelableArrayList(N_LIST)
         initView()
-        initEvent();
+        initEvent()
 
         StatisticsUtils.onPageStart(Points.Virus.RESULT_PAGE_EVENT_CODE, Points.Virus.RESULT_PAGE_EVENT_NAME)
-
     }
 
     private fun initView() {
+        val layoutParams = toolBar.layoutParams as LinearLayout.LayoutParams
+        layoutParams.topMargin = DeviceUtils.getStatusBarHeight(mContext)
+
         var pRiskNum = pList.size;
         var nRiskNum = nList.size;
         var sumNum = pRiskNum + nRiskNum;
@@ -124,10 +127,10 @@ class VirusScanResultFragment : SimpleFragment() {
     fun setTransferPagePerformer(transfer: ITransferPagePerformer) {
         this.transfer = transfer
     }
-    
+     
     fun finish() {
         activity!!.finish()
         StatisticsUtils.trackClick("return_click", Points.Virus.RESULT_RETURN_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
-
+        StatisticsUtils.onPageEnd(Points.Virus.RESULT_PAGE_EVENT_CODE, Points.Virus.RESULT_PAGE_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
     }
 }

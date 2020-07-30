@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FF6D58"
         android:orientation="vertical">
 
         <LinearLayout
@@ -30,7 +31,6 @@
                 android:gravity="center"
                 android:textColor="#ffffff"
                 android:textSize="18sp" />
-
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,98 +65,106 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_virus_result_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_virus_result_privacy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_7dp"
-            android:layout_marginTop="@dimen/dimen_7dp"
-            android:layout_marginRight="@dimen/dimen_7dp"
-            android:background="@drawable/shadow"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <TextView
-                android:id="@+id/tv_virus_result_risk_count_privacy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1项隐私风险"
-                android:textColor="@color/black"
-                android:textSize="@dimen/dimen_17dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="信息，图片及视频可能被偷窥"
-                android:textColor="@color/home_content"
-                android:textSize="@dimen/dimen_14dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="#F7F8FA" />
-
-            <LinearLayout
-                android:id="@+id/linear_virus_result_risk_detail_privacy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-        </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_virus_result_network"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimen_7dp"
-            android:layout_marginTop="@dimen/dimen_7dp"
-            android:layout_marginRight="@dimen/dimen_7dp"
-            android:background="@drawable/shadow"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_virus_result_risk_count_network"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1项网络风险"
-                android:textColor="@color/black"
-                android:textSize="@dimen/dimen_17dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="当前网络存在被偷窥风险"
-                android:textColor="@color/home_content"
-                android:textSize="@dimen/dimen_14dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="#F7F8FA" />
 
             <LinearLayout
-                android:id="@+id/linear_virus_result_risk_detail_network"
+                android:id="@+id/linear_virus_result_privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginLeft="@dimen/dimen_7dp"
+                android:layout_marginTop="@dimen/dimen_7dp"
+                android:layout_marginRight="@dimen/dimen_7dp"
+                android:background="@drawable/shadow"
+                android:orientation="vertical"
+                android:padding="20dp">
 
+                <TextView
+                    android:id="@+id/tv_virus_result_risk_count_privacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1项隐私风险"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_17dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="信息，图片及视频可能被偷窥"
+                    android:textColor="@color/home_content"
+                    android:textSize="@dimen/dimen_14dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#F7F8FA" />
+
+                <LinearLayout
+                    android:id="@+id/linear_virus_result_risk_detail_privacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_virus_result_network"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_7dp"
+                android:layout_marginTop="@dimen/dimen_7dp"
+                android:layout_marginRight="@dimen/dimen_7dp"
+                android:background="@drawable/shadow"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tv_virus_result_risk_count_network"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1项网络风险"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dimen_17dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="当前网络存在被偷窥风险"
+                    android:textColor="@color/home_content"
+                    android:textSize="@dimen/dimen_14dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#F7F8FA" />
+
+                <LinearLayout
+                    android:id="@+id/linear_virus_result_risk_detail_network"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/btn_clear_virus_result"
+                    style="@style/large_blue_button_style"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="10dp"
+                    android:text="一键优化" />
+            </RelativeLayout>
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/btn_clear_virus_result"
-                style="@style/large_blue_button_style"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:text="一键优化" />
-        </RelativeLayout>
     </LinearLayout>
 </ScrollView>
