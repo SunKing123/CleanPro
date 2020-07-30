@@ -116,7 +116,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -125,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_7dp"
                     android:layout_marginRight="@dimen/dimen_7dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/shadow"
                     android:orientation="vertical"
                     android:padding="20dp">

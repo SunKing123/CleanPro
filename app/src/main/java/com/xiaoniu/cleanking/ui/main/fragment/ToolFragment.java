@@ -121,10 +121,8 @@ public class ToolFragment extends SimpleFragment {
                 mTvToolPercentNum.setText("" + progress + "%");
         });
         llTopLayout.setPadding(0,DeviceUtils.getStatusBarHeight(mContext),0,0);
-        
         getAccessListBelow();
     }
-
 
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     private void setData() {
