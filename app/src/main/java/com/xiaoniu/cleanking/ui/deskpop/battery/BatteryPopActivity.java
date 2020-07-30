@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
 import java.text.DecimalFormat;
@@ -66,10 +67,13 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        StatusBarCompat.translucentStatusBarForImage(this, true, true);
         initView();
     }
 
     private void initView() {
+        StatusBarCompat.translucentStatusBarForImage(this, true, true);
+
         MmkvUtil.saveLong(PositionId.PAGE_DESK_BATTERY_INFO_TIME, System.currentTimeMillis());
         DeskPopConfig.getInstance().saveAndDecreaseBatteryPopNum();
 
@@ -93,11 +97,11 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
         EasyBatteryMod easyBatteryMod = new EasyBatteryMod(this);
         tvCurrentValue.setText(String.valueOf(easyBatteryMod.getBatteryPercentage()));
 
-        tvCurrentValue.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerCapacity.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerVoltage.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerTemp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerApp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
+        tvCurrentValue.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerCapacity.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerVoltage.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerTemp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerApp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
 
         if (easyBatteryMod.getBatteryPercentage() == 100) {
             tvFullTime.setVisibility(View.GONE);

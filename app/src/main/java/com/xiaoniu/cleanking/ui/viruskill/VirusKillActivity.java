@@ -76,6 +76,12 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
         pageIndex = 1;
         VirusScanResultFragment resultFragment = new VirusScanResultFragment();
         Bundle bundle = new Bundle();
+        if(pList==null){
+            pList=new ArrayList<>();
+        }
+        if(nList==null){
+            nList=new ArrayList<>();
+        }
         bundle.putParcelableArrayList(VirusScanResultFragment.IntentKey.P_LIST, pList);
         bundle.putParcelableArrayList(VirusScanResultFragment.IntentKey.N_LIST, nList);
         resultFragment.setArguments(bundle);

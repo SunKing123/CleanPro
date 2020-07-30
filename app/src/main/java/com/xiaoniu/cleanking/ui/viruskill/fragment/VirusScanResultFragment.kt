@@ -7,6 +7,7 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.jess.arms.base.SimpleFragment
@@ -71,16 +72,20 @@ class VirusScanResultFragment : SimpleFragment() {
         tv_virus_result_title.setText(biggerText(text, sumNum.toString()))
 
         var pText = pRiskNum.toString() + " 项隐私风险"
-        tv_virus_result_risk_count_privacy.setText(biggerText(pText, pRiskNum.toString()))
+        tv_virus_result_risk_count_privacy.setText(biggerText21(pText, pRiskNum.toString()))
 
         var nText = nRiskNum.toString() + " 项网络风险"
-        tv_virus_result_risk_count_network.setText(biggerText(nText, nRiskNum.toString()))
+        tv_virus_result_risk_count_network.setText(biggerText21(nText, nRiskNum.toString()))
 
         initPItemView()
         initNItemView()
 
         tvTitle.setText("病毒查杀")
         toolBar.setOnClickListener({ finish() })
+
+        if(sumNum==0){
+            relative_bottom.visibility= View.GONE
+        }
     }
 
     private fun initEvent() {
@@ -113,6 +118,15 @@ class VirusScanResultFragment : SimpleFragment() {
         var start = text.indexOf(bigText)
         var end = start + bigText.length
         var size = AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_35))
+        sp.setSpan(size, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return sp
+    }
+
+    private fun biggerText21(text: String, bigText: String): SpannableString {
+        var sp = SpannableString(text)
+        var start = text.indexOf(bigText)
+        var end = start + bigText.length
+        var size = AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_21))
         sp.setSpan(size, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         return sp
     }

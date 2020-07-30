@@ -392,7 +392,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="large_blue_button_style">
+    <style name="large_blue_button_style" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">46dp</item>
         <item name="android:textColor">@color/white</item>

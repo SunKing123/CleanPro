@@ -7,14 +7,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
 
         <ImageView
             android:id="@+id/image_memory"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:scaleType="fitXY"
             android:src="@drawable/icon_memory_percent_high"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="15dp"
             android:text="运行总内存：16G"
             android:textColor="#666666"
             android:textSize="@dimen/dp_14"
@@ -48,6 +48,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
+            android:layout_marginTop="4dp"
             android:id="@+id/tv_memory_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +58,8 @@
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/tv_memory_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_memory_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_memory_title"
+            android:textStyle="bold"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btn_clean_memory"
@@ -74,15 +76,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="24dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp">
 
         <ImageView
             android:id="@+id/image_storage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:scaleType="fitXY"
             android:src="@drawable/icon_memory_percent_high"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -106,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="15dp"
             android:text="运行总内存：16G"
             android:textColor="#666666"
             android:textSize="@dimen/dp_14"
@@ -116,6 +118,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
+            android:layout_marginTop="4dp"
             android:id="@+id/tv_storage_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,7 +128,8 @@
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/tv_storage_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_storage_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_storage_title"
+            android:textStyle="bold"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btn_clean_storage"
@@ -141,15 +145,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="24dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp">
 
         <ImageView
             android:id="@+id/image_temperature"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:scaleType="fitXY"
             android:src="@drawable/icon_temperature_percent_normal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -174,7 +178,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="15dp"
             android:text="运行总内存：16G"
             android:textColor="#262626"
             android:textSize="@dimen/dp_14"
@@ -184,6 +188,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
+            android:layout_marginTop="4dp"
             android:id="@+id/tv_temperature_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -193,7 +198,8 @@
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/tv_temperature_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_temperature_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_temperature_title"
+            android:textStyle="bold"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btn_clean_temperature"
@@ -209,16 +215,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="24dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp">
 
         <ImageView
             android:id="@+id/image_battery"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/icon_battery_percent_high"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -230,7 +236,7 @@
             android:layout_height="wrap_content"
             android:text="75%"
             android:textColor="@color/black"
-            android:textSize="@dimen/dp_12"
+            android:textSize="@dimen/dp_11"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="@+id/image_battery"
@@ -241,7 +247,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="15dp"
             android:text="运行总内存：16G"
             android:textColor="#666666"
             android:textSize="@dimen/dp_14"
@@ -251,6 +257,7 @@
             app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
+            android:layout_marginTop="4dp"
             android:id="@+id/tv_battery_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -260,7 +267,8 @@
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/tv_battery_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_battery_title" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_battery_title"
+            android:textStyle="bold"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btn_clean_battery"

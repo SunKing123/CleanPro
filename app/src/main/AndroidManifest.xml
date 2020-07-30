@@ -300,6 +300,7 @@
             android:name=".ui.newclean.activity.NewCleanFinishActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
+            android:taskAffinity="com.locker.new.task"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.NewsActivity"
@@ -492,7 +493,7 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />-->
 
         <activity
-            android:name=".ui.newclean.activity.ExternalSceneActivity"
+            android:name=".ui.deskpop.wifi.ExternalSceneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
             android:hardwareAccelerated="true"
