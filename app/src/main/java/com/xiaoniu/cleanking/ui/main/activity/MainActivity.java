@@ -407,12 +407,14 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //开启常驻通知栏服务
         if (NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()) {
             try {
-                Intent intent = new Intent(this, NotificationService.class);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
+                startService(new Intent(this, NotificationService.class));
+//                //多次重启暂时会出现ANR,已解决，是NotificationService中没有添加startForeground方法
+//                Intent intent = new Intent(this, NotificationService.class);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    startForegroundService(intent);
+//                } else {
+//                    startService(intent);
+//                }
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
