@@ -179,6 +179,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         if(isFinishing()){
             return;
         }
+        if (null != tvScanTitle)
         tvScanTitle.setText(title);
     }
 
