@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/dimen_20dp"
+            android:layout_marginBottom="@dimen/dimen_30dp"
             android:textColor="@color/color_262626"
             android:textSize="@dimen/dimen_20sp"
             tools:text="WiFi已链接" />
@@ -44,7 +44,7 @@
         <!--使用ViewStub引入自己的布局即可  end-->
 
 
-        <androidx.appcompat.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/scene_button"
             style="@style/large_blue_button_style"
             android:layout_marginStart="@dimen/dimen_53dp"
