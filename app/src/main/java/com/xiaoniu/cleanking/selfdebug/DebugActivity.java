@@ -37,6 +37,7 @@ import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
+import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
@@ -481,6 +482,15 @@ public class DebugActivity extends BaseActivity {
         startActivity(screenIntent);
     }
 
+
+    public void deviceInfoClick(View view){
+        Intent screenIntent = new Intent(this, ExternalPhoneStateActivity.class);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+        startActivity(screenIntent);
+    }
 
 
 
