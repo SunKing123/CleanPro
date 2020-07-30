@@ -127,8 +127,15 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
             }
         }
         tvPowerCapacity.setText(getString(R.string.power_num_capacity, String.valueOf(easyBatteryMod.getCapacity())));
-        tvPowerVoltage.setText(getString(R.string.power_num_voltage, new DecimalFormat(".0").format(Float.valueOf(easyBatteryMod.getBatteryVoltage()) / 1000f)));
-        tvPowerTemp.setText(getString(R.string.power_num_temp, String.valueOf(easyBatteryMod.getBatteryTemperature())));
+        String voltageValue = "4.0";
+        try {
+            float voltage  = Float.valueOf(easyBatteryMod.getBatteryVoltage()) / 1000f;
+            voltageValue =  new DecimalFormat(".0").format(voltage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tvPowerVoltage.setText(getString(R.string.power_num_voltage, voltageValue));
+        tvPowerTemp.setText(getString(R.string.power_num_temp, String.valueOf(easyBatteryMod.getBatteryTemperature()) ));
         if(easyBatteryMod.getBatteryTemperature()>35f){
             tvPowerTemp.setTextColor(getResources().getColor(R.color.home_content_red));
         }
