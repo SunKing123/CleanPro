@@ -93,11 +93,11 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
         EasyBatteryMod easyBatteryMod = new EasyBatteryMod(this);
         tvCurrentValue.setText(String.valueOf(easyBatteryMod.getBatteryPercentage()));
 
-        tvCurrentValue.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerCapacity.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerVoltage.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerTemp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
-        tvPowerApp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Bold.otf"));
+        tvCurrentValue.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerCapacity.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerVoltage.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerTemp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
+        tvPowerApp.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/DIN-Medium.otf"));
 
         if (easyBatteryMod.getBatteryPercentage() == 100) {
             tvFullTime.setVisibility(View.GONE);
