@@ -34,8 +34,7 @@ class LocalPushSchedule {
             val atLastFromClearAppToLauncher = MmkvUtil.getLong(SpCacheConfig.KEY_LAST_CLEAR_APP_PRESSED_HOME, 0L)
             val current = System.currentTimeMillis()
             val period = current / 1000 - atLastFromClearAppToLauncher / 1000
-            if (period < 5) {
-                // if (period < 10 * 60) {
+            if (period < 10 * 60) {
                 LogUtils.e("====距离上次清理APP触发Home键过了" + period + "秒小于限制时间，直接返回")
                 return
             }
