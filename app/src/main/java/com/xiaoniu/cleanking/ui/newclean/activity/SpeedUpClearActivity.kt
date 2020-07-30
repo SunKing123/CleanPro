@@ -129,6 +129,9 @@ class SpeedUpClearActivity : BaseActivity() {
 
 
     private fun jumpFinish() {
+        if (isFinishing) {
+            return
+        }
         val mIntent = Intent()
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed))
         mIntent.putExtra(ExtraConstant.NUM, mSpeedUpNum)
