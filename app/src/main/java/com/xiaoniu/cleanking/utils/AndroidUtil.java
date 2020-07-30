@@ -353,7 +353,7 @@ public class AndroidUtil {
             PackageInfo packageInfo = packages.get(i);
             //判断是否系统应用
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) { //非系统应用
-                if (packageInfo.applicationInfo.packageName.equals(BuildConfig.APPLICATION_ID)) {
+                if (Constant.WHITE_LIST().contains(packageInfo.applicationInfo.packageName)) {
                     continue;
                 }
                 FirstJunkInfo tmpInfo = new FirstJunkInfo();

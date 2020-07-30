@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_virus_scan_result_layout.*
  * email：xinxiaolong123@foxmail.com
  */
 class VirusScanResultFragment : SimpleFragment() {
-    
+
     lateinit var transfer: ITransferPagePerformer
     lateinit var pList: ArrayList<ScanTextItemModel>
     lateinit var nList: ArrayList<ScanTextItemModel>
