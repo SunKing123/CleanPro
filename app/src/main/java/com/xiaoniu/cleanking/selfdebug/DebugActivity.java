@@ -46,12 +46,14 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
 import java.util.Locale;
+import java.util.Timer;
 
 /**
  * deprecation:调试页面
@@ -116,7 +118,7 @@ public class DebugActivity extends BaseActivity {
 ////        String test02 ="cleankingmajor://com.hellogeek.cleanking/jump?isfullscreen=1&amp;need_login=&amp;url=http%3A%2F%2F192.168.85.61";
 //        SchemeProxy.openScheme(this, test);
 //        oneKeyCircleButtonView.startLottie();
-        lottieAnimationView.setMinAndMaxFrame(0,33);
+        lottieAnimationView.setMinAndMaxFrame(0, 33);
         lottieAnimationView.setAnimation("home_top_scan/state01/data.json");
         lottieAnimationView.setImageAssetsFolder("home_top_scan/state01/images");
         lottieAnimationView.addAnimatorListener(new Animator.AnimatorListener() {
@@ -473,25 +475,31 @@ public class DebugActivity extends BaseActivity {
 
     }
 
-    public void powerClick(View view){
-        Intent screenIntent = new Intent(this, BatteryPopActivity.class);
+    public void powerClick(View view) {
+        new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
+            @Override
+            public void action(long number) {
+                Intent screenIntent = new Intent(DebugActivity.this, BatteryPopActivity.class);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                startActivity(screenIntent);
+            }
+        });
+    }
+
+
+    public void deviceInfoClick(View view) {
+        Intent screenIntent = new Intent(DebugActivity.this, ExternalPhoneStateActivity.class);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
         startActivity(screenIntent);
+
+
     }
-
-
-    public void deviceInfoClick(View view){
-        Intent screenIntent = new Intent(this, ExternalPhoneStateActivity.class);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        startActivity(screenIntent);
-    }
-
 
 
     private String[] units = {"B", "KB", "MB", "GB"};

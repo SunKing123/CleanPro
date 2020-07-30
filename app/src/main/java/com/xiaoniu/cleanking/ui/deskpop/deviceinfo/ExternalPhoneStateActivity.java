@@ -7,6 +7,7 @@ import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -39,6 +40,7 @@ public class ExternalPhoneStateActivity extends BaseActivity {
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        StatusBarCompat.translucentStatusBarForImage(this, true, true);
         initFragment();
         initView();
         //当打开时，将弹框数量递减
