@@ -271,6 +271,7 @@ public class WXImgChatFragment extends BaseFragment<WXCleanImgPresenter> {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_IMG_VIEW) {
             List<FileEntity> listTemp = new ArrayList<>();
+            if(CleanAllFileScanUtil.clean_image_list!=null&&CleanAllFileScanUtil.clean_image_list.size()>0)
             listTemp.addAll(CleanAllFileScanUtil.clean_image_list);
             refreshData(listTemp);
         }
