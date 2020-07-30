@@ -51,6 +51,7 @@ class SpeedUpClearActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         StatusBarUtil.setTransparentForWindow(this)
         toolBar.setBackgroundResource(R.color.color_02D086)
+        mBtnLeft.setImageResource(0)
         StatisticsUtils.onPageStart("boost_animation_page_view_page", "加速动画页浏览")
     }
 

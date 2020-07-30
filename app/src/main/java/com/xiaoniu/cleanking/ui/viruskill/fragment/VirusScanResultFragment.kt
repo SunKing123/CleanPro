@@ -112,7 +112,7 @@ class VirusScanResultFragment : SimpleFragment() {
         var sp = SpannableString(text)
         var start = text.indexOf(bigText)
         var end = start + bigText.length
-        var size = AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_24))
+        var size = AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_35))
         sp.setSpan(size, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         return sp
     }

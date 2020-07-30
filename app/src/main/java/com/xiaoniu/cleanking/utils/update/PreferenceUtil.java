@@ -367,7 +367,7 @@ public class PreferenceUtil {
     public static boolean getVirusKillTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
-        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+        if (System.currentTimeMillis() - time > 30 * 60 * 1000)
             return true;
         return false;
     }

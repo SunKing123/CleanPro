@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * email：xinxiaolong123@foxmail.com
  */
 public interface ITransferPagePerformer {
+
     void onTransferResultPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList);
 
     void onTransferCleanPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList);

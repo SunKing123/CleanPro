@@ -159,7 +159,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
 
     @Override
     public void initView() {
-        StatusBarUtil.setTransparentForWindow(this);
+      //  StatusBarUtil.setTransparentForWindow(this);
         StatisticsUtils.onPageStart("boost_scan_page_view_page", "用户在加速扫描页浏览");
         tv_size.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/FuturaRound-Medium.ttf"));
         mAppBarLayout.setExpanded(true);

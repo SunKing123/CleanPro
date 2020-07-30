@@ -837,17 +837,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     //start kill virus page
     private void startKillVirusActivity() {
-//        if (PreferenceUtil.getVirusKillTime()) {
-//            startActivity(VirusKillActivity.class);
-//        } else {
-//            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
-//            intent.putExtra("title", "病毒查杀");
-//            intent.putExtra("main", false);
-//            intent.putExtra("unused", true);
-//            startActivity(intent);
-//        }
-
-        startActivity(VirusKillActivity.class);
+        if (PreferenceUtil.getVirusKillTime()) {
+            startActivity(VirusKillActivity.class);
+        } else {
+            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            intent.putExtra("title", "病毒查杀");
+            intent.putExtra("main", false);
+            intent.putExtra("unused", true);
+            startActivity(intent);
+        }
     }
 
     /*
