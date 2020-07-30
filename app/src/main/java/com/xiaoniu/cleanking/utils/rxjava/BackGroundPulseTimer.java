@@ -16,7 +16,7 @@ public class BackGroundPulseTimer {
 
     private List<BackGroundIPulseObserver> observers = new ArrayList<>();
     private RxTimer timer;
-    final int MILLI_SECONDS = 5000;
+    final int MILLI_SECONDS = 15000;
     private static BackGroundPulseTimer backGroundPulseTimer;
 
     public static BackGroundPulseTimer getInstance() {
