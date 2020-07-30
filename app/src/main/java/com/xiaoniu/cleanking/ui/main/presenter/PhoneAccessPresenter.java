@@ -242,7 +242,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
     boolean canPlaying = true;
 
     public void setNumAnim(View view, TextView tv_size, TextView tv_size_show, TextView tv_delete, TextView tv_gb, TextView tv_gb1, View viewt, View view_top, int startNum, int endNum, int type) {
-        ArrayList<FirstJunkInfo> installAppList = AndroidUtil.getRandomMaxCountInstallApp(mActivity, 30);
+        ArrayList<FirstJunkInfo> installAppList = AndroidUtil.getRandomMaxCountInstallApp(mActivity, 20);
         //第三方应用不足5个从系统应用中拿
         if (installAppList.size() < 5) {
             installAppList.addAll(AndroidUtil.getSystemInstallApps(mActivity, 10));
@@ -252,7 +252,7 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
         startNum = 1;
         endNum = mRandomSize;
         ValueAnimator anim = ValueAnimator.ofInt(startNum, endNum);
-        anim.setDuration(2000);
+        anim.setDuration(1300);
         anim.setInterpolator(new DecelerateInterpolator());
         canPlaying = true;
         anim.addUpdateListener(animation -> {
@@ -281,12 +281,12 @@ public class PhoneAccessPresenter extends RxPresenter<PhoneAccessActivity, MainM
 
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(viewt, "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         colorAnim1.setEvaluator(new ArgbEvaluator());
-        colorAnim1.setDuration(2000);
+        colorAnim1.setDuration(1300);
         // colorAnim1.setStartDelay(1200);
 
         ValueAnimator colorAnim2 = ObjectAnimator.ofInt(view, "backgroundColor", ThirdLevel, SecondLevel, FirstLevel);
         colorAnim2.setEvaluator(new ArgbEvaluator());
-        colorAnim2.setDuration(2000);
+        colorAnim2.setDuration(1300);
         // colorAnim2.setStartDelay(1200);
 
         colorAnim1.addUpdateListener(animation -> {

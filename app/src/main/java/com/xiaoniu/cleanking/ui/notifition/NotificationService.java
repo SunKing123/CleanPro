@@ -14,6 +14,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import androidx.annotation.Nullable;
+
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
@@ -29,8 +31,6 @@ import com.xiaoniu.common.utils.StatisticsUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import androidx.annotation.Nullable;
 
 /**
  * 常住通知栏服务
@@ -75,6 +75,7 @@ public class NotificationService extends Service {
             notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);//锁屏显示通知
             notificationManager.createNotificationChannel(notificationChannel);
             mBuilder.setChannelId("1");
+//            startForeground(1, new Notification());
         } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {  //4.4版本兼容点击跳转
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.notification_bar_layout);
@@ -179,7 +180,7 @@ public class NotificationService extends Service {
     @Subscribe
     public void cleanFinish(NotificationEvent notificationEvent) {
         Log.d("cleanFinish", "cleanFinish: " + notificationEvent);
-        if(null == contentView)
+        if (null == contentView)
             return;
         if ("clean".equals(notificationEvent.getType())) {
             if (notificationEvent.getFlag() == 0) {

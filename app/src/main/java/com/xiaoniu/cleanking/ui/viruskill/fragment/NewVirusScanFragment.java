@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.jess.arms.base.SimpleFragment;
 import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.DeviceUtils;
 import com.jess.arms.widget.LeiDaView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -85,6 +86,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private VirusScanTextItemAdapter textAdapter;
     private VirusScanIconItemAdapter iconAdapter;
     private ITransferPagePerformer transferPagePerformer;
+    private boolean isFirst=true;
 
     public static NewVirusScanFragment getInstance() {
         return new NewVirusScanFragment();
@@ -102,6 +104,10 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
+        isFirst=true;
+        LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) toolBar.getLayoutParams();
+        layoutParams.topMargin= DeviceUtils.getStatusBarHeight(mContext);
+
         presenter = new VirusScanPresenter(this);
         presenter.onCreate();
         initRecycleView();
@@ -309,7 +315,11 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         }
         textAdapter.updateState();
         txtPro.setText(100 + "%");
-        new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList), 1000);
+
+        if(isFirst){
+            isFirst=false;
+            new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList), 1000);
+        }
     }
 
     /*

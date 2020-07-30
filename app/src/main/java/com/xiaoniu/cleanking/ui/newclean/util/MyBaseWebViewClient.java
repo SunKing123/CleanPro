@@ -121,7 +121,6 @@ public class MyBaseWebViewClient extends WebViewClient {
 //            errorView.setVisibility(View.VISIBLE);
 //            errorView.showErrorView();
 //        }
-        Log.e("snow", "=====onReceivedError=========");
     }
 
     @Override

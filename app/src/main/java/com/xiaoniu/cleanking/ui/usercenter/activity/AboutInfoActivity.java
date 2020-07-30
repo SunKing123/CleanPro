@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.ui.usercenter.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,7 +24,6 @@ import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.usercenter.contract.AboutInfoContract;
 import com.xiaoniu.cleanking.ui.usercenter.di.component.DaggerAboutInfoComponent;
 import com.xiaoniu.cleanking.ui.usercenter.presenter.AboutInfoPresenter;
-import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -80,11 +78,11 @@ public class AboutInfoActivity extends BaseActivity<AboutInfoPresenter> implemen
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
-        } else {
-            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
+//        } else {
+//            StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), false);
+//        }
         iv_back.setOnClickListener(v -> finish());
         tv_version.setText("当前版本 V" + AppUtils.getVersionName(this, this.getPackageName()));
         //检测版本更新

@@ -20,6 +20,8 @@ import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 /**
@@ -74,9 +76,15 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         var percent = (used.toDouble() / total.toDouble()) * 100
         tv_memory_title.setText("运行总内存：" + FileUtils.getUnitGB(total))
         tv_memory_content.setText("已用运行内存：" + FileUtils.getUnitGB(used))
-        tv_memory_percent.setText(percent.toInt().toString() + "%")
+        tv_memory_percent.setText(format(percent)+ "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
         updateBtnBackGround(btn_clean_memory, percent.toInt())
+    }
+
+    fun format(value: Double): String? {
+        var bd = BigDecimal(value)
+        bd = bd.setScale(0, RoundingMode.HALF_UP)
+        return bd.toString()
     }
 
     /**
@@ -88,7 +96,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         var percent = (used.toDouble() / total.toDouble()) * 100
         tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total))
         tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used))
-        tv_storage_percent.setText(percent.toInt().toString() + "%")
+        tv_storage_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
         updateBtnBackGround(btn_clean_storage, percent.toInt())
     }

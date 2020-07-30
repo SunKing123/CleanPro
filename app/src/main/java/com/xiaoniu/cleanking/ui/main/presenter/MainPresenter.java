@@ -581,15 +581,13 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (!AppUtils.checkStoragePermission(mActivity))//未授权谭庄
             return;
         //展示内部插屏广告
-        if (null != mActivity && null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
+        if (null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
             InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);
-            LogUtils.e("======databean:" + new Gson().toJson(dataBean));
             if (dataBean != null && dataBean.isOpen()) {//内部插屏广告
                 if (!TextUtils.isEmpty(dataBean.getInternalAdRate()) && dataBean.getInternalAdRate().contains(",")) {
                     List<String> internalList = Arrays.asList(dataBean.getInternalAdRate().split(","));
                     InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
                     int startCount = inside.getCount();
-                    LogUtils.e("=======count:" + startCount);
                     if (internalList.contains(String.valueOf(startCount))) {
                         showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
                         return;
