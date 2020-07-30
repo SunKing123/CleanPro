@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 
@@ -72,11 +73,11 @@ public class NetBroadcastReceiver extends BroadcastReceiver {
                     LogUtils.e("==========不满足wifi展示的总次数");
                     return;
                 }
-                PreferenceUtil.updatePopupWifi(false);
+                MmkvUtil.saveBool("isResetWiFi", false);
                 EventBus.getDefault().post(new PopEventModel("wifi"));
             } else {
                 //不是同一天，重置数据
-                PreferenceUtil.updatePopupWifi(true);
+                MmkvUtil.saveBool("isResetWiFi", true);
                 EventBus.getDefault().post(new PopEventModel("wifi"));
             }
 

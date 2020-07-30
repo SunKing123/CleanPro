@@ -214,7 +214,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 LogUtils.i("checkStoragePermission()---true");
                 readyScanningJunk();
                 scanningJunk();
-
             }
 
             @Override
@@ -236,7 +235,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
      */
     private boolean hasPermissionDeniedForever() {
         boolean hasDeniedForever = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M&&mView!=null) {
             if (mView.getActivity().shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 hasDeniedForever = true;
             }
