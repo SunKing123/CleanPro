@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_virus_scan_result_layout.*
  * email：xinxiaolong123@foxmail.com
  */
 class VirusScanResultFragment : SimpleFragment() {
-
+    
     lateinit var transfer: ITransferPagePerformer
     lateinit var pList: ArrayList<ScanTextItemModel>
     lateinit var nList: ArrayList<ScanTextItemModel>
@@ -112,7 +112,7 @@ class VirusScanResultFragment : SimpleFragment() {
         var sp = SpannableString(text)
         var start = text.indexOf(bigText)
         var end = start + bigText.length
-        var size = AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_24))
+        var size = AbsoluteSizeSpan(resources.getDimensionPixelSize(R.dimen.dp_35))
         sp.setSpan(size, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         return sp
     }
