@@ -297,6 +297,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
+        if (null == mUnlockView)
+            return;
         mUnlockView.stopAnim();
 
     }
