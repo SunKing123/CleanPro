@@ -33,6 +33,22 @@ public class LollipopFixedWebView extends WebView {
     public LollipopFixedWebView(Context context, AttributeSet attrs, int defStyleAttr, boolean privateBrowsing) {
         super(getFixedContext(context), attrs, defStyleAttr, privateBrowsing);
     }
+//修改android.webkit.WebViewFactory$MissingWebViewPackageException
+//Failed to load WebView provider: No WebView installed
+//    设备：华为 DUB-AL00
+//    版本：8.1
+    @Override
+    public void setOverScrollMode(int mode) {
+        try {
+            super.setOverScrollMode(mode);
+        } catch (Exception e) {
+            if (e.getMessage() != null && e.getMessage().contains("Failed to load WebView provider: No WebView installed")) {
+                e.printStackTrace();
+            } else {
+                throw e;
+            }
+        }
+    }
 
     public static Context getFixedContext(Context context) {
         if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 23) {
