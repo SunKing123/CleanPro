@@ -85,7 +85,6 @@ public class DeskPopConfig {
         DeskPopLogger.log("thisPopNum: "+externalPopNumEntity.getPopupCount()+"    "+externalPopNumEntity.getPopupTime());
         PreferenceUtil.saveStateExternalPopNumEntity(externalPopNumEntity);
         DeskPopLogger.log("=======================in saveAndDecreaseStatePopNum()========================");
-
     }
 
     /**

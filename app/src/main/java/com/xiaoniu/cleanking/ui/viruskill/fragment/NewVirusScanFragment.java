@@ -304,7 +304,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         }
         textAdapter.addData(model);
     }
-    
+
     /**
      * 所有扫描已结束
      */

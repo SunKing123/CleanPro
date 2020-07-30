@@ -8,12 +8,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
+import com.jess.arms.utils.DeviceUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.umeng.qq.tencent.Tencent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
@@ -51,6 +50,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
@@ -92,6 +92,8 @@ public class ToolFragment extends SimpleFragment {
     TextView mTvPhoneSpace;
     @BindView(R.id.flayout_bottom_ad)
     FrameLayout frameBottomLayout;
+    @BindView(R.id.ll_top_layout)
+    LinearLayout llTopLayout;
 
     private int mNotifySize; //通知条数
     private int mPowerSize; //耗电应用数
@@ -118,7 +120,8 @@ public class ToolFragment extends SimpleFragment {
             if (mTvToolPercentNum != null)
                 mTvToolPercentNum.setText("" + progress + "%");
         });
-
+        llTopLayout.setPadding(0,DeviceUtils.getStatusBarHeight(mContext),0,0);
+        
         getAccessListBelow();
     }
 

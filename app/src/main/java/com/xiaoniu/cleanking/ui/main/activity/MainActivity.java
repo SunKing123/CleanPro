@@ -713,6 +713,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Subscribe
     public void onEventWifiConnection(PopEventModel popEventModel) {
+        DeskPopLogger.log("======MainActivity before  的event bus:" + popEventModel.getAction());
         if (TextUtils.isEmpty(popEventModel.getAction()) || AppLifecycleUtil.isAppOnForeground(mContext))
             return;
         DeskPopLogger.log("======MainActivity 的event bus:" + popEventModel.getAction());
