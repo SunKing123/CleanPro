@@ -44,7 +44,6 @@ class VirusScanResultFragment : SimpleFragment() {
 
     }
 
-
     override fun getLayoutId(): Int {
         return R.layout.fragment_virus_scan_result_layout
     }
@@ -86,7 +85,6 @@ class VirusScanResultFragment : SimpleFragment() {
         btn_clear_virus_result.setOnClickListener({
             transfer.onTransferCleanPage(pList, nList)
             StatisticsUtils.onPageEnd(Points.Virus.RESULT_PAGE_EVENT_CODE, Points.Virus.RESULT_PAGE_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
-            StatisticsUtils.trackClick(Points.Virus.RESULT_TO_CLEAN_EVENT_CODE,Points.Virus.RESULT_TO_CLEAN_EVENT_NAME,"",Points.Virus.RESULT_PAGE)
         })
     }
 
@@ -127,10 +125,14 @@ class VirusScanResultFragment : SimpleFragment() {
     fun setTransferPagePerformer(transfer: ITransferPagePerformer) {
         this.transfer = transfer
     }
-     
+
     fun finish() {
         activity!!.finish()
         StatisticsUtils.trackClick("return_click", Points.Virus.RESULT_RETURN_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         StatisticsUtils.onPageEnd(Points.Virus.RESULT_PAGE_EVENT_CODE, Points.Virus.RESULT_PAGE_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
     }
 }

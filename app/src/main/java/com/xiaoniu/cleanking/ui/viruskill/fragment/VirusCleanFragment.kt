@@ -53,6 +53,7 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
         initView()
     }
 
+
     fun initView() {
         lottie.startRotationAnimation()
         StatisticsUtils.onPageStart(Points.Virus.CLEAN_FINISH_PAGE_EVENT_CODE, Points.Virus.CLEAN_FINISH_PAGE_EVENT_NAME)
@@ -68,7 +69,7 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
 
             override fun onFinish() {
                 transfer.cleanComplete()
-                StatisticsUtils.onPageEnd(Points.Virus.CLEAN_FINISH_PAGE_EVENT_CODE, Points.Virus.CLEAN_FINISH_PAGE_EVENT_NAME,"",Points.Virus.CLEAN_FINISH_PAGE)
+                StatisticsUtils.onPageEnd(Points.Virus.CLEAN_FINISH_PAGE_EVENT_CODE, Points.Virus.CLEAN_FINISH_PAGE_EVENT_NAME, "", Points.Virus.CLEAN_FINISH_PAGE)
             }
         }
         timer.start()
