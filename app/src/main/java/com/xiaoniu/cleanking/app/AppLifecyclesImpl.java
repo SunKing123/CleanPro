@@ -57,6 +57,7 @@ import com.xiaoniu.cleanking.app.injector.module.AppModule;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
+import com.xiaoniu.cleanking.keeplive.receive.NetBroadcastReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.NetworkCallbackImpl;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.keeplive.utils.HomeWatcher;
@@ -176,6 +177,12 @@ public class AppLifecyclesImpl implements AppLifecycles {
             intentFilter.addAction(Intent.ACTION_SCREEN_ON);
             intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
             application.registerReceiver(new LockActivityStarReceiver(), intentFilter);
+
+            //WIFI连接
+            // registerWifiConnect(application);
+            NetBroadcastReceiver wifiReceiver = new NetBroadcastReceiver();
+            IntentFilter wifiFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+            application.registerReceiver(wifiReceiver, wifiFilter);
         }
 
 
@@ -201,7 +208,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         //初始化utilCode
         Utils.init(application);
 
-        registerWifiConnect(application);
 
     }
 
@@ -539,10 +545,10 @@ public class AppLifecyclesImpl implements AppLifecycles {
     /**
      * 启动后台心跳
      */
-    private void startBackgroundTimer(){
+    private void startBackgroundTimer() {
         BackGroundPulseTimer timer = BackGroundPulseTimer.getInstance();
 
-        DeskPopLogger.log("startBackgroundTimer()   isStateCanPop="+DeskPopConfig.getInstance().isStateCanPop()+"    isBatteryCanPop="+DeskPopConfig.getInstance().isBatteryCanPop());
+        DeskPopLogger.log("startBackgroundTimer()   isStateCanPop=" + DeskPopConfig.getInstance().isStateCanPop() + "    isBatteryCanPop=" + DeskPopConfig.getInstance().isBatteryCanPop());
 
         if (DeskPopConfig.getInstance().isStateCanPop()) {
             timer.register(new PhoneStatePopChecker());
@@ -561,7 +567,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
     /**
      * 关闭后台心跳
      */
-    private void destroyBackgroundTimer(){
+    private void destroyBackgroundTimer() {
         BackGroundPulseTimer.getInstance().destroy();
     }
 
