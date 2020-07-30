@@ -304,7 +304,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         }
         textAdapter.addData(model);
     }
-
+    
     /**
      * 所有扫描已结束
      */
@@ -315,7 +315,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         }
         textAdapter.updateState();
         txtPro.setText(getProgressText(100));
-
+        imgNetwork.setImageResource(R.drawable.icon_network_scan_complete);
         if(isFirst){
             isFirst=false;
             new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList), 1000);
