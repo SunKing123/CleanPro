@@ -165,6 +165,7 @@ public class VirusScanPresenter extends BasePresenter<NewVirusKillContract.LieMo
      */
     private void handlePrivacyStart() {
         warningCount = 0;
+        if (null != mRootView)
         mRootView.setScanTitle("隐私风险扫描中...");
     }
 
@@ -181,10 +182,12 @@ public class VirusScanPresenter extends BasePresenter<NewVirusKillContract.LieMo
             //添加扫描文案
             p_index = thisIndex;
             ScanTextItemModel model = pList.get(p_index);
+            if (null != mRootView)
             mRootView.addScanPrivacyItem(model);
 
             if (model.warning) {
                 warningCount++;
+                if (null != mRootView)
                 mRootView.setPrivacyCount(warningCount);
             }
         }
