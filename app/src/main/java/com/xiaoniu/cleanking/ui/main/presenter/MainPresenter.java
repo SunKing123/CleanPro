@@ -61,6 +61,7 @@ import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
+import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
@@ -452,11 +453,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     PreferenceUtil.saveLocalPushConfig(new Gson().toJson(pushConfigList));
                 }
 
-                //限制华为设置启动包活；
-//                if (Build.MANUFACTURER.toLowerCase().contains("huawei")) {
-                //启动保活进程
-                mView.start();
-//                }
+                delayStartKeepLive();
             }
 
             @Override
@@ -469,6 +466,35 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
 
             }
         });
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+        LogUtils.i("----detachView()");
+        removeTimer();
+    }
+
+    /**
+     * 延迟10秒启动保活
+     */
+    RxTimer rxTimer;
+    public void delayStartKeepLive(){
+        rxTimer = new RxTimer();
+        rxTimer.timer(1000 * 15, new RxTimer.RxAction() {
+            @Override
+            public void action(long number) {
+                if (null != mView) {
+                    mView.startKeepLive();
+                }
+            }
+        });
+    }
+
+    public void removeTimer(){
+        if (null != rxTimer) {
+            rxTimer.cancel();
+        }
     }
 
     /**

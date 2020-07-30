@@ -547,6 +547,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } catch (Exception e) {
         }
         AppLifecyclesImpl.removeTask(myRunnable);
+
+
     }
 
 
@@ -776,7 +778,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
-    public void start() {
+    public void startKeepLive() {
         try {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                 //启动保活服务
@@ -898,6 +900,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
         QuickUtils.getInstant(this).enableComponent(apple);
     }
+
 
 
 }
