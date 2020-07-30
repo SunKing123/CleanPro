@@ -258,7 +258,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
         initAnimator(phoneTemperature);
     }
 
-    private static final int FirstLevel = 0xff06C581;
+    private static final int FirstLevel = 0xffFD6F46;
     private static final int ThirdLevel = 0xff06C581;
 
     /**
