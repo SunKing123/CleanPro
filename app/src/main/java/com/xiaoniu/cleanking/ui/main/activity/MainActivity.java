@@ -407,7 +407,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //开启常驻通知栏服务
         if (NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()) {
             try {
-                startService(new Intent(this, NotificationService.class));
+                Intent intent = new Intent(this, NotificationService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent);
+                } else {
+                    startService(intent);
+                }
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }

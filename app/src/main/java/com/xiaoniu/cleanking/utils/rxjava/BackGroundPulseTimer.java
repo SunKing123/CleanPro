@@ -36,7 +36,6 @@ public class BackGroundPulseTimer {
     }
 
     private void callBack(long number) {
-        ToastUtils.showShort("callBack(long number)"+number);
         DeskPopLogger.log("===============callBack()==============");
         for (BackGroundIPulseObserver observer : observers) {
             observer.onPulse(number);
@@ -71,7 +70,6 @@ public class BackGroundPulseTimer {
     }
 
     public void destroy() {
-        ToastUtils.showShort("backgroundTimer destroy()");
         unRegisterAll();
         timer.cancel();
     }

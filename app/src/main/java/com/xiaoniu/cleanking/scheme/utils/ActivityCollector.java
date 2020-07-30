@@ -56,7 +56,7 @@ public class ActivityCollector {
         }
         LogUtils.e("====================pulseTimer  activities()=======================");
 
-        return activities.containsKey(ExternalPhoneStateActivity.class) ||
+        return  activities.containsKey(ExternalPhoneStateActivity.class) ||
                 activities.containsKey(BatteryPopActivity.class) ||
                 activities.containsKey(ExternalSceneActivity.class) ||
                 activities.containsKey(PopPushActivity.class)||

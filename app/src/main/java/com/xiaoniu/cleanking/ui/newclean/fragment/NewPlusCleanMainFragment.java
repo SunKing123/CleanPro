@@ -200,7 +200,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态",
                 "home_page", "home_page", extParam);
         checkAndUploadPoint();
-        showGuideView();
+        //暂时不需要展示新手引导
+//        showGuideView();
     }
 
     /**

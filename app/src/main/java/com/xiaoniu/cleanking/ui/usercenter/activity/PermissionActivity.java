@@ -71,7 +71,13 @@ public class PermissionActivity extends SimpleActivity {
                 FloatingImageDisplayService.imageRes = new int[]{R.mipmap.icon_per2, R.mipmap.icon_per3, R.mipmap.icon_per4};
                 FloatingImageDisplayService.imageWidth = new int[]{275, 275, 275};
                 FloatingImageDisplayService.imageHeight = new int[]{186, 186, 206};
-                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
+                Intent intent1 = new Intent(this, FloatingImageDisplayService.class);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent1);
+                } else {
+                    startService(intent1);
+                }
+//                startService(new Intent(PermissionActivity.this, FloatingImageDisplayService.class));
             }
         });
         line_dingwei.setOnClickListener(v -> {
