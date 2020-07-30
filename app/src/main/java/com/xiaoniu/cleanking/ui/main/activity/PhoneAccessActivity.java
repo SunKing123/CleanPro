@@ -231,7 +231,7 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
                 strUnit = "";
             }
             if (!mIsFinish) {
-                showCleanFinishUI(strNum, strUnit);
+                //showCleanFinishUI(strNum, strUnit);
             }
         });
 
