@@ -148,6 +148,7 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                     if (!isShow) {
                         isShow = true;
                         mStartNetNumber = msg.obj.toString();
+                        if (null != mNetNumTv && null != mStartNetNumber)
                         mNetNumTv.setText("现网速度： " + mStartNetNumber);
                     }
                     break;
