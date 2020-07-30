@@ -834,7 +834,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.trackClick(Points.MainHome.VIRUS_KILLING_CLICK_CODE, Points.MainHome.VIRUS_KILLING_CLICK_NAME, "home_page", "home_page");
         startKillVirusActivity();
     }
-
+    
     //start kill virus page
     private void startKillVirusActivity() {
         if (PreferenceUtil.getVirusKillTime()) {

@@ -58,7 +58,7 @@ import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.newclean.activity.ExternalSceneActivity;
+import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
