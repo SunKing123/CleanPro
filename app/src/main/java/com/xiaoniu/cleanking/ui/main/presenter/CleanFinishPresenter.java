@@ -169,7 +169,8 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                                   if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
                                       adId = MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS;
                                   }
-                                  startGoldSuccess(adId, bubbleCollected.getData().getGoldCount(), mView.getActivityTitle());
+                                  if (null != bubbleDouble)
+                                      startGoldSuccess(adId, bubbleDouble.getData().getGoldCount(), mView.getActivityTitle());
                                   GoldCoinDialog.dismiss();
                               }
 
