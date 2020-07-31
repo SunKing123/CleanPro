@@ -23,6 +23,7 @@ import com.xiaoniu.common.utils.StatisticsUtils
 import com.xnad.sdk.ad.entity.AdInfo
 import com.xnad.sdk.ad.listener.AbsAdCallBack
 import kotlinx.android.synthetic.main.activity_gold_coin_success.*
+import java.lang.Exception
 
 
 /**
@@ -38,10 +39,6 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     companion object {
         fun start(context: Context, model: GoldCoinDoubleModel) {
-            if (model == null) {
-                Toast.makeText(context, "非法参数", Toast.LENGTH_LONG).show()
-                return
-            }
             var intent = Intent(context, GoldCoinSuccessActivity::class.java);
             intent.putExtra("model", model)
             context.startActivity(intent)
@@ -50,7 +47,12 @@ class GoldCoinSuccessActivity : BaseActivity() {
 
     override fun initLayout(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_gold_coin_success)
-        model = intent.getParcelableExtra("model")
+        try {
+            //有时候为空了
+            model = intent.getParcelableExtra("model")
+        }catch (e:Exception){
+
+        }
         if (model == null) {
             Toast.makeText(context, "非法参数", Toast.LENGTH_LONG).show()
             finish()

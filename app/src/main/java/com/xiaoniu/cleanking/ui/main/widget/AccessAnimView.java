@@ -439,8 +439,6 @@ public class AccessAnimView extends RelativeLayout {
      * @return 火箭向上飞进
      */
     public ObjectAnimator createStartFadeAnimator() {
-
-
         PropertyValuesHolder translationY = PropertyValuesHolder.ofFloat("translationY", line_hj.getTranslationY() + (1) * DisplayUtils.dip2px(990), line_hj.getTranslationY());
         PropertyValuesHolder alpha = PropertyValuesHolder.ofFloat("alpha", 0.5f, 1f);
         ObjectAnimator animator = ObjectAnimator.ofPropertyValuesHolder(line_hj, translationY, alpha);
@@ -597,8 +595,6 @@ public class AccessAnimView extends RelativeLayout {
         mAnimationCloudView.setImageAssetsFolder("images");
         mAnimationCloudView.setAnimation("data_one_key_speed_up.json");
         mAnimationCloudView.playAnimation();
-
-
     }
 
     /**
@@ -611,7 +607,6 @@ public class AccessAnimView extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-
                 startFinishAnimator();
             }
         });
