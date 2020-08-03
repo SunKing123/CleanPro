@@ -78,7 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginRight="15dp">
 
         <ImageView
@@ -147,7 +147,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginRight="15dp">
 
         <ImageView
@@ -216,7 +216,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="40dp">
 

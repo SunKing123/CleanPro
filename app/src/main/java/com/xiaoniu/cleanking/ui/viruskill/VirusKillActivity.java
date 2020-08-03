@@ -70,7 +70,6 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
                 .commitAllowingStateLoss();
     }
 
-
     @Override
     public void onTransferResultPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
         pageIndex = 1;
