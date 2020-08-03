@@ -442,14 +442,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 boolean flag = AppLifecycleUtil.isAppOnForeground(application);
                 LocalPushSchedule.Companion.getInstance().popPush(flag);
-                Intent i = new Intent(application, LocalService.class);
-                i.putExtra("action", "home");
-                // i.putExtra("homePressed", currentTimestamp);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    application.startForegroundService(i);
-                } else {
-                    application.startService(i);
-                }
 
             }
 
@@ -462,14 +454,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 mLastClickTime = SystemClock.elapsedRealtime();
                 boolean flag = AppLifecycleUtil.isAppOnForeground(application);
                 LocalPushSchedule.Companion.getInstance().popPush(flag);
-                Intent i = new Intent(application, LocalService.class);
-                i.putExtra("action", "home");
-                //  i.putExtra("homePressed", currentTimestamp);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    application.startForegroundService(i);
-                } else {
-                    application.startService(i);
-                }
             }
         });
         mHomeWatcher.startWatch();
@@ -611,6 +595,9 @@ public class AppLifecyclesImpl implements AppLifecycles {
             ButterKnife.setDebug(true);
         }
     }
+
+
+
 
 
 }

@@ -31,8 +31,12 @@ public class HomeWatcher  {
     }
 
     public void startWatch() {
-        if (mReceiver != null) {
-            mContext.registerReceiver(mReceiver, mFilter);
+        try {
+            if (mReceiver != null) {
+                mContext.registerReceiver(mReceiver, mFilter);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
