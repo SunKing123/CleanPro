@@ -360,16 +360,16 @@ public class PreferenceUtil {
     }
 
     /**
-     * 是否距离上次病毒查杀隔至少3分钟
+     * 是否距离上次病毒查杀隔至少30分钟
      *
-     * @return true 3分钟以上 false 小于3分钟
+     * @return true 3分钟以上 false 小于30分钟
      */
     public static boolean getVirusKillTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_VIRUS_TIME, 0);
         if (System.currentTimeMillis() - time > 30 * 60 * 1000)
             return true;
-        return false;
+        return true;
     }
 
     /**

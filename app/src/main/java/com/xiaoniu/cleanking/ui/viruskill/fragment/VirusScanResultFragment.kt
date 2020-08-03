@@ -83,15 +83,17 @@ class VirusScanResultFragment : SimpleFragment() {
         tvTitle.setText("病毒查杀")
         toolBar.setOnClickListener({ finish() })
 
-        if(sumNum==0){
-            relative_bottom.visibility= View.GONE
+        if (sumNum == 0) {
+            relative_bottom.visibility = View.GONE
         }
     }
 
     private fun initEvent() {
         btn_clear_virus_result.setOnClickListener({
-            transfer.onTransferCleanPage(pList, nList)
-            StatisticsUtils.trackClick(RESULT_TO_CLEAN_EVENT_CODE, RESULT_TO_CLEAN_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
+            if (transfer != null) {
+                transfer.onTransferCleanPage(pList, nList)
+                StatisticsUtils.trackClick(RESULT_TO_CLEAN_EVENT_CODE, RESULT_TO_CLEAN_EVENT_NAME, "", Points.Virus.RESULT_PAGE)
+            }
         })
     }
 

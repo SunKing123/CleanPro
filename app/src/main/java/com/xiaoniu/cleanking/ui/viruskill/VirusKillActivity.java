@@ -86,7 +86,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
         bundle.putParcelableArrayList(VirusScanResultFragment.IntentKey.N_LIST, nList);
         resultFragment.setArguments(bundle);
         resultFragment.setTransferPagePerformer(this);
-
+        if(mManager!=null)
         mManager.beginTransaction()
                 .replace(R.id.frame_layout, resultFragment)
                 .commitAllowingStateLoss();
@@ -103,6 +103,7 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
         cleanFragment.setArguments(bundle);
         cleanFragment.setTransferPagePerformer(this);
 
+        if(mManager!=null)
         mManager.beginTransaction()
                 .replace(R.id.frame_layout, cleanFragment)
                 .commitAllowingStateLoss();
