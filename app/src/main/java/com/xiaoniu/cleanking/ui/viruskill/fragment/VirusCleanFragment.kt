@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.ui.viruskill.model.ScanTextItemModel
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_viruskill_clean_layout.*
+import java.lang.Exception
 import android.os.CountDownTimer as AndroidOsCountDownTimer
 
 /**
@@ -18,8 +19,8 @@ import android.os.CountDownTimer as AndroidOsCountDownTimer
 class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
 
     lateinit var transfer: ITransferPagePerformer
-    lateinit var pList: ArrayList<ScanTextItemModel>
-    lateinit var nList: ArrayList<ScanTextItemModel>
+    var pList=ArrayList<ScanTextItemModel>()
+    var nList=ArrayList<ScanTextItemModel>()
     var aList = ArrayList<ScanTextItemModel>()
     lateinit var timer: AndroidOsCountDownTimer
 
@@ -44,15 +45,29 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        pList = arguments!!.getParcelableArrayList(VirusScanResultFragment.IntentKey.P_LIST)
-        nList = arguments!!.getParcelableArrayList(VirusScanResultFragment.IntentKey.N_LIST)
+        try {
+            pList = arguments!!.getParcelableArrayList(VirusScanResultFragment.IntentKey.P_LIST)
+            nList = arguments!!.getParcelableArrayList(VirusScanResultFragment.IntentKey.N_LIST)
+        }catch (e:Exception){
+
+        }
         aList.addAll(pList)
         aList.addAll(nList)
+
+        if(aList.size==0){
+            addModel()
+        }
+
         gridLength = 100 / aList.size
 
         initView()
     }
 
+    private fun addModel(){
+        var model=ScanTextItemModel()
+        model.name="WIFI加密";
+        aList.add(model)
+    }
 
     fun initView() {
         lottie.startRotationAnimation()
