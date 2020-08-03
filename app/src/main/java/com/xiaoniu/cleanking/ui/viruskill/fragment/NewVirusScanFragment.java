@@ -86,7 +86,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
     private VirusScanTextItemAdapter textAdapter;
     private VirusScanIconItemAdapter iconAdapter;
     private ITransferPagePerformer transferPagePerformer;
-    private boolean isFirst=true;
+    private boolean isFirst = true;
 
     public static NewVirusScanFragment getInstance() {
         return new NewVirusScanFragment();
@@ -104,9 +104,9 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
     @Override
     public void initData(@Nullable Bundle savedInstanceState) {
-        isFirst=true;
-        LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) toolBar.getLayoutParams();
-        layoutParams.topMargin= DeviceUtils.getStatusBarHeight(mContext);
+        isFirst = true;
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolBar.getLayoutParams();
+        layoutParams.topMargin = DeviceUtils.getStatusBarHeight(mContext);
 
         presenter = new VirusScanPresenter(this);
         presenter.onCreate();
@@ -144,7 +144,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
 
         timer = new CountDownTimer(millisInFuture, countDownInterval) {
             public void onTick(long millisUntilFinished) {
-                if(isFinishing()){
+                if (isFinishing()) {
                     return;
                 }
                 int progress = (int) (100 - millisUntilFinished / countDownInterval);
@@ -162,10 +162,10 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         timer.start();
     }
 
-    private SpannableString getProgressText(int progress){
-        String head=String.valueOf(progress);
-        String text=head+" %";
-        return  AndroidUtil.zoomText(text,4,0,head.length());
+    private SpannableString getProgressText(int progress) {
+        String head = String.valueOf(progress);
+        String text = head + " %";
+        return AndroidUtil.zoomText(text, 4, 0, head.length());
     }
 
 
@@ -176,11 +176,11 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setScanTitle(String title) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         if (null != tvScanTitle)
-        tvScanTitle.setText(title);
+            tvScanTitle.setText(title);
     }
 
 
@@ -198,7 +198,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setPrivacyCount(int count) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         tvPrivacy.setVisibility(View.VISIBLE);
@@ -216,7 +216,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void addScanPrivacyItem(ScanTextItemModel model) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         if (textAdapter.getItemCount() == 4) {
@@ -230,7 +230,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setScanPrivacyComplete() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         textAdapter.updateState();
@@ -250,7 +250,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void showScanVirusIcons(ArrayList<FirstJunkInfo> list) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         recycleViewText.setVisibility(View.GONE);
@@ -263,7 +263,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void setScanVirusComplete() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         imgVirusScan.setImageResource(R.drawable.icon_virus_ok);
@@ -282,7 +282,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void startScanNetwork() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         textAdapter.clean();
@@ -297,7 +297,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void addScanNetWorkItem(ScanTextItemModel model) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         if (textAdapter.getItemCount() == 4) {
@@ -311,16 +311,22 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      */
     @Override
     public void scanAllComplete(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         textAdapter.updateState();
         txtPro.setText(getProgressText(100));
         imgNetwork.setImageResource(R.drawable.icon_network_scan_complete);
-        if(isFirst){
-            isFirst=false;
-            new Handler().postDelayed(() -> transferPagePerformer.onTransferResultPage(pList, nList), 1000);
+        if (isFirst) {
+            isFirst = false;
+            new Handler().postDelayed(() ->
+                    toResultPage(pList, nList), 1000);
         }
+    }
+
+    private void toResultPage(ArrayList<ScanTextItemModel> pList, ArrayList<ScanTextItemModel> nList) {
+        if (transferPagePerformer != null)
+            transferPagePerformer.onTransferResultPage(pList, nList);
     }
 
     /*
@@ -333,7 +339,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      * 过渡到病毒查杀背景
      */
     private void transitionBackgroundVirus() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", pBackGround, vBackGround);
@@ -346,7 +352,7 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
      * 过渡到网络安全背景
      */
     private void transitionBackgroundNet() {
-        if(isFinishing()){
+        if (isFinishing()) {
             return;
         }
         ValueAnimator colorAnim1 = ObjectAnimator.ofInt(rootView, "backgroundColor", vBackGround, nBackGround);
@@ -364,13 +370,13 @@ public class NewVirusScanFragment extends SimpleFragment implements NewVirusKill
         this.transferPagePerformer = transferPagePerformer;
     }
 
-    private boolean isFinishing(){
-        return tvScanTitle==null;
+    private boolean isFinishing() {
+        return tvScanTitle == null;
     }
 
     public void finish() {
         timer.cancel();
         getActivity().finish();
-        StatisticsUtils.trackClick("return_click",Points.Virus.SCAN_SYSTEM_RETURN_EVENT_NAME,"", Points.Virus.SCAN_PAGE);
+        StatisticsUtils.trackClick("return_click", Points.Virus.SCAN_SYSTEM_RETURN_EVENT_NAME, "", Points.Virus.SCAN_PAGE);
     }
 }
