@@ -47,8 +47,13 @@ public class ProxyImpl implements IProxy {
         /**
          * 解绑，避免内存泄漏
          */
+        if (mInjectPresenters == null) {
+            return;
+        }
         for (BasePresenter presenter : mInjectPresenters) {
-            presenter.detach();
+            if (presenter != null) {
+                presenter.detach();
+            }
         }
         mInjectPresenters.clear();
         mInjectPresenters = null;
