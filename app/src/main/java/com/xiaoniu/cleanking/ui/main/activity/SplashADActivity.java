@@ -29,6 +29,7 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.constant.Constant;
@@ -379,27 +380,27 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 break;
             case R.id.tv_qx:
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/agree.html");
+                    jumpXieyiActivity("file:///android_asset/agree.html", "隐私政策");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/agree.html");
+                    jumpXieyiActivity(H5Urls.PRIVACY_CLAUSE_URL, "隐私政策");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
                 break;
             case R.id.tv_xy:
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/userAgreement.html");
+                    jumpXieyiActivity("file:///android_asset/userAgreement.html", "用户协议");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/userAgreement.html");
+                    jumpXieyiActivity(H5Urls.USER_AGREEMENT_URL, "用户协议");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
                 break;
         }
     }
 
-    public void jumpXieyiActivity(String url) {
+    public void jumpXieyiActivity(String url, String title) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, url);
-        bundle.putString(Constant.Title, "服务协议");
+        bundle.putString(Constant.Title, title);
         bundle.putBoolean(Constant.NoTitle, false);
         startActivity(UserLoadH5Activity.class, bundle);
     }

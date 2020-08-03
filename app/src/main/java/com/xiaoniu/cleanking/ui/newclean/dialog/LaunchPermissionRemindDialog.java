@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -81,7 +82,7 @@ public class LaunchPermissionRemindDialog extends Dialog {
                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                     jumpXieyiActivity("file:///android_asset/userAgreement.html", "用户协议");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/userAgreement.html", "用户协议");
+                    jumpXieyiActivity(H5Urls.USER_AGREEMENT_URL, "用户协议");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
 
@@ -99,10 +100,10 @@ public class LaunchPermissionRemindDialog extends Dialog {
         spannableStringBuilder.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
+                 if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
                     jumpXieyiActivity("file:///android_asset/agree.html", "隐私政策");
                 } else {
-                    jumpXieyiActivity(BuildConfig.Base_H5_Host + "/agree.html", "隐私政策");
+                    jumpXieyiActivity(H5Urls.PRIVACY_CLAUSE_URL, "隐私政策");
                 }
                 StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
             }
