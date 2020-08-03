@@ -114,7 +114,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
             if (TextUtils.isEmpty(mTitle))
                 mTitle = getString(R.string.app_name);
             if (getString(R.string.app_name).contains(mTitle)) {
-                //清理管家极速版
+                //清理极速管家
                 if (TextUtils.isEmpty(num) || num.equals("0.0") || num.equals("0")) {
                     mTvSize.setText("");
                     mTvGb.setText("已达到最佳状态");
@@ -235,10 +235,10 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
         if (getString(R.string.app_name).contains(mTitle)) {
-            //清理管家极速版
+            //清理极速管家
             currentPage = "clean_success_page";
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
-            //清理管家极速版
+            //清理极速管家
             currentPage = "boost_success_page";
         } else if (getString(R.string.tool_suggest_clean).contains(mTitle)) {
             //1.2.1清理完成页面_建议清理
@@ -319,7 +319,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     public void pageStart() {
 
         if (getString(R.string.app_name).contains(mTitle)) {
-            //清理管家极速版
+            //清理极速管家
             NiuDataAPI.onPageStart("clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
@@ -357,7 +357,7 @@ public class CleanFinishAdvertisementActivity extends BaseActivity<CleanFinishAd
     //失去焦点
     public void onPageEnd() {
         if (getString(R.string.app_name).contains(mTitle)) {
-            //清理管家极速版
+            //清理极速管家
             NiuDataAPIUtil.onPageEnd(source_page, currentPage, "clean_success_page_view_page", "清理结果出现时");
         } else if (getString(R.string.tool_one_key_speed).contains(mTitle)) {
             //一键加速
