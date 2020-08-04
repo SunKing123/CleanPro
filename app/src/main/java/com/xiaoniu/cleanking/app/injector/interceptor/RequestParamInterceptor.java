@@ -12,6 +12,7 @@ import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("versionCode", AppUtils.getVersionCode(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
         mapHeader.put("appName", "gj_clean");
         mapHeader.put("bid", (int) (99 * Math.random()));
+        mapHeader.put("activate-timestamp", String.valueOf(SystemUtils.getAppLastUpdateTime(ContextUtils.getContext())));//当前版本激活时间戳
         requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
 
         //爱步行header参数；
@@ -85,6 +87,8 @@ public class RequestParamInterceptor implements Interceptor {
         requestBuilder.addHeader("gps-lng", "");
         requestBuilder.addHeader("gps-lat", "");
         requestBuilder.addHeader("sdk-uid", NiuDataAPI.getUUID());
+
+
         if (original.body() instanceof FormBody) {
 
             FormBody oidFormBody = (FormBody) original.body();
