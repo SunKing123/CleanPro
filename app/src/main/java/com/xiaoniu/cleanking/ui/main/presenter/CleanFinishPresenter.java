@@ -170,7 +170,8 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                                       adId = MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS;
                                   }
                                   if (null != bubbleDouble)
-                                      startGoldSuccess(adId, bubbleDouble.getData().getGoldCount(), mView.getActivityTitle());
+                                      startGoldSuccess(adId, bubbleDouble.getData().getGoldCount(), mView.getActivityTitle(),
+                                              bubbleCollected.getData().getDoubledMagnification());
                                   GoldCoinDialog.dismiss();
                               }
 
@@ -186,10 +187,10 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                                   GoldCoinDialog.dismiss();
                               }
                           }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), bubbleCollected.getData().getUuid(), bubbleCollected.getData().getLocationNum(),
-                bubbleCollected.getData().getGoldCount(),String.valueOf(bubbleCollected.getData().getDoubledMagnification()));
+                bubbleCollected.getData().getGoldCount(), bubbleCollected.getData().getDoubledMagnification());
     }
 
-    private void startGoldSuccess(String adId, int num, String functionName) {
+    private void startGoldSuccess(String adId, int num, String functionName, int doubledMagnification) {
    /*     Activity activity = AppApplication.getInstance().getTopActivity();
         if (activity != null) {
             //TODO 判断条件：   1.应用在前台 2.非本应用报名前缀的activity
@@ -198,7 +199,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             }
         }
 */
-        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, Points.FunctionGoldCoin.SUCCESS_PAGE, functionName);
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, Points.FunctionGoldCoin.SUCCESS_PAGE, functionName, doubledMagnification);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
     }
 

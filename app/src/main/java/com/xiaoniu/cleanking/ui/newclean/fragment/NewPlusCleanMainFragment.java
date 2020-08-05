@@ -813,6 +813,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
             startActivity(PhoneAccessActivity.class, bundle);
         }
+
     }
 
     private void initThreeAdvOnOffInfo() {
@@ -1070,14 +1071,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     public void bubbleDouble(BubbleCollected dataBean) {
         if (null != dataBean) {
-            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount(), String.valueOf(dataBean.getData().getDoubledMagnification()));//刷新金币列表；
+            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount(),dataBean.getData().getDoubledMagnification());//刷新金币列表；
         }
     }
 
     /**
      * 翻倍成功
      */
-    public void bubbleDoubleSuccess(BubbleDouble dataBean, int localNum) {
+    public void bubbleDoubleSuccess(BubbleDouble dataBean, int localNum,int doubledMagnification) {
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
@@ -1086,11 +1087,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
             adId = AdposUtil.getAdPos(localNum, 2);
         }
-        startGoldSuccess(adId, num, localNum);
+        startGoldSuccess(adId, num, localNum,doubledMagnification);
     }
 
-    private void startGoldSuccess(String adId, int num, int index) {
-        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index, Points.MainGoldCoin.SUCCESS_PAGE);
+    private void startGoldSuccess(String adId, int num, int index, int doubledMagnification) {
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index, Points.MainGoldCoin.SUCCESS_PAGE,doubledMagnification);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
     }
 
