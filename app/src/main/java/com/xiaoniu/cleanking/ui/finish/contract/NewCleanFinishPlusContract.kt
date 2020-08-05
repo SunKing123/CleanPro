@@ -13,8 +13,8 @@ import com.xiaoniu.cleanking.ui.finish.model.RecrmdItemModel
 public interface NewCleanFinishPlusContract {
 
     interface CleanFinishView : IView {
-        fun visibleRecommendViewOne(item: RecrmdItemModel)
-        fun visibleRecommendViewTwo(item: RecrmdItemModel)
+        fun visibleRecommendViewFirst(item: RecrmdItemModel)
+        fun visibleRecommendViewSecond(item: RecrmdItemModel)
         fun visibleScratchCardView()
     }
 

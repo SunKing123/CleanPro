@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 /**
  * Created by xinxiaolong on 2020/8/4.
  * email：xinxiaolong123@foxmail.com
+ * 推荐功能数据组装算法
  */
 public class RecrmdItemDataStore {
 

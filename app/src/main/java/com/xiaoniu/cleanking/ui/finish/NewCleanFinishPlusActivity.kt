@@ -12,11 +12,11 @@ import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 public class NewCleanFinishPlusActivity :BaseActivity<NewCleanFinishPlusContract.CleanFinishPresenter>() {
 
     override fun setupActivityComponent(appComponent: AppComponent) {
-        TODO("Not yet implemented")
+
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        TODO("Not yet implemented")
+
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {

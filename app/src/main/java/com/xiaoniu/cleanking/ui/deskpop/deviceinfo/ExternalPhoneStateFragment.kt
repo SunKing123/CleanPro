@@ -31,9 +31,14 @@ import java.math.RoundingMode
  */
 class ExternalPhoneStateFragment : SimpleFragment() {
 
-    private var low: Array<Int> = arrayOf(0, 20)
-    private var medium: Array<Int> = arrayOf(21, 80)
-    private var high: Array<Int> = arrayOf(80, 99)
+    //内存和存储阈值
+    private var low: Array<Int> = arrayOf(0, 50)
+
+    //电量状态阈值
+    private var bLow: Array<Int> = arrayOf(0, 20)
+    private var bMedium: Array<Int> = arrayOf(21, 80)
+    private var bHigh: Array<Int> = arrayOf(80, 99)
+
     private var TEMPERATURE_VPT = 37
     private lateinit var easyMemoryMod: EasyMemoryMod
     private lateinit var easyBatteryMod: EasyBatteryMod
@@ -86,9 +91,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_memory_content.setText("已用运行内存：" + used + " GB")
         tv_memory_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
-        updateBtnBackGround(btn_clean_memory, percent.toInt())
+        updateMemoryOrStorageBtnBackGround(btn_clean_memory, percent.toInt())
     }
-
 
     fun format(value: Double): String? {
         var bd = BigDecimal(value)
@@ -110,7 +114,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used) + " GB")
         tv_storage_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
-        updateBtnBackGround(btn_clean_storage, percent.toInt())
+        updateMemoryOrStorageBtnBackGround(btn_clean_storage, percent.toInt())
     }
 
     /**
@@ -134,9 +138,9 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         updateBatteryImage(easyBatteryMod.getBatteryPercentage())
 
         var percent = easyBatteryMod.getBatteryPercentage();
-        if (inTheRange(percent, low)) {
+        if (inTheRange(percent, bLow)) {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
-        } else if (inTheRange(percent, medium)) {
+        } else if (inTheRange(percent, bMedium)) {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_yellow_bg)
         } else {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_green_bg)
@@ -203,12 +207,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     /**
      * 更新按钮背景
      */
-    private fun updateBtnBackGround(textView: AppCompatTextView, percent: Int) {
+    private fun updateMemoryOrStorageBtnBackGround(textView: AppCompatTextView, percent: Int) {
         if (inTheRange(percent, low)) {
             textView.setBackgroundResource(R.drawable.clear_btn_green_bg)
-        } else if (inTheRange(percent, medium)) {
-            textView.setBackgroundResource(R.drawable.clear_btn_yellow_bg)
-        } else {
+        }else{
             textView.setBackgroundResource(R.drawable.clear_btn_red_bg)
         }
     }
@@ -219,11 +221,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun updateMemoryOrStorageImage(image: ImageView, percent: Int) {
         if (inTheRange(percent, low)) {
             image.setImageResource(R.drawable.icon_memory_percent_low)
-        } else if (inTheRange(percent, medium)) {
-            image.setImageResource(R.drawable.icon_memory_percent_medium)
-        } else if (inTheRange(percent, high)) {
-            image.setImageResource(R.drawable.icon_memory_percent_high)
-        } else {
+        }else {
             image.setImageResource(R.drawable.icon_memory_percent_high)
         }
     }
@@ -245,11 +243,11 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     }
 
     private fun updateBatteryImage(percent: Int) {
-        if (inTheRange(percent, low)) {
+        if (inTheRange(percent, bLow)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_low)
-        } else if (inTheRange(percent, medium)) {
+        } else if (inTheRange(percent, bMedium)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_medium)
-        } else if (inTheRange(percent, high)) {
+        } else if (inTheRange(percent, bHigh)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_high)
         } else {
             image_battery.setImageResource(R.drawable.icon_battery_percent_max)
