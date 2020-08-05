@@ -50,7 +50,7 @@ class GoldCoinSuccessActivity : BaseActivity() {
         try {
             //有时候为空了
             model = intent.getParcelableExtra("model")
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
         if (model == null) {
@@ -105,7 +105,8 @@ class GoldCoinSuccessActivity : BaseActivity() {
     }
 
     fun initCoinView() {
-        var text = "到账" + coinNum + "金币";
+        tv_coin_title.text = "运气爆棚，金币X${model.doubledMagnification}倍"
+        var text = "到账" + coinNum + "金币"
         var sp = SpannableString(text)
         var start = text.indexOf(coinNum.toString())
         var end = start + coinNum.toString().length;

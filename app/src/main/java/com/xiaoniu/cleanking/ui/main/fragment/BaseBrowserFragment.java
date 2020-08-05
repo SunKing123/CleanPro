@@ -149,7 +149,7 @@ public class BaseBrowserFragment extends SimpleFragment {
             public void requestSuccess(String coin) {
                 String adId = cardAvdPresenter.isOpenThree() ? cardAvdPresenter.getSecondAdvId(cardIndex) : "";
                 int coinC = TextUtils.isEmpty(coin) ? coinCount : Integer.parseInt(coin);
-                GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinC, cardIndex, Points.ScratchCard.SUCCESS_PAGE);
+                GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinC, cardIndex, Points.ScratchCard.SUCCESS_PAGE,0);
                 GoldCoinSuccessActivity.Companion.start(getContext(), model);
                 GoldCoinDialog.dismiss();
                 StatisticsUtils.scratchCardClick(Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_CODE, Points.ScratchCard.VIDEO_PAGE_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.VIDEO_PAGE);
