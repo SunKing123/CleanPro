@@ -99,48 +99,63 @@
                         android:textSize="12sp"
                         android:visibility="gone" />
 
-                    <androidx.appcompat.widget.AppCompatButton
+                    <com.xiaoniu.cleanking.widget.BreathTextView
                         android:id="@+id/see_video_to_double"
                         android:layout_width="@dimen/dimen_219dp"
                         android:layout_height="@dimen/dp_38"
                         android:layout_marginTop="@dimen/dp_15"
                         android:background="@mipmap/btn_see_video"
-                        android:text="看视频多倍领取"
+                        android:gravity="center"
+                        android:text="看视频最高翻10陪"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/sp_14"
+                        android:textSize="@dimen/font_14sp"
                         android:textStyle="bold"
                         android:visibility="gone" />
 
 
-                    <RelativeLayout
+                    <com.xiaoniu.cleanking.widget.BreathTextView
                         android:id="@+id/coin_double_rl"
                         android:layout_width="230dp"
-                        android:layout_height="43dp"
-                        android:layout_marginTop="12dp"
-                        android:visibility="gone">
+                        android:layout_height="@dimen/dimen_40dp"
+                        android:layout_marginTop="@dimen/dp_12"
+                        android:background="@mipmap/btn_bg"
+                        android:gravity="center"
+                        android:text="看视频最高翻10陪"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_14sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
 
-                        <ImageView
-                            android:id="@+id/double_iv"
-                            android:layout_width="230dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentBottom="true"
-                            android:src="@mipmap/btn_bg"
-                            android:textSize="@dimen/dimen_15sp"
-                            tools:visibility="visible" />
+                    <!--  <RelativeLayout
+                          android:id="@+id/coin_double_rl"
+                          android:layout_width="230dp"
+                          android:layout_height="43dp"
+                          android:layout_marginTop="12dp"
+                          android:visibility="gone">
 
-                        <TextView
-                            android:id="@+id/double_x2_tv"
-                            android:layout_width="30dp"
-                            android:layout_height="15dp"
-                            android:layout_marginLeft="150dp"
-                            android:background="@drawable/bg_coin_double"
-                            android:gravity="center"
-                            android:text="X2"
-                            android:textColor="@color/white"
-                            android:textSize="10sp" />
 
-                    </RelativeLayout>
+                          <ImageView
+                              android:id="@+id/double_iv"
+                              android:layout_width="230dp"
+                              android:layout_height="40dp"
+                              android:layout_alignParentBottom="true"
+                              android:src="@mipmap/btn_bg"
+                              android:textSize="@dimen/dimen_15sp"
+                              tools:visibility="visible" />
+
+                          <TextView
+                              android:id="@+id/double_x2_tv"
+                              android:layout_width="30dp"
+                              android:layout_height="15dp"
+                              android:layout_marginLeft="150dp"
+                              android:background="@drawable/bg_coin_double"
+                              android:gravity="center"
+                              android:text="X2"
+                              android:textColor="@color/white"
+                              android:textSize="10sp" />
+
+                      </RelativeLayout>-->
 
 
                     <LinearLayout
