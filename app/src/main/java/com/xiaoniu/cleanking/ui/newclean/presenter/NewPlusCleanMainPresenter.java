@@ -666,7 +666,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
 
     //金币翻倍
-    public void bullDouble(String uuid, int locationNum, int goldCount, String doubledMagnification) {
+    public void bullDouble(String uuid, int locationNum, int goldCount, int doubledMagnification) {
         mModel.goldDouble(new Common3Subscriber<BubbleDouble>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
@@ -676,7 +676,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             @Override
             public void getData(BubbleDouble bubbleDouble) {
                 RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
-                mView.bubbleDoubleSuccess(bubbleDouble, locationNum);
+                mView.bubbleDoubleSuccess(bubbleDouble, locationNum,1);
             }
 
             @Override
