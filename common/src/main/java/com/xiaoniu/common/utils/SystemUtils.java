@@ -7,8 +7,13 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
+
+import com.jess.arms.utils.ArmsUtils;
+import com.xiaoniu.common.BuildConfig;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -131,5 +136,25 @@ public class SystemUtils {
         }
         return false;
     }
+
+
+    /**
+     * 获取安装包更新时间
+     */
+    public static long getAppLastUpdateTime(Context context){
+        long updateTime = 0;
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            updateTime = pi.lastUpdateTime;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return updateTime;
+    }
+
+
+
+
 
 }
