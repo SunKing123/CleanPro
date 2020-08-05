@@ -14,6 +14,7 @@ include ':app',
         ':permission',
         ':arms',
         ':qsvideoplayer',
-        ':deviceinfo'
+        ':deviceinfo',
+        ':guideview'
 
 
