@@ -5,7 +5,9 @@ import android.os.Build;
 import com.google.gson.Gson;
 import com.ishumei.smantifraud.SmAntiFraud;
 import com.xiaoniu.cleanking.BuildConfig;
+import com.xiaoniu.cleanking.ui.localpush.RomUtils;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.RequestApiInfoLog;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.AppUtils;
@@ -67,6 +69,7 @@ public class RequestParamInterceptor implements Interceptor {
         requestBuilder.addHeader("UserAgent", new Gson().toJson(mapHeader));
 
         //爱步行header参数；
+        requestBuilder.addHeader("device-brand", RomUtils.getManufacturerName());
         requestBuilder.addHeader("request-id", UUID.randomUUID().toString());
         requestBuilder.addHeader("language", "cn");
         requestBuilder.addHeader("request-agent", "1");//1：android、2：iOS、3：PC、4、H5、5：wechat
@@ -75,7 +78,7 @@ public class RequestParamInterceptor implements Interceptor {
         requestBuilder.addHeader("sdk-version", AndroidUtil.getAndroidSDKVersion() + "");
         requestBuilder.addHeader("phone-model", Build.MODEL);
         requestBuilder.addHeader("market", ChannelUtil.getChannel());
-        requestBuilder.addHeader("app-version",AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
+        requestBuilder.addHeader("app-version", AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
         requestBuilder.addHeader("app-name", "gj_clean");
         requestBuilder.addHeader("app-id", BuildConfig.API_APPID);
 //        requestBuilder.addHeader("gt-id", TextUtils.isEmpty(pushId)?"":pushId)//todo:zzh  暂时未接入个推
@@ -126,9 +129,9 @@ public class RequestParamInterceptor implements Interceptor {
 
         Request request = requestBuilder.build();
         Response response = chain.proceed(request);
-        if (BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             //打印请求相关信息
-            RequestApiInfoLog.collectionLog(request,response);
+            RequestApiInfoLog.collectionLog(request, response);
         }
         return response;
     }

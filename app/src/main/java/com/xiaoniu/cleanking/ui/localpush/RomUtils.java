@@ -14,10 +14,11 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.DisplayCutout;
-import android.view.TextureView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.xiaoniu.cleanking.constant.Constant;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -156,6 +157,12 @@ public class RomUtils {
         } else {
             return false;
         }
+    }
+
+
+    public static String getManufacturerName() {
+        String name = Build.MANUFACTURER.toLowerCase();
+        return Constant.MANUFACTURER_LIST().contains(name) ? name : "other";
     }
 
 

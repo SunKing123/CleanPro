@@ -118,6 +118,7 @@ public class Constant {
      */
 
     private static final List<String> list = new ArrayList<>();
+    private static final List<String> manufacturer = new ArrayList<>();
 
     static {
         list.add("com.geek.jk.weather"); // 即刻天气
@@ -129,10 +130,22 @@ public class Constant {
         list.add("com.xiaoniu");
         list.add("com.geek.jk.weather.fission"); // 知心天气
         list.add("com.hellogeek.cleanking"); //清理管家极速版
+
+        manufacturer.add("huawei");
+        manufacturer.add("oppo");
+        manufacturer.add("xiaomi");
+        manufacturer.add("meizu");
+        manufacturer.add("vivo");
+        manufacturer.add("samsung");
+        manufacturer.add("oneplus");
     }
 
     public static List<String> WHITE_LIST() {
         return Collections.unmodifiableList(list);
+    }
+
+    public static List<String> MANUFACTURER_LIST() {
+        return Collections.unmodifiableList(manufacturer);
     }
    /* public static final List<String> WHITE_LIST = Arrays.asList(
             "com.geek.jk.weather",  // 即刻天气
@@ -147,6 +160,7 @@ public class Constant {
 
     );
 */
+
 
     public static String[] BASIC_PERMISSIONS = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
