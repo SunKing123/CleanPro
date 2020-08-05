@@ -638,6 +638,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppUtils.checkStoragePermission(getActivity())) {//已经获得权限
             if (PreferenceUtil.getNowCleanTime()) {  //清理结果五分钟以外
                 if (ScanDataHolder.getInstance().getScanState() > 0 && null != ScanDataHolder.getInstance().getmCountEntity() && ScanDataHolder.getInstance().getTotalSize() > 50 * 1024 * 1024) {//扫描缓存5分钟内_展示缓存结果
+
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描

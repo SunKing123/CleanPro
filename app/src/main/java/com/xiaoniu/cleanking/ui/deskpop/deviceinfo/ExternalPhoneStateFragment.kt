@@ -141,7 +141,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         } else {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_green_bg)
         }
-
     }
 
     private fun initEvent() {
@@ -170,7 +169,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 垃圾清理
      */
     private fun goCleanStorage() {
-
         StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE, Points.ExternalDevice.CLICK_STORAGE_BTN_NAME, "", Points.ExternalDevice.PAGE)
 
         startActivity(NowCleanActivity::class.java)

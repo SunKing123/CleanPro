@@ -858,7 +858,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             });
         }
-
     }
 
     protected void loadData() {

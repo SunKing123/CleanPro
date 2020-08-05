@@ -9,14 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.ui.finish.model.RecrmdItemDataStore;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
-import org.greenrobot.eventbus.EventBus;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -114,6 +112,7 @@ public class HomeMainTableView extends ConstraintLayout {
     //一键加速未使用风格
     public void oneKeySpeedUnusedStyle() {
         String tColor = NumberUtils.mathRandom(70, 85) + "%";
+        RecrmdItemDataStore.Companion.getInstance().setMemory(tColor);
         setOneKeyText(tColor, getRedColor());
     }
 
@@ -164,6 +163,7 @@ public class HomeMainTableView extends ConstraintLayout {
     //unused electric style
     public void electricUnusedStyle() {
         String tColor = NumberUtils.mathRandom(5, 15) + "个";
+        RecrmdItemDataStore.Companion.getInstance().setPowerNum(tColor);
         SpannableString text = AndroidUtil.inertColorText(tColor + "应用正在耗电", 0, tColor.length(), getRedColor());
         tvElectric.setText(text);
     }
