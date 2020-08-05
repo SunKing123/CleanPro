@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.xiaoniu.cleanking.BuildConfig;
@@ -29,7 +32,6 @@ import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
 import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
-import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.cleanking.utils.audio.SoundPoolPlayer;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -80,9 +82,9 @@ public class GoldCoinDialog {
         obtainCoinCountTv.setTypeface(typ_ME);
         TextView totalCoinCountTv = dialog.findViewById(R.id.total_coin_count_tv);
         totalCoinCountTv.setTypeface(typ_RE);
-        RelativeLayout CoinDoubleRL = dialog.findViewById(R.id.coin_double_rl);
+        AppCompatTextView CoinDoubleRL = dialog.findViewById(R.id.coin_double_rl);
         TextView tv_coin_str = dialog.findViewById(R.id.tv_coin_str);
-        TextView double_x2_tv = dialog.findViewById(R.id.double_x2_tv);//倍数
+      //  TextView double_x2_tv = dialog.findViewById(R.id.double_x2_tv);//倍数
         // ImageView mLlAdAnim = dialog.findViewById(R.id.ll_ad_anim);
         FrameLayout mRootRL = dialog.findViewById(R.id.root_fl);
         RelativeLayout ll_top = dialog.findViewById(R.id.ll_top);
@@ -139,8 +141,8 @@ public class GoldCoinDialog {
         }
         if (parameter.doubleNums > 0 && parameter.isRewardOpen) {
             CoinDoubleRL.setVisibility(View.VISIBLE);
-            double_x2_tv.setText("X" + parameter.doubleNums);
-            AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
+           // double_x2_tv.setText("X" + parameter.doubleNums);
+           // AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
         }
         if (parameter.dialogType == 3) {
             obtainCoinCountTv.setText("+" + totalCoin);
