@@ -1,12 +1,13 @@
 package com.binioter.guideview;
 
-import android.support.annotation.AnimatorRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.IntRange;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.AnimatorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.IntRange;
 
 /**
  *

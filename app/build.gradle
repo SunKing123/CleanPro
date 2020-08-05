@@ -272,6 +272,7 @@ dependencies {
     implementation project(':otherlib:xrecyclerview')
     implementation project(':jpush')
     implementation project(':deviceinfo')
+    implementation project(':guideview')
 
     //闪验aar
     implementation files('libs/shanyan_sdk_v2.3.1.5.aar')

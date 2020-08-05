@@ -21,7 +21,7 @@
 
         <activity
             android:name=".ui.main.activity.SplashADActivity"
-            android:excludeFromRecents="true"
+            
             android:icon="@mipmap/applogo"
             android:label="@string/app_name"
             android:theme="@style/Theme.Splash">
@@ -36,7 +36,7 @@
         <!--        android:screenOrientation="portrait"-->
         <activity
             android:name=".scheme.ui.DispatcherActivity"
-            android:excludeFromRecents="true"
+            
             android:theme="@style/Theme.AppLauncher">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -51,7 +51,7 @@
         <activity
             android:name=".ui.main.activity.MainActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -59,19 +59,19 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.usercenter.activity.UserLoadH5Activity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.FileManagerHomeActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".selfdebug.DebugActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".selfdebug.AdConfigActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.newclean.activity.DeepCleanPermissionActivity"
@@ -79,202 +79,202 @@
 
         <activity
             android:name=".ui.main.activity.ImageActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.PreviewImageActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.wechat.activity.WechatCleanedResultActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.NewsLoadActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneAccessActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.CleanInstallPackageActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.CleanMusicManageActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.usercenter.activity.AboutInfoActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.CleanBigFileActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.CleanVideoManageActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.HardwareInfoActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.ProcessInfoActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.WhiteListInstallPackgeManageActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.WhiteListSpeedManageActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.usercenter.activity.FeedBackActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.WhiteListSpeedAddActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.CleanFinishActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.wechat.activity.WechatCleanHomeActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.wechat.activity.WechatCleanFileActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.wechat.activity.WechatCleanAudActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.wechat.activity.WechatCleanResultActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.WhiteListSettingActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.usercenter.activity.PermissionActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.usercenter.activity.PermissionDetailActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".ui.main.activity.QuestionReportActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.main.activity.SimplePhotoActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneThinActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneThinResultActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.SoftManageActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.WXCleanImgActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.WXCleanVideoActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" /> <!-- 手机瘦身 -->
         <activity
             android:name=".ui.main.activity.QQCleanImgActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" /> <!-- 手机瘦身结果页 -->
         <activity android:name=".ui.main.activity.QQCleanVideoActivity" /> <!-- 软件管理 -->
         <activity
             android:name=".ui.tool.qq.activity.QQCleanHomeActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.qq.activity.QQCleanFileActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.qq.activity.QQCleanAudActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <!--      <activity
                   android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
-                  android:excludeFromRecents="true"
+                  
                   android:theme="@style/ImagePickerThemeFullScreen" />-->
         <activity
             android:name=".ui.main.activity.PhoneSuperPowerActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneSuperPowerMessageActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -283,72 +283,72 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.notify.activity.NotifyCleanGuideActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.tool.notify.activity.NotifyCleanSetActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.LoginActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.newclean.activity.NewCleanFinishActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:taskAffinity="com.locker.new.task"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.NewsActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name="com.hellogeek.cleanking.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" /> <!-- 微信分享 -->
         <activity
             android:name=".ui.tool.notify.activity.NotifyCleanDetailActivity"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" /> <!-- 常驻通知栏 -->
         <activity
             android:name=".ui.main.activity.PhoneSuperPowerDetailActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.PhonePremisActivity"
-            android:excludeFromRecents="true"
+            
             android:theme="@style/transparent_activity" />
 
         <activity
             android:name=".ui.newclean.activity.NowCleanActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
         <activity
             android:name=".ui.newclean.activity.SpeedUpResultActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
 
         <activity
             android:name=".ui.newclean.activity.SpeedUpClearActivity"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
         <!--            android:launchMode="singleTask"-->
         <activity
             android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
@@ -356,19 +356,19 @@
         <activity
             android:name=".ui.main.activity.SplashADHotActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.newclean.activity.InsertScreenFinishActivity"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
 
         <activity
             android:name=".ui.main.activity.AgentWebViewActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
 
             android:screenOrientation="portrait" />
         <!-- android:process=":gj_webview"-->
@@ -376,27 +376,27 @@
         <activity
             android:name=".ui.main.activity.GameActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.GameListActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.main.activity.NetWorkActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.RedPacketHotActivity"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
         <activity
             android:name=".ui.main.activity.ScreenInsideActivity"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:theme="@style/activityBgTranslucent" />
         <activity
@@ -430,7 +430,7 @@
         <activity
             android:name=".ui.lockscreen.LockActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -443,7 +443,7 @@
         <activity
             android:name=".ui.localpush.PopPushActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
@@ -454,7 +454,7 @@
         <activity
             android:name=".ui.lockscreen.PopLayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
@@ -464,7 +464,7 @@
         <activity
             android:name=".ui.deskpop.battery.BatteryPopActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
@@ -474,7 +474,7 @@
         <activity
             android:name=".ui.lockscreen.FullPopLayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
@@ -485,7 +485,7 @@
     <!--    <activity
             android:name=".ui.newclean.activity.ExternalSceneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
@@ -495,7 +495,7 @@
         <activity
             android:name=".ui.deskpop.wifi.ExternalSceneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
@@ -505,7 +505,7 @@
         <activity
             android:name="com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
@@ -519,7 +519,7 @@
         <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
         <!--        <activity-alias-->
         <!--            android:name=".splash"-->
-        <!--            android:excludeFromRecents="true"-->
+        <!--            -->
         <!--            android:label="@string/app_name"-->
         <!--            android:targetActivity=".ui.main.activity.SplashADActivity">-->
         <!--            <intent-filter>-->
@@ -602,7 +602,7 @@
         <activity
             android:name=".ui.main.activity.divide.WXActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
@@ -614,7 +614,7 @@
         <activity
             android:name=".ui.main.activity.divide.JRTTActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
@@ -626,7 +626,7 @@
         <activity
             android:name=".ui.main.activity.divide.DYActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
@@ -638,7 +638,7 @@
         <activity
             android:name=".ui.main.activity.divide.KSActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
@@ -650,7 +650,7 @@
         <activity
             android:name=".ui.main.activity.divide.AQYActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:exported="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleTask"
@@ -662,7 +662,7 @@
         <activity
             android:name=".ui.viruskill.VirusKillActivity"
             android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
+            
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
 
