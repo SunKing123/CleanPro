@@ -300,14 +300,14 @@
             android:name=".ui.newclean.activity.NewCleanFinishActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity="com.locker.new.task"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task" />
 
         <activity
             android:name=".ui.finish.NewCleanFinishPlusActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity="com.locker.new.task"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
@@ -384,7 +384,6 @@
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.main.activity.NetWorkActivity"
             android:configChanges="orientation|screenSize"
@@ -483,15 +482,15 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
 
 
-    <!--    <activity
-            android:name=".ui.newclean.activity.ExternalSceneActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTask"
-            android:taskAffinity="com.pop.new.task"
-            android:theme="@style/pop_layer_style_2"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />-->
+        <!--    <activity
+                android:name=".ui.newclean.activity.ExternalSceneActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
+                android:excludeFromRecents="true"
+                android:hardwareAccelerated="true"
+                android:launchMode="singleTask"
+                android:taskAffinity="com.pop.new.task"
+                android:theme="@style/pop_layer_style_2"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />-->
 
         <activity
             android:name=".ui.deskpop.wifi.ExternalSceneActivity"
@@ -779,12 +778,12 @@
              android:name="BaiduMobAd_WIFI_LOCATION"
              android:value="true" />-->
 
-   <!--     <receiver android:name=".ui.deskpop.PowerConnectionReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
-            </intent-filter>
-        </receiver>-->
+        <!--     <receiver android:name=".ui.deskpop.PowerConnectionReceiver">
+                 <intent-filter>
+                     <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                     <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+                 </intent-filter>
+             </receiver>-->
         <provider
             android:name=".utils.update.UpdateFileProvider"
             android:authorities="${applicationId}.updatefileprovider"

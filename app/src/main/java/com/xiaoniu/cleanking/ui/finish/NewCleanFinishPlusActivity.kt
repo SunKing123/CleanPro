@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.finish
 import android.os.Bundle
 import com.jess.arms.base.BaseActivity
 import com.jess.arms.di.component.AppComponent
+import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.RecrmdItemModel
 
@@ -21,7 +22,7 @@ public class NewCleanFinishPlusActivity :BaseActivity<NewCleanFinishPlusContract
     }
 
     override fun initView(savedInstanceState: Bundle?): Int {
-        TODO("Not yet implemented")
+       return R.layout.activity_new_clean_finish_plus_layout
     }
 
     /**
