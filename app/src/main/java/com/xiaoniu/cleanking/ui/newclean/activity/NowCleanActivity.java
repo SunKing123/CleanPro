@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanResultFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
@@ -153,9 +154,9 @@ public class NowCleanActivity extends BaseActivity {
         finish();
         Bundle bundle = new Bundle();
         bundle.putString("title", getString(R.string.tool_suggest_clean));
-        Intent intent = new Intent(this, CleanFinishAdvertisementActivity.class);
+        Intent intent = new Intent();
         intent.putExtras(bundle);
-        startActivity(intent);
+        StartFinishActivityUtil.Companion.gotoFinish(this, bundle);
     }
 
     @Override

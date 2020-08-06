@@ -26,7 +26,6 @@ import com.xiaoniu.cleanking.ui.main.activity.WhiteListInstallPackgeManageActivi
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedAddActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSpeedManageActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.InsertScreenFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
@@ -70,7 +69,6 @@ public interface ActivityComponent {
 
     void inject(CleanVideoManageActivity cleanVideoManageActivity);
 
-
     void inject(WhiteListInstallPackgeManageActivity whiteListInstallPackgeManageActivity);
 
     void inject(WhiteListSpeedAddActivity whiteListSpeedAddActivity);
@@ -113,8 +111,6 @@ public interface ActivityComponent {
     void inject(NewCleanFinishActivity newCleanFinishActivity);
 
     void inject(InsertScreenFinishActivity insertScreenFinishActivity);
-
-    void inject(CleanFinishAdvertisementActivity cleanFinishAdvertisementActivity);
 
     void inject(GameActivity activity);
 

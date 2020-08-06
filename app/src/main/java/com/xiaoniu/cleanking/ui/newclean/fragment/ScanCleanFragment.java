@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,11 +21,10 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanCleanContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanCleanPresenter;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -155,21 +153,11 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
         boolean isOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
-            if (isOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_suggest_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_suggest_clean));
-                Intent intent = new Intent(requireActivity(), CleanFinishAdvertisementActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
-                bundle.putString("num", cleanTotalSize);
-                bundle.putString("unit", cleanTotalUnit);
-                Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
+            bundle.putString("num", cleanTotalSize);
+            bundle.putString("unit", cleanTotalUnit);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
             getActivity().finish();
         }
     }
