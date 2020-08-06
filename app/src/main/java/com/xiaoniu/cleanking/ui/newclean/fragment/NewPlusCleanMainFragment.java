@@ -21,14 +21,11 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 
-import com.binioter.guideview.Guide;
-import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -41,7 +38,6 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
-import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -89,7 +85,6 @@ import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
-import com.xiaoniu.cleanking.widget.SimpleComponent;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.Points;
@@ -468,13 +463,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 //重新检测头部扫描状态
                 checkScanState();
             }
-            //引导页面展示逻辑
-            int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
-            if (exposuredTimes <= 2) { //只记录三次展示
-                int currentTimes = (exposuredTimes + 1);
-                MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
-                EventBus.getDefault().post(new ExposureEvent(currentTimes));
-            }
+            //引导页展示时机
+            exposureChange();
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -1084,6 +1074,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Subscribe
     public void homeExposureEvent(ExposureEvent exposureEvent){
         mPresenter.showGuideView(exposureEvent.getExposureTimes(),view_lottie_top);
+    }
+
+    /**
+     *引导页面展示逻辑
+     */
+    public void exposureChange(){
+        int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
+        if (exposuredTimes <= 2) { //只记录三次展示
+            int currentTimes = (exposuredTimes + 1);
+            MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
+            EventBus.getDefault().post(new ExposureEvent(currentTimes));
+        }
     }
     /*
      * *********************************************************************************************************************************************************
