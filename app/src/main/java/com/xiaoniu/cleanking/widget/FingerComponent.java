@@ -3,24 +3,19 @@ package com.xiaoniu.cleanking.widget;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.binioter.guideview.Component;
 import com.xiaoniu.cleanking.R;
 
 /**
- * Created by binIoter on 16/6/17.
+ * 首页第一次引导
  */
-public class SimpleComponent implements Component {
+public class FingerComponent implements Component {
 
   @Override public View getView(LayoutInflater inflater) {
-
-    LinearLayout ll = (LinearLayout) inflater.inflate(R.layout.layer_frends, null);
-    ll.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View view) {
-        Toast.makeText(view.getContext(), "引导层被点击了", Toast.LENGTH_SHORT).show();
-      }
-    });
+    RelativeLayout ll = (RelativeLayout) inflater.inflate(R.layout.layer_finger_guide, null);
     return ll;
   }
 
@@ -29,7 +24,7 @@ public class SimpleComponent implements Component {
   }
 
   @Override public int getFitPosition() {
-    return Component.FIT_END;
+    return Component.FIT_CENTER;
   }
 
   @Override public int getXOffset() {
@@ -37,6 +32,6 @@ public class SimpleComponent implements Component {
   }
 
   @Override public int getYOffset() {
-    return 10;
+    return -32;
   }
 }
