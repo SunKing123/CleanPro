@@ -133,6 +133,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
 
     @Override
     public void initView() {
+        StatisticsUtils.customTrackEvent("image_cleaning_page_custom", "图片清理页面曝光", "image_cleaning_page", "image_cleaning_page");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.color_4690FD), true);
         } else {
@@ -193,6 +194,7 @@ public class ImageActivity extends BaseActivity<ImageListPresenter> {
             if (AppManager.getAppManager().preActivityName() != null && AppManager.getAppManager().preActivityName().contains("FileManagerHomeActivity")) {
                 pageName = "file_cleaning_page";
             }
+            StatisticsUtils.trackClick("delete_click", "删除按钮点击", "image_cleaning_page", "image_cleaning_page");
             StatisticsUtils.trackClick("picture_cleaning_clean_click", "图片清理-删除", pageName, "picture_cleaning_page");
         });
         iv_back.setOnClickListener(v -> {
