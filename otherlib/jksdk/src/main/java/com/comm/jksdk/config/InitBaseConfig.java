@@ -13,7 +13,7 @@ import com.comm.jksdk.http.utils.AppEnvironment;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CollectionUtils;
 import com.comm.jksdk.utils.JsonUtils;
-import com.comm.jksdk.utils.MmkvUtil;
+import com.comm.jksdk.utils.AdMmkvUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -79,7 +79,7 @@ public class InitBaseConfig {
              * 判断是否需要刷新兜底_根据位置数量
              * 缓存配置>=asset配置情况不进行刷新；
              */
-            String confString= MmkvUtil.getString(Constants.SPUtils.CONFIG_INFO  ,"");
+            String confString= AdMmkvUtil.getString(Constants.SPUtils.CONFIG_INFO  ,"");
             if(!TextUtils.isEmpty(confString) && assetConfig != null){
                 ConfigBean cacheConfig = new Gson().fromJson(confString,ConfigBean.class);
                 if (null != cacheConfig && !CollectionUtils.isEmpty(cacheConfig.getAdList()) && !CollectionUtils.isEmpty(assetConfig.getAdList()) ) {//&&cacheConfig.getAdList().size() >= assetConfig.getAdList().size()
@@ -133,22 +133,22 @@ public class InitBaseConfig {
                     default:
                         defEnvironment = AppEnvironment.ServerEnvironment.Product.ordinal();
                 }
-                return MmkvUtil.getInt(SERVER_ENVIRONMENT, defEnvironment);
+                return AdMmkvUtil.getInt(SERVER_ENVIRONMENT, defEnvironment);
             }
 
             @Override
             public void setServerEnvironmentOrdinal(int ordinal) {
-                MmkvUtil.saveInt(SERVER_ENVIRONMENT, ordinal);
+                AdMmkvUtil.saveInt(SERVER_ENVIRONMENT, ordinal);
             }
         }, new AppEnvironment.TestModeStub() {
             @Override
             public void setIsTestMode(boolean isTestMode) {
-                MmkvUtil.saveBool(TEST_MODE_IS_OPEN, isTestMode);
+                AdMmkvUtil.saveBool(TEST_MODE_IS_OPEN, isTestMode);
             }
 
             @Override
             public boolean isTestMode() {
-                return MmkvUtil.getBool(TEST_MODE_IS_OPEN, false);
+                return AdMmkvUtil.getBool(TEST_MODE_IS_OPEN, false);
             }
         });
     }

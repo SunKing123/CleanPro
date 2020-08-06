@@ -8,7 +8,7 @@ import com.tencent.mmkv.MMKV;
  * @date 2019/12/11 13
  * @mail：zhengzhihao@hellogeek.com 多进程_key_value 存取
  */
-public class MmkvUtil {
+public class AdMmkvUtil {
 
     //(string数据保存)
     public static void saveString(String key, String data) {

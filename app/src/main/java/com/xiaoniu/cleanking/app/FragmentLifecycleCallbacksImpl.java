@@ -19,6 +19,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.event.ExposureEvent;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
+import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+
 import org.greenrobot.eventbus.EventBus;
 
 import androidx.fragment.app.Fragment;
@@ -30,7 +36,7 @@ import timber.log.Timber;
  * 展示 {@link FragmentManager.FragmentLifecycleCallbacks} 的用法
  * ================================================
  */
-public class FragmentLifecycleCallbacksImpl extends FragmentManager.FragmentLifecycleCallbacks{
+public class FragmentLifecycleCallbacksImpl extends FragmentManager.FragmentLifecycleCallbacks {
 
     @Override
     public void onFragmentAttached(FragmentManager fm, Fragment f, Context context) {
@@ -49,47 +55,56 @@ public class FragmentLifecycleCallbacksImpl extends FragmentManager.FragmentLife
 
     @Override
     public void onFragmentViewCreated(FragmentManager fm, Fragment f, View v, Bundle savedInstanceState) {
-        Timber.i(f.toString() + " - onFragmentViewCreated");
+//        Timber.i(f.toString() + " - onFragmentViewCreated");
     }
 
     @Override
     public void onFragmentActivityCreated(FragmentManager fm, Fragment f, Bundle savedInstanceState) {
-        Timber.i(f.toString() + " - onFragmentActivityCreated");
+//        Timber.i(f.toString() + " - onFragmentActivityCreated");
     }
 
     @Override
     public void onFragmentStarted(FragmentManager fm, Fragment f) {
         Timber.i(f.toString() + " - onFragmentStarted");
+        if (f instanceof NewPlusCleanMainFragment) {
+            int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
+            if (exposuredTimes <= 2) { //只记录三次展示
+                int currentTimes = (exposuredTimes + 1);
+                MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
+                EventBus.getDefault().post(new ExposureEvent(currentTimes));
+            }
+        }
+
     }
 
     @Override
     public void onFragmentResumed(FragmentManager fm, Fragment f) {
-        Timber.i(f.getClass().getName().toString() + " - onFragmentResumed");
+//        Timber.i(f.getClass().getName().toString() + " - onFragmentResumed");
     }
 
     @Override
     public void onFragmentPaused(FragmentManager fm, Fragment f) {
-        Timber.i(f.toString() + " - onFragmentPaused");
+//        Timber.i(f.toString() + " - onFragmentPaused");
     }
 
     @Override
     public void onFragmentStopped(FragmentManager fm, Fragment f) {
-        Timber.i(f.toString() + " - onFragmentStopped");
+//        Timber.i(f.toString() + " - onFragmentStopped");
     }
 
     @Override
     public void onFragmentSaveInstanceState(FragmentManager fm, Fragment f, Bundle outState) {
-        Timber.i(f.toString() + " - onFragmentSaveInstanceState");
+//        Timber.i(f.toString() + " - onFragmentSaveInstanceState");
     }
 
     @Override
     public void onFragmentViewDestroyed(FragmentManager fm, Fragment f) {
-        Timber.i(f.toString() + " - onFragmentViewDestroyed");
+//        Timber.i(f.toString() + " - onFragmentViewDestroyed");
     }
 
     @Override
     public void onFragmentDestroyed(FragmentManager fm, Fragment f) {
-        Timber.i(f.toString() + " - onFragmentDestroyed");
+//        Timber.i(f.toString() + " - onFragmentDestroyed");
        /* ((RefWatcher) ArmsUtils
                 .obtainAppComponentFromContext(f.getActivity())
                 .extras()
@@ -99,6 +114,6 @@ public class FragmentLifecycleCallbacksImpl extends FragmentManager.FragmentLife
 
     @Override
     public void onFragmentDetached(FragmentManager fm, Fragment f) {
-        Timber.i(f.toString() + " - onFragmentDetached");
+//        Timber.i(f.toString() + " - onFragmentDetached");
     }
 }

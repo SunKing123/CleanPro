@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alibaba.fastjson.JSONObject;
+import com.binioter.guideview.Component;
+import com.binioter.guideview.Guide;
+import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
@@ -28,6 +31,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
@@ -56,6 +60,7 @@ import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xiaoniu.cleanking.widget.MutiComponent;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -839,6 +844,47 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 mPreferencesHelper.setUploadImeiStatus(true);
             }
         }
+    }
+
+
+    public void showGuideView(int times, View view) {
+        LogUtils.d("zz--showGuideView()--" + times);
+        switch (times){
+            case 1:
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GuideBuilder builder = new GuideBuilder();
+                        int screenWidth = ScreenUtils.getScreenWidth(mView.getContext());
+                        int paddingValue = (screenWidth - Float.valueOf((screenWidth / 1.43f)).intValue()) / 2;
+                        builder.setTargetView(view)
+                                .setAlpha(150)
+                                .setHighTargetPadding(-paddingValue)
+                                .setHighTargetGraphStyle(Component.CIRCLE);
+                        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+                            @Override
+                            public void onShown() {
+                            }
+
+                            @Override
+                            public void onDismiss() {
+
+                            }
+                        });
+                        builder.addComponent(new MutiComponent());
+                        Guide guide = builder.createGuide();
+                        guide.show(mView.getActivity());
+                    }
+                });
+
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+
+
     }
 
 
