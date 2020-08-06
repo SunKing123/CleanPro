@@ -230,7 +230,9 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
     }
 
-    //获取埋点参数
+    /**
+     * 初始化埋点数据
+     */
     void getPageData() {
         sourcePage = AppHolder.getInstance().getCleanFinishSourcePageId();
 
@@ -858,7 +860,6 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
                 }
             });
         }
-
     }
 
     protected void loadData() {

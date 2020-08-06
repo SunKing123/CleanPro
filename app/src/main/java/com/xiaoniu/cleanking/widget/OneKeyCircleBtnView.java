@@ -129,6 +129,7 @@ public class OneKeyCircleBtnView extends RelativeLayout {
     //根据扫描垃圾总数
     public void setTotalSize(long totalSize) {
         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalSize);
+
         if (null != countEntity&&null!= tv_file_total_size) {
             tv_file_total_size.setText(countEntity.getTotalSize() + countEntity.getUnit());
             tv_file_total_size.setVisibility(VISIBLE);

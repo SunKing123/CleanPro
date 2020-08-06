@@ -21,12 +21,15 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 
+import com.binioter.guideview.Guide;
+import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -39,6 +42,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -53,7 +57,6 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
@@ -62,6 +65,7 @@ import com.xiaoniu.cleanking.ui.newclean.dialog.GuideHomeDialog;
 import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -84,6 +88,7 @@ import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
+import com.xiaoniu.cleanking.widget.SimpleComponent;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.Points;
@@ -147,6 +152,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.image_interactive)
     public HomeInteractiveView imageInteractive;
 
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
     private boolean isThreeAdvOpen = false;
     private boolean hasInitThreeAdvOnOff = false;
 
@@ -202,7 +209,15 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         //暂时不需要展示新手引导
 //        showGuideView();
+//        tvTitle.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((MainActivity)getActivity()).showFirstGuideView(tvTitle);
+//            }
+//        });
     }
+
+
 
     /**
      * 引导弹窗
@@ -638,6 +653,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppUtils.checkStoragePermission(getActivity())) {//已经获得权限
             if (PreferenceUtil.getNowCleanTime()) {  //清理结果五分钟以外
                 if (ScanDataHolder.getInstance().getScanState() > 0 && null != ScanDataHolder.getInstance().getmCountEntity() && ScanDataHolder.getInstance().getTotalSize() > 50 * 1024 * 1024) {//扫描缓存5分钟内_展示缓存结果
+
                     setScanningJunkTotal(ScanDataHolder.getInstance().getTotalSize()); //展示缓存结果
                     view_lottie_top.scanFinish(ScanDataHolder.getInstance().getTotalSize());
                 } else {//重新开始扫描
@@ -794,34 +810,19 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.trackClick(Points.MainHome.BOOST_CLICK_CODE, Points.MainHome.BOOST_CLICK_NAME, "home_page", "home_page");
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
-            initThreeAdvOnOffInfo();
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_one_key_speed), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_one_key_speed));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_one_key_speed));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putBoolean("unused", true);
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_one_key_speed));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            bundle.putBoolean("unused", true);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
         } else {
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
             startActivity(PhoneAccessActivity.class, bundle);
         }
 
-    }
-
-    private void initThreeAdvOnOffInfo() {
-        if (hasInitThreeAdvOnOff) {
-            return;
-        }
-        hasInitThreeAdvOnOff = true;
-        isThreeAdvOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_THREE_CODE);
     }
 
     /*
@@ -835,7 +836,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.trackClick(Points.MainHome.VIRUS_KILLING_CLICK_CODE, Points.MainHome.VIRUS_KILLING_CLICK_NAME, "home_page", "home_page");
         startKillVirusActivity();
     }
-    
+
     //start kill virus page
     private void startKillVirusActivity() {
         if (PreferenceUtil.getVirusKillTime()) {
@@ -862,19 +863,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            initThreeAdvOnOffInfo();
-            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_super_power_saving), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_super_power_saving));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_super_power_saving));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putBoolean("unused", true);
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_super_power_saving));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            bundle.putBoolean("unused", true);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
         }
     }
 
@@ -925,19 +919,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
         } else {
-            initThreeAdvOnOffInfo();
-            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_chat_clear), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_chat_clear));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_chat_clear));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putBoolean("unused", true);
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_chat_clear));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            bundle.putBoolean("unused", true);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
         }
     }
 
@@ -955,19 +942,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
-            initThreeAdvOnOffInfo();
-            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_notification_clean), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_notification_clean));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_notification_clean));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putBoolean("unused", true);
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_notification_clean));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            bundle.putBoolean("unused", true);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+
         }
     }
 
@@ -984,19 +965,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
-            initThreeAdvOnOffInfo();
-            if (isThreeAdvOpen && PreferenceUtil.getShowCount(getActivity(), getString(R.string.tool_phone_temperature_low), mRamScale, mNotifySize, mPowerSize) < 3) {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
-                startActivity(CleanFinishAdvertisementActivity.class, bundle);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                bundle.putBoolean("unused", true);
-                startActivity(NewCleanFinishActivity.class, bundle);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+            bundle.putString("num", "");
+            bundle.putString("unit", "");
+            bundle.putBoolean("unused", true);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+
         }
     }
 
@@ -1071,14 +1046,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     public void bubbleDouble(BubbleCollected dataBean) {
         if (null != dataBean) {
-            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount(),dataBean.getData().getDoubledMagnification());//刷新金币列表；
+            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount(), dataBean.getData().getDoubledMagnification());//刷新金币列表；
         }
     }
 
     /**
      * 翻倍成功
      */
-    public void bubbleDoubleSuccess(BubbleDouble dataBean, int localNum,int doubledMagnification) {
+    public void bubbleDoubleSuccess(BubbleDouble dataBean, int localNum, int doubledMagnification) {
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
@@ -1087,11 +1062,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
             adId = AdposUtil.getAdPos(localNum, 2);
         }
-        startGoldSuccess(adId, num, localNum,doubledMagnification);
+        startGoldSuccess(adId, num, localNum, doubledMagnification);
     }
 
     private void startGoldSuccess(String adId, int num, int index, int doubledMagnification) {
-        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index, Points.MainGoldCoin.SUCCESS_PAGE,doubledMagnification);
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index, Points.MainGoldCoin.SUCCESS_PAGE, doubledMagnification);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
     }
 

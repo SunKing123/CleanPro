@@ -51,17 +51,12 @@ public class RequestParamInterceptor implements Interceptor {
         mapHeader.put("appVersion", AppUtils.getVersionName(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
         mapHeader.put("channel", ChannelUtil.getChannel());
         mapHeader.put("deviceId", DeviceUtils.getUdid());
-        mapHeader.put("gtId", "");
-
         mapHeader.put("imei", "357755073075671");
         mapHeader.put("os", "android");
         mapHeader.put("phoneType", DeviceUtils.getModel());
         mapHeader.put("phoneVersion", "Android" + DeviceUtils.getSDKVersion() + "");
-        mapHeader.put("sessionId", "");
         mapHeader.put("sign", "7cdd4afd6a0bd76080a973ada0566598");
-        mapHeader.put("talkVersion", "");
         mapHeader.put("timestamp", System.currentTimeMillis());
-        mapHeader.put("uid", "");
         mapHeader.put("versionCode", AppUtils.getVersionCode(ContextUtils.getContext(), ContextUtils.getContext().getPackageName()));
         mapHeader.put("appName", "gj_clean");
         mapHeader.put("bid", (int) (99 * Math.random()));
@@ -90,6 +85,7 @@ public class RequestParamInterceptor implements Interceptor {
         requestBuilder.addHeader("gps-lng", "");
         requestBuilder.addHeader("gps-lat", "");
         requestBuilder.addHeader("sdk-uid", NiuDataAPI.getUUID());
+        requestBuilder.addHeader("activate-timestamp", String.valueOf(SystemUtils.getAppLastUpdateTime(ContextUtils.getContext())));//当前版本激活时间戳
 
 
         if (original.body() instanceof FormBody) {

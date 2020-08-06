@@ -27,15 +27,14 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
-import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -338,7 +337,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     intentClean.putExtras(bundle);
                     startActivity(intentClean);
                 } else {
-                    Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
+                    Intent intentClean = new Intent();
                     intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -350,7 +349,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString("unit", "");
                     bundle.putString("home", "");
                     intentClean.putExtras(bundle);
-                    startActivity(intentClean);
+                    StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
                 }
 
                 break;
@@ -369,7 +368,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(phoneAccessIntent);
                 } else {
                     PreferenceUtil.getInstants().save("lock_action", "ram");//埋点区分逻辑
-                    Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
+                    Intent intentClean = new Intent();
                     intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -378,7 +377,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString("title", "一键加速");
                     bundle.putString("action", "lock");
                     intentClean.putExtras(bundle);
-                    startActivity(intentClean);
+                    StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
+
                 }
 
                 break;
@@ -388,7 +388,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 if (PreferenceUtil.getVirusKillTime()) {
                     startVirUsKill();
                 } else {
-                    Intent intentClean = new Intent(this, CleanFinishAdvertisementActivity.class);
+                    Intent intentClean = new Intent();
                     intentClean.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
@@ -397,8 +397,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString("title", "病毒查杀");
                     bundle.putString("action", "lock");
                     intentClean.putExtras(bundle);
-                    startActivity(intentClean);
-
+                    StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
                 }
                 break;
 
