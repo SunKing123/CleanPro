@@ -75,6 +75,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
 
     @Override
     protected void initView() {
+        StatisticsUtils.customTrackEvent("video_cleaning_page_custom","视频清理页面曝光","video_cleaning_page","video_cleaning_page");
         String path = Environment.getExternalStorageDirectory().getPath();
         mPresenter.getFlieList(path);
         mLoading=CleanFileLoadingDialogFragment.newInstance();
@@ -162,7 +163,7 @@ public class CleanVideoManageActivity extends BaseActivity<CleanVideoManagePrese
             finish();
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("clean_click","\"清理\"点击","file_cleaning_page","video_cleaning_page");
-
+            StatisticsUtils.trackClick("delete_click","删除按钮点击","video_cleaning_page","video_cleaning_page");
             String title=String.format("确定删除这%s个视频?",getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
