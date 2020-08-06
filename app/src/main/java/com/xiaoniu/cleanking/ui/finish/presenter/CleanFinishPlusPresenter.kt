@@ -35,18 +35,18 @@ import javax.inject.Inject
  */
 public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPresenter<NewCleanFinishPlusActivity,MainModel> {
 
+    @JvmField
     @Inject
-    protected var mModel: MainModel? = null
+    var mModel: MainModel? = null
 
-    private lateinit var view: NewCleanFinishPlusActivity
+    lateinit var view: NewCleanFinishPlusActivity
     private lateinit var itemDataStore: RecmedItemDataStore
     private var isOpenOne = false
     private var isOpenTwo = false
     private var isFirst = true
 
-    
     @Inject
-    constructor(activity: RxAppCompatActivity){
+    public constructor(){
 
     }
 

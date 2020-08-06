@@ -51,6 +51,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         //todo 这里替换成广告位容器布局
         mPresenter.loadOneAdv(LinearLayout(this))
         mPresenter.loadTwoAdv(LinearLayout(this))
+
+        mPresenter.getGoldCoin()
     }
 
     override fun netError() {
@@ -91,7 +93,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
         bean.advCallBack = object : AbsAdCallBack() {}
         bean.closeClickListener = View.OnClickListener { view: View? -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson()) }
-        bean.onDoubleClickListener = label@ View.OnClickListener { v: View? ->
+        bean.onDoubleClickListener = View.OnClickListener { v: View? ->
             if (AndroidUtil.isFastDoubleBtnClick(1000)) {
                 return@OnClickListener
             }
