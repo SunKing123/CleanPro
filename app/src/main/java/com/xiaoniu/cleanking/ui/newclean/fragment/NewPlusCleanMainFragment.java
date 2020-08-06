@@ -21,8 +21,6 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 
-import com.binioter.guideview.Guide;
-import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.gson.Gson;
@@ -117,7 +115,6 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * email：xinxiaolong123@foxmail.com
  */
 public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener, FragmentOnFocusListenable {
-
     @BindView(R.id.view_lottie_top)
     OneKeyCircleBtnView view_lottie_top;
     @BindView(R.id.home_main_table)

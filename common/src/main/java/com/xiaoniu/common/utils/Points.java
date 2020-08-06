@@ -16,6 +16,8 @@ public interface Points {
 
     //系统返回
     String SYSTEM_RETURN_CLICK_EVENT_CODE = "system_return_click";
+    String RETURN_CLICK_EVENT_CODE = "return_click";
+
 
     interface Virus {
         //病毒查杀扫描
@@ -115,25 +117,25 @@ public interface Points {
         String DEEP_CLEANING_CLICK_CODE = "deep_cleaning_click";
         String DEEP_CLEANING_CLICK_NAME = "用户在首页点击【深度清理】按钮";
 
-        String SCRAPING_BUOY_CLICK_CODE="scraping_buoy_click";
-        String SCRAPING_BUOY_CLICK_NAME="首页刮刮卡浮标点击";
+        String SCRAPING_BUOY_CLICK_CODE = "scraping_buoy_click";
+        String SCRAPING_BUOY_CLICK_NAME = "首页刮刮卡浮标点击";
     }
 
-    interface Tab{
-        String CLEAN_CLICK_CODE="tab_clean_click";
-        String CLEAN_CLICK_NAME="底部tab栏清理点击";
+    interface Tab {
+        String CLEAN_CLICK_CODE = "tab_clean_click";
+        String CLEAN_CLICK_NAME = "底部tab栏清理点击";
 
-        String TOOLBOX_CLICK_CODE="tab_toolbox_click";
-        String TOOLBOX_CLICK_NAME="底部tab栏工具箱点击";
+        String TOOLBOX_CLICK_CODE = "tab_toolbox_click";
+        String TOOLBOX_CLICK_NAME = "底部tab栏工具箱点击";
 
-        String SCRAPING_CARD_CLICK_CODE="tab_scraping_card_click";
-        String SCRAPING_CARD_CLICK_NAME="底部tab栏刮刮卡点击";
+        String SCRAPING_CARD_CLICK_CODE = "tab_scraping_card_click";
+        String SCRAPING_CARD_CLICK_NAME = "底部tab栏刮刮卡点击";
 
-        String MINE_CLICK_CODE ="tab_my_click";
-        String MINE_CLICK_NAME ="底部tab栏我的点击";
+        String MINE_CLICK_CODE = "tab_my_click";
+        String MINE_CLICK_NAME = "底部tab栏我的点击";
     }
 
-    interface ExternalDevice{
+    interface ExternalDevice {
 
         String PAGE = "mobile_phone_status_insertion_screen";
 
@@ -143,20 +145,277 @@ public interface Points {
         String MEET_CONDITION_CODE = "mobile_phone_status_insertion_screen_meets_opportunity";
         String MEET_CONDITION_NAME = "手机状态插屏满足时机";
 
-        String CLICK_MEMORY_BTN_CODE="running_memory_button_click";
-        String CLICK_MEMORY_BTN_NAME="运行内存按钮点击";
+        String CLICK_MEMORY_BTN_CODE = "running_memory_button_click";
+        String CLICK_MEMORY_BTN_NAME = "运行内存按钮点击";
 
-        String CLICK_STORAGE_BTN_CODE="internal_storage_button_click";
-        String CLICK_STORAGE_BTN_NAME="内存储存按钮点击";
+        String CLICK_STORAGE_BTN_CODE = "internal_storage_button_click";
+        String CLICK_STORAGE_BTN_NAME = "内存储存按钮点击";
 
-        String CLICK_BATTERY_TEMPERATURE_BTN_CODE="battery_temperature_button_click";
-        String CLICK_BATTERY_TEMPERATURE_BTN_NAME="电池温度按钮点击";
+        String CLICK_BATTERY_TEMPERATURE_BTN_CODE = "battery_temperature_button_click";
+        String CLICK_BATTERY_TEMPERATURE_BTN_NAME = "电池温度按钮点击";
 
-        String CLICK_BATTERY_QUANTITY_BTN_CODE="electricity_quantity_button_click";
-        String CLICK_BATTERY_QUANTITY_BTN_NAME="电量按钮点击";
+        String CLICK_BATTERY_QUANTITY_BTN_CODE = "electricity_quantity_button_click";
+        String CLICK_BATTERY_QUANTITY_BTN_NAME = "电量按钮点击";
 
-        String CLICK_CLOSE_CODE="close_click";
-        String CLICK_CLOSE_NAME="手机状态插屏关闭按钮点击";
+        String CLICK_CLOSE_CODE = "close_click";
+        String CLICK_CLOSE_NAME = "手机状态插屏关闭按钮点击";
+    }
+
+    interface CleanFinish {
+
+        String RECOMMEND_CLICK_NAME = "recommendation_function_click";
+        String RECOMMEND_CLICK_CODE = "推荐功能点击";
+
+        interface Point {
+            String getPage();
+            String getPageEventCode();
+            String getPageEventName();
+            String getReturnClickName();
+        }
+
+        class Clean implements Point{
+            String PAGE = "clean_success_page";
+            String PAGE_EVENT_CODE = "clean_success_page_custom";
+            String PAGE_EVENT_NAME = "垃圾清理完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在垃圾清理完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
+
+        class Acc implements Point{
+            String PAGE = "boost_success_page";
+            String PAGE_EVENT_CODE = "boost_success_page_custom";
+            String PAGE_EVENT_NAME = "加速完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在加速完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
+
+        class Virus implements Point{
+            String PAGE = "virus_killing_success_page";
+            String PAGE_EVENT_CODE = "virus_killing_success_page_custom";
+            String PAGE_EVENT_NAME = "病毒查杀完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在病毒查杀完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
+
+        class Power implements Point{
+            String PAGE = "powersave_success_page";
+            String PAGE_EVENT_CODE = "powersave_success_page_custom";
+            String PAGE_EVENT_NAME = "省电完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在省电完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
+
+        class WxClean implements Point{
+            String PAGE = "wxclean_success_page";
+            String PAGE_EVENT_CODE = "wxclean_success_page_custom";
+            String PAGE_EVENT_NAME = "微信清理完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在微信清理完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
+
+        class Cool implements Point{
+            String PAGE = "cool_success_page";
+            String PAGE_EVENT_CODE = "cool_success_page_custom";
+            String PAGE_EVENT_NAME = "手机降温完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在手机降温完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+
+        }
+
+        class Notify implements Point{
+            String PAGE = "notification_clean_success_page";
+            String PAGE_EVENT_CODE = "notification_clean_success_page_custom";
+            String PAGE_EVENT_NAME = "通知清理完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在通知清理完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
+
+        class NetWork implements Point{
+            String PAGE = "network_acceleration_success_page";
+            String PAGE_EVENT_CODE = "network_acceleration_success_page_custom";
+            String PAGE_EVENT_NAME = "网络加速完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在网络加速完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
+
+        class Folder implements Point{
+            String PAGE = "depth_clean_success_page";
+            String PAGE_EVENT_CODE = "depth_clean_success_pagesuccess_page_custom";
+            String PAGE_EVENT_NAME = "深度清理完成页曝光时";
+            String RETURN_CLICK_NAME = "用户在深度清理完成页返回";
+
+            @Override
+            public String getPage() {
+                return PAGE;
+            }
+
+            @Override
+            public String getPageEventCode() {
+                return PAGE_EVENT_CODE;
+            }
+
+            @Override
+            public String getPageEventName() {
+                return PAGE_EVENT_NAME;
+            }
+
+            @Override
+            public String getReturnClickName() {
+                return RETURN_CLICK_NAME;
+            }
+        }
     }
 
 }
