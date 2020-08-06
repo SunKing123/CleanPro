@@ -302,6 +302,14 @@
             android:excludeFromRecents="true"
             android:taskAffinity="com.locker.new.task"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.finish.NewCleanFinishPlusActivity"
+            android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:taskAffinity="com.locker.new.task"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.main.activity.NewsActivity"
             android:excludeFromRecents="true"
@@ -345,13 +353,6 @@
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
         <!--            android:launchMode="singleTask"-->
-        <activity
-            android:name=".ui.newclean.activity.CleanFinishAdvertisementActivity"
-            android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task" />
 
         <activity
             android:name=".ui.main.activity.SplashADHotActivity"

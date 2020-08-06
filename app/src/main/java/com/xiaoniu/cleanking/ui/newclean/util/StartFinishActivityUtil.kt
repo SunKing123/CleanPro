@@ -2,46 +2,26 @@ package com.xiaoniu.cleanking.ui.newclean.util
 
 import android.content.Context
 import android.content.Intent
-import com.xiaoniu.cleanking.base.AppHolder
-import com.xiaoniu.cleanking.ui.main.config.PositionId
-import com.xiaoniu.cleanking.ui.newclean.activity.CleanFinishAdvertisementActivity
+import android.os.Bundle
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
-import com.xiaoniu.cleanking.utils.ExtraConstant
-import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 
 /**
  * @author XiLei
  * @date 2019/11/22.
- * description：完成页之前的全屏视频广告
+ * description：跳完成页面
  */
 class StartFinishActivityUtil {
 
     companion object {
-        var isOneOpen = false
-        var isTwoOpen = false
-        var isThreeOpen = false
-        var hasInit = false;
-
-        fun gotoFinish(context: Context,intent: Intent) {
-            initOnOff();
-            var title=intent.getStringExtra(ExtraConstant.TITLE)
-            if (isThreeOpen&&PreferenceUtil.getShowCount(context, title, 0, 0, 0) < 3) {
-                intent.setClass(context, CleanFinishAdvertisementActivity::class.java);
-                context.startActivity(intent)
-            } else {
-                intent.setClass(context, NewCleanFinishActivity::class.java);
-                context.startActivity(intent)
-            }
+        fun gotoFinish(context: Context, intent: Intent) {
+            intent.setClass(context, NewCleanFinishActivity::class.java);
+            context.startActivity(intent)
         }
-
-        fun initOnOff() {
-            if (hasInit) {
-                return
-            }
-            hasInit = true
-            isOneOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE)
-            isTwoOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_TWO_CODE)
-            isThreeOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_THREE_CODE)
+        fun gotoFinish(context: Context, bundle:Bundle) {
+            var intent=Intent()
+            intent.setClass(context, NewCleanFinishActivity::class.java);
+            intent.putExtras(bundle)
+            context.startActivity(intent)
         }
     }
 }
