@@ -97,6 +97,10 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
     @Override
     protected void initView() {
+        StatisticsUtils.customTrackEvent("audio_frequency_cleaning_page_custom",
+                "音频清理页面曝光",
+                "audio_frequency_cleaning_page",
+                "audio_frequency_cleaning_page");
         mLoading = CleanFileLoadingDialogFragment.newInstance();
         mAdapter = new CleanMusicManageAdapter(this.getBaseContext());
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
@@ -163,7 +167,9 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
             finish();
         } else if (id == R.id.btn_del) { //删除文件
             StatisticsUtils.trackClick("music_cleaning_delete_click", "\"删除\"按钮点击", "file_cleaning_page", "music_cleaning_page");
-
+            StatisticsUtils.trackClick("delete_click", "删除按钮点击",
+                    "audio_frequency_cleaning_page",
+                    "audio_frequency_cleaning_page");
             String title = String.format("确定删除这%s个音乐？", getSelectSize());
             DelDialogFragment dialogFragment = DelDialogFragment.newInstance(title);
             dialogFragment.show(getFragmentManager(), "");
