@@ -14,24 +14,29 @@ import com.xiaoniu.cleanking.R;
  */
 public class FingerComponent implements Component {
 
-  @Override public View getView(LayoutInflater inflater) {
-    RelativeLayout ll = (RelativeLayout) inflater.inflate(R.layout.layer_finger_guide, null);
-    return ll;
-  }
+    @Override
+    public View getView(LayoutInflater inflater) {
+        RelativeLayout ll = (RelativeLayout) inflater.inflate(R.layout.layer_finger_guide, null);
+        return ll;
+    }
 
-  @Override public int getAnchor() {
-    return Component.ANCHOR_BOTTOM;
-  }
+    @Override
+    public int getAnchor() {
+        return Component.ANCHOR_BOTTOM;
+    }
 
-  @Override public int getFitPosition() {
-    return Component.FIT_CENTER;
-  }
+    @Override
+    public int getFitPosition() {
+        return Component.FIT_CENTER;
+    }
 
-  @Override public int getXOffset() {
-    return 0;
-  }
+    @Override
+    public int getXOffset() {
+        return 0;
+    }
 
-  @Override public int getYOffset() {
-    return -32;
-  }
+    @Override
+    public int getYOffset() {
+        return -30;
+    }
 }
