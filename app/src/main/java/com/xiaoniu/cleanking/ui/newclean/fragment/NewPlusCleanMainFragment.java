@@ -42,6 +42,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -207,34 +208,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         //暂时不需要展示新手引导
 //        showGuideView();
-        AppLifecyclesImpl.postDelay(new Runnable() {
-            @Override
-            public void run() {
-                showFirstGuideView();
-            }
-        }, 3000);
+//        tvTitle.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((MainActivity)getActivity()).showFirstGuideView(tvTitle);
+//            }
+//        });
     }
-    public void showFirstGuideView() {
-        GuideBuilder builder = new GuideBuilder();
-        builder.setTargetView(tvTitle)
-                .setAlpha(150)
-                .setHighTargetCorner(20)
-                .setHighTargetPadding(10);
-        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-            @Override
-            public void onShown() {
-            }
 
-            @Override
-            public void onDismiss() {
 
-            }
-        });
 
-        builder.addComponent(new SimpleComponent());
-        Guide guide = builder.createGuide();
-        guide.show(mActivity);
-    }
     /**
      * 引导弹窗
      */
@@ -867,7 +850,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.trackClick(Points.MainHome.VIRUS_KILLING_CLICK_CODE, Points.MainHome.VIRUS_KILLING_CLICK_NAME, "home_page", "home_page");
         startKillVirusActivity();
     }
-    
+
     //start kill virus page
     private void startKillVirusActivity() {
         if (PreferenceUtil.getVirusKillTime()) {
@@ -1103,14 +1086,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     public void bubbleDouble(BubbleCollected dataBean) {
         if (null != dataBean) {
-            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount(),dataBean.getData().getDoubledMagnification());//刷新金币列表；
+            mPresenter.bullDouble(dataBean.getData().getUuid(), dataBean.getData().getLocationNum(), dataBean.getData().getGoldCount(), dataBean.getData().getDoubledMagnification());//刷新金币列表；
         }
     }
 
     /**
      * 翻倍成功
      */
-    public void bubbleDoubleSuccess(BubbleDouble dataBean, int localNum,int doubledMagnification) {
+    public void bubbleDoubleSuccess(BubbleDouble dataBean, int localNum, int doubledMagnification) {
         if (null == dataBean)
             return;
         mPresenter.refBullList();//刷新金币列表；
@@ -1119,11 +1102,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
             adId = AdposUtil.getAdPos(localNum, 2);
         }
-        startGoldSuccess(adId, num, localNum,doubledMagnification);
+        startGoldSuccess(adId, num, localNum, doubledMagnification);
     }
 
     private void startGoldSuccess(String adId, int num, int index, int doubledMagnification) {
-        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index, Points.MainGoldCoin.SUCCESS_PAGE,doubledMagnification);
+        GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, num, index, Points.MainGoldCoin.SUCCESS_PAGE, doubledMagnification);
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
     }
 

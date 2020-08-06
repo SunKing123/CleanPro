@@ -82,6 +82,7 @@ public class RequestParamInterceptor implements Interceptor {
         requestBuilder.addHeader("gps-lng", "");
         requestBuilder.addHeader("gps-lat", "");
         requestBuilder.addHeader("sdk-uid", NiuDataAPI.getUUID());
+        requestBuilder.addHeader("activate-timestamp", String.valueOf(SystemUtils.getAppLastUpdateTime(ContextUtils.getContext())));//当前版本激活时间戳
 
 
         if (original.body() instanceof FormBody) {

@@ -19,6 +19,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.binioter.guideview.Guide;
+import com.binioter.guideview.GuideBuilder;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
@@ -37,6 +39,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.selfdebug.DebugActivity;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
@@ -74,6 +77,7 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.SimpleComponent;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -298,10 +302,30 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 mBottomBar.setCurrentItem(3);
             }
         });
-
-
     }
 
+    public void showFirstGuideView(View view) {
+        GuideBuilder builder = new GuideBuilder();
+        builder.setTargetView(view)
+                .setAlpha(150)
+                .setHighTargetCorner(20)
+                .setHighTargetPadding(10);
+        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+            @Override
+            public void onShown() {
+            }
+
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+
+        builder.addComponent(new SimpleComponent());
+        Guide guide = builder.createGuide();
+//        guide.setShouldCheckLocInWindow(false);
+        guide.show(MainActivity.this);
+    }
 
     private class MyRunnable implements Runnable {
 
