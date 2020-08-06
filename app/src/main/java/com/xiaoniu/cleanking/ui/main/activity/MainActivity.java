@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.binioter.guideview.Component;
 import com.binioter.guideview.Guide;
 import com.binioter.guideview.GuideBuilder;
 import com.umeng.socialize.UMShareAPI;
@@ -53,6 +54,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.dialog.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
+import com.xiaoniu.cleanking.ui.main.event.ExposureEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
@@ -62,6 +64,7 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
@@ -77,6 +80,7 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.MutiComponent;
 import com.xiaoniu.cleanking.widget.SimpleComponent;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.DateUtils;
@@ -304,28 +308,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         });
     }
 
-    public void showFirstGuideView(View view) {
-        GuideBuilder builder = new GuideBuilder();
-        builder.setTargetView(view)
-                .setAlpha(150)
-                .setHighTargetCorner(20)
-                .setHighTargetPadding(10);
-        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
-            @Override
-            public void onShown() {
-            }
 
-            @Override
-            public void onDismiss() {
-
-            }
-        });
-
-        builder.addComponent(new SimpleComponent());
-        Guide guide = builder.createGuide();
-//        guide.setShouldCheckLocInWindow(false);
-        guide.show(MainActivity.this);
-    }
 
     private class MyRunnable implements Runnable {
 
@@ -757,6 +740,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
+
     private void startPopActivity(Class<? extends AppCompatActivity> target) {
         if (ActivityCollector.hasExternalActivity()) {
             return;
@@ -931,6 +915,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
         QuickUtils.getInstant(this).enableComponent(apple);
     }
+
+
 
 
 

@@ -146,7 +146,7 @@ public class SystemUtils {
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
-            updateTime = pi.lastUpdateTime;
+            updateTime = pi.lastUpdateTime / 1000;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
