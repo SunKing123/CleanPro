@@ -170,6 +170,9 @@ public class PositionId {
 
     public static final String PAGE_DESK_BATTERY_INFO_TIME = "page_desk_battery_info_time";//桌面插屏电池信息；
 
+    public static final String KEY_HOME_PAGE_SHOW_TIMES = "key_home_page_show_times";//首页展示次数、记录四次(功能二级页面返回至首页、功能完成页返回至首页、tab切换进入首页、冷热启动进入首页)
+
+
 
 
 }

@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -100,10 +101,12 @@ public class OneKeyCircleBtnView extends RelativeLayout {
         iv_top_perview.setLayoutParams(layoutParams);//bitmap遮罩层；
 
 
+        //扫描结果展示
         RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) linear_text_tag.getLayoutParams();
         textLayout.topMargin = Float.valueOf((screenWidth / 1.43f / 1.81f)).intValue();
         linear_text_tag.setLayoutParams(textLayout);
         linear_text_tag.setVisibility(VISIBLE);
+
         startAnimation();
 
     }

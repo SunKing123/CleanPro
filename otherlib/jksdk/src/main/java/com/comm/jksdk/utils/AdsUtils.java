@@ -16,7 +16,7 @@ public class AdsUtils {
         boolean requestAdOverTime = false;
         if (adRequestTimeOut > 0) {
             Long curTime = System.currentTimeMillis();
-            Long firstRequestAdTime = MmkvUtil.getLong(Constants.SPUtils.FIRST_REQUEST_AD_TIME, 0L);
+            Long firstRequestAdTime = AdMmkvUtil.getLong(Constants.SPUtils.FIRST_REQUEST_AD_TIME, 0L);
             if (firstRequestAdTime.longValue() != 0) {
                 if (curTime - firstRequestAdTime > adRequestTimeOut * 1000) {
                     // 超时

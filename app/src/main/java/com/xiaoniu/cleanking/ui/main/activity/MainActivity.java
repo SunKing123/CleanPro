@@ -19,6 +19,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.binioter.guideview.Component;
+import com.binioter.guideview.Guide;
+import com.binioter.guideview.GuideBuilder;
 import com.umeng.socialize.UMShareAPI;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
@@ -37,6 +40,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.selfdebug.DebugActivity;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
@@ -50,6 +54,7 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.dialog.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
+import com.xiaoniu.cleanking.ui.main.event.ExposureEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
@@ -59,6 +64,7 @@ import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
+import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
@@ -74,6 +80,8 @@ import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.quick.QuickUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
+import com.xiaoniu.cleanking.widget.MutiComponent;
+import com.xiaoniu.cleanking.widget.SimpleComponent;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -298,9 +306,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 mBottomBar.setCurrentItem(3);
             }
         });
-
-
     }
+
 
 
     private class MyRunnable implements Runnable {
@@ -733,6 +740,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
+
     private void startPopActivity(Class<? extends AppCompatActivity> target) {
         if (ActivityCollector.hasExternalActivity()) {
             return;
@@ -907,6 +915,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
         QuickUtils.getInstant(this).enableComponent(apple);
     }
+
+
 
 
 

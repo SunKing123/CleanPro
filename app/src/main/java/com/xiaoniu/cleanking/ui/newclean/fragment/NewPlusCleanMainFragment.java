@@ -21,12 +21,14 @@ import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 
+import com.binioter.guideview.Guide;
+import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
-import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -39,6 +41,7 @@ import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -51,6 +54,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
+import com.xiaoniu.cleanking.ui.main.event.ExposureEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
@@ -78,12 +82,14 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.ClearCardView;
 import com.xiaoniu.cleanking.widget.CommonTitleLayout;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
+import com.xiaoniu.cleanking.widget.SimpleComponent;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.Points;
@@ -147,6 +153,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.image_interactive)
     public HomeInteractiveView imageInteractive;
 
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    private boolean isThreeAdvOpen = false;
     private boolean hasInitThreeAdvOnOff = false;
 
     private int mNotifySize; //通知条数
@@ -201,7 +210,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         //暂时不需要展示新手引导
 //        showGuideView();
+
     }
+
+
 
     /**
      * 引导弹窗
@@ -455,6 +467,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 refreshAdAll();
                 //重新检测头部扫描状态
                 checkScanState();
+            }
+            //引导页面展示逻辑
+            int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
+            if (exposuredTimes <= 2) { //只记录三次展示
+                int currentTimes = (exposuredTimes + 1);
+                MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
+                EventBus.getDefault().post(new ExposureEvent(currentTimes));
             }
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
@@ -1053,6 +1072,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         GoldCoinSuccessActivity.Companion.start(mActivity, model);
     }
 
+
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * ********************************************************** 首页引导展示 ***************************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+    @Subscribe
+    public void homeExposureEvent(ExposureEvent exposureEvent){
+        mPresenter.showGuideView(exposureEvent.getExposureTimes(),view_lottie_top);
+    }
     /*
      * *********************************************************************************************************************************************************
      * ********************************************************** others ***************************************************************************************

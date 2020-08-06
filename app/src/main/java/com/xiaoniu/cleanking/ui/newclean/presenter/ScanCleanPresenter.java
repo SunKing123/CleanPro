@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.annotation.SuppressLint;
 import android.os.Environment;
 
-import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -17,6 +16,7 @@ import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
