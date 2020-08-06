@@ -15,7 +15,7 @@ import com.comm.jksdk.http.utils.AppInfoUtils;
 import com.comm.jksdk.http.utils.LogUtils;
 import com.comm.jksdk.utils.CollectionUtils;
 import com.comm.jksdk.utils.JsonUtils;
-import com.comm.jksdk.utils.MmkvUtil;
+import com.comm.jksdk.utils.AdMmkvUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -203,7 +203,7 @@ public class AdsConfig {
         if (TextUtils.isEmpty(postion)) {
             return null;
         }
-        String confString= MmkvUtil.getString(Constants.SPUtils.CONFIG_INFO + "_" + postion.trim() ,"");
+        String confString= AdMmkvUtil.getString(Constants.SPUtils.CONFIG_INFO + "_" + postion.trim() ,"");
         if(TextUtils.isEmpty(confString)){
             return null;
         }
@@ -221,7 +221,7 @@ public class AdsConfig {
         if (Constants.bid > 0) {
             return Constants.bid;
         }
-        Constants.bid = MmkvUtil.getInt(Constants.SPUtils.BID, -1);
+        Constants.bid = AdMmkvUtil.getInt(Constants.SPUtils.BID, -1);
         return Constants.bid;
     }
 
@@ -231,7 +231,7 @@ public class AdsConfig {
      * @return
      */
     public static void setBid(int bid) {
-        MmkvUtil.saveInt(Constants.SPUtils.BID, bid);
+        AdMmkvUtil.saveInt(Constants.SPUtils.BID, bid);
         Constants.bid = bid;
     }
 
@@ -244,7 +244,7 @@ public class AdsConfig {
         if (Constants.userActive > 0) {
             return Constants.userActive;
         }
-        Constants.userActive = MmkvUtil.getLong(Constants.SPUtils.USER_ACTIVE, -1);
+        Constants.userActive = AdMmkvUtil.getLong(Constants.SPUtils.USER_ACTIVE, -1);
         return Constants.userActive;
     }
 
@@ -254,7 +254,7 @@ public class AdsConfig {
      * @param userActive
      */
     public static void setUserActive(long userActive) {
-        MmkvUtil.saveLong(Constants.SPUtils.USER_ACTIVE, userActive);
+        AdMmkvUtil.saveLong(Constants.SPUtils.USER_ACTIVE, userActive);
         Constants.userActive = userActive;
     }
 
@@ -264,7 +264,7 @@ public class AdsConfig {
      * @param longitude
      */
     public static void setLongitude(String longitude) {
-        MmkvUtil.saveString(Constants.SPUtils.LONGITUDE, longitude);
+        AdMmkvUtil.saveString(Constants.SPUtils.LONGITUDE, longitude);
         Constants.longitude = longitude;
     }
 
@@ -277,7 +277,7 @@ public class AdsConfig {
         if (!TextUtils.isEmpty(Constants.longitude)) {
             return Constants.longitude;
         }
-        Constants.longitude = MmkvUtil.getString(Constants.SPUtils.LONGITUDE, "");
+        Constants.longitude = AdMmkvUtil.getString(Constants.SPUtils.LONGITUDE, "");
         return Constants.longitude;
     }
 
@@ -285,7 +285,7 @@ public class AdsConfig {
      * 设置纬度
      */
     public static void setLatitude(String latitude) {
-        MmkvUtil.saveString(Constants.SPUtils.LATITUDE, latitude);
+        AdMmkvUtil.saveString(Constants.SPUtils.LATITUDE, latitude);
         Constants.latitude = latitude;
     }
 
@@ -298,7 +298,7 @@ public class AdsConfig {
         if (!TextUtils.isEmpty(Constants.latitude)) {
             return Constants.latitude;
         }
-        Constants.latitude = MmkvUtil.getString(Constants.SPUtils.LATITUDE, "");
+        Constants.latitude = AdMmkvUtil.getString(Constants.SPUtils.LATITUDE, "");
         return Constants.latitude;
     }
 
@@ -365,7 +365,7 @@ public class AdsConfig {
         if (!CollectionUtils.isEmpty(adsInfoslist)) {
             return adsInfoslist;
         }
-        String adInfo = MmkvUtil.getString(Constants.SPUtils.CONFIG_INFO, "");
+        String adInfo = AdMmkvUtil.getString(Constants.SPUtils.CONFIG_INFO, "");
         if (TextUtils.isEmpty(adInfo)) {
             return adsInfoslist;
         }
@@ -387,10 +387,10 @@ public class AdsConfig {
         adsInfoslist.addAll(configBean.getAdList());
         String configInfo = new Gson().toJson(configBean);
         LogUtils.i("GeekSdk--configInfo---" + configInfo);
-        MmkvUtil.saveString(Constants.SPUtils.CONFIG_INFO, configInfo);
+        AdMmkvUtil.saveString(Constants.SPUtils.CONFIG_INFO, configInfo);
         //以position_id作为key独立保存单个ad_infp
         for (ConfigBean.AdListBean bean : adsInfoslist) {
-            MmkvUtil.saveString(Constants.SPUtils.CONFIG_INFO + "_" + bean.getAdPosition(), new Gson().toJson(bean));
+            AdMmkvUtil.saveString(Constants.SPUtils.CONFIG_INFO + "_" + bean.getAdPosition(), new Gson().toJson(bean));
         }
 //        //初始化穿山甲sdk
 //        String csjAppId = "";

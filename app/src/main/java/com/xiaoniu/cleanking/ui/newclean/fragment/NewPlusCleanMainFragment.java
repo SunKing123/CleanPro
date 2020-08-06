@@ -25,7 +25,6 @@ import com.binioter.guideview.Guide;
 import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
-import com.comm.jksdk.utils.MmkvUtil;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
@@ -83,6 +82,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.ClearCardView;
@@ -467,6 +467,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 refreshAdAll();
                 //重新检测头部扫描状态
                 checkScanState();
+            }
+            //引导页面展示逻辑
+            int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
+            if (exposuredTimes <= 2) { //只记录三次展示
+                int currentTimes = (exposuredTimes + 1);
+                MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
+                EventBus.getDefault().post(new ExposureEvent(currentTimes));
             }
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
