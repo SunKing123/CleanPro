@@ -682,9 +682,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         bundle.putString("num", countEntity.getTotalSize());
                         bundle.putString("unit", countEntity.getUnit());
                         bundle.putBoolean("unused", true);
-                        Intent intent = new Intent(requireActivity(), NewCleanFinishActivity.class);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        StartFinishActivityUtil.Companion.gotoFinish(requireActivity(), bundle);
                     } else {
                         //判断扫描缓存；
                         if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
@@ -826,11 +824,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getVirusKillTime()) {
             startActivity(VirusKillActivity.class);
         } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            Intent intent = new Intent();
             intent.putExtra("title", "病毒查杀");
             intent.putExtra("main", false);
             intent.putExtra("unused", true);
-            startActivity(intent);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent);
         }
     }
 
@@ -969,13 +967,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getSpeedNetWorkTime()) {
             startActivity(NetWorkActivity.class);
         } else {
-            Intent intent = new Intent(getActivity(), NewCleanFinishActivity.class);
+            Intent intent = new Intent();
             String num = PreferenceUtil.getSpeedNetworkValue();
             intent.putExtra("title", "网络加速");
             intent.putExtra("main", false);
             intent.putExtra("num", num);
             intent.putExtra("unused", true);
-            startActivity(intent);
+            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent);
+
         }
     }
 

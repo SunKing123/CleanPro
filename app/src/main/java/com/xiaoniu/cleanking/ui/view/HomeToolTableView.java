@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.ui.finish.model.RecrmdItemDataStore;
+import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -169,7 +169,7 @@ public class HomeToolTableView extends LinearLayout {
         temp = temp > 0 ? temp : 30;
         temp = temp + random;
         String tColor = temp + "°C";
-        RecrmdItemDataStore.Companion.getInstance().setTemperature(tColor);
+        RecmedItemDataStore.Companion.getInstance().setTemperature(tColor);
         SpannableString text = AndroidUtil.inertColorText(tHead + tColor, tHead.length(), tHead.length() + tColor.length(), getRedColor());
         itemTemperature.setContent(text);
     }

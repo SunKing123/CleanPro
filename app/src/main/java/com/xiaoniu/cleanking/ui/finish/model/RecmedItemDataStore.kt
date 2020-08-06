@@ -14,7 +14,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil
  * email：xinxiaolong123@foxmail.com
  * 推荐功能数据组装算法
  */
-public class RecrmdItemDataStore {
+public class RecmedItemDataStore {
 
     var itemArray = arrayOf("一键清理", "病毒查杀", "一键加速", "超强省电", "微信清理", "手机降温", "通知栏清理")
 
@@ -25,10 +25,10 @@ public class RecrmdItemDataStore {
 
     companion object {
         @Volatile
-        private var instance: RecrmdItemDataStore? = null
+        private var instance: RecmedItemDataStore? = null
         fun getInstance() =
                 instance ?: synchronized(this) {
-                    instance ?: RecrmdItemDataStore().also { instance = it }
+                    instance ?: RecmedItemDataStore().also { instance = it }
                 }
     }
 
@@ -36,7 +36,7 @@ public class RecrmdItemDataStore {
 
     }
 
-    fun popModel(): RecrmdItemModel? {
+    fun popModel(): RecmedItemModel? {
         modelIndex++;
         if (modelIndex >= itemArray.size) {
             return null
@@ -87,7 +87,7 @@ public class RecrmdItemDataStore {
     /**
      * 一键清理数据
      */
-    fun assembleOneKeyClean(): RecrmdItemModel {
+    fun assembleOneKeyClean(): RecmedItemModel {
         var title = "垃圾文件太多"
 
         val countEntity = CleanUtil.formatShortFileSize(ScanDataHolder.getInstance().getTotalSize())
@@ -98,25 +98,25 @@ public class RecrmdItemDataStore {
         var content2 = SpannableString("存储空间即将不足")
         var imageIcon = R.drawable.icon_finish_recommed_clean_stroage
         var buttonText = "立即清理"
-        return RecrmdItemModel(title, content1, content2, imageIcon, buttonText)
+        return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
 
     /**
      * 病毒查杀数据
      */
-    fun assembleCleanVirus(): RecrmdItemModel {
+    fun assembleCleanVirus(): RecmedItemModel {
         var title = "病毒查杀"
         var content1 = SpannableString("网络环境存在安全风险")
         var content2 = SpannableString("存在隐私泄露风险")
         var imageIcon = R.drawable.icon_finish_recommed_clean_virus
         var buttonText = "立即杀毒"
-        return RecrmdItemModel(title, content1, content2, imageIcon, buttonText)
+        return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
 
     /**
      * 一键加速数据
      */
-    fun assembleOneKeyAcc(): RecrmdItemModel {
+    fun assembleOneKeyAcc(): RecmedItemModel {
         var title = "手机加速"
 
         if (memory.length == 0) {
@@ -129,13 +129,13 @@ public class RecrmdItemDataStore {
         var content2 = SpannableString("不清理将导致手机卡慢")
         var imageIcon = R.drawable.icon_finish_recommed_clean_memory
         var buttonText = "立即清理"
-        return RecrmdItemModel(title, content1, content2, imageIcon, buttonText)
+        return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
 
     /**
      * 超强省电数据
      */
-    fun assembleBattery(): RecrmdItemModel {
+    fun assembleBattery(): RecmedItemModel {
         var title = "超强省电"
 
         if (powerNum.length == 0) {
@@ -147,25 +147,25 @@ public class RecrmdItemDataStore {
         var content2 = SpannableString("将导致电池待机时间缩短")
         var imageIcon = R.drawable.icon_finish_recommed_clean_battery
         var buttonText = "立即省电"
-        return RecrmdItemModel(title, content1, content2, imageIcon, buttonText)
+        return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
 
     /**
      * 微信清理数据
      */
-    fun assembleCleanWeChat(): RecrmdItemModel {
+    fun assembleCleanWeChat(): RecmedItemModel {
         var title = "微信清理"
         var content1 = SpannableString("缓存过期文件过多")
         var content2 = SpannableString("不处理将导致聊天卡顿")
         var imageIcon = R.drawable.icon_finish_recommed_clean_virus
         var buttonText = "立即清理"
-        return RecrmdItemModel(title, content1, content2, imageIcon, buttonText)
+        return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
 
     /**
      * 手机降温数据
      */
-    fun assembleTemperature(): RecrmdItemModel {
+    fun assembleTemperature(): RecmedItemModel {
         var title = "手机降温"
 
         if (temperature.length == 0) {
@@ -178,19 +178,19 @@ public class RecrmdItemDataStore {
         var content2 = SpannableString("手机过热会损伤电池")
         var imageIcon = R.drawable.icon_finish_recommed_clean_cool
         var buttonText = "立即降温"
-        return RecrmdItemModel(title, content1, content2, imageIcon, buttonText)
+        return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
 
     /**
      * 通知栏清理数据
      */
-    fun assembleNotify(): RecrmdItemModel {
+    fun assembleNotify(): RecmedItemModel {
         var title = "通知栏清理"
         var content1 = SpannableString("通知栏常驻消息过多")
         var content2 = SpannableString("有效拦截诈骗骚扰通知")
         var imageIcon = R.drawable.icon_finish_recommed_clean_notify
         var buttonText = "立即清理"
-        return RecrmdItemModel(title, content1, content2, imageIcon, buttonText)
+        return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
 
     fun getRedColor(): Int {
