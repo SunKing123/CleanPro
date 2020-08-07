@@ -55,7 +55,6 @@ import static com.jess.arms.utils.ThirdViewUtil.convertAutoView;
  * ================================================
  * 因为 Java 只能单继承, 所以如果要用到需要继承特定 {@link Activity} 的三方库, 那你就需要自己自定义 {@link Activity}
  * 继承于这个特定的 {@link Activity}, 然后再按照 {@link BaseActivity} 的格式, 将代码复制过去, 记住一定要实现{@link IActivity}
-
  * ================================================
  */
 public abstract class BaseActivity<P extends IPresenter> extends SupportActivity implements IActivity, ActivityLifecycleable {

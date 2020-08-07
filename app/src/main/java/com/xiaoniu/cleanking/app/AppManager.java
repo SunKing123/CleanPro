@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Process;
 import android.text.TextUtils;
 
+import com.xiaoniu.cleanking.ui.finish.presenter.CleanFinishPlusPresenter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -20,7 +22,6 @@ public class AppManager {
     private volatile static AppManager instance;
 
     private AppManager() {
-
     }
 
     /**

@@ -112,11 +112,11 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                         }
                     }
                 }
-
             }
 
             @Override
             public void showExtraOp(String message) {
+
             }
 
             @Override

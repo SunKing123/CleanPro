@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.app.injector.component;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.xiaoniu.cleanking.app.injector.PerActivity;
 import com.xiaoniu.cleanking.app.injector.module.ActivityModule;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanBigFileActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanInstallPackageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
@@ -52,6 +53,8 @@ public interface ActivityComponent {
     RxAppCompatActivity getActivity();
 
     void inject(MainActivity mainActivity);
+
+    void inject(NewCleanFinishPlusActivity mainActivity);
 
     void inject(UserLoadH5Activity userLoadH5Activity);
 

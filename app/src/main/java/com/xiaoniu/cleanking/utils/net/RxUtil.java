@@ -1,5 +1,7 @@
 package com.xiaoniu.cleanking.utils.net;
 
+import android.app.Activity;
+
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
@@ -36,6 +38,7 @@ public class RxUtil {
             }
         };
     }
+
 
     /**
      * 统一线程处理

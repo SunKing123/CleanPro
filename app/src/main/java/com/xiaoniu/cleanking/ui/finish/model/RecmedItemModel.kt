@@ -8,4 +8,4 @@ import android.text.SpannableString
  *
  * 推荐功能数据
  */
-data class RecrmdItemModel constructor(var title:String,var content1: SpannableString,var content2: SpannableString,var imageIcon:Int,var buttonText:String)
+data class RecmedItemModel constructor(var title:String, var content1: SpannableString, var content2: SpannableString, var imageIcon:Int, var buttonText:String)
