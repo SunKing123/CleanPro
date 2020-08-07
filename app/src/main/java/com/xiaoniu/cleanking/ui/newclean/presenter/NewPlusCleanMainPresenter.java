@@ -95,7 +95,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
-//    private AdParameter mAdParameter;
+    //    private AdParameter mAdParameter;
     @Inject
     NoClearSPHelper mPreferencesHelper;
 
@@ -513,16 +513,16 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
-        MidasRequesCenter.preloadAd(mView.getActivity(),MidasConstants.MAIN_THREE_AD_ID);
+        MidasRequesCenter.preloadAd(mView.getActivity(), MidasConstants.MAIN_THREE_AD_ID);
     }
 
     public void fillVideoAd(FrameLayout viewGroup, IOnAdClickListener onAdClick) {
         String adId = MidasConstants.MAIN_THREE_AD_ID;
-        MidasRequesCenter.requestAndShowAd(mView.getActivity(),adId,new SimpleViewCallBack(viewGroup){
+        MidasRequesCenter.requestAndShowAd(mView.getActivity(), adId, new SimpleViewCallBack(viewGroup) {
             @Override
             public void onAdClick(AdInfoModel adInfoModel) {
                 super.onAdClick(adInfoModel);
-                if (onAdClick != null){
+                if (onAdClick != null) {
                     onAdClick.onClick(adId);
                 }
             }
@@ -533,13 +533,25 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
-        MidasRequesCenter.requestAndShowAd(mView.getActivity(),adviceID,new SimpleViewCallBack(viewGroup){
+        MidasRequesCenter.requestAndShowAd(mView.getActivity(), adviceID, new SimpleViewCallBack(viewGroup) {
             @Override
             public void onAdClick(AdInfoModel adInfoModel) {
                 super.onAdClick(adInfoModel);
-                if (onAdClick != null){
+                if (onAdClick != null) {
                     onAdClick.onClick(adviceID);
                 }
+            }
+
+            @Override
+            public void onAdLoaded(AdInfoModel adInfoModel) {
+                super.onAdLoaded(adInfoModel);
+                mView.showAdSuccess(adviceID);
+            }
+
+            @Override
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
+                mView.showAdError(adviceID, errorCode, errorMsg);
             }
         });
     }
@@ -660,6 +672,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             public void onAdExposure(AdInfoModel adInfoModel) {
                 super.onAdExposure(adInfoModel);
             }
+
             @Override
             public void onAdLoadError(String errorCode, String errorMsg) {
                 super.onAdLoadError(errorCode, errorMsg);
@@ -758,7 +771,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 //                    .setAdId(posId).setActivity(mView.getActivity()).setViewWidthOffset(45).build();
 //            MidasRequesCenter.preLoad(params);
 
-            MidasRequesCenter.preloadAd(mView.getActivity(),posId);
+            MidasRequesCenter.preloadAd(mView.getActivity(), posId);
         } catch (Exception e) {
             e.printStackTrace();
         }
