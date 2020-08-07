@@ -171,9 +171,9 @@ public class RecmedItemDataStore {
         if (temperature.length == 0) {
             temperature = "37°C"
         }
-        var head = "手机温度已超过" + temperature
+        var head = "手机温度已超过"
         var content = head + temperature
-        var content1 = AndroidUtil.inertColorText(content, head.length, temperature.length, getRedColor())
+        var content1 = AndroidUtil.inertColorText(content, head.length, head.length+temperature.length, getRedColor())
 
         var content2 = SpannableString("手机过热会损伤电池")
         var imageIcon = R.drawable.icon_finish_recommed_clean_cool
