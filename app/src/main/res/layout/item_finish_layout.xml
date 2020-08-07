@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="@dimen/dimen_148dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/shadow"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_148dp"
+    android:background="@drawable/shadow">
 
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="垃圾文件过多"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_30dp"
         android:layout_marginTop="@dimen/dimen_19dp"
+        android:text="垃圾文件过多"
         android:textColor="@color/color_FF2028"
-        android:textSize="@dimen/dimen_21sp" />
+        android:textSize="@dimen/dimen_21sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/sub_title_1"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:text="网络环境存在安全风险"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_13dp"
         android:drawableStart="@mipmap/finish_icon_warn"
         android:drawablePadding="7dp"
-        android:textSize="@dimen/font_14sp" />
+        android:text="网络环境存在安全风险"
+        android:textSize="@dimen/font_14sp"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/sub_title_2"
-        app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/sub_title_1"
-        android:text="网络环境存在安全风险"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_13dp"
         android:drawableStart="@mipmap/finish_icon_warn"
         android:drawablePadding="7dp"
-        android:textSize="@dimen/font_14sp" />
+        android:text="网络环境存在安全风险"
+        android:textSize="@dimen/font_14sp"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/sub_title_1" />
 
 
     <FrameLayout
         android:id="@+id/image_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="@dimen/dimen_78dp"
-        android:layout_height="@dimen/dimen_78dp">
+        android:layout_height="@dimen/dimen_78dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@mipmap/applogo" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:text="12%"
+            android:id="@+id/image_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:text="12%"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_12sp" />
     </FrameLayout>
@@ -72,11 +72,11 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/button"
         style="@style/home_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_layout"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="23.5dp"
-        android:text="立即清理" />
+        android:text="立即清理"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
