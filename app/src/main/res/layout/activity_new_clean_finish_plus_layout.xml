@@ -7,7 +7,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_63dp"
+        android:layout_height="@dimen/dimen_75dp"
         android:background="@drawable/finish_top_bg">
 
         <androidx.appcompat.widget.AppCompatTextView
