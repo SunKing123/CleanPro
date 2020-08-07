@@ -4,10 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
+import android.graphics.Typeface
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
@@ -34,9 +38,12 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.AndroidUtil
+import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatisticsUtils
+import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.common.utils.ToastUtils
 import com.xiaoniu.unitionadbase.model.AdInfoModel
+import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -45,7 +52,7 @@ import java.util.*
  * Created by xinxiaolong on 2020/8/4.
  * email：xinxiaolong123@foxmail.com
  */
-public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(),NewCleanFinishPlusContract.CleanFinishView {
+public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
 
     var titleName:String=""
     lateinit var pointer:CleanFinishPointer
@@ -66,6 +73,105 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         //todo 这里替换成广告位容器布局
         mPresenter.loadOneAdv(FrameLayout(this))
         mPresenter.loadTwoAdv(FrameLayout(this))
+
+        titleName = "手机清理"
+        left_title.text = titleName
+        left_title.setOnClickListener {
+            onBackPressed()
+        }
+        when (titleName) {
+            "建议清理" -> showSuggestClearView("886", "MB")
+            "一键加速" -> show0neKeySpeedUp("24")
+            "病毒查杀" -> showKillVirusView()
+            "超强省电" -> showPowerSaving()
+            "微信专理" -> showWeiXinClear()
+            "手机降温" -> showPhoneCold("37", "60")
+            "通知栏清理" -> showNotificationClear()
+            "网络加速" -> showNetSpeedUp("80")
+            "手机清理" -> showPhoneClear()
+        }
+    }
+
+    //建议清理
+    private fun showSuggestClearView(num: String, unit: String) {
+        function_icon.setImageResource(R.mipmap.finish_icon_ok)
+        val content = num.plus(unit)
+        val spannableString = SpannableString(content)
+        val sizeSpan = AbsoluteSizeSpan(DisplayUtils.sp2px(this, 30F))
+        spannableString.setSpan(sizeSpan, 0, num.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        function_title.text = spannableString
+        function_sub_title.text = "垃圾已清理"
+        function_sub_title.textSize = 10F
+    }
+
+    //一键加速
+    private fun show0neKeySpeedUp(num: String) {
+        function_icon.setImageResource(R.mipmap.finish_icon_speedup)
+        val content = "运行速度已提升$num%"
+        val spannableString = SpannableString(content)
+        val styleSpan = StyleSpan(Typeface.BOLD)
+        spannableString.setSpan(styleSpan, content.length - 1 - num.length, content.length - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        function_title.text = spannableString
+    }
+
+    //病毒查杀
+    private fun showKillVirusView() {
+        function_icon.setImageResource(R.mipmap.finish_icon_virus)
+        function_sub_title.visibility = View.GONE
+    }
+
+    //超强省电
+    private fun showPowerSaving() {
+        function_icon.setImageResource(R.mipmap.finish_icon_power)
+        function_title.text = "已达到最佳状态"
+        function_sub_title.text = "快去体验其他功能"
+    }
+
+    //微信清理
+    private fun showWeiXinClear() {
+        function_icon.setImageResource(R.mipmap.finish_icon_weixin)
+        function_title.text = "已清理"
+    }
+
+    //手机降温
+    private fun showPhoneCold(num: String, time: String) {
+        function_icon.setImageResource(R.mipmap.finish_icon_cold)
+        val content = "成功降温$num°C"
+        val spannableString = SpannableString(content)
+        val styleSpan = StyleSpan(Typeface.BOLD)
+        spannableString.setSpan(styleSpan, content.indexOf(num), content.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        function_title.text = spannableString
+        val subContent = "${time}s后达到最佳降温效果"
+        val subSpannableString = SpannableString(subContent)
+        subSpannableString.setSpan(styleSpan, 0, subContent.indexOf("s"), Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        function_sub_title.text = subSpannableString
+
+    }
+
+    //通知栏清理
+    private fun showNotificationClear() {
+        function_icon.setImageResource(R.mipmap.finish_icon_notification)
+        function_title.text = "通知栏很干净"
+        function_sub_title.text = "快去体验其他清理功能"
+    }
+
+    //网络加速
+    private fun showNetSpeedUp(num: String) {
+        function_icon.setImageResource(R.mipmap.finish_icon_ok)
+        val content = num.plus("%")
+        val spannableString = SpannableString(content)
+        val sizeSpan = AbsoluteSizeSpan(DisplayUtils.sp2px(this, 30F))
+        spannableString.setSpan(sizeSpan, 0, num.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
+        function_title.text = spannableString
+        function_sub_title.text = "网络已提速"
+        function_sub_title.textSize = 10F
+    }
+
+    //手机清理
+    private fun showPhoneClear() {
+        function_icon.setImageResource(R.mipmap.finish_icon_ok)
+        function_title.text = "已达到最佳状态"
+        function_sub_title.text = "快去体验其他清理功能"
     }
 
     override fun netError() {
@@ -159,7 +265,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         val jsonObject = JSONObject()
         try {
             jsonObject.put("position_id", 5)
-            jsonObject.put("function_name",titleName)
+            jsonObject.put("function_name", titleName)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
