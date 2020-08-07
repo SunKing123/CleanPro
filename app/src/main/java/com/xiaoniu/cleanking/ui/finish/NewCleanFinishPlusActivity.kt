@@ -9,7 +9,6 @@ import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
@@ -30,10 +29,8 @@ import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.common.utils.ToastUtils
-import com.xnad.sdk.ad.entity.AdInfo
-import com.xnad.sdk.ad.listener.AbsAdCallBack
-import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
 import com.xiaoniu.unitionadbase.model.AdInfoModel
+import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
