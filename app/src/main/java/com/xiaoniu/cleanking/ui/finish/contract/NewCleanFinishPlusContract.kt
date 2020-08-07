@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.finish.contract
 
 import android.app.Activity
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.jess.arms.mvp.IModel
 import com.xiaoniu.cleanking.base.BaseModel
@@ -26,8 +27,8 @@ public interface NewCleanFinishPlusContract {
 
     interface CleanFinishPresenter<T : BaseView, V : BaseModel> : com.xiaoniu.cleanking.base.BasePresenter<T,V> {
         fun onCreate()
-        fun loadOneAdv(advContainer: LinearLayout)
-        fun loadTwoAdv(advContainer: LinearLayout)
+        fun loadOneAdv(advContainer: FrameLayout)
+        fun loadTwoAdv(advContainer: FrameLayout)
         fun addDoubleGoldCoin(bubbleCollected: BubbleCollected)
         fun onPostResume()
         fun onPause()

@@ -22,6 +22,7 @@ buildscript {
         jcenter()
         maven {url 'http://developer.huawei.com/repo/'}
         maven { url 'http://pre.openxiaoniu.com/repository/xiaoniuhy-andriod-release' }
+        maven { url 'http://pre.openxiaoniu.com/repository/midas_sdk' }
     }
     dependencies {
         classpath 'com.jakewharton:butterknife-gradle-plugin:10.0.0'
@@ -54,6 +55,8 @@ buildscript {
         classpath "com.didiglobal.booster:booster-transform-res-check:$booster_version"
 
         classpath 'com.huawei.agconnect:agcp:1.0.0.300'
+
+        classpath "com.alibaba:arouter-register:1.0.2"
     }
 }
 
@@ -75,6 +78,8 @@ allprojects {
         jcenter()
         maven {url 'http://developer.huawei.com/repo/'}
         maven { url 'http://pre.openxiaoniu.com/repository/xiaoniuhy-andriod-release' }
+
+        maven { url 'http://pre.openxiaoniu.com/repository/midas_sdk' }
     }
 }
 

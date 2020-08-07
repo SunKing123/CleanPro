@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -139,11 +140,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     CommonTitleLayout commonTitleLayout;
 
     @BindView(R.id.ad_one)
-    ViewGroup adLayoutOne;
+    FrameLayout adLayoutOne;
     @BindView(R.id.ad_two)
-    ViewGroup adLayoutTwo;
+    FrameLayout adLayoutTwo;
     @BindView(R.id.ad_three)
-    ViewGroup adLayoutThree;
+    FrameLayout adLayoutThree;
     @BindView(R.id.layout_scroll)
     ObservableScrollView mScrollView;
     @BindView(R.id.image_interactive)
@@ -381,8 +382,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             showAdVideo();
         }
     }
-
-    private void refreshAd(String adId) {
+private void refreshAd(String adId) {
         switch (adId) {
             case MidasConstants.MAIN_ONE_AD_ID:
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {

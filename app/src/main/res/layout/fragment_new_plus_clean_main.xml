@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/ad_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
 
             </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/ad_two"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/main_home_marginTop" />
 
-            <LinearLayout
+            <FrameLayout
                 android:id="@+id/ad_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +24,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider;
@@ -34,7 +34,7 @@ import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.audio.SoundPoolPlayer;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
 
 /**
  * Created by zhaoyingtao
@@ -50,10 +50,9 @@ public class GoldCoinDialog {
             return;
         }
         Activity context = parameter.context;
-        AbsAdCallBack advCallBack = parameter.advCallBack;
         View.OnClickListener onDoubleClickListener = parameter.onDoubleClickListener;
 
-        if (context == null || advCallBack == null || onDoubleClickListener == null || parameter.obtainCoinCount < 0) {
+        if (context == null  || onDoubleClickListener == null || parameter.obtainCoinCount < 0) {
             if (BuildConfig.DEBUG) {
                 ToastUtils.showShort("加载广告请求参数错误！！！");
             }
@@ -185,7 +184,13 @@ public class GoldCoinDialog {
             return;
         }
         playGoldCoin();
-        requestAd(context, advCallBack, parameter, mRootRL);
+
+        if (dialog != null && !context.isFinishing()) {
+            dialog.show();
+
+            MidasRequesCenter.requestAndShowAd(context,parameter.adId,new SimpleViewCallBack(mRootRL));
+        }
+
     }
 
     private static MyRunnable myRunnable = new MyRunnable();
@@ -201,24 +206,6 @@ public class GoldCoinDialog {
         public void run() {
             poolPlayer.playGoldCoin();
         }
-    }
-
-    private static void requestAd(Activity context, AbsAdCallBack callBack, GoldCoinDialogParameter coinBean, ViewGroup mRootRL) {
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(coinBean.adId).setActivity(context)
-                .setViewWidth(ScreenUtils.getScreenWidth(context) - DisplayUtil.dip2px(context, 45))
-                .setViewContainer(mRootRL).build();
-        if (dialog != null && !context.isFinishing()) {
-            dialog.show();
-            MidasRequesCenter.requestAd(params, callBack);
-        }
-     /*   //尝试预加载，丝滑般的体验...
-        MidasAdSdk.getAdsManger().askIsReady(context, coinBean.adId, new AskReadyCallBack() {
-            @Override
-            public void onReady(boolean b) {
-
-            }
-        });*/
     }
 
     public static void dismiss() {

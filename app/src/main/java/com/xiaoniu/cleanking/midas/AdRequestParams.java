@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xnad.sdk.ad.entity.AdInfo;
 
 import java.lang.ref.WeakReference;
 
@@ -84,7 +82,7 @@ public class AdRequestParams {
     private AdTemplateLoadListener mAdTemplateLoadListener;
 
 
-    private AdInfo adInfo;
+//    private AdInfo adInfo;
 
 
     private int viewWidth;
@@ -106,7 +104,7 @@ public class AdRequestParams {
         this.mAdRepeatShowListener = builder.mAdRepeatShowListener;
         this.mAdTemplateLoadListener = builder.mAdTemplateLoadListener;
         this.isSkipSwitch = builder.isSkipSwitch;
-        this.adInfo = builder.adInfo;
+//        this.adInfo = builder.adInfo;
         this.viewWidth = builder.viewWidth;
     }
 
@@ -257,7 +255,7 @@ public class AdRequestParams {
          */
         private AdTemplateLoadListener mAdTemplateLoadListener;
 
-        private AdInfo adInfo;
+//        private AdInfo adInfo;
 
         private int viewWidth;
 
@@ -348,10 +346,10 @@ public class AdRequestParams {
         }
 
 
-        public Builder setAdInfo(AdInfo a) {
-            this.adInfo = a;
-            return this;
-        }
+//        public Builder setAdInfo(AdInfo a) {
+//            this.adInfo = a;
+//            return this;
+//        }
 
 
         public Builder setViewWidth(int width){

@@ -3,12 +3,9 @@ package com.xiaoniu.cleanking.ui.newclean.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.ViewGroup;
 
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.base.AppHolder;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
-import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
@@ -18,7 +15,8 @@ import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xnad.sdk.ad.entity.AdInfo;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import java.util.HashMap;
 
@@ -84,7 +82,7 @@ public class ScratchCardAvdPresenter {
         parameter.context = activity;
         parameter.isDouble = isDouble && !isAreaOne;
         parameter.isRewardOpen = isOpenTwo();
-        parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
+//        parameter.advCallBack = new CardAdCallBack(ADV_FIRST_PREFIX);
         parameter.onDoubleClickListener = v -> handlerDoubleClick();
         parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
@@ -162,10 +160,35 @@ public class ScratchCardAvdPresenter {
             return;
         }
         pointVideo();
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(advId).setActivity(activity)
-                .setViewContainer((ViewGroup) activity.getWindow().getDecorView()).build();
-        MidasRequesCenter.requestAd(params, new CardAdCallBack(ADV_VIDEO_PREFIX));
+
+        MidasRequesCenter.requestAndShowAd(activity, advId, new AbsAdBusinessCallback() {
+            boolean videoPlayed = false;
+            @Override
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
+                handlerVideoAdvError();
+            }
+            @Override
+            public void onAdExposure(AdInfoModel adInfoModel) {
+                super.onAdExposure(adInfoModel);
+                GoldCoinDialog.dismiss();
+            }
+
+            @Override
+            public void onAdClose(AdInfoModel adInfoModel) {
+                super.onAdClose(adInfoModel);
+                if (videoPlayed) {
+                    startCoinCompletePage();
+                }
+            }
+
+            @Override
+            public void onAdVideoComplete(AdInfoModel adInfoModel) {
+                super.onAdVideoComplete(adInfoModel);
+                videoPlayed = true;
+            }
+
+        });
     }
 
     private void pointVideo() {
@@ -179,76 +202,6 @@ public class ScratchCardAvdPresenter {
         String advId = getAdvId(activity, allResourceName);
         log("================================================resNamePrefix=" + resNamePrefix + "   index=" + index + "   广告id=" + advId + "");
         return advId;
-    }
-
-    class CardAdCallBack extends CMAbsAdCallBack {
-        String resNamePrefix;
-        boolean videoPlayed = false;
-
-        public CardAdCallBack(String resNamePrefix) {
-            this.resNamePrefix = resNamePrefix;
-        }
-
-        @Override
-        public void onShowError(int i, String s) {
-            super.onShowError(i, s);
-            log("onShowError()====" + resNamePrefix + "====" + s);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    handlerVideoAdvError();
-                    break;
-            }
-        }
-
-        @Override
-        public void onAdShow(AdInfo adInfo) {
-            super.onAdShow(adInfo);
-            log("onAdShow()====" + resNamePrefix);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    GoldCoinDialog.dismiss();
-                    break;
-            }
-        }
-
-        @Override
-        public void onAdClicked(AdInfo adInfo) {
-            super.onAdClicked(adInfo);
-            log("onAdClicked()====" + resNamePrefix);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    break;
-            }
-        }
-
-        @Override
-        public void onAdClose(AdInfo adInfo) {
-            super.onAdClose(adInfo);
-            log("onAdClose()====" + resNamePrefix);
-            switch (resNamePrefix) {
-                case ADV_FIRST_PREFIX:
-
-                    break;
-                case ADV_VIDEO_PREFIX:
-                    if (videoPlayed) {
-                        startCoinCompletePage();
-                    }
-                    break;
-            }
-        }
-
-        @Override
-        public void onAdVideoComplete(AdInfo adInfo) {
-            super.onAdVideoComplete(adInfo);
-            log("onAdVideoComplete()====" + resNamePrefix);
-            videoPlayed = true;
-        }
     }
 
     /**
@@ -358,11 +311,13 @@ public class ScratchCardAvdPresenter {
         if (TextUtils.isEmpty(posId)) {
             return;
         }
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(posId)
-                .setActivity(activity)
-                .setViewWidthOffset(45)
-                .build();
-        MidasRequesCenter.preLoad(params);
+//        AdRequestParams params = new AdRequestParams.Builder()
+//                .setAdId(posId)
+//                .setActivity(activity)
+//                .setViewWidthOffset(45)
+//                .build();
+//        MidasRequesCenter.preLoad(params);
+        
+        MidasRequesCenter.preloadAd(activity,posId);
     }
 }

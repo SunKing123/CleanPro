@@ -31,7 +31,6 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.constant.Constant;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
@@ -72,8 +71,8 @@ import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -559,12 +558,11 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (!mActivity.hasWindowFocus())
             return;
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setActivity(mActivity).setAdId(appID).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+        MidasRequesCenter.requestAndShowAd(mActivity, appID, new AbsAdBusinessCallback() {
+
             @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
+            public void onAdExposure(AdInfoModel adInfoModel) {
+                super.onAdExposure(adInfoModel);
                 LogUtils.e("====首页内部插屏广告展出======");
             }
         });

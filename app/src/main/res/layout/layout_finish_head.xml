@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_finish" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/ad_container_pos01"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

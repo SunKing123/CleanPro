@@ -10,6 +10,7 @@ import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
@@ -118,6 +119,25 @@ public class AppHolder {
         return switchInfoList != null ? switchInfoList : new Gson().fromJson(MmkvUtil.getSwitchInfo(), SwitchInfoList.class);
     }
 
+    /**
+     * 获取冷热起间隔时间
+     * @return
+     */
+    public int getHotTime() {
+        int defaultTime = 2 * 60 * 1000;
+        try {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (TextUtils.equals(PositionId.HOT_CODE, switchInfo.getAdvertPosition())) {
+                        defaultTime = switchInfo.getHotStartInterval() * 60 * 1000;
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        return defaultTime;
+    }
 
     public void setBottomAdList(List<BottoomAdList.DataBean> switchInfoList) {
         this.mBottoomAdList = switchInfoList;

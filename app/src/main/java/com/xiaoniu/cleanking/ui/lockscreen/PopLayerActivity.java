@@ -4,23 +4,22 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 /**
  * @author zhengzhihao
@@ -28,13 +27,12 @@ import com.xnad.sdk.ad.listener.AbsAdCallBack;
  * @mail：zhengzhihao@hellogeek.com 弹出层Activity
  */
 public class PopLayerActivity extends AppCompatActivity implements View.OnClickListener {
-    LinearLayout adContainer;
+    FrameLayout adContainerFrameLayout;
     RelativeLayout full_screen_insert_ad_header_layout;
     //private TextView adShowTime;
    // private TextView progree_tv;
     private ImageView adClose;
     private int showTimeSecond = 3;
-    private AdInfo mAdInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +44,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_pop_layer);
         //adShowTime = findViewById(R.id.full_screen_insert_ad_show_time_txt);
-        adContainer = (LinearLayout) findViewById(R.id.ad_container);
+        adContainerFrameLayout = findViewById(R.id.pop_layer_ff);
         full_screen_insert_ad_header_layout = (RelativeLayout) findViewById(R.id.full_screen_insert_ad_header_layout);
         adClose = findViewById(R.id.full_screen_insert_ad_close);
       //  progree_tv = findViewById(R.id.progree_tv);
@@ -79,33 +77,30 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     public void adInit() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "external_advertising_page", "external_advertising_page");
-        AdRequestParams params = new AdRequestParams.Builder().setViewContainer(adContainer)
-                .setActivity(this).setViewWidthOffset(56).setAdId(MidasConstants.SCREEN_ON_ID).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+        MidasRequesCenter.requestAndShowAd(this,MidasConstants.SCREEN_ON_ID,new SimpleViewCallBack(adContainerFrameLayout){
             @Override
-            public void onReadyToShow(AdInfo adInfo) {
-                super.onReadyToShow(adInfo);
+            public void onAdLoaded(AdInfoModel adInfoModel) {
                 full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);
                 adClose.setVisibility(View.VISIBLE);
+                super.onAdLoaded(adInfoModel);
             }
 
             @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
-                mAdInfo = adInfo;
-                LogUtils.e("===========桌面弹窗展示成功");
+            public void onAdExposure(AdInfoModel adInfoModel) {
+                super.onAdExposure(adInfoModel);
+                mAdInfoModel = adInfoModel;
             }
 
             @Override
-            public void onAdClose(AdInfo adInfo) {
-                super.onAdClose(adInfo);
+            public void onAdClose(AdInfoModel adInfoModel) {
+                super.onAdClose(adInfoModel);
                 finish();
             }
 
             @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-                LogUtils.e("===========桌面弹窗展示失败：" + s);
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
+                finish();
             }
         });
 
@@ -119,10 +114,13 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         finish();
     }
 
+    private AdInfoModel mAdInfoModel;
+
     @Override
     public void onClick(View v) {
         finish();
-        if (null != mAdInfo) {
+
+        if (null != mAdInfoModel) {
             StatisticsUtils.trackClick("ad_close_click", "关闭点击", "external_advertising_page", "external_advertising_page");
         }
 

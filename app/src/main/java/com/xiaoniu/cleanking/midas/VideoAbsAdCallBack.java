@@ -1,14 +1,14 @@
 package com.xiaoniu.cleanking.midas;
 
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
 
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 /**
  * Desc:广告回调抽象类
  * Date: 2020/5/18
  */
-public abstract class VideoAbsAdCallBack extends AbsAdCallBack {
+public abstract class VideoAbsAdCallBack extends AbsAdBusinessCallback {
 
     private boolean isComplete = false;
 
@@ -17,17 +17,20 @@ public abstract class VideoAbsAdCallBack extends AbsAdCallBack {
     }
 
     @Override
-    public void onAdClose(AdInfo adInfo) {
-        super.onAdClose(adInfo);
-        onAdClose(adInfo,isComplete);
+    public void onAdClose(AdInfoModel adInfoModel) {
+        super.onAdClose(adInfoModel);
+        onAdClose(adInfoModel,isComplete);
     }
+
     @Override
-    public void onAdVideoComplete(AdInfo adInfo) {
-        super.onAdVideoComplete(adInfo);
+    public void onAdVideoComplete(AdInfoModel adInfoModel) {
+        super.onAdVideoComplete(adInfoModel);
         isComplete = true;
     }
 
-    public void onAdClose(AdInfo adInfo, boolean isComplete) {
+    public void onAdClose(AdInfoModel adInfo, boolean isComplete) {
 
     }
+
+
 }
