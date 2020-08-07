@@ -31,6 +31,7 @@ public interface NewCleanFinishPlusContract {
         fun loadOneAdv(advContainer: FrameLayout)
         fun loadTwoAdv(advContainer: FrameLayout)
         fun addDoubleGoldCoin(bubbleCollected: BubbleCollected)
+        fun loadVideoAdv(bubbleCollected: BubbleCollected)
         fun onPostResume()
         fun onPause()
     }

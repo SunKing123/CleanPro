@@ -77,8 +77,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         mPresenter.loadRecommendData()
     }
 
-
-
     private fun loadAdv(){
         mPresenter.loadOneAdv(FrameLayout(this))
         mPresenter.loadTwoAdv(FrameLayout(this))
@@ -87,6 +85,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     private fun initHeadView(){
         left_title.text = titleName
         left_title.setOnClickListener {
+            pointer.returnPoint()
             onBackPressed()
         }
         when (titleName) {
@@ -221,43 +220,17 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN
         bean.context = this
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
-//        bean.advCallBack = object : AbsAdCallBack() {}
-        bean.closeClickListener = View.OnClickListener { view: View? -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson()) }
+        bean.closeClickListener = View.OnClickListener { view: View? ->pointer.goldCoinClose()}
         bean.onDoubleClickListener = View.OnClickListener { v: View? ->
             if (AndroidUtil.isFastDoubleBtnClick(1000)) {
                 return@OnClickListener
             }
-            StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson())
-            StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap())
-            val viewGroup = getWindow().getDecorView() as ViewGroup
-            val params = AdRequestParams.Builder().setActivity(this).setViewContainer(viewGroup).setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build()
-
-            MidasRequesCenter.requestAndShowAd(this,MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON,object : VideoAbsAdCallBack(){
-                override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
-                    super.onAdLoadError(errorCode, errorMsg)
-                    ToastUtils.showLong("网络异常")
-                    GoldCoinDialog.dismiss()
-                }
-
-                override fun onAdClose(adInfo: AdInfoModel?, isComplete: Boolean) {
-                    super.onAdClose(adInfo, isComplete)
-                    StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop_up_window_incentive_video_page", getStatisticsJson())
-                    if (isComplete) {
-                        //播放完成的话去翻倍
-                        mPresenter.addDoubleGoldCoin(bubbleCollected)
-                    } else {
-                        //没有播放完成就关闭广告的话把弹窗关掉
-                        GoldCoinDialog.dismiss()
-                    }
-                }
-
-                override fun onAdVideoComplete(adInfoModel: AdInfoModel?) {
-                    super.onAdVideoComplete(adInfoModel)
-                }
-            })
+            pointer.goldCoinDoubleClick()
+            pointer.goldCoinRequestAdv2()
+            mPresenter.loadVideoAdv(bubbleCollected)
         }
-        StatisticsUtils.customTrackEvent("success_page_gold_coin_pop_up_window_custom", "功能完成页金币领取弹窗曝光", "", "success_page_gold_coin_pop_up_window")
-        StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页金币领取弹窗上广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap())
+        pointer.goldCoinDialogExposure()
+        pointer.goldCoinRequestAdv1()
         GoldCoinDialog.showGoldCoinDialog(bean)
     }
 
@@ -293,9 +266,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onPostResume() {
         super.onPostResume()
-
-        pointer.exposurePoint()
         mPresenter.onPostResume()
+        pointer.exposurePoint()
     }
 
     override fun onPause() {
