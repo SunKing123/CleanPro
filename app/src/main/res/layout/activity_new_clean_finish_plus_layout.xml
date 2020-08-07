@@ -65,7 +65,8 @@
 
     </LinearLayout>
 
-    <include layout="@layout/item_finish_layout" />
+    <include
+        layout="@layout/item_finish_layout" />
 
     <FrameLayout
         android:id="@+id/ad_container_1"
