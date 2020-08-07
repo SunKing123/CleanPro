@@ -222,7 +222,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     fun onRecommendViewClick(title: String) {
         pointer.recommendClickPoint(title)
         when (title) {
-            "一键清理" -> startClean()
+            "垃圾文件太多" -> startClean()
             "一键加速" -> startAcc()
             "病毒查杀" -> startVirus()
             "超强省电" -> startPower()
