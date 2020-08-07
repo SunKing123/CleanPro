@@ -2,40 +2,25 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
-import com.google.gson.Gson;
-import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.constant.Constant;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -44,10 +29,8 @@ import com.xiaoniu.cleanking.ui.main.presenter.SplashPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.dialog.LaunchPermissionRemindDialog;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
-import com.xiaoniu.cleanking.ui.usercenter.activity.UserLoadH5Activity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PhoneInfoUtils;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
@@ -57,15 +40,13 @@ import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -74,19 +55,7 @@ import io.reactivex.disposables.Disposable;
  * 冷启动开屏页面
  * <p>
  */
-public class SplashADActivity extends BaseActivity<SplashPresenter> implements View.OnClickListener {
-    @BindView(R.id.v_start)
-    View mStartView;
-    @BindView(R.id.v_content)
-    View mContentView;
-    @BindView(R.id.tv_delete)
-    TextView mBtn;
-    @BindView(R.id.tv_qx)
-    TextView mAgreement;
-    @BindView(R.id.tv_xy)
-    TextView tv_xy;
-    @BindView(R.id.error_ad_iv)
-    ImageView mErrorAdIv;
+public class SplashADActivity extends BaseActivity<SplashPresenter> {
     @Inject
     NoClearSPHelper mSPHelper;
     private ViewGroup container;
@@ -134,9 +103,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     protected void initView() {
         StatusBarUtil.setTransparentForWindow(this);
         container = this.findViewById(R.id.splash_container);
-        mBtn.setOnClickListener(this);
-        mAgreement.setOnClickListener(this);
-        tv_xy.setOnClickListener(this);
         mPresenter.spDataInit();
         initNiuData();
         if (!PreferenceUtil.isNotFirstOpenApp()) {//第一次冷启动
@@ -325,33 +291,27 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
     private void initGeekSdkAD() {
         StatisticsUtils.customTrackEvent("ad_request_sdk", "冷启动页广告发起请求", "clod_page", "clod_page");
 
-        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
-                .setActivity(this).setViewContainer(container).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+        MidasRequesCenter.requestAndShowAd(this, MidasConstants.SP_CODE_START_ID, new AbsAdBusinessCallback() {
             @Override
-            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdLoadSuccess(adInfo);
+            public void onAdLoaded(AdInfoModel adInfoModel) {
+                super.onAdLoaded(adInfoModel);
+                if (adInfoModel.view!= null && adInfoModel.view.getParent() == null){
+                    container.addView(adInfoModel.view);
+                }
             }
 
             @Override
-            public void onShowError(int i, String s) {
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
                 jumpActivity();
             }
 
             @Override
-            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdShow(adInfo);
-            }
-
-//            @Override
-//            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-//                jumpActivity();
-//            }
-
-            @Override
-            public void onAdClose(AdInfo adInfo) {
+            public void onAdClose(AdInfoModel adInfoModel) {
+                super.onAdClose(adInfoModel);
                 jumpActivity();
             }
+
         });
 
     }
@@ -365,42 +325,6 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> implements V
                 jumpActivity();
                 break;
         }
-    }
-
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_delete:
-                PreferenceUtil.saveFirstOpenApp();
-                startActivity(MainActivity.class);
-                finish();
-                break;
-            case R.id.tv_qx:
-                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/agree.html", "隐私政策");
-                } else {
-                    jumpXieyiActivity(H5Urls.PRIVACY_CLAUSE_URL, "隐私政策");
-                }
-                StatisticsUtils.trackClick("Service_agreement_click", "隐私政策", "mine_page", "about_page");
-                break;
-            case R.id.tv_xy:
-                if (NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO) {
-                    jumpXieyiActivity("file:///android_asset/userAgreement.html", "用户协议");
-                } else {
-                    jumpXieyiActivity(H5Urls.USER_AGREEMENT_URL, "用户协议");
-                }
-                StatisticsUtils.trackClick("Service_agreement_click", "用户协议", "mine_page", "about_page");
-                break;
-        }
-    }
-
-    public void jumpXieyiActivity(String url, String title) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constant.URL, url);
-        bundle.putString(Constant.Title, title);
-        bundle.putBoolean(Constant.NoTitle, false);
-        startActivity(UserLoadH5Activity.class, bundle);
     }
 
     /**

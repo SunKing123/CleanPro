@@ -10,23 +10,27 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.comm.jksdk.utils.DisplayUtil;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
-import com.xiaoniu.cleanking.midas.MidasConstants;
-import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
+import com.xiaoniu.cleanking.midas.MidasConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
@@ -45,7 +49,8 @@ import com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,15 +61,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * 锁屏信息流广告页面
  */
 public class LockActivity extends AppCompatActivity implements View.OnClickListener {
     private TouchToUnLockView mUnlockView;
-    private RelativeLayout relAd;
+    private FrameLayout lockAdFrameLayout;
     private TextView mLockTime, mLockDate, tv_weather_temp;
     private RelativeLayout rel_clean_file, rel_clean_ram, rel_clean_virus, rel_interactive;
     private ImageView iv_file_btn, iv_ram_btn, iv_virus_btn, mErrorAdIv, iv_interactive;
@@ -140,7 +142,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mLockDate = ViewUtils.get(this, R.id.lock_date_txt);
         mUnlockView = ViewUtils.get(this, R.id.lock_unlock_view);
         linAdLayout = ViewUtils.get(this, R.id.lock_ad_container);
-        relAd = ViewUtils.get(this, R.id.rel_ad);
+        lockAdFrameLayout = ViewUtils.get(this, R.id.f_ad_container);
 
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
@@ -566,43 +568,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         mLastTime = SystemClock.elapsedRealtime();
 
         StatisticsUtils.customTrackEvent("ad_request_sdk", "锁屏页广告发起请求", "lock_screen_page", "lock_screen_page");
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(MidasConstants.LOCK_PAGE_FEED_ID)
-                .setActivity(this)
-                .setViewWidth(DisplayUtil.getScreenWidth(LockActivity.this) - DisplayUtil.dip2px(LockActivity.this, 28))//设置宽度；
-                .setViewContainer(relAd)
-                .build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdLoadSuccess(adInfo);
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
-            }
 
-            @Override
-            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
-
-            }
-
-            @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-
-            }
-
-            @Override
-            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdShow(adInfo);
-            }
-
-            @Override
-            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-            }
-
-
-        });
+        MidasRequesCenter.requestAndShowAd(this, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(lockAdFrameLayout));
 
     }
 }

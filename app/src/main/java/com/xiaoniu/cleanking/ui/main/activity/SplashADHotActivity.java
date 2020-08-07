@@ -11,7 +11,6 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.bean.HotStartAction;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList;
@@ -25,8 +24,8 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -137,38 +136,30 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
     private void initGeekSdkAD() {
 
         StatisticsUtils.customTrackEvent("ad_request_sdk", "热启动页广告发起请求", "hot_page", "hot_page");
-        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.SP_CODE_START_ID)
-                .setActivity(this).setViewContainer(container).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
+
+        MidasRequesCenter.requestAndShowAd(this, MidasConstants.SP_CODE_START_ID, new AbsAdBusinessCallback() {
             @Override
-            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
+            public void onAdLoaded(AdInfoModel adInfoModel) {
+                super.onAdLoaded(adInfoModel);
+                if (adInfoModel.view!= null && adInfoModel.view.getParent() == null){
+                    container.addView(adInfoModel.view);
+                }
+            }
+
+            @Override
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
                 jumpActivity();
             }
 
             @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-                jumpActivity();
-            }
-
-            @Override
-            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdShow(adInfo);
-            }
-
-            @Override
-            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-            }
-
-            @Override
-            public void onAdClose(AdInfo adInfo) {
-                super.onAdClose(adInfo);
+            public void onAdClose(AdInfoModel adInfoModel) {
+                super.onAdClose(adInfoModel);
                 jumpActivity();
             }
 
         });
+
     }
 
 

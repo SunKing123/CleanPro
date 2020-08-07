@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
 
 /**
  * Created by zhaoyingtao
@@ -36,5 +36,5 @@ public class GoldCoinDialogParameter {
     //金币框消息回调
     public DialogInterface.OnDismissListener dismissListener;
     //广告回调
-    public AbsAdCallBack advCallBack;
+    public AbsAdBusinessCallback advCallBack;
 }

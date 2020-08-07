@@ -12,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.comm.jksdk.utils.DisplayUtil;
 import com.google.gson.Gson;
 import com.jess.arms.base.BaseActivity;
@@ -23,6 +26,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.main.bean.WeatherForecastResponseEntity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.weather.contract.WeatherForecastContract;
@@ -31,17 +35,13 @@ import com.xiaoniu.cleanking.ui.weather.presenter.WeatherForecastPresenter;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import org.song.videoplayer.IVideoPlayer;
 import org.song.videoplayer.JKQSVideoView;
 import org.song.videoplayer.PlayListener;
 import org.song.videoplayer.media.AndroidMedia;
+
+import butterknife.BindView;
 
 import static com.jess.arms.utils.Preconditions.checkNotNull;
 
@@ -64,8 +64,8 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
     JKQSVideoView qsVideoview;
     @BindView(R.id.tv_weather_forecast_publish_time)
     TextView tvWeatherForecastPublishTime;
-    @BindView(R.id.rel_root_ad)
-    RelativeLayout relRootAd;
+    @BindView(R.id.weather_forecast_ad_fl)
+    FrameLayout weatherAdFl;
 
     private static final String weatherForecastResponseEntityKey = "WeatherForecastResponseEntity";
     private static final String weatherForecastPublishTimeKey = "WeatherForecastPublishTime";
@@ -252,19 +252,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
         if(AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WEATHER_VIDEO_PAGE,PositionId.DRAW_ONE_CODE)){
 
             StatisticsUtils.customTrackEvent("ad_request_sdk", "天气预报详情页广告发起请求", "home_page", "weather_forecast_page");
-            AdRequestParams params=new AdRequestParams.Builder().setAdId(MidasConstants.WEATHER_VIDEO_PAGE_BELOW)
-                    .setActivity(this).setViewContainer(relRootAd).build();
-            MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-                @Override
-                public void onAdError(AdInfo adInfo, int i, String s) {
-                    super.onAdError(adInfo, i, s);
-                }
-
-                @Override
-                public void onShowError(int i, String s) {
-                    super.onShowError(i, s);
-                }
-            });
+            MidasRequesCenter.requestAndShowAd(this,MidasConstants.WEATHER_VIDEO_PAGE_BELOW,new SimpleViewCallBack(weatherAdFl));
         }
 
     }

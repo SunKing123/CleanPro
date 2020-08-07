@@ -12,7 +12,7 @@ import com.xiaoniu.cleanking.R;
 /**
  * 首页第一次引导
  */
-public class FingerComponent implements Component {
+public class FingerGuideComponent implements Component {
 
     @Override
     public View getView(LayoutInflater inflater) {
@@ -39,4 +39,6 @@ public class FingerComponent implements Component {
     public int getYOffset() {
         return -30;
     }
+
+
 }

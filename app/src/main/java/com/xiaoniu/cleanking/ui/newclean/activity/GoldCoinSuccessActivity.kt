@@ -12,6 +12,7 @@ import android.widget.Toast
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.mvp.BaseActivity
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel
 import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider
@@ -20,10 +21,9 @@ import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
-import com.xnad.sdk.ad.entity.AdInfo
-import com.xnad.sdk.ad.listener.AbsAdCallBack
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
+import com.xiaoniu.unitionadbase.model.AdInfoModel
 import kotlinx.android.synthetic.main.activity_gold_coin_success.*
-import java.lang.Exception
 
 
 /**
@@ -85,17 +85,34 @@ class GoldCoinSuccessActivity : BaseActivity() {
                     .setViewWidthOffset(45)
                     .build()
             adRequestPoint()
-            MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
-                override fun onAdClose(p0: AdInfo?) {
-                    super.onAdClose(p0)
+
+//            MidasRequesCenter.requestAd()
+
+
+            MidasRequesCenter.requestAndShowAd(this, model.adId, object : SimpleViewCallBack(ad_frameLayout){
+
+                override fun onAdClose(adInfoModel: AdInfoModel?) {
+                    super.onAdClose(adInfoModel)
                     loadAd()
                 }
 
-                override fun onAdError(p0: AdInfo?, p1: Int, p2: String?) {
-                    super.onAdError(p0, p1, p2)
-                    LogUtils.d("=====================goldCoinSuccess onAdError()" + p2)
+                override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
+                    super.onAdLoadError(errorCode, errorMsg)
+                    LogUtils.d("=====================goldCoinSuccess onAdError()" + errorMsg)
                 }
             })
+
+//            MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
+//                override fun onAdClose(p0: AdInfo?) {
+//                    super.onAdClose(p0)
+//                    loadAd()
+//                }
+//
+//                override fun onAdError(p0: AdInfo?, p1: Int, p2: String?) {
+//                    super.onAdError(p0, p1, p2)
+//                    LogUtils.d("=====================goldCoinSuccess onAdError()" + p2)
+//                }
+//            })
         }
     }
 

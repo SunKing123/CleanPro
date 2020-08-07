@@ -27,7 +27,6 @@ import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber;
 import com.xiaoniu.cleanking.utils.net.Common4Subscriber;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
@@ -35,8 +34,8 @@ import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -250,14 +249,8 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             return;
         }
         StatisticsUtils.customTrackEvent("ad_request_sdk_4", "功能完成页广告位4发起请求", "", "success_page");
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setActivity(mActivity).setAdId(MidasConstants.FINISH_INSIDE_SCREEN_ID).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
-                LogUtils.e("====完成页内部插屏广告展出======");
-            }
+
+        MidasRequesCenter.requestAndShowAd(mActivity, MidasConstants.FINISH_INSIDE_SCREEN_ID, new AbsAdBusinessCallback() {
         });
     }
 
@@ -289,7 +282,7 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN;
         bean.context = mActivity;
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO);
-        bean.advCallBack = new AbsAdCallBack() {
+        bean.advCallBack = new AbsAdBusinessCallback() {
 
         };
         bean.closeClickListener = view -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
@@ -299,28 +292,17 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
             }
             StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson());
             StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap());
-            ViewGroup viewGroup = (ViewGroup) mView.getWindow().getDecorView();
-            AdRequestParams params = new AdRequestParams.Builder().
-                    setActivity(mActivity).
-                    setViewContainer(viewGroup).
-                    setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build();
-            MidasRequesCenter.requestAd(params, new VideoAbsAdCallBack() {
+
+            MidasRequesCenter.requestAndShowAd(mActivity, MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON, new VideoAbsAdCallBack() {
                 @Override
-                public void onShowError(int i, String s) {
-                    super.onShowError(i, s);
+                public void onAdLoadError(String errorCode, String errorMsg) {
+                    super.onAdLoadError(errorCode, errorMsg);
                     ToastUtils.showLong("网络异常");
                     GoldCoinDialog.dismiss();
                 }
 
                 @Override
-                public void onAdError(AdInfo adInfo, int i, String s) {
-                    super.onAdError(adInfo, i, s);
-                    ToastUtils.showLong("网络异常");
-                    GoldCoinDialog.dismiss();
-                }
-
-                @Override
-                public void onAdClose(AdInfo adInfo, boolean isComplete) {
+                public void onAdClose(AdInfoModel adInfo, boolean isComplete) {
                     super.onAdClose(adInfo, isComplete);
                     StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop_up_window_incentive_video_page", getStatisticsJson());
                     if (isComplete) {
@@ -330,12 +312,6 @@ public class CleanFinishPresenter extends RxPresenter<NewCleanFinishActivity, Ma
                         //没有播放完成就关闭广告的话把弹窗关掉
                         GoldCoinDialog.dismiss();
                     }
-                }
-
-
-                @Override
-                public void onAdVideoComplete(AdInfo adInfo) {
-                    super.onAdVideoComplete(adInfo);
                 }
             });
         };

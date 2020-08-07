@@ -536,7 +536,7 @@
         android:background="@drawable/bg_recommend"
         android:visibility="gone" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/ad_container_pos02"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
