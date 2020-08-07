@@ -33,7 +33,7 @@ import javax.inject.Inject
  * Created by xinxiaolong on 2020/8/5.
  * email：xinxiaolong123@foxmail.com
  */
-public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPresenter<NewCleanFinishPlusActivity,MainModel> {
+public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPresenter<NewCleanFinishPlusActivity, MainModel> {
 
     @JvmField
     @Inject
@@ -46,7 +46,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     private var isFirst = true
 
     @Inject
-    public constructor(){
+    public constructor() {
 
     }
 
@@ -92,11 +92,13 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载弹框
      */
     private fun loadPopView() {
-        val config: InsertAdSwitchInfoList.DataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
-        if (config?.isOpen) {
-            loadInsideScreenDialog()
-        } else {
-            loadGoldCoinDialog()
+        val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
+        config?.let {
+            if (it.isOpen) {
+                loadInsideScreenDialog()
+            } else {
+                loadGoldCoinDialog()
+            }
         }
     }
 
@@ -121,7 +123,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         })
     }
 
-    fun loadGoldCoinDialog(){
+    fun loadGoldCoinDialog() {
         getGoldCoin()
     }
 
@@ -162,6 +164,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 ToastUtils.showShort(message)
             }
+
             override fun getData(bubbleConfig: BubbleConfig?) {
                 if (bubbleConfig != null && bubbleConfig.data.size > 0) {
                     for (item in bubbleConfig.data) {
