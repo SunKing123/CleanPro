@@ -10,17 +10,12 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.constant.RouteConstants
-import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasConstants
-import com.xiaoniu.cleanking.midas.MidasRequesCenter
-import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemModel
@@ -40,10 +35,7 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.AndroidUtil
 import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
-import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
-import com.xiaoniu.common.utils.ToastUtils
-import com.xiaoniu.unitionadbase.model.AdInfoModel
 import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -160,7 +152,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         val subSpannableString = SpannableString(subContent)
         subSpannableString.setSpan(styleSpan, 0, subContent.indexOf("s"), Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         function_sub_title.text = subSpannableString
-
     }
 
     //通知栏清理
@@ -223,7 +214,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         pointer.recommendClickPoint(title)
         when (title) {
             "垃圾文件太多" -> startClean()
-            "一键加速" -> startAcc()
+            "手机加速" -> startAcc()
             "病毒查杀" -> startVirus()
             "超强省电" -> startPower()
             "微信专清" -> startWxClean()
