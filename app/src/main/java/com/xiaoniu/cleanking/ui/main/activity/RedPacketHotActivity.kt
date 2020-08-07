@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.main.activity
 import android.content.Intent
 import android.os.Build
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import com.geek.webpage.eventbus.BaseEventBus
 import com.geek.webpage.eventbus.BaseEventBusConstant
@@ -55,12 +54,14 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
      */
     private fun showRedPacket() {
         if (AppHolder.getInstance() == null || AppHolder.getInstance().popupDataEntity == null) {
+            finish()
             return
         }
         val redPacketData = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().popupDataEntity, PopupWindowType.POPUP_RED_PACKET)
-
-        if (null == redPacketData || null == redPacketData.imgUrls || redPacketData.imgUrls.size <= 0)
+        if (null == redPacketData || null == redPacketData.imgUrls || redPacketData.imgUrls.size <= 0) {
+            finish()
             return
+        }
         if (redPacketData.showType == 1) { //循环
             if (PreferenceUtil.getRedPacketShowTrigger() != redPacketData.trigger) {
                 PreferenceUtil.saveRedPacketForCount(0)
@@ -79,9 +80,11 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
                 mCount = Random().nextInt(redPacketData.imgUrls.size - 1)
             }
         }
+        mCount = 1
         if (!isFinishing()) {
 //            preloadingSplashAd(this, PositionId.AD_RED_PACKET, getString(R.string.redpack))
             NiuDataAPI.onPageStart("red_envelopes_page_view_page", "红包弹窗浏览")
+            //val url="https://wkqlapph5.wukongclean.com/popBox.html?url=https://getvideo-test.oss-cn-shanghai.aliyuncs.com/clean/banner/image/6fa19961d83d4a199e52383576c22003.png"
             WebDialogManager.getInstance().showWebDialog(this, this, redPacketData.htmlUrl + redPacketData.imgUrls[mCount])
             WebDialogManager.getInstance().setFinishInterface(this)
         }
@@ -135,7 +138,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         val viewGroup: ViewGroup = window.decorView as ViewGroup
 //        val params = AdRequestParams.Builder().setAdId(MidasConstants.RED_PACKET)
 //                .setViewContainer(viewGroup).setActivity(this).build()
-        MidasRequesCenter.requestAndShowAd(this,MidasConstants.RED_PACKET,object : AbsAdBusinessCallback(){})
+        MidasRequesCenter.requestAndShowAd(this, MidasConstants.RED_PACKET, object : AbsAdBusinessCallback() {})
     }
 
     private fun showWebView() {
