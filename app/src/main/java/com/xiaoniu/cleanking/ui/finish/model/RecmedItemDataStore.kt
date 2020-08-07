@@ -36,6 +36,10 @@ public class RecmedItemDataStore {
 
     }
 
+    fun resetIndex(){
+        modelIndex=-1
+    }
+
     fun popModel(): RecmedItemModel? {
         modelIndex++;
         if (modelIndex >= itemArray.size) {

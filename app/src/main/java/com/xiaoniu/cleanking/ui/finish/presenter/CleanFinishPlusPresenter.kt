@@ -77,6 +77,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 装载推荐功能布局
      */
      override fun loadRecommendData() {
+        itemDataStore.resetIndex()
+
         var firstModel: RecmedItemModel? = itemDataStore.popModel()
 
         if (firstModel != null) {
