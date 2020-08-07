@@ -27,6 +27,7 @@ public interface NewCleanFinishPlusContract {
 
     interface CleanFinishPresenter<T : BaseView, V : BaseModel> : com.xiaoniu.cleanking.base.BasePresenter<T,V> {
         fun onCreate()
+        fun loadRecommendData()
         fun loadOneAdv(advContainer: FrameLayout)
         fun loadTwoAdv(advContainer: FrameLayout)
         fun addDoubleGoldCoin(bubbleCollected: BubbleCollected)

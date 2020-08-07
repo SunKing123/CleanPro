@@ -56,6 +56,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     var titleName:String=""
     lateinit var pointer:CleanFinishPointer
+
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
     }
@@ -65,16 +66,25 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     }
 
     override fun initView() {
+        StatusBarUtil.setTransparentForWindow(this)
         titleName= intent.getStringExtra("title")
         pointer= CleanFinishPointer(titleName)
-        initHeadView()
         mPresenter.attachView(this)
         mPresenter.onCreate()
-        //todo 这里替换成广告位容器布局
+
+        loadAdv()
+        initHeadView()
+        mPresenter.loadRecommendData()
+    }
+
+
+
+    private fun loadAdv(){
         mPresenter.loadOneAdv(FrameLayout(this))
         mPresenter.loadTwoAdv(FrameLayout(this))
+    }
 
-        titleName = "手机清理"
+    private fun initHeadView(){
         left_title.text = titleName
         left_title.setOnClickListener {
             onBackPressed()
@@ -91,6 +101,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
             "手机清理" -> showPhoneClear()
         }
     }
+
 
     //建议清理
     private fun showSuggestClearView(num: String, unit: String) {
@@ -363,9 +374,5 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         intent.putExtra("type", "huodong")
         startActivity(intent)
         finish()
-    }
-
-    private fun initHeadView(){
-
     }
 }

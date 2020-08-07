@@ -54,7 +54,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     override fun onCreate() {
         loadAdSwitch()
-        loadRecommendView()
     }
 
     override fun attachView(view: NewCleanFinishPlusActivity) {
@@ -73,7 +72,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     /**
      * 装载推荐功能布局
      */
-    private fun loadRecommendView() {
+     override fun loadRecommendData() {
         var firstModel: RecmedItemModel? = itemDataStore.popModel()
 
         if (firstModel != null) {
