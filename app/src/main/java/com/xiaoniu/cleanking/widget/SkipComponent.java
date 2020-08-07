@@ -19,9 +19,13 @@ import com.xiaoniu.common.utils.DisplayUtils;
  */
 public class SkipComponent implements Component {
     private View.OnClickListener mClickListener;
+    private int xoffset = 0;
+    private int yoffset = 0;
 
-    public SkipComponent(View.OnClickListener clickListener) {
+    public SkipComponent(int xOff,int yOff,View.OnClickListener clickListener) {
         mClickListener = clickListener;
+        xoffset = xOff;
+        yoffset = yOff;
     }
 
     @Override
@@ -31,7 +35,7 @@ public class SkipComponent implements Component {
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setLayoutParams(param);
         TextView textView = new TextView(inflater.getContext());
-        textView.setText("跳过");
+        textView.setText(inflater.getContext().getString(R.string.click_to_skip));
         textView.setTextColor(inflater.getContext().getResources().getColor(R.color.white));
         textView.setTextSize(17);
         ll.removeAllViews();
@@ -54,11 +58,11 @@ public class SkipComponent implements Component {
 
     @Override
     public int getXOffset() {
-        return  DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenWidth() * 0.06f);
+        return this.xoffset;
     }
 
     @Override
     public int getYOffset() {
-        return - DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenHeight() * 0.06f);
+        return this.yoffset;
     }
 }

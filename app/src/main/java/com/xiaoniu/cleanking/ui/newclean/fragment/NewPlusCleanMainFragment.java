@@ -114,6 +114,8 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPresenter> implements IBullClickListener, FragmentOnFocusListenable {
     @BindView(R.id.view_lottie_top)
     OneKeyCircleBtnView view_lottie_top;
+    @BindView(R.id.rtbotm)
+    LuckBubbleView rtBottom;
     @BindView(R.id.home_main_table)
     HomeMainTableView homeMainTableView;
     @BindView(R.id.home_tool_table)
@@ -204,7 +206,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         //暂时不需要展示新手引导
 //        showGuideView();
-        mPresenter.showGuideView(1,view_lottie_top);
+//        mPresenter.showGuideView(2,rtBottom);
 
     }
 

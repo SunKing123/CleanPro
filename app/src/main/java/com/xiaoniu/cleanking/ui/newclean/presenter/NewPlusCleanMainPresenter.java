@@ -19,6 +19,7 @@ import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
@@ -59,8 +60,10 @@ import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
-import com.xiaoniu.cleanking.widget.FingerComponent;
+import com.xiaoniu.cleanking.widget.FingerGuideComponent;
+import com.xiaoniu.cleanking.widget.GoldGuideComponent;
 import com.xiaoniu.cleanking.widget.SkipComponent;
+import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -86,7 +89,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-//import com.tbruyelle.rxpermissions2.RxPermissions;
 
 public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragment, NewScanModel> {
     private Guide guide;
@@ -872,15 +874,18 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             }
                         });
 
-                        builder.addComponent(new FingerComponent());
-                        builder.addComponent(new SkipComponent(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (null != guide) {
-                                    guide.dismiss();
-                                }
-                            }
-                        }));
+                        builder.addComponent(new FingerGuideComponent());
+                        builder.addComponent(new SkipComponent(
+                                DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenWidth() * 0.06f),
+                                -DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenHeight() * 0.07f),
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (null != guide) {
+                                            guide.dismiss();
+                                        }
+                                    }
+                                }));
                         guide = builder.createGuide();
                         guide.show(mView.getActivity());
 
@@ -889,6 +894,41 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
                 break;
             case 2:
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GuideBuilder builder = new GuideBuilder();
+                        builder.setTargetView(view)
+                                .setAlpha(150)
+                                .setOverlayTarget(true);
+                        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+                            @Override
+                            public void onShown() {
+                            }
+
+                            @Override
+                            public void onDismiss() {
+
+                            }
+                        });
+
+                        builder.addComponent(new GoldGuideComponent());
+                        builder.addComponent(new SkipComponent(
+                                0,
+                                -150,
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (null != guide) {
+                                            guide.dismiss();
+                                        }
+                                    }
+                                }));
+                        guide = builder.createGuide();
+                        guide.show(mView.getActivity());
+
+                    }
+                });
                 break;
             case 3:
                 break;
