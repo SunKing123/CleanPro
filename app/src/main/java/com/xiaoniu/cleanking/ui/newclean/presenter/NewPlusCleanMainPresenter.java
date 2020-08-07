@@ -60,6 +60,7 @@ import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.FingerComponent;
+import com.xiaoniu.cleanking.widget.SkipComponent;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -88,7 +89,7 @@ import io.reactivex.schedulers.Schedulers;
 //import com.tbruyelle.rxpermissions2.RxPermissions;
 
 public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragment, NewScanModel> {
-
+    private Guide guide;
     private FileQueryUtils mFileQueryUtils;
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
@@ -239,7 +240,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
      */
     private boolean hasPermissionDeniedForever() {
         boolean hasDeniedForever = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M&&mView!=null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mView != null) {
             if (mView.getActivity().shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 hasDeniedForever = true;
             }
@@ -680,7 +681,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             @Override
             public void getData(BubbleDouble bubbleDouble) {
                 RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
-                mView.bubbleDoubleSuccess(bubbleDouble, locationNum,1);
+                mView.bubbleDoubleSuccess(bubbleDouble, locationNum, 1);
             }
 
             @Override
@@ -848,7 +849,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     public void showGuideView(int times, View view) {
         LogUtils.d("zz--showGuideView()--" + times);
-        switch (times){
+        switch (times) {
             case 1:
                 view.post(new Runnable() {
                     @Override
@@ -870,10 +871,19 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
                             }
                         });
-                        builder.addComponent(new FingerComponent());
 
-                        Guide guide = builder.createGuide();
+                        builder.addComponent(new FingerComponent());
+                        builder.addComponent(new SkipComponent(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (null != guide) {
+                                    guide.dismiss();
+                                }
+                            }
+                        }));
+                        guide = builder.createGuide();
                         guide.show(mView.getActivity());
+
                     }
                 });
 
