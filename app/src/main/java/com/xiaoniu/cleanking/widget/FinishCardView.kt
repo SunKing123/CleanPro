@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.widget
 
 import android.content.Context
+import android.text.SpannableString
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -46,17 +47,15 @@ class FinishCardView(context: Context, attributeSet: AttributeSet) : LinearLayou
         mImageLabel.visibility = View.GONE
     }
 
-
-    fun setSubTitle1(text: String) {
+    fun setSubTitle1(text: SpannableString) {
         mSubText1.text = text
     }
 
-    fun setSubTitle2(text: String) {
+    fun setSubTitle2(text: SpannableString) {
         mSubText2.text = text
     }
 
-
-    fun getButton(): AppCompatTextView {
-        return mButton
+    fun setButtonText(text: String) {
+        mButton.text = text
     }
 }

@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.AndroidUtil
+import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
@@ -94,7 +95,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
             onBackPressed()
         }
         when (titleName) {
-            "建议清理","立即清理","一键清理" -> showSuggestClearView("886", "MB")
+            "建议清理", "立即清理", "一键清理" -> showSuggestClearView("886", "MB")
             "一键加速" -> show0neKeySpeedUp("24")
             "病毒查杀" -> showKillVirusView()
             "超强省电" -> showPowerSaving()
@@ -196,14 +197,39 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
      * 显示第一个推荐功能视图
      */
     override fun visibleRecommendViewFirst(item: RecmedItemModel) {
-
+        setRecommendViewData(card_1, item)
     }
 
     /**
      * 显示第二个推荐功能视图
      */
     override fun visibleRecommendViewSecond(item: RecmedItemModel) {
+        setRecommendViewData(card_2, item)
+    }
 
+    fun setRecommendViewData(view: FinishCardView, item: RecmedItemModel) {
+        view.visibility = View.VISIBLE
+        view.setImage(item.imageIcon)
+        view.setLeftTitle(item.title)
+        view.setSubTitle1(item.content1)
+        view.setSubTitle2(item.content2)
+        view.setButtonText(item.buttonText)
+        view.setImageLabelHide()
+
+        view.setOnClickListener({onRecommendViewClick(item.title) })
+    }
+
+    fun onRecommendViewClick(title: String) {
+        pointer.recommendClickPoint(title)
+        when (title) {
+            "一键清理" -> startClean()
+            "一键加速" -> startAcc()
+            "病毒查杀" -> startVirus()
+            "超强省电" -> startPower()
+            "微信专清" -> startWxClean()
+            "手机降温" -> startCool()
+            "通知栏清理" -> startNotify()
+        }
     }
 
     /**

@@ -45,8 +45,8 @@ public class CleanFinishPointer {
             "手机降温" -> {
                 point = Points.CleanFinish.Cool()
             }
-            "游戏加速" -> {
-
+            else ->{
+                point = Points.CleanFinish.Acc()
             }
         }
     }
