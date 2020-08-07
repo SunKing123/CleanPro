@@ -1,6 +1,9 @@
 package com.xiaoniu.cleanking.ui.finish
 
 import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.view.KeyEvent
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
@@ -13,17 +16,27 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
+import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
+import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemModel
 import com.xiaoniu.cleanking.ui.finish.presenter.CleanFinishPlusPresenter
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity
+import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
+import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected
 import com.xiaoniu.cleanking.ui.main.config.PositionId
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
+import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
+import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity
+import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.AndroidUtil
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -41,7 +54,8 @@ import java.util.*
  */
 public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
 
-    var titleName: String = ""
+    var titleName:String=""
+    lateinit var pointer:CleanFinishPointer
 
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
@@ -53,14 +67,24 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun initView() {
         StatusBarUtil.setTransparentForWindow(this)
-        titleName = intent.getStringExtra("title")
+        titleName= intent.getStringExtra("title")
+        pointer= CleanFinishPointer(titleName)
         mPresenter.attachView(this)
         mPresenter.onCreate()
-        //todo 这里替换成广告位容器布局
+
+        loadAdv()
+        initHeadView()
+        mPresenter.loadRecommendData()
+    }
+
+
+
+    private fun loadAdv(){
         mPresenter.loadOneAdv(FrameLayout(this))
         mPresenter.loadTwoAdv(FrameLayout(this))
+    }
 
-        titleName = "手机清理"
+    private fun initHeadView(){
         left_title.text = titleName
         left_title.setOnClickListener {
             onBackPressed()
@@ -77,6 +101,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
             "手机清理" -> showPhoneClear()
         }
     }
+
 
     //建议清理
     private fun showSuggestClearView(num: String, unit: String) {
@@ -268,6 +293,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onPostResume() {
         super.onPostResume()
+
+        pointer.exposurePoint()
         mPresenter.onPostResume()
     }
 
@@ -279,5 +306,73 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     override fun onDestroy() {
         super.onDestroy()
         mPresenter.detachView()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            pointer.systemReturnPoint()
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    /**
+     * 一键清理
+     */
+    fun startClean(){
+        startActivity(NowCleanActivity::class.java)
+    }
+
+    /**
+     * 病毒查杀
+     */
+    fun startVirus(){
+        startActivity(VirusKillActivity::class.java)
+    }
+
+    /**
+     * 一键加速
+     */
+    fun startAcc(){
+        val bundle = Bundle()
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
+        startActivity(PhoneAccessActivity::class.java, bundle)
+    }
+
+    /**
+     * 超强省电
+     */
+    fun startPower(){
+        startActivity(PhoneSuperPowerActivity::class.java)
+    }
+
+    /**
+     * 微信清理
+     */
+    fun startWxClean(){
+        startActivity(WechatCleanHomeActivity::class.java)
+    }
+
+    /**
+     * 手机降温
+     */
+    fun startCool(){
+        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY)
+    }
+
+    /**
+     * 通知栏清理
+     */
+    fun startNotify(){
+        NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0)
+    }
+
+    /**
+     * 刮刮卡列表
+     */
+    fun startScratch(){
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("type", "huodong")
+        startActivity(intent)
+        finish()
     }
 }
