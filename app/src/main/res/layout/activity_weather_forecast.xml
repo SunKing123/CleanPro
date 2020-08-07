@@ -73,8 +73,8 @@
     </LinearLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/rel_root_ad"
+    <FrameLayout
+        android:id="@+id/weather_forecast_ad_fl"
         android:layout_below="@+id/linear_video"
         android:background="@drawable/ads_rect_corner_6_bg"
         android:layout_width="match_parent"

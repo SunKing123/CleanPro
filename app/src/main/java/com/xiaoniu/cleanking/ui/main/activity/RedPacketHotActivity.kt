@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.main.activity
 import android.content.Intent
 import android.os.Build
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import com.geek.webpage.eventbus.BaseEventBus
 import com.geek.webpage.eventbus.BaseEventBusConstant
@@ -12,7 +13,6 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.bean.PopupWindowType
-import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.ui.main.config.PositionId
@@ -23,7 +23,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.statistic.NiuDataAPI
-import com.xnad.sdk.ad.listener.AbsAdCallBack
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
 import org.simple.eventbus.EventBus
 import org.simple.eventbus.Subscriber
 import org.simple.eventbus.ThreadMode
@@ -133,11 +133,9 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "hot_splash_page", "red_envelopes_page_video_page")
 
         val viewGroup: ViewGroup = window.decorView as ViewGroup
-        val params = AdRequestParams.Builder().setAdId(MidasConstants.RED_PACKET)
-                .setViewContainer(viewGroup).setActivity(this).build()
-        MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
-
-        })
+//        val params = AdRequestParams.Builder().setAdId(MidasConstants.RED_PACKET)
+//                .setViewContainer(viewGroup).setActivity(this).build()
+        MidasRequesCenter.requestAndShowAd(this,MidasConstants.RED_PACKET,object : AbsAdBusinessCallback(){})
     }
 
     private fun showWebView() {

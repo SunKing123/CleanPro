@@ -21,10 +21,22 @@ public interface MidasConstants {
      */
     String PRODUCT_ID = "181";
 
+//    have done
     /**
-     * InmoBiAppId
+     * 冷启动-开屏
      */
-    String INMOBI_APPID = "7f8d97e6b5684c5c9e6f8bd7259c811d";
+    String SP_CODE_START_ID = "adpos_2851353101";
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 首页内部插屏广告ID
@@ -73,15 +85,8 @@ public interface MidasConstants {
      * 我的页面底部广告
      */
     String ME_BOTTOM_ID = "adpos_9634429151";
-    /**
-     * 冷启动-开屏
-     */
-    String SP_CODE_START_ID = "adpos_2851353101";
 
-    /**
-     * 热启动-开屏
-     */
-    String SP_HOT_START_ID = "adpos_8811905601";
+
 
     /**
      * 完成页面金币弹窗领取广告
@@ -123,7 +128,6 @@ public interface MidasConstants {
      * 锁屏-信息流模板
      */
     String LOCK_PAGE_FEED_ID = "adpos_1531089251";
-
 
     /**
      * 首页金币-左上-模板

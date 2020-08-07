@@ -309,24 +309,18 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/rel_ad"
+    <FrameLayout
+        android:id="@+id/f_ad_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="@dimen/dp_13"
         android:layout_marginRight="@dimen/dp_13"
         android:background="@drawable/ad_container_bg"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lock_ad_container" >
-        <ImageView
-            android:id="@+id/error_ad_iv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:maxHeight="350dp"
-            android:scaleType="fitXY" />
-    </RelativeLayout>
+        app:layout_constraintTop_toBottomOf="@+id/lock_ad_container"
+        android:orientation="vertical"/>
 
     <com.xiaoniu.cleanking.widget.lockview.TouchToUnLockView
         android:id="@+id/lock_unlock_view"

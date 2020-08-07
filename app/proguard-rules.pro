@@ -621,11 +621,13 @@
 -keep class com.huawei.updatesdk.**{*;}
 -keep class com.huawei.hms.**{*;}
 
-#Midas变现SDK
--dontwarn com.xnad.sdk.**
--keep class com.xnad.sdk.**{*;}
--keep public class com.xnad.sdk.ad.**{*;}
-#牛数埋点SDK混淆
+#MidasSDK混淆
+-keep public class com.xiaoniu.unitionadbase.**{*;}
+-keep public class com.xiaoniu.unitionadaction.**{*;}
+-keep public class com.xiaoniu.unitionadalliance.**{*;}
+-keep public class com.xiaoniu.unitionad.uikit.**{*;}
+-keep public class com.xiaoniu.unitionadproxy.**{*;}
+#牛数埋点混淆
 -dontwarn com.xiaoniu.statistic.**
 -keep class com.xiaoniu.statistic.**{*;}
 -keep class com.bun.miitmdid.** {*;}
@@ -636,53 +638,38 @@
 -keep class com.ss.android.** { *; }
 -keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
 -keep class com.pgl.sys.ces.* {*;}
-#优量汇FileProvider
--keep class com.xnad.sdk.ad.provider.** {*;}
-#mintegral sdk
+# TopMob广告广告SDK混淆
+-keep class com.meishu.sdk.** { *; }
+#MobVista广告SDK混淆
 -keepattributes Signature
 -keepattributes *Annotation*
 -keep class com.mintegral.** {*; }
 -keep interface com.mintegral.** {*; }
+-keep interface androidx.** { *; }
+-keep class androidx.** { *; }
 -keep class android.support.v4.** { *; }
+-keep public class * extends androidx.** { *; }
 -dontwarn com.mintegral.**
 -keep class **.R$* { public static final int mintegral*; }
 -keep class com.alphab.** {*; }
 -keep interface com.alphab.** {*; }
--keep interface androidx.** { *; }
--keep class androidx.** { *; }
--keep public class * extends androidx.** { *; }
-# topmob广告广告SDK混淆
--keep class com.meishu.sdk.** { *; }
-#tuia广告SDK
--ignorewarnings
--dontwarn com.lechuan.midunovel.**
--keep class com.lechuan.midunovel.** { *; }
-#InMoBiSDK
--keepattributes SourceFile,LineNumberTable
--keep class com.inmobi.** { *; }
--dontwarn com.inmobi.**
--dontwarn com.squareup.picasso.**
-#skip the Picasso library classes
--keep class com.squareup.picasso.** {*;}
--dontwarn com.squareup.picasso.**
--dontwarn com.squareup.okhttp.**
-#skip AVID classes
--keep class com.integralads.avid.library.** {*;}
-# skip OAID classes
--keep class com.bun.miitmdid.core.** {*;}
--dontwarn com.bun.**
-#skip IAB classes
--keep class com.iab.** {*;}
--dontwarn com.iab.**
-#以下两⾏仅针对海外流量
--keep public class com.google.android.gms.**
--dontwarn com.google.android.gms.**
--keep class com.google.android.gms.ads.identifier.AdvertisingIdClient{public *;}
--keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info{public *;}
-#快手SDK
--keep class com.kwad.sdk.** { *;}
--keep class com.ksad.download.** { *;}
--keep class com.kwai.filedownloader.** { *;}
+#百青藤
+-keepclassmembers class * extends android.app.Activity {
+ public void *(android.view.View);
+}-keepclassmembers enum * {
+ public static **[] values();
+ public static ** valueOf(java.lang.String);
+}-keep class com.baidu.mobads.*.** { *; }
+#快手的混淆
+-keep class org.chromium.** {*;}
+-keep class org.chromium.** { *; }
+-keep class aegon.chrome.** { *; }
+-keep class com.kwai.**{ *; }
+-dontwarn com.kwai.**
+-dontwarn com.kwad.**
+-dontwarn com.ksad.**
+-dontwarn aegon.chrome.**
+-allowaccessmodification
 
 #数美sdk
 -keep class com.ishumei.** { *; }

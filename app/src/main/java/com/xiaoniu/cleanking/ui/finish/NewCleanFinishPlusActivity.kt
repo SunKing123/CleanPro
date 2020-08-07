@@ -8,6 +8,7 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
@@ -32,6 +33,7 @@ import com.xiaoniu.common.utils.ToastUtils
 import com.xnad.sdk.ad.entity.AdInfo
 import com.xnad.sdk.ad.listener.AbsAdCallBack
 import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
+import com.xiaoniu.unitionadbase.model.AdInfoModel
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -58,8 +60,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         mPresenter.attachView(this)
         mPresenter.onCreate()
         //todo 这里替换成广告位容器布局
-        mPresenter.loadOneAdv(LinearLayout(this))
-        mPresenter.loadTwoAdv(LinearLayout(this))
+        mPresenter.loadOneAdv(FrameLayout(this))
+        mPresenter.loadTwoAdv(FrameLayout(this))
 
         titleName = "手机清理"
         left_title.text = titleName
@@ -197,7 +199,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN
         bean.context = this
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
-        bean.advCallBack = object : AbsAdCallBack() {}
+//        bean.advCallBack = object : AbsAdCallBack() {}
         bean.closeClickListener = View.OnClickListener { view: View? -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson()) }
         bean.onDoubleClickListener = View.OnClickListener { v: View? ->
             if (AndroidUtil.isFastDoubleBtnClick(1000)) {
@@ -207,20 +209,15 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
             StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap())
             val viewGroup = getWindow().getDecorView() as ViewGroup
             val params = AdRequestParams.Builder().setActivity(this).setViewContainer(viewGroup).setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build()
-            MidasRequesCenter.requestAd(params, object : VideoAbsAdCallBack() {
-                override fun onShowError(i: Int, s: String) {
-                    super.onShowError(i, s)
+
+            MidasRequesCenter.requestAndShowAd(this,MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON,object : VideoAbsAdCallBack(){
+                override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
+                    super.onAdLoadError(errorCode, errorMsg)
                     ToastUtils.showLong("网络异常")
                     GoldCoinDialog.dismiss()
                 }
 
-                override fun onAdError(adInfo: AdInfo, i: Int, s: String) {
-                    super.onAdError(adInfo, i, s)
-                    ToastUtils.showLong("网络异常")
-                    GoldCoinDialog.dismiss()
-                }
-
-                override fun onAdClose(adInfo: AdInfo, isComplete: Boolean) {
+                override fun onAdClose(adInfo: AdInfoModel?, isComplete: Boolean) {
                     super.onAdClose(adInfo, isComplete)
                     StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop_up_window_incentive_video_page", getStatisticsJson())
                     if (isComplete) {
@@ -232,8 +229,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
                     }
                 }
 
-                override fun onAdVideoComplete(adInfo: AdInfo) {
-                    super.onAdVideoComplete(adInfo)
+                override fun onAdVideoComplete(adInfoModel: AdInfoModel?) {
+                    super.onAdVideoComplete(adInfoModel)
                 }
             })
         }

@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.finish.presenter
 
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.xiaoniu.cleanking.R
@@ -7,6 +8,7 @@ import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore
@@ -24,8 +26,8 @@ import com.xiaoniu.cleanking.utils.net.RxUtil
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.ToastUtils
-import com.xnad.sdk.ad.entity.AdInfo
-import com.xnad.sdk.ad.listener.AbsAdCallBack
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
+import com.xiaoniu.unitionadbase.model.AdInfoModel
 import java.util.*
 import javax.inject.Inject
 
@@ -113,11 +115,11 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                 "",
                 "success_page"
         )
-        val params: AdRequestParams = AdRequestParams.Builder()
-                .setActivity(view.getActivity()).setAdId(MidasConstants.FINISH_INSIDE_SCREEN_ID).build()
-        MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {
-            override fun onAdShow(adInfo: AdInfo) {
-                super.onAdShow(adInfo)
+//        val params: AdRequestParams = AdRequestParams.Builder()
+//                .setActivity(view.getActivity()).setAdId(MidasConstants.FINISH_INSIDE_SCREEN_ID).build()
+        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH_INSIDE_SCREEN_ID,object : AbsAdBusinessCallback(){
+            override fun onAdExposure(adInfoModel: AdInfoModel?) {
+                super.onAdExposure(adInfoModel)
                 LogUtils.e("====完成页内部插屏广告展出======")
             }
         })
@@ -131,14 +133,12 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载第一个广告位数据
      * todo 这个广告位id需要换吗？后续确认一下：确认不变
      */
-    override fun loadOneAdv(advContainer: LinearLayout) {
+    override fun loadOneAdv(advContainer: FrameLayout) {
         if (!isOpenOne) return
         StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页广告位1发起请求", NewCleanFinishActivity.sourcePage, "success_page")
-        val params = AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
-                .setActivity(view.getActivity())
-                .setViewContainer(advContainer).setViewWidthOffset(24)
-                .build()
-        MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {})
+        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH01_TOP_FEEED_ID,object : SimpleViewCallBack(advContainer){
+
+        })
     }
 
     /**
@@ -146,14 +146,17 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * todo 这个广告位id需要换吗？后续确认一下：确认不变
      *
      */
-    override fun loadTwoAdv(advContainer: LinearLayout) {
+    override fun loadTwoAdv(advContainer: FrameLayout) {
         if (!isOpenTwo) return
         StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页广告位2发起请求", NewCleanFinishActivity.sourcePage, "success_page")
         val params = AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
                 .setActivity(view.getActivity())
                 .setViewContainer(advContainer).setViewWidthOffset(24)
                 .build()
-        MidasRequesCenter.requestAd(params, object : AbsAdCallBack() {})
+
+        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH01_CENTER_FEEED_ID,object : SimpleViewCallBack(advContainer){
+
+        })
     }
 
     /**

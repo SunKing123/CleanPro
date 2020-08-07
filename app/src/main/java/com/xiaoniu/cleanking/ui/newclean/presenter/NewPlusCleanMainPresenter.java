@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.JSONObject;
 import com.binioter.guideview.Component;
@@ -18,18 +19,20 @@ import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
+import com.hellogeek.permission.util.ScreenUtils;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.AdposUtil;
-import com.xiaoniu.cleanking.midas.CMAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
@@ -41,7 +44,6 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
@@ -59,15 +61,15 @@ import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
-import com.xiaoniu.cleanking.widget.FingerComponent;
+import com.xiaoniu.cleanking.widget.FingerGuideComponent;
+import com.xiaoniu.cleanking.widget.GoldGuideComponent;
 import com.xiaoniu.cleanking.widget.SkipComponent;
+import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.widget.TemplateView;
-import com.xnad.sdk.config.AdParameter;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import org.json.JSONException;
 
@@ -86,7 +88,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-//import com.tbruyelle.rxpermissions2.RxPermissions;
 
 public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragment, NewScanModel> {
     private Guide guide;
@@ -94,7 +95,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
-    private AdParameter mAdParameter;
+//    private AdParameter mAdParameter;
     @Inject
     NoClearSPHelper mPreferencesHelper;
 
@@ -512,95 +513,36 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
-        //尝试预加载，丝滑般的体验...
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(MidasConstants.MAIN_THREE_AD_ID).setActivity(mView.getActivity()).setViewWidthOffset(28)
-                .setViewContainer(viewGroup).build();
-        MidasRequesCenter.preLoad(params);
-//        MidasAdSdk.getAdsManger().askIsReady(mView.getActivity(), MidasConstants.MAIN_THREE_AD_ID, result -> isReadSuccess = result);
+        MidasRequesCenter.preloadAd(mView.getActivity(),MidasConstants.MAIN_THREE_AD_ID);
     }
 
-    public void fillVideoAd(ViewGroup viewGroup, IOnAdClickListener onAdClick) {
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(MidasConstants.MAIN_THREE_AD_ID).setActivity(mView.getActivity())
-                .setViewContainer(viewGroup).setViewWidthOffset(28).build();
-        MidasRequesCenter.requestAd(params, new AdvCallBack(MidasConstants.MAIN_THREE_AD_ID, onAdClick));
+    public void fillVideoAd(FrameLayout viewGroup, IOnAdClickListener onAdClick) {
+        String adId = MidasConstants.MAIN_THREE_AD_ID;
+        MidasRequesCenter.requestAndShowAd(mView.getActivity(),adId,new SimpleViewCallBack(viewGroup){
+            @Override
+            public void onAdClick(AdInfoModel adInfoModel) {
+                super.onAdClick(adInfoModel);
+                if (onAdClick != null){
+                    onAdClick.onClick(adId);
+                }
+            }
+        });
     }
 
-    public void showAdviceLayout(ViewGroup viewGroup, String adviceID, IOnAdClickListener onAdClick) {
+    public void showAdviceLayout(FrameLayout viewGroup, String adviceID, IOnAdClickListener onAdClick) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(adviceID).setActivity(mView.getActivity())
-                .setViewWidth(ScreenUtils.getScreenWidth(mView.getActivity()) - DisplayUtil.dip2px(mView.getActivity(), 28))
-                .setViewContainer(viewGroup).build();
-
-        MidasRequesCenter.requestAd(params, new AdvCallBack(adviceID, onAdClick));
-    }
-
-    static class AdvCallBack extends CMAbsAdCallBack {
-        String advId;
-        String title = "";
-        IOnAdClickListener onAdClick;
-
-        AdvCallBack(String advId, IOnAdClickListener onAdClick) {
-            this.advId = advId;
-            this.onAdClick = onAdClick;
-            switch (advId) {
-                case MidasConstants.MAIN_ONE_AD_ID:
-                    title = "one";
-                    break;
-                case MidasConstants.MAIN_TWO_AD_ID:
-                    title = "two";
-                    break;
-                case MidasConstants.MAIN_THREE_AD_ID:
-                    title = "three";
-                    break;
+        MidasRequesCenter.requestAndShowAd(mView.getActivity(),adviceID,new SimpleViewCallBack(viewGroup){
+            @Override
+            public void onAdClick(AdInfoModel adInfoModel) {
+                super.onAdClick(adInfoModel);
+                if (onAdClick != null){
+                    onAdClick.onClick(adviceID);
+                }
             }
-        }
-
-        @Override
-        public void onAdLoadSuccess(AdInfo adInfo) {
-            super.onAdLoadSuccess(adInfo);
-        }
-
-        @Override
-        public void onShowError(int i, String s) {
-            super.onShowError(i, s);
-        }
-
-        @Override
-        public void onAdShow(AdInfo adInfo) {
-            super.onAdShow(adInfo);
-
-        }
-
-        @Override
-        public void onAdClicked(AdInfo adInfo) {
-            super.onAdClicked(adInfo);
-            if (onAdClick != null) {
-                onAdClick.onClick(advId);
-            }
-        }
-
-        @Override
-        public void onAdClose(AdInfo adInfo) {
-            super.onAdClose(adInfo);
-        }
-
-        @Override
-        public void onAdClose(AdInfo adInfo, TemplateView templateView) {
-            super.onAdClose(adInfo, templateView);
-            LogUtils.e("====首页广告one====templateView:点击关闭按钮");
-        }
-
-        public void onReadyToShow(AdInfo var1) {
-            var1.getAdParameter().getViewContainer().setVisibility(View.VISIBLE);
-        }
-
+        });
     }
-
 
     //更新金币列表
     public void refBullList() {
@@ -713,15 +655,14 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_TWO_CODE);//激励视频广告位开关
         bean.totalCoinCount = dataBean.getData().getTotalGoldCount();
         //广告回调
-        bean.advCallBack = new AbsAdCallBack() {
+        bean.advCallBack = new AbsAdBusinessCallback() {
             @Override
-            public void onAdShow(AdInfo adInfo) {
-
+            public void onAdExposure(AdInfoModel adInfoModel) {
+                super.onAdExposure(adInfoModel);
             }
-
             @Override
-            public void onAdError(AdInfo adInfo, int i, String s) {
-
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
             }
         };
         //翻倍回调
@@ -741,34 +682,30 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页翻倍激励视频广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", mapJson);
 
                 ViewGroup viewGroup = (ViewGroup) mView.getActivity().getWindow().getDecorView();
-                AdRequestParams params = new AdRequestParams.Builder().
-                        setActivity(mView.getActivity()).
-                        setViewContainer(viewGroup).
-                        setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1)).build();
-                MidasRequesCenter.requestAdVideo(params, new VideoAbsAdCallBack() {
-                    @Override
-                    public void onShowError(int i, String s) {
-                        ToastUtils.showLong("网络异常");
-                        GoldCoinDialog.dismiss();
+//                AdRequestParams params = new AdRequestParams.Builder().
+//                        setActivity(mView.getActivity()).
+//                        setViewContainer(viewGroup).
+//                        setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1)).build();
 
-                    }
-
+                MidasRequesCenter.requestAndShowAd(mView.getActivity(), AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1), new VideoAbsAdCallBack() {
                     @Override
-                    public void onAdError(AdInfo adInfo, int i, String s) {
+                    public void onAdLoadError(String errorCode, String errorMsg) {
+                        super.onAdLoadError(errorCode, errorMsg);
                         ToastUtils.showLong("网络异常");
                         GoldCoinDialog.dismiss();
                     }
 
                     @Override
-                    public void onAdVideoComplete(AdInfo adInfo) {
-                        super.onAdVideoComplete(adInfo);
+                    public void onAdVideoComplete(AdInfoModel adInfoModel) {
+                        super.onAdVideoComplete(adInfoModel);
                         if (!mView.getActivity().isFinishing()) {
                             GoldCoinDialog.dismiss();
                         }
                     }
 
                     @Override
-                    public void onAdClose(AdInfo adInfo, boolean isComplete) {
+                    public void onAdClose(AdInfoModel adInfo, boolean isComplete) {
+                        super.onAdClose(adInfo, isComplete);
                         try {
                             org.json.JSONObject exJson = new org.json.JSONObject();
                             exJson.put("position_id", dataBean.getData().getLocationNum());
@@ -783,8 +720,6 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             GoldCoinDialog.dismiss();
                         }
                     }
-
-
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -819,9 +754,11 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     //广告预加载
     public void adPrevData(String posId) {
         try {
-            AdRequestParams params = new AdRequestParams.Builder()
-                    .setAdId(posId).setActivity(mView.getActivity()).setViewWidthOffset(45).build();
-            MidasRequesCenter.preLoad(params);
+//            AdRequestParams params = new AdRequestParams.Builder()
+//                    .setAdId(posId).setActivity(mView.getActivity()).setViewWidthOffset(45).build();
+//            MidasRequesCenter.preLoad(params);
+
+            MidasRequesCenter.preloadAd(mView.getActivity(),posId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -872,15 +809,18 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             }
                         });
 
-                        builder.addComponent(new FingerComponent());
-                        builder.addComponent(new SkipComponent(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (null != guide) {
-                                    guide.dismiss();
-                                }
-                            }
-                        }));
+                        builder.addComponent(new FingerGuideComponent());
+                        builder.addComponent(new SkipComponent(
+                                DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenWidth() * 0.06f),
+                                -DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenHeight() * 0.07f),
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (null != guide) {
+                                            guide.dismiss();
+                                        }
+                                    }
+                                }));
                         guide = builder.createGuide();
                         guide.show(mView.getActivity());
 
@@ -889,6 +829,41 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
                 break;
             case 2:
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GuideBuilder builder = new GuideBuilder();
+                        builder.setTargetView(view)
+                                .setAlpha(150)
+                                .setOverlayTarget(true);
+                        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+                            @Override
+                            public void onShown() {
+                            }
+
+                            @Override
+                            public void onDismiss() {
+
+                            }
+                        });
+
+                        builder.addComponent(new GoldGuideComponent());
+                        builder.addComponent(new SkipComponent(
+                                0,
+                                -150,
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (null != guide) {
+                                            guide.dismiss();
+                                        }
+                                    }
+                                }));
+                        guide = builder.createGuide();
+                        guide.show(mView.getActivity());
+
+                    }
+                });
                 break;
             case 3:
                 break;

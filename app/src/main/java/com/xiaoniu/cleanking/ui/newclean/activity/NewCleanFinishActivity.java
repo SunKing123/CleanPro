@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,8 +31,8 @@ import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.main.activity.FileManagerHomeActivity;
-import com.xiaoniu.cleanking.ui.main.activity.GameActivity;
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
@@ -61,8 +60,6 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
-import com.xnad.sdk.ad.widget.TemplateView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -108,7 +105,7 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
     FileQueryUtils fileQueryUtils;
     int processNum = 0;
 
-    private LinearLayout ad_container_pos01, ad_container_pos02;
+    private FrameLayout ad_container_pos01, ad_container_pos02;
     private ImageView error_ad_iv1, error_ad_iv2;
 
     @Override
@@ -1040,37 +1037,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
         }
 
         StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页广告位1发起请求", sourcePage, "success_page");
-        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
-                .setActivity(this)
-                .setViewContainer(ad_container_pos01).setViewWidthOffset(24)
-                .build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdLoadSuccess(adInfo);
-//                StatisticsUtils.customADRequest("ad_request", "广告请求", "1", info.getAdId(), info.getAdSource(), "success", "clod_splash_page", "clod_splash_page");
-            }
+//        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_TOP_FEEED_ID)
+//                .setActivity(this)
+//                .setViewContainer(ad_container_pos01).setViewWidthOffset(24)
+//                .build();
 
-            @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-            }
-
-            @Override
-            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdShow(adInfo);
-            }
-
-            @Override
-            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-            }
-
-            @Override
-            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
-                super.onAdClose(adInfo, templateView);
-            }
-        });
+        MidasRequesCenter.requestAndShowAd(this,MidasConstants.FINISH01_TOP_FEEED_ID,new SimpleViewCallBack(ad_container_pos01));
     }
 
 
@@ -1079,50 +1051,12 @@ public class NewCleanFinishActivity extends BaseActivity<CleanFinishPresenter> i
             return;
         }
         StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页广告位2发起请求", sourcePage, "success_page");
-        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
-                .setActivity(this)
-                .setViewContainer(ad_container_pos02).setViewWidthOffset(24)
-                .build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onAdLoadSuccess(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdLoadSuccess(adInfo);
-                log("广告位2： onAdLoadSuccess()");
-            }
+//        AdRequestParams params = new AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
+//                .setActivity(this)
+//                .setViewContainer(ad_container_pos02).setViewWidthOffset(24)
+//                .build();
 
-            @Override
-            public void onAdError(com.xnad.sdk.ad.entity.AdInfo adInfo, int i, String s) {
-                super.onAdError(adInfo, i, s);
-                log("广告位2： onAdError()   " + s);
-
-            }
-
-            @Override
-            public void onShowError(int i, String s) {
-                super.onShowError(i, s);
-                log("广告位2： onShowError()   " + s);
-            }
-
-            @Override
-            public void onAdShow(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdShow(adInfo);
-                log("广告位2： onAdShow()   ");
-            }
-
-            @Override
-            public void onAdClicked(com.xnad.sdk.ad.entity.AdInfo adInfo) {
-                super.onAdClicked(adInfo);
-                log("广告位2： onAdClicked()   ");
-            }
-
-            @Override
-            public void onAdClose(com.xnad.sdk.ad.entity.AdInfo adInfo, TemplateView templateView) {
-                super.onAdClose(adInfo, templateView);
-                log("广告位2： onAdClose()   ");
-
-
-            }
-        });
+        MidasRequesCenter.requestAndShowAd(this,MidasConstants.FINISH01_CENTER_FEEED_ID,new SimpleViewCallBack(ad_container_pos02));
     }
 
     private void log(String text) {

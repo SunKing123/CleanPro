@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -19,6 +20,7 @@ import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
@@ -41,8 +43,8 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
-import com.xnad.sdk.ad.entity.AdInfo;
-import com.xnad.sdk.ad.listener.AbsAdCallBack;
+import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -97,8 +99,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
         ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            mBinding.bannerAdLl.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
-            mBinding.bannerAdLl.setClipToOutline(true);
+            mBinding.mineAdFf.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
+            mBinding.mineAdFf.setClipToOutline(true);
         }
 //        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
     }
@@ -284,29 +286,14 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_MINE))
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
-        AdRequestParams params = new AdRequestParams.Builder()
-                .setAdId(MidasConstants.ME_BOTTOM_ID)
-                .setActivity(getActivity())
-                .setViewContainer(mBinding.bannerAdLl).setViewWidthOffset(30).build();
-        MidasRequesCenter.requestAd(params, new AbsAdCallBack() {
-            @Override
-            public void onReadyToShow(AdInfo adInfo) {
-                super.onReadyToShow(adInfo);
-                ViewGroup viewGroup = adInfo.getAdParameter().getViewContainer();
-                if (viewGroup  != null){
-                    viewGroup.setVisibility(View.VISIBLE);
-                    ViewGroup.LayoutParams p = viewGroup.getLayoutParams();
-                    p.height = -2;
-                }
-            }
 
+        MidasRequesCenter.requestAndShowAd(mActivity,MidasConstants.LOCK_PAGE_FEED_ID,new SimpleViewCallBack(mBinding.mineAdFf){
             @Override
-            public void onAdShow(AdInfo adInfo) {
-                super.onAdShow(adInfo);
+            public void onAdExposure(AdInfoModel adInfoModel) {
+                super.onAdExposure(adInfoModel);
                 StatisticsUtils.customTrackEvent("ad_request", "我的页面广告请求（满足广告展现时机时向商业化sdk发起请求数）", "my_page", "my_page");
             }
         });
-
     }
 
 }
