@@ -22,10 +22,8 @@ import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
-import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider;
 import com.xiaoniu.cleanking.ui.tool.wechat.util.TimeUtil;
@@ -34,7 +32,6 @@ import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
 import com.xiaoniu.cleanking.utils.audio.SoundPoolPlayer;
 import com.xiaoniu.cleanking.widget.BreathTextView;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
 
 /**
  * Created by zhaoyingtao
@@ -82,7 +79,7 @@ public class GoldCoinDialog {
         totalCoinCountTv.setTypeface(typ_RE);
         AppCompatTextView CoinDoubleRL = dialog.findViewById(R.id.coin_double_rl);
         TextView tv_coin_str = dialog.findViewById(R.id.tv_coin_str);
-      //  TextView double_x2_tv = dialog.findViewById(R.id.double_x2_tv);//倍数
+        //  TextView double_x2_tv = dialog.findViewById(R.id.double_x2_tv);//倍数
         // ImageView mLlAdAnim = dialog.findViewById(R.id.ll_ad_anim);
         FrameLayout mRootRL = dialog.findViewById(R.id.root_fl);
         RelativeLayout ll_top = dialog.findViewById(R.id.ll_top);
@@ -124,7 +121,9 @@ public class GoldCoinDialog {
             ivAnim.setVisibility(View.VISIBLE);
             ll_my_coin.setVisibility(View.VISIBLE);
         }
-
+        if (!TextUtils.isEmpty(parameter.doubleMsg)) {//刮刮卡传过显示按钮的内容
+            CoinDoubleRL.setText(parameter.doubleMsg);
+        }
         ll_top_content.setLayoutParams(layoutParams);
         int totalCoin;
         if (parameter.fbTip) {//手动点击翻倍和自动翻倍后的需要展示插屏结果
@@ -139,8 +138,8 @@ public class GoldCoinDialog {
         }
         if (parameter.doubleNums > 0 && parameter.isRewardOpen) {
             CoinDoubleRL.setVisibility(View.VISIBLE);
-           // double_x2_tv.setText("X" + parameter.doubleNums);
-           // AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
+            // double_x2_tv.setText("X" + parameter.doubleNums);
+            // AnimationScaleUtils.getInstance().playScaleAnimation(CoinDoubleRL, 1000);
         }
         if (parameter.dialogType == 3) {
             obtainCoinCountTv.setText("+" + totalCoin);
