@@ -161,10 +161,44 @@ public interface Points {
         String CLICK_CLOSE_NAME = "手机状态插屏关闭按钮点击";
     }
 
+    /**
+     * 功能完成页埋点
+     */
     interface CleanFinish {
 
         String RECOMMEND_CLICK_NAME = "recommendation_function_click";
         String RECOMMEND_CLICK_CODE = "推荐功能点击";
+
+        interface GoldCoin{
+            String PAGE = "success_page_gold_coin_pop_up_window";
+            String PAGE_EVENT_CODE = "success_page_gold_coin_pop_up_window_custom";
+            String PAGE_EVENT_NAME = "功能完成页金币领取弹窗曝光";
+
+            String DOUBLE_CLICK_EVENT_CODE="double_the_gold_coin_click";
+            String DOUBLE_CLICK_EVENT_NAME="金币翻倍按钮点击";
+
+            String CLOSE_CLICK_EVENT_CODE="close_click";
+            String CLOSE_CLICK_EVENT_NAME="弹窗关闭点击";
+
+            String REQUEST_ADV1_EVENT_CODE="ad_request_sdk_1";
+            String REQUEST_ADV1_EVENT_NAME="功能完成页金币领取弹窗上广告发起请求";
+
+            String REQUEST_ADV2_EVENT_CODE="ad_request_sdk_2";
+            String REQUEST_ADV2_EVENT_NAME="功能完成页翻倍激励视频广告发起请求";
+
+            String NUMBER_OF_GOLD_COINS_EVENT_CODE="number_of_gold_coins_issued";
+            String NUMBER_OF_GOLD_COINS_EVENT_NAME="功能完成页领取弹窗金币发放数";
+        }
+
+        interface Insert{
+            String PAGE = "success_page";
+
+            String REQUEST_ADV4_EVENT_CODE = "ad_request_sdk_4";
+            String REQUEST_ADV4_EVENT_NAME = "功能完成页广告位4发起请求";
+
+            String REQUEST_ADV5_EVENT_CODE = "ad_request_sdk_5";
+            String REQUEST_ADV5_EVENT_NAME = "功能完成页广告位5发起请求";
+        }
 
         interface Point {
             String getPage();
