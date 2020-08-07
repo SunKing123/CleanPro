@@ -1,105 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="@dimen/dimen_63dp"
+        android:background="@drawable/finish_top_bg">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/left_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:drawableStart="@mipmap/finish_top_back"
+            android:drawablePadding="8dp"
+            android:layout_marginBottom="3dp"
+            android:text="一键加速"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_20sp" />
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_162dp"
-            android:background="@drawable/finish_top_bg"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/left_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_12dp"
-                android:layout_marginTop="40.5dp"
-                android:drawableStart="@mipmap/finish_top_back"
-                android:drawablePadding="8dp"
-                android:text="一键加速"
-                android:textColor="@color/white"
-                android:textSize="@dimen/dimen_20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_23dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="@dimen/dimen_99dp"
+                android:background="@drawable/finish_top_bg"
+                android:orientation="vertical">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/function_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dimen_11dp"
-                    android:src="@mipmap/finish_icon_ok" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="@dimen/dimen_23dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/function_title"
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/function_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="安全，已解决所有风险"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/dimen_18sp" />
+                        android:layout_marginEnd="@dimen/dimen_11dp"
+                        android:src="@mipmap/finish_icon_ok" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/function_sub_title"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="1px"
-                        android:text="快试试其它功能吧！"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/dimen_13sp" />
+                        android:orientation="vertical">
 
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/function_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="安全，已解决所有风险"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_18sp" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/function_sub_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1px"
+                            android:text="快试试其它功能吧！"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/dimen_13sp" />
+
+                    </LinearLayout>
                 </LinearLayout>
+
             </LinearLayout>
 
+            <com.xiaoniu.cleanking.widget.FinishCardView
+                android:id="@+id/card_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="7dp" />
+
+            <FrameLayout
+                android:id="@+id/ad_container_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.xiaoniu.cleanking.widget.FinishCardView
+                android:id="@+id/card_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginEnd="7dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="7dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/finish_pic_card" />
+
+            <FrameLayout
+                android:id="@+id/ad_container_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
+    </ScrollView>
 
-        <com.xiaoniu.cleanking.widget.FinishCardView
-            android:id="@+id/card_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="7dp" />
-
-        <FrameLayout
-            android:id="@+id/ad_container_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.xiaoniu.cleanking.widget.FinishCardView
-            android:id="@+id/card_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:layout_marginEnd="7dp" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="7dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="7dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/finish_pic_card" />
-
-        <FrameLayout
-            android:id="@+id/ad_container_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>
