@@ -40,6 +40,7 @@ import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
+import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushDispatcher;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -52,13 +53,13 @@ import com.xiaoniu.cleanking.ui.main.dialog.ExitRetainDialog;
 import com.xiaoniu.cleanking.ui.main.event.AutoCleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.FileCleanSizeEvent;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
+import com.xiaoniu.cleanking.ui.main.event.SwitchTabEvent;
 import com.xiaoniu.cleanking.ui.main.fragment.ShoppingMallFragment;
 import com.xiaoniu.cleanking.ui.main.fragment.ToolFragment;
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBar;
 import com.xiaoniu.cleanking.ui.main.widget.BottomBarTab;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
-import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
 import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
@@ -731,6 +732,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
+    //切换tab的监听
+    @Subscribe
+    public void onEventTabSwitch(SwitchTabEvent tabEvent) {
+        if (tabEvent != null) {
+            mBottomBar.setCurrentItem(tabEvent.tabPosition);
+        }
+    }
 
 
     private void startPopActivity(Class<? extends AppCompatActivity> target) {

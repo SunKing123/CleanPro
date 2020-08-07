@@ -122,6 +122,10 @@ class GoldCoinSuccessActivity : BaseActivity() {
     }
 
     fun initCoinView() {
+        StatisticsUtils.customTrackEvent("success_page_gold_coin_pop_up_window_success_page_custom",
+                "功能完成页金币翻倍领取完成页曝光",
+                "success_page_gold_coin_pop_up_window_success_page",
+                "success_page_gold_coin_pop_up_window_success_page")
         tv_coin_title.text = "运气爆棚，金币X${model.doubledMagnification}倍"
         var text = "到账" + coinNum + "金币"
         var sp = SpannableString(text)

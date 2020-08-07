@@ -2,6 +2,8 @@ package com.xiaoniu.cleanking.ui.finish.model
 
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * Created by xinxiaolong on 2020/8/6.
@@ -43,8 +45,8 @@ public class CleanFinishPointer {
             "手机降温" -> {
                 point = Points.CleanFinish.Cool()
             }
-            "游戏加速" -> {
-
+            else ->{
+                point = Points.CleanFinish.Acc()
             }
         }
     }
@@ -77,5 +79,43 @@ public class CleanFinishPointer {
      */
     fun systemReturnPoint() {
         StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, point.returnClickName, "", point.page)
+    }
+
+    fun goldCoinDialogExposure(){
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.PAGE_EVENT_CODE, Points.CleanFinish.GoldCoin.PAGE_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE)
+    }
+
+    fun goldCoinDoubleClick(){
+        StatisticsUtils.trackClick(Points.CleanFinish.GoldCoin.DOUBLE_CLICK_EVENT_CODE, Points.CleanFinish.GoldCoin.DOUBLE_CLICK_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsJson())
+    }
+
+    fun goldCoinRequestAdv1(){
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.REQUEST_ADV1_EVENT_CODE, Points.CleanFinish.GoldCoin.REQUEST_ADV1_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsMap())
+    }
+
+    fun goldCoinRequestAdv2(){
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.REQUEST_ADV2_EVENT_CODE, Points.CleanFinish.GoldCoin.REQUEST_ADV2_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsMap())
+    }
+
+    fun goldCoinClose(){
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_CODE, Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsMap())
+    }
+
+    private fun getStatisticsMap(): Map<String, Any>? {
+        val map: MutableMap<String, Any> = java.util.HashMap()
+        map["position_id"] = 5
+        map["function_name"] = title
+        return map
+    }
+
+    private fun getStatisticsJson(): JSONObject? {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("position_id", 5)
+            jsonObject.put("function_name", title)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return jsonObject
     }
 }

@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
+import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
@@ -19,6 +20,7 @@ import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel
 import com.xiaoniu.cleanking.ui.main.model.MainModel
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity.Companion.start
 import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
+import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil
 import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber
@@ -28,6 +30,8 @@ import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.ToastUtils
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
 import com.xiaoniu.unitionadbase.model.AdInfoModel
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 import javax.inject.Inject
 
@@ -54,7 +58,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     override fun onCreate() {
         loadAdSwitch()
-        loadRecommendView()
     }
 
     override fun attachView(view: NewCleanFinishPlusActivity) {
@@ -73,7 +76,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     /**
      * 装载推荐功能布局
      */
-    private fun loadRecommendView() {
+     override fun loadRecommendData() {
+        itemDataStore.resetIndex()
+
         var firstModel: RecmedItemModel? = itemDataStore.popModel()
 
         if (firstModel != null) {
@@ -131,7 +136,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     /**
      * 加载第一个广告位数据
-     * todo 这个广告位id需要换吗？后续确认一下：确认不变
      */
     override fun loadOneAdv(advContainer: FrameLayout) {
         if (!isOpenOne) return
@@ -143,7 +147,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     /**
      * 加载第二个广告位数据
-     * todo 这个广告位id需要换吗？后续确认一下：确认不变
      *
      */
     override fun loadTwoAdv(advContainer: FrameLayout) {
@@ -276,5 +279,40 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     override fun detachView() {
 
+    }
+
+    override fun loadVideoAdv(bubbleCollected: BubbleCollected) {
+        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON,object : VideoAbsAdCallBack(){
+            override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
+                super.onAdLoadError(errorCode, errorMsg)
+                ToastUtils.showLong("网络异常")
+                view.dismissGoldCoinDialog()
+            }
+            override fun onAdClose(adInfo: AdInfoModel?, isComplete: Boolean) {
+                super.onAdClose(adInfo, isComplete)
+                StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop_up_window_incentive_video_page", getStatisticsJson())
+                if (isComplete) {
+                    //播放完成的话去翻倍
+                    addDoubleGoldCoin(bubbleCollected)
+                } else {
+                    //没有播放完成就关闭广告的话把弹窗关掉
+                    view.dismissGoldCoinDialog()
+                }
+            }
+            override fun onAdVideoComplete(adInfoModel: AdInfoModel?) {
+                super.onAdVideoComplete(adInfoModel)
+            }
+        })
+    }
+
+    private fun getStatisticsJson(): JSONObject? {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("position_id", 5)
+            jsonObject.put("function_name", view.titleName)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return jsonObject
     }
 }

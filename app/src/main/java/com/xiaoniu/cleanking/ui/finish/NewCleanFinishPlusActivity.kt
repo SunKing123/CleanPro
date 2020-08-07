@@ -10,17 +10,12 @@ import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
 import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.constant.RouteConstants
-import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasConstants
-import com.xiaoniu.cleanking.midas.MidasRequesCenter
-import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemModel
@@ -38,11 +33,9 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.AndroidUtil
+import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
-import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
-import com.xiaoniu.common.utils.ToastUtils
-import com.xiaoniu.unitionadbase.model.AdInfoModel
 import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -54,8 +47,9 @@ import java.util.*
  */
 public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
 
-    var titleName:String=""
-    lateinit var pointer:CleanFinishPointer
+    var titleName: String = ""
+    lateinit var pointer: CleanFinishPointer
+
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
     }
@@ -64,27 +58,40 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         activityComponent.inject(this)
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        initView()
+    }
+
     override fun initView() {
-        titleName= intent.getStringExtra("title")
-        pointer= CleanFinishPointer(titleName)
-        initHeadView()
+        StatusBarUtil.setTransparentForWindow(this)
+        titleName = intent.getStringExtra("title")
+        pointer = CleanFinishPointer(titleName)
         mPresenter.attachView(this)
         mPresenter.onCreate()
-        //todo 这里替换成广告位容器布局
-        mPresenter.loadOneAdv(FrameLayout(this))
-        mPresenter.loadTwoAdv(FrameLayout(this))
 
-        titleName = "手机清理"
+        loadAdv()
+        initHeadView()
+        mPresenter.loadRecommendData()
+    }
+
+    private fun loadAdv() {
+        mPresenter.loadOneAdv(findViewById(R.id.ad_container_1))
+        mPresenter.loadTwoAdv(findViewById(R.id.ad_container_2))
+    }
+
+    private fun initHeadView() {
         left_title.text = titleName
         left_title.setOnClickListener {
+            pointer.returnPoint()
             onBackPressed()
         }
         when (titleName) {
-            "建议清理" -> showSuggestClearView("886", "MB")
+            "建议清理", "立即清理", "一键清理" -> showSuggestClearView("886", "MB")
             "一键加速" -> show0neKeySpeedUp("24")
             "病毒查杀" -> showKillVirusView()
             "超强省电" -> showPowerSaving()
-            "微信专理" -> showWeiXinClear()
+            "微信专清" -> showWeiXinClear()
             "手机降温" -> showPhoneCold("37", "60")
             "通知栏清理" -> showNotificationClear()
             "网络加速" -> showNetSpeedUp("80")
@@ -145,7 +152,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         val subSpannableString = SpannableString(subContent)
         subSpannableString.setSpan(styleSpan, 0, subContent.indexOf("s"), Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         function_sub_title.text = subSpannableString
-
     }
 
     //通知栏清理
@@ -182,14 +188,39 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
      * 显示第一个推荐功能视图
      */
     override fun visibleRecommendViewFirst(item: RecmedItemModel) {
-
+        setRecommendViewData(card_1, item)
     }
 
     /**
      * 显示第二个推荐功能视图
      */
     override fun visibleRecommendViewSecond(item: RecmedItemModel) {
+        setRecommendViewData(card_2, item)
+    }
 
+    fun setRecommendViewData(view: FinishCardView, item: RecmedItemModel) {
+        view.visibility = View.VISIBLE
+        view.setImage(item.imageIcon)
+        view.setLeftTitle(item.title)
+        view.setSubTitle1(item.content1)
+        view.setSubTitle2(item.content2)
+        view.setButtonText(item.buttonText)
+        view.setImageLabelHide()
+
+        view.setOnClickListener({onRecommendViewClick(item.title) })
+    }
+
+    fun onRecommendViewClick(title: String) {
+        pointer.recommendClickPoint(title)
+        when (title) {
+            "垃圾文件太多" -> startClean()
+            "手机加速" -> startAcc()
+            "病毒查杀" -> startVirus()
+            "超强省电" -> startPower()
+            "微信清理" -> startWxClean()
+            "手机降温" -> startCool()
+            "通知栏清理" -> startNotify()
+        }
     }
 
     /**
@@ -210,43 +241,17 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN
         bean.context = this
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
-//        bean.advCallBack = object : AbsAdCallBack() {}
-        bean.closeClickListener = View.OnClickListener { view: View? -> StatisticsUtils.trackClick("close_click", "弹窗关闭点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson()) }
+        bean.closeClickListener = View.OnClickListener { view: View? -> pointer.goldCoinClose() }
         bean.onDoubleClickListener = View.OnClickListener { v: View? ->
             if (AndroidUtil.isFastDoubleBtnClick(1000)) {
                 return@OnClickListener
             }
-            StatisticsUtils.trackClick("double_the_gold_coin_click", "金币翻倍按钮点击", "", "success_page_gold_coin_pop_up_window", getStatisticsJson())
-            StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页翻倍激励视频广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap())
-            val viewGroup = getWindow().getDecorView() as ViewGroup
-            val params = AdRequestParams.Builder().setActivity(this).setViewContainer(viewGroup).setAdId(MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON).build()
-
-            MidasRequesCenter.requestAndShowAd(this,MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON,object : VideoAbsAdCallBack(){
-                override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
-                    super.onAdLoadError(errorCode, errorMsg)
-                    ToastUtils.showLong("网络异常")
-                    GoldCoinDialog.dismiss()
-                }
-
-                override fun onAdClose(adInfo: AdInfoModel?, isComplete: Boolean) {
-                    super.onAdClose(adInfo, isComplete)
-                    StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop_up_window_incentive_video_page", getStatisticsJson())
-                    if (isComplete) {
-                        //播放完成的话去翻倍
-                        mPresenter.addDoubleGoldCoin(bubbleCollected)
-                    } else {
-                        //没有播放完成就关闭广告的话把弹窗关掉
-                        GoldCoinDialog.dismiss()
-                    }
-                }
-
-                override fun onAdVideoComplete(adInfoModel: AdInfoModel?) {
-                    super.onAdVideoComplete(adInfoModel)
-                }
-            })
+            pointer.goldCoinDoubleClick()
+            pointer.goldCoinRequestAdv2()
+            mPresenter.loadVideoAdv(bubbleCollected)
         }
-        StatisticsUtils.customTrackEvent("success_page_gold_coin_pop_up_window_custom", "功能完成页金币领取弹窗曝光", "", "success_page_gold_coin_pop_up_window")
-        StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页金币领取弹窗上广告发起请求", "", "success_page_gold_coin_pop_up_window", getStatisticsMap())
+        pointer.goldCoinDialogExposure()
+        pointer.goldCoinRequestAdv1()
         GoldCoinDialog.showGoldCoinDialog(bean)
     }
 
@@ -282,9 +287,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onPostResume() {
         super.onPostResume()
-
-        pointer.exposurePoint()
         mPresenter.onPostResume()
+        pointer.exposurePoint()
     }
 
     override fun onPause() {
@@ -298,7 +302,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             pointer.systemReturnPoint()
         }
         return super.onKeyDown(keyCode, event)
@@ -307,21 +311,21 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     /**
      * 一键清理
      */
-    fun startClean(){
+    fun startClean() {
         startActivity(NowCleanActivity::class.java)
     }
 
     /**
      * 病毒查杀
      */
-    fun startVirus(){
+    fun startVirus() {
         startActivity(VirusKillActivity::class.java)
     }
 
     /**
      * 一键加速
      */
-    fun startAcc(){
+    fun startAcc() {
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
         startActivity(PhoneAccessActivity::class.java, bundle)
@@ -330,42 +334,38 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     /**
      * 超强省电
      */
-    fun startPower(){
+    fun startPower() {
         startActivity(PhoneSuperPowerActivity::class.java)
     }
 
     /**
      * 微信清理
      */
-    fun startWxClean(){
+    fun startWxClean() {
         startActivity(WechatCleanHomeActivity::class.java)
     }
 
     /**
      * 手机降温
      */
-    fun startCool(){
+    fun startCool() {
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY)
     }
 
     /**
      * 通知栏清理
      */
-    fun startNotify(){
+    fun startNotify() {
         NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0)
     }
 
     /**
      * 刮刮卡列表
      */
-    fun startScratch(){
+    fun startScratch() {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("type", "huodong")
         startActivity(intent)
         finish()
-    }
-
-    private fun initHeadView(){
-
     }
 }

@@ -212,7 +212,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
 
-
     /**
      * 引导弹窗
      */
@@ -382,7 +381,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             showAdVideo();
         }
     }
-private void refreshAd(String adId) {
+
+    private void refreshAd(String adId) {
         switch (adId) {
             case MidasConstants.MAIN_ONE_AD_ID:
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
@@ -398,7 +398,7 @@ private void refreshAd(String adId) {
                 break;
             case MidasConstants.MAIN_THREE_AD_ID:
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
-                    if (getAdLayoutThreeVisible()) {
+                    if (getAdLayoutThreeVisible() || isThreeADLoadFailed) {
                         StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
                         mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
                     } else {
@@ -422,7 +422,7 @@ private void refreshAd(String adId) {
     }
 
     boolean isRequest = false;
-
+    boolean isThreeADLoadFailed = false;
 
     private void showAdVideo() {
         if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD) || mScrollView == null) {
@@ -433,7 +433,7 @@ private void refreshAd(String adId) {
             mScrollView.getHitRect(scrollBounds);
             if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
                 //子控件至少有一个像素在可视范围内
-                if (!isRequest) {
+                if (!isRequest || isThreeADLoadFailed) {
                     mPresenter.fillVideoAd(adLayoutThree, adClick);
                 }
                 isRequest = true;
@@ -444,6 +444,20 @@ private void refreshAd(String adId) {
 
     }
 
+
+    public void showAdSuccess(String adId) {
+        //第三个广告位特别处理下
+        if (PositionId.KEY_MAIN_THREE_AD.equals(adId)) {
+            isThreeADLoadFailed = false;
+        }
+    }
+
+    public void showAdError(String adId, String errorCode, String errorMsg) {
+        //第三个广告位特别处理下
+        if (PositionId.KEY_MAIN_THREE_AD.equals(adId)) {
+            isThreeADLoadFailed = true;
+        }
+    }
 
     /*
      *********************************************************************************************************************************************************
@@ -1065,22 +1079,20 @@ private void refreshAd(String adId) {
     }
 
 
-
-
     /*
      * *********************************************************************************************************************************************************
      * ********************************************************** 首页引导展示 ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
     @Subscribe
-    public void homeExposureEvent(ExposureEvent exposureEvent){
-        mPresenter.showGuideView(exposureEvent.getExposureTimes(),view_lottie_top);
+    public void homeExposureEvent(ExposureEvent exposureEvent) {
+        mPresenter.showGuideView(exposureEvent.getExposureTimes(), view_lottie_top);
     }
 
     /**
-     *引导页面展示逻辑
+     * 引导页面展示逻辑
      */
-    public void exposureChange(){
+    public void exposureChange() {
         int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
         if (exposuredTimes <= 2) { //只记录三次展示
             int currentTimes = (exposuredTimes + 1);
