@@ -54,8 +54,8 @@ import java.util.*
  */
 public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
 
-    var titleName:String=""
-    lateinit var pointer:CleanFinishPointer
+    var titleName: String = ""
+    lateinit var pointer: CleanFinishPointer
 
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
@@ -65,10 +65,15 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         activityComponent.inject(this)
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        initView()
+    }
+
     override fun initView() {
         StatusBarUtil.setTransparentForWindow(this)
-        titleName= intent.getStringExtra("title")
-        pointer= CleanFinishPointer(titleName)
+        titleName = intent.getStringExtra("title")
+        pointer = CleanFinishPointer(titleName)
         mPresenter.attachView(this)
         mPresenter.onCreate()
 
@@ -77,30 +82,29 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         mPresenter.loadRecommendData()
     }
 
-    private fun loadAdv(){
-        mPresenter.loadOneAdv(FrameLayout(this))
-        mPresenter.loadTwoAdv(FrameLayout(this))
+    private fun loadAdv() {
+        mPresenter.loadOneAdv(findViewById(R.id.ad_container_1))
+        mPresenter.loadTwoAdv(findViewById(R.id.ad_container_2))
     }
 
-    private fun initHeadView(){
+    private fun initHeadView() {
         left_title.text = titleName
         left_title.setOnClickListener {
             pointer.returnPoint()
             onBackPressed()
         }
         when (titleName) {
-            "建议清理" -> showSuggestClearView("886", "MB")
+            "建议清理","立即清理","一键清理" -> showSuggestClearView("886", "MB")
             "一键加速" -> show0neKeySpeedUp("24")
             "病毒查杀" -> showKillVirusView()
             "超强省电" -> showPowerSaving()
-            "微信专理" -> showWeiXinClear()
+            "微信专清" -> showWeiXinClear()
             "手机降温" -> showPhoneCold("37", "60")
             "通知栏清理" -> showNotificationClear()
             "网络加速" -> showNetSpeedUp("80")
             "手机清理" -> showPhoneClear()
         }
     }
-
 
     //建议清理
     private fun showSuggestClearView(num: String, unit: String) {
@@ -220,7 +224,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         bean.adId = MidasConstants.FINISH_GET_GOLD_COIN
         bean.context = this
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
-        bean.closeClickListener = View.OnClickListener { view: View? ->pointer.goldCoinClose()}
+        bean.closeClickListener = View.OnClickListener { view: View? -> pointer.goldCoinClose() }
         bean.onDoubleClickListener = View.OnClickListener { v: View? ->
             if (AndroidUtil.isFastDoubleBtnClick(1000)) {
                 return@OnClickListener
@@ -281,7 +285,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if(keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             pointer.systemReturnPoint()
         }
         return super.onKeyDown(keyCode, event)
@@ -290,21 +294,21 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     /**
      * 一键清理
      */
-    fun startClean(){
+    fun startClean() {
         startActivity(NowCleanActivity::class.java)
     }
 
     /**
      * 病毒查杀
      */
-    fun startVirus(){
+    fun startVirus() {
         startActivity(VirusKillActivity::class.java)
     }
 
     /**
      * 一键加速
      */
-    fun startAcc(){
+    fun startAcc() {
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
         startActivity(PhoneAccessActivity::class.java, bundle)
@@ -313,35 +317,35 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     /**
      * 超强省电
      */
-    fun startPower(){
+    fun startPower() {
         startActivity(PhoneSuperPowerActivity::class.java)
     }
 
     /**
      * 微信清理
      */
-    fun startWxClean(){
+    fun startWxClean() {
         startActivity(WechatCleanHomeActivity::class.java)
     }
 
     /**
      * 手机降温
      */
-    fun startCool(){
+    fun startCool() {
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY)
     }
 
     /**
      * 通知栏清理
      */
-    fun startNotify(){
+    fun startNotify() {
         NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0)
     }
 
     /**
      * 刮刮卡列表
      */
-    fun startScratch(){
+    fun startScratch() {
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("type", "huodong")
         startActivity(intent)

@@ -83,7 +83,8 @@
         android:layout_marginTop="9dp"
         android:layout_marginEnd="7dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/finish_pic_card" />
+        android:src="@mipmap/finish_pic_card"
+        />
 
     <FrameLayout
         android:id="@+id/ad_container_2"

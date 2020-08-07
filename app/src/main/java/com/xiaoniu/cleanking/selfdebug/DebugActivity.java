@@ -43,6 +43,7 @@ import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -69,6 +70,10 @@ public class DebugActivity extends BaseActivity {
     private ImageView icon_app;
     private TextView deviceTempcontent;
     private OneKeyCircleBtnView oneKeyCircleButtonView;
+    private TextView tv_finish;
+
+    private String[] titleNames={"一键清理", "病毒查杀", "一键加速", "超强省电", "微信清理", "手机降温", "通知栏清理","网络加速"};
+    private int titleIndex=-1;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -93,6 +98,7 @@ public class DebugActivity extends BaseActivity {
         tv_lottie = findViewById(R.id.tv_lottie);
         frame_layout = findViewById(R.id.frame_layout);
         tv_hide_icon = findViewById(R.id.tv_hide_icon);
+        tv_finish=findViewById(R.id.tv_finish);
         lottieAnimationView = findViewById(R.id.view_lottie_bottom);
         tv_hide_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +108,22 @@ public class DebugActivity extends BaseActivity {
 //                enableOtherComponent();
             }
         });
+
+        tv_finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title=titleNames[getTitleIndex()];
+                Intent intent=new Intent();
+                intent.putExtra("title",title);
+                StartFinishActivityUtil.Companion.gotoFinish(DebugActivity.this,intent);
+            }
+        });
+    }
+
+    public int getTitleIndex(){
+        titleIndex++;
+        titleIndex=titleIndex>=titleNames.length?0:titleIndex;
+        return titleIndex;
     }
 
     public void close(View view) {
