@@ -217,7 +217,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
             "手机加速" -> startAcc()
             "病毒查杀" -> startVirus()
             "超强省电" -> startPower()
-            "微信专清" -> startWxClean()
+            "微信清理" -> startWxClean()
             "手机降温" -> startCool()
             "通知栏清理" -> startNotify()
         }
