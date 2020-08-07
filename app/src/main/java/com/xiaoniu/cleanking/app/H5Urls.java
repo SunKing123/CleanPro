@@ -31,8 +31,13 @@ public interface H5Urls {
      * 刮刮卡页面
      * 刘帅帅 域名 http://192.168.85.61:9999/html/wallet/withdrawal.html?
      */
-//    String SCRATCHCARDS_URL = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList.html?" + timeFlag;
-    String SCRATCHCARDS_URL = BuildConfig.Base_H5_Host_300 + "/html/activitiesHtml/scratchCards/cardList.html?" + timeFlag;
+//    String SCRATCHCARDS_URL = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList2.html?" + timeFlag;
+    String SCRATCHCARDS_URL = BuildConfig.Base_H5_Host_300 + "/html/activitiesHtml/scratchCards/cardList2.html?" + timeFlag;
+    /**
+     * 刮刮卡详情页面
+     */
+//    String SCRATCHCARDS_DETAIL_URL = "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/scratch.html?";
+    String SCRATCHCARDS_DETAIL_URL = BuildConfig.Base_H5_Host_300 + "/html/activitiesHtml/scratchCards/scratch.html?";
 
     /**
      * 邀请好友

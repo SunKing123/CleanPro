@@ -37,4 +37,6 @@ public class GoldCoinDialogParameter {
     public DialogInterface.OnDismissListener dismissListener;
     //广告回调
     public AbsAdBusinessCallback advCallBack;
+    //翻倍按钮的文字内容
+    public String doubleMsg;
 }

@@ -59,7 +59,6 @@ import com.xiaoniu.cleanking.jpush.JPushNotificationManager;
 import com.xiaoniu.cleanking.jsbridge.module.JsBridgeModule;
 import com.xiaoniu.cleanking.keeplive.receive.NetBroadcastReceiver;
 import com.xiaoniu.cleanking.keeplive.receive.NetworkCallbackImpl;
-import com.xiaoniu.cleanking.keeplive.service.LocalService;
 import com.xiaoniu.cleanking.keeplive.utils.HomeWatcher;
 import com.xiaoniu.cleanking.keeplive.utils.OnHomePressedListener;
 import com.xiaoniu.cleanking.lifecyler.LifecycleHelper;
@@ -284,7 +283,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
     }
 
     private void initGeekPush(Application application) {
-        GeekPush.setDebug(false);
+        GeekPush.setDebug(BuildConfig.DEBUG);
 
         GeekPush.init(application, ((platformCode, platformName) -> {
             boolean result = (platformCode == PushConstants.PLATFORMCODE_JPUSH);

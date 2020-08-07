@@ -18,6 +18,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.geek.webpage.utils.NetkUtils;
+import com.jess.arms.utils.LogUtils;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebSettingsImpl;
 import com.just.agentweb.WebChromeClient;
@@ -25,8 +26,12 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.databinding.FragmentYuleBinding;
-import com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter;
+import com.xiaoniu.cleanking.mvp.GSON;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.ui.main.event.SwitchTabEvent;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScrapingCardBean;
 import com.xiaoniu.cleanking.ui.newclean.util.MyBaseWebViewClient;
+import com.xiaoniu.cleanking.ui.newclean.util.ScrapingCardDataUtils;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -36,6 +41,8 @@ import com.xiaoniu.statusview.StatusViewBuilder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
@@ -74,7 +81,7 @@ public class YuLeFragment extends SimpleFragment {
 //            Intent intent = new Intent(getContext(), BrowserActivity.class);
 //            intent.putExtra(Constant.URL,url);
 //            startActivity(intent);
-//            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
+            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
 //            Log.e("snow", "==" + AndroidUtil.getXnData());
             Log.e("snow", "=errorView.getVisibility=" + errorView.getVisibility());
         });
@@ -126,6 +133,7 @@ public class YuLeFragment extends SimpleFragment {
         if (!hidden) {
 //            getWebView().loadUrl(H5Urls.SCRATCHCARDS_URL);
             getWebView().loadUrl("javascript:refresh()");
+            LogUtils.debugInfo("snow", "=======刮刮乐页面显示===================");
             NiuDataAPI.onPageStart("home_page_view_page", "刮刮卡浏览");
 //            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
 //            if (isFirstLoad) {
@@ -228,6 +236,35 @@ public class YuLeFragment extends SimpleFragment {
             }
             return "0";
         }
+
+        @JavascriptInterface
+        public void skipToNext(String dataJson, int curPosition, boolean isSkipVideo) {//跳转卡片详情
+            if (UserHelper.init().isLogin() && !TextUtils.isEmpty(dataJson)) {
+                List<ScrapingCardBean> dataList = GSON.parseList(dataJson, ScrapingCardBean.class);
+                ScrapingCardDataUtils.init().setScrapingCardData(dataList, curPosition);
+                LogUtils.debugInfo("h5调用方法==dataList====" + dataList.size() + "==curPosition==" + curPosition + "===isSkipVideo==" + isSkipVideo);
+                if (isSkipVideo) {
+                    ScrapingCardDataUtils.init().goToScrapingCarDetail(getActivity());
+                } else {
+                    ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity());
+                }
+            } else {
+                UserHelper.init().startToLogin(getActivity());
+            }
+        }
+
+        @JavascriptInterface
+        public void addCarsData(String dataJson) {//只填充卡片数据
+            if (!TextUtils.isEmpty(dataJson)) {
+                List<ScrapingCardBean> dataList = GSON.parseList(dataJson, ScrapingCardBean.class);
+                ScrapingCardDataUtils.init().setScrapingCardData(dataList, 0);
+            }
+        }
+
+        @JavascriptInterface
+        public void skipToMine() {//跳转我的页面
+            EventBus.getDefault().post(new SwitchTabEvent(MainActivity.MINE));
+        }
     }
 
     /**
@@ -282,7 +319,8 @@ public class YuLeFragment extends SimpleFragment {
     public void onResume() {
         mAgentWeb.getWebLifeCycle().onResume();
         super.onResume();
-        getWebView().loadUrl("javascript:refresh()");
+        LogUtils.debugInfo("snow", "=======刮刮乐页面onResume===================");
+//        getWebView().loadUrl("javascript:refresh()");
     }
 
     @Override
