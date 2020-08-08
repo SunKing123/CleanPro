@@ -8,9 +8,14 @@ import org.json.JSONObject
 /**
  * Created by xinxiaolong on 2020/8/6.
  * email：xinxiaolong123@foxmail.com
+ *
+ * 文档 https://docs.qq.com/sheet/DZUx2WXlCcXpYSXFu?newPad=1&newPadType=clone&tab=2f6nzz
+ *
+ * 完成页面埋点统一封装
+ *
  */
-public class CleanFinishPointer {
-    
+class CleanFinishPointer {
+
     var title: String
     lateinit var point: Points.CleanFinish.Point
 
@@ -21,7 +26,7 @@ public class CleanFinishPointer {
 
     private fun initPoint(title: String) {
         when (title) {
-            "建议清理","立即清理","一键清理" -> {
+            "建议清理", "立即清理", "一键清理" -> {
                 point = Points.CleanFinish.Clean()
             }
             "通知栏清理" -> {
@@ -45,7 +50,7 @@ public class CleanFinishPointer {
             "手机降温" -> {
                 point = Points.CleanFinish.Cool()
             }
-            else ->{
+            else -> {
                 point = Points.CleanFinish.Acc()
             }
         }
@@ -81,24 +86,83 @@ public class CleanFinishPointer {
         StatisticsUtils.trackClick(Points.SYSTEM_RETURN_CLICK_EVENT_CODE, point.returnClickName, "", point.page)
     }
 
-    fun goldCoinDialogExposure(){
+    /**
+     * 金币弹框曝光
+     */
+    fun goldCoinDialogExposure() {
         StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.PAGE_EVENT_CODE, Points.CleanFinish.GoldCoin.PAGE_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE)
     }
 
-    fun goldCoinDoubleClick(){
+    /**
+     * 金币点击翻倍
+     */
+    fun goldCoinDoubleClick() {
         StatisticsUtils.trackClick(Points.CleanFinish.GoldCoin.DOUBLE_CLICK_EVENT_CODE, Points.CleanFinish.GoldCoin.DOUBLE_CLICK_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsJson())
     }
 
-    fun goldCoinRequestAdv1(){
+    /**
+     * 金币弹框第一个广告位
+     */
+    fun goldCoinRequestAdv1() {
         StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.REQUEST_ADV1_EVENT_CODE, Points.CleanFinish.GoldCoin.REQUEST_ADV1_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsMap())
     }
 
-    fun goldCoinRequestAdv2(){
+    /**
+     * 金币弹框激励视频广告
+     */
+    fun goldCoinRequestAdv2() {
         StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.REQUEST_ADV2_EVENT_CODE, Points.CleanFinish.GoldCoin.REQUEST_ADV2_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsMap())
     }
 
-    fun goldCoinClose(){
+    /**
+     * 信息流广告位1
+     */
+    fun requestFeedAdv1() {
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.FeedAdv.REQUEST_ADV1_EVENT_CODE, Points.CleanFinish.FeedAdv.REQUEST_ADV1_EVENT_NAME, "", Points.CleanFinish.FeedAdv.PAGE)
+    }
+
+    /**
+     * 信息流广告位2
+     */
+    fun requestFeedAdv2() {
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.FeedAdv.REQUEST_ADV2_EVENT_CODE, Points.CleanFinish.FeedAdv.REQUEST_ADV2_EVENT_NAME, "", Points.CleanFinish.FeedAdv.PAGE)
+    }
+
+    /**
+     * 插屏广告
+     */
+    fun insertAdvRequest4() {
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.Insert.REQUEST_ADV4_EVENT_CODE, Points.CleanFinish.Insert.REQUEST_ADV4_EVENT_NAME, "", Points.CleanFinish.Insert.PAGE)
+    }
+
+    /**
+     * 首页插屏广告
+     */
+    fun insertAdvRequest5() {
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.Insert.REQUEST_ADV5_EVENT_CODE, Points.CleanFinish.Insert.REQUEST_ADV5_EVENT_NAME, "", Points.CleanFinish.Insert.PAGE)
+    }
+
+    /**
+     * 金币弹框关闭
+     */
+    fun goldCoinClose() {
         StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_CODE, Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsMap())
+    }
+
+    /**
+     * 激励视频广告关闭
+     */
+    fun videoAdvClose() {
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.VIDEO_CLOSE_EVENT_CODE, Points.CleanFinish.VIDEO_CLOSE_EVENT_NAME, "", Points.CleanFinish.VIDEO_PAGE, getStatisticsMap())
+    }
+
+    /**
+     * 金币发放数量
+     */
+    fun goldNum(goldNum: String) {
+        val map: MutableMap<String, Any> = getStatisticsMap() as MutableMap<String, Any>
+        map["gold_number"] = goldNum
+        StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.NUMBER_OF_GOLD_COINS_EVENT_CODE, Points.CleanFinish.GoldCoin.NUMBER_OF_GOLD_COINS_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, map)
     }
 
     private fun getStatisticsMap(): Map<String, Any>? {

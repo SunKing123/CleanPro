@@ -169,6 +169,11 @@ public interface Points {
         String RECOMMEND_CLICK_NAME = "recommendation_function_click";
         String RECOMMEND_CLICK_CODE = "推荐功能点击";
 
+        String VIDEO_PAGE="success_page_gold_coin_pop_up_window_incentive_video_page";
+        String VIDEO_CLOSE_EVENT_CODE="incentive_video_ad_click";
+        String VIDEO_CLOSE_EVENT_NAME="功能完成页金币翻倍激励视频广告关闭点击";
+
+
         interface GoldCoin{
             String PAGE = "success_page_gold_coin_pop_up_window";
             String PAGE_EVENT_CODE = "success_page_gold_coin_pop_up_window_custom";
@@ -198,6 +203,16 @@ public interface Points {
 
             String REQUEST_ADV5_EVENT_CODE = "ad_request_sdk_5";
             String REQUEST_ADV5_EVENT_NAME = "功能完成页广告位5发起请求";
+        }
+
+        interface FeedAdv{
+            String PAGE = "success_page";
+
+            String REQUEST_ADV1_EVENT_CODE = "ad_request_sdk_1";
+            String REQUEST_ADV1_EVENT_NAME = "功能完成页广告位1发起请求";
+
+            String REQUEST_ADV2_EVENT_CODE = "ad_request_sdk_2";
+            String REQUEST_ADV2_EVENT_NAME = "功能完成页广告位2发起请求";
         }
 
         interface Point {

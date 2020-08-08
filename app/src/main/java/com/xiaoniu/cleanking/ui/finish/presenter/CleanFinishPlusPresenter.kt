@@ -1,17 +1,15 @@
 package com.xiaoniu.cleanking.ui.finish.presenter
 
 import android.widget.FrameLayout
-import android.widget.LinearLayout
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
-import com.xiaoniu.cleanking.midas.AdRequestParams
 import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
+import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemModel
 import com.xiaoniu.cleanking.ui.main.bean.*
@@ -19,8 +17,6 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel
 import com.xiaoniu.cleanking.ui.main.model.MainModel
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity.Companion.start
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
-import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil
 import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber
@@ -30,8 +26,6 @@ import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.ToastUtils
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
 import com.xiaoniu.unitionadbase.model.AdInfoModel
-import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
 import javax.inject.Inject
 
@@ -49,6 +43,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     private lateinit var itemDataStore: RecmedItemDataStore
     private var isOpenOne = false
     private var isOpenTwo = false
+    private lateinit var pointer:CleanFinishPointer
 
     @Inject
     public constructor() {
@@ -62,6 +57,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     override fun attachView(view: NewCleanFinishPlusActivity) {
         this.view = view
         this.itemDataStore = RecmedItemDataStore.getInstance()
+        pointer= CleanFinishPointer(view.titleName)
     }
 
     /**
@@ -115,14 +111,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         if (view.getActivity() == null) {
             return
         }
-        StatisticsUtils.customTrackEvent(
-                "ad_request_sdk_4",
-                "功能完成页广告位4发起请求",
-                "",
-                "success_page"
-        )
-//        val params: AdRequestParams = AdRequestParams.Builder()
-//                .setActivity(view.getActivity()).setAdId(MidasConstants.FINISH_INSIDE_SCREEN_ID).build()
+        pointer.insertAdvRequest4()
         MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH_INSIDE_SCREEN_ID,object : AbsAdBusinessCallback(){
             override fun onAdExposure(adInfoModel: AdInfoModel?) {
                 super.onAdExposure(adInfoModel)
@@ -140,7 +129,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      */
     override fun loadOneAdv(advContainer: FrameLayout) {
         if (!isOpenOne) return
-        StatisticsUtils.customTrackEvent("ad_request_sdk_1", "功能完成页广告位1发起请求", NewCleanFinishActivity.sourcePage, "success_page")
+        pointer.requestFeedAdv1()
         MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH01_TOP_FEEED_ID,object : SimpleViewCallBack(advContainer){
 
         })
@@ -152,7 +141,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      */
     override fun loadTwoAdv(advContainer: FrameLayout) {
         if (!isOpenTwo) return
-        StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页广告位2发起请求", NewCleanFinishActivity.sourcePage, "success_page")
+        pointer.requestFeedAdv2()
         MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH01_CENTER_FEEED_ID,object : SimpleViewCallBack(advContainer){
 
         })
@@ -199,9 +188,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             override fun getData(bubbleConfig: BubbleCollected?) {
                 //实时更新金币信息
                 RequestUserInfoUtil.getUserCoinInfo()
-                val map: MutableMap<String, Any> = getStatisticsMap() as MutableMap<String, Any>
-                map["gold_number"] = goldNum
-                StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", "功能完成页领取弹窗金币发放数", "", "success_page_gold_coin_pop_up_window", map)
+                pointer.goldNum(goldNum.toString())
                 if (bubbleConfig != null) {
                     //添加成功后，展示金币弹框
                     view.showGoldCoinDialog(bubbleConfig)
@@ -283,7 +270,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             }
             override fun onAdClose(adInfo: AdInfoModel?, isComplete: Boolean) {
                 super.onAdClose(adInfo, isComplete)
-                StatisticsUtils.trackClick("incentive_video_ad_click", "功能完成页金币翻倍激励视频广告关闭点击", "", "success_page_gold_coin_pop_up_window_incentive_video_page", getStatisticsJson())
+                pointer.videoAdvClose()
                 if (isComplete) {
                     //播放完成的话去翻倍
                     addDoubleGoldCoin(bubbleCollected)
@@ -296,16 +283,5 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                 super.onAdVideoComplete(adInfoModel)
             }
         })
-    }
-
-    private fun getStatisticsJson(): JSONObject? {
-        val jsonObject = JSONObject()
-        try {
-            jsonObject.put("position_id", 5)
-            jsonObject.put("function_name", view.titleName)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-        return jsonObject
     }
 }

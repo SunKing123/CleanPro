@@ -64,6 +64,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.MineFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.NewPlusCleanMainFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
+import com.xiaoniu.cleanking.ui.newclean.util.ScrapingCardDataUtils;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
@@ -302,7 +303,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
-
     private class MyRunnable implements Runnable {
 
         @Override
@@ -349,6 +349,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mBottomBar.setCurrentItem(CLEAN);
         } else if ("huodong".equals(type)) {
             mBottomBar.setCurrentItem(NEWS);
+            //跳转刮刮卡
+            if (ScrapingCardDataUtils.init().getCardsListSize() > 0) {
+                ScrapingCardDataUtils.init().goToScrapingCarDetail(this);
+            }
         } else if ("wode".equals(type)) {
             mBottomBar.setCurrentItem(MINE);
         }
@@ -778,12 +782,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     /**
      * 底部tabview获取
+     *
      * @return
      */
-    public BottomBar getCardTabView(){
+    public BottomBar getCardTabView() {
         return mBottomBar;
     }
-
 
 
     /**
@@ -926,9 +930,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         ComponentName apple = new ComponentName(getApplication(), "com.xiaoniu.cleanking.wx");
         QuickUtils.getInstant(this).enableComponent(apple);
     }
-
-
-
 
 
 }
