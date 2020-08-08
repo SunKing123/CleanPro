@@ -844,6 +844,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         builder.addComponent(new FingerGuideComponent(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                StatisticsUtils.trackClick("clean_up_immediately_click", "立即清理按钮点击", "clear_mask_guide", "clear_mask_guide");
                                 EventBus.getDefault().post(new GuideViewClickEvent(1));
                                 if (null != guide) {
                                     guide.dismiss();
@@ -856,6 +857,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        StatisticsUtils.trackClick("skip_click", "跳过按钮点击", "clear_mask_guide", "clear_mask_guide");
                                         if (null != guide) {
                                             guide.dismiss();
                                         }
@@ -863,7 +865,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                                 }));
                         guide = builder.createGuide();
                         guide.show(mView.getActivity());
-
+                        StatisticsUtils.customTrackEvent("clear_mask_guide_custom", "清理蒙层引导页面曝光", "clear_mask_guide", "clear_mask_guide");
 
                     }
                 });
@@ -891,6 +893,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         builder.addComponent(new GoldGuideComponent(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        StatisticsUtils.trackClick("receive_immediately_click", "立即领取按钮点击", "gold_coin_mask_guide", "gold_coin_mask_guide");
                                         EventBus.getDefault().post(new GuideViewClickEvent(2));
                                         if (null != guide) {
                                             guide.dismiss();
@@ -904,6 +907,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        StatisticsUtils.trackClick("skip_click", "跳过按钮点击", "gold_coin_mask_guide", "gold_coin_mask_guide");
                                         if (null != guide) {
                                             guide.dismiss();
                                         }
@@ -911,6 +915,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                                 }));
                         guide = builder.createGuide();
                         guide.show(mView.getActivity());
+                        StatisticsUtils.customTrackEvent("gold_coin_mask_guide_custom", "金币蒙层引导页面曝光", "gold_coin_mask_guide", "gold_coin_mask_guide");
 
                     }
                 });
@@ -937,6 +942,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         builder.addComponent(new CardGuideComponent(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                StatisticsUtils.trackClick("scratch_immediately_click", "立即刮卡按钮点击", "scraping_carmen_layer_guide", "scraping_carmen_layer_guide");
                                 EventBus.getDefault().post(new GuideViewClickEvent(3));
                                 if (null != guide) {
                                     guide.dismiss();
@@ -949,6 +955,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        StatisticsUtils.trackClick("skip_click", "跳过按钮点击", "scraping_carmen_layer_guide", "scraping_carmen_layer_guide");
                                         if (null != guide) {
                                             guide.dismiss();
                                         }
@@ -956,7 +963,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                                 }));
                         guide = builder.createGuide();
                         guide.show(mView.getActivity());
-
+                        StatisticsUtils.customTrackEvent("scraping_carmen_layer_guide_custom", "刮刮卡蒙层引导页面曝光", "scraping_carmen_layer_guide", "scraping_carmen_layer_guide");
                     }
                 });
                 break;
