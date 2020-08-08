@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -57,6 +58,7 @@ import com.xiaoniu.cleanking.ui.main.event.GuideViewClickEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.event.SwitchTabEvent;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
+import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
@@ -712,7 +714,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
 
-
     void oneKeyClick() {
         if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
             if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
@@ -1102,7 +1103,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Subscribe
     public void homeExposureEvent(ExposureEvent exposureEvent) {
         int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
-        if (exposuredTimes <= 2) { //只记录三次展示
+        String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
+        if (TextUtils.equals(auditSwitch, "1") && exposuredTimes <= 2) { //只记录三次展示
             int currentTimes = (exposuredTimes + 1);
             MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
             switch (currentTimes) {
@@ -1118,7 +1120,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                         public void run() {
                             mPresenter.showActionGuideView(currentTimes, ((MainActivity) mActivity).getCardTabView());
                         }
-                    },3000);
+                    }, 3000);
                     break;
             }
         }
