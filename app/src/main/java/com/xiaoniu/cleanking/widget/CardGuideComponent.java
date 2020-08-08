@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 import com.binioter.guideview.Component;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.event.GuideViewClickEvent;
+import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
+import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -29,6 +31,7 @@ public class CardGuideComponent implements Component {
         ImageView iv_guide03_tag02 = (ImageView)ll.findViewById(R.id.iv_guide03_tag02);
         iv_guide03_tag02.setOnClickListener(onmClickListener);
         iv_guide03_tag04.setOnClickListener(onmClickListener);
+        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide03_tag02, 1000);
         return ll;
     }
 

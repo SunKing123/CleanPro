@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 import com.binioter.guideview.Component;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.event.GuideViewClickEvent;
+import com.xiaoniu.cleanking.utils.anim.AnimationRotateUtils;
+import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -27,6 +29,8 @@ public class GoldGuideComponent implements Component {
         ImageView iv_guide02_tag04 = (ImageView)ll.findViewById(R.id.iv_guide02_tag04);
         gold.setOnClickListener(onmClickListener);
         iv_guide02_tag04.setOnClickListener(onmClickListener);
+        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide02_tag04, 1000);
+
         return ll;
     }
 

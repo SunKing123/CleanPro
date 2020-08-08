@@ -12,6 +12,7 @@ import com.binioter.guideview.Component;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.main.event.GuideViewClickEvent;
+import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +38,7 @@ public class FingerGuideComponent implements Component {
         iv_guide_tag00.setLayoutParams(relP);
         iv_guide_tag00.setOnClickListener(onmClickListener);
         iv_guide_tag03.setOnClickListener(onmClickListener);
+        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide_tag03, 1000);
         return ll;
     }
 
