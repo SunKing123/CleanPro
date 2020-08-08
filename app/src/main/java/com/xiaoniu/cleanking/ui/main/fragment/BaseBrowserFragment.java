@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.geek.webpage.utils.NetkUtils;
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebSettingsImpl;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -110,6 +111,7 @@ public class BaseBrowserFragment extends SimpleFragment {
                 .closeIndicator()
                 .setMainFrameErrorView(errorView)
                 .setWebChromeClient(new CustomWebChromeClient())
+                .setAgentWebWebSettings(AgentWebSettingsImpl.getInstance())
                 .setWebViewClient(baseWebViewClient)
                 .addJavascriptInterface("native", new JsInterface())
                 .addJavascriptInterface("android", new SdkJsInterface())

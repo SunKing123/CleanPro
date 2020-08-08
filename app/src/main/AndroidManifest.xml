@@ -665,6 +665,9 @@
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
 
+        <activity android:name=".ui.usercenter.activity.ScrapingCarDetailActivity"
+            android:screenOrientation="portrait"/>
+
         <meta-data
             android:name="android.max_aspect"
             android:value="2.2" /> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
