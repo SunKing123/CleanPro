@@ -31,6 +31,7 @@ public interface NewCleanFinishPlusContract {
         fun loadRecommendData()
         fun loadOneAdv(advContainer: FrameLayout)
         fun loadTwoAdv(advContainer: FrameLayout)
+        fun loadPopView()
         fun addDoubleGoldCoin(bubbleCollected: BubbleCollected)
         fun loadVideoAdv(bubbleCollected: BubbleCollected)
         fun onPostResume()

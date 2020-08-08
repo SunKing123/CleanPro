@@ -100,7 +100,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     /**
      * 加载弹框
      */
-    private fun loadPopView() {
+    override fun loadPopView() {
         val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
         config?.let {
             if (it.isOpen) {
@@ -256,11 +256,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     }
 
     override fun onPostResume() {
-        //插屏广告滞后请求，处理友盟bug
-        if (isFirst) {
-            isFirst = false
-            loadPopView()
-        }
     }
 
     override fun onPause() {

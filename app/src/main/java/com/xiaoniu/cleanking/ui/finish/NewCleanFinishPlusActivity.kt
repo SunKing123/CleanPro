@@ -40,9 +40,6 @@ import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
-import org.json.JSONException
-import org.json.JSONObject
-import java.util.*
 
 /**
  * Created by xinxiaolong on 2020/8/4.
@@ -52,7 +49,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     var titleName: String = ""
     lateinit var pointer: CleanFinishPointer
-
+    lateinit var newIntent: Intent
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
     }
@@ -63,7 +60,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        titleName = intent!!.getStringExtra("title")
+        newIntent = intent!!
         initView()
     }
 
@@ -71,10 +68,11 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         super.onViewCreated()
         mPresenter.onCreate()
         StatusBarUtil.setTransparentForWindow(this)
-        titleName = intent.getStringExtra("title")
+        newIntent = intent
     }
 
     override fun initView() {
+        titleName = newIntent.getStringExtra("title")
         pointer = CleanFinishPointer(titleName)
         restView()
         loadAdv()
@@ -82,20 +80,22 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         initHeadView()
         initEvent()
         mPresenter.loadRecommendData()
+        mPresenter.getGoldCoin()
     }
 
-    fun restView(){
-        card_1.visibility=View.GONE
-        card_2.visibility=View.GONE
+    fun restView() {
+        card_1.visibility = View.GONE
+        card_2.visibility = View.GONE
     }
 
-    private fun initEvent(){
+    private fun initEvent() {
         left_title.setOnClickListener {
             pointer.returnPoint()
             onBackPressed()
         }
         finish_card.setOnClickListener({ startScratch() })
     }
+
     private fun loadAdv() {
         mPresenter.loadOneAdv(findViewById(R.id.ad_container_1))
         mPresenter.loadTwoAdv(findViewById(R.id.ad_container_2))
@@ -304,8 +304,14 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onPostResume() {
         super.onPostResume()
-        mPresenter.onPostResume()
         pointer.exposurePoint()
+        
+        val unused = newIntent.getBooleanExtra("unused", false)
+        //真正使用过功能才请求弹框
+        if (!unused) {
+            //插屏广告滞后请求，处理友盟bug
+            mPresenter.loadPopView()
+        }
     }
 
     override fun onPause() {
