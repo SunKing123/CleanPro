@@ -76,6 +76,10 @@ public class ScrapingCardDataUtils {
         cardBean = getCarDataOfPosition(currentPosition);
     }
 
+    public int getCardsListSize() {
+        return cardList == null ? 0 : cardList.size();
+    }
+
     /**
      * 刮刮卡下一步处理
      */
@@ -308,7 +312,8 @@ public class ScrapingCardDataUtils {
         parameter.context = mActivity;
         parameter.isDouble = isDouble && !isAreaOne;
         parameter.isRewardOpen = isShowNext;
-        parameter.advCallBack = new AbsAdBusinessCallback() {};
+        parameter.advCallBack = new AbsAdBusinessCallback() {
+        };
         parameter.onDoubleClickListener = v -> clickNextCard(mActivity);
 //        parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
