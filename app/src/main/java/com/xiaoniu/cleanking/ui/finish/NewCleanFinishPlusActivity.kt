@@ -91,6 +91,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     private fun initEvent() {
         left_title.setOnClickListener {
             pointer.returnPoint()
+            pointer.insertAdvRequest5()
             onBackPressed()
         }
         finish_card.setOnClickListener({ startScratch() })
@@ -282,7 +283,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
                 return@OnClickListener
             }
             pointer.goldCoinDoubleClick()
-            pointer.goldCoinRequestAdv2()
             mPresenter.loadVideoAdv(bubbleCollected)
         }
         pointer.goldCoinDialogExposure()
@@ -327,6 +327,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             pointer.systemReturnPoint()
+            pointer.insertAdvRequest5()
+
         }
         return super.onKeyDown(keyCode, event)
     }
