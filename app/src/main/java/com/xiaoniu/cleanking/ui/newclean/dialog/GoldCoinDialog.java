@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -98,6 +100,13 @@ public class GoldCoinDialog {
         tv_coin_str.setVisibility(View.GONE);
         iv_top_three.setVisibility(View.GONE);
         ll_my_coin.setVisibility(View.GONE);
+
+        Window window = dialog.getWindow();
+        if (window != null){
+            WindowManager.LayoutParams p = window.getAttributes();
+            p.width = (int) (DisplayUtil.getScreenWidth(context) * 0.8722f);
+            window.setAttributes(p);
+        }
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             mRootRL.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(context, 8)));
             mRootRL.setClipToOutline(true);

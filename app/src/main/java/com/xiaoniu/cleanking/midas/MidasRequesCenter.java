@@ -48,6 +48,7 @@ public class MidasRequesCenter {
 //                .setDrawFeedWidthPx(DisplayUtils.dp2px(this, 300))//设置draw信息流宽度  单位像素
 //                .setDrawFeedHeightPx(DisplayUtils.dp2px(this, 500))//设置draw信息流高度  单位像素
                 .setSplashBottomHeightDp(100)//设置启动页半屏底部高度 单位dp
+                .setPrimaryColor("#06C581")//设置主题色颜色[主要为倒计时颜色、按钮、箭头颜色设置]
 //        .setDisableAllianceInitVariableArray(UnionConstants.AD_SOURCE_FROM_CSJ,UnionConstants.AD_SOURCE_FROM_YLH)//设置禁用联盟初始化可变数组
                 .setWebViewConfig(webViewConfig)//设置webview配置
                 .setHotFlashIntervalTime(AppHolder.getInstance().getHotTime())//设置热起时间间隔

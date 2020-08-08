@@ -4,11 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -50,6 +52,7 @@ import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
+import com.xiaoniu.unitionadbase.global.UnionConstants;
 import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -353,7 +356,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     intentClean.putExtras(bundle);
                     StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
                 }
-
+//                959
                 break;
             case R.id.rel_clean_ram://一键加速
                 StatisticsUtils.trackClick("memory_usage_click", "内存使用点击", "lock_screen", "lock_screen");
@@ -569,7 +572,17 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         StatisticsUtils.customTrackEvent("ad_request_sdk", "锁屏页广告发起请求", "lock_screen_page", "lock_screen_page");
 
-        MidasRequesCenter.requestAndShowAd(this, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(lockAdFrameLayout));
+        MidasRequesCenter.requestAndShowAd(this, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(lockAdFrameLayout){
+            @Override
+            public void onAdLoaded(AdInfoModel adInfoModel) {
+                if (TextUtils.equals(UnionConstants.AD_SOURCE_FROM_CSJ,adInfoModel.adUnion)){
+                    if (lockAdFrameLayout != null){
+                        lockAdFrameLayout.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
+                super.onAdLoaded(adInfoModel);
+            }
+        });
 
     }
 }
