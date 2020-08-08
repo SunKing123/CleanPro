@@ -144,6 +144,9 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
                 if (adInfoModel.view!= null && adInfoModel.view.getParent() == null){
                     container.addView(adInfoModel.view);
                 }
+                if (rxTimer != null){
+                    rxTimer.cancel();
+                }
             }
 
             @Override
