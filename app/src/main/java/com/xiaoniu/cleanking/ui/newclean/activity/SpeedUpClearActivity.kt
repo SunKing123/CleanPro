@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.bean.JunkResultWrapper
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.LogUtils
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.base.BaseActivity
 import com.xiaoniu.common.utils.AppUtils
 import com.xiaoniu.common.utils.DisplayUtils
@@ -135,6 +136,7 @@ class SpeedUpClearActivity : BaseActivity() {
         val mIntent = Intent()
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed))
         mIntent.putExtra(ExtraConstant.NUM, mSpeedUpNum)
+        PreferenceUtil.saveOneKeySpeedNum(mSpeedUpNum)
         // mIntent.putExtra(ExtraConstant.UNIT, unit)
         //  if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
         //   mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))
@@ -142,7 +144,6 @@ class SpeedUpClearActivity : BaseActivity() {
         StartFinishActivityUtil.gotoFinish(this, mIntent)
         finish()
     }
-
 
     private fun getNextImg(): Bitmap? {
         if (mCurrentIndex < mJunkResultWrapperList.size) {

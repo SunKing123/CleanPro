@@ -1875,4 +1875,20 @@ public class PreferenceUtil {
         return sharedPreferences.getString(SpCacheConfig.WARNED_NETWORK_RANDOM_IDS, "");
     }
 
+    /**
+     * 保存一键加速
+     */
+    public static void saveOneKeySpeedNum(String num) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.SAVE_ONE_KEY_SPEED_NUM, num).commit();
+    }
+
+    /**
+     * 获取一键加速
+     */
+    public static String getOneKeySpeedNum() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.SAVE_ONE_KEY_SPEED_NUM, "20");
+    }
 }
