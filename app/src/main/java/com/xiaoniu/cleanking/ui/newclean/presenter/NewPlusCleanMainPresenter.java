@@ -44,6 +44,7 @@ import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
 import com.xiaoniu.cleanking.ui.main.bean.SecondJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.ui.main.event.GuideViewClickEvent;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
@@ -72,6 +73,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
 import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -96,7 +98,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     private CompositeDisposable compositeDisposable;
     private LinkedHashMap<ScanningResultType, JunkGroup> mJunkGroups = new LinkedHashMap<>();
     private Handler mHandler = new Handler(Looper.getMainLooper());
-    //    private AdParameter mAdParameter;
+    private List<BubbleConfig.DataBean> bubbleListData = new ArrayList<>();
     @Inject
     NoClearSPHelper mPreferencesHelper;
 
@@ -571,6 +573,19 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             @Override
             public void getData(BubbleConfig bubbleConfig) {
                 mView.setTopBubbleView(bubbleConfig);
+                Map<Integer, BubbleConfig.DataBean> mp = new HashMap<>();
+                for (int i = 0; i < bubbleConfig.getData().size(); i++) {
+                    mp.put(bubbleConfig.getData().get(i).getLocationNum(), bubbleConfig.getData().get(i));
+                }
+                bubbleListData.clear();
+                if (mp.containsKey(4))
+                    bubbleListData.add(mp.get(4));//右下
+                if (mp.containsKey(2))
+                    bubbleListData.add(mp.get(2));//右上
+                if (mp.containsKey(3))
+                    bubbleListData.add(mp.get(3));//左下
+                if (mp.containsKey(1))
+                    bubbleListData.add(mp.get(1));//左上方
 
             }
 
@@ -586,6 +601,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
 
+    public BubbleConfig.DataBean getGuideViewBean(){
+        return bubbleListData.remove(0);
+    }
     //领取金币
     public void bullCollect(int locationNum) {
         mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
@@ -823,7 +841,15 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             }
                         });
 
-                        builder.addComponent(new FingerGuideComponent());
+                        builder.addComponent(new FingerGuideComponent(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                EventBus.getDefault().post(new GuideViewClickEvent(1));
+                                if (null != guide) {
+                                    guide.dismiss();
+                                }
+                            }
+                        }));
                         builder.addComponent(new SkipComponent(
                                 DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenWidth() * 0.06f),
                                 -DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenHeight() * 0.07f),
@@ -862,7 +888,16 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             }
                         });
 
-                        builder.addComponent(new GoldGuideComponent());
+                        builder.addComponent(new GoldGuideComponent(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        EventBus.getDefault().post(new GuideViewClickEvent(2));
+                                        if (null != guide) {
+                                            guide.dismiss();
+                                        }
+                                    }
+                                })
+                        );
                         builder.addComponent(new SkipComponent(
                                 0,
                                 -150,
@@ -899,7 +934,15 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             }
                         });
 
-                        builder.addComponent(new CardGuideComponent());
+                        builder.addComponent(new CardGuideComponent(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                EventBus.getDefault().post(new GuideViewClickEvent(3));
+                                if (null != guide) {
+                                    guide.dismiss();
+                                }
+                            }
+                        }));
                         builder.addComponent(new SkipComponent(
                                 -DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenWidth() * 0.06f),
                                 -DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenHeight() * 0.84f),

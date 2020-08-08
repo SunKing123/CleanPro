@@ -26,6 +26,7 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -52,15 +53,18 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.ExposureEvent;
+import com.xiaoniu.cleanking.ui.main.event.GuideViewClickEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
+import com.xiaoniu.cleanking.ui.newclean.bean.ScrapingCardBean;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GuideHomeDialog;
 import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
+import com.xiaoniu.cleanking.ui.newclean.util.ScrapingCardDataUtils;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
@@ -696,33 +700,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         switch (view.getId()) {
             case R.id.view_lottie_top_center:
                 StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
-                if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
-                    if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                        //读取扫描缓存
-                        startActivity(NowCleanActivity.class);
-                    } else {    //scanState ==0: 扫描中
-                        checkStoragePermission();
-                    }
-                } else {
-                    String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
-                    CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
-                    if (null != countEntity && getActivity() != null && this.isAdded()) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
-                        bundle.putString("num", countEntity.getTotalSize());
-                        bundle.putString("unit", countEntity.getUnit());
-                        bundle.putBoolean("unused", true);
-                        StartFinishActivityUtil.Companion.gotoFinish(requireActivity(), bundle);
-                    } else {
-                        //判断扫描缓存；
-                        if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
-                            //读取扫描缓存
-                            startActivity(NowCleanActivity.class);
-                        } else {                //scanState ==0: 扫描中
-                            checkStoragePermission();
-                        }
-                    }
-                }
+                oneKeyClick();
                 break;
 
             case R.id.layout_temp://获取天气信息；
@@ -732,6 +710,37 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
+
+
+    void oneKeyClick() {
+        if (PreferenceUtil.getNowCleanTime()) { //清理缓存五分钟_未扫过或者间隔五分钟以上
+            if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                //读取扫描缓存
+                startActivity(NowCleanActivity.class);
+            } else {    //scanState ==0: 扫描中
+                checkStoragePermission();
+            }
+        } else {
+            String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
+            CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
+            if (null != countEntity && getActivity() != null && this.isAdded()) {
+                Bundle bundle = new Bundle();
+                bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
+                bundle.putString("num", countEntity.getTotalSize());
+                bundle.putString("unit", countEntity.getUnit());
+                bundle.putBoolean("unused", true);
+                StartFinishActivityUtil.Companion.gotoFinish(requireActivity(), bundle);
+            } else {
+                //判断扫描缓存；
+                if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
+                    //读取扫描缓存
+                    startActivity(NowCleanActivity.class);
+                } else {                //scanState ==0: 扫描中
+                    checkStoragePermission();
+                }
+            }
+        }
+    }
 
     /**
      * 检查文件存贮权限
@@ -1095,17 +1104,49 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (exposuredTimes <= 2) { //只记录三次展示
             int currentTimes = (exposuredTimes + 1);
             MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
-            switch(currentTimes){
+            switch (currentTimes) {
                 case 1:
-                    mPresenter.showActionGuideView(currentTimes,view_lottie_top);
+                    mPresenter.showActionGuideView(currentTimes, view_lottie_top);
                     break;
                 case 2:
-                    mPresenter.showActionGuideView(currentTimes,rtBottom);
+                    mPresenter.showActionGuideView(currentTimes, rtBottom);
                     break;
                 case 3:
-                    mPresenter.showActionGuideView(currentTimes,((MainActivity)mActivity).getCardTabView());
+                    AppLifecyclesImpl.postDelay(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPresenter.showActionGuideView(currentTimes, ((MainActivity) mActivity).getCardTabView());
+                        }
+                    },3000);
                     break;
             }
+        }
+
+    }
+
+
+    @Subscribe
+    public void guideClickEvent(GuideViewClickEvent guideViewClickEvent) {
+        switch (guideViewClickEvent.getGuideIndex()) {
+            case 1:
+                oneKeyClick();
+                break;
+            case 2:
+                BubbleConfig.DataBean ballBean = mPresenter.getGuideViewBean();
+                if (ballBean == null) {
+                    return;
+                }
+                if (!AndroidUtil.isFastDoubleClick()) {
+                    mPresenter.bullCollect(ballBean.getLocationNum());
+                }
+                break;
+            case 3:
+                ScrapingCardBean scrapingCardBean = ScrapingCardDataUtils.init().getCarDataOfPosition(0);
+                if (scrapingCardBean != null) {
+                    ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity());
+                }
+                break;
+
         }
 
     }
