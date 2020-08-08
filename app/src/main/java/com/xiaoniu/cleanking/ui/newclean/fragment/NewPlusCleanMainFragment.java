@@ -1103,7 +1103,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Subscribe
     public void homeExposureEvent(ExposureEvent exposureEvent) {
         int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
-        String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
+        String auditSwitch = SPUtil.getString(mActivity, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "1") && exposuredTimes <= 2) { //只记录三次展示
             int currentTimes = (exposuredTimes + 1);
             MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
