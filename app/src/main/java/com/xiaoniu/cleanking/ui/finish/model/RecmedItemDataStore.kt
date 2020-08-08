@@ -88,13 +88,12 @@ public class RecmedItemDataStore {
         return popModel();
     }
 
-
     /**
      * 一键清理数据
      */
     fun assembleOneKeyClean(): RecmedItemModel {
         var title = "垃圾文件太多"
-       
+
         var content1: SpannableString
         if (ScanDataHolder.getInstance().getTotalSize() <= 0) {
             content1 = SpannableString("已发现大量缓存垃圾")

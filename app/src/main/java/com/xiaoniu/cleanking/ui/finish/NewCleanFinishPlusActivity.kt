@@ -76,12 +76,17 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun initView() {
         pointer = CleanFinishPointer(titleName)
+        restView()
         loadAdv()
         initTitle()
         initHeadView()
         initEvent()
         mPresenter.loadRecommendData()
+    }
 
+    fun restView(){
+        card_1.visibility=View.GONE
+        card_2.visibility=View.GONE
     }
 
     private fun initEvent(){
