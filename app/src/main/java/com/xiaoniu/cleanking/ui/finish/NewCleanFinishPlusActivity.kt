@@ -335,7 +335,9 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
      * 一键清理
      */
     fun startClean() {
-        startActivity(NowCleanActivity::class.java)
+        var intent=Intent(this,NowCleanActivity::class.java)
+        intent.putExtra("fromRecommend",true)
+        startActivity(intent)
     }
 
     /**

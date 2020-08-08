@@ -49,7 +49,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     private lateinit var itemDataStore: RecmedItemDataStore
     private var isOpenOne = false
     private var isOpenTwo = false
-    private var isFirst = true
 
     @Inject
     public constructor() {
@@ -197,7 +196,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 // ToastUtils.showShort(message);
             }
-
             override fun getData(bubbleConfig: BubbleCollected?) {
                 //实时更新金币信息
                 RequestUserInfoUtil.getUserCoinInfo()
