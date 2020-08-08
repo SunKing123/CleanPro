@@ -305,7 +305,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     override fun onPostResume() {
         super.onPostResume()
         pointer.exposurePoint()
-        
+
         val unused = newIntent.getBooleanExtra("unused", false)
         //真正使用过功能才请求弹框
         if (!unused) {

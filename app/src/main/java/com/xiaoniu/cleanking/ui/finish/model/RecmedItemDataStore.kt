@@ -165,7 +165,7 @@ public class RecmedItemDataStore {
         var title = "微信清理"
         var content1 = SpannableString("缓存过期文件过多")
         var content2 = SpannableString("不处理将导致聊天卡顿")
-        var imageIcon = R.drawable.icon_finish_recommed_clean_virus
+        var imageIcon = R.drawable.icon_finish_recommed_clean_wechat
         var buttonText = "立即清理"
         return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
