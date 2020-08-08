@@ -633,7 +633,6 @@ public class PreferenceUtil {
         return false;
     }
 
-
     /**
      * 保存清理运行内存是否全选
      *
@@ -1891,4 +1890,23 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
         return sharedPreferences.getString(SpCacheConfig.SAVE_ONE_KEY_SPEED_NUM, "20");
     }
+
+
+    /**
+     * 保存垃圾清理大小
+     */
+    public static void saveCleanStorageNum(String num,String unit) {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SpCacheConfig.SAVE_CLEAN_STORAGE_NUM, num+":"+unit).commit();
+    }
+
+    /**
+     * 获取垃圾清理大小
+     */
+    public static String getCleanStorageNum() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(SpCacheConfig.SAVE_CLEAN_STORAGE_NUM, "201:MB");
+    }
+
 }

@@ -18,6 +18,7 @@ import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
+import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemModel
 import com.xiaoniu.cleanking.ui.finish.presenter.CleanFinishPlusPresenter
 import com.xiaoniu.cleanking.ui.main.activity.MainActivity
@@ -94,7 +95,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     private fun initHeadView() {
         var num = intent.getStringExtra(ExtraConstant.NUM)
         when (titleName) {
-            "建议清理", "立即清理", "一键清理" -> showSuggestClearView("886", "MB")
+            "建议清理", "立即清理", "一键清理" -> showSuggestClearView()
             "一键加速" -> showOneKeySpeedUp()
             "病毒查杀" -> showKillVirusView()
             "超强省电" -> showPowerSaving()
@@ -107,15 +108,14 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     }
 
     //建议清理
-    private fun showSuggestClearView(num: String, unit: String) {
+    private fun showSuggestClearView() {
+        var storage=PreferenceUtil.getCleanStorageNum().split(":")
+        var num=storage[0]
+        var unit=storage[1]
         function_icon.setImageResource(R.mipmap.finish_icon_ok)
-        val content = num.plus(unit)
-        val spannableString = SpannableString(content)
-        val sizeSpan = AbsoluteSizeSpan(DisplayUtils.sp2px(this, 30F))
-        spannableString.setSpan(sizeSpan, 0, num.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-        function_title.text = spannableString
+        val content = AndroidUtil.zoomText(num.plus(unit), 2f,0,num.length)
+        function_title.text = content
         function_sub_title.text = "垃圾已清理"
-        function_sub_title.textSize = 10F
     }
 
     //一键加速
@@ -216,8 +216,11 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         view.setSubTitle1(item.content1)
         view.setSubTitle2(item.content2)
         view.setButtonText(item.buttonText)
-        view.setImageLabelHide()
-
+        if(item.title.equals("手机加速")){
+            view.setImageLabel(RecmedItemDataStore.getInstance().memory)
+        }else{
+            view.setImageLabelHide()
+        }
         view.setOnClickListener({ onRecommendViewClick(item.title) })
     }
 

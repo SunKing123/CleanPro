@@ -6,12 +6,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
+import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanCleanFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
@@ -20,6 +22,7 @@ import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
+import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -156,6 +159,7 @@ public class NowCleanActivity extends BaseActivity {
         bundle.putString("title", getString(R.string.tool_suggest_clean));
         Intent intent = new Intent();
         intent.putExtras(bundle);
+
         StartFinishActivityUtil.Companion.gotoFinish(this, bundle);
     }
 

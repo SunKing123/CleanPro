@@ -155,6 +155,7 @@ public class OneKeyCircleBtnView extends RelativeLayout {
         if (null != countEntity && !TextUtils.isEmpty(countEntity.getResultSize())) {
             tv_file_total_size.setVisibility(GONE);
             tv_file_total_tag.setText(getContext().getResources().getString(R.string.home_top_pop02_tag, countEntity.getResultSize()));
+
             tv_file_total_tag.setVisibility(VISIBLE);
             greenState();
         }
