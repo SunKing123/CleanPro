@@ -50,6 +50,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     var titleName: String = ""
     lateinit var pointer: CleanFinishPointer
     lateinit var newIntent: Intent
+    var isFirst=true
+
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
     }
@@ -86,6 +88,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     fun restView() {
         card_1.visibility = View.GONE
         card_2.visibility = View.GONE
+        isFirst=true
     }
 
     private fun initEvent() {
@@ -308,8 +311,9 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
         val unused = newIntent.getBooleanExtra("unused", false)
         //真正使用过功能才请求弹框
-        if (!unused) {
+        if (!unused&&isFirst) {
             //插屏广告滞后请求，处理友盟bug
+            isFirst=false
             mPresenter.loadPopView()
         }
     }
@@ -328,7 +332,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             pointer.systemReturnPoint()
             pointer.insertAdvRequest5()
-
         }
         return super.onKeyDown(keyCode, event)
     }
