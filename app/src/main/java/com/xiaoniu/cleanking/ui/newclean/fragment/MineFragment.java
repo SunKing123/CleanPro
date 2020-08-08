@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import androidx.databinding.DataBindingUtil;
@@ -58,6 +59,7 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * Describe:个人中心 替换之前的MeFragment页面
  */
 public class MineFragment extends BaseFragment<MinePresenter> implements MineFragmentContact.View {
+    FrameLayout mine_ad_ff;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -78,11 +80,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
+
         mBinding = DataBindingUtil.bind(getView());
         mBinding.phoneNumTv.setText("未登录");
         setUserInfo();
         RequestUserInfoUtil.getUserCoinInfo();
-
+        mine_ad_ff = getView().findViewById(R.id.mine_ad_ff);
 
         RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.settingLl.getLayoutParams();
         params.topMargin = DeviceUtils.getStatusBarHeight(mContext) + 30;
@@ -95,8 +98,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
         ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            mBinding.mineAdFf.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
-            mBinding.mineAdFf.setClipToOutline(true);
+            mine_ad_ff.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
+            mine_ad_ff.setClipToOutline(true);
         }
 //        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
     }
@@ -283,7 +286,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
 
-        MidasRequesCenter.requestAndShowAd(mActivity,MidasConstants.LOCK_PAGE_FEED_ID,new SimpleViewCallBack(mBinding.mineAdFf){
+        MidasRequesCenter.requestAndShowAd(mActivity, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(mine_ad_ff) {
             @Override
             public void onAdExposure(AdInfoModel adInfoModel) {
                 super.onAdExposure(adInfoModel);
