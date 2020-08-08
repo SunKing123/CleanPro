@@ -2,13 +2,13 @@ package com.xiaoniu.cleanking.ui.finish
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import android.view.KeyEvent
 import android.graphics.Typeface
+import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
+import android.view.KeyEvent
 import android.view.View
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
@@ -40,9 +40,6 @@ import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
-import org.json.JSONException
-import org.json.JSONObject
-import java.util.*
 
 /**
  * Created by xinxiaolong on 2020/8/4.
@@ -52,7 +49,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     var titleName: String = ""
     lateinit var pointer: CleanFinishPointer
-
+    lateinit var newIntent: Intent
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
     }
@@ -63,20 +60,40 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        newIntent = intent!!
         initView()
     }
 
-    override fun initView() {
-        StatusBarUtil.setTransparentForWindow(this)
-        titleName = intent.getStringExtra("title")
-        pointer = CleanFinishPointer(titleName)
-        mPresenter.attachView(this)
+    override fun onViewCreated() {
+        super.onViewCreated()
         mPresenter.onCreate()
+        StatusBarUtil.setTransparentForWindow(this)
+        newIntent = intent
+    }
 
+    override fun initView() {
+        titleName = newIntent.getStringExtra("title")
+        pointer = CleanFinishPointer(titleName)
+        restView()
         loadAdv()
         initTitle()
         initHeadView()
+        initEvent()
         mPresenter.loadRecommendData()
+        mPresenter.getGoldCoin()
+    }
+
+    fun restView() {
+        card_1.visibility = View.GONE
+        card_2.visibility = View.GONE
+    }
+
+    private fun initEvent() {
+        left_title.setOnClickListener {
+            pointer.returnPoint()
+            onBackPressed()
+        }
+        finish_card.setOnClickListener({ startScratch() })
     }
 
     private fun loadAdv() {
@@ -86,10 +103,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     private fun initTitle() {
         left_title.text = titleName
-        left_title.setOnClickListener {
-            pointer.returnPoint()
-            onBackPressed()
-        }
     }
 
     private fun initHeadView() {
@@ -109,11 +122,11 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     //建议清理
     private fun showSuggestClearView() {
-        var storage=PreferenceUtil.getCleanStorageNum().split(":")
-        var num=storage[0]
-        var unit=storage[1]
+        var storage = PreferenceUtil.getCleanStorageNum().split(":")
+        var num = storage[0]
+        var unit = storage[1]
         function_icon.setImageResource(R.mipmap.finish_icon_ok)
-        val content = AndroidUtil.zoomText(num.plus(unit), 2f,0,num.length)
+        val content = AndroidUtil.zoomText(num.plus(unit), 2f, 0, num.length)
         function_title.text = content
         function_sub_title.text = "垃圾已清理"
     }
@@ -216,9 +229,10 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         view.setSubTitle1(item.content1)
         view.setSubTitle2(item.content2)
         view.setButtonText(item.buttonText)
-        if(item.title.equals("手机加速")){
+        if (item.title.equals("手机加速")) {
+            view.setImageLabelVisible()
             view.setImageLabel(RecmedItemDataStore.getInstance().memory)
-        }else{
+        } else {
             view.setImageLabelHide()
         }
         view.setOnClickListener({ onRecommendViewClick(item.title) })
@@ -241,7 +255,14 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
      * 显示刮刮卡引导视图
      */
     override fun visibleScratchCardView() {
+        finish_card.visibility = View.VISIBLE
+    }
 
+    /**
+     * 显示刮刮卡引导视图
+     */
+    override fun goneScratchCardView() {
+        finish_card.visibility = View.GONE
     }
 
     /**
@@ -273,24 +294,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         GoldCoinDialog.dismiss()
     }
 
-    private fun getStatisticsMap(): Map<String, Any>? {
-        val map: MutableMap<String, Any> = HashMap()
-        map["position_id"] = 5
-        map["function_name"] = titleName
-        return map
-    }
-
-    private fun getStatisticsJson(): JSONObject? {
-        val jsonObject = JSONObject()
-        try {
-            jsonObject.put("position_id", 5)
-            jsonObject.put("function_name", titleName)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-        return jsonObject
-    }
-
     override fun getActivity(): Activity {
         return this
     }
@@ -301,8 +304,14 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onPostResume() {
         super.onPostResume()
-        mPresenter.onPostResume()
         pointer.exposurePoint()
+
+        val unused = newIntent.getBooleanExtra("unused", false)
+        //真正使用过功能才请求弹框
+        if (!unused) {
+            //插屏广告滞后请求，处理友盟bug
+            mPresenter.loadPopView()
+        }
     }
 
     override fun onPause() {
@@ -326,7 +335,9 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
      * 一键清理
      */
     fun startClean() {
-        startActivity(NowCleanActivity::class.java)
+        var intent=Intent(this,NowCleanActivity::class.java)
+        intent.putExtra("fromRecommend",true)
+        startActivity(intent)
     }
 
     /**

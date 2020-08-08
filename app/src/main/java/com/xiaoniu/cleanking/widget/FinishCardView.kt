@@ -47,6 +47,10 @@ class FinishCardView(context: Context, attributeSet: AttributeSet) : LinearLayou
         mImageLabel.visibility = View.GONE
     }
 
+    fun setImageLabelVisible() {
+        mImageLabel.visibility = View.VISIBLE
+    }
+
     fun setSubTitle1(text: SpannableString) {
         mSubText1.text = text
     }

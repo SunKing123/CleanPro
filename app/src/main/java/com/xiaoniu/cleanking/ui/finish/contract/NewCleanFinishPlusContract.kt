@@ -19,6 +19,7 @@ public interface NewCleanFinishPlusContract {
         fun visibleRecommendViewFirst(item: RecmedItemModel)
         fun visibleRecommendViewSecond(item: RecmedItemModel)
         fun visibleScratchCardView()
+        fun goneScratchCardView()
         fun showGoldCoinDialog(bubbleCollected: BubbleCollected)
         fun dismissGoldCoinDialog()
         fun getActivity():Activity
@@ -30,6 +31,7 @@ public interface NewCleanFinishPlusContract {
         fun loadRecommendData()
         fun loadOneAdv(advContainer: FrameLayout)
         fun loadTwoAdv(advContainer: FrameLayout)
+        fun loadPopView()
         fun addDoubleGoldCoin(bubbleCollected: BubbleCollected)
         fun loadVideoAdv(bubbleCollected: BubbleCollected)
         fun onPostResume()

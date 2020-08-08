@@ -49,7 +49,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     private lateinit var itemDataStore: RecmedItemDataStore
     private var isOpenOne = false
     private var isOpenTwo = false
-    private var isFirst = true
 
     @Inject
     public constructor() {
@@ -92,13 +91,15 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
         if (secondModel == null) {
             view.visibleScratchCardView()
+        }else{
+            view.goneScratchCardView()
         }
     }
 
     /**
      * 加载弹框
      */
-    private fun loadPopView() {
+    override fun loadPopView() {
         val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
         config?.let {
             if (it.isOpen) {
@@ -188,11 +189,13 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 根据添加数量，添加金币
      */
     private fun addGoldCoin(goldNum: Int) {
+        if(goldNum==0){
+            return
+        }
         mModel?.goleCollect(object : Common3Subscriber<BubbleCollected?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 // ToastUtils.showShort(message);
             }
-
             override fun getData(bubbleConfig: BubbleCollected?) {
                 //实时更新金币信息
                 RequestUserInfoUtil.getUserCoinInfo()
@@ -254,11 +257,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     }
 
     override fun onPostResume() {
-        //插屏广告滞后请求，处理友盟bug
-        if (isFirst) {
-            isFirst = false
-            loadPopView()
-        }
     }
 
     override fun onPause() {

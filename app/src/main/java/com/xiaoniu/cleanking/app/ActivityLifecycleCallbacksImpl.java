@@ -21,6 +21,7 @@ import android.os.Bundle;
 
 
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.utils.LogUtils;
 
 import timber.log.Timber;
 
@@ -35,6 +36,7 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         Timber.i(activity + " - onActivityCreated");
+        LogUtils.e("lifeCycle:onActivityCreated()"+activity.getClass().getName());
         ActivityCollector.addActivity(activity, activity.getClass());
     }
 
@@ -63,9 +65,10 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
     public void onActivityDestroyed(Activity activity) {
 
         Timber.i(activity + " - onActivityDestroyed");
+        LogUtils.e("lifeCycle:onActivityDestroyed()"+activity.getClass().getName());
+
         ActivityCollector.removeActivity(activity);
         //横竖屏切换或配置改变时, Activity 会被重新创建实例, 但 Bundle 中的基础数据会被保存下来,移除该数据是为了保证重新创建的实例可以正常工作
         activity.getIntent().removeExtra(EXTRA_ISINITTOOLBAR);
-
     }
 }

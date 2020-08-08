@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
@@ -89,7 +90,10 @@ public class NowCleanActivity extends BaseActivity {
         if (null != getToolBar()) {
             getToolBar().setVisibility(View.GONE); //不显示公共toobar
         }
-        if(ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0){
+
+        //如果是从推荐功能进来的，跳入扫描页面
+        boolean fromRecommend=getIntent().getBooleanExtra("fromRecommend",false);
+        if(!fromRecommend&&ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0){
             scanFinish();
         } else {
             startScan();
@@ -159,7 +163,7 @@ public class NowCleanActivity extends BaseActivity {
         bundle.putString("title", getString(R.string.tool_suggest_clean));
         Intent intent = new Intent();
         intent.putExtras(bundle);
-
+        PreferenceUtil.saveNowCleanTime();
         StartFinishActivityUtil.Companion.gotoFinish(this, bundle);
     }
 

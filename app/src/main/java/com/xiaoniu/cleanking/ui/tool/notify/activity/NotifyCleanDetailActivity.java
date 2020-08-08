@@ -273,10 +273,7 @@ public class NotifyCleanDetailActivity extends BaseActivity {
 
 
         if (mIsFinish) return;
-        //保存通知栏清理完成时间
-        if (PreferenceUtil.getNotificationCleanTime()) {
-            PreferenceUtil.saveNotificationCleanTime();
-        }
+        PreferenceUtil.saveNotificationCleanTime();
         PreferenceUtil.saveCleanNotifyUsed(true);
         AppHolder.getInstance().setCleanFinishSourcePageId("notification_clean_success_page");
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());

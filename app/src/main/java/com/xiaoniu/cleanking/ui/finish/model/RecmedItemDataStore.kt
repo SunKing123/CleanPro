@@ -4,6 +4,7 @@ import android.text.SpannableString
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.AppApplication
 import com.xiaoniu.cleanking.base.ScanDataHolder
+import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.utils.AndroidUtil
 import com.xiaoniu.cleanking.utils.CleanUtil
 import com.xiaoniu.cleanking.utils.NumberUtils
@@ -36,8 +37,8 @@ public class RecmedItemDataStore {
 
     }
 
-    fun resetIndex(){
-        modelIndex=-1
+    fun resetIndex() {
+        modelIndex = -1
     }
 
     fun popModel(): RecmedItemModel? {
@@ -79,7 +80,7 @@ public class RecmedItemDataStore {
                 }
             }
             "通知栏清理" -> {
-                if (PreferenceUtil.getNotificationCleanTime()) {
+                if (PreferenceUtil.getNotificationCleanTime() && NotifyCleanManager.getInstance().getAllNotifications().size > 0) {
                     return assembleNotify()
                 }
             }
@@ -87,18 +88,21 @@ public class RecmedItemDataStore {
         return popModel();
     }
 
-
     /**
      * 一键清理数据
      */
     fun assembleOneKeyClean(): RecmedItemModel {
         var title = "垃圾文件太多"
 
-        val countEntity = CleanUtil.formatShortFileSize(ScanDataHolder.getInstance().getTotalSize())
-        var storageNum = countEntity.totalSize + countEntity.unit
-        var content = "已发现" + storageNum + "缓存垃圾文件"
-        var content1 = AndroidUtil.inertColorText(content, content.indexOf(storageNum), content.indexOf(storageNum) + storageNum.length, getRedColor())
-
+        var content1: SpannableString
+        if (ScanDataHolder.getInstance().getTotalSize() <= 0) {
+            content1 = SpannableString("已发现大量缓存垃圾")
+        } else {
+            val countEntity = CleanUtil.formatShortFileSize(ScanDataHolder.getInstance().getTotalSize())
+            var storageNum = countEntity.totalSize + countEntity.unit
+            var content = "已发现" + storageNum + "缓存垃圾文件"
+            content1 = AndroidUtil.inertColorText(content, content.indexOf(storageNum), content.indexOf(storageNum) + storageNum.length, getRedColor())
+        }
         var content2 = SpannableString("存储空间即将不足")
         var imageIcon = R.drawable.icon_finish_recommed_clean_stroage
         var buttonText = "立即清理"
@@ -161,7 +165,7 @@ public class RecmedItemDataStore {
         var title = "微信清理"
         var content1 = SpannableString("缓存过期文件过多")
         var content2 = SpannableString("不处理将导致聊天卡顿")
-        var imageIcon = R.drawable.icon_finish_recommed_clean_virus
+        var imageIcon = R.drawable.icon_finish_recommed_clean_wechat
         var buttonText = "立即清理"
         return RecmedItemModel(title, content1, content2, imageIcon, buttonText)
     }
@@ -177,7 +181,7 @@ public class RecmedItemDataStore {
         }
         var head = "手机温度已超过"
         var content = head + temperature
-        var content1 = AndroidUtil.inertColorText(content, head.length, head.length+temperature.length, getRedColor())
+        var content1 = AndroidUtil.inertColorText(content, head.length, head.length + temperature.length, getRedColor())
 
         var content2 = SpannableString("手机过热会损伤电池")
         var imageIcon = R.drawable.icon_finish_recommed_clean_cool
