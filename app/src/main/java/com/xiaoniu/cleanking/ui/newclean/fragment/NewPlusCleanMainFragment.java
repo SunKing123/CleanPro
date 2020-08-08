@@ -27,7 +27,6 @@ import com.blankj.utilcode.util.PermissionUtils;
 import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
@@ -213,7 +212,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         //暂时不需要展示新手引导
 //        showGuideView();
-
+        mPresenter.showActionGuideView(3, ((MainActivity) mActivity).getCardTabView());
 
     }
 
