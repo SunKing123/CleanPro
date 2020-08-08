@@ -1,10 +1,8 @@
 package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import androidx.databinding.DataBindingUtil;
@@ -29,13 +27,11 @@ import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
-import com.xiaoniu.cleanking.ui.newclean.util.OutlineProvider;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.DimenUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -59,7 +55,6 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * Describe:个人中心 替换之前的MeFragment页面
  */
 public class MineFragment extends BaseFragment<MinePresenter> implements MineFragmentContact.View {
-    FrameLayout mine_ad_ff;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -85,7 +80,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         mBinding.phoneNumTv.setText("未登录");
         setUserInfo();
         RequestUserInfoUtil.getUserCoinInfo();
-        mine_ad_ff = getView().findViewById(R.id.mine_ad_ff);
 
         RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.settingLl.getLayoutParams();
         params.topMargin = DeviceUtils.getStatusBarHeight(mContext) + 30;
@@ -97,10 +91,10 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
         ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
         ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            mine_ad_ff.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
-            mine_ad_ff.setClipToOutline(true);
-        }
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+//            mBinding.mineAdFf.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
+//            mBinding.mineAdFf.setClipToOutline(true);
+//        }
 //        Log.e("snow","状态栏高度====="+DeviceUtils.getStatusBarHeight(mContext));
     }
 
@@ -286,7 +280,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
 
-        MidasRequesCenter.requestAndShowAd(mActivity, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(mine_ad_ff) {
+        MidasRequesCenter.requestAndShowAd(mActivity, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(mBinding.mineAdFf) {
             @Override
             public void onAdExposure(AdInfoModel adInfoModel) {
                 super.onAdExposure(adInfoModel);
