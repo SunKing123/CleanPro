@@ -352,6 +352,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         } else if ("wode".equals(type)) {
             mBottomBar.setCurrentItem(MINE);
         }
+
         String tabIndex = intent.getString(SchemeConstant.EXTRA_MAIN_INDEX);
         if (!TextUtils.isEmpty(tabIndex)) {
             try {
@@ -774,6 +775,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (mBottomBarTab != null)
             mBottomBarTab.hideBadgeView();
     }
+
+    /**
+     * 底部tabview获取
+     * @return
+     */
+    public BottomBar getCardTabView(){
+        return mBottomBar;
+    }
+
+
 
     /**
      * 操作记录(PUSH消息)
