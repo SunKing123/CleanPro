@@ -130,17 +130,36 @@ public class ScrapingCarDetailActivity extends BaseActivity {
         }
         return mAgentWeb.getWebCreator().getWebView();
     }
+    @Override
+    protected void onPause() {
+        if (mAgentWeb != null) {
+            mAgentWeb.getWebLifeCycle().onPause();
+        }
+        super.onPause();
 
+    }
+
+    @Override
+    protected void onResume() {
+        if (mAgentWeb != null) {
+            mAgentWeb.getWebLifeCycle().onResume();
+        }
+        super.onResume();
+    }
     @Override
     protected void onDestroy() {
 //        EventBus.getDefault().unregister(this);
         super.onDestroy();
+        if (mAgentWeb != null) {
+            mAgentWeb.getWebLifeCycle().onDestroy();
+        }
         EventBus.getDefault().post("refreshGuaGuaLeH5");
     }
 
     public class JsInterface {
         @JavascriptInterface
         public String getXnData() {
+            LogUtils.debugInfo("snow","调用getXnData");
             return AndroidUtil.getXnData();
         }
 

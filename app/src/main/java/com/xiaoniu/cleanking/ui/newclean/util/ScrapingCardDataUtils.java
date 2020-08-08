@@ -141,13 +141,15 @@ public class ScrapingCardDataUtils {
         if (activity == null || cardBean == null) {
             return;
         }
+        if (!UserHelper.init().isLogin()){//没登录跳登录页面
+            UserHelper.init().startToLogin(activity);
+            return;
+        }
         if (activity instanceof ScrapingCarDetailActivity) {
             activity.finish();
         }
         Bundle bundle = new Bundle();
         bundle.putString(Constant.URL, assembleScrapingCardUrl());
-//        bundle.putString(Constant.URL, "https://www.baidu.com/");
-//        bundle.putString(Constant.URL, "http://192.168.85.61:9999/html/activitiesHtml/scratchCards/cardList2.html?");
         String title = "";
         if (!TextUtils.isEmpty(title)) {
             bundle.putString(Constant.Title, title);
@@ -182,12 +184,12 @@ public class ScrapingCardDataUtils {
         urlBuf.append(H5Urls.SCRATCHCARDS_DETAIL_URL)
                 .append("id=" + cardBean.getId())
                 .append("&cardPosition=" + cardBean.getCardPosition())
-                .append("&rondaId=" + cardBean.getRondaId())
+//                .append("&rondaId=" + cardBean.getRondaId())
                 .append("&awardType=" + cardBean.getAwardType())
                 .append("&hitCode=" + cardBean.getHitCode())
                 .append("&num=" + cardBean.getNum())
-                .append("&remark=" + cardBean.getRemark())
-                .append("&cardType=" + cardBean.getCardType())
+//                .append("&remark=" + cardBean.getRemark())
+//                .append("&cardType=" + cardBean.getCardType())
                 .append("&goldSectionNum=" + goldSectionNum)
                 .append("&actRdNum=" + cardBean.getActRdNum())
                 .append("&doubledMagnification=" + cardBean.getDoubledMagnification());
