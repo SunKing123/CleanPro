@@ -190,6 +190,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 根据添加数量，添加金币
      */
     private fun addGoldCoin(goldNum: Int) {
+        if(goldNum==0){
+            return
+        }
         mModel?.goleCollect(object : Common3Subscriber<BubbleCollected?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 // ToastUtils.showShort(message);
