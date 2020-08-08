@@ -92,6 +92,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
         if (secondModel == null) {
             view.visibleScratchCardView()
+        }else{
+            view.goneScratchCardView()
         }
     }
 

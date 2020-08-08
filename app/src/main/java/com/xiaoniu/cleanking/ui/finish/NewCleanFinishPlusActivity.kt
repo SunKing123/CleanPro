@@ -125,7 +125,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         function_title.text = content
         function_sub_title.text = "垃圾已清理"
     }
-    
+
     //一键加速
     private fun showOneKeySpeedUp() {
         var num = PreferenceUtil.getOneKeySpeedNum()
@@ -251,6 +251,13 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
      */
     override fun visibleScratchCardView() {
         finish_card.visibility = View.VISIBLE
+    }
+
+    /**
+     * 显示刮刮卡引导视图
+     */
+    override fun goneScratchCardView() {
+        finish_card.visibility = View.GONE
     }
 
     /**
