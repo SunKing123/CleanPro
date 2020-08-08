@@ -55,6 +55,7 @@ import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.main.event.ExposureEvent;
 import com.xiaoniu.cleanking.ui.main.event.GuideViewClickEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
+import com.xiaoniu.cleanking.ui.main.event.SwitchTabEvent;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
@@ -1143,7 +1144,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case 3:
                 ScrapingCardBean scrapingCardBean = ScrapingCardDataUtils.init().getCarDataOfPosition(0);
                 if (scrapingCardBean != null) {
-                    ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity());
+                    ScrapingCardDataUtils.init().goToScrapingCarDetail(getActivity());
+                    EventBus.getDefault().post(new SwitchTabEvent(2));
                 }
                 break;
 
