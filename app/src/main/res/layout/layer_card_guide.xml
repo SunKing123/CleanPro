@@ -9,8 +9,7 @@
         android:layout_width="@dimen/dimen_89dp"
         android:layout_height="@dimen/dimen_89dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/guide03_tag01" />
+        android:layout_alignParentRight="true" />
 
     <ImageView
         android:id="@+id/iv_guide02_tag02"

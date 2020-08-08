@@ -2,13 +2,13 @@ package com.xiaoniu.cleanking.ui.finish
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import android.view.KeyEvent
 import android.graphics.Typeface
+import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.StyleSpan
+import android.view.KeyEvent
 import android.view.View
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
@@ -63,22 +63,34 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        titleName = intent!!.getStringExtra("title")
         initView()
     }
 
-    override fun initView() {
+    override fun onViewCreated() {
+        super.onViewCreated()
+        mPresenter.onCreate()
         StatusBarUtil.setTransparentForWindow(this)
         titleName = intent.getStringExtra("title")
-        pointer = CleanFinishPointer(titleName)
-        mPresenter.attachView(this)
-        mPresenter.onCreate()
+    }
 
+    override fun initView() {
+        pointer = CleanFinishPointer(titleName)
         loadAdv()
         initTitle()
         initHeadView()
+        initEvent()
         mPresenter.loadRecommendData()
+
     }
 
+    private fun initEvent(){
+        left_title.setOnClickListener {
+            pointer.returnPoint()
+            onBackPressed()
+        }
+        finish_card.setOnClickListener({ startScratch() })
+    }
     private fun loadAdv() {
         mPresenter.loadOneAdv(findViewById(R.id.ad_container_1))
         mPresenter.loadTwoAdv(findViewById(R.id.ad_container_2))
@@ -86,10 +98,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     private fun initTitle() {
         left_title.text = titleName
-        left_title.setOnClickListener {
-            pointer.returnPoint()
-            onBackPressed()
-        }
     }
 
     private fun initHeadView() {
@@ -109,15 +117,15 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     //建议清理
     private fun showSuggestClearView() {
-        var storage=PreferenceUtil.getCleanStorageNum().split(":")
-        var num=storage[0]
-        var unit=storage[1]
+        var storage = PreferenceUtil.getCleanStorageNum().split(":")
+        var num = storage[0]
+        var unit = storage[1]
         function_icon.setImageResource(R.mipmap.finish_icon_ok)
-        val content = AndroidUtil.zoomText(num.plus(unit), 2f,0,num.length)
+        val content = AndroidUtil.zoomText(num.plus(unit), 2f, 0, num.length)
         function_title.text = content
         function_sub_title.text = "垃圾已清理"
     }
-
+    
     //一键加速
     private fun showOneKeySpeedUp() {
         var num = PreferenceUtil.getOneKeySpeedNum()
@@ -216,9 +224,10 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         view.setSubTitle1(item.content1)
         view.setSubTitle2(item.content2)
         view.setButtonText(item.buttonText)
-        if(item.title.equals("手机加速")){
+        if (item.title.equals("手机加速")) {
+            view.setImageLabelVisible()
             view.setImageLabel(RecmedItemDataStore.getInstance().memory)
-        }else{
+        } else {
             view.setImageLabelHide()
         }
         view.setOnClickListener({ onRecommendViewClick(item.title) })
@@ -241,7 +250,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
      * 显示刮刮卡引导视图
      */
     override fun visibleScratchCardView() {
-
+        finish_card.visibility = View.VISIBLE
     }
 
     /**
@@ -271,24 +280,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
 
     override fun dismissGoldCoinDialog() {
         GoldCoinDialog.dismiss()
-    }
-
-    private fun getStatisticsMap(): Map<String, Any>? {
-        val map: MutableMap<String, Any> = HashMap()
-        map["position_id"] = 5
-        map["function_name"] = titleName
-        return map
-    }
-
-    private fun getStatisticsJson(): JSONObject? {
-        val jsonObject = JSONObject()
-        try {
-            jsonObject.put("position_id", 5)
-            jsonObject.put("function_name", titleName)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-        return jsonObject
     }
 
     override fun getActivity(): Activity {
