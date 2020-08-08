@@ -250,13 +250,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     }
 
-    private fun getStatisticsMap(): Map<String, Any>? {
-        val map: MutableMap<String, Any> = HashMap()
-        map["position_id"] = 5
-        map["function_name"] = view.getFunctionTitle()
-        return map
-    }
-
     override fun detachView() {
 
     }
