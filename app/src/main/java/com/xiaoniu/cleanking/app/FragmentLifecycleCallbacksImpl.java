@@ -69,9 +69,7 @@ public class FragmentLifecycleCallbacksImpl extends FragmentManager.FragmentLife
         if (f instanceof NewPlusCleanMainFragment) {
             int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
             if (exposuredTimes <= 2) { //只记录三次展示
-                int currentTimes = (exposuredTimes + 1);
-                MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
-                EventBus.getDefault().post(new ExposureEvent(currentTimes));
+                EventBus.getDefault().post(new ExposureEvent());
             }
         }
 

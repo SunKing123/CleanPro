@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -56,7 +55,6 @@ import com.xiaoniu.cleanking.ui.main.event.ExposureEvent;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GuideHomeDialog;
@@ -208,7 +206,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         //暂时不需要展示新手引导
 //        showGuideView();
-//        mPresenter.showGuideView(3,((MainActivity)mActivity).getCardTabView());
+
 
     }
 
@@ -216,6 +214,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 引导弹窗
      */
+    @Deprecated
     private void showGuideView() {
         boolean isAudit = AppHolder.getInstance().getAuditSwitch();
         boolean guideOpen = AppHolder.getInstance().checkSwitchIsOpen(PositionId.KEY_MAIN_GUIDE_VIEW);
@@ -479,9 +478,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 refreshAdAll();
                 //重新检测头部扫描状态
                 checkScanState();
+
+                //引导页展示时机
+                int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
+                if (exposuredTimes <= 2) { //只记录三次展示
+                    EventBus.getDefault().post(new ExposureEvent());
+                }
             }
-            //引导页展示时机
-            exposureChange();
+
         } else {
             NiuDataAPI.onPageEnd("home_page_view_page", "首页浏览");
         }
@@ -1087,20 +1091,25 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Subscribe
     public void homeExposureEvent(ExposureEvent exposureEvent) {
-        mPresenter.showGuideView(exposureEvent.getExposureTimes(), view_lottie_top);
-    }
-
-    /**
-     * 引导页面展示逻辑
-     */
-    public void exposureChange() {
         int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
         if (exposuredTimes <= 2) { //只记录三次展示
             int currentTimes = (exposuredTimes + 1);
             MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
-            EventBus.getDefault().post(new ExposureEvent(currentTimes));
+            switch(currentTimes){
+                case 1:
+                    mPresenter.showActionGuideView(currentTimes,view_lottie_top);
+                    break;
+                case 2:
+                    mPresenter.showActionGuideView(currentTimes,rtBottom);
+                    break;
+                case 3:
+                    mPresenter.showActionGuideView(currentTimes,((MainActivity)mActivity).getCardTabView());
+                    break;
+            }
         }
+
     }
+
     /*
      * *********************************************************************************************************************************************************
      * ********************************************************** others ***************************************************************************************

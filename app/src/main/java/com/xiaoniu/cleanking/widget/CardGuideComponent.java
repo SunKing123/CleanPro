@@ -14,7 +14,7 @@ public class CardGuideComponent implements Component {
 
     @Override
     public View getView(LayoutInflater inflater) {
-        RelativeLayout ll = (RelativeLayout) inflater.inflate(R.layout.layer_gold_guide, null);
+        RelativeLayout ll = (RelativeLayout) inflater.inflate(R.layout.layer_card_guide, null);
         return ll;
     }
 
@@ -25,7 +25,7 @@ public class CardGuideComponent implements Component {
 
     @Override
     public int getFitPosition() {
-        return Component.FIT_END;
+        return Component.FIT_CENTER;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CardGuideComponent implements Component {
 
     @Override
     public int getYOffset() {
-        return -0;
+        return 52;
     }
 
 

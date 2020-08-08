@@ -6,17 +6,4 @@ package com.xiaoniu.cleanking.ui.main.event;
  * @mail：zhengzhihao@xiaoniuhy.com
  */
 public class ExposureEvent {
-    public ExposureEvent(int exposureTimes) {
-        this.exposureTimes = exposureTimes;
-    }
-
-    int exposureTimes ;
-
-    public int getExposureTimes() {
-        return exposureTimes;
-    }
-
-    public void setExposureTimes(int exposureTimes) {
-        this.exposureTimes = exposureTimes;
-    }
 }

@@ -61,6 +61,7 @@ import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xiaoniu.cleanking.widget.CardGuideComponent;
 import com.xiaoniu.cleanking.widget.FingerGuideComponent;
 import com.xiaoniu.cleanking.widget.GoldGuideComponent;
 import com.xiaoniu.cleanking.widget.SkipComponent;
@@ -797,7 +798,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
 
-    public void showGuideView(int times, View view) {
+    public void showActionGuideView(int times, View view) {
         LogUtils.d("zz--showGuideView()--" + times);
         switch (times) {
             case 1:
@@ -836,6 +837,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                                 }));
                         guide = builder.createGuide();
                         guide.show(mView.getActivity());
+
 
                     }
                 });
@@ -897,10 +899,10 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             }
                         });
 
-                        builder.addComponent(new GoldGuideComponent());
+                        builder.addComponent(new CardGuideComponent());
                         builder.addComponent(new SkipComponent(
-                                0,
-                                -150,
+                                -DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenWidth() * 0.06f),
+                                -DisplayUtil.px2dp(AppApplication.getInstance(), DisplayUtils.getScreenHeight() * 0.84f),
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
