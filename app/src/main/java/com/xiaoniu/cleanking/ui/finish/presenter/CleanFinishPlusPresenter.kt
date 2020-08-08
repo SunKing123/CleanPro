@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
+import com.xiaoniu.cleanking.ui.finish.base.CleanFinishLogger
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore
@@ -22,11 +23,9 @@ import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber
 import com.xiaoniu.cleanking.utils.net.RxUtil
 import com.xiaoniu.common.utils.Points
-import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.ToastUtils
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
 import com.xiaoniu.unitionadbase.model.AdInfoModel
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -43,7 +42,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     private lateinit var itemDataStore: RecmedItemDataStore
     private var isOpenOne = false
     private var isOpenTwo = false
-    private lateinit var pointer:CleanFinishPointer
+    private lateinit var pointer: CleanFinishPointer
 
     @Inject
     public constructor() {
@@ -57,7 +56,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     override fun attachView(view: NewCleanFinishPlusActivity) {
         this.view = view
         this.itemDataStore = RecmedItemDataStore.getInstance()
-        pointer= CleanFinishPointer(view.titleName)
+        pointer = CleanFinishPointer(view.titleName)
     }
 
     /**
@@ -66,12 +65,16 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     private fun loadAdSwitch() {
         isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE)
         isOpenTwo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_TWO_CODE)
+
+        CleanFinishLogger.log("============ 信息广告开关：======================")
+        CleanFinishLogger.log("isOpenOne="+isOpenOne)
+        CleanFinishLogger.log("isOpenTwo="+isOpenTwo)
     }
 
     /**
      * 装载推荐功能布局
      */
-     override fun loadRecommendData() {
+    override fun loadRecommendData() {
         itemDataStore.resetIndex()
 
         var firstModel: RecmedItemModel? = itemDataStore.popModel()
@@ -87,7 +90,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
         if (secondModel == null) {
             view.visibleScratchCardView()
-        }else{
+        } else {
             view.goneScratchCardView()
         }
     }
@@ -98,6 +101,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     override fun loadPopView() {
         val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
         config?.let {
+            CleanFinishLogger.log("============ 插屏广告开关：======================")
+            CleanFinishLogger.log("isOpen="+it.isOpen)
             if (it.isOpen) {
                 loadInsideScreenDialog()
             } else {
@@ -112,7 +117,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.insertAdvRequest4()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH_INSIDE_SCREEN_ID,object : AbsAdBusinessCallback(){
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH_INSIDE_SCREEN_ID, object : AbsAdBusinessCallback() {
             override fun onAdExposure(adInfoModel: AdInfoModel?) {
                 super.onAdExposure(adInfoModel)
                 LogUtils.e("====完成页内部插屏广告展出======")
@@ -130,19 +135,20 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     override fun loadOneAdv(advContainer: FrameLayout) {
         if (!isOpenOne) return
         pointer.requestFeedAdv1()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH01_TOP_FEEED_ID,object : SimpleViewCallBack(advContainer){
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH01_TOP_FEEED_ID, object : SimpleViewCallBack(advContainer) {
 
         })
     }
 
     /**
      * 加载第二个广告位数据
-     *
      */
     override fun loadTwoAdv(advContainer: FrameLayout) {
-        if (!isOpenTwo) return
+        if (!isOpenTwo) {
+            return
+        }
         pointer.requestFeedAdv2()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH01_CENTER_FEEED_ID,object : SimpleViewCallBack(advContainer){
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH01_CENTER_FEEED_ID, object : SimpleViewCallBack(advContainer) {
 
         })
     }
@@ -178,13 +184,14 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 根据添加数量，添加金币
      */
     private fun addGoldCoin(goldNum: Int) {
-        if(goldNum==0){
+        if (goldNum == 0) {
             return
         }
         mModel?.goleCollect(object : Common3Subscriber<BubbleCollected?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 // ToastUtils.showShort(message);
             }
+
             override fun getData(bubbleConfig: BubbleCollected?) {
                 //实时更新金币信息
                 RequestUserInfoUtil.getUserCoinInfo()
@@ -256,12 +263,13 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     override fun loadVideoAdv(bubbleCollected: BubbleCollected) {
         pointer.goldCoinRequestAdv2()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON,object : VideoAbsAdCallBack(){
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON, object : VideoAbsAdCallBack() {
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
                 super.onAdLoadError(errorCode, errorMsg)
                 ToastUtils.showLong("网络异常")
                 view.dismissGoldCoinDialog()
             }
+
             override fun onAdClose(adInfo: AdInfoModel?, isComplete: Boolean) {
                 super.onAdClose(adInfo, isComplete)
                 pointer.videoAdvClose()
@@ -273,6 +281,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                     view.dismissGoldCoinDialog()
                 }
             }
+
             override fun onAdVideoComplete(adInfoModel: AdInfoModel?) {
                 super.onAdVideoComplete(adInfoModel)
             }

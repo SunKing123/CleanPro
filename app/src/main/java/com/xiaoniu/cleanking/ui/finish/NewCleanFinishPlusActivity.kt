@@ -45,7 +45,7 @@ import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
  * Created by xinxiaolong on 2020/8/4.
  * email：xinxiaolong123@foxmail.com
  */
-public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
+class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
 
     var titleName: String = ""
     lateinit var pointer: CleanFinishPointer
@@ -82,7 +82,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         initHeadView()
         initEvent()
         mPresenter.loadRecommendData()
-        mPresenter.getGoldCoin()
     }
 
     fun restView() {
@@ -312,8 +311,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         val unused = newIntent.getBooleanExtra("unused", false)
         //真正使用过功能才请求弹框
         if (!unused&&isFirst) {
-            //插屏广告滞后请求，处理友盟bug
             isFirst=false
+            //插屏广告滞后请求，处理友盟bug
             mPresenter.loadPopView()
         }
     }
