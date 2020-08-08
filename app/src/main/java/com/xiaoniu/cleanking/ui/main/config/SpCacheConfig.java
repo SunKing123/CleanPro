@@ -173,6 +173,7 @@ public class SpCacheConfig {
     public static final String IS_USED_WECHAT = "is_used_wechat";
     public static final String IS_USED_COLL = "is_used_coll";
     public static final String SAVE_COOL_NUM = "save_cool_num";
+    public static final String SAVE_ONE_KEY_SPEED_NUM = "save_one_key_speed_num";
     public static final String IS_USED_GAME = "is_used_game";
     //wifi连接状态
     public static final String WIFI_STATE = "wifi_state";

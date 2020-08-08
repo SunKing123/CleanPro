@@ -152,11 +152,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     override fun loadTwoAdv(advContainer: FrameLayout) {
         if (!isOpenTwo) return
         StatisticsUtils.customTrackEvent("ad_request_sdk_2", "功能完成页广告位2发起请求", NewCleanFinishActivity.sourcePage, "success_page")
-        val params = AdRequestParams.Builder().setAdId(MidasConstants.FINISH01_CENTER_FEEED_ID)
-                .setActivity(view.getActivity())
-                .setViewContainer(advContainer).setViewWidthOffset(24)
-                .build()
-
         MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.FINISH01_CENTER_FEEED_ID,object : SimpleViewCallBack(advContainer){
 
         })

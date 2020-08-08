@@ -33,6 +33,8 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.AndroidUtil
+import com.xiaoniu.cleanking.utils.ExtraConstant
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatusBarUtil
@@ -71,6 +73,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         mPresenter.onCreate()
 
         loadAdv()
+        initTitle()
         initHeadView()
         mPresenter.loadRecommendData()
     }
@@ -80,21 +83,25 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         mPresenter.loadTwoAdv(findViewById(R.id.ad_container_2))
     }
 
-    private fun initHeadView() {
+    private fun initTitle() {
         left_title.text = titleName
         left_title.setOnClickListener {
             pointer.returnPoint()
             onBackPressed()
         }
+    }
+
+    private fun initHeadView() {
+        var num = intent.getStringExtra(ExtraConstant.NUM)
         when (titleName) {
             "建议清理", "立即清理", "一键清理" -> showSuggestClearView("886", "MB")
-            "一键加速" -> show0neKeySpeedUp("24")
+            "一键加速" -> showOneKeySpeedUp()
             "病毒查杀" -> showKillVirusView()
             "超强省电" -> showPowerSaving()
             "微信专清" -> showWeiXinClear()
-            "手机降温" -> showPhoneCold("37", "60")
+            "手机降温" -> showPhoneCold()
             "通知栏清理" -> showNotificationClear()
-            "网络加速" -> showNetSpeedUp("80")
+            "网络加速" -> showNetSpeedUp()
             "手机清理" -> showPhoneClear()
         }
     }
@@ -112,7 +119,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     }
 
     //一键加速
-    private fun show0neKeySpeedUp(num: String) {
+    private fun showOneKeySpeedUp() {
+        var num = PreferenceUtil.getOneKeySpeedNum()
         function_icon.setImageResource(R.mipmap.finish_icon_speedup)
         val content = "运行速度已提升$num%"
         val spannableString = SpannableString(content)
@@ -141,7 +149,9 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     }
 
     //手机降温
-    private fun showPhoneCold(num: String, time: String) {
+    private fun showPhoneCold() {
+        var num = PreferenceUtil.getCleanCoolNum().toString()
+        var time = "60s"
         function_icon.setImageResource(R.mipmap.finish_icon_cold)
         val content = "成功降温$num°C"
         val spannableString = SpannableString(content)
@@ -162,7 +172,8 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
     }
 
     //网络加速
-    private fun showNetSpeedUp(num: String) {
+    private fun showNetSpeedUp() {
+        var num = PreferenceUtil.getSpeedNetworkValue()
         function_icon.setImageResource(R.mipmap.finish_icon_ok)
         val content = num.plus("%")
         val spannableString = SpannableString(content)
@@ -207,7 +218,7 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
         view.setButtonText(item.buttonText)
         view.setImageLabelHide()
 
-        view.setOnClickListener({onRecommendViewClick(item.title) })
+        view.setOnClickListener({ onRecommendViewClick(item.title) })
     }
 
     fun onRecommendViewClick(title: String) {
