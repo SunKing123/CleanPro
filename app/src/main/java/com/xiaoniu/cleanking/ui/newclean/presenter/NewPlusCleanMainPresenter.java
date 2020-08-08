@@ -879,6 +879,41 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 });
                 break;
             case 3:
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        GuideBuilder builder = new GuideBuilder();
+                        builder.setTargetView(view)
+                                .setAlpha(150)
+                                .setOverlayTarget(true);
+                        builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
+                            @Override
+                            public void onShown() {
+                            }
+
+                            @Override
+                            public void onDismiss() {
+
+                            }
+                        });
+
+                        builder.addComponent(new GoldGuideComponent());
+                        builder.addComponent(new SkipComponent(
+                                0,
+                                -150,
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (null != guide) {
+                                            guide.dismiss();
+                                        }
+                                    }
+                                }));
+                        guide = builder.createGuide();
+                        guide.show(mView.getActivity());
+
+                    }
+                });
                 break;
         }
 
