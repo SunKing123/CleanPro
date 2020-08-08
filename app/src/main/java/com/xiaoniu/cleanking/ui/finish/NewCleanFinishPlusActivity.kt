@@ -283,7 +283,6 @@ public class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>
                 return@OnClickListener
             }
             pointer.goldCoinDoubleClick()
-            pointer.goldCoinRequestAdv2()
             mPresenter.loadVideoAdv(bubbleCollected)
         }
         pointer.goldCoinDialogExposure()

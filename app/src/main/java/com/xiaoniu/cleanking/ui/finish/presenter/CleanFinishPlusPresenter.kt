@@ -262,6 +262,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     }
 
     override fun loadVideoAdv(bubbleCollected: BubbleCollected) {
+        pointer.goldCoinRequestAdv2()
         MidasRequesCenter.requestAndShowAd(view.getActivity(),MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON,object : VideoAbsAdCallBack(){
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
                 super.onAdLoadError(errorCode, errorMsg)

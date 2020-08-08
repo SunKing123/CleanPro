@@ -9,7 +9,7 @@ import org.json.JSONObject
  * Created by xinxiaolong on 2020/8/6.
  * email：xinxiaolong123@foxmail.com
  *
- * 文档 https://docs.qq.com/sheet/DZUx2WXlCcXpYSXFu?newPad=1&newPadType=clone&tab=2f6nzz
+ * 文档: https://docs.qq.com/sheet/DZUx2WXlCcXpYSXFu?newPad=1&newPadType=clone&tab=2f6nzz
  *
  * 完成页面埋点统一封装
  *
@@ -167,7 +167,6 @@ class CleanFinishPointer {
 
     private fun getStatisticsMap(): Map<String, Any>? {
         val map: MutableMap<String, Any> = java.util.HashMap()
-        map["position_id"] = 5
         map["function_name"] = title
         return map
     }
@@ -175,7 +174,6 @@ class CleanFinishPointer {
     private fun getStatisticsJson(): JSONObject? {
         val jsonObject = JSONObject()
         try {
-            jsonObject.put("position_id", 5)
             jsonObject.put("function_name", title)
         } catch (e: JSONException) {
             e.printStackTrace()
