@@ -12,11 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
+import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
@@ -157,6 +159,7 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
             bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
             bundle.putString("num", cleanTotalSize);
             bundle.putString("unit", cleanTotalUnit);
+            PreferenceUtil.saveCleanStorageNum(cleanTotalSize,cleanTotalUnit);
             StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
             getActivity().finish();
         }
