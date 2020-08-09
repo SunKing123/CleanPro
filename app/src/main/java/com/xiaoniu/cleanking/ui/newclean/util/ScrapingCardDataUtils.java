@@ -125,7 +125,7 @@ public class ScrapingCardDataUtils {
     }
 
     //加载激励视屏广告
-    public void loadVideoAdv(Activity activity, String advId) {
+    private void loadVideoAdv(Activity activity, String advId) {
         boolean isFast = AndroidUtil.isFastDoubleBtnClick(4000);
         LogUtils.debugInfo("加载=1====loadVideoAdv===" + isFast + "====" + activity);
         if (isFast || activity == null) {
