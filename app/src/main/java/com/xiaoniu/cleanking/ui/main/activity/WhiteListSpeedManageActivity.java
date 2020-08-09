@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WhiteListSpeedAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.WhiteListSpeedPresenter;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +98,8 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
         if (ids == R.id.img_back) {
             finish();
         } else if (ids == R.id.ll_add) {
+            if(AndroidUtil.isFastDoubleClick())
+                return;
             Intent intent = new Intent(this, WhiteListSpeedAddActivity.class);
             intent.putExtra("type",mType);
             startActivityForResult(intent, REQUEST_CODE_UPDATE);
