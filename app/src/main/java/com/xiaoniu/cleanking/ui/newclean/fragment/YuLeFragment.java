@@ -255,6 +255,7 @@ public class YuLeFragment extends SimpleFragment {
 
         @JavascriptInterface
         public void addCarsData(String dataJson) {//只填充卡片数据
+            LogUtils.debugInfo("snow", "====只填充卡片数据========");
             if (!TextUtils.isEmpty(dataJson)) {
                 List<ScrapingCardBean> dataList = GSON.parseList(dataJson, ScrapingCardBean.class);
                 ScrapingCardDataUtils.init().setScrapingCardData(dataList, 0);
@@ -320,7 +321,8 @@ public class YuLeFragment extends SimpleFragment {
         mAgentWeb.getWebLifeCycle().onResume();
         super.onResume();
         LogUtils.debugInfo("snow", "=======刮刮乐页面onResume===================");
-//        getWebView().loadUrl("javascript:refresh()");
+        //此处需要刷新，应用置后台回来需要刷新，切换也需要刷新
+        getWebView().loadUrl("javascript:refresh()");
     }
 
     @Override

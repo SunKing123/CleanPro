@@ -72,8 +72,10 @@ public class ScrapingCardDataUtils {
         if (cards != null && cards.size() > 0) {
             cardList.addAll(cards);
         }
+        LogUtils.debugInfo("snow", "====setScrapingCardData========" + skipNums);
         skipNums = 0;
         cardBean = getCarDataOfPosition(currentPosition);
+
     }
 
     public int getCardsListSize() {
@@ -87,12 +89,15 @@ public class ScrapingCardDataUtils {
         if (cardBean == null) {
             return;
         }
-        if (skipNums % 2 == 0) {//先加载广告
+        //激励视频开关
+        boolean isOpenJiLiVideo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_TWO_CODE);
+        if (skipNums % 2 == 0 && isOpenJiLiVideo) {//先加载广告
             String advId = getCarAdvId(activity, ADV_VIDEO_PREFIX, cardBean.getCardPosition());
             loadVideoAdv(activity, advId);
         } else {//直接跳详情
             goToScrapingCarDetail(activity);
         }
+        LogUtils.debugInfo("snow", "====scrapingCardNextAction========" + skipNums + "===skipNums % 2===" + (skipNums % 2));
         skipNums++;
     }
 
@@ -141,7 +146,7 @@ public class ScrapingCardDataUtils {
         if (activity == null || cardBean == null) {
             return;
         }
-        if (!UserHelper.init().isLogin()){//没登录跳登录页面
+        if (!UserHelper.init().isLogin()) {//没登录跳登录页面
             UserHelper.init().startToLogin(activity);
             return;
         }
@@ -299,7 +304,7 @@ public class ScrapingCardDataUtils {
      * @param coinCount
      * @param totalCoinCount
      * @param isDouble
-     * @param isAreaOne
+     * @param isAreaOne            是否是区域1 true 是  false 刮的区域2
      * @param doubledmagnification
      */
     public void showDialog(Activity mActivity, int coinCount, int totalCoinCount, boolean isDouble, boolean isAreaOne, int doubledmagnification) {
@@ -313,7 +318,7 @@ public class ScrapingCardDataUtils {
         GoldCoinDialogParameter parameter = new GoldCoinDialogParameter();
         parameter.context = mActivity;
         parameter.isDouble = isDouble && !isAreaOne;
-        parameter.isRewardOpen = isShowNext;
+        parameter.isRewardOpen = isShowNext && !isAreaOne;
         parameter.advCallBack = new AbsAdBusinessCallback() {
         };
         parameter.onDoubleClickListener = v -> clickNextCard(mActivity);
