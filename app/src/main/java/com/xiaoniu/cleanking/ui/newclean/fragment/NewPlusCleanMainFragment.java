@@ -212,7 +212,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         //暂时不需要展示新手引导
 //        showGuideView();
-        mPresenter.showActionGuideView(3, ((MainActivity) mActivity).getCardTabView());
+//        mPresenter.showActionGuideView(3, ((MainActivity) mActivity).getCardTabView());
 
     }
 

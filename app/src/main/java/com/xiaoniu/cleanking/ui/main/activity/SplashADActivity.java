@@ -298,6 +298,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 if (adInfoModel.view!= null && adInfoModel.view.getParent() == null){
                     container.addView(adInfoModel.view);
                 }
+                if (rxTimer != null){
+                    rxTimer.cancel();
+                }
             }
 
             @Override

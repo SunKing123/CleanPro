@@ -33,8 +33,6 @@ import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.statusview.StatusView;
 
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 
 /**
@@ -130,6 +128,7 @@ public class ScrapingCarDetailActivity extends BaseActivity {
         }
         return mAgentWeb.getWebCreator().getWebView();
     }
+
     @Override
     protected void onPause() {
         if (mAgentWeb != null) {
@@ -146,6 +145,7 @@ public class ScrapingCarDetailActivity extends BaseActivity {
         }
         super.onResume();
     }
+
     @Override
     protected void onDestroy() {
 //        EventBus.getDefault().unregister(this);
@@ -153,13 +153,14 @@ public class ScrapingCarDetailActivity extends BaseActivity {
         if (mAgentWeb != null) {
             mAgentWeb.getWebLifeCycle().onDestroy();
         }
-        EventBus.getDefault().post("refreshGuaGuaLeH5");
+        //前面在onresume中刷新了，所以这个不需要了
+//        EventBus.getDefault().post("refreshGuaGuaLeH5");
     }
 
     public class JsInterface {
         @JavascriptInterface
         public String getXnData() {
-            LogUtils.debugInfo("snow","调用getXnData");
+            LogUtils.debugInfo("snow", "调用getXnData");
             return AndroidUtil.getXnData();
         }
 
@@ -204,6 +205,14 @@ public class ScrapingCarDetailActivity extends BaseActivity {
                 return true;
             }
             return super.shouldOverrideUrlLoading(view, request);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            if (ScrapingCardDataUtils.init().parseUrl(ScrapingCarDetailActivity.this, url)) {
+                return true;
+            }
+            return super.shouldOverrideUrlLoading(view, url);
         }
 
         @Override

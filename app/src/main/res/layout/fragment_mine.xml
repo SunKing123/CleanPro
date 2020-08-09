@@ -353,7 +353,8 @@
                 android:visibility="gone"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:layout_marginRight="@dimen/dimen_15dp"
-                android:background="@color/white"
+                android:padding="@dimen/dp_10"
+                android:background="@drawable/bg_white_fillet_06"
                 android:orientation="horizontal"
                 tools:visibility="visible"/>
 

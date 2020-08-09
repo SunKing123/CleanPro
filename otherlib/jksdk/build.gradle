@@ -79,10 +79,10 @@ dependencies {
 //    api(name: 'msa_mdid_1.0.13', ext: 'aar')
     //2.MidasSdk库
     //策略代理组件
-    api 'adlib:proxy:1.4.0.10'
+    api 'adlib:proxy:1.4.0.17'
     //关联组件
     api 'adlib:webview:1.1.0.0'
-    api 'adlib:core:1.2.0.46'
+    api 'adlib:core:1.2.0.47'
     api 'adlib:uikit:1.1.0.0'
     //3.联盟组件
     //穿山甲
