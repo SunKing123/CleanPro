@@ -153,6 +153,23 @@ public class SystemUtils {
         return updateTime;
     }
 
+    /**
+     * 是否第一次安装
+     * @param context
+     */
+    public static boolean isFirstInstall(Context context) {
+        boolean isFirst = false;
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            isFirst = pi.firstInstallTime == pi.lastUpdateTime;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return isFirst;
+
+    }
+
 
 
 

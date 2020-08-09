@@ -83,6 +83,7 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -95,6 +96,7 @@ import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.SystemUtils;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 
@@ -474,7 +476,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-
         if (!hidden && getActivity() != null) {
             NiuDataAPI.onPageStart("home_page_view_page", "首页浏览");
             //金币配置刷新
@@ -1103,7 +1104,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void homeExposureEvent(ExposureEvent exposureEvent) {
         int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
         String auditSwitch = SPUtil.getString(mActivity, SpCacheConfig.AuditSwitch, "1");
-        if (TextUtils.equals(auditSwitch, "1") && exposuredTimes <= 2) { //只记录三次展示
+        if ((isFirstCreate || this.isVisible()) && TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
             int currentTimes = (exposuredTimes + 1);
             MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
             switch (currentTimes) {
