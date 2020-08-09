@@ -243,11 +243,7 @@ public class YuLeFragment extends SimpleFragment {
                 List<ScrapingCardBean> dataList = GSON.parseList(dataJson, ScrapingCardBean.class);
                 ScrapingCardDataUtils.init().setScrapingCardData(dataList, curPosition);
                 LogUtils.debugInfo("h5调用方法==dataList====" + dataList.size() + "==curPosition==" + curPosition + "===isSkipVideo==" + isSkipVideo);
-                if (isSkipVideo) {
-                    ScrapingCardDataUtils.init().goToScrapingCarDetail(getActivity());
-                } else {
-                    ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity());
-                }
+                ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(),!isSkipVideo);
             } else {
                 UserHelper.init().startToLogin(getActivity());
             }

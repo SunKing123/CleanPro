@@ -28,10 +28,13 @@ import com.xiaoniu.cleanking.ui.usercenter.activity.ScrapingCarDetailActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.common.utils.Points;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
 import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.xiaoniu.cleanking.ui.newclean.presenter.ScratchCardAvdPresenter.ADV_FIRST_PREFIX;
@@ -48,6 +51,8 @@ public class ScrapingCardDataUtils {
     //跳转详情页的次数
     private int skipNums = 0;
     private ScrapingCardBean cardBean;
+    private int cardIndex;
+    private int currentPosition;
 
     public static ScrapingCardDataUtils init() {
         if (cardDataUtils == null) {
@@ -68,13 +73,14 @@ public class ScrapingCardDataUtils {
      */
     public void setScrapingCardData(List<ScrapingCardBean> cards, int currentPosition) {
 //        cards = GSON.parseList(dd, ScrapingCardBean.class);
+        this.currentPosition = currentPosition;
         cardList.clear();
         if (cards != null && cards.size() > 0) {
             cardList.addAll(cards);
         }
         LogUtils.debugInfo("snow", "====setScrapingCardData========" + skipNums);
         skipNums = 0;
-        cardBean = getCarDataOfPosition(currentPosition);
+//        cardBean = getCarDataOfPosition(currentPosition);
 
     }
 
@@ -84,15 +90,20 @@ public class ScrapingCardDataUtils {
 
     /**
      * 刮刮卡下一步处理
+     * @param activity
+     * @param isShowVideo 是否需要跳激励视频 true 需要跳
      */
-    public void scrapingCardNextAction(Activity activity) {
+    public void scrapingCardNextAction(Activity activity, boolean isShowVideo) {
+        cardBean = getCarDataOfPosition(currentPosition);
         if (cardBean == null) {
             return;
         }
+        cardIndex = cardBean.getCardPosition();
         //激励视频开关
         boolean isOpenJiLiVideo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_TWO_CODE);
-        if (skipNums % 2 == 0 && isOpenJiLiVideo) {//先加载广告
+        if (skipNums % 2 == 0 && isOpenJiLiVideo && isShowVideo) {//先加载广告
             String advId = getCarAdvId(activity, ADV_VIDEO_PREFIX, cardBean.getCardPosition());
+            StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardBean.getCardPosition(), "", Points.ScratchCard.WINDOW_PAGE);
             loadVideoAdv(activity, advId);
         } else {//直接跳详情
             goToScrapingCarDetail(activity);
@@ -106,7 +117,7 @@ public class ScrapingCardDataUtils {
      *
      * @return
      */
-    public ScrapingCardBean getCarDataOfPosition(int position) {
+    private ScrapingCardBean getCarDataOfPosition(int position) {
         if (cardList != null && position < cardList.size()) {
             return cardList.remove(position);//使用remove直接获取数据并移除数据
         }
@@ -120,6 +131,7 @@ public class ScrapingCardDataUtils {
         if (isFast || activity == null) {
             return;
         }
+        pointVideo();
         AdRequestParams params = new AdRequestParams.Builder()
                 .setAdId(advId).setActivity(activity)
                 .setViewContainer((ViewGroup) activity.getWindow().getDecorView()).build();
@@ -134,6 +146,7 @@ public class ScrapingCardDataUtils {
             @Override
             public void onAdClose(AdInfoModel adInfoModel) {
                 super.onAdClose(adInfoModel);
+                handlerCloseClick();
                 goToScrapingCarDetail(activity);
             }
         });
@@ -142,7 +155,7 @@ public class ScrapingCardDataUtils {
     /**
      * 跳转刮刮卡详情
      */
-    public void goToScrapingCarDetail(Activity activity) {
+    private void goToScrapingCarDetail(Activity activity) {
         if (activity == null || cardBean == null) {
             return;
         }
@@ -331,6 +344,7 @@ public class ScrapingCardDataUtils {
         parameter.obtainCoinCount = coinCount;
         parameter.doubleMsg = "刮下一张";
         GoldCoinDialog.showGoldCoinDialog(parameter);
+        goldPoint(coinCount, cardIndex);
 //        StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, currentPosition, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
@@ -353,7 +367,30 @@ public class ScrapingCardDataUtils {
      */
     private void clickNextCard(Activity activity) {
         GoldCoinDialog.dismiss();
-        cardBean = getCarDataOfPosition(0);
-        scrapingCardNextAction(activity);
+        this.currentPosition = 0;
+        scrapingCardNextAction(activity, true);
+    }
+
+    /**
+     * 金币领取埋点
+     */
+    private void goldPoint(int coinCount, int cardIndex) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("position_id", cardIndex);
+        map.put("gold_number", coinCount);
+        StatisticsUtils.customTrackEvent("number_of_gold_coins_issued", Points.ScratchCard.WINDOW_GOLD_NUM_NAME, "", Points.ScratchCard.WINDOW_PAGE, map);
+    }
+
+    /**
+     * 点击关闭按钮事件
+     */
+    private void handlerCloseClick() {
+        StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_CLOSE_CLICK_CODE, Points.ScratchCard.WINDOW_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
+    }
+
+    private void pointVideo() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("position_id", cardIndex);
+        StatisticsUtils.customTrackEvent("ad_request_sdk_2", "刮刮卡翻倍激励视频广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
     }
 }

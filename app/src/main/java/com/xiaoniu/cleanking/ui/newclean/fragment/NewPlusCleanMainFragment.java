@@ -61,7 +61,6 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
-import com.xiaoniu.cleanking.ui.newclean.bean.ScrapingCardBean;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GuideHomeDialog;
 import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
@@ -83,7 +82,6 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -1144,11 +1142,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
                 break;
             case 3:
-                ScrapingCardBean scrapingCardBean = ScrapingCardDataUtils.init().getCarDataOfPosition(0);
-                if (scrapingCardBean != null) {
-                    ScrapingCardDataUtils.init().goToScrapingCarDetail(getActivity());
+//                ScrapingCardBean scrapingCardBean = ScrapingCardDataUtils.init().getCarDataOfPosition(0);
+//                if (scrapingCardBean != null) {
+                    ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(),false);
                     EventBus.getDefault().post(new SwitchTabEvent(2));
-                }
+//                }
                 break;
 
         }
