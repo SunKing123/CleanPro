@@ -217,16 +217,16 @@ public class BaseWebpageActivity extends AppCompatActivity implements WebViewLis
     @Override
     public void onPause() {
         super.onPause();
-        mLWWebView.onPause();
-        mLWWebView.pauseTimers();
+//        mLWWebView.onPause();
+//        mLWWebView.pauseTimers();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onResume() {
         super.onResume();
-        mLWWebView.resumeTimers();
-        mLWWebView.onResume();
+//        mLWWebView.resumeTimers();
+//        mLWWebView.onResume();
         isNetworkAvailable();
     }
 
