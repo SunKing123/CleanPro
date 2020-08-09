@@ -77,11 +77,11 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         titleName = newIntent.getStringExtra("title")
         pointer = CleanFinishPointer(titleName)
         restView()
-        loadAdv()
         initTitle()
         initHeadView()
         initEvent()
         mPresenter.loadRecommendData()
+        loadAdv()
     }
 
     fun restView() {
@@ -143,12 +143,14 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         val styleSpan = StyleSpan(Typeface.BOLD)
         spannableString.setSpan(styleSpan, content.length - 1 - num.length, content.length - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         function_title.text = spannableString
+        function_sub_title.text = "快试试其他功能吧！"
     }
 
     //病毒查杀
     private fun showKillVirusView() {
         function_icon.setImageResource(R.mipmap.finish_icon_virus)
         function_sub_title.visibility = View.GONE
+        function_title.text = "安全，已经解决所有风险"
     }
 
     //超强省电
@@ -162,6 +164,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     private fun showWeiXinClear() {
         function_icon.setImageResource(R.mipmap.finish_icon_weixin)
         function_title.text = "已清理"
+        function_sub_title.text = "快试试其他功能吧！"
     }
 
     //手机降温
@@ -174,7 +177,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         val styleSpan = StyleSpan(Typeface.BOLD)
         spannableString.setSpan(styleSpan, content.indexOf(num), content.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         function_title.text = spannableString
-        val subContent = "${time}s后达到最佳降温效果"
+        val subContent = "${time}后达到最佳降温效果"
         val subSpannableString = SpannableString(subContent)
         subSpannableString.setSpan(styleSpan, 0, subContent.indexOf("s"), Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         function_sub_title.text = subSpannableString
@@ -244,7 +247,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     fun onRecommendViewClick(title: String) {
         pointer.recommendClickPoint(title)
         when (title) {
-            "垃圾文件太多" -> startClean()
+            "垃圾文件过多" -> startClean()
             "手机加速" -> startAcc()
             "病毒查杀" -> startVirus()
             "超强省电" -> startPower()
@@ -339,53 +342,67 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
      * 一键清理
      */
     fun startClean() {
+        RecmedItemDataStore.getInstance().click_clean=true
         var intent=Intent(this,NowCleanActivity::class.java)
         intent.putExtra("fromRecommend",true)
         startActivity(intent)
+        finish()
     }
 
     /**
      * 病毒查杀
      */
     fun startVirus() {
+        RecmedItemDataStore.getInstance().click_virus=true
         startActivity(VirusKillActivity::class.java)
+        finish()
     }
 
     /**
      * 一键加速
      */
     fun startAcc() {
+        RecmedItemDataStore.getInstance().click_acc=true
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
         startActivity(PhoneAccessActivity::class.java, bundle)
+        finish()
     }
 
     /**
      * 超强省电
      */
     fun startPower() {
+        RecmedItemDataStore.getInstance().click_power=true
         startActivity(PhoneSuperPowerActivity::class.java)
+        finish()
     }
 
     /**
      * 微信清理
      */
     fun startWxClean() {
+        RecmedItemDataStore.getInstance().click_wx=true
         startActivity(WechatCleanHomeActivity::class.java)
+        finish()
     }
 
     /**
      * 手机降温
      */
     fun startCool() {
+        RecmedItemDataStore.getInstance().click_cool=true
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY)
+        finish()
     }
 
     /**
      * 通知栏清理
      */
     fun startNotify() {
+        RecmedItemDataStore.getInstance().click_notify=true
         NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0)
+        finish()
     }
 
     /**

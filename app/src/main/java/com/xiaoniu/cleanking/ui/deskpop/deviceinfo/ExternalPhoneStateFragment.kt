@@ -36,8 +36,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
 
     //电量状态阈值
     private var bLow: Array<Int> = arrayOf(0, 20)
-    private var bMedium: Array<Int> = arrayOf(21, 80)
-    private var bHigh: Array<Int> = arrayOf(80, 99)
+    private var bHigh: Array<Int> = arrayOf(20, 100)
 
     private var TEMPERATURE_VPT = 37
     private lateinit var easyMemoryMod: EasyMemoryMod
@@ -140,8 +139,6 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         var percent = easyBatteryMod.getBatteryPercentage();
         if (inTheRange(percent, bLow)) {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
-        } else if (inTheRange(percent, bMedium)) {
-            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_yellow_bg)
         } else {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_green_bg)
         }
@@ -245,9 +242,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun updateBatteryImage(percent: Int) {
         if (inTheRange(percent, bLow)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_low)
-        } else if (inTheRange(percent, bMedium)) {
-            image_battery.setImageResource(R.drawable.icon_battery_percent_medium)
-        } else if (inTheRange(percent, bHigh)) {
+        }else if (inTheRange(percent, bHigh)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_high)
         } else {
             image_battery.setImageResource(R.drawable.icon_battery_percent_max)

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
 
 /**
  * @author XiLei

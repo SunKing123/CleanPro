@@ -1,6 +1,5 @@
 package com.xiaoniu.cleanking.ui.deskpop.wifi
 
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.wifi.WifiInfo
@@ -12,11 +11,9 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity
-import com.xiaoniu.cleanking.ui.newclean.activity.NewCleanFinishActivity
 import com.xiaoniu.cleanking.ui.newclean.presenter.ExternalScenePresenter
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
-import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.MmkvUtil
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil

@@ -166,7 +166,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.CleanFinishActivity"
-            
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
@@ -292,22 +291,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.LoginActivity"
-            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.newclean.activity.NewCleanFinishActivity"
-            android:configChanges="orientation|screenSize"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task" />
 
         <activity
             android:name=".ui.finish.NewCleanFinishPlusActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task"  />
 
         <activity
             android:name=".ui.main.activity.NewsActivity"

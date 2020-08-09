@@ -88,10 +88,19 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             view.visibleRecommendViewSecond(secondModel)
         }
 
-        if (secondModel == null) {
+        /**
+         * 当第二个推荐功能为空时,过审开关没有打开
+         * 展示刮刮卡引导图
+         */
+        if (secondModel == null&&!AppHolder.getInstance().auditSwitch) {
             view.visibleScratchCardView()
         } else {
             view.goneScratchCardView()
+        }
+        
+        //如果没有推荐功能，第一个广告不推荐
+        if(firstModel==null&&secondModel==null){
+            isOpenOne=false
         }
     }
 
@@ -117,10 +126,11 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.insertAdvRequest4()
+        CleanFinishLogger.log("============完成页内部插屏广告正在加载...：======================")
         MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH_INSIDE_SCREEN_ID, object : AbsAdBusinessCallback() {
             override fun onAdExposure(adInfoModel: AdInfoModel?) {
                 super.onAdExposure(adInfoModel)
-                LogUtils.e("====完成页内部插屏广告展出======")
+                CleanFinishLogger.log("============完成页内部插屏广告展出：======================")
             }
         })
     }
@@ -157,15 +167,16 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 获取可以加金币的数量
      */
     fun getGoldCoin() {
+        CleanFinishLogger.log("============金币发放数正在加载...：======================")
         mModel?.getGoleGonfigs(object : Common3Subscriber<BubbleConfig?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 ToastUtils.showShort(message)
             }
-
             override fun getData(bubbleConfig: BubbleConfig?) {
                 if (bubbleConfig != null && bubbleConfig.data.size > 0) {
                     for (item in bubbleConfig.data) {
                         if (item.locationNum == 5) {
+                            CleanFinishLogger.log("============金币发放数正在加载完成:"+item.goldCount)
                             addGoldCoin(item.goldCount)
                             break
                         }
@@ -187,6 +198,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         if (goldNum == 0) {
             return
         }
+        CleanFinishLogger.log("============调用添加金币数量接口...：======================")
         mModel?.goleCollect(object : Common3Subscriber<BubbleCollected?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 // ToastUtils.showShort(message);
@@ -198,6 +210,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                 pointer.goldNum(goldNum.toString())
                 if (bubbleConfig != null) {
                     //添加成功后，展示金币弹框
+                    CleanFinishLogger.log("============调用添加金币数量接口成功，弹窗展示：======================")
                     view.showGoldCoinDialog(bubbleConfig)
                 }
             }
@@ -213,6 +226,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 激励视频看完，进行金币翻倍
      */
     override fun addDoubleGoldCoin(bubbleCollected: BubbleCollected) {
+
+        CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求======================")
         mModel?.goldDouble(object : Common3Subscriber<BubbleDouble?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 ToastUtils.showShort(message)
@@ -225,8 +240,11 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                     adId = MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS
                 }
                 if (null != bubbleDouble) {
+                    CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求成功！======================")
                     startGoldSuccess(adId, bubbleDouble.data.goldCount, view.getFunctionTitle(),
                             bubbleCollected.data.doubledMagnification)
+                }else{
+                    CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求失败！bubbleDouble==null======================")
                 }
                 view.dismissGoldCoinDialog()
             }
@@ -243,7 +261,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         }, RxUtil.rxSchedulerHelper<ImageAdEntity>(view), bubbleCollected.data.uuid, bubbleCollected.data.locationNum,
                 bubbleCollected.data.goldCount, bubbleCollected.data.doubledMagnification)
     }
-
 
     fun startGoldSuccess(adId: String, num: Int, functionName: String, doubledMagnification: Int) {
         val model = GoldCoinDoubleModel(adId, num, Points.FunctionGoldCoin.SUCCESS_PAGE, functionName, doubledMagnification)

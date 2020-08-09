@@ -19,6 +19,14 @@ public class RecmedItemDataStore {
 
     var itemArray = arrayOf("一键清理", "病毒查杀", "一键加速", "超强省电", "微信清理", "手机降温", "通知栏清理")
 
+    var click_clean=false;
+    var click_virus=false;
+    var click_acc=false;
+    var click_power=false;
+    var click_wx=false;
+    var click_cool=false;
+    var click_notify=false;
+
     var memory: String = ""
     var powerNum: String = ""
     var temperature: String = ""
@@ -50,37 +58,37 @@ public class RecmedItemDataStore {
 
         when (name) {
             "一键清理" -> {
-                if (PreferenceUtil.getNowCleanTime()) {
+                if (PreferenceUtil.getNowCleanTime()&&!click_clean) {
                     return assembleOneKeyClean()
                 }
             }
             "病毒查杀" -> {
-                if (PreferenceUtil.getVirusKillTime()) {
+                if (PreferenceUtil.getVirusKillTime()&&!click_virus) {
                     return assembleCleanVirus()
                 }
             }
             "一键加速" -> {
-                if (PreferenceUtil.getCleanTime()) {
+                if (PreferenceUtil.getCleanTime()&&!click_acc) {
                     return assembleOneKeyAcc()
                 }
             }
             "超强省电" -> {
-                if (PreferenceUtil.getPowerCleanTime()) {
+                if (PreferenceUtil.getPowerCleanTime()&&!click_power) {
                     return assembleBattery()
                 }
             }
             "微信清理" -> {
-                if (PreferenceUtil.getWeChatCleanTime()) {
+                if (PreferenceUtil.getWeChatCleanTime()&&!click_wx) {
                     return assembleCleanWeChat()
                 }
             }
             "手机降温" -> {
-                if (PreferenceUtil.getCoolingCleanTime()) {
+                if (PreferenceUtil.getCoolingCleanTime()&&!click_cool) {
                     return assembleTemperature()
                 }
             }
             "通知栏清理" -> {
-                if (PreferenceUtil.getNotificationCleanTime() && NotifyCleanManager.getInstance().getAllNotifications().size > 0) {
+                if (PreferenceUtil.getNotificationCleanTime()&&!click_notify) {
                     return assembleNotify()
                 }
             }
@@ -92,7 +100,7 @@ public class RecmedItemDataStore {
      * 一键清理数据
      */
     fun assembleOneKeyClean(): RecmedItemModel {
-        var title = "垃圾文件太多"
+        var title = "垃圾文件过多"
 
         var content1: SpannableString
         if (ScanDataHolder.getInstance().getTotalSize() <= 0) {

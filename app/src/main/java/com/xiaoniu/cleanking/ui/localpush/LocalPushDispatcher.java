@@ -141,7 +141,6 @@ public class LocalPushDispatcher {
             if (!isOpen)
                 return;
 
-
             String mPopLayerTime = PreferenceUtil.getInstants().get(SpCacheConfig.POP_LAYER_TIME);
             long preTime = TextUtils.isEmpty(mPopLayerTime) ? 0 : Long.parseLong(mPopLayerTime);
             int number = PreferenceUtil.getInstants().getInt(SpCacheConfig.POP_LAYER_NUMBERS);
