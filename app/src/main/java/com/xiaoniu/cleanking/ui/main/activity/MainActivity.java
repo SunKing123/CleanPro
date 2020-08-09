@@ -351,7 +351,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mBottomBar.setCurrentItem(NEWS);
             //跳转刮刮卡
             if (ScrapingCardDataUtils.init().getCardsListSize() > 0) {
-                ScrapingCardDataUtils.init().goToScrapingCarDetail(this);
+                ScrapingCardDataUtils.init().scrapingCardNextAction(this,false);
             }
         } else if ("wode".equals(type)) {
             mBottomBar.setCurrentItem(MINE);
