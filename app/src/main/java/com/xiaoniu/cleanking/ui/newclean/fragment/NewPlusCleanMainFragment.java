@@ -82,6 +82,7 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -254,6 +255,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void initListener() {
+
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(int x, int y, int oldx, int oldy, boolean isBottom) {
@@ -1107,9 +1109,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
             switch (currentTimes) {
                 case 1:
+                    if (mScrollView.getScrollY() <= 50)  //头部未划出
                     mPresenter.showActionGuideView(currentTimes, view_lottie_top);
                     break;
                 case 2:
+                    if (mScrollView.getScrollY() <= 100)  //头部未划出
                     mPresenter.showActionGuideView(currentTimes, rtBottom);
                     break;
                 case 3:
