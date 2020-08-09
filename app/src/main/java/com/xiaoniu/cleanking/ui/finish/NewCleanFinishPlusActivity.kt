@@ -177,7 +177,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         val styleSpan = StyleSpan(Typeface.BOLD)
         spannableString.setSpan(styleSpan, content.indexOf(num), content.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         function_title.text = spannableString
-        val subContent = "${time}s后达到最佳降温效果"
+        val subContent = "${time}后达到最佳降温效果"
         val subSpannableString = SpannableString(subContent)
         subSpannableString.setSpan(styleSpan, 0, subContent.indexOf("s"), Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
         function_sub_title.text = subSpannableString
