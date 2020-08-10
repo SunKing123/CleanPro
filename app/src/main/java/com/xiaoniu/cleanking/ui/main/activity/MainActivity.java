@@ -946,9 +946,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
      * @return
      */
     public void guideViewClose(){
-        if(null!=mainFragment ) {
+        if (null != mainFragment) {
             mainFragment.hideGuideView();
         }
     }
 
+
+    public int getCurrentIndex(){
+        return mCurrentPosition;
+    }
 }
