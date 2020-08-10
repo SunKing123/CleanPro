@@ -52,7 +52,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     var titleName: String = ""
     lateinit var pointer: CleanFinishPointer
     lateinit var newIntent: Intent
-    var isFirst=true
+    var isFirst = true
 
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
@@ -89,7 +89,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     fun restView() {
         card_1.visibility = View.GONE
         card_2.visibility = View.GONE
-        isFirst=true
+        isFirst = true
     }
 
     private fun initEvent() {
@@ -110,6 +110,12 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         left_title.text = titleName
     }
 
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************init head view data**************************************************************************
+     *********************************************************************************************************************************************************
+    */
     private fun initHeadView() {
         var num = intent.getStringExtra(ExtraConstant.NUM)
         when (titleName) {
@@ -134,7 +140,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         val content = AndroidUtil.zoomText(num.plus(unit), 2f, 0, num.length)
         function_title.text = content
         function_sub_title.text = "垃圾已清理"
-        function_sub_title.textSize=10F
+        function_sub_title.textSize = 10F
     }
 
     //一键加速
@@ -217,6 +223,13 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
 
     }
 
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************init recommend card view*********************************************************************
+     *********************************************************************************************************************************************************
+    */
+
     /**
      * 显示第一个推荐功能视图
      */
@@ -274,6 +287,12 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         finish_card.visibility = View.GONE
     }
 
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************gold coin dialog ****************************************************************************
+     *********************************************************************************************************************************************************
+    */
     /**
      * 金币弹框
      */
@@ -310,14 +329,107 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         return this.titleName
     }
 
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************recommend card start activity****************************************************************
+     *********************************************************************************************************************************************************
+    */
+    /**
+     * 一键清理
+     */
+    fun startClean() {
+        RecmedItemDataStore.getInstance().click_clean = true
+        var intent = Intent(this, NowCleanActivity::class.java)
+        intent.putExtra("fromRecommend", true)
+        startActivity(intent)
+        finish()
+    }
+
+    /**
+     * 病毒查杀
+     */
+    fun startVirus() {
+        RecmedItemDataStore.getInstance().click_virus = true
+        startActivity(VirusKillActivity::class.java)
+        finish()
+    }
+
+    /**
+     * 一键加速
+     */
+    fun startAcc() {
+        RecmedItemDataStore.getInstance().click_acc = true
+        val bundle = Bundle()
+        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
+        startActivity(PhoneAccessActivity::class.java, bundle)
+        finish()
+    }
+
+    /**
+     * 超强省电
+     */
+    fun startPower() {
+        RecmedItemDataStore.getInstance().click_power = true
+        startActivity(PhoneSuperPowerActivity::class.java)
+        finish()
+    }
+
+    /**
+     * 微信清理
+     */
+    fun startWxClean() {
+        RecmedItemDataStore.getInstance().click_wx = true
+        startActivity(WechatCleanHomeActivity::class.java)
+        finish()
+    }
+
+    /**
+     * 手机降温
+     */
+    fun startCool() {
+        RecmedItemDataStore.getInstance().click_cool = true
+        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY)
+        finish()
+    }
+
+    /**
+     * 通知栏清理
+     */
+    fun startNotify() {
+        RecmedItemDataStore.getInstance().click_notify = true
+        NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0)
+        finish()
+    }
+
+    /**
+     * 刮刮卡列表
+     */
+    fun startScratch() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("type", "huodong")
+        startActivity(intent)
+        finish()
+    }
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************activity lifecycle***************************************************************************
+     *********************************************************************************************************************************************************
+    */
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        jumpMainPage()
+    }
+
     override fun onPostResume() {
         super.onPostResume()
         pointer.exposurePoint()
 
         val unused = newIntent.getBooleanExtra("unused", false)
         //真正使用过功能才请求弹框
-        if (!unused&&isFirst) {
-            isFirst=false
+        if (!unused && isFirst) {
+            isFirst = false
             //插屏广告滞后请求，处理友盟bug
             mPresenter.loadPopView()
         }
@@ -339,88 +451,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
             pointer.insertAdvRequest5()
         }
         return super.onKeyDown(keyCode, event)
-    }
-
-    /**
-     * 一键清理
-     */
-    fun startClean() {
-        RecmedItemDataStore.getInstance().click_clean=true
-        var intent=Intent(this,NowCleanActivity::class.java)
-        intent.putExtra("fromRecommend",true)
-        startActivity(intent)
-        finish()
-    }
-
-    /**
-     * 病毒查杀
-     */
-    fun startVirus() {
-        RecmedItemDataStore.getInstance().click_virus=true
-        startActivity(VirusKillActivity::class.java)
-        finish()
-    }
-
-    /**
-     * 一键加速
-     */
-    fun startAcc() {
-        RecmedItemDataStore.getInstance().click_acc=true
-        val bundle = Bundle()
-        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
-        startActivity(PhoneAccessActivity::class.java, bundle)
-        finish()
-    }
-
-    /**
-     * 超强省电
-     */
-    fun startPower() {
-        RecmedItemDataStore.getInstance().click_power=true
-        startActivity(PhoneSuperPowerActivity::class.java)
-        finish()
-    }
-
-    /**
-     * 微信清理
-     */
-    fun startWxClean() {
-        RecmedItemDataStore.getInstance().click_wx=true
-        startActivity(WechatCleanHomeActivity::class.java)
-        finish()
-    }
-
-    /**
-     * 手机降温
-     */
-    fun startCool() {
-        RecmedItemDataStore.getInstance().click_cool=true
-        startActivity(RouteConstants.PHONE_COOLING_ACTIVITY)
-        finish()
-    }
-
-    /**
-     * 通知栏清理
-     */
-    fun startNotify() {
-        RecmedItemDataStore.getInstance().click_notify=true
-        NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0)
-        finish()
-    }
-
-    /**
-     * 刮刮卡列表
-     */
-    fun startScratch() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("type", "huodong")
-        startActivity(intent)
-        finish()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        jumpMainPage()
     }
 
     private fun jumpMainPage() {

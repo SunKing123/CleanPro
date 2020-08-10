@@ -67,9 +67,7 @@ class CleanFinishPointer {
      * 点击推荐埋点
      */
     fun recommendClickPoint(functionName: String) {
-        var extParam = HashMap<String, Any>()
-        extParam.put("position_title", functionName)
-        StatisticsUtils.customTrackEvent(Points.CleanFinish.RECOMMEND_CLICK_CODE, Points.CleanFinish.RECOMMEND_CLICK_NAME, "", point.page, extParam)
+        StatisticsUtils.trackClick(Points.CleanFinish.RECOMMEND_CLICK_CODE, Points.CleanFinish.RECOMMEND_CLICK_NAME, "", point.page, getPositionTitleJson(functionName))
     }
 
     /**
@@ -146,14 +144,14 @@ class CleanFinishPointer {
      * 金币弹框关闭
      */
     fun goldCoinClose() {
-        StatisticsUtils.customTrackEvent(Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_CODE, Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE, getStatisticsMap())
+        StatisticsUtils.trackClick(Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_CODE, Points.CleanFinish.GoldCoin.CLOSE_CLICK_EVENT_NAME, "", Points.CleanFinish.GoldCoin.PAGE,  getStatisticsJson())
     }
 
     /**
      * 激励视频广告关闭
      */
     fun videoAdvClose() {
-        StatisticsUtils.customTrackEvent(Points.CleanFinish.VIDEO_CLOSE_EVENT_CODE, Points.CleanFinish.VIDEO_CLOSE_EVENT_NAME, "", Points.CleanFinish.VIDEO_PAGE, getStatisticsMap())
+        StatisticsUtils.trackClick(Points.CleanFinish.VIDEO_CLOSE_EVENT_CODE, Points.CleanFinish.VIDEO_CLOSE_EVENT_NAME, "", Points.CleanFinish.VIDEO_PAGE, getStatisticsJson())
     }
 
     /**
@@ -175,6 +173,16 @@ class CleanFinishPointer {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("function_name", title)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return jsonObject
+    }
+
+    private fun getPositionTitleJson(functionName:String): JSONObject? {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("position_title", functionName)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
