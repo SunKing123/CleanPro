@@ -217,7 +217,7 @@ public class BaseWebpageActivity extends AppCompatActivity implements WebViewLis
     @Override
     public void onPause() {
         super.onPause();
-//        mLWWebView.onPause();
+        mLWWebView.onPause();
 //        mLWWebView.pauseTimers();
     }
 
@@ -226,7 +226,7 @@ public class BaseWebpageActivity extends AppCompatActivity implements WebViewLis
     public void onResume() {
         super.onResume();
 //        mLWWebView.resumeTimers();
-//        mLWWebView.onResume();
+        mLWWebView.onResume();
         isNetworkAvailable();
     }
 
