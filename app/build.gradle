@@ -110,7 +110,7 @@ android {
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-dev-default.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host_300", "\"http://testwkkeeperh5.wukongclean.com\""
-            buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.openxiaoniu.com/v/v/dataprobe2/wk\""
             buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
             buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
             minifyEnabled false
@@ -137,7 +137,7 @@ android {
             buildConfigField "String", "BASE_HOST", "\"http://clsystem-mclean-fat-default.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host", "\"http://testwlqlapph5.xiaoniuhy.com\""
             buildConfigField "String", "Base_H5_Host_300", "\"http://testwkkeeperh5.wukongclean.com\""
-            buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.51huihuahua.com/v/v/dataprobe2/wk\""
+            buildConfigField "String", "BIGDATA_MD", "\"http://testaidataprobe2.openxiaoniu.com/v/v/dataprobe2/wk\""
             buildConfigField "String", "MIDAS_NIU_DATA_SERVER_URL", "\"http://testrealisationaidataprobe.openxiaoniu.com/realisationaidataprobe\""
             buildConfigField "boolean", "MIDAS_IS_FORMAL", 'false'
             minifyEnabled false
