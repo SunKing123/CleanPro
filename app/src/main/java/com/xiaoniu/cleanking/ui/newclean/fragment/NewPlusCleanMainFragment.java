@@ -1125,7 +1125,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                             break;
                         case 2:
                             BubbleConfig.DataBean ballBean = mPresenter.getGuideViewBean();
-                            if (ballBean == null)   //当前配置金币
+                            if (null == ballBean)   //当前配置金币
                                 return;
                             if (mScrollView.getScrollY() <= 100)  //头部未划出
                             {
@@ -1148,7 +1148,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                     }
                 }
             }
-        }, 1000);
+        }, 1500);
     }
 
     @Subscribe
@@ -1159,7 +1159,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
             case 2:
                 BubbleConfig.DataBean ballBean = mPresenter.getGuideViewBean();
-                if (ballBean == null) {
+                if (null == ballBean) {
                     return;
                 }
                 if (!AndroidUtil.isFastDoubleClick()) {
