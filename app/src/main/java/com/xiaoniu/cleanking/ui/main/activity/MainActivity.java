@@ -688,16 +688,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Subscribe
     public void onEventHotStart(HotStartEvent event) {
         if (event.getAction() == HotStartAction.RED_PACKET) {
-            if(isGuideViewShowing()){
-                return;
-            }
-            startActivity(new Intent(this, RedPacketHotActivity.class));
+            AppLifecyclesImpl.postDelay(() -> {
+                if (isGuideViewShowing()) {
+                    return;
+                }
+                startActivity(new Intent(this, RedPacketHotActivity.class));
+            },2200);
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
             AppLifecyclesImpl.postDelay(() -> {
                     mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
-
-
-            }, 1000);
+            }, 2200);
         }
     }
 
@@ -853,8 +853,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if(isGuideViewShowing()){
             return;
         }
-        if (data.getTrigger() == 0
-                || PreferenceUtil.getRedPacketShowCount() % data.getTrigger() == 0) {
+        if (data.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % data.getTrigger() == 0) {
             mShowRedFirst = true;
             if (!isFinishing()) {
                 startActivity(new Intent(this, RedPacketHotActivity.class));
