@@ -430,7 +430,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         }
     }
 
-    fun loadPopView(){
+    private fun loadPopView(){
         val unused = newIntent.getBooleanExtra("unused", false)
         CleanFinishLogger.log("============ 加载PopView: nused="+unused+"======================")
         //真正使用过功能才请求弹框
