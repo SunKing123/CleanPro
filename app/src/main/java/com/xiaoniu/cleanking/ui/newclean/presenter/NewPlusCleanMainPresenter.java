@@ -62,6 +62,7 @@ import com.xiaoniu.cleanking.utils.net.ErrorCode;
 import com.xiaoniu.cleanking.utils.net.RxUtil;
 import com.xiaoniu.cleanking.utils.prefs.NoClearSPHelper;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.widget.CardGuideComponent;
 import com.xiaoniu.cleanking.widget.FingerGuideComponent;
 import com.xiaoniu.cleanking.widget.GoldGuideComponent;
@@ -833,6 +834,8 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
                             @Override
                             public void onShown() {
+
+
                             }
 
                             @Override
@@ -882,6 +885,10 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                         builder.setOnVisibilityChangedListener(new GuideBuilder.OnVisibilityChangedListener() {
                             @Override
                             public void onShown() {
+                                //恢复展示样式
+                                if (PreferenceUtil.getInstants().getInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW) ==1) {
+                                    view.setVisibility(View.GONE);
+                                }
                             }
 
                             @Override

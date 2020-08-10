@@ -181,7 +181,8 @@ public class GoldCoinDialog {
             }
             dialog.dismiss();
         });
-
+        //搬个位置，没广告也需要播放声音
+        playGoldCoin();
         dialog.setOnDismissListener(parameter.dismissListener);
         //当传进来的id为空时，不加载广告
         if (TextUtils.isEmpty(parameter.adId)) {
@@ -191,7 +192,7 @@ public class GoldCoinDialog {
             }
             return;
         }
-        playGoldCoin();
+
 
         if (dialog != null && !context.isFinishing()) {
             dialog.show();

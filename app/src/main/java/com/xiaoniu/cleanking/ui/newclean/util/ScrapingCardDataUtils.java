@@ -392,6 +392,6 @@ public class ScrapingCardDataUtils {
     private void pointVideo() {
         HashMap<String, Object> map = new HashMap<>();
         map.put("position_id", cardIndex);
-        StatisticsUtils.customTrackEvent("ad_request_sdk_2", "刮刮卡翻倍激励视频广告发起请求", "", "scratch_card_gold_coin_pop_up_window_page", map);
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "刮刮卡翻倍激励视频广告发起请求", "", "scraping_card_list_page", map);
     }
 }
