@@ -93,6 +93,7 @@ import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.SystemUtils;
@@ -1131,14 +1132,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                                 MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
                                 if (rtBottom.getVisibility() == View.GONE) {
                                     rtBottom.setVisibility(View.VISIBLE);    //当前金币如果不展示，引导view定位；
-                                    PreferenceUtil.getInstants().saveInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW,1);
-                                }else{
-                                    PreferenceUtil.getInstants().saveInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW,0);
+                                    PreferenceUtil.getInstants().saveInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW, 1);
+                                } else {
+                                    PreferenceUtil.getInstants().saveInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW, 0);
                                 }
                                 mPresenter.showActionGuideView(currentTimes, rtBottom);
                             }
                             break;
                         case 3:
+                            if (!NetworkUtils.isNetConnected())//排除无网络状态
+                                return;
                             MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
                             mPresenter.showActionGuideView(currentTimes, ((MainActivity) mActivity).getCardTabView());
                             break;
