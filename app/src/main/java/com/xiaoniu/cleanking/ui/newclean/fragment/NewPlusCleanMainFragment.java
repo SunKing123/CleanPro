@@ -1151,6 +1151,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }, 1500);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.hideGuideView();
+    }
+
     @Subscribe
     public void guideClickEvent(GuideViewClickEvent guideViewClickEvent) {
         switch (guideViewClickEvent.getGuideIndex()) {

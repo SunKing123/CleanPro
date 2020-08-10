@@ -986,5 +986,12 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     }
 
+    //隐藏引导view
+    public void hideGuideView(){
+        if (null != guide) {
+            guide.dismiss();
+        }
+    }
+
 
 }
