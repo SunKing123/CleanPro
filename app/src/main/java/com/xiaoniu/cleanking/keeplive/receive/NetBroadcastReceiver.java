@@ -57,7 +57,6 @@ public class NetBroadcastReceiver extends BroadcastReceiver {
         }
         //判断WIFI插屏是否打开
         InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIFI_EXTERNAL_SCREEN);
-        LogUtils.e("=========wifi config:" + new Gson().toJson(configBean));
         //1.先判断是否打开了WIFI弹窗的开关
         if (configBean != null && configBean.isOpen()) {
             long currentTime = System.currentTimeMillis();
