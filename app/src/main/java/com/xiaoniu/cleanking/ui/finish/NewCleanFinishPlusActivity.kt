@@ -271,6 +271,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
             "手机降温" -> startCool()
             "通知栏清理" -> startNotify()
         }
+        finish()
     }
 
     /**
@@ -287,10 +288,9 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         finish_card.visibility = View.GONE
     }
 
-
     /*
      *********************************************************************************************************************************************************
-     ************************************************************gold coin dialog ****************************************************************************
+     ************************************************************gold coin dialog*****************************************************************************
      *********************************************************************************************************************************************************
     */
     /**
@@ -342,7 +342,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         var intent = Intent(this, NowCleanActivity::class.java)
         intent.putExtra("fromRecommend", true)
         startActivity(intent)
-        finish()
     }
 
     /**
@@ -351,7 +350,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     fun startVirus() {
         RecmedItemDataStore.getInstance().click_virus = true
         startActivity(VirusKillActivity::class.java)
-        finish()
     }
 
     /**
@@ -362,7 +360,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
         startActivity(PhoneAccessActivity::class.java, bundle)
-        finish()
     }
 
     /**
@@ -371,7 +368,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     fun startPower() {
         RecmedItemDataStore.getInstance().click_power = true
         startActivity(PhoneSuperPowerActivity::class.java)
-        finish()
     }
 
     /**
@@ -380,7 +376,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     fun startWxClean() {
         RecmedItemDataStore.getInstance().click_wx = true
         startActivity(WechatCleanHomeActivity::class.java)
-        finish()
     }
 
     /**
@@ -389,7 +384,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     fun startCool() {
         RecmedItemDataStore.getInstance().click_cool = true
         startActivity(RouteConstants.PHONE_COOLING_ACTIVITY)
-        finish()
     }
 
     /**
@@ -398,7 +392,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     fun startNotify() {
         RecmedItemDataStore.getInstance().click_notify = true
         NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0)
-        finish()
     }
 
     /**
@@ -408,7 +401,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("type", "huodong")
         startActivity(intent)
-        finish()
     }
 
     /*
