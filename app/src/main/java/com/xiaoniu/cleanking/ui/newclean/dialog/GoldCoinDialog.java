@@ -23,7 +23,6 @@ import com.comm.jksdk.utils.DisplayUtil;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
-import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter;
@@ -65,7 +64,6 @@ public class GoldCoinDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        poolPlayer.prePareLoadSound();
         dialog = new Dialog(context, R.style.dialog_2_button);
         dialog.setContentView(R.layout.gold_coin_dialog);
         dialog.setCancelable(true);//所有的翻倍弹窗、奖励弹窗，支持物理键返回关闭弹窗。
@@ -211,7 +209,6 @@ public class GoldCoinDialog {
 
 
     public static void dismiss() {
-        poolPlayer.release();
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }

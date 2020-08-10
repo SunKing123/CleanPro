@@ -14,7 +14,7 @@ class SoundPoolPlayer {
     private val audioBuild = AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC).build()
     private var soundPool: SoundPool = SoundPool.Builder().setMaxStreams(1).setAudioAttributes(audioBuild).build()
 
-    fun prePareLoadSound() {
+    init {
         soundGoldCoin = soundPool.load(ContextUtils.getContext(), R.raw.gold_coin, 1)
         LogUtils.e("================soundplayer 加载完成")
     }
@@ -25,7 +25,7 @@ class SoundPoolPlayer {
         LogUtils.e("================soundplayer 播放完成")
     }
 
-    fun release() {
+    fun releaseResource() {
         soundPool.release();
     }
 }

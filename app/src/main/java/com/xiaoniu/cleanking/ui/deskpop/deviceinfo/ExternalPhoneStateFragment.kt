@@ -32,7 +32,7 @@ import java.math.RoundingMode
 class ExternalPhoneStateFragment : SimpleFragment() {
 
     //内存和存储阈值
-    private var low: Array<Int> = arrayOf(0, 50)
+    private var low: Array<Int> = arrayOf(0, 49)
 
     //电量状态阈值
     private var bLow: Array<Int> = arrayOf(0, 20)

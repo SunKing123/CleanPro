@@ -1,7 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -84,13 +83,14 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
         super.onResume();
         mSbtnNotificationTag.setChecked((NotificationsUtils.isNotificationEnabled(this) && PreferenceUtil.getIsNotificationEnabled()));
         if (mSbtnNotificationTag.isChecked()) {
-            //开启常驻通知栏服务
-            Intent intent = new Intent(this, NotificationService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent);
-            } else {
-                startService(intent);
-            }
+            startService(new Intent(this, NotificationService.class));
+//            //开启常驻通知栏服务
+//            Intent intent = new Intent(this, NotificationService.class);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                startForegroundService(intent);
+//            } else {
+//                startService(intent);
+//            }
         }
     }
 

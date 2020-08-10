@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.widget.LoadingDialog;
 
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -120,9 +121,32 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-
+        try {
+            super.onResume();
+        } catch (Exception e) {
+            callUpActivity();
+            e.printStackTrace();
+        }
         MobclickAgent.onResume(this);
+    }
+
+    /**
+     * 尝试处理友盟bug:
+     * https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3316922465190
+     * 解决方案：
+     * https://blog.csdn.net/ahubenkui/article/details/80038381
+     */
+    private void callUpActivity() {
+        try {
+            Class activityClass = Activity.class;
+            Field callField = activityClass.getDeclaredField("mCalled");
+            callField.setAccessible(true);
+            callField.setBoolean(this, true);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
