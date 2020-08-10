@@ -171,17 +171,21 @@ public class AppLifecyclesImpl implements AppLifecycles {
             initOaid(application);
             homeCatch(application);
 
-            //锁屏广播监听
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_SCREEN_ON);
-            intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
-            application.registerReceiver(new LockActivityStarReceiver(), intentFilter);
+            try {
+                //锁屏广播监听
+                IntentFilter intentFilter = new IntentFilter();
+                intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+                intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+                application.registerReceiver(new LockActivityStarReceiver(), intentFilter);
 
-            //WIFI连接
-            // registerWifiConnect(application);
-            NetBroadcastReceiver wifiReceiver = new NetBroadcastReceiver();
-            IntentFilter wifiFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-            application.registerReceiver(wifiReceiver, wifiFilter);
+                //WIFI连接
+                // registerWifiConnect(application);
+                NetBroadcastReceiver wifiReceiver = new NetBroadcastReceiver();
+                IntentFilter wifiFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+                application.registerReceiver(wifiReceiver, wifiFilter);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -594,9 +598,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
             ButterKnife.setDebug(true);
         }
     }
-
-
-
 
 
 }
