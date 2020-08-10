@@ -172,6 +172,8 @@ public class PositionId {
 
     public static final String KEY_HOME_PAGE_SHOW_TIMES = "key_home_page_show_times";//首页展示次数、记录四次(功能二级页面返回至首页、功能完成页返回至首页、tab切换进入首页、冷热启动进入首页)
 
+    public static final String KEY_HOME_GOLDE_BTN_SHOW = "key_home_golde_btn_show";//首页展示次数、记录四次(功能二级页面返回至首页、功能完成页返回至首页、tab切换进入首页、冷热启动进入首页)
+
 
 
 

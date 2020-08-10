@@ -1107,7 +1107,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             public void run() {
                 if (PreferenceUtil.isHaseUpdateVersion())
                     return;
-                if(!mActivity.hasWindowFocus()){
+                if (!mActivity.hasWindowFocus()) {
                     return;
                 }
                 int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
@@ -1123,9 +1123,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                             }
                             break;
                         case 2:
+                            BubbleConfig.DataBean ballBean = mPresenter.getGuideViewBean();
+                            if (ballBean == null)   //当前配置金币
+                                return;
                             if (mScrollView.getScrollY() <= 100)  //头部未划出
                             {
                                 MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
+                                if (rtBottom.getVisibility() == View.GONE) {
+                                    rtBottom.setVisibility(View.VISIBLE);    //当前金币如果不展示，引导view定位；
+                                    PreferenceUtil.getInstants().saveInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW,1);
+                                }else{
+                                    PreferenceUtil.getInstants().saveInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW,0);
+                                }
                                 mPresenter.showActionGuideView(currentTimes, rtBottom);
                             }
                             break;
