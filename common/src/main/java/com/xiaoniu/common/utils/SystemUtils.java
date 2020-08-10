@@ -91,14 +91,20 @@ public class SystemUtils {
         if (context == null) {
             return "";
         }
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> list=manager.getRunningAppProcesses();
-        if(null!=list&&list.size()>0){
-            for (ActivityManager.RunningAppProcessInfo processInfo : list) {
-                if (processInfo.pid == android.os.Process.myPid()) {
-                    return processInfo.processName;
+        try {
+            //处理友盟bug,能不能try住？
+            // https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3317258220190
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningAppProcessInfo> list=manager.getRunningAppProcesses();
+            if(null!=list&&list.size()>0){
+                for (ActivityManager.RunningAppProcessInfo processInfo : list) {
+                    if (processInfo.pid == android.os.Process.myPid()) {
+                        return processInfo.processName;
+                    }
                 }
             }
+        }catch (Exception e){
+
         }
         return "";
     }
