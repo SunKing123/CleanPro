@@ -1107,21 +1107,30 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             public void run() {
                 if (PreferenceUtil.isHaseUpdateVersion())
                     return;
+                if(!mActivity.hasWindowFocus()){
+                    return;
+                }
                 int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
                 String auditSwitch = SPUtil.getString(mActivity, SpCacheConfig.AuditSwitch, "1");
                 if ((isFirstCreate || NewPlusCleanMainFragment.this.isVisible()) && TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
                     int currentTimes = (exposuredTimes + 1);
-                    MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
                     switch (currentTimes) {
                         case 1:
                             if (mScrollView.getScrollY() <= 50)  //头部未划出
+                            {
+                                MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
                                 mPresenter.showActionGuideView(currentTimes, view_lottie_top);
+                            }
                             break;
                         case 2:
                             if (mScrollView.getScrollY() <= 100)  //头部未划出
+                            {
+                                MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
                                 mPresenter.showActionGuideView(currentTimes, rtBottom);
+                            }
                             break;
                         case 3:
+                            MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
                             mPresenter.showActionGuideView(currentTimes, ((MainActivity) mActivity).getCardTabView());
                             break;
                     }
