@@ -98,13 +98,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneAccessActivity"
-            
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.activity.PhoneCoolingActivity"
-            
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -648,7 +645,6 @@
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/divide_style"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-
 
         <activity
             android:name=".ui.viruskill.VirusKillActivity"
