@@ -646,7 +646,6 @@
             android:theme="@style/divide_style"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
-
         <activity
             android:name=".ui.viruskill.VirusKillActivity"
             android:configChanges="orientation|screenSize"

@@ -659,7 +659,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             @Override
             public void getData(BubbleDouble bubbleDouble) {
                 RequestUserInfoUtil.getUserCoinInfo(); //更新UI金币信息；
-                mView.bubbleDoubleSuccess(bubbleDouble, locationNum, 1);
+                mView.bubbleDoubleSuccess(bubbleDouble, locationNum, doubledMagnification);
             }
 
             @Override
