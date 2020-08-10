@@ -72,6 +72,7 @@ public class Guide implements View.OnKeyListener, View.OnTouchListener {
         }
         if (mMaskView.getParent() == null && mConfiguration.mTargetView != null) {
             overlay.addView(mMaskView);
+
             if (mConfiguration.mEnterAnimationId != -1) {
                 Animation anim = AnimationUtils.loadAnimation(activity, mConfiguration.mEnterAnimationId);
                 assert anim != null;
@@ -113,6 +114,9 @@ public class Guide implements View.OnKeyListener, View.OnTouchListener {
         vp.removeView(mMaskView);
         onDestroy();
     }
+
+
+
 
     /**
      * 隐藏该遮罩并回收资源相关
