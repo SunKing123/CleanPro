@@ -19,6 +19,14 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Created by lang.chen on 2019/7/4
  */
@@ -51,7 +59,7 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
         SharedPreferences.Editor editor = sp.edit();
         if ("white_list".equals(type)) {
             editor.putStringSet(SpCacheConfig.WHITE_LIST_KEY_INSTALL_PACKE_NAME, caches);
-        }else {
+        } else {
             editor.putStringSet(SpCacheConfig.WHITE_LIST_SOFT_KEY_INSTALL_PACKE_NAME, caches);
         }
         editor.commit();
@@ -79,11 +87,40 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
 
     //扫描已安装的apk信息
     public void scanData(String type) {
-        try {
-            getApplicationInfo(type);
-        } catch (Exception e) {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                try {
+                    getApplicationInfo(type);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                emitter.onComplete();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-        }
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.refData();
+                    }
+                });
+
     }
 
 
@@ -97,12 +134,12 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
      * <p>
      * 存储大小对应的是 packname/files;
      */
-    public void getApplicationInfo(String type){
+    public void getApplicationInfo(String type) {
         List<PackageInfo> packages = mContext.getPackageManager().getInstalledPackages(0);
         Set<String> caches;
         if ("white_list".equals(type)) {
             caches = getCacheWhite();
-        }else {
+        } else {
             caches = getSoftCacheWhite();
         }
         apps.clear();
@@ -112,11 +149,11 @@ public class WhiteListSpeedPresenter extends RxPresenter<WhiteListSpeedManageAct
 
                 boolean isExist = false;
                 for (String packeName : caches) {
-                    if (packeName.equals(packageInfo.packageName)){
+                    if (packeName.equals(packageInfo.packageName)) {
                         isExist = true;
                     }
                 }
-                if(isExist){
+                if (isExist) {
                     AppInfoBean appInfoBean = new AppInfoBean();
                     appInfoBean.name = packageInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString();
                     //应用icon

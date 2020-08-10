@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.WhiteListSpeedAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.AppInfoBean;
 import com.xiaoniu.cleanking.ui.main.presenter.WhiteListSpeedPresenter;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,10 +87,13 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
         LinearLayoutManager mLlManger = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLlManger);
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.modifyList(mPresenter.getData());
+
         mAdapter.setOnCheckListener(this);
         setEmptyView();
     }
+
+
+
 
     @OnClick({R.id.img_back, R.id.ll_add})
     public void onClickView(View view) {
@@ -97,6 +101,8 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
         if (ids == R.id.img_back) {
             finish();
         } else if (ids == R.id.ll_add) {
+            if(AndroidUtil.isFastDoubleClick())
+                return;
             Intent intent = new Intent(this, WhiteListSpeedAddActivity.class);
             intent.putExtra("type",mType);
             startActivityForResult(intent, REQUEST_CODE_UPDATE);
@@ -108,9 +114,6 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_UPDATE) {
             mPresenter.scanData(mType);
-            mAdapter.clear();
-            mAdapter.modifyList(mPresenter.getData());
-            setEmptyView();
         }
     }
 
@@ -139,5 +142,17 @@ public class WhiteListSpeedManageActivity extends BaseActivity<WhiteListSpeedPre
             mLLEmptyView.setVisibility(View.VISIBLE);
             mLLHead.setVisibility(View.GONE);
         }
+    }
+
+    public void refData(){
+        mAdapter.clear();
+        mAdapter.modifyList(mPresenter.getData());
+        setEmptyView();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

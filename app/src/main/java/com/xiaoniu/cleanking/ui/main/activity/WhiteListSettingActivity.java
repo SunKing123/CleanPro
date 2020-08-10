@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.presenter.WhiteListSettingPresenter;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -98,15 +99,21 @@ public class WhiteListSettingActivity extends BaseActivity<WhiteListSettingPrese
         Intent intent = null;
         int ids = view.getId();
         if (ids == R.id.ll_install_package) {
+            if(AndroidUtil.isFastDoubleClick())
+                return;
             //安装包保护名单
             intent = new Intent(this, WhiteListInstallPackgeManageActivity.class);
             startActivity(intent);
         } else if (ids == R.id.ll_speed_list) {
+            if(AndroidUtil.isFastDoubleClick())
+                return;
             //加速白名单
             intent = new Intent(this, WhiteListSpeedManageActivity.class);
             intent.putExtra("type", "white_list");
             startActivity(intent);
         } else if (ids == R.id.ll_soft_package) {
+            if(AndroidUtil.isFastDoubleClick())
+                return;
             //管理软件白名单
             intent = new Intent(this, WhiteListSpeedManageActivity.class);
             intent.putExtra("type", "soft_white_list");
