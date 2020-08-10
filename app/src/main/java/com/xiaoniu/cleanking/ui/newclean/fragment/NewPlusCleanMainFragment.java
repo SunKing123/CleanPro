@@ -82,7 +82,6 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -1151,6 +1150,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }, 1500);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPresenter.hideGuideView();
+    }
+
     @Subscribe
     public void guideClickEvent(GuideViewClickEvent guideViewClickEvent) {
         switch (guideViewClickEvent.getGuideIndex()) {
@@ -1176,6 +1181,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         }
 
+    }
+
+    /**
+     * 引导层是否展示
+     * @return
+     */
+    public boolean guideViewIsShow(){
+        return mPresenter.isGuideViewShowing();
     }
 
     /*

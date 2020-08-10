@@ -688,12 +688,16 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Subscribe
     public void onEventHotStart(HotStartEvent event) {
         if (event.getAction() == HotStartAction.RED_PACKET) {
-            startActivity(new Intent(this, RedPacketHotActivity.class));
+            AppLifecyclesImpl.postDelay(() -> {
+                if (isGuideViewShowing()) {
+                    return;
+                }
+                startActivity(new Intent(this, RedPacketHotActivity.class));
+            },2200);
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
             AppLifecyclesImpl.postDelay(() -> {
-
-                mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
-            }, 1000);
+                    mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+            }, 2200);
         }
     }
 
@@ -846,8 +850,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
-        if (data.getTrigger() == 0
-                || PreferenceUtil.getRedPacketShowCount() % data.getTrigger() == 0) {
+        if(isGuideViewShowing()){
+            return;
+        }
+        if (data.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % data.getTrigger() == 0) {
             mShowRedFirst = true;
             if (!isFinishing()) {
                 startActivity(new Intent(this, RedPacketHotActivity.class));
@@ -921,5 +927,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         QuickUtils.getInstant(this).enableComponent(apple);
     }
 
+
+    /**
+     * 引导view是否展示;
+     * @return
+     */
+    public boolean isGuideViewShowing(){
+        if(null!=mainFragment && mainFragment.guideViewIsShow()){
+            return true;
+        }else {
+            return false;
+        }
+    }
 
 }
