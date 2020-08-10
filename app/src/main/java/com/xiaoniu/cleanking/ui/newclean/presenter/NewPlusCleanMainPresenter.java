@@ -19,6 +19,7 @@ import com.binioter.guideview.GuideBuilder;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.comm.jksdk.utils.DisplayUtil;
+import com.google.gson.Gson;
 import com.hellogeek.permission.util.ScreenUtils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
@@ -573,6 +574,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             @Override
             public void getData(BubbleConfig bubbleConfig) {
+                LogUtils.i("zz--"+new Gson().toJson(bubbleConfig));
                 mView.setTopBubbleView(bubbleConfig);
                 Map<Integer, BubbleConfig.DataBean> mp = new HashMap<>();
                 for (int i = 0; i < bubbleConfig.getData().size(); i++) {
@@ -604,7 +606,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     public BubbleConfig.DataBean getGuideViewBean(){
         if(bubbleListData.size()>0){
-            return bubbleListData.remove(0);
+            return bubbleListData.get(0);
         }else{
             return null;
         }

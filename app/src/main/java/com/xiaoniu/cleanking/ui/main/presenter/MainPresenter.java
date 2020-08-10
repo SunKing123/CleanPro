@@ -390,6 +390,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {
                     mUpdateAgent.check();
                 }
+                ((MainActivity)mActivity).guideViewClose();
             }
         }
         checkAdviceOrRedPacketDialog();
