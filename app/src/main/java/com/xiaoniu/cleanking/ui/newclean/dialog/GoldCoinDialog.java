@@ -51,7 +51,7 @@ public class GoldCoinDialog {
         Activity context = parameter.context;
         View.OnClickListener onDoubleClickListener = parameter.onDoubleClickListener;
 
-        if (context == null  || onDoubleClickListener == null || parameter.obtainCoinCount < 0) {
+        if (context == null || onDoubleClickListener == null || parameter.obtainCoinCount < 0) {
             if (BuildConfig.DEBUG) {
                 ToastUtils.showShort("加载广告请求参数错误！！！");
             }
@@ -65,6 +65,7 @@ public class GoldCoinDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        poolPlayer.prePareLoadSound();
         dialog = new Dialog(context, R.style.dialog_2_button);
         dialog.setContentView(R.layout.gold_coin_dialog);
         dialog.setCancelable(true);//所有的翻倍弹窗、奖励弹窗，支持物理键返回关闭弹窗。
@@ -102,7 +103,7 @@ public class GoldCoinDialog {
         ll_my_coin.setVisibility(View.GONE);
 
         Window window = dialog.getWindow();
-        if (window != null){
+        if (window != null) {
             WindowManager.LayoutParams p = window.getAttributes();
             p.width = (int) (DisplayUtil.getScreenWidth(context) * 0.8722f);
             window.setAttributes(p);
@@ -197,29 +198,20 @@ public class GoldCoinDialog {
         if (dialog != null && !context.isFinishing()) {
             dialog.show();
 
-            MidasRequesCenter.requestAndShowAd(context,parameter.adId,new SimpleViewCallBack(mRootRL));
+            MidasRequesCenter.requestAndShowAd(context, parameter.adId, new SimpleViewCallBack(mRootRL));
         }
 
     }
 
-    private static MyRunnable myRunnable = new MyRunnable();
     private static SoundPoolPlayer poolPlayer = new SoundPoolPlayer();
 
     private static void playGoldCoin() {
-        AppLifecyclesImpl.postDelay(myRunnable, 500);
+        poolPlayer.playGoldCoin();
     }
 
-    private static class MyRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            poolPlayer.playGoldCoin();
-        }
-    }
 
     public static void dismiss() {
         poolPlayer.release();
-        AppLifecyclesImpl.removeTask(myRunnable);
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }

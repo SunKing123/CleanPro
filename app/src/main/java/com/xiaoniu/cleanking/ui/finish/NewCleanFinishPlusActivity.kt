@@ -301,7 +301,9 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         bean.dialogType = 3
         bean.obtainCoinCount = bubbleCollected.data.goldCount
         bean.totalCoinCount = bubbleCollected.data.totalGoldCount.toDouble()
-        bean.adId = MidasConstants.FINISH_GET_GOLD_COIN
+        if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_FINISH_GET_GOLD_COIN)) {
+            bean.adId = MidasConstants.FINISH_GET_GOLD_COIN
+        }
         bean.context = this
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
         bean.closeClickListener = View.OnClickListener { view: View? -> pointer.goldCoinClose() }
@@ -417,7 +419,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     override fun onPostResume() {
         super.onPostResume()
         pointer.exposurePoint()
-
         val unused = newIntent.getBooleanExtra("unused", false)
         //真正使用过功能才请求弹框
         if (!unused && isFirst) {
@@ -425,6 +426,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
             //插屏广告滞后请求，处理友盟bug
             mPresenter.loadPopView()
         }
+
     }
 
     override fun onPause() {
