@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.jess.arms.utils.LogUtils;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiaoniu.cleanking.api.UserApiService;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
@@ -79,6 +80,7 @@ public class RequestUserInfoUtil {
                         if (tokenBean != null) {
                             boolean beanData = tokenBean.getData();
                             UserHelper.init().setCheckUserTokenResult(beanData);
+                            LogUtils.debugInfo("===用户/token校验==="+beanData);
                             if (!beanData) {//调退出登录
                                 exitLogin(activity, null);
                             }

@@ -7,7 +7,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_75dp"
+        android:layout_height="@dimen/dimen_70dp"
         android:background="@drawable/finish_top_bg">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -16,9 +16,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginBottom="3dp"
             android:drawableStart="@mipmap/finish_top_back"
             android:drawablePadding="8dp"
-            android:layout_marginBottom="3dp"
             android:text="一键加速"
             android:textColor="@color/white"
             android:textSize="@dimen/dimen_20sp" />
@@ -36,7 +36,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_99dp"
+                android:layout_height="@dimen/dimen_105dp"
                 android:background="@drawable/finish_top_bg"
                 android:orientation="vertical">
 
@@ -44,7 +44,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_23dp"
+                    android:layout_marginTop="@dimen/dimen_20dp"
+                    android:layout_marginBottom="@dimen/dimen_20dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -72,7 +73,6 @@
                             android:id="@+id/function_sub_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="1px"
                             android:text="快试试其它功能吧！"
                             android:textColor="@color/white"
                             android:textSize="@dimen/dimen_13sp" />
@@ -102,17 +102,45 @@
                 android:layout_marginStart="7dp"
                 android:layout_marginEnd="7dp" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <RelativeLayout
                 android:id="@+id/finish_card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dimen_136dp"
                 android:layout_gravity="center_horizontal"
+                android:visibility="gone"
                 android:layout_marginStart="7dp"
                 android:layout_marginTop="9dp"
-                android:layout_marginEnd="7dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/finish_pic_card"
-                android:visibility="gone"/>
+                android:layout_marginEnd="7dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/finish_pic_card_bg" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="@dimen/dimen_20dp"
+                    android:layout_marginBottom="@dimen/dimen_20dp"
+                    android:text="最高可中\n888元现金"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_24sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_20dp"
+                    android:background="@mipmap/finish_card_corner_mark"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="@dimen/dimen_5dp"
+                    android:text="永久免费"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/font_14sp" />
+            </RelativeLayout>
+
 
             <FrameLayout
                 android:id="@+id/ad_container_2"

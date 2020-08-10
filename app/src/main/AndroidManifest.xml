@@ -450,7 +450,7 @@
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
 
         <activity
             android:name=".ui.deskpop.battery.BatteryPopActivity"

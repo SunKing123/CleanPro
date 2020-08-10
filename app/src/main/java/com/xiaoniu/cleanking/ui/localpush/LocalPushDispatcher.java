@@ -103,6 +103,11 @@ public class LocalPushDispatcher {
     }
 
 
+    public void testDialogActivityOnLauncher() {
+        Intent screenIntent = getIntent(mContext);
+        mContext.startActivity(screenIntent);
+    }
+
     //悬浮广告页面
     public void startDialogActivityOnLauncher() {
 
