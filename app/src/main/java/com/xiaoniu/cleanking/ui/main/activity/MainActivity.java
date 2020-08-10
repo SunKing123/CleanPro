@@ -389,9 +389,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             StatisticsUtils.customTrackEvent("ad_request_sdk_5", "功能完成页广告位5发起请求", "", "success_page");
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
             if (configBean != null && configBean.isOpen()) {
-                AppLifecyclesImpl.postDelay(() -> {
-                    mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK);
-                }, 1000);
+                AppLifecyclesImpl.postDelay(() -> mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK), 1000);
             }
         }
         parsePushData(intent);
@@ -717,7 +715,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     @Subscribe
     public void onEventWifiConnection(PopEventModel popEventModel) {
-        DeskPopLogger.log("======MainActivity before  的event bus:" + popEventModel.getAction());
         if (TextUtils.isEmpty(popEventModel.getAction()) || AppLifecycleUtil.isAppOnForeground(mContext))
             return;
         DeskPopLogger.log("======MainActivity 的event bus:" + popEventModel.getAction());

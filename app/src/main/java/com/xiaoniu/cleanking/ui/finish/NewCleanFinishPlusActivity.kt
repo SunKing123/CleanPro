@@ -134,6 +134,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         val content = AndroidUtil.zoomText(num.plus(unit), 2f, 0, num.length)
         function_title.text = content
         function_sub_title.text = "垃圾已清理"
+        function_sub_title.textSize=10F
     }
 
     //一键加速
