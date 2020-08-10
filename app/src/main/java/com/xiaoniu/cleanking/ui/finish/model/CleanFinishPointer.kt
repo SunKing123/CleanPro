@@ -51,7 +51,7 @@ class CleanFinishPointer {
                 point = Points.CleanFinish.Cool()
             }
             else -> {
-                point = Points.CleanFinish.Acc()
+                point = Points.CleanFinish.Folder()
             }
         }
     }

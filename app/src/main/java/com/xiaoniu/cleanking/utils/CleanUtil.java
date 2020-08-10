@@ -110,7 +110,6 @@ public class CleanUtil {
             }catch (Exception e){
 
             }
-
         }
         countEntity.setNumber(number);
         return countEntity;

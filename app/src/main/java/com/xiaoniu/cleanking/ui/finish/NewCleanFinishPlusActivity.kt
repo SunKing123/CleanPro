@@ -259,7 +259,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         }
         view.setOnClickListener({ onRecommendViewClick(item.title) })
     }
-   
+
     fun onRecommendViewClick(title: String) {
         pointer.recommendClickPoint(title)
         when (title) {
