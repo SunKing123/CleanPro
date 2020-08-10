@@ -103,7 +103,6 @@ public class ScrapingCardDataUtils {
         boolean isOpenJiLiVideo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_TWO_CODE);
         if (skipNums % 2 == 0 && isOpenJiLiVideo && isShowVideo) {//先加载广告
             String advId = getCarAdvId(activity, ADV_VIDEO_PREFIX, cardBean.getCardPosition());
-            StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardBean.getCardPosition(), "", Points.ScratchCard.WINDOW_PAGE);
             loadVideoAdv(activity, advId);
         } else {//直接跳详情
             goToScrapingCarDetail(activity);
@@ -369,6 +368,8 @@ public class ScrapingCardDataUtils {
         GoldCoinDialog.dismiss();
         this.currentPosition = 0;
         scrapingCardNextAction(activity, true);
+        //点击刮下一个埋点
+        StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardBean.getCardPosition(), "", Points.ScratchCard.WINDOW_PAGE);
     }
 
     /**
