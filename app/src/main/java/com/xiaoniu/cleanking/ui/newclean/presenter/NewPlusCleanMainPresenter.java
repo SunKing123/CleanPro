@@ -823,6 +823,9 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
     public void showActionGuideView(int times, View view) {
         LogUtils.d("zz--showGuideView()--" + times);
+        if (null != guide) {
+            guide.dismiss();
+        }
         switch (times) {
             case 1:
                 view.post(new Runnable() {
