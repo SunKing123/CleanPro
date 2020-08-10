@@ -1195,6 +1195,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         return mPresenter.isGuideViewShowing();
     }
 
+
+
+    /**
+     * 引导层是否展示
+     * @return
+     */
+    public void hideGuideView(){
+        mPresenter.hideGuideView();
+    }
+
     /*
      * *********************************************************************************************************************************************************
      * ********************************************************** others ***************************************************************************************
