@@ -82,6 +82,7 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -172,6 +173,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     boolean isFirstCreate = false;
     private boolean isDenied = false;
     private boolean isSlide;//正在滑动
+    private boolean pagehasFocus = false;
     FloatAnimManager mFloatAnimManager;
     private MyRunnable myRunnable = new MyRunnable();
 
@@ -235,6 +237,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
+        pagehasFocus = hasFocus;
         if (hasFocus && isFirstCreate) {
             AppLifecyclesImpl.postDelay(myRunnable, 3000);
             isFirstCreate = false;
@@ -1112,7 +1115,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 }
                 int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
                 String auditSwitch = SPUtil.getString(mActivity, SpCacheConfig.AuditSwitch, "1");
-                if ((isFirstCreate || NewPlusCleanMainFragment.this.isVisible()) && TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
+                if ((isFirstCreate || pagehasFocus) && TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
                     int currentTimes = (exposuredTimes + 1);
                     switch (currentTimes) {
                         case 1:
@@ -1124,6 +1127,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                             break;
                         case 2:
                             BubbleConfig.DataBean ballBean = mPresenter.getGuideViewBean();
+                            LogUtils.i("zz---"+new Gson().toJson(ballBean));
                             if (null == ballBean)   //当前配置金币
                                 return;
                             if (mScrollView.getScrollY() <= 100)  //头部未划出
