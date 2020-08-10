@@ -103,8 +103,14 @@ public class CleanUtil {
         countEntity.setTotalLong(number);
         countEntity.setTotalSize(value);
         if (null != AppApplication.getInstance()) {
-            countEntity.setUnit(AppApplication.getInstance().getString(suffix));
-            countEntity.setResultSize(value + AppApplication.getInstance().getString(suffix));
+            try {
+                //修复友盟bug 有时候getString()找不到
+                countEntity.setUnit(AppApplication.getInstance().getString(suffix));
+                countEntity.setResultSize(value + AppApplication.getInstance().getString(suffix));
+            }catch (Exception e){
+
+            }
+
         }
         countEntity.setNumber(number);
         return countEntity;
