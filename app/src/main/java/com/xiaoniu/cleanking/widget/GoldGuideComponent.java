@@ -29,7 +29,7 @@ public class GoldGuideComponent implements Component {
         ImageView iv_guide02_tag04 = (ImageView)ll.findViewById(R.id.iv_guide02_tag04);
         gold.setOnClickListener(onmClickListener);
         iv_guide02_tag04.setOnClickListener(onmClickListener);
-//        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide02_tag04, 1000);
+        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide02_tag04, 500);
 
         return ll;
     }
