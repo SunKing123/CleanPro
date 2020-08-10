@@ -2,6 +2,7 @@ package com.geek.webpage.web.webview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -24,30 +25,37 @@ public class LWWebView extends WebView implements DownloadListener {
     private WebViewListener mWebViewListener;
 
     public LWWebView(Context context) {
-        super(context);
+        super(getFixedContext(context));
         initDatas();
     }
 
     public LWWebView(Context context,WebViewListener webViewListener) {
-        super(context);
+        super(getFixedContext(context));
         initDatas();
     }
 
     public LWWebView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(getFixedContext(context), attrs);
         initDatas();
     }
 
     public LWWebView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(getFixedContext(context), attrs, defStyleAttr);
         initDatas();
     }
 
     public LWWebView(Context context, AttributeSet attrs, int defStyleAttr, boolean privateBrowsing) {
-        super(context, attrs, defStyleAttr, privateBrowsing);
+        super(getFixedContext(context), attrs, defStyleAttr, privateBrowsing);
         initDatas();
     }
 
+    public static Context getFixedContext(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return context.createConfigurationContext(new Configuration());
+        } else {
+            return context;
+        }
+    }
     private void initDatas(){
         //setHorizontalScrollBarEnabled(false);
         setVerticalScrollBarEnabled(false);
