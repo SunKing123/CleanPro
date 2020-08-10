@@ -32,22 +32,22 @@ public class DefaultWebLifeCycleImpl implements WebLifeCycle {
 
     @Override
     public void onResume() {
-//        if (this.mWebView != null) {
-//            if (Build.VERSION.SDK_INT >= 11){
-//                this.mWebView.onResume();
-//            }
+        if (this.mWebView != null) {
+            if (Build.VERSION.SDK_INT >= 11){
+                this.mWebView.onResume();
+            }
 //            this.mWebView.resumeTimers();
-//        }
+        }
     }
 
     @Override
     public void onPause() {
-//        if (this.mWebView != null) {
-//            if (Build.VERSION.SDK_INT >= 11){
-//                this.mWebView.onPause();
-//            }
+        if (this.mWebView != null) {
+            if (Build.VERSION.SDK_INT >= 11){
+                this.mWebView.onPause();
+            }
 //            this.mWebView.pauseTimers();
-//        }
+        }
     }
 
     @Override
