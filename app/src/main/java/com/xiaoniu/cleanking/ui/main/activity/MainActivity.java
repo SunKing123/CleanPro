@@ -940,4 +940,15 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
     }
 
+
+    /**
+     * 引导view是否展示;
+     * @return
+     */
+    public void guideViewClose(){
+        if(null!=mainFragment ) {
+            mainFragment.hideGuideView();
+        }
+    }
+
 }
