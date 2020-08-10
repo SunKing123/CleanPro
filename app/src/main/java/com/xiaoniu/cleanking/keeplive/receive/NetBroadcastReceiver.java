@@ -37,12 +37,15 @@ public class NetBroadcastReceiver extends BroadcastReceiver {
             //WIFI连接或者移动网络连接
             netContentListener.netContent(true);
         }*/
-        if (wifiNetInfo.isConnected()) {
-            LogUtils.e("===================WIFI Connect=====");
-            startExternalSceneActivity(context);
-        } else {
-            LogUtils.e("===================WIFI Disconnect=====");
+        if (wifiNetInfo != null) {
+            if (wifiNetInfo.isConnected()) {
+                LogUtils.e("===================WIFI Connect=====");
+                startExternalSceneActivity(context);
+            } else {
+                LogUtils.e("===================WIFI Disconnect=====");
+            }
         }
+
     }
 
 
