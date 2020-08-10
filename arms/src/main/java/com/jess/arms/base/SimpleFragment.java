@@ -84,7 +84,12 @@ public abstract class SimpleFragment extends SupportFragment implements IFragmen
 
     @Override
     public void onDestroy() {
-        mUnBinder.unbind();
+        try {
+            //捕获：throw new IllegalStateException("Bindings already cleared.")
+            mUnBinder.unbind();
+        }catch (Exception e){
+
+        }
         super.onDestroy();
     }
 
