@@ -39,6 +39,7 @@
         android:layout_below="@+id/iv_guide02_tag03"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dimen_18dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/guide02_tag04" />
 
 
