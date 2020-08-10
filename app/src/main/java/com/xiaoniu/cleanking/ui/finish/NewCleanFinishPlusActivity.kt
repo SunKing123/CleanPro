@@ -30,6 +30,7 @@ import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.ui.newclean.bean.GoldCoinDialogParameter
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog
+import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
@@ -40,6 +41,7 @@ import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by xinxiaolong on 2020/8/4.
@@ -414,4 +416,18 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         startActivity(intent)
         finish()
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        jumpMainPage()
+    }
+
+    private fun jumpMainPage() {
+        EventBus.getDefault().post(FromHomeCleanFinishEvent(titleName))
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("back_from_finish", true)
+        startActivity(intent)
+        finish()
+    }
+
 }
