@@ -31,7 +31,7 @@ public class CardGuideComponent implements Component {
         ImageView iv_guide03_tag02 = (ImageView)ll.findViewById(R.id.iv_guide03_tag02);
         iv_guide03_tag02.setOnClickListener(onmClickListener);
         iv_guide03_tag04.setOnClickListener(onmClickListener);
-//        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide03_tag02, 1000);
+        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide03_tag02, 500);
         return ll;
     }
 
