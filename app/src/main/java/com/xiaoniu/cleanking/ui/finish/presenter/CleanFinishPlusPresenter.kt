@@ -108,6 +108,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载弹框
      */
     override fun loadPopView() {
+        if(isDestroy()){
+            return
+        }
         val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
         config?.let {
             CleanFinishLogger.log("============ 插屏广告开关：======================")
@@ -122,7 +125,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     //显示内部插屏广告
     fun loadInsideScreenDialog() {
-        if (view.getActivity() == null) {
+        if(isDestroy()){
             return
         }
         pointer.insertAdvRequest4()
@@ -143,7 +146,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载第一个广告位数据
      */
     override fun loadOneAdv(advContainer: FrameLayout) {
-        if (!isOpenOne) return
+        if (!isOpenOne||isDestroy()) return
         pointer.requestFeedAdv1()
         MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH01_TOP_FEEED_ID, object : SimpleViewCallBack(advContainer) {
 
@@ -154,7 +157,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载第二个广告位数据
      */
     override fun loadTwoAdv(advContainer: FrameLayout) {
-        if (!isOpenTwo) {
+        if (!isOpenTwo||isDestroy()) {
             return
         }
         pointer.requestFeedAdv2()
@@ -167,6 +170,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 获取可以加金币的数量
      */
     fun getGoldCoin() {
+        if(isDestroy()){
+            return
+        }
         CleanFinishLogger.log("============金币发放数正在加载...：======================")
         mModel?.getGoleGonfigs(object : Common3Subscriber<BubbleConfig?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
@@ -195,7 +201,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 根据添加数量，添加金币
      */
     private fun addGoldCoin(goldNum: Int) {
-        if (goldNum == 0) {
+        if (goldNum == 0||isDestroy()) {
             return
         }
         CleanFinishLogger.log("============调用添加金币数量接口...：======================")
@@ -226,7 +232,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 激励视频看完，进行金币翻倍
      */
     override fun addDoubleGoldCoin(bubbleCollected: BubbleCollected) {
-
+        if(isDestroy()){
+            return
+        }
         CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求======================")
         mModel?.goldDouble(object : Common3Subscriber<BubbleDouble?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
@@ -279,6 +287,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     }
 
     override fun loadVideoAdv(bubbleCollected: BubbleCollected) {
+        if(isDestroy()){
+            return
+        }
         pointer.goldCoinRequestAdv2()
         MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON, object : VideoAbsAdCallBack() {
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
@@ -303,5 +314,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                 super.onAdVideoComplete(adInfoModel)
             }
         })
+    }
+
+    fun isDestroy():Boolean{
+       return view==null||pointer==null||view.getActivity()==null
     }
 }
