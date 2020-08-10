@@ -557,6 +557,10 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         }
         if (!mActivity.hasWindowFocus())
             return;
+
+        if(((MainActivity)mActivity).isGuideViewShowing()){
+            return;
+        }
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
         MidasRequesCenter.requestAndShowAd(mActivity, appID, new AbsAdBusinessCallback() {
 

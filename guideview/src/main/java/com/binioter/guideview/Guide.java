@@ -117,6 +117,13 @@ public class Guide implements View.OnKeyListener, View.OnTouchListener {
 
 
 
+    public boolean isShow(){
+        boolean isShow = false;
+        if(null!=mMaskView && mMaskView.getChildCount()>0){
+            isShow = true;
+        }
+        return isShow;
+    }
 
     /**
      * 隐藏该遮罩并回收资源相关
