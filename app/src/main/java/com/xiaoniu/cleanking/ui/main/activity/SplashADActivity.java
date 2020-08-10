@@ -20,7 +20,6 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
-import com.xiaoniu.cleanking.selfdebug.AppConfig;
 import com.xiaoniu.cleanking.ui.main.bean.AuditSwitch;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -127,12 +126,15 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
     private void permissionRemind() {
         //引导使用说明埋点
         StatisticsUtils.customTrackEvent("use_guide_page_custom", "使用指引页曝光", "use_guide_page", "use_guide_page");
-        new LaunchPermissionRemindDialog(this).setLaunchPermissionListener(() -> {
+        LaunchPermissionRemindDialog permissionRemindDialog = new LaunchPermissionRemindDialog(this).setLaunchPermissionListener(() -> {
             StatisticsUtils.trackClick("experience_it_now_button_click", "立即体验按钮点击", "use_guide_page", "use_guide_page");
 
             requestPhoneStatePermission();
             PreferenceUtil.saveFirstOpenApp();
-        }).show();
+        });
+        if (!isFinishing()) {
+            permissionRemindDialog.show();
+        }
     }
 
     /**
@@ -295,10 +297,10 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
             @Override
             public void onAdLoaded(AdInfoModel adInfoModel) {
                 super.onAdLoaded(adInfoModel);
-                if (adInfoModel.view!= null && adInfoModel.view.getParent() == null){
+                if (adInfoModel.view != null && adInfoModel.view.getParent() == null) {
                     container.addView(adInfoModel.view);
                 }
-                if (rxTimer != null){
+                if (rxTimer != null) {
                     rxTimer.cancel();
                 }
             }

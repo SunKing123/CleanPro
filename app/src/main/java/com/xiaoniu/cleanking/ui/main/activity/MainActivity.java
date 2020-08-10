@@ -533,7 +533,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         FragmentTransaction ft = mManager.beginTransaction();
         if (position < mFragments.size()) {
             ft.show(mFragments.get(position));
-            if (prePosition != -1) {
+            if (prePosition != -1 && prePosition<mFragments.size()) {
                 ft.hide(mFragments.get(prePosition));
             }
             ft.commitAllowingStateLoss();
