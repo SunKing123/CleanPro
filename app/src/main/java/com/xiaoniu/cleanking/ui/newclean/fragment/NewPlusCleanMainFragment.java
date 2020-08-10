@@ -82,6 +82,7 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -254,6 +255,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     private void initListener() {
+
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(int x, int y, int oldx, int oldy, boolean isBottom) {
@@ -1100,31 +1102,33 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     @Subscribe
     public void homeExposureEvent(ExposureEvent exposureEvent) {
-        int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
-        String auditSwitch = SPUtil.getString(mActivity, SpCacheConfig.AuditSwitch, "1");
-        if ((isFirstCreate || this.isVisible()) && TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
-            int currentTimes = (exposuredTimes + 1);
-            MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
-            switch (currentTimes) {
-                case 1:
-                    mPresenter.showActionGuideView(currentTimes, view_lottie_top);
-                    break;
-                case 2:
-                    mPresenter.showActionGuideView(currentTimes, rtBottom);
-                    break;
-                case 3:
-                    AppLifecyclesImpl.postDelay(new Runnable() {
-                        @Override
-                        public void run() {
+        AppLifecyclesImpl.postDelay(new Runnable() { //延迟加载（升级弹窗状态||刮刮卡详情页面数据）
+            @Override
+            public void run() {
+                if (PreferenceUtil.isHaseUpdateVersion())
+                    return;
+                int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
+                String auditSwitch = SPUtil.getString(mActivity, SpCacheConfig.AuditSwitch, "1");
+                if ((isFirstCreate || NewPlusCleanMainFragment.this.isVisible()) && TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
+                    int currentTimes = (exposuredTimes + 1);
+                    MmkvUtil.saveInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, currentTimes);
+                    switch (currentTimes) {
+                        case 1:
+                            if (mScrollView.getScrollY() <= 50)  //头部未划出
+                                mPresenter.showActionGuideView(currentTimes, view_lottie_top);
+                            break;
+                        case 2:
+                            if (mScrollView.getScrollY() <= 100)  //头部未划出
+                                mPresenter.showActionGuideView(currentTimes, rtBottom);
+                            break;
+                        case 3:
                             mPresenter.showActionGuideView(currentTimes, ((MainActivity) mActivity).getCardTabView());
-                        }
-                    }, 3000);
-                    break;
+                            break;
+                    }
+                }
             }
-        }
-
+        }, 1000);
     }
-
 
     @Subscribe
     public void guideClickEvent(GuideViewClickEvent guideViewClickEvent) {
@@ -1144,8 +1148,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case 3:
 //                ScrapingCardBean scrapingCardBean = ScrapingCardDataUtils.init().getCarDataOfPosition(0);
 //                if (scrapingCardBean != null) {
-                    ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(),false);
-                    EventBus.getDefault().post(new SwitchTabEvent(2));
+                ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(), false);
+                EventBus.getDefault().post(new SwitchTabEvent(2));
 //                }
                 break;
 
