@@ -129,7 +129,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.insertAdvRequest4()
-        CleanFinishLogger.log("============完成页内部插屏广告正在加载...：======================")
+        CleanFinishLogger.log("============完成页内部插屏广告正在加载...：======================"+view.hasWindowFocus())
         MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH_INSIDE_SCREEN_ID, object : AbsAdBusinessCallback() {
             override fun onAdExposure(adInfoModel: AdInfoModel?) {
                 super.onAdExposure(adInfoModel)

@@ -38,7 +38,7 @@ public class FingerGuideComponent implements Component {
         iv_guide_tag00.setLayoutParams(relP);
         iv_guide_tag00.setOnClickListener(onmClickListener);
         iv_guide_tag03.setOnClickListener(onmClickListener);
-//        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide_tag03, 1000);
+        AnimationScaleUtils.getInstance().playScaleAnimation(iv_guide_tag03, 500);
         return ll;
     }
 

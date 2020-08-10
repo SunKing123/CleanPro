@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.midas.MidasConstants
+import com.xiaoniu.cleanking.ui.finish.base.CleanFinishLogger
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore
@@ -419,14 +420,24 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     override fun onPostResume() {
         super.onPostResume()
         pointer.exposurePoint()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if(hasFocus&&isFirst){
+            isFirst=false
+            loadPopView()
+        }
+    }
+
+    fun loadPopView(){
         val unused = newIntent.getBooleanExtra("unused", false)
+        CleanFinishLogger.log("============ 加载PopView: nused="+unused+"======================")
         //真正使用过功能才请求弹框
-        if (!unused && isFirst) {
-            isFirst = false
+        if (!unused) {
             //插屏广告滞后请求，处理友盟bug
             mPresenter.loadPopView()
         }
-
     }
 
     override fun onPause() {
