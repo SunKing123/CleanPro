@@ -603,7 +603,11 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
 
     public BubbleConfig.DataBean getGuideViewBean(){
-        return bubbleListData.remove(0);
+        if(bubbleListData.size()>0){
+            return bubbleListData.remove(0);
+        }else{
+            return null;
+        }
     }
     //领取金币
     public void bullCollect(int locationNum) {
