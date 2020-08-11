@@ -56,7 +56,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     override fun attachView(view: NewCleanFinishPlusActivity) {
         this.view = view
         this.itemDataStore = RecmedItemDataStore.getInstance()
-        pointer = CleanFinishPointer(view.titleName)
+        pointer = CleanFinishPointer(view.getFunctionTitle())
     }
 
     /**

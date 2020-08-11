@@ -50,7 +50,8 @@ import org.greenrobot.eventbus.EventBus
  */
 class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
 
-    var titleName: String = ""
+    //这里先允许为空，因为intent里获取有时会为null,导致程序崩溃。
+    var titleName: String ?= ""
     lateinit var pointer: CleanFinishPointer
     lateinit var newIntent: Intent
     var isFirst = true
@@ -77,8 +78,13 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     }
 
     override fun initView() {
-        titleName = newIntent.getStringExtra("title")
-        pointer = CleanFinishPointer(titleName)
+        titleName = newIntent.getStringExtra(ExtraConstant.TITLE)
+        //有时候intent传进的title为空了，真是费解！
+        //bug描述：https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3328618714190
+        if(titleName==null){
+            titleName="一键加速"
+        }
+        pointer = CleanFinishPointer(titleName!!)
         restView()
         initTitle()
         initHeadView()
@@ -118,7 +124,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
      *********************************************************************************************************************************************************
     */
     private fun initHeadView() {
-        var num = intent.getStringExtra(ExtraConstant.NUM)
         when (titleName) {
             "建议清理", "立即清理", "一键清理" -> showSuggestClearView()
             "一键加速" -> showOneKeySpeedUp()
@@ -329,7 +334,10 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     }
 
     override fun getFunctionTitle(): String {
-        return this.titleName
+        if(titleName==null){
+            titleName="一键加速"
+        }
+        return this.titleName!!
     }
 
     /*
