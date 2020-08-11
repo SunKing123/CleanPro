@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.ScanResultFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -160,7 +161,7 @@ public class NowCleanActivity extends BaseActivity {
     private void showCleanResult() {
         finish();
         Bundle bundle = new Bundle();
-        bundle.putString("title", getString(R.string.tool_suggest_clean));
+        bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
         Intent intent = new Intent();
         intent.putExtras(bundle);
         PreferenceUtil.saveNowCleanTime();

@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.ui.tool.qq.util.QQUtil;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanAllFileScanUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -205,7 +206,7 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(WechatCleanHomeActivity.class);
             } else {
                 Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_chat_clear));
+                bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_chat_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
                 StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
@@ -231,7 +232,7 @@ public class ToolFragment extends SimpleFragment {
             if (!PreferenceUtil.getCleanTime()) {
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
                 Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_one_key_speed));
+                bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
                 StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
@@ -250,7 +251,7 @@ public class ToolFragment extends SimpleFragment {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             } else {
                 Bundle bundle = new Bundle();
-                bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+                bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
                 StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);

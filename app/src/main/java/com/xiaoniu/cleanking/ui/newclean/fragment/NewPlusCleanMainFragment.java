@@ -81,6 +81,7 @@ import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
@@ -730,7 +731,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
             if (null != countEntity && getActivity() != null && this.isAdded()) {
                 Bundle bundle = new Bundle();
-                bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
+                bundle.putString(ExtraConstant.TITLE, getResources().getString(R.string.tool_suggest_clean));
                 bundle.putString("num", countEntity.getTotalSize());
                 bundle.putString("unit", countEntity.getUnit());
                 bundle.putBoolean("unused", true);
@@ -838,7 +839,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (!PreferenceUtil.getCleanTime()) {
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
             Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_one_key_speed));
+            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
             bundle.putString("num", "");
             bundle.putString("unit", "");
             bundle.putBoolean("unused", true);
@@ -869,7 +870,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             startActivity(VirusKillActivity.class);
         } else {
             Intent intent = new Intent();
-            intent.putExtra("title", "病毒查杀");
+            intent.putExtra(ExtraConstant.TITLE, "病毒查杀");
             intent.putExtra("main", false);
             intent.putExtra("unused", true);
             StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent);
@@ -890,7 +891,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             startActivity(PhoneSuperPowerActivity.class);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_super_power_saving));
+            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_super_power_saving));
             bundle.putString("num", "");
             bundle.putString("unit", "");
             bundle.putBoolean("unused", true);
@@ -946,7 +947,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             startActivity(WechatCleanHomeActivity.class);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_chat_clear));
+            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_chat_clear));
             bundle.putString("num", "");
             bundle.putString("unit", "");
             bundle.putBoolean("unused", true);
@@ -969,7 +970,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_notification_clean));
+            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_notification_clean));
             bundle.putString("num", "");
             bundle.putString("unit", "");
             bundle.putBoolean("unused", true);
@@ -992,7 +993,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
             Bundle bundle = new Bundle();
-            bundle.putString("title", getString(R.string.tool_phone_temperature_low));
+            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low));
             bundle.putString("num", "");
             bundle.putString("unit", "");
             bundle.putBoolean("unused", true);
@@ -1013,12 +1014,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         } else {
             Intent intent = new Intent();
             String num = PreferenceUtil.getSpeedNetworkValue();
-            intent.putExtra("title", "网络加速");
+            intent.putExtra(ExtraConstant.TITLE, "网络加速");
             intent.putExtra("main", false);
             intent.putExtra("num", num);
             intent.putExtra("unused", true);
             StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent);
-
         }
     }
 

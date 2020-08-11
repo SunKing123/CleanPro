@@ -348,7 +348,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                     Bundle bundle = new Bundle();
-                    bundle.putString("title", "立即清理");
+                    bundle.putString(ExtraConstant.TITLE, "立即清理");
                     bundle.putString("action", "lock");
                     bundle.putString("num", "");
                     bundle.putString("unit", "");
@@ -379,7 +379,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                     Bundle bundle = new Bundle();
-                    bundle.putString("title", "一键加速");
+                    bundle.putString(ExtraConstant.TITLE, "一键加速");
                     bundle.putString("action", "lock");
                     intentClean.putExtras(bundle);
                     StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
@@ -399,7 +399,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                     intentClean.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                     Bundle bundle = new Bundle();
-                    bundle.putString("title", "病毒查杀");
+                    bundle.putString(ExtraConstant.TITLE, "病毒查杀");
                     bundle.putString("action", "lock");
                     intentClean.putExtras(bundle);
                     StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);

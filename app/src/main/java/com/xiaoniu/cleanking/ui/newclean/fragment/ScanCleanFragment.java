@@ -29,6 +29,7 @@ import com.xiaoniu.cleanking.ui.newclean.presenter.ScanCleanPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
+import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.SimpleAnimatorListener;
@@ -156,7 +157,7 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         if (getActivity() != null && this.isAdded()) {
             Bundle bundle = new Bundle();
-            bundle.putString("title", getResources().getString(R.string.tool_suggest_clean));
+            bundle.putString(ExtraConstant.TITLE, getResources().getString(R.string.tool_suggest_clean));
             bundle.putString("num", cleanTotalSize);
             bundle.putString("unit", cleanTotalUnit);
             PreferenceUtil.saveCleanStorageNum(cleanTotalSize,cleanTotalUnit);

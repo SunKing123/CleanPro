@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.deskpop.wifi
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.wifi.WifiInfo
@@ -14,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity
 import com.xiaoniu.cleanking.ui.newclean.presenter.ExternalScenePresenter
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
+import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.MmkvUtil
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
@@ -62,6 +64,10 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
         if (PreferenceUtil.getSpeedNetWorkTime()) {
             startActivity(NetWorkActivity::class.java)
         } else {
+            val intent = Intent()
+            val num = PreferenceUtil.getSpeedNetworkValue()
+            intent.putExtra(ExtraConstant.TITLE, "网络加速")
+            intent.putExtra("unused", true)
             StartFinishActivityUtil.gotoFinish(this,intent)
         }
     }
@@ -70,6 +76,9 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
         if (PreferenceUtil.getVirusKillTime()) {
             startActivity(VirusKillActivity::class.java)
         } else {
+            val intent = Intent()
+            intent.putExtra(ExtraConstant.TITLE, "病毒查杀")
+            intent.putExtra("unused", true)
             StartFinishActivityUtil.gotoFinish(this,intent)
         }
     }
