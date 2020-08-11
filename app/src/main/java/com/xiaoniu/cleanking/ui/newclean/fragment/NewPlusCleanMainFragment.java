@@ -25,7 +25,6 @@ import androidx.core.widget.NestedScrollView;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.gson.Gson;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
@@ -61,7 +60,6 @@ import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
-import com.xiaoniu.cleanking.ui.newclean.dialog.GuideHomeDialog;
 import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
@@ -81,8 +79,8 @@ import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -156,27 +154,16 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @BindView(R.id.layout_scroll)
     ObservableScrollView mScrollView;
     @BindView(R.id.image_interactive)
-    public HomeInteractiveView imageInteractive;
-
+    HomeInteractiveView imageInteractive;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    private boolean isThreeAdvOpen = false;
-    private boolean hasInitThreeAdvOnOff = false;
-
-    private int mNotifySize; //通知条数
-    private int mPowerSize; //耗电应用数
-    private int mRamScale = 0;
-    private RxPermissions rxPermissions;
-
-    private AlertDialog dlg;
-    private CompositeDisposable compositeDisposable;
+    private AlertDialog permissDlg;
     //判断重新启动
     boolean isFirstCreate = false;
-    private boolean isDenied = false;
     private boolean isSlide;//正在滑动
-    private boolean pagehasFocus = false;
+    private int bullNum = 0;
     FloatAnimManager mFloatAnimManager;
-    private MyRunnable myRunnable = new MyRunnable();
+    private BullRunnable bullRunnable = new BullRunnable();
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -195,66 +182,44 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     @Override
     protected void initView() {
-        commonTitleLayout.hindContentView().setBgColor(R.color.color_F7F8FA);
         EventBus.getDefault().register(this);
-        rxPermissions = new RxPermissions(requireActivity());
-        compositeDisposable = new CompositeDisposable();
-
+        isFirstCreate = true;
+        commonTitleLayout.hindContentView().setBgColor(R.color.color_F7F8FA);
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
         mFloatAnimManager = new FloatAnimManager(imageInteractive, DisplayUtils.dip2px(180));
-        isFirstCreate = true;
         initEvent();
         showHomeLottieView();
         initClearItemCard();
         initListener();
+        checkAndUploadPoint();
+        mPresenter.getInteractionSwitch();//互动式广告开关
+        mPresenter.refBullList();//金币列表
+        //埋点
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
         Map<String, Object> extParam = new HashMap<>();
         extParam.put("testing_status", UserHelper.init().isWxLogin() ? "yes" : "no");
-        StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态",
-                "home_page", "home_page", extParam);
-        checkAndUploadPoint();
-        //暂时不需要展示新手引导
-//        showGuideView();
-//        mPresenter.showActionGuideView(3, ((MainActivity) mActivity).getCardTabView());
+        StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
 
-    }
-
-
-    /**
-     * 引导弹窗
-     */
-    @Deprecated
-    private void showGuideView() {
-        boolean isAudit = AppHolder.getInstance().getAuditSwitch();
-        boolean guideOpen = AppHolder.getInstance().checkSwitchIsOpen(PositionId.KEY_MAIN_GUIDE_VIEW);
-        boolean isShowed = MmkvUtil.getBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, false);
-        if (!isAudit && !isShowed && guideOpen) {
-            new GuideHomeDialog(getContext()).show();
-            MmkvUtil.saveBool(SpCacheConfig.MAIN_GUIDE_VIEW_KEY, true);
-        }
     }
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        pagehasFocus = hasFocus;
         if (hasFocus && isFirstCreate) {
-            AppLifecyclesImpl.postDelay(myRunnable, 3000);
+            AppLifecyclesImpl.postDelay(bullRunnable, 3000);
             isFirstCreate = false;
         }
-
     }
 
-    private class MyRunnable implements Runnable {
-
+    private class BullRunnable implements Runnable {
         @Override
         public void run() {
-            mPresenter.getInteractionSwitch();
-            mPresenter.refBullList();
-            //金币前两个位置预加载
-            mPresenter.goldAdprev();
             refreshAdAll();
+            if (bullNum > 0) {//金币数量大于0前两个位置预加载
+                mPresenter.goldAdprev();
+            }
+
         }
     }
 
@@ -508,8 +473,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onResume() {
         super.onResume();
-        mNotifySize = NotifyCleanManager.getInstance().getAllNotifications().size();
-        mPowerSize = new FileQueryUtils().getRunningProcess().size();
         imageInteractive.loadNextDrawable();
         checkScanState();
     }
@@ -518,7 +481,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        AppLifecyclesImpl.removeTask(myRunnable);
+        AppLifecyclesImpl.removeTask(bullRunnable);
     }
 
     /*
@@ -564,8 +527,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Subscribe
     public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
         if (null == view_lottie_top) return;
-        //热启动后重新检测权限
-        isDenied = false;
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
         mPresenter.refBullList();//金币配置刷新；
@@ -617,12 +578,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      ************************************************************head oneKey clean start**********************************************************************
      *********************************************************************************************************************************************************
      */
-//    @Deprecated
     private void showHomeLottieView() {
-//        int screenWidth = ScreenUtils.getScreenWidth(mContext);
-//        RelativeLayout.LayoutParams textLayout = (RelativeLayout.LayoutParams) view_lottie_top.getLayoutParams();
-//        textLayout.setMargins(0, -Float.valueOf(screenWidth * 0.1f).intValue(), 0, 0);
-//        view_lottie_top.setLayoutParams(textLayout);
         LuckBubbleView lftop = view_lottie_top.findViewById(R.id.lftop);
         LuckBubbleView lfbottom = view_lottie_top.findViewById(R.id.lfbotm);
         LuckBubbleView rttop = view_lottie_top.findViewById(R.id.rttop);
@@ -670,7 +626,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void permissionDenied() {//授权被拒绝
         if (null != view_lottie_top)
             view_lottie_top.setNoSize();
-        isDenied = true;
     }
 
     //重新检测头部扫描状态
@@ -771,12 +726,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     public void showPermissionDialog() {
-        dlg = new AlertDialog.Builder(requireContext()).create();
+        permissDlg = new AlertDialog.Builder(requireContext()).create();
         if (requireActivity().isFinishing()) {
             return;
         }
-        dlg.show();
-        Window window = dlg.getWindow();
+        permissDlg.show();
+        Window window = permissDlg.getWindow();
         if (window != null) {
             window.setContentView(R.layout.alite_redp_send_dialog);
             WindowManager.LayoutParams lp = window.getAttributes();
@@ -794,10 +749,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             tipTxt.setText("提示!");
             content.setText("清理功能无法使用，请先开启文件读写权限。");
             btnOk.setOnClickListener(v -> {
-                dlg.dismiss();
+                permissDlg.dismiss();
                 goSetting();
             });
-            btnCancle.setOnClickListener(v -> dlg.dismiss());
+            btnCancle.setOnClickListener(v -> permissDlg.dismiss());
         }
     }
 
@@ -1034,6 +989,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void setTopBubbleView(BubbleConfig dataBean) {
         if (null != view_lottie_top && null != dataBean) {
             view_lottie_top.refBubbleView(dataBean);
+            if (!CollectionUtils.isEmpty(dataBean.getData())) {
+                bullNum = dataBean.getData().size();
+            }
         }
     }
 
@@ -1114,7 +1072,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 if (!mActivity.hasWindowFocus()) {
                     return;
                 }
-                if(((MainActivity)mContext).getCurrentIndex()!=1){
+                if (((MainActivity) mContext).getCurrentIndex() != 1) {
                     return;
                 }
                 int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
@@ -1131,7 +1089,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                             break;
                         case 2:
                             BubbleConfig.DataBean ballBean = mPresenter.getGuideViewBean();
-                            LogUtils.i("zz---"+new Gson().toJson(ballBean));
+                            LogUtils.i("zz---" + new Gson().toJson(ballBean));
                             if (null == ballBean)   //当前配置金币
                                 return;
                             if (mScrollView.getScrollY() <= 100)  //头部未划出
@@ -1193,19 +1151,20 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     /**
      * 引导层是否展示
+     *
      * @return
      */
-    public boolean guideViewIsShow(){
+    public boolean guideViewIsShow() {
         return mPresenter.isGuideViewShowing();
     }
 
 
-
     /**
      * 引导层是否展示
+     *
      * @return
      */
-    public void hideGuideView(){
+    public void hideGuideView() {
         mPresenter.hideGuideView();
     }
 
