@@ -1108,14 +1108,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         AppLifecyclesImpl.postDelay(new Runnable() { //延迟加载（升级弹窗状态||刮刮卡详情页面数据）
             @Override
             public void run() {
+
                 if (PreferenceUtil.isHaseUpdateVersion())
                     return;
                 if (!mActivity.hasWindowFocus()) {
                     return;
                 }
+                if(((MainActivity)mContext).getCurrentIndex()!=1){
+                    return;
+                }
                 int exposuredTimes = MmkvUtil.getInt(PositionId.KEY_HOME_PAGE_SHOW_TIMES, 0);
                 String auditSwitch = SPUtil.getString(mActivity, SpCacheConfig.AuditSwitch, "1");
-                if ((isFirstCreate || pagehasFocus) && TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
+                if (TextUtils.equals(auditSwitch, "1") && SystemUtils.isFirstInstall(mContext) && exposuredTimes <= 2) { //当前fragment展示状态 && 过审开关&&第一次安装&& 只记录三次展示
                     int currentTimes = (exposuredTimes + 1);
                     switch (currentTimes) {
                         case 1:
