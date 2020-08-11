@@ -89,6 +89,8 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         initTitle()
         initHeadView()
         initEvent()
+        // 先装载推荐卡片布局，再加载广告。
+        // 因为推荐卡片布局数量影响广告加载的数量
         mPresenter.loadRecommendData()
         loadAdv()
     }
