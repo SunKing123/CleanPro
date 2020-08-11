@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
@@ -137,6 +138,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
     @Override
     public void onCreate(@NonNull Application application) {
+        fixedWebViewBugInAndroidP(application);
         ContextUtils.initApplication(application);
         logConfig();
         PayShareApplication.getInstance().initPayShare(application, UMENG_APPKEY, ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "")
@@ -212,6 +214,18 @@ public class AppLifecyclesImpl implements AppLifecycles {
         Utils.init(application);
 
 
+    }
+    /*
+     *在进程初始化的时候调用，比如Application中进行调用，并且这行代码需要在其他的SDK等等初始化之前就要调*用，否则会报其他的错误
+     */
+    private void fixedWebViewBugInAndroidP(Application application) {
+        //Android P 以及之后版本不支持同时从多个进程使用具有相同数据目录的WebView
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            String processName = SystemUtils.getProcessName(application);
+            if (!application.getPackageName().equals(processName)) {//判断不等于默认进程名称
+                WebView.setDataDirectorySuffix(processName);
+            }
+        }
     }
 
 
