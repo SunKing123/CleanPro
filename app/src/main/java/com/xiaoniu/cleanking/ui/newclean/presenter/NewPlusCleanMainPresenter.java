@@ -526,13 +526,13 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             public void onAdClick(AdInfoModel adInfoModel) {
                 super.onAdClick(adInfoModel);
                 if (onAdClick != null) {
-                    onAdClick.onClick(adId);
+                    onAdClick.onClick(PositionId.KEY_MAIN_THREE_AD,adId);
                 }
             }
         });
     }
 
-    public void showAdviceLayout(FrameLayout viewGroup, String adviceID, IOnAdClickListener onAdClick) {
+    public void showAdviceLayout(FrameLayout viewGroup, String adviceID,String posId, IOnAdClickListener onAdClick) {
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
@@ -541,7 +541,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             public void onAdClick(AdInfoModel adInfoModel) {
                 super.onAdClick(adInfoModel);
                 if (onAdClick != null) {
-                    onAdClick.onClick(adviceID);
+                    onAdClick.onClick(posId,adviceID);
                 }
             }
 

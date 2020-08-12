@@ -5,5 +5,5 @@ package com.xiaoniu.cleanking.midas;
  * email：xinxiaolong123@foxmail.com
  */
 public interface IOnAdClickListener {
-    void onClick(String adId);
+    void onClick(String posId,String adId);
 }
