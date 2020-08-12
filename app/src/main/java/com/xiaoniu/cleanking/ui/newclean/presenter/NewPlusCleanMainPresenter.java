@@ -27,8 +27,6 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
-import com.xiaoniu.cleanking.midas.AdRequestParams;
-import com.xiaoniu.cleanking.midas.AdposUtil;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
@@ -574,7 +572,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
 
             @Override
             public void getData(BubbleConfig bubbleConfig) {
-                LogUtils.i("zz--"+new Gson().toJson(bubbleConfig));
+                LogUtils.i("zz--" + new Gson().toJson(bubbleConfig));
                 mView.setTopBubbleView(bubbleConfig);
                 Map<Integer, BubbleConfig.DataBean> mp = new HashMap<>();
                 for (int i = 0; i < bubbleConfig.getData().size(); i++) {
@@ -604,13 +602,14 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
 
-    public BubbleConfig.DataBean getGuideViewBean(){
-        if(bubbleListData.size()>0){
+    public BubbleConfig.DataBean getGuideViewBean() {
+        if (bubbleListData.size() > 0) {
             return bubbleListData.get(0);
-        }else{
+        } else {
             return null;
         }
     }
+
     //领取金币
     public void bullCollect(int locationNum) {
         mModel.goleCollect(new Common3Subscriber<BubbleCollected>() {
@@ -684,7 +683,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         bean.doubleNums = dataBean.getData().getDoubledMagnification();
         //广告位1开关控制
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE)) {
-            bean.adId = AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 0);
+            bean.adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE);
             Map<String, Object> mapJson = new HashMap<>();
             mapJson.put("position_id", String.valueOf(dataBean.getData().getLocationNum()));
             StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页金币领取弹窗上广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", mapJson);
@@ -720,13 +719,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                 mapJson.put("position_id", String.valueOf(dataBean.getData().getLocationNum()));
                 StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页翻倍激励视频广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", mapJson);
 
-                ViewGroup viewGroup = (ViewGroup) mView.getActivity().getWindow().getDecorView();
-//                AdRequestParams params = new AdRequestParams.Builder().
-//                        setActivity(mView.getActivity()).
-//                        setViewContainer(viewGroup).
-//                        setAdId(AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1)).build();
-
-                MidasRequesCenter.requestAndShowAd(mView.getActivity(), AdposUtil.getAdPos(dataBean.getData().getLocationNum(), 1), new VideoAbsAdCallBack() {
+                MidasRequesCenter.requestAndShowAd(mView.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_TWO_CODE), new VideoAbsAdCallBack() {
                     @Override
                     public void onAdLoadError(String errorCode, String errorMsg) {
                         super.onAdLoadError(errorCode, errorMsg);
@@ -780,13 +773,13 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         bean.context = mView.getActivity();
         StatisticsUtils.customTrackEvent("home_page_gold_coin_pop_up_window_custom", "首页金币领取弹窗曝光", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
         GoldCoinDialog.showGoldCoinDialog(bean);
-        adPrevData(AdposUtil.getAdPos(1, 3));//位置三预加载
+        adPrevData(AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE));//位置三预加载
     }
 
     //金币位置预加载
     public void goldAdprev() {
-        adPrevData(AdposUtil.getAdPos(1, 0));//位置一预加载
-        adPrevData(AdposUtil.getAdPos(1, 1));//位置二预加载
+        adPrevData(AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_TWO_CODE));//位置一预加载
+        adPrevData(AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE));//位置二预加载
 
     }
 
@@ -895,7 +888,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
                             @Override
                             public void onShown() {
                                 //恢复展示样式
-                                if (PreferenceUtil.getInstants().getInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW) ==1) {
+                                if (PreferenceUtil.getInstants().getInt(PositionId.KEY_HOME_GOLDE_BTN_SHOW) == 1) {
                                     view.setVisibility(View.GONE);
                                 }
                             }
@@ -989,17 +982,17 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
     }
 
     //隐藏引导view
-    public void hideGuideView(){
+    public void hideGuideView() {
         if (null != guide) {
             guide.dismiss();
         }
     }
 
     //引导view是否展示；
-    public boolean isGuideViewShowing(){
+    public boolean isGuideViewShowing() {
         if (null != guide) {
             return guide.isShow();
-        }else{
+        } else {
             return false;
         }
     }
