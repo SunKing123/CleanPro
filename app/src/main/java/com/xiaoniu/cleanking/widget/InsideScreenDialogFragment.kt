@@ -47,6 +47,10 @@ class InsideScreenDialogFragment constructor(var adId: String) : DialogFragment(
                 super.onAdClose(adInfoModel)
                 dismiss()
             }
+            override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
+                super.onAdLoadError(errorCode, errorMsg)
+                dismiss()
+            }
         })
     }
 

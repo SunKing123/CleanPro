@@ -610,7 +610,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         if (data != null) {
             mView.getRedPacketListSuccess(data);
         }
-
     }
 
     /**
