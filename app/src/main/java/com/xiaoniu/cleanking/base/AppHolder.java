@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.IconsEntity;
@@ -12,8 +13,11 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,40 +108,32 @@ public class AppHolder {
         insertAdSwitchMap.clear();
         for (InsertAdSwitchInfoList.DataBean post : insertAdSwitchInfoList.getData()) {
             insertAdSwitchMap.put(post.getConfigKey(), post);
+            MmkvUtil.saveString(post.getConfigKey(), new Gson().toJson(post));//单个插屏数据保存；
         }
         MmkvUtil.setInsertSwitchInfo(new Gson().toJson(insertAdSwitchInfoList));
     }
 
 
     public void setSwitchInfoList(SwitchInfoList switchInfoList) {
-        this.switchInfoList = switchInfoList;
-        //本地数据保存
-        MmkvUtil.setSwitchInfo(new Gson().toJson(switchInfoList));
+        if (null != switchInfoList && !CollectionUtils.isEmpty(switchInfoList.getData())) {
+            this.switchInfoList = switchInfoList;
+            //本地数据保存;
+            MmkvUtil.setSwitchInfo(new Gson().toJson(switchInfoList));
+            //单个广告位数据保存;
+            List<SwitchInfoList.DataBean> dataBeansn = switchInfoList.getData();
+            for (SwitchInfoList.DataBean item : dataBeansn) {
+                String adkey = item.getConfigKey() + "_" + item.getAdvertPosition();
+                MmkvUtil.saveString(adkey, new Gson().toJson(item));
+            }
+        }
+
+
     }
 
     public SwitchInfoList getSwitchInfoList() {
         return switchInfoList != null ? switchInfoList : new Gson().fromJson(MmkvUtil.getSwitchInfo(), SwitchInfoList.class);
     }
 
-    /**
-     * 获取冷热起间隔时间
-     * @return
-     */
-    public int getHotTime() {
-        int defaultTime = 2 * 60 * 1000;
-        try {
-            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                    if (TextUtils.equals(PositionId.HOT_CODE, switchInfo.getAdvertPosition())) {
-                        defaultTime = switchInfo.getHotStartInterval() * 60 * 1000;
-                    }
-                }
-            }
-        } catch (Exception e) {
-        }
-        return defaultTime;
-    }
 
     public void setBottomAdList(List<BottoomAdList.DataBean> switchInfoList) {
         this.mBottoomAdList = switchInfoList;
@@ -211,6 +207,7 @@ public class AppHolder {
         }
         return isOpen;
     }
+
 
     /**
      * 根据configKey判断开关是否打开
@@ -304,4 +301,60 @@ public class AppHolder {
     }
 
 
+    /**
+     * 总广告开关
+     * midasId获取
+     *
+     * @param configKey
+     * @return
+     */
+    public String getMidasAdId(String configKey) {
+        return getMidasAdId(configKey, PositionId.DRAW_ONE_CODE);
+    }
+
+    /**
+     * 总广告开关
+     * midasId获取
+     *
+     * @param configKey
+     * @param advertPosition
+     * @return
+     */
+    public String getMidasAdId(String configKey, String advertPosition) {
+        String advertId = "";
+        String adData = MmkvUtil.getString(configKey + "_" + advertPosition, "");
+        if (!TextUtils.isEmpty(adData)) {
+            SwitchInfoList.DataBean dataBean = new Gson().fromJson(adData, SwitchInfoList.DataBean.class);
+            if (null != dataBean) {
+                advertId = dataBean.getAdvertId();
+            }
+        }
+        if (BuildConfig.DEBUG) {
+            LogUtils.d("ad_request_midas_id:" + advertId + "---广告开关位置：---" + configKey + "_" + advertPosition);
+        }
+        return advertId;
+    }
+
+
+    /**
+     * 插屏广告
+     * midasId获取
+     *
+     * @param configKey
+     * @return
+     */
+    public String getInsertAdMidasId(String configKey) {
+        String advertId = "";
+        String adData = MmkvUtil.getString(configKey, "");//单个插屏数据保存；
+        if (!TextUtils.isEmpty(adData)) {
+            InsertAdSwitchInfoList.DataBean dataBean = new Gson().fromJson(adData, InsertAdSwitchInfoList.DataBean.class);
+            if (null != dataBean) {
+                advertId = dataBean.getAdvertId();
+            }
+        }
+        if (BuildConfig.DEBUG) {
+            LogUtils.d("ad_request_midas_id:" + advertId + "---插屏广告开关位置：---" + configKey);
+        }
+        return advertId;
+    }
 }

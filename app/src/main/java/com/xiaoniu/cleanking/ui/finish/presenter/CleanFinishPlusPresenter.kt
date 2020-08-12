@@ -148,7 +148,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     override fun loadOneAdv(advContainer: FrameLayout) {
         if (!isOpenOne || isDestroy()) return
         pointer.requestFeedAdv1()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH01_TOP_FEEED_ID, object : SimpleViewCallBack(advContainer) {
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE), object : SimpleViewCallBack(advContainer) {
 
         })
     }
@@ -161,7 +161,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.requestFeedAdv2()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH01_CENTER_FEEED_ID, object : SimpleViewCallBack(advContainer) {
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE), object : SimpleViewCallBack(advContainer) {
 
         })
     }
@@ -245,8 +245,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
             override fun getData(bubbleDouble: BubbleDouble?) {
                 var adId = ""
-                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-                    adId = MidasConstants.GET_DOUBLE_GOLD_COIN_SUCCESS
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS,PositionId.DRAW_DEFAULT_CODE)) {
+                    adId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS,PositionId.DRAW_DEFAULT_CODE)
                 }
                 if (null != bubbleDouble) {
                     CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求成功！======================")
@@ -292,7 +292,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.goldCoinRequestAdv2()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON, object : VideoAbsAdCallBack() {
+        var videoId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO,PositionId.DRAW_DEFAULT_CODE)
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), videoId, object : VideoAbsAdCallBack() {
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
                 super.onAdLoadError(errorCode, errorMsg)
                 ToastUtils.showLong("网络异常")

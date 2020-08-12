@@ -13,10 +13,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -71,7 +73,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
 
     public void initAdv() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", "", "", "all_ad_request", "retain_the_pop_up_window", "retain_the_pop_up_window");
-        MidasRequesCenter.requestAndShowAd(activity,MidasConstants.EXIT_RETAIN_ID,new SimpleViewCallBack(container));
+        MidasRequesCenter.requestAndShowAd(activity, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_EXIT_RETAIN,PositionId.DRAW_ONE_CODE),new SimpleViewCallBack(container));
     }
 
     @Override

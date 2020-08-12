@@ -138,7 +138,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         val viewGroup: ViewGroup = window.decorView as ViewGroup
 //        val params = AdRequestParams.Builder().setAdId(MidasConstants.RED_PACKET)
 //                .setViewContainer(viewGroup).setActivity(this).build()
-        MidasRequesCenter.requestAndShowAd(this, MidasConstants.RED_PACKET, object : AbsAdBusinessCallback() {})
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_RED_JILI,PositionId.DRAW_ONE_CODE), object : AbsAdBusinessCallback() {})
     }
 
     private fun showWebView() {

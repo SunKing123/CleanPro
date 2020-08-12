@@ -137,7 +137,7 @@ public class SplashADHotActivity extends BaseActivity<SplashHotPresenter> {
 
         StatisticsUtils.customTrackEvent("ad_request_sdk", "热启动页广告发起请求", "hot_page", "hot_page");
 
-        MidasRequesCenter.requestAndShowAd(this, MidasConstants.SP_CODE_START_ID, new AbsAdBusinessCallback() {
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.SPLASH_ID, PositionId.HOT_CODE) , new AbsAdBusinessCallback() {
             @Override
             public void onAdLoaded(AdInfoModel adInfoModel) {
                 super.onAdLoaded(adInfoModel);

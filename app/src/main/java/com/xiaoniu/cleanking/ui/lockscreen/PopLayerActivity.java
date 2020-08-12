@@ -12,9 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -77,7 +79,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
 
     public void adInit() {
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "external_advertising_page", "external_advertising_page");
-        MidasRequesCenter.requestAndShowAd(this,MidasConstants.SCREEN_ON_ID,new SimpleViewCallBack(adContainerFrameLayout){
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_PAGE_OUTSIDE_SCREEN),new SimpleViewCallBack(adContainerFrameLayout){
             @Override
             public void onAdLoaded(AdInfoModel adInfoModel) {
                 full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);

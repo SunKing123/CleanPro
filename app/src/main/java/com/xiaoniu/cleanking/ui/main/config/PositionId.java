@@ -26,6 +26,7 @@ public class PositionId {
     //热启动开屏广告
     public static final String HOT_CODE = "advert_position_hot_start";
 
+    public static final String DRAW_DEFAULT_CODE = "advert_position_0";
     public static final String DRAW_ONE_CODE = "advert_position_advert1";
     public static final String DRAW_TWO_CODE = "advert_position_advert2";
     public static final String DRAW_THREE_CODE = "advert_position_advert3";
@@ -75,6 +76,10 @@ public class PositionId {
 
     //完成页左上角返回时显示在首页的插屏广告
     public static final String KEY_FINISH_PAGE_BACK_SCREEN = "page_finish_back_to_main_gj_3.0";
+
+    //外部插屏广告开关
+    public static final String KEY_PAGE_OUTSIDE_SCREEN = "page_outside_screen";
+
     //首页第一个广告位
     public static final String KEY_MAIN_ONE_AD = "page_main_one_ad_gj_3.0";
     //首页第二个广告位

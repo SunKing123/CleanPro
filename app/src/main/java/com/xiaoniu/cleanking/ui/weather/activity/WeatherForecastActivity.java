@@ -252,7 +252,7 @@ public class WeatherForecastActivity extends BaseActivity<WeatherForecastPresent
         if(AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WEATHER_VIDEO_PAGE,PositionId.DRAW_ONE_CODE)){
 
             StatisticsUtils.customTrackEvent("ad_request_sdk", "天气预报详情页广告发起请求", "home_page", "weather_forecast_page");
-            MidasRequesCenter.requestAndShowAd(this,MidasConstants.WEATHER_VIDEO_PAGE_BELOW,new SimpleViewCallBack(weatherAdFl));
+            MidasRequesCenter.requestAndShowAd(this,AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WEATHER_VIDEO_PAGE,PositionId.DRAW_ONE_CODE),new SimpleViewCallBack(weatherAdFl));
         }
 
     }

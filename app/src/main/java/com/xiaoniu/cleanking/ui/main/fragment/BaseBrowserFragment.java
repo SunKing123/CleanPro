@@ -20,10 +20,12 @@ import com.geek.webpage.utils.NetkUtils;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebSettingsImpl;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.utils.Parameters;
 import com.xiaoniu.cleanking.scheme.utils.UrlUtils;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel;
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity;
 import com.xiaoniu.cleanking.ui.newclean.dialog.GoldCoinDialog;
@@ -149,7 +151,7 @@ public class BaseBrowserFragment extends SimpleFragment {
         RequestUserInfoUtil.guaGuaBubbleDoubleRequest(getContext(), id, new RequestResultListener() {
             @Override
             public void requestSuccess(String coin) {
-                String adId = cardAvdPresenter.isOpenThree() ? cardAvdPresenter.getSecondAdvId(cardIndex) : "";
+                String adId = cardAvdPresenter.isOpenThree() ? AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_TWO_CODE) : "";
                 int coinC = TextUtils.isEmpty(coin) ? coinCount : Integer.parseInt(coin);
                 GoldCoinDoubleModel model = new GoldCoinDoubleModel(adId, coinC, cardIndex, Points.ScratchCard.SUCCESS_PAGE,0);
                 GoldCoinSuccessActivity.Companion.start(getContext(), model);
