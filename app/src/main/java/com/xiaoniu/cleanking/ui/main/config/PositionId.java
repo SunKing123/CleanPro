@@ -19,8 +19,6 @@ public class PositionId {
 
     //清理到清理完成页之间的插屏广告
     public static final String CLEAN_BETWEEN_FINISH_ID = "9040684602724677";
-
-
     //冷启动开屏广告
     public static final String COLD_CODE = "advert_position_cold_start";
     //热启动开屏广告
