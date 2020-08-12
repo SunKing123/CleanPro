@@ -12,6 +12,7 @@ import androidx.fragment.app.DialogFragment
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
+import com.xiaoniu.unitionadbase.model.AdInfoModel
 import kotlinx.android.synthetic.main.insert_screen_ad_layout.*
 import java.lang.ref.WeakReference
 
@@ -42,7 +43,10 @@ class InsideScreenDialogFragment constructor(var adId: String) : DialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         MidasRequesCenter.requestAndShowAd(activity,adId, object : SimpleViewCallBack(ad_container) {
-
+            override fun onAdClose(adInfoModel: AdInfoModel?) {
+                super.onAdClose(adInfoModel)
+                dismiss()
+            }
         })
     }
 
