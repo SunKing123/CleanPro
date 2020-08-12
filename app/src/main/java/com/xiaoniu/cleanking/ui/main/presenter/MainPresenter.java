@@ -584,7 +584,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                     InsideAdEntity inside = PreferenceUtil.getColdAndHotStartCount();
                     int startCount = inside.getCount();
                     if (internalList.contains(String.valueOf(startCount))) {
-                        showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+                        showInsideScreenDialog(AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_NEIBU_SCREEN));
                         return;
                     }
 

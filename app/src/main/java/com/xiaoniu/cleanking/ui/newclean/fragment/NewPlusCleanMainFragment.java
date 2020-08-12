@@ -208,7 +208,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && isFirstCreate) {
-            refreshAdAll();//首页广告刷新
             AppLifecyclesImpl.postDelay(bullRunnable, 3000);
             isFirstCreate = false;
         }
@@ -219,13 +218,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         public void run() {
             if (bullNum > 0) {//金币数量大于0前两个位置预加载
                 mPresenter.goldAdprev();
+                refreshAdAll();//首页广告刷新
             }
-
         }
     }
-
+    
     private void initListener() {
-
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(int x, int y, int oldx, int oldy, boolean isBottom) {
@@ -350,7 +348,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      ************************************************************load advInfo*********************************************************************************
      *********************************************************************************************************************************************************
      */
-
     private void refreshAdAll() {
         if (!AndroidUtil.isFastDoubleBtnClick(3000)) {
             refreshAd(PositionId.KEY_MAIN_ONE_AD, AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_ONE_AD, PositionId.DRAW_DEFAULT_CODE));
