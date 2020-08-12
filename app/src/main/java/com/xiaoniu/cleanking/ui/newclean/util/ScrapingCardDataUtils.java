@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.jess.arms.utils.LogUtils;
+import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.app.H5Urls;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.constant.Constant;
@@ -81,7 +82,6 @@ public class ScrapingCardDataUtils {
         LogUtils.debugInfo("snow", "====setScrapingCardData========" + skipNums);
         skipNums = 0;
 //        cardBean = getCarDataOfPosition(currentPosition);
-
     }
 
     public int getCardsListSize() {
@@ -102,7 +102,8 @@ public class ScrapingCardDataUtils {
         //激励视频开关
         boolean isOpenJiLiVideo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_TWO_CODE);
         if (skipNums % 2 == 0 && isOpenJiLiVideo && isShowVideo) {//先加载广告
-            String advId = getCarAdvId(activity, ADV_VIDEO_PREFIX, cardBean.getCardPosition());
+            String advId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_TWO_CODE);
+            log("刮刮卡激励视频广告id="+advId);
             loadVideoAdv(activity, advId);
         } else {//直接跳详情
             goToScrapingCarDetail(activity);
@@ -213,33 +214,6 @@ public class ScrapingCardDataUtils {
         return urlBuf.toString();
     }
 
-    /**
-     * 获取视频ID
-     *
-     * @param context
-     * @param index
-     * @return
-     */
-    public String getCarAdvId(Context context, String advStyle, int index) {
-        String resourceName = advStyle + index;
-        if (context == null) {
-            LogUtils.debugInfo("不能加载广告，context为空。");
-            return "";
-        }
-        int resourceId = context.getResources().getIdentifier(resourceName, "string", context.getPackageName());
-
-        if (resourceId == 0) {
-            LogUtils.debugInfo("不能加载广告，广告resourceId为0");
-            return "";
-        }
-        try {
-            return context.getResources().getString(resourceId);
-        } catch (Exception e) {
-            LogUtils.debugInfo("不能加载广告，获取广告id异常。");
-        }
-        return "";
-    }
-
 
     /**
      * 解析url协议
@@ -325,7 +299,6 @@ public class ScrapingCardDataUtils {
             return;
         }
         boolean isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_ONE_CODE);
-        boolean isOpenTwo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_SCRATCH_CARD, PositionId.DRAW_TWO_CODE);
         boolean isShowNext = cardList.size() > 0;
         GoldCoinDialogParameter parameter = new GoldCoinDialogParameter();
         parameter.context = mActivity;
@@ -338,13 +311,12 @@ public class ScrapingCardDataUtils {
         parameter.totalCoinCount = totalCoinCount;
         parameter.doubleNums = doubledmagnification;
         if (cardBean != null) {
-            parameter.adId = isOpenOne && !isAreaOne ? getCarAdvId(mActivity, ADV_FIRST_PREFIX, cardBean.getCardPosition()) : "";
+            parameter.adId = isOpenOne && !isAreaOne ?  AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_ONE_CODE) : "";
         }
         parameter.obtainCoinCount = coinCount;
         parameter.doubleMsg = "刮下一张";
         GoldCoinDialog.showGoldCoinDialog(parameter);
         goldPoint(coinCount, cardIndex);
-//        StatisticsUtils.scratchCardCustom(Points.ScratchCard.WINDOW_UP_EVENT_CODE, Points.ScratchCard.WINDOW_UP_EVENT_NAME, currentPosition, "", Points.ScratchCard.WINDOW_PAGE);
     }
 
     /**
@@ -393,5 +365,11 @@ public class ScrapingCardDataUtils {
         HashMap<String, Object> map = new HashMap<>();
         map.put("position_id", cardIndex);
         StatisticsUtils.customTrackEvent("ad_request_sdk", "刮刮卡翻倍激励视频广告发起请求", "", "scraping_card_list_page", map);
+    }
+
+    private void log(String text) {
+        if (BuildConfig.DEBUG) {
+            com.xiaoniu.cleanking.utils.LogUtils.e("scratchCard： " + text);
+        }
     }
 }
