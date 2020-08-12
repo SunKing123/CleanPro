@@ -209,7 +209,6 @@ public class AppHolder {
     }
 
 
-
     /**
      * 根据configKey判断开关是否打开
      *
@@ -330,8 +329,8 @@ public class AppHolder {
                 advertId = dataBean.getAdvertId();
             }
         }
-        if(BuildConfig.DEBUG){
-            LogUtils.d("ad_request_midas_id:" + advertId);
+        if (BuildConfig.DEBUG) {
+            LogUtils.d("ad_request_midas_id:" + advertId + "---广告开关位置：---" + configKey + "_" + advertPosition);
         }
         return advertId;
     }
@@ -340,20 +339,21 @@ public class AppHolder {
     /**
      * 插屏广告
      * midasId获取
+     *
      * @param configKey
      * @return
      */
-    public String getInsertAdMidasId(String configKey){
-        String advertId ="";
+    public String getInsertAdMidasId(String configKey) {
+        String advertId = "";
         String adData = MmkvUtil.getString(configKey, "");//单个插屏数据保存；
-        if(!TextUtils.isEmpty(adData)){
-            InsertAdSwitchInfoList.DataBean dataBean= new Gson().fromJson(adData, InsertAdSwitchInfoList.DataBean.class);
-            if(null!= dataBean){
+        if (!TextUtils.isEmpty(adData)) {
+            InsertAdSwitchInfoList.DataBean dataBean = new Gson().fromJson(adData, InsertAdSwitchInfoList.DataBean.class);
+            if (null != dataBean) {
                 advertId = dataBean.getAdvertId();
             }
         }
-        if(BuildConfig.DEBUG){
-            LogUtils.d("ad_request_midas_id:" + advertId);
+        if (BuildConfig.DEBUG) {
+            LogUtils.d("ad_request_midas_id:" + advertId + "---插屏广告开关位置：---" + configKey);
         }
         return advertId;
     }

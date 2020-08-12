@@ -82,9 +82,9 @@ public class SplashPresenter extends RxPresenter<SplashADActivity, MainModel> {
 
             @Override
             public void getData(SwitchInfoList switchInfoList) {
-                mView.getSwitchInfoListSuccess(switchInfoList);
                 AppHolder.getInstance().setSwitchInfoList(switchInfoList);
                 PreferenceUtil.getInstants().save(Constant.SWITCH_INFO, new Gson().toJson(switchInfoList));
+                mView.getSwitchInfoListSuccess(switchInfoList);
             }
 
             @Override

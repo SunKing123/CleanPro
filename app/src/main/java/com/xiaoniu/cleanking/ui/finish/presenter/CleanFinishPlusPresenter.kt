@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity.Compan
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber
 import com.xiaoniu.cleanking.utils.net.RxUtil
+import com.xiaoniu.cleanking.widget.InsideScreenDialogFragment
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.ToastUtils
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
@@ -66,8 +67,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         isOpenTwo = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_TWO_CODE)
 
         CleanFinishLogger.log("============ 信息广告开关：======================")
-        CleanFinishLogger.log("isOpenOne="+isOpenOne)
-        CleanFinishLogger.log("isOpenTwo="+isOpenTwo)
+        CleanFinishLogger.log("isOpenOne=" + isOpenOne)
+        CleanFinishLogger.log("isOpenTwo=" + isOpenTwo)
     }
 
     /**
@@ -91,15 +92,15 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
          * 当第二个推荐功能为空时,过审开关没有打开
          * 展示刮刮卡引导图
          */
-        if (secondModel == null&&!AppHolder.getInstance().auditSwitch) {
+        if (secondModel == null && !AppHolder.getInstance().auditSwitch) {
             view.visibleScratchCardView()
         } else {
             view.goneScratchCardView()
         }
-        
+
         //如果没有推荐功能，第一个广告不推荐
-        if(firstModel==null&&secondModel==null){
-            isOpenOne=false
+        if (firstModel == null && secondModel == null) {
+            isOpenOne = false
         }
     }
 
@@ -107,13 +108,13 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载弹框
      */
     override fun loadPopView() {
-        if(isDestroy()){
+        if (isDestroy()) {
             return
         }
         val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
         config?.let {
             CleanFinishLogger.log("============ 插屏广告开关：======================")
-            CleanFinishLogger.log("isOpen="+it.isOpen)
+            CleanFinishLogger.log("isOpen=" + it.isOpen)
             if (it.isOpen) {
                 loadInsideScreenDialog()
             } else {
@@ -123,21 +124,21 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     }
 
     //显示内部插屏广告
-    fun loadInsideScreenDialog() {
-        if(isDestroy()){
+    private fun loadInsideScreenDialog() {
+        if (isDestroy()) {
             return
         }
         pointer.insertAdvRequest4()
-        CleanFinishLogger.log("============完成页内部插屏广告正在加载...：======================"+view.hasWindowFocus())
-        MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_FINISH_INSIDE_SCREEN), object : AbsAdBusinessCallback() {
+/*        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH_INSIDE_SCREEN_ID, object : AbsAdBusinessCallback() {
             override fun onAdExposure(adInfoModel: AdInfoModel?) {
                 super.onAdExposure(adInfoModel)
-                CleanFinishLogger.log("============完成页内部插屏广告展出：======================")
             }
-        })
+        })*/
+        val insideScreenFragment = InsideScreenDialogFragment(MidasConstants.FINISH_INSIDE_SCREEN_ID)
+        insideScreenFragment.show(view.supportFragmentManager, InsideScreenDialogFragment::class.java.simpleName)
     }
 
-    fun loadGoldCoinDialog() {
+    private fun loadGoldCoinDialog() {
         getGoldCoin()
     }
 
@@ -145,7 +146,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载第一个广告位数据
      */
     override fun loadOneAdv(advContainer: FrameLayout) {
-        if (!isOpenOne||isDestroy()) return
+        if (!isOpenOne || isDestroy()) return
         pointer.requestFeedAdv1()
         MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE), object : SimpleViewCallBack(advContainer) {
 
@@ -156,7 +157,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载第二个广告位数据
      */
     override fun loadTwoAdv(advContainer: FrameLayout) {
-        if (!isOpenTwo||isDestroy()) {
+        if (!isOpenTwo || isDestroy()) {
             return
         }
         pointer.requestFeedAdv2()
@@ -169,7 +170,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 获取可以加金币的数量
      */
     fun getGoldCoin() {
-        if(isDestroy()){
+        if (isDestroy()) {
             return
         }
         CleanFinishLogger.log("============金币发放数正在加载...：======================")
@@ -177,11 +178,12 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 ToastUtils.showShort(message)
             }
+
             override fun getData(bubbleConfig: BubbleConfig?) {
                 if (bubbleConfig != null && bubbleConfig.data.size > 0) {
                     for (item in bubbleConfig.data) {
                         if (item.locationNum == 5) {
-                            CleanFinishLogger.log("============金币发放数正在加载完成:"+item.goldCount)
+                            CleanFinishLogger.log("============金币发放数正在加载完成:" + item.goldCount)
                             addGoldCoin(item.goldCount)
                             break
                         }
@@ -200,7 +202,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 根据添加数量，添加金币
      */
     private fun addGoldCoin(goldNum: Int) {
-        if (goldNum == 0||isDestroy()) {
+        if (goldNum == 0 || isDestroy()) {
             return
         }
         CleanFinishLogger.log("============调用添加金币数量接口...：======================")
@@ -231,7 +233,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 激励视频看完，进行金币翻倍
      */
     override fun addDoubleGoldCoin(bubbleCollected: BubbleCollected) {
-        if(isDestroy()){
+        if (isDestroy()) {
             return
         }
         CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求======================")
@@ -250,7 +252,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                     CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求成功！======================")
                     startGoldSuccess(adId, bubbleDouble.data.goldCount, view.getFunctionTitle(),
                             bubbleCollected.data.doubledMagnification)
-                }else{
+                } else {
                     CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求失败！bubbleDouble==null======================")
                 }
                 view.dismissGoldCoinDialog()
@@ -286,7 +288,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     }
 
     override fun loadVideoAdv(bubbleCollected: BubbleCollected) {
-        if(isDestroy()){
+        if (isDestroy()) {
             return
         }
         pointer.goldCoinRequestAdv2()
@@ -316,7 +318,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         })
     }
 
-    fun isDestroy():Boolean{
-       return view==null||pointer==null||view.getActivity()==null
+    fun isDestroy(): Boolean {
+        return view == null || pointer == null || view.getActivity() == null
     }
 }
