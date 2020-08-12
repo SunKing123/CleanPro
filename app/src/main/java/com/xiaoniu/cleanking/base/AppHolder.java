@@ -12,8 +12,10 @@ import com.xiaoniu.cleanking.ui.main.bean.RedPacketEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,9 +112,19 @@ public class AppHolder {
 
 
     public void setSwitchInfoList(SwitchInfoList switchInfoList) {
-        this.switchInfoList = switchInfoList;
-        //本地数据保存
-        MmkvUtil.setSwitchInfo(new Gson().toJson(switchInfoList));
+        if (null != switchInfoList && CollectionUtils.isEmpty(switchInfoList.getData())) {
+            this.switchInfoList = switchInfoList;
+            //本地数据保存;
+            MmkvUtil.setSwitchInfo(new Gson().toJson(switchInfoList));
+            //单个广告位数据保存;
+            List<SwitchInfoList.DataBean> dataBeansn = switchInfoList.getData();
+            for (SwitchInfoList.DataBean item : dataBeansn) {
+                String adkey = item.getConfigKey() + "_" + item.getAdvertPosition();
+                MmkvUtil.saveString(adkey, new Gson().toJson(adkey));
+            }
+        }
+
+
     }
 
     public SwitchInfoList getSwitchInfoList() {
@@ -121,6 +133,7 @@ public class AppHolder {
 
     /**
      * 获取冷热起间隔时间
+     *
      * @return
      */
     public int getHotTime() {
@@ -210,6 +223,45 @@ public class AppHolder {
             }
         }
         return isOpen;
+    }
+
+
+    /**
+     * midasId获取
+     *
+     * @param configKey
+     * @param advertPosition
+     * @return
+     */
+    public String getMidasAdId(String configKey, String advertPosition) {
+        String advertId = "";
+        String adData = MmkvUtil.getString(configKey + "_" + advertPosition, "");
+        if (!TextUtils.isEmpty(adData)) {
+            SwitchInfoList.DataBean dataBean = new Gson().fromJson(adData, SwitchInfoList.DataBean.class);
+            if (null != dataBean) {
+                advertId = dataBean.getAdvertId();
+            }
+        }
+        return advertId;
+    }
+
+
+    /**
+     * midasId获取
+     *
+     * @param configKey
+     * @return
+     */
+    public String getMidasAdId(String configKey) {
+        String advertId = "";
+        String adData = MmkvUtil.getString(configKey + "_" + PositionId.DRAW_ONE_CODE, "");
+        if (!TextUtils.isEmpty(adData)) {
+            SwitchInfoList.DataBean dataBean = new Gson().fromJson(adData, SwitchInfoList.DataBean.class);
+            if (null != dataBean) {
+                advertId = dataBean.getAdvertId();
+            }
+        }
+        return advertId;
     }
 
     /**
