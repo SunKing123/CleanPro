@@ -303,6 +303,9 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
                 if (rxTimer != null) {
                     rxTimer.cancel();
                 }
+                //预加载首页前两个信息流广告;
+                adPrevData(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_ONE_AD, PositionId.DRAW_DEFAULT_CODE));
+                adPrevData(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_TWO_AD, PositionId.DRAW_DEFAULT_CODE));
             }
 
             @Override
@@ -400,5 +403,14 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     }
 
+
+    //广告预加载
+    public void adPrevData(String posId) {
+        try {
+            MidasRequesCenter.preloadAd(this, posId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

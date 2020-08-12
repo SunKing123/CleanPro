@@ -115,7 +115,7 @@ public class AppHolder {
 
 
     public void setSwitchInfoList(SwitchInfoList switchInfoList) {
-        if (null != switchInfoList && CollectionUtils.isEmpty(switchInfoList.getData())) {
+        if (null != switchInfoList && !CollectionUtils.isEmpty(switchInfoList.getData())) {
             this.switchInfoList = switchInfoList;
             //本地数据保存;
             MmkvUtil.setSwitchInfo(new Gson().toJson(switchInfoList));
