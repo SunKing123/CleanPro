@@ -129,12 +129,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.insertAdvRequest4()
-/*        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.FINISH_INSIDE_SCREEN_ID, object : AbsAdBusinessCallback() {
-            override fun onAdExposure(adInfoModel: AdInfoModel?) {
-                super.onAdExposure(adInfoModel)
-            }
-        })*/
-        val insideScreenFragment = InsideScreenDialogFragment(MidasConstants.FINISH_INSIDE_SCREEN_ID)
+        val insideScreenFragment = InsideScreenDialogFragment(AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_FINISH_INSIDE_SCREEN))
         insideScreenFragment.show(view.supportFragmentManager, InsideScreenDialogFragment::class.java.simpleName)
     }
 
