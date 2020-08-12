@@ -10,11 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.xiaoniu.cleanking.R
-import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
-import com.xiaoniu.cleanking.utils.LogUtils
-import com.xiaoniu.unitionadbase.model.AdInfoModel
 import kotlinx.android.synthetic.main.insert_screen_ad_layout.*
 import java.lang.ref.WeakReference
 
