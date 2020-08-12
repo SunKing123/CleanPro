@@ -120,7 +120,7 @@ public class AppHolder {
             List<SwitchInfoList.DataBean> dataBeansn = switchInfoList.getData();
             for (SwitchInfoList.DataBean item : dataBeansn) {
                 String adkey = item.getConfigKey() + "_" + item.getAdvertPosition();
-                MmkvUtil.saveString(adkey, new Gson().toJson(adkey));
+                MmkvUtil.saveString(adkey, new Gson().toJson(item));
             }
         }
 
