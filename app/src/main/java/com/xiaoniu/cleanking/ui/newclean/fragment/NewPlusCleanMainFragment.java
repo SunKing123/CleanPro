@@ -195,7 +195,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         mPresenter.getInteractionSwitch();//互动式广告开关
         mPresenter.refBullList();//金币列表
-        refreshAdAll();//首页广告刷新
+
         //埋点
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
         Map<String, Object> extParam = new HashMap<>();
@@ -208,6 +208,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && isFirstCreate) {
+            refreshAdAll();//首页广告刷新
             AppLifecyclesImpl.postDelay(bullRunnable, 3000);
             isFirstCreate = false;
         }
@@ -352,32 +353,32 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private void refreshAdAll() {
         if (!AndroidUtil.isFastDoubleBtnClick(3000)) {
-            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_ONE_AD,PositionId.DRAW_DEFAULT_CODE));
-            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_TWO_AD,PositionId.DRAW_DEFAULT_CODE));
-            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_THREE_AD,PositionId.DRAW_DEFAULT_CODE));
+            refreshAd(PositionId.KEY_MAIN_ONE_AD, AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_ONE_AD, PositionId.DRAW_DEFAULT_CODE));
+            refreshAd(PositionId.KEY_MAIN_TWO_AD, AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_TWO_AD, PositionId.DRAW_DEFAULT_CODE));
+            refreshAd(PositionId.KEY_MAIN_THREE_AD, AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_THREE_AD, PositionId.DRAW_DEFAULT_CODE));
             showAdVideo();
         }
     }
 
-    private void refreshAd(String adId) {
-        switch (adId) {
-            case MidasConstants.MAIN_ONE_AD_ID:
+    private void refreshAd(String posId, String adId) {
+        switch (posId) {
+            case PositionId.KEY_MAIN_ONE_AD:
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_ONE_AD)) {
                     StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页广告位1发起广告请求数", "", "home_page");
-                    mPresenter.showAdviceLayout(adLayoutOne, adId, adClick);
+                    mPresenter.showAdviceLayout(adLayoutOne, adId, posId, adClick);
                 }
                 break;
-            case MidasConstants.MAIN_TWO_AD_ID:
+            case PositionId.KEY_MAIN_TWO_AD:
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_TWO_AD)) {
                     StatisticsUtils.customTrackEvent("ad_request_sdk_2", "首页广告位2发起广告请求数", "", "home_page");
-                    mPresenter.showAdviceLayout(adLayoutTwo, adId, adClick);
+                    mPresenter.showAdviceLayout(adLayoutTwo, adId, posId, adClick);
                 }
                 break;
-            case MidasConstants.MAIN_THREE_AD_ID:
+            case PositionId.KEY_MAIN_THREE_AD:
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
                     if (getAdLayoutThreeVisible() || isThreeADLoadFailed) {
                         StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
-                        mPresenter.showAdviceLayout(adLayoutThree, adId, adClick);
+                        mPresenter.showAdviceLayout(adLayoutThree, adId, posId, adClick);
                     } else {
                         mPresenter.prepareVideoAd(adLayoutThree);
                     }
