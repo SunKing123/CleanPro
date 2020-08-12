@@ -17,6 +17,7 @@ import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
@@ -292,8 +293,7 @@ public class SplashADActivity extends BaseActivity<SplashPresenter> {
 
     private void initGeekSdkAD() {
         StatisticsUtils.customTrackEvent("ad_request_sdk", "冷启动页广告发起请求", "clod_page", "clod_page");
-
-        MidasRequesCenter.requestAndShowAd(this, MidasConstants.SP_CODE_START_ID, new AbsAdBusinessCallback() {
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.SPLASH_ID, PositionId.COLD_CODE), new AbsAdBusinessCallback() {
             @Override
             public void onAdLoaded(AdInfoModel adInfoModel) {
                 super.onAdLoaded(adInfoModel);

@@ -2,7 +2,6 @@ package com.xiaoniu.cleanking.utils.update;
 
 import android.text.TextUtils;
 
-import com.comm.jksdk.GeekAdSdk;
 import com.tencent.mmkv.MMKV;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;

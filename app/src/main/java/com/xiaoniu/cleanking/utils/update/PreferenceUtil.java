@@ -14,11 +14,14 @@ import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.app.injector.module.ApiModule;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.main.bean.ExitRetainEntity;
 import com.xiaoniu.cleanking.ui.main.bean.InsideAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.bean.ExternalPopNumEntity;
+import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -1909,4 +1912,26 @@ public class PreferenceUtil {
         return sharedPreferences.getString(SpCacheConfig.SAVE_CLEAN_STORAGE_NUM, "201:MB");
     }
 
+
+
+    /**
+     * 获取冷热起间隔时间
+     *
+     * @return
+     */
+    public int getHotTime() {
+        int defaultTime = 2 * 60 * 1000;
+        try {
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (TextUtils.equals(PositionId.HOT_CODE, switchInfo.getAdvertPosition())) {
+                        defaultTime = switchInfo.getHotStartInterval() * 60 * 1000;
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        return defaultTime;
+    }
 }

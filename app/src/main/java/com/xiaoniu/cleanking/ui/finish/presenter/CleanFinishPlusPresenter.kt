@@ -129,7 +129,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         }
         pointer.insertAdvRequest4()
         CleanFinishLogger.log("============完成页内部插屏广告正在加载...：======================"+view.hasWindowFocus())
-        MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getMidasAdId(), object : AbsAdBusinessCallback() {
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_FINISH_INSIDE_SCREEN), object : AbsAdBusinessCallback() {
             override fun onAdExposure(adInfoModel: AdInfoModel?) {
                 super.onAdExposure(adInfoModel)
                 CleanFinishLogger.log("============完成页内部插屏广告展出：======================")
@@ -290,7 +290,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.goldCoinRequestAdv2()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(), MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON, object : VideoAbsAdCallBack() {
+        var videoId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), videoId, object : VideoAbsAdCallBack() {
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
                 super.onAdLoadError(errorCode, errorMsg)
                 ToastUtils.showLong("网络异常")

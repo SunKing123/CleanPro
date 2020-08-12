@@ -572,7 +572,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         StatisticsUtils.customTrackEvent("ad_request_sdk", "锁屏页广告发起请求", "lock_screen_page", "lock_screen_page");
 
-        MidasRequesCenter.requestAndShowAd(this, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(lockAdFrameLayout){
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN), new SimpleViewCallBack(lockAdFrameLayout){
             @Override
             public void onAdLoaded(AdInfoModel adInfoModel) {
                 if (TextUtils.equals(UnionConstants.AD_SOURCE_FROM_CSJ,adInfoModel.adUnion)){
