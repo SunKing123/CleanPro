@@ -15,7 +15,6 @@ import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
 import com.xiaoniu.cleanking.constant.RouteConstants
-import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.ui.finish.base.CleanFinishLogger
 import com.xiaoniu.cleanking.ui.finish.contract.NewCleanFinishPlusContract
 import com.xiaoniu.cleanking.ui.finish.model.CleanFinishPointer
