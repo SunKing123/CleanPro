@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.ui.finish.presenter
 import android.widget.FrameLayout
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
-import com.xiaoniu.cleanking.midas.MidasConstants
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
@@ -19,12 +18,11 @@ import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel
 import com.xiaoniu.cleanking.ui.main.model.MainModel
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity.Companion.start
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil
+import com.xiaoniu.cleanking.utils.InsideScreenDialogUtil
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber
 import com.xiaoniu.cleanking.utils.net.RxUtil
-import com.xiaoniu.cleanking.widget.InsideScreenDialogFragment
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.ToastUtils
-import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
 import com.xiaoniu.unitionadbase.model.AdInfoModel
 import javax.inject.Inject
 
@@ -113,7 +111,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         }
         val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
         config?.let {
-            CleanFinishLogger.log("============ 插屏广告开关：======================")
             CleanFinishLogger.log("isOpen=" + it.isOpen)
             if (it.isOpen) {
                 loadInsideScreenDialog()
@@ -129,8 +126,9 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.insertAdvRequest4()
-        val insideScreenFragment = InsideScreenDialogFragment(AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_FINISH_INSIDE_SCREEN))
-        insideScreenFragment.show(view.supportFragmentManager, InsideScreenDialogFragment::class.java.simpleName)
+        val utils = InsideScreenDialogUtil()
+        utils.showInsideDialog(view, AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_FINISH_INSIDE_SCREEN))
+
     }
 
     private fun loadGoldCoinDialog() {
@@ -241,7 +239,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             override fun getData(bubbleDouble: BubbleDouble?) {
                 var adId = ""
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-                    adId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS,PositionId.DRAW_THREE_CODE)
+                    adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS, PositionId.DRAW_THREE_CODE)
                 }
                 if (null != bubbleDouble) {
                     CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求成功！======================")
@@ -287,7 +285,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.goldCoinRequestAdv2()
-        var videoId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO,PositionId.DRAW_TWO_CODE)
+        var videoId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO, PositionId.DRAW_TWO_CODE)
         MidasRequesCenter.requestAndShowAd(view.getActivity(), videoId, object : VideoAbsAdCallBack() {
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
                 super.onAdLoadError(errorCode, errorMsg)

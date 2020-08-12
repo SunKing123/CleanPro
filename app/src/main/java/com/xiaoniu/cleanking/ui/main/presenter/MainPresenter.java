@@ -54,6 +54,7 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.weather.activity.WeatherForecastActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.InsideScreenDialogUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.net.Common2Subscriber;
@@ -65,7 +66,6 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
-import com.xiaoniu.cleanking.widget.InsideScreenDialogFragment;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
@@ -562,16 +562,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         }
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
-      /*  MidasRequesCenter.requestAndShowAd(mActivity, appID, new AbsAdBusinessCallback() {
-
-            @Override
-            public void onAdExposure(AdInfoModel adInfoModel) {
-                super.onAdExposure(adInfoModel);
-                LogUtils.e("====首页内部插屏广告展出======");
-            }
-        });*/
-        InsideScreenDialogFragment insideScreenFragment = new InsideScreenDialogFragment(adId);
-        insideScreenFragment.show(mView.getSupportFragmentManager(), InsideScreenDialogFragment.class.getSimpleName());
+        InsideScreenDialogUtil util = new InsideScreenDialogUtil();
+        util.showInsideDialog(mView, adId);
 
     }
 
