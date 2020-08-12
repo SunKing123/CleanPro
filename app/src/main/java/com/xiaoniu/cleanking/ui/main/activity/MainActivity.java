@@ -569,6 +569,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
                     SwitchInfoList.DataBean dataBean = null;
                     for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
+
+                        AppHolder.getInstance().getMidasAdId()
                         if (PositionId.KEY_PAGE_EXIT_RETAIN.equals(switchInfo.getConfigKey())) {
                             dataBean = switchInfo;
                         }

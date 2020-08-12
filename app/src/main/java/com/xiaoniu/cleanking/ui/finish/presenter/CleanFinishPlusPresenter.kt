@@ -243,8 +243,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
             override fun getData(bubbleDouble: BubbleDouble?) {
                 var adId = ""
-                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
-                    adId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)
+                if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS,PositionId.DRAW_DEFAULT_CODE)) {
+                    adId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS,PositionId.DRAW_DEFAULT_CODE)
                 }
                 if (null != bubbleDouble) {
                     CleanFinishLogger.log("============激励视频看完，进行翻倍接口请求成功！======================")
@@ -290,7 +290,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.goldCoinRequestAdv2()
-        var videoId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
+        var videoId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO,PositionId.DRAW_DEFAULT_CODE)
         MidasRequesCenter.requestAndShowAd(view.getActivity(), videoId, object : VideoAbsAdCallBack() {
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
                 super.onAdLoadError(errorCode, errorMsg)

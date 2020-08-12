@@ -352,9 +352,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private void refreshAdAll() {
         if (!AndroidUtil.isFastDoubleBtnClick(3000)) {
-            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_ONE_AD));
-            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_TWO_AD));
-            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_THREE_AD));
+            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_ONE_AD,PositionId.DRAW_DEFAULT_CODE));
+            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_TWO_AD,PositionId.DRAW_DEFAULT_CODE));
+            refreshAd(AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_THREE_AD,PositionId.DRAW_DEFAULT_CODE));
             showAdVideo();
         }
     }

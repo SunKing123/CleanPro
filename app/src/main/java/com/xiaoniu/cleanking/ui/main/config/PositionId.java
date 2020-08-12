@@ -26,6 +26,7 @@ public class PositionId {
     //热启动开屏广告
     public static final String HOT_CODE = "advert_position_hot_start";
 
+    public static final String DRAW_DEFAULT_CODE = "advert_position_0";
     public static final String DRAW_ONE_CODE = "advert_position_advert1";
     public static final String DRAW_TWO_CODE = "advert_position_advert2";
     public static final String DRAW_THREE_CODE = "advert_position_advert3";

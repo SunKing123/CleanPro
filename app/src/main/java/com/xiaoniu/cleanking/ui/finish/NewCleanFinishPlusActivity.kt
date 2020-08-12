@@ -310,7 +310,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         bean.obtainCoinCount = bubbleCollected.data.goldCount
         bean.totalCoinCount = bubbleCollected.data.totalGoldCount.toDouble()
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_FINISH_GET_GOLD_COIN)) {
-            bean.adId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_FINISH_GET_GOLD_COIN)
+            bean.adId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_FINISH_GET_GOLD_COIN,PositionId.DRAW_DEFAULT_CODE)
         }
         bean.context = this
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
