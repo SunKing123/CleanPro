@@ -7,6 +7,7 @@ import android.util.Log;
 import com.xiaoniu.cleanking.BuildConfig;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ChannelUtil;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
@@ -51,7 +52,7 @@ public class MidasRequesCenter {
                 .setPrimaryColor("#06C581")//设置主题色颜色[主要为倒计时颜色、按钮、箭头颜色设置]
 //        .setDisableAllianceInitVariableArray(UnionConstants.AD_SOURCE_FROM_CSJ,UnionConstants.AD_SOURCE_FROM_YLH)//设置禁用联盟初始化可变数组
                 .setWebViewConfig(webViewConfig)//设置webview配置
-                .setHotFlashIntervalTime(AppHolder.getInstance().getHotTime())//设置热起时间间隔
+                .setHotFlashIntervalTime(PreferenceUtil.getInstants().getHotTime())//设置热起时间间隔
 //                .setShowLogWindow(true)//设置是否显示日志窗口
                 .build();
         //初始化广告SDK
