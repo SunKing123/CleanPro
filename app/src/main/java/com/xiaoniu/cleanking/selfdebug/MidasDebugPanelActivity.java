@@ -6,11 +6,6 @@ import android.widget.FrameLayout;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
-import com.xiaoniu.cleanking.midas.MidasConstants;
-import com.xiaoniu.cleanking.midas.MidasRequesCenter;
-import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
-import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
-import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 /**
  * @author zhengzhihao
@@ -40,8 +35,8 @@ public class MidasDebugPanelActivity extends BaseActivity{
         findViewById(R.id.debug_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MidasRequesCenter.requestAndShowAd(MidasDebugPanelActivity.this, MidasConstants.LOCK_PAGE_FEED_ID,
-                        new SimpleViewCallBack(findViewById(R.id.ad_container)));
+//                MidasRequesCenter.requestAndShowAd(MidasDebugPanelActivity.this, MidasConstants.LOCK_PAGE_FEED_ID,
+//                        new SimpleViewCallBack(findViewById(R.id.ad_container)));
             }
         });
     }

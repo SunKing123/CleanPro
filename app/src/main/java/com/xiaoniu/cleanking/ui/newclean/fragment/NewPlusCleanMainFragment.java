@@ -408,7 +408,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             Rect scrollBounds = new Rect();
-            mScrollView.getHitRect(scrollBounds);
+             mScrollView.getHitRect(scrollBounds);
             if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
                 //子控件至少有一个像素在可视范围内
                 if (!isRequest || isThreeADLoadFailed) {

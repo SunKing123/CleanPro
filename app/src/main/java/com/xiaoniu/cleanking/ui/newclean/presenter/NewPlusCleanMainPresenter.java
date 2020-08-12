@@ -516,18 +516,30 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
         if (viewGroup == null || mView == null || mView.getActivity() == null) {
             return;
         }
-        MidasRequesCenter.preloadAd(mView.getActivity(), MidasConstants.MAIN_THREE_AD_ID);
+        MidasRequesCenter.preloadAd(mView.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_THREE_AD,PositionId.DRAW_DEFAULT_CODE));
     }
 
     public void fillVideoAd(FrameLayout viewGroup, IOnAdClickListener onAdClick) {
-        String adId = MidasConstants.MAIN_THREE_AD_ID;
-        MidasRequesCenter.requestAndShowAd(mView.getActivity(), adId, new SimpleViewCallBack(viewGroup) {
+
+        MidasRequesCenter.requestAndShowAd(mView.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_THREE_AD,PositionId.DRAW_DEFAULT_CODE), new SimpleViewCallBack(viewGroup) {
             @Override
             public void onAdClick(AdInfoModel adInfoModel) {
                 super.onAdClick(adInfoModel);
                 if (onAdClick != null) {
-                    onAdClick.onClick(PositionId.KEY_MAIN_THREE_AD,adId);
+                    onAdClick.onClick(PositionId.KEY_MAIN_THREE_AD, AppHolder.getInstance().getMidasAdId(PositionId.KEY_MAIN_THREE_AD,PositionId.DRAW_DEFAULT_CODE));
                 }
+            }
+
+            @Override
+            public void onAdLoaded(AdInfoModel adInfoModel) {
+                super.onAdLoaded(adInfoModel);
+                mView.showAdSuccess(PositionId.KEY_MAIN_THREE_AD);
+            }
+
+            @Override
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
+                mView.showAdError(PositionId.KEY_MAIN_THREE_AD, errorCode, errorMsg);
             }
         });
     }
