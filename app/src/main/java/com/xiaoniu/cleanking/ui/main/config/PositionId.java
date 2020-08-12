@@ -75,6 +75,10 @@ public class PositionId {
 
     //完成页左上角返回时显示在首页的插屏广告
     public static final String KEY_FINISH_PAGE_BACK_SCREEN = "page_finish_back_to_main_gj_3.0";
+
+    //外部插屏广告开关
+    public static final String KEY_PAGE_OUTSIDE_SCREEN = "page_outside_screen";
+
     //首页第一个广告位
     public static final String KEY_MAIN_ONE_AD = "page_main_one_ad_gj_3.0";
     //首页第二个广告位

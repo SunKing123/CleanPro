@@ -382,7 +382,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             StatisticsUtils.customTrackEvent("ad_request_sdk_5", "功能完成页广告位5发起请求", "", "success_page");
             InsertAdSwitchInfoList.DataBean configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_PAGE_BACK_SCREEN);
             if (configBean != null && configBean.isOpen()) {
-                AppLifecyclesImpl.postDelay(() -> mPresenter.showInsideScreenDialog(MidasConstants.MAIN_FINISH_PAGE_BACK), 1000);
+                AppLifecyclesImpl.postDelay(() -> mPresenter.showInsideScreenDialog(AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_FINISH_PAGE_BACK_SCREEN)), 1000);
             }
         }
         parsePushData(intent);
@@ -696,7 +696,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             },2200);
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
             AppLifecyclesImpl.postDelay(() -> {
-                    mPresenter.showInsideScreenDialog(MidasConstants.MAIN_INSIDE_SCREEN_ID);
+                    mPresenter.showInsideScreenDialog(AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_NEIBU_SCREEN));
             }, 2200);
         }
     }
