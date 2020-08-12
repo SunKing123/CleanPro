@@ -22,11 +22,4 @@ public interface MidasConstants {
     String PRODUCT_ID = "181";
 
 
-
-    /**
-     * 首页内部插屏广告ID
-     */
-    String MAIN_INSIDE_SCREEN_ID = "adpos_5659620321";
-
-
 }

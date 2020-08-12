@@ -14,7 +14,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
-import com.xiaoniu.cleanking.midas.MidasConstants;
+
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;

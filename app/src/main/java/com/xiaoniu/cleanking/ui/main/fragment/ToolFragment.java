@@ -20,7 +20,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.SimpleFragment;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.AdRequestParams;
-import com.xiaoniu.cleanking.midas.MidasConstants;
+
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;

@@ -31,7 +31,7 @@ import com.xiaoniu.cleanking.base.BaseEntity;
 import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.constant.Constant;
-import com.xiaoniu.cleanking.midas.MidasConstants;
+
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;

@@ -30,7 +30,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.keeplive.service.LocalService;
-import com.xiaoniu.cleanking.midas.MidasConstants;
+
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;

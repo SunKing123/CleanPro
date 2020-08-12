@@ -28,7 +28,7 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.bean.JunkWrapper;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
-import com.xiaoniu.cleanking.midas.MidasConstants;
+
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.VideoAbsAdCallBack;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
