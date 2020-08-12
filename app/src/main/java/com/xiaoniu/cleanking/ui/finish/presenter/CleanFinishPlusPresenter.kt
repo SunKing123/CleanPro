@@ -160,7 +160,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.requestFeedAdv2()
-        MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE), object : SimpleViewCallBack(advContainer) {
+        MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_TWO_CODE), object : SimpleViewCallBack(advContainer) {
 
         })
     }

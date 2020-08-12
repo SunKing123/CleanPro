@@ -225,7 +225,7 @@ public interface Points {
         class Clean implements Point{
             String PAGE = "clean_success_page";
             String PAGE_EVENT_CODE = "clean_success_page_custom";
-            String PAGE_EVENT_NAME = "垃圾清理完成页曝光时";
+            String PAGE_EVENT_NAME = "清理结果页创建时";
             String RETURN_CLICK_NAME = "用户在垃圾清理完成页返回";
 
             @Override
@@ -252,7 +252,7 @@ public interface Points {
         class Acc implements Point{
             String PAGE = "boost_success_page";
             String PAGE_EVENT_CODE = "boost_success_page_custom";
-            String PAGE_EVENT_NAME = "加速完成页曝光时";
+            String PAGE_EVENT_NAME = "加速结果页创建时";
             String RETURN_CLICK_NAME = "用户在加速完成页返回";
 
             @Override
@@ -279,7 +279,7 @@ public interface Points {
         class Virus implements Point{
             String PAGE = "virus_killing_success_page";
             String PAGE_EVENT_CODE = "virus_killing_success_page_custom";
-            String PAGE_EVENT_NAME = "病毒查杀完成页曝光时";
+            String PAGE_EVENT_NAME = "病毒查杀结果页创建时";
             String RETURN_CLICK_NAME = "用户在病毒查杀完成页返回";
 
             @Override
@@ -306,7 +306,7 @@ public interface Points {
         class Power implements Point{
             String PAGE = "powersave_success_page";
             String PAGE_EVENT_CODE = "powersave_success_page_custom";
-            String PAGE_EVENT_NAME = "省电完成页曝光时";
+            String PAGE_EVENT_NAME = "省电结果页创建时";
             String RETURN_CLICK_NAME = "用户在省电完成页返回";
 
             @Override
@@ -333,7 +333,7 @@ public interface Points {
         class WxClean implements Point{
             String PAGE = "wxclean_success_page";
             String PAGE_EVENT_CODE = "wxclean_success_page_custom";
-            String PAGE_EVENT_NAME = "微信清理完成页曝光时";
+            String PAGE_EVENT_NAME = "微信结果页创建时";
             String RETURN_CLICK_NAME = "用户在微信清理完成页返回";
 
             @Override
@@ -360,7 +360,7 @@ public interface Points {
         class Cool implements Point{
             String PAGE = "cool_success_page";
             String PAGE_EVENT_CODE = "cool_success_page_custom";
-            String PAGE_EVENT_NAME = "手机降温完成页曝光时";
+            String PAGE_EVENT_NAME = "降温结果页创建时";
             String RETURN_CLICK_NAME = "用户在手机降温完成页返回";
 
             @Override
@@ -388,7 +388,7 @@ public interface Points {
         class Notify implements Point{
             String PAGE = "notification_clean_success_page";
             String PAGE_EVENT_CODE = "notification_clean_success_page_custom";
-            String PAGE_EVENT_NAME = "通知清理完成页曝光时";
+            String PAGE_EVENT_NAME = "通知栏清理结果页出现时";
             String RETURN_CLICK_NAME = "用户在通知清理完成页返回";
 
             @Override
@@ -415,7 +415,7 @@ public interface Points {
         class NetWork implements Point{
             String PAGE = "network_acceleration_success_page";
             String PAGE_EVENT_CODE = "network_acceleration_success_page_custom";
-            String PAGE_EVENT_NAME = "网络加速完成页曝光时";
+            String PAGE_EVENT_NAME = "网络加速结果页创建时";
             String RETURN_CLICK_NAME = "用户在网络加速完成页返回";
 
             @Override
