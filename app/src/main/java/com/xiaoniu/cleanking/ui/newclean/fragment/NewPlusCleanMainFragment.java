@@ -32,7 +32,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
-import com.xiaoniu.cleanking.midas.AdposUtil;
+
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.midas.MidasConstants;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
@@ -1045,7 +1045,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         int num = dataBean.getData().getGoldCount();
         String adId = "";
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE)) {//广告位3开关
-            adId = AdposUtil.getAdPos(localNum, 2);
+            adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE);
         }
         startGoldSuccess(adId, num, localNum, doubledMagnification);
     }
