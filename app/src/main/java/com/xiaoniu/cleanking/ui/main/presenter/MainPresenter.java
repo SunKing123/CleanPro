@@ -32,7 +32,6 @@ import com.xiaoniu.cleanking.base.RxPresenter;
 import com.xiaoniu.cleanking.bean.PopupWindowType;
 import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.midas.MidasConstants;
-import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushConfigModel;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushType;
 import com.xiaoniu.cleanking.ui.localpush.RomUtils;
@@ -66,13 +65,12 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.cleanking.utils.update.UpdateAgent;
 import com.xiaoniu.cleanking.utils.update.UpdateUtil;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.cleanking.widget.InsideScreenDialogFragment;
 import com.xiaoniu.common.utils.AppUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
-import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -390,7 +388,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
                 } else {
                     mUpdateAgent.check();
                 }
-                ((MainActivity)mActivity).guideViewClose();
+                ((MainActivity) mActivity).guideViewClose();
             }
         }
         checkAdviceOrRedPacketDialog();
@@ -478,7 +476,8 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
      * 延迟10秒启动保活
      */
     RxTimer rxTimer;
-    public void delayStartKeepLive(){
+
+    public void delayStartKeepLive() {
         rxTimer = new RxTimer();
         rxTimer.timer(1000 * 15, new RxTimer.RxAction() {
             @Override
@@ -490,7 +489,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
         });
     }
 
-    public void removeTimer(){
+    public void removeTimer() {
         if (null != rxTimer) {
             rxTimer.cancel();
         }
@@ -552,25 +551,27 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
     }
 
     //显示内部插屏广告
-    public void showInsideScreenDialog(String appID) {
-        if (mActivity == null || TextUtils.isEmpty(appID)) {
+    public void showInsideScreenDialog(String adId) {
+        if (mActivity == null || TextUtils.isEmpty(adId)) {
             return;
         }
         if (!mActivity.hasWindowFocus())
             return;
 
-        if(((MainActivity)mActivity).isGuideViewShowing()){
+        if (((MainActivity) mActivity).isGuideViewShowing()) {
             return;
         }
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
-        MidasRequesCenter.requestAndShowAd(mActivity, appID, new AbsAdBusinessCallback() {
+      /*  MidasRequesCenter.requestAndShowAd(mActivity, appID, new AbsAdBusinessCallback() {
 
             @Override
             public void onAdExposure(AdInfoModel adInfoModel) {
                 super.onAdExposure(adInfoModel);
                 LogUtils.e("====首页内部插屏广告展出======");
             }
-        });
+        });*/
+        InsideScreenDialogFragment insideScreenFragment = new InsideScreenDialogFragment(adId);
+        insideScreenFragment.show(mView.getSupportFragmentManager(), InsideScreenDialogFragment.class.getSimpleName());
 
     }
 
