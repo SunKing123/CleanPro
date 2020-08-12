@@ -242,6 +242,7 @@ public class AppHolder {
      * @param configKey
      * @param advertPosition
      * @return
+     *
      */
     public String getMidasAdId(String configKey, String advertPosition) {
         String advertId = "";

@@ -87,7 +87,7 @@ public class ScratchCardAvdPresenter {
         parameter.closeClickListener = v -> handlerCloseClick();
         parameter.totalCoinCount = totalCoinCount;
         parameter.doubleNums = doubledmagnification;
-        parameter.adId = isOpenOne() && !isAreaOne ? getFirstAdvId(cardIndex) : "";
+        parameter.adId = isOpenOne() && !isAreaOne ?AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_ONE_CODE): "";
         parameter.obtainCoinCount = coinCount;
 
         if (TextUtils.isEmpty(parameter.adId)) {
@@ -121,7 +121,7 @@ public class ScratchCardAvdPresenter {
      * 点击翻倍按钮事件
      */
     private void handlerDoubleClick() {
-        loadVideoAdv(getVideoAdvId(cardIndex));
+        loadVideoAdv(AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_TWO_CODE));
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_CODE, Points.ScratchCard.WINDOW_DOUBLE_CLICK_EVENT_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
 
     }
@@ -131,27 +131,6 @@ public class ScratchCardAvdPresenter {
      */
     private void handlerCloseClick() {
         StatisticsUtils.scratchCardClick(Points.ScratchCard.WINDOW_CLOSE_CLICK_CODE, Points.ScratchCard.WINDOW_CLOSE_CLICK_NAME, cardIndex, "", Points.ScratchCard.WINDOW_PAGE);
-    }
-
-    /**
-     * 两个刮刮卡刮完显示的广告id
-     */
-    private String getFirstAdvId(int cardIndex) {
-        return getAdvId(ADV_FIRST_PREFIX, cardIndex);
-    }
-
-    /**
-     * 获取翻倍完成的广告id
-     */
-    public String getSecondAdvId(int cardIndex) {
-        return getAdvId(ADV_SECOND_PREFIX, cardIndex);
-    }
-
-    /**
-     * 点击金币翻倍展示的激励视频广告id
-     */
-    private String getVideoAdvId(int cardIndex) {
-        return getAdvId(ADV_VIDEO_PREFIX, cardIndex);
     }
 
     //加载激励视屏广告
