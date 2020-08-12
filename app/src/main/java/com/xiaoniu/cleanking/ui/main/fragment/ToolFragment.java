@@ -356,8 +356,9 @@ public class ToolFragment extends SimpleFragment {
     private void addBottomAdView() {
         if (null == getActivity() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_ACCELERATE))
             return;
+
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        MidasRequesCenter.requestAndShowAd(mActivity, MidasConstants.SPEED_BOTTOM_ID, new SimpleViewCallBack(frameBottomLayout));
+        MidasRequesCenter.requestAndShowAd(mActivity, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_ACCELERATE), new SimpleViewCallBack(frameBottomLayout));
 
     }
 

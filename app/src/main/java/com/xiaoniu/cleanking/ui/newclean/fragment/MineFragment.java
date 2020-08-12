@@ -280,7 +280,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             return;
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "my_page", "my_page");
 
-        MidasRequesCenter.requestAndShowAd(mActivity, MidasConstants.LOCK_PAGE_FEED_ID, new SimpleViewCallBack(mBinding.mineAdFf) {
+        MidasRequesCenter.requestAndShowAd(mActivity, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_MINE), new SimpleViewCallBack(mBinding.mineAdFf) {
             @Override
             public void onAdExposure(AdInfoModel adInfoModel) {
                 super.onAdExposure(adInfoModel);
