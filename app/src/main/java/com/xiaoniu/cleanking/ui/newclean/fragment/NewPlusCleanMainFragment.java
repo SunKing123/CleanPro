@@ -195,6 +195,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         mPresenter.getInteractionSwitch();//互动式广告开关
         mPresenter.refBullList();//金币列表
+        refreshAdAll();//首页广告刷新
         //埋点
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
         Map<String, Object> extParam = new HashMap<>();
@@ -215,7 +216,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private class BullRunnable implements Runnable {
         @Override
         public void run() {
-            refreshAdAll();
             if (bullNum > 0) {//金币数量大于0前两个位置预加载
                 mPresenter.goldAdprev();
             }
