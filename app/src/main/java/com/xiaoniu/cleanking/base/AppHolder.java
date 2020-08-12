@@ -230,6 +230,16 @@ public class AppHolder {
      * midasId获取
      *
      * @param configKey
+     * @return
+     */
+    public String getMidasAdId(String configKey) {
+        return getMidasAdId(configKey, PositionId.DRAW_ONE_CODE);
+    }
+
+    /**
+     * midasId获取
+     *
+     * @param configKey
      * @param advertPosition
      * @return
      */
@@ -246,23 +256,7 @@ public class AppHolder {
     }
 
 
-    /**
-     * midasId获取
-     *
-     * @param configKey
-     * @return
-     */
-    public String getMidasAdId(String configKey) {
-        String advertId = "";
-        String adData = MmkvUtil.getString(configKey + "_" + PositionId.DRAW_ONE_CODE, "");
-        if (!TextUtils.isEmpty(adData)) {
-            SwitchInfoList.DataBean dataBean = new Gson().fromJson(adData, SwitchInfoList.DataBean.class);
-            if (null != dataBean) {
-                advertId = dataBean.getAdvertId();
-            }
-        }
-        return advertId;
-    }
+
 
     /**
      * 根据configKey判断开关是否打开
