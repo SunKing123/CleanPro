@@ -292,7 +292,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         pointer.goldCoinRequestAdv2()
-        var videoId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO,PositionId.DRAW_DEFAULT_CODE)
+        var videoId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO,PositionId.DRAW_TWO_CODE)
         MidasRequesCenter.requestAndShowAd(view.getActivity(), videoId, object : VideoAbsAdCallBack() {
             override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
                 super.onAdLoadError(errorCode, errorMsg)
