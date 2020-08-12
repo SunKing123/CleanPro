@@ -44,11 +44,8 @@ class InsideScreenDialogFragment constructor(var adId: String) : DialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        MidasRequesCenter.requestAndShowAd(activity, MidasConstants.MAIN_THREE_AD_ID, object : SimpleViewCallBack(ad_container) {
-            override fun onAdExposure(adInfoModel: AdInfoModel?) {
-                super.onAdExposure(adInfoModel)
-                LogUtils.e("====首页内部插屏广告展出======");
-            }
+        MidasRequesCenter.requestAndShowAd(activity,adId, object : SimpleViewCallBack(ad_container) {
+
         })
     }
 
