@@ -358,7 +358,7 @@ public class ToolFragment extends SimpleFragment {
             return;
 
         StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
-        MidasRequesCenter.requestAndShowAd(mActivity, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_ACCELERATE), new SimpleViewCallBack(frameBottomLayout));
+        MidasRequesCenter.requestAndShowAd(mActivity, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_ACCELERATE, PositionId.DRAW_ONE_CODE), new SimpleViewCallBack(frameBottomLayout));
 
     }
 
