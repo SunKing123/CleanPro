@@ -31,7 +31,7 @@ class InsideScreenDialogUtil {
             var dialog: Dialog? = null
             override fun onAdLoaded(adInfoModel: AdInfoModel) {
                 super.onAdLoaded(adInfoModel)
-                if (activity != null && !activity.isFinishing) {
+                if (adInfoModel.view != null && activity != null && !activity.isFinishing) {
                     dialog = Dialog(activity)
                     dialog?.setContentView(R.layout.insert_screen_ad_layout)
                     val window = dialog!!.window
