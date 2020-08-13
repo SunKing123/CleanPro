@@ -23,7 +23,6 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.GlideUtils;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
 
@@ -90,7 +89,6 @@ public class BottomBarTab extends FrameLayout {
                 for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
                     iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
                     iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
-                    LogUtils.e("==================Tab   "+title+" url="+AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
                 }
             }
         }
@@ -108,11 +106,9 @@ public class BottomBarTab extends FrameLayout {
         lLContainer.setLayoutParams(paramsContainer);
 
         mIcon = new ImageView(context);
-        LogUtils.e("==================Tab  iconString="+iconString);
         if (null == mContext || TextUtils.isEmpty(iconString)) {
             params = new LinearLayout.LayoutParams(orderNum == 3 ? 110 : 70, orderNum == 3 ? 110 : 70);
             mIcon.setImageResource(icon);
-            LogUtils.e("==================Tab  isEmpty: "+title+"     "+icon);
         } else if (title.equals("刮刮卡")) {
             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, context.getResources().getDimensionPixelOffset(R.dimen.dimen_40dp));
             mIcon.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -158,7 +154,6 @@ public class BottomBarTab extends FrameLayout {
         mBadgeView.setBackgroundResource(R.drawable.icon_bottom_badge);
         mBadgeView.setVisibility(GONE);
         addView(mBadgeView, badgeParams);
-
     }
 
     @Override
@@ -168,7 +163,6 @@ public class BottomBarTab extends FrameLayout {
             return;
         }
         if (selected) {
-            LogUtils.e("==================Tab  setSelected  "+iconsSelect[mTabPosition]);
             if (null == mContext || iconsSelectNet.isEmpty()) {
                 mIcon.setImageResource(iconsSelect[mTabPosition]);
             } else {
@@ -176,7 +170,6 @@ public class BottomBarTab extends FrameLayout {
             }
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_29D69F));
         } else {
-            LogUtils.e("==================Tab  setSelected  false"+iconsSelect[mTabPosition]);
             if (null == mContext || iconsNet.isEmpty()) {
                 mIcon.setImageResource(icons[mTabPosition]);
             } else {
