@@ -32,9 +32,7 @@ import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
-
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
-
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
@@ -109,7 +107,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.disposables.CompositeDisposable;
 
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
@@ -373,7 +370,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
             case PositionId.KEY_MAIN_THREE_AD:
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD)) {
-                    if (getAdLayoutThreeVisible() || isThreeADLoadFailed) {
+                    if (getAdLayoutThreeVisible()) {
                         StatisticsUtils.customTrackEvent("ad_request_sdk_3", "首页广告位3发起广告请求数", "", "home_page");
                         mPresenter.showAdviceLayout(adLayoutThree, adId, posId, adClick);
                     } else {
@@ -397,7 +394,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     }
 
     boolean isRequest = false;
-    boolean isThreeADLoadFailed = false;
+
 
     private void showAdVideo() {
         if (!AppHolder.getInstance().checkAdSwitch(PositionId.KEY_MAIN_THREE_AD) || mScrollView == null) {
@@ -405,10 +402,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         mScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
             Rect scrollBounds = new Rect();
-             mScrollView.getHitRect(scrollBounds);
+            mScrollView.getHitRect(scrollBounds);
             if (clearVideoLayout.getLocalVisibleRect(scrollBounds)) {
                 //子控件至少有一个像素在可视范围内
-                if (!isRequest || isThreeADLoadFailed) {
+                if (!isRequest) {
                     mPresenter.fillVideoAd(adLayoutThree, adClick);
                 }
                 isRequest = true;
@@ -419,20 +416,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     }
 
-
-    public void showAdSuccess(String adId) {
-        //第三个广告位特别处理下
-        if (PositionId.KEY_MAIN_THREE_AD.equals(adId)) {
-            isThreeADLoadFailed = false;
-        }
-    }
-
-    public void showAdError(String adId, String errorCode, String errorMsg) {
-        //第三个广告位特别处理下
-        if (PositionId.KEY_MAIN_THREE_AD.equals(adId)) {
-            isThreeADLoadFailed = true;
-        }
-    }
 
     /*
      *********************************************************************************************************************************************************
