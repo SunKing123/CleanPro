@@ -79,7 +79,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
 
     override fun initView() {
         titleName = newIntent.getStringExtra(ExtraConstant.TITLE)
-        //有时候intent传进的title为空了，真是费解！
+        //有时候intent传进的title为空了，费解！
         //bug描述：https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3328618714190
         if (titleName == null) {
             titleName = "一键加速"
