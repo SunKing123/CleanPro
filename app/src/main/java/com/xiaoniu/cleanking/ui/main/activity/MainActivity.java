@@ -872,6 +872,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         mBottomBar.removeAllTabs();
         String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
+            LogUtils.e("==================Tab  getIconListSuccess:auditSwitch=0");
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
                             , iconsEntity.getData().get(0).getTabName()
@@ -881,6 +882,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                             , iconsEntity.getData().get(3).getOrderNum()));
             mBottomBar.setCurrentItem(0);
         } else {
+
+            LogUtils.e("==================Tab  getIconListSuccess:auditSwitch=1   "+R.drawable.msg_normal);
+
             if (iconsEntity.getData().size() >= 4) {
                 mBottomBar
                         .addItem(new BottomBarTab(this, R.drawable.msg_normal, iconsEntity.getData().get(0).getIconImgUrl()
@@ -907,17 +911,19 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         //        状态（0=隐藏，1=显示）
         String auditSwitch = SPUtil.getString(MainActivity.this, SpCacheConfig.AuditSwitch, "1");
         if (TextUtils.equals(auditSwitch, "0")) {
+            LogUtils.e("==================Tab  refBottomState:auditSwitch=0");
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.clean_normal, "", getString(R.string.clean), 0))
                     .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
         } else {
+            LogUtils.e("==================Tab  refBottomState:auditSwitch=1");
             mBottomBar
                     .addItem(new BottomBarTab(this, R.drawable.clean_normal, "", getString(R.string.clean), 0))
                     .addItem(new BottomBarTab(this, R.drawable.tool_normal, "", getString(R.string.tool), 0))
                     .addItem(new BottomBarTab(this, R.drawable.icon_scratch_tab, "", getString(R.string.top), 0))
                     .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
         }
-        mBottomBar.setCurrentItem(0);
+       // mBottomBar.setCurrentItem(0);
     }
 
 
