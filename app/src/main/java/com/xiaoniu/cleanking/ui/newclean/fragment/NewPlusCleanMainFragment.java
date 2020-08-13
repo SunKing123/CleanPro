@@ -222,7 +222,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             }
         }
     }
-    
+
     private void initListener() {
         mScrollView.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
             @Override

@@ -561,9 +561,12 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 return true;
             }
             if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof ShoppingMallFragment) {
+                //处理友盟异常 https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3331997352190
+                if(mBottomBar.getCurrentItemPosition()>=mFragments.size()){
+                    return true;
+                }
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
                 fragment.onKeyBack();
-                return true;
             } else {
                 if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
                         && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
