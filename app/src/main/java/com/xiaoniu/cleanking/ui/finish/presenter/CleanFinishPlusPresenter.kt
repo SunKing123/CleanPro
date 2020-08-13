@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.finish.presenter
 
+import android.view.View
 import android.widget.FrameLayout
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
@@ -139,7 +140,10 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      * 加载第一个广告位数据
      */
     override fun loadOneAdv(advContainer: FrameLayout) {
-        if (!isOpenOne || isDestroy()) return
+        if (!isOpenOne || isDestroy()) {
+            advContainer.visibility = View.GONE
+            return
+        }
         pointer.requestFeedAdv1()
         MidasRequesCenter.requestAndShowAd(view.getActivity(), AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE), object : SimpleViewCallBack(advContainer) {
 
@@ -151,6 +155,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
      */
     override fun loadTwoAdv(advContainer: FrameLayout) {
         if (!isOpenTwo || isDestroy()) {
+            advContainer.visibility = View.GONE
             return
         }
         pointer.requestFeedAdv2()
