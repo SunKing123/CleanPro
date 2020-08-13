@@ -23,6 +23,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.utils.GlideUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.common.utils.DisplayUtils;
 
@@ -61,7 +62,6 @@ public class BottomBarTab extends FrameLayout {
         init(context, icon, iconString, title, orderNum);
     }
 
-    LinearLayout.LayoutParams params;
     protected void init(Context context, int icon, String iconString, CharSequence title, int orderNum) {
         mContext = context;
         this.title = title.toString();
@@ -86,12 +86,17 @@ public class BottomBarTab extends FrameLayout {
                 iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(0).getClickIconUrl());
                 iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(3).getClickIconUrl());
             } else {
+                LogUtils.e("===================================Tab======================================================");
                 for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
                     iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
                     iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
+                    LogUtils.e("=================Tab===== icon= "+AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
+                    LogUtils.e("=================Tab===== clickIcon= "+AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
                 }
             }
         }
+
+        LogUtils.e("===================================Tab title="+title);
 
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
@@ -104,6 +109,8 @@ public class BottomBarTab extends FrameLayout {
         LayoutParams paramsContainer = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         paramsContainer.gravity = Gravity.CENTER;
         lLContainer.setLayoutParams(paramsContainer);
+
+        LinearLayout.LayoutParams params;
 
         mIcon = new ImageView(context);
         if (null == mContext || TextUtils.isEmpty(iconString)) {
