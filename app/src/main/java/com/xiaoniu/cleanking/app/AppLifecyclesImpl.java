@@ -105,6 +105,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
+import kotlin.DslMarker;
 import timber.log.Timber;
 
 import static com.xiaoniu.cleanking.constant.Constant.QQ_APPID;
@@ -141,14 +142,11 @@ public class AppLifecyclesImpl implements AppLifecycles {
         fixedWebViewBugInAndroidP(application);
         ContextUtils.initApplication(application);
         logConfig();
+        String rootDir = MMKV.initialize(application);
         PayShareApplication.getInstance().initPayShare(application, UMENG_APPKEY, ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "")
                 .setWeixin(WEICHAT_APPID, WEICHAT_APPSECRET)
                 .setQQZone(QQ_APPID, QQ_APPKEY)
                 .setSinaWeibo(SINA_APPID, SINA_APPSECRET, "http://xiaoniu.com");
-//        PlatformConfig.setWeixin("wx19414dec77020d03", "090f560fa82e0dfff2f0cb17e43747c2");
-//        PlatformConfig.setQQZone("1109516379", "SJUCaQdURyRd8Dfi");
-//        PlatformConfig.setSinaWeibo("1456333364", "bee74e1ccd541f657875803a7eb32b1b", "http://xiaoniu.com");
-//        UMShareAPI.get(application);
         initInjector(application);
 
         //初始化sdk
@@ -159,12 +157,10 @@ public class AppLifecyclesImpl implements AppLifecycles {
             ARouter.openDebug();   // Turn on debugging mode (If you are running in InstantRun mode, you must turn on debug mode! Online version needs to be closed, otherwise there is a security risk)
         }
         ARouter.init(application);
-//        UMConfigure.init(application, "5dcb9de5570df3121b000fbe", ChannelUtil.getChannel(), UMConfigure.DEVICE_TYPE_PHONE, "");
         NotificationUtils.createNotificationChannel();
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
         setErrorHander();
         initRoom(application);
-//        initNiuData(application);
 
         String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
@@ -172,7 +168,12 @@ public class AppLifecyclesImpl implements AppLifecycles {
             MidasRequesCenter.init(application);
             initOaid(application);
             homeCatch(application);
-
+            initLifecycle(application);
+            initPermission(application);
+            initJsBridge();
+            initShanYan(application);//闪验初始化
+            //初始化utilCode
+            Utils.init(application);
             try {
                 //锁屏广播监听
                 IntentFilter intentFilter = new IntentFilter();
@@ -189,31 +190,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 e.printStackTrace();
             }
         }
-
-
-//        initOaid(application);
-        //穿山甲SDK初始化
-        //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
-//        TTAdManagerHolder.init(application);
-//        LogUtils.i("GeekSdk--"+SystemUtils.getProcessName(application));
-//        initAdSdk(application);
-        initJsBridge();
-        initLifecycle(application);
-        Logger.addLogAdapter(new AndroidLogAdapter() {
-            @Override
-            public boolean isLoggable(int priority, String tag) {
-                return BuildConfig.DEBUG;
-            }
-        });
-        String rootDir = MMKV.initialize(application);
-
-        initPermission(application);
-        initShanYan(application);
-
-        //初始化utilCode
-        Utils.init(application);
-
-
     }
     /*
      *在进程初始化的时候调用，比如Application中进行调用，并且这行代码需要在其他的SDK等等初始化之前就要调*用，否则会报其他的错误
@@ -228,7 +204,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         }
     }
 
-
+    @Deprecated
     private void registerWifiConnect(Application application) {
         String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
@@ -240,7 +216,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 connMgr.registerNetworkCallback(request, networkCallback);
             }
         }
-
     }
 
     /**
@@ -262,7 +237,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 .apiModule(new ApiModule(application))
                 .build();
         mAppComponent.inject(application);
-
     }
 
 
@@ -279,20 +253,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 });
     }
 
-    //商业sdk初始化
-//    public void initAdSdk(Application application) {
-//        String processName = SystemUtils.getProcessName(application);
-//        if (!processName.equals(application.getPackageName()))
-//            return;
-//        GeekAdSdk.init(application, Constant.GEEK_ADSDK_PRODUCT_NAME, Constant.CSJ_AD_ID, Constant.YLH_AD_ID, ChannelUtil.getChannel(), BuildConfig.SYSTEM_EN);
-//        //广告sdk_Bid只设置一次
-//        if (GeekAdSdk.getBid() < 0) {
-//            GeekAdSdk.setBid(NumberUtils.mathRandomInt(0, 99));
-//        }
-//        ContextUtils.initAdBid(GeekAdSdk.getBid());
-//    }
-
-
     /**
      * js回调
      */
@@ -302,7 +262,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
 
     private void initGeekPush(Application application) {
         GeekPush.setDebug(BuildConfig.DEBUG);
-
         GeekPush.init(application, ((platformCode, platformName) -> {
             boolean result = (platformCode == PushConstants.PLATFORMCODE_JPUSH);
             return result;
@@ -590,10 +549,6 @@ public class AppLifecyclesImpl implements AppLifecycles {
         }
     }
 
-    private boolean isMainProcess(Application application) {
-        String processName = SystemUtils.getProcessName(application);
-        return processName.equals(application.getPackageName());
-    }
 
     public void logConfig() {
         if (BuildConfig.DEBUG) {//Timber初始化
@@ -611,6 +566,13 @@ public class AppLifecyclesImpl implements AppLifecycles {
 //                    });
             ButterKnife.setDebug(true);
         }
+
+        Logger.addLogAdapter(new AndroidLogAdapter() {
+            @Override
+            public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
     }
 
 
