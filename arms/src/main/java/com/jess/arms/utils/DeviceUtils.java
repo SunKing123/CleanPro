@@ -609,20 +609,6 @@ public class DeviceUtils {
         context.startActivity(mainIntent);
     }
 
-    public static boolean openAppActivity(Context context, String packageName,
-                                          String activityName) {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        ComponentName cn = new ComponentName(packageName, activityName);
-        intent.setComponent(cn);
-        try {
-            context.startActivity(intent);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     /**
      * wifi是否开启
      *
