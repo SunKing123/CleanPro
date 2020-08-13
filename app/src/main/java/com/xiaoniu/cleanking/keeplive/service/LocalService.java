@@ -299,7 +299,7 @@ public final class LocalService extends Service {
     //全局跳转锁屏页面
     public void startActivity(Context context) {
         try {
-            if (!(ActivityCollector.currentActivity() instanceof LockActivity)) {
+            if (!(ActivityCollector.currentActivity() != null && ActivityCollector.currentActivity() instanceof LockActivity) && !ActivityCollector.isActivityExist(LockActivity.class)) {
                 String auditSwitch = SPUtil.getString(getApplicationContext(), SpCacheConfig.AuditSwitch, "1");
                 boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
                 if (TextUtils.equals(auditSwitch, "1") && lock_sw) { //过审开关打开状态

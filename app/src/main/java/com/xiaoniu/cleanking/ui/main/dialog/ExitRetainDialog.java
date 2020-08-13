@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.midas.AdRequestParams;
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -83,10 +84,7 @@ public class ExitRetainDialog extends AlertDialog implements View.OnClickListene
                 StatisticsUtils.trackClick("confirm_exit_button_click", "确认退出按钮点击", "", "retain_the_pop_up_window");
                 //更新按返回键退出程序的次数
                 dismiss();
-                Intent home = new Intent(Intent.ACTION_MAIN);
-                home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                home.addCategory(Intent.CATEGORY_HOME);
-                activity.startActivity(home);
+                AndroidUtil.gotoDesktop(activity);
                 break;
             case R.id.btn_cancel:
                 StatisticsUtils.trackClick("continue_to_browse_button_click", "继续浏览按钮点击", "", "retain_the_pop_up_window");

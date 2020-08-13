@@ -73,6 +73,13 @@ public class AndroidUtil {
     private static String mac = "";
     private static String sImei;
 
+    public static void gotoDesktop(Context context){
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        home.addCategory(Intent.CATEGORY_HOME);
+        context.startActivity(home);
+    }
+
     /**
      * app是否被安装
      *
