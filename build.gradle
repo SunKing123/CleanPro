@@ -54,7 +54,7 @@ buildscript {
         /*检查覆盖安装导致的 Resources 和 Assets 未加载的 Bug*/
         classpath "com.didiglobal.booster:booster-transform-res-check:$booster_version"
 
-//        classpath 'com.huawei.agconnect:agcp:1.0.0.300'
+        classpath 'com.huawei.agconnect:agcp:1.0.0.300'
 
         classpath "com.alibaba:arouter-register:1.0.2"
     }
