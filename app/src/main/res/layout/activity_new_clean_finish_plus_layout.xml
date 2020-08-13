@@ -86,14 +86,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
+                android:layout_marginEnd="7dp"
                 android:layout_marginTop="9dp" />
 
             <FrameLayout
                 android:id="@+id/ad_container_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
                 android:layout_marginBottom="9dp"
                 android:visibility="gone"/>
 
@@ -101,7 +102,9 @@
                 android:id="@+id/card_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="7dp" />
+                android:layout_marginStart="7dp"
+                android:layout_marginEnd="7dp"
+                />
 
             <RelativeLayout
                 android:visibility="gone"
@@ -147,8 +150,8 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="9dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
                 android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
