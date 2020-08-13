@@ -178,7 +178,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         registerLockerReceiver();
         setBtnState();
 
-        if (PreferenceUtil.getInstants().getInt("isGetWeatherInfo") == 1) {
+       /* if (PreferenceUtil.getInstants().getInt("isGetWeatherInfo") == 1) {
             lin_tem_top.setVisibility(View.VISIBLE);
             lin_tem_bottom.setVisibility(View.VISIBLE);
             String temp = PreferenceUtil.getInstants().get("temperature");
@@ -196,7 +196,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             lin_tem_top.setVisibility(View.GONE);
             lin_tem_bottom.setVisibility(View.GONE);
 
-        }
+        }*/
 
     }
 
@@ -290,8 +290,12 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         if (null == mUnlockView)
             return;
-        mUnlockView.startAnim();
-        updateTimeUI();
+        try {
+            mUnlockView.startAnim();
+            updateTimeUI();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         boolean lock_sw = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_LOCK_SCREEN, PositionId.KEY_ADVERT_LOCK_SCREEN);//锁屏开关
         if (lock_sw) {
             adInit();
