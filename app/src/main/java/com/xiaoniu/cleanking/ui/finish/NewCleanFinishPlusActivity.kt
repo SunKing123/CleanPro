@@ -40,6 +40,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatusBarUtil
+import com.xiaoniu.common.utils.ToastUtils
 import kotlinx.android.synthetic.main.activity_new_clean_finish_plus_layout.*
 import org.greenrobot.eventbus.EventBus
 
@@ -50,7 +51,7 @@ import org.greenrobot.eventbus.EventBus
 class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), NewCleanFinishPlusContract.CleanFinishView {
 
     //这里先允许为空，因为intent里获取有时会为null,导致程序崩溃。
-    var titleName: String ?= ""
+    var titleName: String? = ""
     lateinit var pointer: CleanFinishPointer
     lateinit var newIntent: Intent
     var isFirst = true
@@ -80,8 +81,8 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         titleName = newIntent.getStringExtra(ExtraConstant.TITLE)
         //有时候intent传进的title为空了，真是费解！
         //bug描述：https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3328618714190
-        if(titleName==null){
-            titleName="一键加速"
+        if (titleName == null) {
+            titleName = "一键加速"
         }
         pointer = CleanFinishPointer(titleName!!)
         restView()
@@ -309,7 +310,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         bean.obtainCoinCount = bubbleCollected.data.goldCount
         bean.totalCoinCount = bubbleCollected.data.totalGoldCount.toDouble()
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_FINISH_GET_GOLD_COIN)) {
-            bean.adId =AppHolder.getInstance().getMidasAdId(PositionId.KEY_FINISH_GET_GOLD_COIN,PositionId.DRAW_ONE_CODE)
+            bean.adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_FINISH_GET_GOLD_COIN, PositionId.DRAW_ONE_CODE)
         }
         bean.context = this
         bean.isRewardOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GOLD_DIALOG_SHOW_VIDEO)
@@ -335,8 +336,8 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     }
 
     override fun getFunctionTitle(): String {
-        if(titleName==null){
-            titleName="一键加速"
+        if (titleName == null) {
+            titleName = "一键加速"
         }
         return this.titleName!!
     }
@@ -386,6 +387,10 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
      * 微信清理
      */
     fun startWxClean() {
+        if (!AndroidUtil.isInstallWeiXin(this)) {
+            ToastUtils.showShort(R.string.tool_no_install_chat)
+            return
+        }
         RecmedItemDataStore.getInstance().click_wx = true
         startActivity(WechatCleanHomeActivity::class.java)
     }
@@ -433,15 +438,15 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if(hasFocus&&isFirst){
-            isFirst=false
+        if (hasFocus && isFirst) {
+            isFirst = false
             loadPopView()
         }
     }
 
-    private fun loadPopView(){
+    private fun loadPopView() {
         val unused = newIntent.getBooleanExtra("unused", false)
-        CleanFinishLogger.log("============ 加载PopView: nused="+unused+"======================")
+        CleanFinishLogger.log("============ 加载PopView: nused=" + unused + "======================")
         //真正使用过功能才请求弹框
         if (!unused) {
             //插屏广告滞后请求，处理友盟bug
