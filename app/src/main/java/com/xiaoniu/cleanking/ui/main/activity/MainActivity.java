@@ -650,10 +650,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
     private void goHome() {
-        Intent home = new Intent(Intent.ACTION_MAIN);
-        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        home.addCategory(Intent.CATEGORY_HOME);
-        startActivity(home);
+        AndroidUtil.gotoDesktop(this);
     }
 
     @SuppressLint("MissingSuperCall")
