@@ -24,7 +24,7 @@ public class LockActivityStarReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!(ActivityCollector.currentActivity() != null && ActivityCollector.currentActivity() instanceof LockActivity)) {       //判断是否在锁屏界面 && 没有LockActivity
+        if (!(ActivityCollector.currentActivity() != null && ActivityCollector.currentActivity() instanceof LockActivity) && !ActivityCollector.isActivityExist(LockActivity.class)) {       //判断是否在锁屏界面 && 没有LockActivity
             //避免两次都是屏幕on
             //判断广告开关是否打开，以及频次判断
             String action = intent.getAction();
