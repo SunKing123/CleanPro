@@ -62,7 +62,6 @@ public class BottomBarTab extends FrameLayout {
         init(context, icon, iconString, title, orderNum);
     }
 
-    LinearLayout.LayoutParams params;
     protected void init(Context context, int icon, String iconString, CharSequence title, int orderNum) {
         mContext = context;
         this.title = title.toString();
@@ -87,13 +86,17 @@ public class BottomBarTab extends FrameLayout {
                 iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(0).getClickIconUrl());
                 iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(3).getClickIconUrl());
             } else {
+                LogUtils.e("===================================Tab======================================================");
                 for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
                     iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
                     iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
-                    LogUtils.e("==================Tab   "+title+" url="+AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
+                    LogUtils.e("=================Tab===== icon= "+AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
+                    LogUtils.e("=================Tab===== clickIcon= "+AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
                 }
             }
         }
+
+        LogUtils.e("===================================Tab title="+title);
 
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
@@ -107,12 +110,12 @@ public class BottomBarTab extends FrameLayout {
         paramsContainer.gravity = Gravity.CENTER;
         lLContainer.setLayoutParams(paramsContainer);
 
+        LinearLayout.LayoutParams params;
+
         mIcon = new ImageView(context);
-        LogUtils.e("==================Tab  iconString="+iconString);
         if (null == mContext || TextUtils.isEmpty(iconString)) {
             params = new LinearLayout.LayoutParams(orderNum == 3 ? 110 : 70, orderNum == 3 ? 110 : 70);
             mIcon.setImageResource(icon);
-            LogUtils.e("==================Tab  isEmpty: "+title+"     "+icon);
         } else if (title.equals("刮刮卡")) {
             params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, context.getResources().getDimensionPixelOffset(R.dimen.dimen_40dp));
             mIcon.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -158,7 +161,6 @@ public class BottomBarTab extends FrameLayout {
         mBadgeView.setBackgroundResource(R.drawable.icon_bottom_badge);
         mBadgeView.setVisibility(GONE);
         addView(mBadgeView, badgeParams);
-
     }
 
     @Override
@@ -168,7 +170,6 @@ public class BottomBarTab extends FrameLayout {
             return;
         }
         if (selected) {
-            LogUtils.e("==================Tab  setSelected  "+iconsSelect[mTabPosition]);
             if (null == mContext || iconsSelectNet.isEmpty()) {
                 mIcon.setImageResource(iconsSelect[mTabPosition]);
             } else {
@@ -176,7 +177,6 @@ public class BottomBarTab extends FrameLayout {
             }
             mTvTitle.setTextColor(ContextCompat.getColor(mContext, R.color.color_29D69F));
         } else {
-            LogUtils.e("==================Tab  setSelected  false"+iconsSelect[mTabPosition]);
             if (null == mContext || iconsNet.isEmpty()) {
                 mIcon.setImageResource(icons[mTabPosition]);
             } else {

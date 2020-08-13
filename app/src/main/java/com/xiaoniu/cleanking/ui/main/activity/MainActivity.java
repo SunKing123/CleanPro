@@ -882,8 +882,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                             , iconsEntity.getData().get(3).getOrderNum()));
             mBottomBar.setCurrentItem(0);
         } else {
-
-            LogUtils.e("==================Tab  getIconListSuccess:auditSwitch=1   "+R.drawable.msg_normal);
+            LogUtils.e("==================Tab  getIconListSuccess:auditSwitch=1");
 
             if (iconsEntity.getData().size() >= 4) {
                 mBottomBar
