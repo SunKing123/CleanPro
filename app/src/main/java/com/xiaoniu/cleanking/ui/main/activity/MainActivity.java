@@ -923,7 +923,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     .addItem(new BottomBarTab(this, R.drawable.icon_scratch_tab, "", getString(R.string.top), 0))
                     .addItem(new BottomBarTab(this, R.drawable.me_normal, "", getString(R.string.mine), 0));
         }
-       // mBottomBar.setCurrentItem(0);
+        mBottomBar.setCurrentItem(0);
     }
 
 
