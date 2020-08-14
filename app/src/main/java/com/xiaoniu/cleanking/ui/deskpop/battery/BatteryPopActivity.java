@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -14,16 +15,19 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
 import com.xiaoniu.cleanking.widget.CircleRoundingAnim;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import java.text.DecimalFormat;
 
@@ -53,6 +57,7 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
     private TextView tvPowerVoltage;
     private TextView tvPowerTemp;
     private TextView tvPowerApp;
+    private FrameLayout adContainer;
 
     @Override
     public void setupActivityComponent(@NonNull AppComponent appComponent) {
@@ -88,7 +93,7 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
         chargeState01 = findViewById(R.id.charge_state01);
         chargeState02 = findViewById(R.id.charge_state02);
         chargeState03 = findViewById(R.id.charge_state03);
-
+        adContainer = findViewById(R.id.ad_container);
         tvPowerCapacity = findViewById(R.id.tv_power_capacity);
         tvPowerVoltage = findViewById(R.id.tv_power_voltage);
         tvPowerTemp = findViewById(R.id.tv_power_temp);
@@ -155,6 +160,8 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
         super.onWindowFocusChanged(hasFocus);
         if(!hasFocus){
             finish();
+        } else {
+            initAd();
         }
     }
 
@@ -175,6 +182,24 @@ public class BatteryPopActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
         }
+    }
+
+    /**
+     * 广告展示
+     */
+    public void initAd(){
+            if (isFinishing() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_DESK_BATTERY_AD))
+                return;
+//            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
+            MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_DESK_BATTERY_AD, PositionId.DRAW_ONE_CODE), new SimpleViewCallBack(adContainer){
+                @Override
+                public void onAdClick(AdInfoModel adInfoModel) {
+                    super.onAdClick(adInfoModel);
+                    BatteryPopActivity.this.finish();
+                }
+            });
+
+
     }
 
 
