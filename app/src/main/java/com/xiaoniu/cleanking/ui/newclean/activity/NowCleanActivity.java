@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.ScanResultFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -29,6 +30,8 @@ import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.base.BaseActivity;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.StatusBarUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -159,13 +162,14 @@ public class NowCleanActivity extends BaseActivity {
     }
 
     private void showCleanResult() {
-        finish();
         Bundle bundle = new Bundle();
         bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
         Intent intent = new Intent();
         intent.putExtras(bundle);
         PreferenceUtil.saveNowCleanTime();
         StartFinishActivityUtil.Companion.gotoFinish(this, bundle);
+        EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_suggest_clean)));
+        finish();
     }
 
     @Override

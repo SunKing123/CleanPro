@@ -17,6 +17,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 
+import static com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateFragment.FROM_EXTERNAL;
+
 /**
  * Created by xinxiaolong on 2020/7/25.
  * email：xinxiaolong123@foxmail.com
@@ -58,7 +60,7 @@ public class ExternalPhoneStateActivity extends BaseActivity {
 
     private void initFragment() {
         mManager.beginTransaction()
-                .add(R.id.frame_layout, new ExternalPhoneStateFragment())
+                .add(R.id.frame_layout, ExternalPhoneStateFragment.Companion.getInstance(FROM_EXTERNAL))
                 .commitAllowingStateLoss();
     }
 
