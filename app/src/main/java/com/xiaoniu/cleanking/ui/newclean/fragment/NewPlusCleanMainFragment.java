@@ -638,17 +638,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     /**
      * 点击立即清理
      */
-    @OnClick({R.id.view_lottie_top_center, R.id.layout_temp})
+    @OnClick({R.id.view_lottie_top_center})
     public void nowClean(View view) {
         switch (view.getId()) {
             case R.id.view_lottie_top_center:
                 StatisticsUtils.trackClick("home_page_clean_click", "用户在首页点击【立即清理】", "home_page", "home_page");
                 oneKeyClick();
-                break;
-
-            case R.id.layout_temp://获取天气信息；
-                StatisticsUtils.trackClick("weather_forecast_click", "用户在首页点击【天气预报】模板", "home_page", "home_page");
-                EventBus.getDefault().post(new WeatherInfoRequestEvent(0));
                 break;
         }
     }
