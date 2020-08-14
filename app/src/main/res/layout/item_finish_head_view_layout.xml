@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_18dp"
+        android:layout_marginBottom="@dimen/dimen_18dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/function_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_11dp"
+            android:src="@mipmap/finish_icon_ok" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/function_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安全，已解决所有风险"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_18sp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/function_sub_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="快试试其它功能吧！"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_13sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

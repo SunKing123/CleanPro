@@ -26,6 +26,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.callback.OnCleanListSelectListener;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
 import com.xiaoniu.cleanking.ui.main.adapter.DockingExpandableListViewAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
@@ -35,7 +36,6 @@ import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.newclean.presenter.CleanPresenter;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -278,15 +278,7 @@ public class CleanFragment extends BaseFragment<CleanPresenter> {
             viewLottieBottom.cancelAnimation();
             viewLottieBottom.clearAnimation();
 
-            Intent intent_finish = new Intent();
-            intent_finish.putExtra(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
-            intent_finish.putExtra(ExtraConstant.NUM, checkCountEntity.getTotalSize());
-            intent_finish.putExtra(ExtraConstant.UNIT, checkCountEntity.getUnit());
-            if (getActivity().getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
-                intent_finish.putExtra(ExtraConstant.ACTION_NAME, getActivity().getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
-            }
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent_finish);
-
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_suggest_clean),true);
             getActivity().finish();
         }
     }

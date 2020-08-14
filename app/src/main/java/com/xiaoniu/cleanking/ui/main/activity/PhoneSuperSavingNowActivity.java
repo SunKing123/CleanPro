@@ -22,12 +22,12 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
 import com.xiaoniu.cleanking.ui.main.bean.PowerChildInfo;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.widget.SPUtil;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -375,10 +375,8 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         AppHolder.getInstance().setCleanFinishSourcePageId("powersave_finish_annimation_page");
 
-        Intent intent=new Intent()
-                .putExtra(ExtraConstant.TITLE, getString(R.string.tool_super_power_saving));
-        StartFinishActivityUtil.Companion.gotoFinish(this, intent);
 
+        NewCleanFinishPlusActivity.Companion.start(this,getString(R.string.tool_super_power_saving),true);
         finish();
     }
 

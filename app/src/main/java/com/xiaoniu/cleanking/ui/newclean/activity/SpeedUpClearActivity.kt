@@ -13,9 +13,8 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl
 import com.xiaoniu.cleanking.base.ScanDataHolder
 import com.xiaoniu.cleanking.bean.JunkResultWrapper
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
 import com.xiaoniu.cleanking.utils.ExtraConstant
-import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.base.BaseActivity
 import com.xiaoniu.common.utils.AppUtils
@@ -133,15 +132,8 @@ class SpeedUpClearActivity : BaseActivity() {
         if (isFinishing) {
             return
         }
-        val mIntent = Intent()
-        mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed))
-        mIntent.putExtra(ExtraConstant.NUM, mSpeedUpNum)
         PreferenceUtil.saveOneKeySpeedNum(mSpeedUpNum)
-        // mIntent.putExtra(ExtraConstant.UNIT, unit)
-        //  if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
-        //   mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))
-        //  }
-        StartFinishActivityUtil.gotoFinish(this, mIntent)
+        NewCleanFinishPlusActivity.start(this,getString(R.string.tool_one_key_speed),true)
         finish()
     }
 

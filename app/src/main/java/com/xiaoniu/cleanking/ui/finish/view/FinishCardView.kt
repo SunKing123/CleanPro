@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.widget
+package com.xiaoniu.cleanking.ui.finish.view
 
 import android.content.Context
 import android.text.SpannableString
@@ -9,6 +9,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.xiaoniu.cleanking.R
+import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore
+import com.xiaoniu.cleanking.ui.finish.model.RecmedItemModel
 
 class FinishCardView(context: Context, attributeSet: AttributeSet) : LinearLayout(context, attributeSet) {
     private var mContext: Context = context
@@ -20,7 +22,6 @@ class FinishCardView(context: Context, attributeSet: AttributeSet) : LinearLayou
     private var mSubText2: AppCompatTextView
     private var mButton: AppCompatTextView
 
-
     init {
         mTitleView = mView.findViewById(R.id.title)
         mImage = mView.findViewById(R.id.image)
@@ -29,7 +30,6 @@ class FinishCardView(context: Context, attributeSet: AttributeSet) : LinearLayou
         mSubText2 = mView.findViewById(R.id.sub_title_2)
         mButton = mView.findViewById(R.id.button)
     }
-
 
     fun setLeftTitle(value: String) {
         mTitleView.text = value
@@ -61,5 +61,20 @@ class FinishCardView(context: Context, attributeSet: AttributeSet) : LinearLayou
 
     fun setButtonText(text: String) {
         mButton.text = text
+    }
+
+    fun initViewData(item: RecmedItemModel) {
+        visibility = View.VISIBLE
+        setImage(item.imageIcon)
+        setLeftTitle(item.title)
+        setSubTitle1(item.content1)
+        setSubTitle2(item.content2)
+        setButtonText(item.buttonText)
+        if (item.title.equals("手机加速")) {
+            setImageLabelVisible()
+            setImageLabel(RecmedItemDataStore.getInstance().memory)
+        } else {
+            setImageLabelHide()
+        }
     }
 }

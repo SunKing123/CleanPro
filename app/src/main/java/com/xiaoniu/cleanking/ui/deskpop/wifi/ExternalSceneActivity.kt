@@ -11,9 +11,9 @@ import com.xiaoniu.clean.deviceinfo.EasyNetworkMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.BaseActivity
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity
 import com.xiaoniu.cleanking.ui.newclean.presenter.ExternalScenePresenter
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.NumberUtils
@@ -64,11 +64,7 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
         if (PreferenceUtil.getSpeedNetWorkTime()) {
             startActivity(NetWorkActivity::class.java)
         } else {
-            val intent = Intent()
-            val num = PreferenceUtil.getSpeedNetworkValue()
-            intent.putExtra(ExtraConstant.TITLE, "网络加速")
-            intent.putExtra("unused", true)
-            StartFinishActivityUtil.gotoFinish(this,intent)
+            NewCleanFinishPlusActivity.start(this,"网络加速",false)
         }
     }
 
@@ -76,10 +72,7 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
         if (PreferenceUtil.getVirusKillTime()) {
             startActivity(VirusKillActivity::class.java)
         } else {
-            val intent = Intent()
-            intent.putExtra(ExtraConstant.TITLE, "病毒查杀")
-            intent.putExtra("unused", true)
-            StartFinishActivityUtil.gotoFinish(this,intent)
+            NewCleanFinishPlusActivity.start(this,"病毒查杀",false)
         }
     }
 

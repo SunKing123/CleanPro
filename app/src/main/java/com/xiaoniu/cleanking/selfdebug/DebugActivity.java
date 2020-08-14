@@ -38,12 +38,12 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.FullPopLayerActivity;
 import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -113,9 +113,7 @@ public class DebugActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String title=titleNames[getTitleIndex()];
-                Intent intent=new Intent();
-                intent.putExtra("title",title);
-                StartFinishActivityUtil.Companion.gotoFinish(DebugActivity.this,intent);
+                NewCleanFinishPlusActivity.Companion.start(DebugActivity.this,title,true);
             }
         });
     }

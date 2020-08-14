@@ -17,8 +17,8 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.presenter.NetWorkPresenter;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NetWorkSpeedUtils;
@@ -111,17 +111,11 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
                 String speed=NumberUtils.mathRandom(25, 50);
 
                 AppHolder.getInstance().setCleanFinishSourcePageId("network_acceleration_animation_page");
-
-
-                Intent intent = new Intent()
-                        .putExtra(ExtraConstant.TITLE, getString(R.string.network_quicken))
-                        .putExtra(ExtraConstant.NUM,speed);
-
-                StartFinishActivityUtil.Companion.gotoFinish(NetWorkActivity.this, intent);
-
                 PreferenceUtil.saveSpeedNetworkTime();
                 PreferenceUtil.saveSpeedNetworkValue(speed);
                 EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.network_quicken)));
+
+                NewCleanFinishPlusActivity.Companion.start(NetWorkActivity.this,getString(R.string.network_quicken),true);
 
                 finish();
             }

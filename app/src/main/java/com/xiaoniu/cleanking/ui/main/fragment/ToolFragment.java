@@ -23,12 +23,13 @@ import com.xiaoniu.cleanking.midas.AdRequestParams;
 
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
+import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneThinActivity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.qq.activity.QQCleanHomeActivity;
@@ -205,11 +206,8 @@ public class ToolFragment extends SimpleFragment {
                 // 每次清理间隔 至少3秒
                 startActivity(WechatCleanHomeActivity.class);
             } else {
-                Bundle bundle = new Bundle();
-                bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_chat_clear));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+                NewCleanFinishPlusActivity.Companion.start(getActivity(),getActivity().getString(R.string.tool_chat_clear),false);
+
             }
         } else if (ids == R.id.rl_qq) {
 
@@ -231,11 +229,8 @@ public class ToolFragment extends SimpleFragment {
             //保存本次清理完成时间 保证每次清理时间间隔为3分钟
             if (!PreferenceUtil.getCleanTime()) {
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-                Bundle bundle = new Bundle();
-                bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+                NewCleanFinishPlusActivity.Companion.start(getActivity(),getActivity().getString(R.string.tool_one_key_speed),false);
+
             } else {
                 Bundle bundle = new Bundle();
                 bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
@@ -250,11 +245,7 @@ public class ToolFragment extends SimpleFragment {
             if (PreferenceUtil.getCoolingCleanTime()) {
                 startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
             } else {
-                Bundle bundle = new Bundle();
-                bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low));
-                bundle.putString("num", "");
-                bundle.putString("unit", "");
-                StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+                NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_phone_temperature_low),false);
             }
         } else if (ids == R.id.text_phone_thin) {
             Intent intent = new Intent(getActivity(), PhoneThinActivity.class);
