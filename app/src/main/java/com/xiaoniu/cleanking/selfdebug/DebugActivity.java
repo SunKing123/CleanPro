@@ -498,17 +498,17 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void powerClick(View view) {
-        new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
-            @Override
-            public void action(long number) {
+//        new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
+//            @Override
+//            public void action(long number) {
                 Intent screenIntent = new Intent(DebugActivity.this, BatteryPopActivity.class);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                 startActivity(screenIntent);
-            }
-        });
+//            }
+//        });
     }
 
 

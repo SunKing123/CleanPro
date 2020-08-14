@@ -96,6 +96,12 @@ public class PositionId {
     public static final String KEY_MAIN_GUIDE_VIEW = "key_main_guide_view_gj_3.0";
     //WIFI连接时的外部场景弹窗
     public static final String KEY_WIFI_EXTERNAL_SCREEN = "page_wifi_external";
+    //电池插屏广告
+    public static final String KEY_PAGE_DESK_BATTERY_AD = "page_desk_battery_ad";
+    //wifi插屏广告
+    public static final String KEY_PAGE_DESK_WIFI_AD = "page_desk_wifi_ad";
+    //手机状态插屏广告
+    public static final String KEY_PAGE_DESK_DEVICE_STATE_AD = "page_desk_device_state_ad";
 
     public static final String KEY_VIRUS_JILI = "page_virus_kill_encourag";
     public static final String KEY_NET_JILI = "page_net_speed_encourag";
