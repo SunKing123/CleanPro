@@ -893,6 +893,73 @@
             android:screenOrientation="unspecified"
             android:theme="@style/shanyanDialogStyle" />
         <!--闪验集成配置==============结束============-->
+
+
+        <!--广告相关==============页面跟区分栈，方式吊起应用============-->
+        <activity
+            android:name="com.qq.e.ads.ADActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:taskAffinity="com.xiaoniu.clean.ad"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            tools:replace="android:configChanges" />
+        <activity
+            android:name="com.qq.e.ads.PortraitADActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:taskAffinity="com.xiaoniu.clean.ad"
+            tools:replace="android:configChanges"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            />
+
+        <activity
+            android:name="com.bytedance.sdk.openadsdk.activity.TTLandingPageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:taskAffinity="com.xiaoniu.clean.ad"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            tools:replace="android:configChanges" />
+        <activity
+            android:name="com.qq.e.ads.LandscapeADActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            tools:replace="android:configChanges"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad" />
+
+        <activity
+            android:name="com.ss.android.socialbase.appdownloader.view.DownloadTaskDeleteActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            tools:replace="android:configChanges"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+
+            android:taskAffinity="com.xiaoniu.clean.ad" />
+
+
+        <activity
+            android:name="com.bytedance.sdk.openadsdk.activity.TTVideoLandingPageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            tools:replace="android:configChanges"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad" />
+        <activity
+            android:name="com.bytedance.sdk.openadsdk.activity.TTPlayableLandingPageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            tools:replace="android:configChanges"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+
+            android:taskAffinity="com.xiaoniu.clean.ad" />
+
+        <activity
+            android:name="com.baidu.mobads.AppActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad" />
+        <!--广告相关==============页面跟区分栈，方式吊起应用结束============-->
     </application>
     <!-- 允许程序扩展或收缩状态栏 -->
     <permission
