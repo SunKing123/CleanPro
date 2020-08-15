@@ -296,6 +296,17 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/dimen_16sp" />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:onClick="wifiInfoClick"
+                    android:text="wifi状态插屏"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_16sp" />
+
             </LinearLayout>
 
             <TextView

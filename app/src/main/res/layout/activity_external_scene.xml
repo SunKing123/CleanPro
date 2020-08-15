@@ -6,53 +6,59 @@
     android:layout_gravity="bottom"
     android:background="@android:color/transparent">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/scene_bg"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/scene_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/dimen_12dp"
-            android:layout_marginEnd="@dimen/dimen_12dp"
-            android:src="@mipmap/scene_close" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/scene_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/dimen_30dp"
-            android:textColor="@color/color_262626"
-            android:textSize="@dimen/dimen_20sp"
-            tools:text="WiFi已链接" />
-
-        <!--使用ViewStub引入自己的布局即可  start-->
-        <ViewStub
-            android:id="@+id/wifi_stub"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout="@layout/view_scene_wifi" />
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/scene_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/dimen_12dp"
+                android:layout_marginEnd="@dimen/dimen_12dp"
+                android:src="@mipmap/scene_close" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/scene_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/dimen_30dp"
+                android:textColor="@color/color_262626"
+                android:textSize="@dimen/dimen_20sp"
+                tools:text="WiFi已链接" />
+
+            <!--使用ViewStub引入自己的布局即可  start-->
+            <ViewStub
+                android:id="@+id/wifi_stub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout="@layout/view_scene_wifi" />
 
 
-        <!--使用ViewStub引入自己的布局即可  end-->
+            <!--使用ViewStub引入自己的布局即可  end-->
 
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/scene_button"
-            style="@style/large_blue_button_style"
-            android:layout_marginStart="@dimen/dimen_53dp"
-            android:layout_marginTop="@dimen/dimen_20dp"
-            android:layout_marginEnd="@dimen/dimen_53dp"
-            android:layout_marginBottom="@dimen/dp_40"
-            tools:text="网络加速" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/scene_button"
+                style="@style/large_blue_button_style"
+                android:layout_marginStart="@dimen/dimen_53dp"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                android:layout_marginEnd="@dimen/dimen_53dp"
+                android:layout_marginBottom="@dimen/dp_20"
+                tools:text="网络加速" />
 
-    </LinearLayout>
+            <include layout="@layout/layout_desk_ad_contenter"></include>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </FrameLayout>

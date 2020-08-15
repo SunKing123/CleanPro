@@ -10,8 +10,12 @@ import android.view.WindowManager
 import com.xiaoniu.clean.deviceinfo.EasyNetworkMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
+import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.base.BaseActivity
+import com.xiaoniu.cleanking.midas.MidasRequesCenter
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.main.activity.NetWorkActivity
+import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.newclean.presenter.ExternalScenePresenter
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
@@ -21,7 +25,9 @@ import com.xiaoniu.cleanking.utils.update.MmkvUtil
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import com.xiaoniu.common.utils.StatisticsUtils
+import com.xiaoniu.unitionadbase.model.AdInfoModel
 import kotlinx.android.synthetic.main.activity_external_scene.*
+import kotlinx.android.synthetic.main.layout_desk_ad_contenter.*
 import kotlinx.android.synthetic.main.view_scene_wifi.*
 
 class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
@@ -54,6 +60,7 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
         StatisticsUtils.customTrackEvent("wifi_plug_screen_custom", "wifi插屏曝光", "wifi_plug_screen", "wifi_plug_screen")
         wifi_stub.inflate()
         showWifiScene()
+        initAd()
         scene_close.setOnClickListener {
             StatisticsUtils.trackClick("close_click", "wifi插屏关闭按钮点击", "wifi_plug_screen", "wifi_plug_screen")
             finish()
@@ -136,5 +143,21 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
     }
 
     override fun netError() {
+    }
+
+
+    /**
+     * 广告展示
+     */
+    fun initAd() {
+        if (isFinishing || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_DESK_WIFI_AD))
+            return
+//            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_DESK_WIFI_AD, PositionId.DRAW_ONE_CODE), object : SimpleViewCallBack(ad_container) {
+            override fun onAdClick(adInfoModel: AdInfoModel) {
+                super.onAdClick(adInfoModel)
+                this@ExternalSceneActivity.finish()
+            }
+        })
     }
 }
