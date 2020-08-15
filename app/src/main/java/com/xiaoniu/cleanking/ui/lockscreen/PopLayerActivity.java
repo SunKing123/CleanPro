@@ -41,7 +41,6 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         LogUtils.e("==========进入了PopLayerActivity");
-        StatisticsUtils.customTrackEvent("lock_screen_page_custom", "锁屏页面创建时", "", "lock_screen_page");
         StatisticsUtils.customTrackEvent("ad_request_sdk", "外部插屏发起请求", "", "external_advertising_page");
 
         setContentView(R.layout.activity_pop_layer);

@@ -2,25 +2,29 @@ package com.xiaoniu.cleanking.ui.deskpop.deviceinfo
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.alibaba.android.arouter.launcher.ARouter
-import com.jess.arms.base.SimpleFragment
-import com.jess.arms.di.component.AppComponent
 import com.jess.arms.utils.FileUtils
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod
 import com.xiaoniu.cleanking.R
+import com.xiaoniu.cleanking.base.SimpleFragment
 import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
-import java.lang.Exception
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -31,47 +35,62 @@ import java.math.RoundingMode
  */
 class ExternalPhoneStateFragment : SimpleFragment() {
 
+    companion object {
+        const val FROM_EXTERNAL = 0
+        const val FROM_HOME = 1
+        fun getInstance(from: Int): ExternalPhoneStateFragment {
+            val fragment = ExternalPhoneStateFragment()
+            val bundle = Bundle()
+            bundle.putInt("from", from)
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
+    //来源：0 外部插屏展示，1 首页展示
+    private var from: Int = 0
+
     //内存和存储阈值
     private var low: Array<Int> = arrayOf(0, 49)
 
     //电量状态阈值
     private var bLow: Array<Int> = arrayOf(0, 20)
-    private var bHigh: Array<Int> = arrayOf(20, 100)
+    private var bHigh: Array<Int> = arrayOf(20, 90)
 
     private var TEMPERATURE_VPT = 37
     private lateinit var easyMemoryMod: EasyMemoryMod
     private lateinit var easyBatteryMod: EasyBatteryMod
 
-    override fun setupFragmentComponent(appComponent: AppComponent) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initData(savedInstanceState)
+        EventBus.getDefault().register(this)
     }
 
-
-    override fun setData(data: Any?) {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(getLayoutId(), null)
     }
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_phone_memory_state_layout
     }
 
-    override fun initData(savedInstanceState: Bundle?) {
+    fun initData(savedInstanceState: Bundle?) {
+        try {
+            from = arguments!!.getInt("from", 0)
+        } catch (e: Exception) {
+        }
         easyMemoryMod = EasyMemoryMod(mContext)
         easyBatteryMod = EasyBatteryMod(mContext)
-
-        try {
-            initView()
-            initEvent()
-        } catch (e: Exception) {
-
-        }
     }
 
-    private fun initView() {
+    override fun initView() {
         initMemoryView()
         initStorageView()
         initCoolView()
         initBatteryView()
+        initEvent()
         StatisticsUtils.customTrackEvent(Points.ExternalDevice.MEET_CONDITION_CODE, Points.ExternalDevice.MEET_CONDITION_NAME, "", Points.ExternalDevice.PAGE)
         StatisticsUtils.customTrackEvent(Points.ExternalDevice.PAGE_EVENT_CODE, Points.ExternalDevice.PAGE_EVENT_NAME, "", Points.ExternalDevice.PAGE)
     }
@@ -80,6 +99,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 运行信息
      */
     private fun initMemoryView() {
+
         var total = easyMemoryMod.getTotalRAM().toFloat()
         var used = total - easyMemoryMod.getAvailableRAM().toFloat()
         total = FileUtils.getUnitGB(total).toFloat()
@@ -137,6 +157,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         updateBatteryImage(easyBatteryMod.getBatteryPercentage())
 
         var percent = easyBatteryMod.getBatteryPercentage();
+
+
         if (inTheRange(percent, bLow)) {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
         } else {
@@ -163,7 +185,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         var intent = Intent(mContext, PhoneAccessActivity::class.java)
         intent.putExtras(bundle)
         mContext.startActivity(intent)
-        mActivity.finish()
+        checkFromFinish()
     }
 
     /**
@@ -171,9 +193,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun goCleanStorage() {
         StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE, Points.ExternalDevice.CLICK_STORAGE_BTN_NAME, "", Points.ExternalDevice.PAGE)
-
         startActivity(NowCleanActivity::class.java)
-        mActivity.finish()
+        checkFromFinish()
     }
 
     /**
@@ -181,9 +202,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun goCool() {
         StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
-
         ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation()
-        mActivity.finish()
+        checkFromFinish()
     }
 
     /**
@@ -192,12 +212,12 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun goCleanBattery() {
         StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_NAME, "", Points.ExternalDevice.PAGE)
         startActivity(PhoneSuperPowerActivity::class.java)
-        mActivity.finish()
+        checkFromFinish()
     }
 
-    private fun startActivity(cls: Class<*>?) {
+    override fun startActivity(cls: Class<*>?) {
         var intent = Intent(mContext, cls)
-        mContext.startActivity(intent)
+        activity?.startActivity(intent)
     }
 
 
@@ -207,7 +227,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun updateMemoryOrStorageBtnBackGround(textView: AppCompatTextView, percent: Int) {
         if (inTheRange(percent, low)) {
             textView.setBackgroundResource(R.drawable.clear_btn_green_bg)
-        }else{
+        } else {
             textView.setBackgroundResource(R.drawable.clear_btn_red_bg)
         }
     }
@@ -218,7 +238,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun updateMemoryOrStorageImage(image: ImageView, percent: Int) {
         if (inTheRange(percent, low)) {
             image.setImageResource(R.drawable.icon_memory_percent_low)
-        }else {
+        } else {
             image.setImageResource(R.drawable.icon_memory_percent_high)
         }
     }
@@ -242,7 +262,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun updateBatteryImage(percent: Int) {
         if (inTheRange(percent, bLow)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_low)
-        }else if (inTheRange(percent, bHigh)) {
+        } else if (inTheRange(percent, bHigh)) {
             image_battery.setImageResource(R.drawable.icon_battery_percent_high)
         } else {
             image_battery.setImageResource(R.drawable.icon_battery_percent_max)
@@ -252,4 +272,35 @@ class ExternalPhoneStateFragment : SimpleFragment() {
     private fun inTheRange(percent: Int, range: Array<Int>): Boolean {
         return percent >= range[0] && percent <= range[1]
     }
+
+    fun checkFromFinish() {
+        if (from == FROM_EXTERNAL) {
+            activity?.finish()
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        EventBus.getDefault().unregister(this)
+    }
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************eventBus notify******************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+    //功能使用完成通知
+    @Subscribe
+    fun fromFunctionCompleteEvent(event: FunctionCompleteEvent?) {
+        if (event == null || event.title == null) {
+            return
+        }
+        when (event.title) {
+            "一键加速" -> checkFromFinish()
+            "超强省电" -> checkFromFinish()
+            "手机降温" -> checkFromFinish()
+            "建议清理" -> checkFromFinish()
+        }
+    }
+
 }

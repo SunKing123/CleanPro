@@ -33,6 +33,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
+import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateFragment;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
@@ -105,9 +106,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateFragment.FROM_HOME;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
@@ -154,6 +157,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     HomeInteractiveView imageInteractive;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.frame_deviceInfo)
+    FrameLayout frameDeviceInfo;
+
     private AlertDialog permissDlg;
     //判断重新启动
     boolean isFirstCreate = false;
@@ -198,9 +204,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         Map<String, Object> extParam = new HashMap<>();
         extParam.put("testing_status", UserHelper.init().isWxLogin() ? "yes" : "no");
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
-
+         addDeviceInfoFragment();
     }
 
+    private void addDeviceInfoFragment(){
+        FragmentManager manager=getChildFragmentManager();
+        manager.beginTransaction().add(R.id.frame_deviceInfo,ExternalPhoneStateFragment.Companion.getInstance(FROM_HOME)).commitAllowingStateLoss();
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -413,7 +423,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 //子控件完全不在可视范围内
             }
         });
-
     }
 
 

@@ -148,7 +148,18 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone" />
-<!--  android:background="@drawable/shadow"-->
+
+            <FrameLayout
+                android:id="@+id/frame_deviceInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shadow"
+                android:paddingTop="14dp"
+                android:paddingBottom="24dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                />
+
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"
                 android:layout_width="match_parent"

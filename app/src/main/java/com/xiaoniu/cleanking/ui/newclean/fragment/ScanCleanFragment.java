@@ -28,6 +28,7 @@ import com.xiaoniu.cleanking.ui.newclean.contact.ScanCleanContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanCleanPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -155,6 +156,7 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
         PreferenceUtil.saveCleanAllUsed(true);
         boolean isOpen = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_CLEAN_FINSH, PositionId.DRAW_THREE_CODE);
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
+        EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_suggest_clean)));
         if (getActivity() != null && this.isAdded()) {
             Bundle bundle = new Bundle();
             bundle.putString(ExtraConstant.TITLE, getResources().getString(R.string.tool_suggest_clean));
