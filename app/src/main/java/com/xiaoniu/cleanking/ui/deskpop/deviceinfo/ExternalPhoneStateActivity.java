@@ -1,15 +1,22 @@
 package com.xiaoniu.cleanking.ui.deskpop.deviceinfo;
 
 import android.os.Bundle;
+import android.widget.FrameLayout;
 
 import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.midas.MidasRequesCenter;
+import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
+import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
+import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.Points;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +32,8 @@ public class ExternalPhoneStateActivity extends BaseActivity {
 
     @BindView(R.id.scene_close)
     AppCompatImageView sceneClose;
+    @BindView(R.id.ad_container)
+    FrameLayout adContainer;
     private FragmentManager mManager = getSupportFragmentManager();
 
     @Override
@@ -73,6 +82,26 @@ public class ExternalPhoneStateActivity extends BaseActivity {
         super.onWindowFocusChanged(hasFocus);
         if(!hasFocus){
             finish();
+        }else{
+            initAd();
         }
+    }
+
+    /**
+     * 广告展示
+     */
+    public void initAd(){
+        if (isFinishing() || !AppHolder.getInstance().checkAdSwitch(PositionId.KEY_PAGE_DESK_DEVICE_STATE_AD))
+            return;
+//            StatisticsUtils.customADRequest("ad_request", "广告请求", "1", " ", " ", "all_ad_request", "acceleration_page", "acceleration_page");
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_PAGE_DESK_DEVICE_STATE_AD, PositionId.DRAW_ONE_CODE), new SimpleViewCallBack(adContainer){
+            @Override
+            public void onAdClick(AdInfoModel adInfoModel) {
+                super.onAdClick(adInfoModel);
+                ExternalPhoneStateActivity.this.finish();
+            }
+        });
+
+
     }
 }

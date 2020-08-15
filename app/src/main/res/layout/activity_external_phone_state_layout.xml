@@ -5,37 +5,46 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/scene_bg"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/scene_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/dimen_12dp"
-            android:layout_marginEnd="@dimen/dimen_12dp"
-            android:src="@mipmap/scene_close" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/scene_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/dimen_20dp"
-            android:text="当前手机状态"
-            android:textColor="@color/color_262626"
-            android:textSize="@dimen/dimen_20sp" />
-
-        <FrameLayout
-            android:id="@+id/frame_layout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/scene_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/dimen_12dp"
+                android:layout_marginEnd="@dimen/dimen_12dp"
+                android:src="@mipmap/scene_close" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/scene_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/dimen_20dp"
+                android:text="当前手机状态"
+                android:textColor="@color/color_262626"
+                android:textSize="@dimen/dimen_20sp" />
+
+            <FrameLayout
+                android:id="@+id/frame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <include layout="@layout/layout_desk_ad_contenter"></include>
+
+        </LinearLayout>
+
+
+    </ScrollView>
 
 </FrameLayout>
