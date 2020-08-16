@@ -1,24 +1,17 @@
 package com.xiaoniu.cleanking.ui.deskpop.deviceinfo
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
-import com.alibaba.android.arouter.launcher.ARouter
 import com.jess.arms.utils.FileUtils
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.SimpleFragment
-import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils
-import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
-import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
-import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
-import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.common.utils.Points
@@ -34,13 +27,13 @@ import java.math.RoundingMode
  * Created by xinxiaolong on 2020/7/24.
  * email：xinxiaolong123@foxmail.com
  */
-class ExternalPhoneStateFragment : SimpleFragment() {
+class DeviceInfoFragment : SimpleFragment() {
 
     companion object {
         const val FROM_EXTERNAL = 0
         const val FROM_HOME = 1
-        fun getInstance(from: Int): ExternalPhoneStateFragment {
-            val fragment = ExternalPhoneStateFragment()
+        fun getInstance(from: Int): DeviceInfoFragment {
+            val fragment = DeviceInfoFragment()
             val bundle = Bundle()
             bundle.putInt("from", from)
             fragment.arguments = bundle

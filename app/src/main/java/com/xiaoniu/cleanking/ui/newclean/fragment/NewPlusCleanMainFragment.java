@@ -33,7 +33,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
-import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateFragment;
+import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.DeviceInfoFragment;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
@@ -69,7 +69,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
-import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
 import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
@@ -110,7 +109,7 @@ import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateFragment.FROM_HOME;
+import static com.xiaoniu.cleanking.ui.deskpop.deviceinfo.DeviceInfoFragment.FROM_HOME;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
@@ -209,7 +208,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private void addDeviceInfoFragment(){
         FragmentManager manager=getChildFragmentManager();
-        manager.beginTransaction().add(R.id.frame_deviceInfo,ExternalPhoneStateFragment.Companion.getInstance(FROM_HOME)).commitAllowingStateLoss();
+        manager.beginTransaction().add(R.id.frame_deviceInfo, DeviceInfoFragment.Companion.getInstance(FROM_HOME)).commitAllowingStateLoss();
     }
 
     @Override

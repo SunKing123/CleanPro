@@ -11,7 +11,6 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopConfig;
 import com.xiaoniu.cleanking.ui.deskpop.base.DeskPopLogger;
-import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat;
 import com.xiaoniu.common.utils.Points;
@@ -24,7 +23,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 
-import static com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateFragment.FROM_EXTERNAL;
+import static com.xiaoniu.cleanking.ui.deskpop.deviceinfo.DeviceInfoFragment.FROM_EXTERNAL;
 
 /**
  * Created by xinxiaolong on 2020/7/25.
@@ -69,7 +68,7 @@ public class ExternalPhoneStateActivity extends BaseActivity {
 
     private void initFragment() {
         mManager.beginTransaction()
-                .add(R.id.frame_layout, ExternalPhoneStateFragment.Companion.getInstance(FROM_EXTERNAL))
+                .add(R.id.frame_layout, DeviceInfoFragment.Companion.getInstance(FROM_EXTERNAL))
                 .commitAllowingStateLoss();
     }
 
