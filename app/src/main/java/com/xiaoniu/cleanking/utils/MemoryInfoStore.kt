@@ -74,7 +74,7 @@ public class MemoryInfoStore {
         var easyMemoryMod=EasyMemoryMod(context)
         var falsePercent=getFalseUsedPercent(context)
         var total = easyMemoryMod.getTotalRAM().toFloat()
-        var used = (total*(usedMemoryPercent/100)).toFloat()
+        var used = (total*(falsePercent/100)).toFloat()
         return FileUtils.getUnitGB(used).toFloat()
     }
 

@@ -116,12 +116,11 @@ class DeviceInfoFragment : SimpleFragment() {
      */
     private fun initFalseCleanMemoryView(){
         //内存加速值，需要在真是的百分比上减去假的加速百分比，然后对一直用的内存进行相应计算显示，瞒天过海，骗过用户。
-        var falseTotal = MemoryInfoStore.getInstance().getTotalMemory(mContext)
+        var total = MemoryInfoStore.getInstance().getTotalMemory(mContext)
         var falseUsed =MemoryInfoStore.getInstance().getFalseUsedMemory(mContext)
         var falsePercent=MemoryInfoStore.getInstance().getFalseUsedPercent(mContext)
-        setMemoryViewData(falseTotal,falseUsed,falsePercent)
+        setMemoryViewData(total,falseUsed,falsePercent)
     }
-
 
     private fun setMemoryViewData(total:Float,used:Float,percent:Double){
         tv_memory_title.setText("运行总内存：" + total + " GB")
