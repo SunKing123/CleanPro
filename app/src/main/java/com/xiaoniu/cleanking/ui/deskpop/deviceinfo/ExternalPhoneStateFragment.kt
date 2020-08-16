@@ -178,8 +178,11 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     private fun goCleanMemory() {
 
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_MEMORY_BTN_CODE, Points.ExternalDevice.CLICK_MEMORY_BTN_NAME, "", Points.ExternalDevice.PAGE)
+        if(from==FROM_HOME){
 
+        }else{
+
+        }
         val bundle = Bundle()
         bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
         var intent = Intent(mContext, PhoneAccessActivity::class.java)
@@ -283,13 +286,16 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         super.onDetach()
         EventBus.getDefault().unregister(this)
     }
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************eventBus notify******************************************************************************
      *********************************************************************************************************************************************************
      */
 
-    //功能使用完成通知
+    /**
+     * 功能使用完毕通知
+     */
     @Subscribe
     fun fromFunctionCompleteEvent(event: FunctionCompleteEvent?) {
         if (event == null || event.title == null) {
