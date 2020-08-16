@@ -95,6 +95,17 @@ class DeviceInfoFragment : SimpleFragment() {
      * 运行信息
      */
     private fun initMemoryView() {
+          if(from==FROM_HOME&&!PreferenceUtil.getCleanTime()){
+              initFalseCleanMemoryView()
+          }else{
+              initTrueMemoryView()
+          }
+    }
+
+    /**
+     * 加载真是的内存信息
+     */
+    private fun initTrueMemoryView(){
         var total = easyMemoryMod.getTotalRAM().toFloat()
         var used = total - easyMemoryMod.getAvailableRAM().toFloat()
         total = FileUtils.getUnitGB(total).toFloat()
@@ -104,7 +115,10 @@ class DeviceInfoFragment : SimpleFragment() {
         setMemoryViewData(total,used,usedMemoryPercent)
     }
 
-    private fun initAfterCleanMemoryView(){
+    /**
+     * 加载假的内存信息
+     */
+    private fun initFalseCleanMemoryView(){
         //内存加速值，需要在真是的百分比上减去假的加速百分比，然后对一直用的内存进行相应计算显示，瞒天过海，骗过用户。
         var num = PreferenceUtil.getOneKeySpeedNum()
         var total = easyMemoryMod.getTotalRAM().toFloat()
@@ -331,7 +345,7 @@ class DeviceInfoFragment : SimpleFragment() {
             return
         }
         when (event.title) {
-            "一键加速" -> initAfterCleanMemoryView()
+            "一键加速" -> initFalseCleanMemoryView()
             "超强省电" -> initBatteryView()
             "手机降温" -> initBatteryView()
             "建议清理" -> initBatteryView()
