@@ -178,9 +178,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 一键加速
      */
     private fun goCleanMemory() {
-        if(from==FROM_HOME){
+        if (isDestroy()) return
+        if (from == FROM_HOME) {
             StartActivityUtils.goCleanMemory(activity!!)
-        }else{
+        } else {
             StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_MEMORY_BTN_CODE, Points.ExternalDevice.CLICK_MEMORY_BTN_NAME, "", Points.ExternalDevice.PAGE)
             StartActivityUtils.forceGoCleanMemory(activity!!)
             finish()
@@ -191,9 +192,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 垃圾清理
      */
     private fun goCleanStorage() {
-        if(from==FROM_HOME){
+        if (isDestroy()) return
+        if (from == FROM_HOME) {
             StartActivityUtils.goCleanStorage(activity!!)
-        }else{
+        } else {
             StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE, Points.ExternalDevice.CLICK_STORAGE_BTN_NAME, "", Points.ExternalDevice.PAGE)
             StartActivityUtils.forceGoCleanStorage(activity!!)
             finish()
@@ -204,9 +206,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 手机降温
      */
     private fun goCool() {
-        if(from==FROM_HOME){
+        if (isDestroy()) return
+        if (from == FROM_HOME) {
             StartActivityUtils.goPhoneCool(activity!!)
-        }else{
+        } else {
             StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
             StartActivityUtils.forceGoPhoneCool()
             finish()
@@ -217,9 +220,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 电池优化
      */
     private fun goCleanBattery() {
-        if(from==FROM_HOME){
+        if (isDestroy()) return
+        if (from == FROM_HOME) {
             StartActivityUtils.goCleanBattery(activity!!)
-        }else{
+        } else {
             StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
             StartActivityUtils.forceGoCleanBattery(activity!!)
             finish()
@@ -282,6 +286,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         activity?.finish()
     }
 
+    fun isDestroy(): Boolean {
+        return activity == null || isDetached || tv_memory_title == null
+    }
+
     override fun onDetach() {
         super.onDetach()
         EventBus.getDefault().unregister(this)
@@ -298,7 +306,7 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      */
     @Subscribe
     fun fromFunctionCompleteEvent(event: FunctionCompleteEvent?) {
-        if (event == null || event.title == null) {
+        if (event == null || event.title == null || isDestroy()) {
             return
         }
         when (event.title) {
