@@ -13,6 +13,7 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.SimpleFragment
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
+import com.xiaoniu.cleanking.utils.MemoryInfoStore
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.Points
@@ -55,8 +56,6 @@ class DeviceInfoFragment : SimpleFragment() {
     private var TEMPERATURE_VPT = 37
     private lateinit var easyMemoryMod: EasyMemoryMod
     private lateinit var easyBatteryMod: EasyBatteryMod
-
-    private var usedMemoryPercent:Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,13 +105,10 @@ class DeviceInfoFragment : SimpleFragment() {
      * 加载真是的内存信息
      */
     private fun initTrueMemoryView(){
-        var total = easyMemoryMod.getTotalRAM().toFloat()
-        var used = total - easyMemoryMod.getAvailableRAM().toFloat()
-        total = FileUtils.getUnitGB(total).toFloat()
-        used = FileUtils.getUnitGB(used).toFloat()
-        usedMemoryPercent = (used.toDouble() / total.toDouble()) * 100
-
-        setMemoryViewData(total,used,usedMemoryPercent)
+        var total = MemoryInfoStore.getInstance().getTotalMemory(mContext)
+        var used =MemoryInfoStore.getInstance().getUsedMemory(mContext)
+        var percent=MemoryInfoStore.getInstance().getUsedMemoryPercent(mContext)
+        setMemoryViewData(total,used,percent)
     }
 
     /**
@@ -120,22 +116,10 @@ class DeviceInfoFragment : SimpleFragment() {
      */
     private fun initFalseCleanMemoryView(){
         //内存加速值，需要在真是的百分比上减去假的加速百分比，然后对一直用的内存进行相应计算显示，瞒天过海，骗过用户。
-        var num = PreferenceUtil.getOneKeySpeedNum()
-        var total = easyMemoryMod.getTotalRAM().toFloat()
-        var used = total - easyMemoryMod.getAvailableRAM().toFloat()
-
-        if(usedMemoryPercent<=0){
-            usedMemoryPercent = (used.toDouble() / total.toDouble()) * 100
-        }
-
-        usedMemoryPercent=format(usedMemoryPercent)!!.toDouble()
-        usedMemoryPercent=usedMemoryPercent-num.toDouble()
-
-        used=(total*(usedMemoryPercent/100)).toFloat()
-        total = FileUtils.getUnitGB(total).toFloat()
-        used = FileUtils.getUnitGB(used).toFloat()
-
-        setMemoryViewData(total,used,usedMemoryPercent)
+        var falseTotal = MemoryInfoStore.getInstance().getTotalMemory(mContext)
+        var falseUsed =MemoryInfoStore.getInstance().getFalseUsedMemory(mContext)
+        var falsePercent=MemoryInfoStore.getInstance().getFalseUsedPercent(mContext)
+        setMemoryViewData(falseTotal,falseUsed,falsePercent)
     }
 
 
@@ -348,7 +332,7 @@ class DeviceInfoFragment : SimpleFragment() {
             "一键加速" -> initFalseCleanMemoryView()
             "超强省电" -> initBatteryView()
             "手机降温" -> initBatteryView()
-            "建议清理" -> initBatteryView()
+            "建议清理" -> initStorageView()
         }
     }
 
