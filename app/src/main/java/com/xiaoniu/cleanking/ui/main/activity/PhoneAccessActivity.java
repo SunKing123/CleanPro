@@ -268,9 +268,6 @@ public class PhoneAccessActivity extends BaseActivity<PhoneAccessPresenter> {
         event.setAppendValue(2);
         EventBus.getDefault().post(event);
 
-
-        EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_one_key_speed)));
-
         LocalPushUtils.getInstance().updateLastUsedFunctionTime(SpCacheConfig.KEY_FUNCTION_SPEED_UP);
         //设置锁屏数据
         LockScreenBtnInfo btnInfo = new LockScreenBtnInfo(1);

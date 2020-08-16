@@ -14,6 +14,7 @@ import com.xiaoniu.cleanking.base.SimpleFragment
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
 import com.xiaoniu.cleanking.utils.NumberUtils
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.fragment_phone_memory_state_layout.*
@@ -98,14 +99,38 @@ class DeviceInfoFragment : SimpleFragment() {
         var used = total - easyMemoryMod.getAvailableRAM().toFloat()
         total = FileUtils.getUnitGB(total).toFloat()
         used = FileUtils.getUnitGB(used).toFloat()
-
         var percent = (used.toDouble() / total.toDouble()) * 100
+
+        setMemoryViewData(total,used,percent)
+    }
+
+    private fun setMemoryViewData(total:Float,used:Float,percent:Double){
         tv_memory_title.setText("运行总内存：" + total + " GB")
         tv_memory_content.setText("已用运行内存：" + used + " GB")
         tv_memory_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
         updateMemoryOrStorageBtnBackGround(btn_clean_memory, percent.toInt())
     }
+
+
+    private fun initAfterCleanMemoryView(){
+        //内存加速值，需要在真是的百分比上减去，瞒天过海，骗过用户。
+        var num = PreferenceUtil.getOneKeySpeedNum()
+
+        var total = easyMemoryMod.getTotalRAM().toFloat()
+        var used = total - easyMemoryMod.getAvailableRAM().toFloat()
+
+        var percent = (used.toDouble() / total.toDouble()) * 100
+        percent=format(percent)!!.toDouble()
+        percent=percent-num.toDouble()
+        used=(total*(percent/100)).toFloat()
+
+        total = FileUtils.getUnitGB(total).toFloat()
+        used = FileUtils.getUnitGB(used).toFloat()
+
+        setMemoryViewData(total,used,percent)
+    }
+
 
     fun format(value: Double): String? {
         var bd = BigDecimal(value)
@@ -129,6 +154,7 @@ class DeviceInfoFragment : SimpleFragment() {
         updateMemoryOrStorageImage(image_storage, percent.toInt())
         updateMemoryOrStorageBtnBackGround(btn_clean_storage, percent.toInt())
     }
+
 
     /**
      * 温度信息
@@ -303,7 +329,7 @@ class DeviceInfoFragment : SimpleFragment() {
             return
         }
         when (event.title) {
-            "一键加速" -> initBatteryView()
+            "一键加速" -> initAfterCleanMemoryView()
             "超强省电" -> initBatteryView()
             "手机降温" -> initBatteryView()
             "建议清理" -> initBatteryView()

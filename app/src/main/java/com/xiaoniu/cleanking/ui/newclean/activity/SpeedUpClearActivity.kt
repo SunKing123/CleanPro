@@ -14,8 +14,8 @@ import com.xiaoniu.cleanking.app.AppLifecyclesImpl
 import com.xiaoniu.cleanking.base.ScanDataHolder
 import com.xiaoniu.cleanking.bean.JunkResultWrapper
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
 import com.xiaoniu.cleanking.utils.ExtraConstant
-import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.base.BaseActivity
 import com.xiaoniu.common.utils.AppUtils
@@ -23,6 +23,7 @@ import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatisticsUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.activity_speedup_clear.*
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 class SpeedUpClearActivity : BaseActivity() {
@@ -137,6 +138,8 @@ class SpeedUpClearActivity : BaseActivity() {
         mIntent.putExtra(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed))
         mIntent.putExtra(ExtraConstant.NUM, mSpeedUpNum)
         PreferenceUtil.saveOneKeySpeedNum(mSpeedUpNum)
+        EventBus.getDefault().post(FunctionCompleteEvent(getString(R.string.tool_one_key_speed)))
+
         // mIntent.putExtra(ExtraConstant.UNIT, unit)
         //  if (mContext.getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
         //   mIntent.putExtra(ExtraConstant.ACTION_NAME, mContext.getIntent().getStringExtra(ExtraConstant.ACTION_NAME))
