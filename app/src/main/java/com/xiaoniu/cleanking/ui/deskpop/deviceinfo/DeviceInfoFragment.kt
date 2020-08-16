@@ -56,6 +56,7 @@ class DeviceInfoFragment : SimpleFragment() {
     private lateinit var easyMemoryMod: EasyMemoryMod
     private lateinit var easyBatteryMod: EasyBatteryMod
 
+    private var usedMemoryPercent:Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,15 +95,35 @@ class DeviceInfoFragment : SimpleFragment() {
      * 运行信息
      */
     private fun initMemoryView() {
-
         var total = easyMemoryMod.getTotalRAM().toFloat()
         var used = total - easyMemoryMod.getAvailableRAM().toFloat()
         total = FileUtils.getUnitGB(total).toFloat()
         used = FileUtils.getUnitGB(used).toFloat()
-        var percent = (used.toDouble() / total.toDouble()) * 100
+        usedMemoryPercent = (used.toDouble() / total.toDouble()) * 100
 
-        setMemoryViewData(total,used,percent)
+        setMemoryViewData(total,used,usedMemoryPercent)
     }
+
+    private fun initAfterCleanMemoryView(){
+        //内存加速值，需要在真是的百分比上减去假的加速百分比，然后对一直用的内存进行相应计算显示，瞒天过海，骗过用户。
+        var num = PreferenceUtil.getOneKeySpeedNum()
+        var total = easyMemoryMod.getTotalRAM().toFloat()
+        var used = total - easyMemoryMod.getAvailableRAM().toFloat()
+
+        if(usedMemoryPercent<=0){
+            usedMemoryPercent = (used.toDouble() / total.toDouble()) * 100
+        }
+
+        usedMemoryPercent=format(usedMemoryPercent)!!.toDouble()
+        usedMemoryPercent=usedMemoryPercent-num.toDouble()
+
+        used=(total*(usedMemoryPercent/100)).toFloat()
+        total = FileUtils.getUnitGB(total).toFloat()
+        used = FileUtils.getUnitGB(used).toFloat()
+
+        setMemoryViewData(total,used,usedMemoryPercent)
+    }
+
 
     private fun setMemoryViewData(total:Float,used:Float,percent:Double){
         tv_memory_title.setText("运行总内存：" + total + " GB")
@@ -110,25 +131,6 @@ class DeviceInfoFragment : SimpleFragment() {
         tv_memory_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_memory, percent.toInt())
         updateMemoryOrStorageBtnBackGround(btn_clean_memory, percent.toInt())
-    }
-
-
-    private fun initAfterCleanMemoryView(){
-        //内存加速值，需要在真是的百分比上减去，瞒天过海，骗过用户。
-        var num = PreferenceUtil.getOneKeySpeedNum()
-
-        var total = easyMemoryMod.getTotalRAM().toFloat()
-        var used = total - easyMemoryMod.getAvailableRAM().toFloat()
-
-        var percent = (used.toDouble() / total.toDouble()) * 100
-        percent=format(percent)!!.toDouble()
-        percent=percent-num.toDouble()
-        used=(total*(percent/100)).toFloat()
-
-        total = FileUtils.getUnitGB(total).toFloat()
-        used = FileUtils.getUnitGB(used).toFloat()
-
-        setMemoryViewData(total,used,percent)
     }
 
 
