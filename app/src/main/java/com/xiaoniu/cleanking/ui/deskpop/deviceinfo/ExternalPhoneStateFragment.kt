@@ -14,6 +14,7 @@ import com.xiaoniu.clean.deviceinfo.EasyMemoryMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.SimpleFragment
 import com.xiaoniu.cleanking.constant.RouteConstants
+import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
@@ -177,52 +178,53 @@ class ExternalPhoneStateFragment : SimpleFragment() {
      * 一键加速
      */
     private fun goCleanMemory() {
-
         if(from==FROM_HOME){
-
+            StartActivityUtils.goCleanMemory(activity!!)
         }else{
-
+            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_MEMORY_BTN_CODE, Points.ExternalDevice.CLICK_MEMORY_BTN_NAME, "", Points.ExternalDevice.PAGE)
+            StartActivityUtils.forceGoCleanMemory(activity!!)
+            finish()
         }
-        val bundle = Bundle()
-        bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed))
-        var intent = Intent(mContext, PhoneAccessActivity::class.java)
-        intent.putExtras(bundle)
-        mContext.startActivity(intent)
-        checkFromFinish()
     }
 
     /**
      * 垃圾清理
      */
     private fun goCleanStorage() {
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE, Points.ExternalDevice.CLICK_STORAGE_BTN_NAME, "", Points.ExternalDevice.PAGE)
-        startActivity(NowCleanActivity::class.java)
-        checkFromFinish()
+        if(from==FROM_HOME){
+            StartActivityUtils.goCleanStorage(activity!!)
+        }else{
+            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE, Points.ExternalDevice.CLICK_STORAGE_BTN_NAME, "", Points.ExternalDevice.PAGE)
+            StartActivityUtils.forceGoCleanStorage(activity!!)
+            finish()
+        }
     }
 
     /**
      * 手机降温
      */
     private fun goCool() {
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
-        ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation()
-        checkFromFinish()
+        if(from==FROM_HOME){
+            StartActivityUtils.goPhoneCool(activity!!)
+        }else{
+            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
+            StartActivityUtils.forceGoPhoneCool()
+            finish()
+        }
     }
 
     /**
      * 电池优化
      */
     private fun goCleanBattery() {
-        StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_QUANTITY_BTN_NAME, "", Points.ExternalDevice.PAGE)
-        startActivity(PhoneSuperPowerActivity::class.java)
-        checkFromFinish()
+        if(from==FROM_HOME){
+            StartActivityUtils.goCleanBattery(activity!!)
+        }else{
+            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
+            StartActivityUtils.forceGoCleanBattery(activity!!)
+            finish()
+        }
     }
-
-    override fun startActivity(cls: Class<*>?) {
-        var intent = Intent(mContext, cls)
-        activity?.startActivity(intent)
-    }
-
 
     /**
      * 更新按钮背景
@@ -276,10 +278,8 @@ class ExternalPhoneStateFragment : SimpleFragment() {
         return percent >= range[0] && percent <= range[1]
     }
 
-    fun checkFromFinish() {
-        if (from == FROM_EXTERNAL) {
-            activity?.finish()
-        }
+    fun finish() {
+        activity?.finish()
     }
 
     override fun onDetach() {
@@ -302,10 +302,10 @@ class ExternalPhoneStateFragment : SimpleFragment() {
             return
         }
         when (event.title) {
-            "一键加速" -> checkFromFinish()
-            "超强省电" -> checkFromFinish()
-            "手机降温" -> checkFromFinish()
-            "建议清理" -> checkFromFinish()
+            "一键加速" -> initBatteryView()
+            "超强省电" -> initBatteryView()
+            "手机降温" -> initBatteryView()
+            "建议清理" -> initBatteryView()
         }
     }
 

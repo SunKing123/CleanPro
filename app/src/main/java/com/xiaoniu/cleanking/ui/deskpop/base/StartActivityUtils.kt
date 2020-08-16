@@ -13,8 +13,6 @@ import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil.Companion.gotoFinish
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
-import com.xiaoniu.common.utils.Points
-import com.xiaoniu.common.utils.StatisticsUtils
 
 /**
  * Created by xinxiaolong on 2020/8/16.
@@ -23,31 +21,21 @@ import com.xiaoniu.common.utils.StatisticsUtils
 class StartActivityUtils {
 
     companion object {
+
         /*
          *********************************************************************************************************************************************************
          ************************************************************start oneKey acc************************************************************************
          *********************************************************************************************************************************************************
         */
-        /**
-         * 首页跳转一键加速
-         */
-        fun homeGoCleanMemory(context: Context) {
+        fun goCleanMemory(context: Context) {
             if (PreferenceUtil.getCleanTime()) {
-                goCleanMemory(context)
+                forceGoCleanMemory(context)
             } else {
                 goFinishActivity(context, context.getString(R.string.tool_one_key_speed))
             }
         }
 
-        /**
-         * 外部插屏跳转一键加速
-         */
-        fun externalGoCleanMemory(context: Context) {
-            goCleanMemory(context)
-        }
-
-
-        private fun goCleanMemory(context: Context) {
+        fun forceGoCleanMemory(context: Context) {
             val bundle = Bundle()
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, context.getString(R.string.tool_one_key_speed))
             var intent = Intent(context, PhoneAccessActivity::class.java)
@@ -64,22 +52,15 @@ class StartActivityUtils {
         /**
          * 首页跳转一键清理
          */
-        fun homeGoCleanStorage(context: Context) {
+        fun goCleanStorage(context: Context) {
             if (PreferenceUtil.getNowCleanTime()) {
-                goCleanStorage(context)
+                forceGoCleanStorage(context)
             } else {
                 goFinishActivity(context, context.getString(R.string.tool_suggest_clean))
             }
         }
 
-        /**
-         * 外部插屏跳转一键清理
-         */
-        fun externalGoCleanStorage(context: Context) {
-            goCleanMemory(context)
-        }
-
-        private fun goCleanStorage(context: Context) {
+        fun forceGoCleanStorage(context: Context) {
             startActivity(context, NowCleanActivity::class.java)
         }
 
@@ -88,29 +69,18 @@ class StartActivityUtils {
        ************************************************************start phone cool***********************************************************************
        *********************************************************************************************************************************************************
        */
-        /**
-         * 首页跳转手机降温
-         */
-        fun homeGoPhoneCool(context: Context) {
+        fun goPhoneCool(context: Context) {
             if (PreferenceUtil.getCoolingCleanTime()) {
-                goPhoneCool()
+                forceGoPhoneCool()
             } else {
                 goFinishActivity(context, context.getString(R.string.tool_phone_temperature_low))
             }
         }
 
         /**
-         * 外部插屏跳转手机降温
-         */
-        fun externalGoPhoneCool(context: Context) {
-            goCleanMemory(context)
-        }
-
-
-        /**
          * 手机降温
          */
-        private fun goPhoneCool() {
+        fun forceGoPhoneCool() {
             ARouter.getInstance().build(RouteConstants.PHONE_COOLING_ACTIVITY).navigation()
         }
 
@@ -120,36 +90,26 @@ class StartActivityUtils {
        ************************************************************start clean battery**************************************************************************
        *********************************************************************************************************************************************************
        */
-        /**
-         * 首页跳转电池优化
-         */
-        fun homeGoCleanBattery(context: Context) {
+        fun goCleanBattery(context: Context) {
             if (PreferenceUtil.getPowerCleanTime()) {
-                goCleanBattery(context)
+                forceGoCleanBattery(context)
             } else {
                 goFinishActivity(context, context.getString(R.string.tool_super_power_saving))
             }
         }
 
         /**
-         * 外部插屏跳转电池优化
-         */
-        fun externalGoCleanBattery(context: Context) {
-            goCleanBattery(context)
-        }
-
-        /**
          * 电池优化
          */
-        private fun goCleanBattery(context: Context) {
+        fun forceGoCleanBattery(context: Context) {
             startActivity(context, PhoneSuperPowerActivity::class.java)
         }
 
 
         /*
         *********************************************************************************************************************************************************
-       ************************************************************start tool fun********************************************************************************
-       *********************************************************************************************************************************************************
+       ************************************************************start activity tool fun***********************************************************************
+       **********************************************************************************************************************************************************
        */
 
         private fun startActivity(context: Context, cls: Class<*>?) {
