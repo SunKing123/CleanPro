@@ -23,5 +23,5 @@
         android:layout_centerHorizontal="true"
         android:scaleType="fitCenter"
         android:src="@mipmap/close_btn"
-        android:visibility="visible" />
+        android:visibility="gone" />
 </RelativeLayout>
