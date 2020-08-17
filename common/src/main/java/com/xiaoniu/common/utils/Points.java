@@ -166,8 +166,8 @@ public interface Points {
      */
     interface CleanFinish {
 
-        String RECOMMEND_CLICK_NAME = "recommendation_function_click";
-        String RECOMMEND_CLICK_CODE = "推荐功能点击";
+        String RECOMMEND_CLICK_NAME = "推荐功能点击";
+        String RECOMMEND_CLICK_CODE = "recommendation_function_click";
 
         String VIDEO_PAGE="success_page_gold_coin_pop_up_window_incentive_video_page";
         String VIDEO_CLOSE_EVENT_CODE="incentive_video_ad_click";
