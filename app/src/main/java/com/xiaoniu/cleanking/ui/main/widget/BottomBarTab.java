@@ -86,17 +86,13 @@ public class BottomBarTab extends FrameLayout {
                 iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(0).getClickIconUrl());
                 iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(3).getClickIconUrl());
             } else {
-                LogUtils.e("===================================Tab======================================================");
                 for (int i = 0; i < AppHolder.getInstance().getIconsEntityList().getData().size(); i++) {
                     iconsNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
                     iconsSelectNet.add(AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
-                    LogUtils.e("=================Tab===== icon= "+AppHolder.getInstance().getIconsEntityList().getData().get(i).getIconImgUrl());
-                    LogUtils.e("=================Tab===== clickIcon= "+AppHolder.getInstance().getIconsEntityList().getData().get(i).getClickIconUrl());
                 }
             }
         }
 
-        LogUtils.e("===================================Tab title="+title);
 
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
