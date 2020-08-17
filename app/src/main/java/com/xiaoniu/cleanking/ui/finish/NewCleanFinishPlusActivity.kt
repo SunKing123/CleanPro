@@ -25,6 +25,7 @@ import com.xiaoniu.cleanking.ui.main.activity.MainActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
@@ -446,11 +447,14 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
 
     private fun loadPopView() {
         val unused = newIntent.getBooleanExtra("unused", false)
-        CleanFinishLogger.log("============ 加载PopView: nused=" + unused + "======================")
-        //真正使用过功能才请求弹框
-        if (!unused) {
-            //插屏广告滞后请求，处理友盟bug
-            mPresenter.loadPopView()
+        val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
+        config?.let {
+            CleanFinishLogger.log("isOpen=" + it.isOpen)
+            if (it.isOpen) {
+                mPresenter.loadInsideScreenDialog()
+            } else if(!unused){
+                mPresenter.loadGoldCoinDialog()
+            }
         }
     }
 

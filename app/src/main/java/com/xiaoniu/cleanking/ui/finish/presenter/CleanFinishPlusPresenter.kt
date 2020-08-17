@@ -103,26 +103,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         }
     }
 
-    /**
-     * 加载弹框
-     */
-    override fun loadPopView() {
-        if (isDestroy()) {
-            return
-        }
-        val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
-        config?.let {
-            CleanFinishLogger.log("isOpen=" + it.isOpen)
-            if (it.isOpen) {
-                loadInsideScreenDialog()
-            } else {
-                loadGoldCoinDialog()
-            }
-        }
-    }
-
     //显示内部插屏广告
-    private fun loadInsideScreenDialog() {
+    override fun loadInsideScreenDialog() {
         if (isDestroy()) {
             return
         }
@@ -132,7 +114,10 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     }
 
-    private fun loadGoldCoinDialog() {
+    override fun loadGoldCoinDialog() {
+        if (isDestroy()) {
+            return
+        }
         getGoldCoin()
     }
 
