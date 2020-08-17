@@ -82,7 +82,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onAdLoaded(AdInfoModel adInfoModel) {
                 full_screen_insert_ad_header_layout.setVisibility(View.VISIBLE);
-                adClose.setVisibility(View.VISIBLE);
+//                adClose.setVisibility(View.VISIBLE);
                 super.onAdLoaded(adInfoModel);
             }
 
