@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.airbnb.lottie.LottieAnimationView;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
@@ -48,7 +49,7 @@ public class LuckBubbleView extends LinearLayout {
     private void initView(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.rubble);
         loact = typedArray.getInt(R.styleable.rubble_location, 1);
-        isAniming = typedArray.getBoolean(R.styleable.rubble_isAniming,false);
+        isAniming = typedArray.getBoolean(R.styleable.rubble_isAniming, false);
         typ_RE = Typeface.createFromAsset(context.getAssets(), "fonts/DIN-Bold.otf");
 
         activity = (Activity) context;
@@ -92,7 +93,9 @@ public class LuckBubbleView extends LinearLayout {
         setVisibility(GONE);
     }
 
-   /* *//**
+    /* */
+
+    /**
      * 星星动画
      *//*
     private void setAnim(ImageView ivBallAnim) {
@@ -107,7 +110,6 @@ public class LuckBubbleView extends LinearLayout {
         }
         ballAnim.start();
     }*/
-
     public void setIBullListener(IBullClickListener clickListener) {
         this.iBullClickListener = clickListener;
     }
@@ -139,7 +141,9 @@ public class LuckBubbleView extends LinearLayout {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                iBullClickListener.clickBull(listBean, loact);
+                if (null != iBullClickListener) {
+                    iBullClickListener.clickBull(listBean, loact);
+                }
                 if (loact == 1) {
                     StatisticsUtils.trackClick("upper_left_gold_coin_click", "左上金币点击", "home_page", "home_page");
                 } else if (loact == 2) {
@@ -167,7 +171,7 @@ public class LuckBubbleView extends LinearLayout {
     @Override
     public void onVisibilityChanged(View view, int i) {
         super.onVisibilityChanged(view, i);
-        if(isAniming){
+        if (isAniming) {
             if (i == VISIBLE) {
                 showAnim();
             } else {
