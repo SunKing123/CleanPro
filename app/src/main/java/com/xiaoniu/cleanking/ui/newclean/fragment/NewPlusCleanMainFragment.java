@@ -33,7 +33,9 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
+import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.DeviceInfoFragment;
+import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.HomeDeviceInfoFragment;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
@@ -109,7 +111,6 @@ import androidx.fragment.app.FragmentManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.xiaoniu.cleanking.ui.deskpop.deviceinfo.DeviceInfoFragment.FROM_HOME;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
 import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
 
@@ -204,11 +205,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         extParam.put("testing_status", UserHelper.init().isWxLogin() ? "yes" : "no");
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
          addDeviceInfoFragment();
+
+        StartActivityUtils.Companion.createAccShortcut(getActivity());
     }
 
     private void addDeviceInfoFragment(){
         FragmentManager manager=getChildFragmentManager();
-        manager.beginTransaction().add(R.id.frame_deviceInfo, DeviceInfoFragment.Companion.getInstance(FROM_HOME)).commitAllowingStateLoss();
+        manager.beginTransaction().add(R.id.frame_deviceInfo, HomeDeviceInfoFragment.Companion.getInstance()).commitAllowingStateLoss();
     }
 
     @Override

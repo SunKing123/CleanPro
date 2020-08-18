@@ -29,11 +29,11 @@ import java.math.RoundingMode
  * Created by xinxiaolong on 2020/7/24.
  * email：xinxiaolong123@foxmail.com
  */
-class DeviceInfoFragment : SimpleFragment() {
+class HomeDeviceInfoFragment : SimpleFragment() {
 
     companion object {
-        fun getInstance(): DeviceInfoFragment {
-            val fragment = DeviceInfoFragment()
+        fun getInstance(): HomeDeviceInfoFragment {
+            val fragment = HomeDeviceInfoFragment()
             return fragment
         }
     }
@@ -82,7 +82,6 @@ class DeviceInfoFragment : SimpleFragment() {
      */
     private fun initMemoryView() {
         initTrueMemoryView()
-
     }
 
     /**
@@ -93,6 +92,17 @@ class DeviceInfoFragment : SimpleFragment() {
         var used =MemoryInfoStore.getInstance().getUsedMemory(mContext)
         var percent=MemoryInfoStore.getInstance().getUsedMemoryPercent(mContext)
         setMemoryViewData(total,used,percent)
+    }
+
+    /**
+     * 加载假的内存信息
+     */
+    private fun initFalseCleanMemoryView(){
+        //内存加速值，需要在真是的百分比上减去假的加速百分比，然后对一直用的内存进行相应计算显示，瞒天过海，骗过用户。
+        var total = MemoryInfoStore.getInstance().getTotalMemory(mContext)
+        var falseUsed =MemoryInfoStore.getInstance().getFalseUsedMemory(mContext)
+        var falsePercent=MemoryInfoStore.getInstance().getFalseUsedPercent(mContext)
+        setMemoryViewData(total,falseUsed,falsePercent)
     }
 
     private fun setMemoryViewData(total:Float,used:Float,percent:Double){
@@ -169,9 +179,7 @@ class DeviceInfoFragment : SimpleFragment() {
      */
     private fun goCleanMemory() {
         if (isDestroy()) return
-            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_MEMORY_BTN_CODE, Points.ExternalDevice.CLICK_MEMORY_BTN_NAME, "", Points.ExternalDevice.PAGE)
-            StartActivityUtils.forceGoCleanMemory(activity!!)
-            finish()
+         StartActivityUtils.goCleanMemory(activity!!)
     }
 
     /**
@@ -179,9 +187,7 @@ class DeviceInfoFragment : SimpleFragment() {
      */
     private fun goCleanStorage() {
         if (isDestroy()) return
-            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_STORAGE_BTN_CODE, Points.ExternalDevice.CLICK_STORAGE_BTN_NAME, "", Points.ExternalDevice.PAGE)
-            StartActivityUtils.forceGoCleanStorage(activity!!)
-            finish()
+        StartActivityUtils.goCleanStorage(activity!!)
     }
 
     /**
@@ -189,9 +195,8 @@ class DeviceInfoFragment : SimpleFragment() {
      */
     private fun goCool() {
         if (isDestroy()) return
-            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
-            StartActivityUtils.forceGoPhoneCool()
-            finish()
+        StartActivityUtils.goPhoneCool(activity!!)
+
     }
 
     /**
@@ -199,9 +204,8 @@ class DeviceInfoFragment : SimpleFragment() {
      */
     private fun goCleanBattery() {
         if (isDestroy()) return
-            StatisticsUtils.trackClick(Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_CODE, Points.ExternalDevice.CLICK_BATTERY_TEMPERATURE_BTN_NAME, "", Points.ExternalDevice.PAGE)
-            StartActivityUtils.forceGoCleanBattery(activity!!)
-            finish()
+        StartActivityUtils.goCleanBattery(activity!!)
+
     }
 
     /**
@@ -266,5 +270,29 @@ class DeviceInfoFragment : SimpleFragment() {
 
     override fun onDetach() {
         super.onDetach()
+        EventBus.getDefault().unregister(this)
     }
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************eventBus notify******************************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+    /**
+     * 功能使用完毕通知
+     */
+    @Subscribe
+    fun fromFunctionCompleteEvent(event: FunctionCompleteEvent?) {
+        if (event == null || event.title == null || isDestroy()) {
+            return
+        }
+        when (event.title) {
+            "一键加速" -> initFalseCleanMemoryView()
+            "超强省电" -> initBatteryView()
+            "手机降温" -> initBatteryView()
+            "建议清理" -> initStorageView()
+        }
+    }
+
 }

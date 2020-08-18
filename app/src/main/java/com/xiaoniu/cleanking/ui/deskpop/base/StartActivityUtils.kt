@@ -1,8 +1,15 @@
 package com.xiaoniu.cleanking.ui.deskpop.base
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.launcher.ARouter
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
@@ -120,6 +127,32 @@ class StartActivityUtils {
             val bundle = Bundle()
             bundle.putString(ExtraConstant.TITLE, title)
             gotoFinish(context, bundle)
+        }
+
+
+        /**
+         * 创建加速快捷方式
+         */
+        fun createAccShortcut(context: Context) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                var shortcutManager = context.getSystemService(ShortcutManager::class.java);
+                if (shortcutManager.isRequestPinShortcutSupported()) {
+
+                    var intent = Intent(context, PhoneAccessActivity::class.java)
+                    intent.action="action_create_acc_shortcut"
+                    intent.flags= Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    var pinShortcutInfo = ShortcutInfo.Builder(context, "acc_shortcut")
+                            .setShortLabel("一键加速")
+                            .setLongLabel("一键加速")
+                            .setIcon(Icon.createWithResource(context, R.mipmap.applogo))
+                            .setIntent(intent)
+                            .build();
+                    //当固定快捷方式成功后，会执行该Intent指定的操作，包括启动Activity、发送广播等，如果固定快捷方式成功后不需要做额外处理的话该参数传null就可以。
+                    shortcutManager.requestPinShortcut(pinShortcutInfo,null);
+
+                }
+            }
         }
     }
 
