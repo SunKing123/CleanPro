@@ -72,8 +72,38 @@ dependencies {
     implementation 'com.tencent:mmkv:1.0.23'
     implementation 'com.airbnb.android:lottie:3.1.0'
 
-    //Midas SDK
-    api 'adlib:proxy:1.4.1.2003'
+
+
+    //1.牛数、移动联盟oaid库			aar形式
+//    api(name: 'NiuDataSDK_1.2.3.4_RC', ext: 'aar')
+//    api(name: 'msa_mdid_1.0.13', ext: 'aar')
+    //2.MidasSdk库
+    //策略代理组件
+    api 'adlib:proxy:1.4.0.18'
+    //关联组件
+    api 'adlib:webview:1.1.0.0'
+    api 'adlib:core:1.2.0.51'
+    api 'adlib:uikit:1.1.0.0'
+    //3.联盟组件
+    //穿山甲
+    api 'alliance:chuanshanjia:1.0.0.15'
+    api 'alliance:chuanshanjia_aar:3.0.0.2'
+    //优量汇
+    api 'alliance:youlianghui:1.0.0.14'
+    api 'alliance:youlianghui_aar:4.211.1081'
+    //TopMob
+    api 'alliance:topmob:1.0.0.14'
+    api 'alliance:topmob_aar:0.6.46'
+    //MobVista
+    api 'alliance:mobvista:1.0.0.13'
+    api 'alliance:mobvista_aar:'+'10.5.11'   //version -10.5.11 androidX版本 version -14.3.01 非androidX版本
+    //快手
+    api 'alliance:kuaishou:1.0.0.13'
+    api 'alliance:kuaishou_aar:3.2.0'
+    //百青藤
+    api 'alliance:baiqingteng:1.0.0.13'
+    api 'alliance:baiqingteng_aar:5.8.6'
+
 
 }
 
