@@ -133,6 +133,7 @@
 
     <declare-styleable name="rubble">
         <attr name="location" format="integer" />
+        <attr name="isAniming" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="circleRound">
