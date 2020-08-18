@@ -22,22 +22,26 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
+import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
-import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
+import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.unitionadbase.model.AdInfoModel;
 
@@ -56,7 +60,7 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * Date: 2020/6/30
  * Describe:个人中心 替换之前的MeFragment页面
  */
-public class MineFragment extends BaseFragment<MinePresenter> implements MineFragmentContact.View {
+public class MineFragment extends BaseFragment<MinePresenter> implements MineFragmentContact.View, IBullClickListener {
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -94,6 +98,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
         ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
         mPresenter.refBullList();//金币列表
+        showRewardViewListener();
 //        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
 //            mBinding.mineAdFf.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
 //            mBinding.mineAdFf.setClipToOutline(true);
@@ -115,6 +120,14 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
     }
 
+    /**
+     * 热启动回调
+     */
+    @Subscribe
+    public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
+        mPresenter.refBullList();//金币配置刷新；
+    }
+
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -124,6 +137,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 //            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
             //展示广告
             addBottomAdView();
+            //金币配置刷新
+            mPresenter.refBullList();
         }
         if (hidden) {
             NiuDataAPI.onPageEnd("personal_center_view_page", "个人中心浏览");
@@ -199,6 +214,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 break;
         }
     }
+
+
 
     private void goToWALLETOrWithdrawal(int type) {
         String url = H5Urls.WALLET_URL;
@@ -293,11 +310,31 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     }
 
 
+
+    /*
+     *********************************************************************************************************************************************************
+     ************************************************************刷新限时奖励金币位 View初始化**********************************************************************
+     *********************************************************************************************************************************************************
+     */
+    private void showRewardViewListener() {
+        LuckBubbleView luck01 = mBinding.rewardView.findViewById(R.id.iv_golde_06);
+        LuckBubbleView luck02 = mBinding.rewardView.findViewById(R.id.iv_golde_07);
+        LuckBubbleView luck03 = mBinding.rewardView.findViewById(R.id.iv_golde_08);
+        LuckBubbleView luck04 = mBinding.rewardView.findViewById(R.id.iv_golde_09);
+        luck01.setIBullListener(this);
+        luck02.setIBullListener(this);
+        luck03.setIBullListener(this);
+        luck04.setIBullListener(this);
+
+    }
+
     /*
      * *********************************************************************************************************************************************************
      * ********************************************************** 刷新限时奖励金币位 ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
+
+
 
     /**
      * 刷新金币显示
@@ -306,10 +343,41 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void setBubbleView(BubbleConfig dataBean) {
         if (null != mBinding.rewardView && null != dataBean) {
             mBinding.rewardView.refBubbleView(dataBean);
-        }else{
+        } else {
             mBinding.rewardView.setVisibility(View.GONE);
         }
-
     }
+
+    /**
+     * 金币位点击
+     *
+     * @param ballBean
+     * @param pos
+     */
+    @Override
+    public void clickBull(BubbleConfig.DataBean ballBean, int pos) {
+        if (ballBean == null) {
+            ToastUtils.showShort(R.string.net_error);
+            return;
+        }
+        if (!AndroidUtil.isFastDoubleClick()) {
+            mPresenter.rewardVideoAd(ballBean.getLocationNum());
+//          StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
+        }
+    }
+
+
+    /**
+     * 金币领取成功
+     */
+    @Override
+    public void bubbleCollected(BubbleCollected dataBean) {
+        if (null != dataBean) {
+            mPresenter.refBullList();//刷新金币列表；
+        }
+        assert dataBean != null && dataBean.getData() != null;
+        mPresenter.showGetGoldCoinDialog(dataBean);
+    }
+
 
 }
