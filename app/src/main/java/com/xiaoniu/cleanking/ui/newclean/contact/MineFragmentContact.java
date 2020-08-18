@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.newclean.contact;
 
 import com.xiaoniu.cleanking.base.BaseView;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 
 /**
@@ -11,6 +12,8 @@ import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 public interface MineFragmentContact {
     interface View extends BaseView {
         void getInfoDataSuccess(MinePageInfoBean infoBean);
+
+        void setBubbleView(BubbleConfig bubbleView);
     }
 
 }

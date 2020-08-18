@@ -22,6 +22,7 @@ import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
+import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
@@ -32,6 +33,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -91,6 +93,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
         ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
         ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
+        mPresenter.refBullList();//金币列表
 //        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
 //            mBinding.mineAdFf.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
 //            mBinding.mineAdFf.setClipToOutline(true);
@@ -287,6 +290,26 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 StatisticsUtils.customTrackEvent("ad_request", "我的页面广告请求（满足广告展现时机时向商业化sdk发起请求数）", "my_page", "my_page");
             }
         });
+    }
+
+
+    /*
+     * *********************************************************************************************************************************************************
+     * ********************************************************** 刷新限时奖励金币位 ***************************************************************************************
+     * *********************************************************************************************************************************************************
+     */
+
+    /**
+     * 刷新金币显示
+     */
+    @Override
+    public void setBubbleView(BubbleConfig dataBean) {
+        if (null != mBinding.rewardView && null != dataBean) {
+            mBinding.rewardView.refBubbleView(dataBean);
+        }else{
+            mBinding.rewardView.setVisibility(View.GONE);
+        }
+
     }
 
 }

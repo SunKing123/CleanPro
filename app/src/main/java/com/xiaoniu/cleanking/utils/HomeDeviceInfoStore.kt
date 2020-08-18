@@ -6,4 +6,20 @@ package com.xiaoniu.cleanking.utils
  */
 class HomeDeviceInfoStore {
 
+    companion object {
+        @Volatile
+        private var instance: HomeDeviceInfoStore? = null
+        fun getInstance() =
+                instance ?: synchronized(this) {
+                    instance
+                            ?: HomeDeviceInfoStore().also { instance = it }
+                }
+    }
+
+    private constructor() {
+
+    }
+
+
+
 }

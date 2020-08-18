@@ -204,13 +204,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         Map<String, Object> extParam = new HashMap<>();
         extParam.put("testing_status", UserHelper.init().isWxLogin() ? "yes" : "no");
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
-         addDeviceInfoFragment();
 
-        StartActivityUtils.Companion.createAccShortcut(getActivity());
+        addDeviceInfoFragment();
     }
 
-    private void addDeviceInfoFragment(){
-        FragmentManager manager=getChildFragmentManager();
+    private void addDeviceInfoFragment() {
+        FragmentManager manager = getChildFragmentManager();
         manager.beginTransaction().add(R.id.frame_deviceInfo, HomeDeviceInfoFragment.Companion.getInstance()).commitAllowingStateLoss();
     }
 
