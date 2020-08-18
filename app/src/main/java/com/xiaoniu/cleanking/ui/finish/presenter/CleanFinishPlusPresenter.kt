@@ -260,6 +260,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
     }
 
     override fun onPostResume() {
+
     }
 
     override fun onPause() {
