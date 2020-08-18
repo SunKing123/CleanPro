@@ -24,10 +24,12 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.common.utils.ContextUtils;
 import com.xiaoniu.common.utils.DateUtils;
 import com.xiaoniu.common.utils.DeviceUtils;
+import com.xiaoniu.common.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -326,15 +328,52 @@ public class PreferenceUtil {
 
     /**
      * 保存一键加速清理时间
-     *
+     * 在每次功能使用后调用
      * @return
      */
     public static boolean saveCleanTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(SpCacheConfig.IS_SAVE_CLEAN_TIME, System.currentTimeMillis()).commit();
+        long accTime = sharedPreferences.getLong(SpCacheConfig.IS_SAVE_CLEAN_TIME, 0);
+        int diffDay=TimeUtils.getOffectDay(System.currentTimeMillis(),accTime);
+        printLog(accTime,diffDay);
+        //每次功能使用完后，进行一次是否一天的第一次使用判断。
+        if(diffDay>=1){
+            saveIsFirstUseAccOfDay(true);
+        }else {
+            saveIsFirstUseAccOfDay(false);
+        }
+        getEditor().putLong(SpCacheConfig.IS_SAVE_CLEAN_TIME, System.currentTimeMillis()).commit();
         return true;
     }
+
+    private static void printLog(long time,int diffDay){
+        LogUtils.e("========================acc lastTime="+time+"  nowTime="+System.currentTimeMillis());
+        LogUtils.e("========================acc diffDay="+diffDay);
+    }
+
+    private static SharedPreferences.Editor getEditor(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        return editor;
+    }
+
+    /**
+     * 保存今天是否第一次使用加速功能
+     * @param isFirst
+     */
+    private static void saveIsFirstUseAccOfDay(boolean isFirst){
+        getEditor().putBoolean(SpCacheConfig.IS_SAVE_CLEAN_TIME_FIRST_OF_DAY, isFirst).commit();
+    }
+
+    /**
+     * 今天是否第一次使用加速功能
+     * @return
+     */
+    public static boolean isFirstUseAccOfDay(){
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.IS_SAVE_CLEAN_TIME_FIRST_OF_DAY,false);
+    }
+
 
     /**
      * 是否距离上次一键加速清理间隔至少3分钟
@@ -442,6 +481,7 @@ public class PreferenceUtil {
         //warning displayed the next day。
         return nowDayOfYear - lastDayOfYear >= 1;
     }
+
 
     /**
      * get unused the virus kill function days

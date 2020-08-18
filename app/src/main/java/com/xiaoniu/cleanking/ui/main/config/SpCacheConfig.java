@@ -99,6 +99,8 @@ public class SpCacheConfig {
     public static final String IS_SAVE_ERROR_POWER = "error_power";
     //清理间隔时间
     public static final String IS_SAVE_CLEAN_TIME = "clean_time";
+    //内存加速是否是今天第一次使用
+    public static final String IS_SAVE_CLEAN_TIME_FIRST_OF_DAY = "clean_time_first_of_day";
     //一键清理间隔时间
     public static final String IS_SAVE_ONE_KEY_CLEAN_TIME = "one_key_clean_time";
 
