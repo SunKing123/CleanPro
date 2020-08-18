@@ -13,12 +13,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/dp_10"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dp_10">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_162dp"
+                android:layout_height="@dimen/dimen_240dp"
                 android:background="@drawable/gradient_head"
                 android:orientation="vertical">
 
@@ -70,11 +70,142 @@
                         android:scaleType="fitCenter"
                         android:visibility="gone" />
 
+                    <!--金币提现模块-->
+                    <RelativeLayout
+                        android:id="@+id/cash_rl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/login_ll">
+
+                        <LinearLayout
+                            android:id="@+id/wallet_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:includeFontPadding="false"
+                                    android:text="我的金币"
+                                    android:textColor="@color/color_222222"
+                                    android:textSize="@dimen/dimen_16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="@dimen/dimen_60dp"
+                                    android:layout_height="@dimen/dimen_18dp"
+                                    android:layout_marginLeft="@dimen/dimen_6dp"
+                                    android:background="@drawable/bg_eee_frame_fillet_9"
+                                    android:gravity="center"
+                                    android:includeFontPadding="false"
+                                    android:text="收入明细"
+                                    android:textColor="@color/color_666666"
+                                    android:textSize="@dimen/dimen_11dp" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dimen_4dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/gold_coin_tv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--"
+                                    android:textColor="@color/color_FDBB1D"
+                                    android:textSize="@dimen/dimen_30dp" />
+
+                                <TextView
+                                    android:id="@+id/coin_about"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dimen_5dp"
+                                    android:layout_marginRight="@dimen/dimen_5dp"
+                                    android:text="≈"
+                                    android:textColor="@color/color_FDBB1D"
+                                    android:textSize="@dimen/dimen_24dp"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/coin_unit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="¥"
+                                    android:textColor="#FFE83C"
+                                    android:textSize="@dimen/dimen_16dp"
+                                    android:visibility="gone" />
+
+                                <TextView
+                                    android:id="@+id/money_tv"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--"
+                                    android:textColor="@color/color_FDBB1D"
+                                    android:textSize="@dimen/dimen_20dp"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="@dimen/dimen_75dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="@dimen/dimen_10dp">
+
+                            <LinearLayout
+                                android:id="@+id/withdrawal_ll"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dimen_28dp"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/shape_bg_39b8bb"
+                                android:gravity="center"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@mipmap/gold_icon" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dimen_2dp"
+                                    android:drawableRight="@mipmap/icon_withdraw_right"
+                                    android:drawablePadding="4.5dp"
+                                    android:text="提现"
+                                    android:textColor="@color/color_white_all"
+                                    android:textSize="@dimen/dimen_14dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <ImageView
+                                android:id="@+id/iv_withdraw_tips"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_above="@+id/withdrawal_ll"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="@dimen/dimen_4dp"
+                                android:src="@mipmap/tixian_img" />
+                        </RelativeLayout>
+                    </RelativeLayout>
                 </RelativeLayout>
+
+
             </RelativeLayout>
-            <!--金币提现模块-->
-            <RelativeLayout
-                android:id="@+id/cash_rl"
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_115dp"
                 android:layout_marginLeft="@dimen/dimen_14dp"
@@ -84,128 +215,71 @@
                 android:paddingLeft="@dimen/dimen_14dp"
                 android:paddingRight="@dimen/dimen_14dp">
 
-                <LinearLayout
-                    android:id="@+id/wallet_ll"
+                <TextView
+                    android:id="@+id/tv_award_tag01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:includeFontPadding="false"
-                            android:text="我的金币"
-                            android:textColor="@color/color_222222"
-                            android:textSize="@dimen/dimen_16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="@dimen/dimen_60dp"
-                            android:layout_height="@dimen/dimen_18dp"
-                            android:layout_marginLeft="@dimen/dimen_6dp"
-                            android:background="@drawable/bg_eee_frame_fillet_9"
-                            android:gravity="center"
-                            android:includeFontPadding="false"
-                            android:text="收入明细"
-                            android:textColor="@color/color_666666"
-                            android:textSize="@dimen/dimen_11dp" />
-                    </LinearLayout>
+                    android:layout_marginTop="10dp"
+                    android:includeFontPadding="false"
+                    android:text="限时奖励:"
+                    android:textColor="@color/color_222222"
+                    android:textSize="@dimen/dimen_16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dimen_4dp"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/gold_coin_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="--"
-                            android:textColor="@color/color_FDBB1D"
-                            android:textSize="@dimen/dimen_30dp" />
+                <ImageView
+                    android:id="@+id/iv_golde_01"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/kw1"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/iv_golde_02"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01" />
 
-                        <TextView
-                            android:id="@+id/coin_about"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dimen_5dp"
-                            android:layout_marginRight="@dimen/dimen_5dp"
-                            android:text="≈"
-                            android:textColor="@color/color_FDBB1D"
-                            android:textSize="@dimen/dimen_24dp"
-                            android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/iv_golde_02"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:src="@drawable/kw1"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintHorizontal_weight="1"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_golde_01"
+                    app:layout_constraintRight_toRightOf="@+id/iv_golde_03"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01" />
 
-                        <TextView
-                            android:id="@+id/coin_unit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="¥"
-                            android:textColor="#FFE83C"
-                            android:textSize="@dimen/dimen_16dp"
-                            android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/iv_golde_03"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:src="@drawable/kw1"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_golde_02"
+                    app:layout_constraintRight_toLeftOf="@+id/iv_golde_04"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01" />
 
-                        <TextView
-                            android:id="@+id/money_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="--"
-                            android:textColor="@color/color_FDBB1D"
-                            android:textSize="@dimen/dimen_20dp"
-                            android:visibility="gone" />
-                    </LinearLayout>
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_golde_04"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dp_50"
+                    android:src="@drawable/kw1"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintLeft_toRightOf="@+id/iv_golde_03"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <RelativeLayout
-                    android:layout_width="@dimen/dimen_75dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="@dimen/dimen_10dp">
 
-                    <LinearLayout
-                        android:id="@+id/withdrawal_ll"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dimen_28dp"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/shape_bg_39b8bb"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@mipmap/gold_icon" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dimen_2dp"
-                            android:drawableRight="@mipmap/icon_withdraw_right"
-                            android:drawablePadding="4.5dp"
-                            android:text="提现"
-                            android:textColor="@color/color_white_all"
-                            android:textSize="@dimen/dimen_14dp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/iv_withdraw_tips"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/withdrawal_ll"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="@dimen/dimen_4dp"
-                        android:src="@mipmap/tixian_img" />
-                </RelativeLayout>
-            </RelativeLayout>
             <!--更多功能-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -350,12 +424,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_15dp"
-                android:visibility="gone"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:layout_marginRight="@dimen/dimen_15dp"
                 android:background="@drawable/bg_white_fillet_06"
                 android:orientation="horizontal"
-                tools:visibility="visible"/>
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
