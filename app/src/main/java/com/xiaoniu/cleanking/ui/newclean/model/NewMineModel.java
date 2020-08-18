@@ -13,7 +13,7 @@ import com.xiaoniu.cleanking.utils.net.RxUtil;
 import javax.inject.Inject;
 
 
-public class NewMineModel extends BaseModel {
+public class NewMineModel extends GoldModel {
 
     private final RxFragment mRxFragment;
     @Inject

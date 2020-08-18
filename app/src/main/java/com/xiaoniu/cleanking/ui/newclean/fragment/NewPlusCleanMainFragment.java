@@ -203,7 +203,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         Map<String, Object> extParam = new HashMap<>();
         extParam.put("testing_status", UserHelper.init().isWxLogin() ? "yes" : "no");
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
-         addDeviceInfoFragment();
+        addDeviceInfoFragment();
     }
 
     private void addDeviceInfoFragment(){
