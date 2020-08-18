@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Environment;
 
 import com.google.gson.Gson;
+import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.mvp.BasePresenter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -12,6 +13,7 @@ import com.xiaoniu.cleanking.ui.main.event.CleanEvent;
 import com.xiaoniu.cleanking.ui.newclean.bean.ScanningResultType;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanCleanContact;
 import com.xiaoniu.cleanking.ui.newclean.model.ScanCleanModel;
+import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -30,6 +32,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.blankj.utilcode.util.StringUtils.getString;
 
 public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, ScanCleanModel>
         implements ScanCleanContact.IPresenter {
@@ -53,6 +57,7 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
 
         //设置垃圾清理总量数据
         long junkTotal = setCheckedJunkResult();
+        MmkvUtil.saveLong(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA_B,junkTotal);
 
         CountEntity countEntity = CleanUtil.formatShortFileSize(junkTotal);
         //作为首页头部数据展示缓存
@@ -161,6 +166,9 @@ public class ScanCleanPresenter extends BasePresenter<ScanCleanContact.View, Sca
             CleanEvent cleanEvent = new CleanEvent();
             cleanEvent.setCleanAminOver(true);
             EventBus.getDefault().post(cleanEvent);
+
+            EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_one_key_clean)));
+
             mSPHelper.saveCleanTime(System.currentTimeMillis());
 
             if (getView() != null) {

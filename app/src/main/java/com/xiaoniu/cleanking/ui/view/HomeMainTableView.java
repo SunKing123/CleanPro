@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.HomeDeviceInfoStore;
 import com.xiaoniu.cleanking.utils.MemoryInfoStore;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -112,14 +113,14 @@ public class HomeMainTableView extends ConstraintLayout {
      */
     //一键加速未使用风格
     public void oneKeySpeedUnusedStyle() {
-        String tColor =MemoryInfoStore.Companion.getInstance().format(MemoryInfoStore.Companion.getInstance().getUsedMemoryPercent(getContext()))  + "%";
-        RecmedItemDataStore.Companion.getInstance().setMemory(tColor);
-        setOneKeyText(tColor, getRedColor());
+        String memoryPercent = HomeDeviceInfoStore.Companion.getInstance().getUsedMemoryPercent() + "%";
+        RecmedItemDataStore.Companion.getInstance().setMemory(memoryPercent);
+        setOneKeyText(memoryPercent, getRedColor());
     }
 
     //一键加速已使用风格
     public void oneKeySpeedUsedStyle() {
-        String tColor =MemoryInfoStore.Companion.getInstance().format(MemoryInfoStore.Companion.getInstance().getFalseUsedPercent(getContext()))+ "%";
+        String tColor =HomeDeviceInfoStore.Companion.getInstance().getCleanedUsedMemoryPercent()+ "%";;
         setOneKeyText(tColor, getGreenColor());
     }
 

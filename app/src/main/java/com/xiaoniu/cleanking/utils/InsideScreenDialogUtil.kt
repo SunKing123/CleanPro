@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.comm.jksdk.utils.DisplayUtil
+import com.xiaoniu.cleanking.BuildConfig
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback
@@ -27,6 +28,9 @@ class InsideScreenDialogUtil {
 
     fun showInsideDialog(activity: AppCompatActivity?, adId: String) {
 
+        if(BuildConfig.DEBUG){
+            return
+        }
         MidasRequesCenter.requestAndShowAd(activity, adId, object : AbsAdBusinessCallback() {
             var dialog: Dialog? = null
             override fun onAdLoaded(adInfoModel: AdInfoModel) {

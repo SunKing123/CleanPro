@@ -207,12 +207,20 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         addDeviceInfoFragment();
     }
+    HomeDeviceInfoFragment homeDeviceInfoFragment;
 
     private void addDeviceInfoFragment() {
         FragmentManager manager = getChildFragmentManager();
-        manager.beginTransaction().add(R.id.frame_deviceInfo, HomeDeviceInfoFragment.Companion.getInstance()).commitAllowingStateLoss();
+        manager.beginTransaction().add(R.id.frame_deviceInfo,getDeviceFragment()).commitAllowingStateLoss();
     }
 
+
+    private HomeDeviceInfoFragment getDeviceFragment(){
+        if(homeDeviceInfoFragment==null){
+            homeDeviceInfoFragment=HomeDeviceInfoFragment.Companion.getInstance();
+        }
+        return homeDeviceInfoFragment;
+    }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && isFirstCreate) {
@@ -488,8 +496,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         }
         switch (event.getTitle()) {
+            case "一键清理":
+                homeMainTableView.oneKeySpeedUsedStyle();
+                getDeviceFragment().initStorageView();
+                break;
             case "一键加速":
                 homeMainTableView.oneKeySpeedUsedStyle();
+                getDeviceFragment().initMemoryView();
                 break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();

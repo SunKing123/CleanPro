@@ -191,6 +191,8 @@ public class SpCacheConfig {
     public static final String POP_FULL_LAYER_TIME = "pop_full_time";
     public static final String POP_FULL_LAYER_NUMBERS = "pop_full_numbers";
 
+    public static final String MKV_KEY_HOME_CLEANED_DATA_B = "mkv_key_home_cleaned_data_b";
+
     public static final String MKV_KEY_HOME_CLEANED_DATA = "mkv_key_home_cleaned_data";
 
     public final static String AuditSwitch = "AuditSwitch";

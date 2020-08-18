@@ -50,34 +50,6 @@ public class MemoryInfoStore {
         return used
     }
 
-
-    /**
-     * 加载假的内存信息
-     */
-    fun getFalseUsedPercent(context:Context):Double{
-        var easyMemoryMod=EasyMemoryMod(context)
-        //内存加速值，需要在真是的百分比上减去假的加速百分比，然后对一直用的内存进行相应计算显示，瞒天过海，骗过用户。
-        var num = PreferenceUtil.getOneKeySpeedNum()
-        var falsePercent:Double
-        if(usedMemoryPercent<=0){
-            var total = easyMemoryMod.getTotalRAM().toFloat()
-            var used = total - easyMemoryMod.getAvailableRAM().toFloat()
-            usedMemoryPercent = (used.toDouble() / total.toDouble()) * 100
-        }
-        falsePercent=usedMemoryPercent
-        falsePercent=format(falsePercent)!!.toDouble()
-        falsePercent=falsePercent-num.toDouble()
-        return falsePercent
-    }
-
-    fun getFalseUsedMemory(context:Context):Float{
-        var easyMemoryMod=EasyMemoryMod(context)
-        var falsePercent=getFalseUsedPercent(context)
-        var total = easyMemoryMod.getTotalRAM().toFloat()
-        var used = (total*(falsePercent/100)).toFloat()
-        return FileUtils.getUnitGB(used).toFloat()
-    }
-
     fun format(value: Double): String? {
         var bd = BigDecimal(value)
         bd = bd.setScale(0, RoundingMode.HALF_UP)
