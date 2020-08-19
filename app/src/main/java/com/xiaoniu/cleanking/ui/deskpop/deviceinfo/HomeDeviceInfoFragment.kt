@@ -6,15 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
-import com.jess.arms.utils.FileUtils
-import com.xiaoniu.clean.deviceinfo.EasyBatteryMod
-import com.xiaoniu.clean.deviceinfo.EasyMemoryMod
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.SimpleFragment
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils
+import com.xiaoniu.cleanking.ui.main.event.LifecycEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
 import com.xiaoniu.cleanking.utils.HomeDeviceInfoStore
-import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -85,7 +82,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     /**
      * 运行信息
      */
-    public fun initMemoryView() {
+    private fun initMemoryView() {
         if (PreferenceUtil.getCleanTime()) {
             initTrueMemoryView()
         } else {
@@ -373,6 +370,14 @@ class HomeDeviceInfoFragment : SimpleFragment() {
             "超强省电" -> initCleanedBatteryView()
 
         }
+    }
+
+    /**
+     * 热启动回调
+     */
+    @Subscribe
+    fun changeLifeCycleEvent(lifecycEvent: LifecycEvent?) {
+        refreshAllView()
     }
 
 }

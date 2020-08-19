@@ -262,7 +262,6 @@ class HomeDeviceInfoStore {
         log("saveRandomOptimizeElectricNum() num=" + num)
     }
 
-
     fun log(text: String) {
         LogUtils.e("HomeDeviceInfoStore:======" + text)
     }
