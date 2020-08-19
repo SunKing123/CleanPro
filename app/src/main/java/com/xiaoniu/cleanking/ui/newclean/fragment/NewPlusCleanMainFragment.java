@@ -221,6 +221,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         return homeDeviceInfoFragment;
     }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && isFirstCreate) {

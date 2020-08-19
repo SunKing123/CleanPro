@@ -84,7 +84,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
         initCoolView()
         initBatteryView()
     }
-    
+
     /**
      * 运行信息
      */
@@ -177,10 +177,32 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      * 温度信息
      */
     private fun initCoolView() {
-        updateCoolImage(easyBatteryMod.getBatteryTemperature())
-        updateBtn(easyBatteryMod.getBatteryTemperature())
-        tv_temperature_title.setText("电池温度：" + easyBatteryMod.getBatteryTemperature() + "°C")
-        tv_temperature_content.setText("CPU温度：" + (easyBatteryMod.getBatteryTemperature() + NumberUtils.mathRandomInt(5, 10).toFloat()) + "°C")
+
+        if(PreferenceUtil.getCoolingCleanTime()){
+            initTrueCoolView()
+        }else{
+            initCleanedCoolView()
+        }
+    }
+
+    private fun initTrueCoolView(){
+        var batteryT=HomeDeviceInfoStore.getInstance().getBatteryTemperature(mContext)
+        var cpuT=HomeDeviceInfoStore.getInstance().getCPUTemperature(mContext)
+        updateCoolImage(cpuT)
+        updateBtn(cpuT)
+        tv_temperature_title.setText("电池温度：" +batteryT + "°C")
+        tv_temperature_content.setText("CPU温度：" + cpuT+ "°C")
+    }
+    /**
+     * 温度信息
+     */
+    private fun initCleanedCoolView() {
+        var batteryT=HomeDeviceInfoStore.getInstance().getCleanedBatteryTemperature(mContext)
+        var cpuT=HomeDeviceInfoStore.getInstance().getCleanedCPUTemperature(mContext)
+        updateCoolImage(batteryT)
+        updateBtn(batteryT)
+        tv_temperature_title.setText("电池温度：" + batteryT+ "°C")
+        tv_temperature_content.setText("CPU温度：" + cpuT+ "°C")
     }
 
     /**
@@ -240,7 +262,6 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private fun goCleanBattery() {
         if (isDestroy()) return
         StartActivityUtils.goCleanBattery(activity!!)
-
     }
 
     /**
@@ -325,8 +346,9 @@ class HomeDeviceInfoFragment : SimpleFragment() {
         when (event.title) {
             "一键清理" -> initCleanedStorageView()
             "一键加速" -> initCleanedMemoryView()
+            "手机降温" -> initCleanedCoolView()
             "超强省电" -> initBatteryView()
-            "手机降温" -> initBatteryView()
+
         }
     }
 

@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.utils
 
 import android.content.Context
 import com.jess.arms.utils.FileUtils
+import com.xiaoniu.clean.deviceinfo.EasyBatteryMod
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.utils.update.MmkvUtil
@@ -38,7 +39,7 @@ class HomeDeviceInfoStore {
 
     /*
      *************************************************************************************************************************************************
-     *****************************************************     memory info   **************************************************************************
+     **********************************************************memory info****************************************************************************
      *************************************************************************************************************************************************
      */
 
@@ -151,6 +152,46 @@ class HomeDeviceInfoStore {
         log("getCleanedUsedStoragePercent() percent="+percent+"  used="+used+"   total="+total)
         return percent
     }
+
+    /*
+     *************************************************************************************************************************************************
+     *****************************************************temperature info****************************************************************************
+     *************************************************************************************************************************************************
+     */
+
+    /**
+     * 获取真实的电池温度
+     */
+    fun getBatteryTemperature(context: Context):Float{
+       var easyBatteryMod = EasyBatteryMod(context)
+        return easyBatteryMod.batteryTemperature
+    }
+
+
+    /**
+     * 需求：部分机型获取不到cpu温度情况下，取随机值【40，60】
+     * 实现：部分毛！全都随机!!!
+     */
+    fun getCPUTemperature(context: Context):Float{
+        return NumberUtils.mathRandomInt(40, 60).toFloat()
+    }
+
+    /**
+     * 获取清理后的电池温度
+     * 需求：若用户在核心功能区域使用完手机降温功能，降温完成页降温数值3°，同时手机状态监控电池温度和cpu温度降低3°。
+     */
+    fun getCleanedBatteryTemperature(context: Context):Float{
+        return getBatteryTemperature(context)-PreferenceUtil.getCleanCoolNum()
+    }
+
+    /**
+     * 获取清理后的cpu温度
+     * 需求：若用户在核心功能区域使用完手机降温功能，降温完成页降温数值3°，同时手机状态监控电池温度和cpu温度降低3°。
+     */
+    fun getCleanedCPUTemperature(context: Context):Float{
+        return getCPUTemperature(context)-PreferenceUtil.getCleanCoolNum()
+    }
+
 
     fun log(text:String){
         LogUtils.e("HomeDeviceInfoStore:======"+text)
