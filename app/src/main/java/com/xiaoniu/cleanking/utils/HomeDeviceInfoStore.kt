@@ -236,6 +236,7 @@ class HomeDeviceInfoStore {
 
     /**
      * 保存电量优化后的待机时机增加值
+     *
      * 需求：
      * 当手机电量【1%~10%），延长时间显示【5，15】分钟随机数
      * 当手机电量【10%~20%），延长时间显示【10，30】分钟随机数
@@ -247,7 +248,7 @@ class HomeDeviceInfoStore {
         val electric = getBatteryTemperature(context)
         var num: String? = ""
         num = if (electric >= 70) {
-            NumberUtils.mathRandom(30, 60)
+            NumberUtils.mathRandom(30, 59)
         } else if (electric >= 50) {
             NumberUtils.mathRandom(20, 50)
         } else if (electric >= 20) {
@@ -259,7 +260,6 @@ class HomeDeviceInfoStore {
         }
         PreferenceUtil.saveCleanedBatteryMinutes(num.toInt())
         log("saveRandomOptimizeElectricNum() num=" + num)
-
     }
 
 
