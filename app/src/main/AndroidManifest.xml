@@ -299,6 +299,22 @@
             android:taskAffinity="com.locker.new.task"  />
 
         <activity
+            android:name=".ui.accwidget.AccWidgetAnimationActivity"
+            android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task"
+            android:theme="@style/half_translucent"/>
+
+        <activity
+            android:name=".ui.accwidget.AccWidgetCleanFinishActivity"
+            android:configChanges="orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.locker.new.task"
+            android:theme="@style/half_translucent"/>
+
+        <activity
             android:name=".ui.main.activity.NewsActivity"
             
             android:screenOrientation="portrait" />

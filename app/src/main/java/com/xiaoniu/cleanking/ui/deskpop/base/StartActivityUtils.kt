@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.launcher.ARouter
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
+import com.xiaoniu.cleanking.ui.accwidget.AccWidgetCleanFinishActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
@@ -138,7 +139,7 @@ class StartActivityUtils {
                 var shortcutManager = context.getSystemService(ShortcutManager::class.java);
                 if (shortcutManager.isRequestPinShortcutSupported()) {
 
-                    var intent = Intent(context, PhoneAccessActivity::class.java)
+                    var intent = Intent(context, AccWidgetCleanFinishActivity::class.java)
                     intent.action="action_create_acc_shortcut"
                     intent.flags= Intent.FLAG_ACTIVITY_NEW_TASK
 

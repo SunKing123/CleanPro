@@ -401,4 +401,17 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <!--外部插屏_悬浮Activity样式-->
+    <style name="half_translucent" parent="AppTheme">
+        <!--是否悬浮在activity上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--透明是否-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@null</item>
+        <!--设置没有窗口标题、dialog标题等各种标题-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:title">@null</item>
+        <item name="android:dialogTitle">@null</item>
+    </style>
+
 </resources>
