@@ -172,30 +172,11 @@ public class HomeMainTableView extends ConstraintLayout {
 
     //used electric style
     public void electricUsedStyle() {
-        String tColor = getRandomOptimizeElectricNum();
+        String tColor =PreferenceUtil.getCleanedBatteryMinutes()+"";
         String head = "延长时间";
         SpannableString text = AndroidUtil.inertColorText(head + tColor + "分钟", head.length(), head.length() + tColor.length(), getGreenColor());
         tvElectric.setText(text);
     }
-
-    //get random optimize electric num by electric value
-    private String getRandomOptimizeElectricNum() {
-        int electric = AndroidUtil.getElectricityNum(getContext());
-        String num = "";
-        if (electric >= 70) {
-            num = NumberUtils.mathRandom(30, 60);
-        } else if (electric >= 50) {
-            num = NumberUtils.mathRandom(20, 50);
-        } else if (electric >= 20) {
-            num = NumberUtils.mathRandom(10, 45);
-        } else if (electric >= 10) {
-            num = NumberUtils.mathRandom(10, 30);
-        } else {
-            num = NumberUtils.mathRandom(5, 15);
-        }
-        return num;
-    }
-
 
     /**
      * ****************************************************************************************************************************

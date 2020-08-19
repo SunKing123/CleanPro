@@ -46,8 +46,6 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private var bHigh: Array<Int> = arrayOf(20, 90)
 
     private var TEMPERATURE_VPT = 37
-    private lateinit var easyMemoryMod: EasyMemoryMod
-    private lateinit var easyBatteryMod: EasyBatteryMod
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +62,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     }
 
     fun initData(savedInstanceState: Bundle?) {
-        easyMemoryMod = EasyMemoryMod(mContext)
-        easyBatteryMod = EasyBatteryMod(mContext)
+
     }
 
     override fun initView() {
@@ -178,44 +175,70 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      */
     private fun initCoolView() {
 
-        if(PreferenceUtil.getCoolingCleanTime()){
+        if (PreferenceUtil.getCoolingCleanTime()) {
             initTrueCoolView()
-        }else{
+        } else {
             initCleanedCoolView()
         }
     }
 
-    private fun initTrueCoolView(){
-        var batteryT=HomeDeviceInfoStore.getInstance().getBatteryTemperature(mContext)
-        var cpuT=HomeDeviceInfoStore.getInstance().getCPUTemperature(mContext)
+    private fun initTrueCoolView() {
+        var batteryT = HomeDeviceInfoStore.getInstance().getBatteryTemperature(mContext)
+        var cpuT = HomeDeviceInfoStore.getInstance().getCPUTemperature(mContext)
         updateCoolImage(cpuT)
         updateBtn(cpuT)
-        tv_temperature_title.setText("电池温度：" +batteryT + "°C")
-        tv_temperature_content.setText("CPU温度：" + cpuT+ "°C")
+        tv_temperature_title.setText("电池温度：" + batteryT + "°C")
+        tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
     }
+
     /**
      * 温度信息
      */
     private fun initCleanedCoolView() {
-        var batteryT=HomeDeviceInfoStore.getInstance().getCleanedBatteryTemperature(mContext)
-        var cpuT=HomeDeviceInfoStore.getInstance().getCleanedCPUTemperature(mContext)
+        var batteryT = HomeDeviceInfoStore.getInstance().getCleanedBatteryTemperature(mContext)
+        var cpuT = HomeDeviceInfoStore.getInstance().getCleanedCPUTemperature(mContext)
         updateCoolImage(batteryT)
         updateBtn(batteryT)
-        tv_temperature_title.setText("电池温度：" + batteryT+ "°C")
-        tv_temperature_content.setText("CPU温度：" + cpuT+ "°C")
+        tv_temperature_title.setText("电池温度：" + batteryT + "°C")
+        tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
     }
 
     /**
      * 电量信息
      */
     private fun initBatteryView() {
-        tv_battery_title.setText("当前电量：" + easyBatteryMod.getBatteryPercentage() + "%")
-        tv_battery_content.setText("待机时间" + NumberUtils.mathRandomInt(5, 10) + "小时")
-        tv_battery_percent.setText(easyBatteryMod.getBatteryPercentage().toString() + "%")
+        if (PreferenceUtil.getPowerCleanTime()) {
+            initTrueBatteryView()
+        } else {
+            initCleanedBatteryView()
+        }
+    }
 
-        updateBatteryImage(easyBatteryMod.getBatteryPercentage())
+    private fun initTrueBatteryView() {
+        tv_battery_title.setText("当前电量：" + HomeDeviceInfoStore.getInstance().getElectricNum(mContext) + "%")
+        tv_battery_content.setText("待机时间" + HomeDeviceInfoStore.getInstance().getStandTime(mContext) + "小时")
+        tv_battery_percent.setText(HomeDeviceInfoStore.getInstance().getElectricNum(mContext).toString() + "%")
 
-        var percent = easyBatteryMod.getBatteryPercentage();
+        updateBatteryImage(HomeDeviceInfoStore.getInstance().getElectricNum(mContext))
+        var percent = HomeDeviceInfoStore.getInstance().getElectricNum(mContext)
+
+        if (inTheRange(percent, bLow)) {
+            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
+        } else {
+            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_green_bg)
+        }
+    }
+
+    /**
+     * 电量信息
+     */
+    private fun initCleanedBatteryView() {
+        tv_battery_title.setText("当前电量：" + HomeDeviceInfoStore.getInstance().getElectricNum(mContext) + "%")
+        tv_battery_content.setText("待机时间" + HomeDeviceInfoStore.getInstance().getCleanedStandTime(mContext))
+        tv_battery_percent.setText(HomeDeviceInfoStore.getInstance().getElectricNum(mContext).toString() + "%")
+
+        updateBatteryImage(HomeDeviceInfoStore.getInstance().getElectricNum(mContext))
+        var percent = HomeDeviceInfoStore.getInstance().getElectricNum(mContext)
 
         if (inTheRange(percent, bLow)) {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
@@ -347,7 +370,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
             "一键清理" -> initCleanedStorageView()
             "一键加速" -> initCleanedMemoryView()
             "手机降温" -> initCleanedCoolView()
-            "超强省电" -> initBatteryView()
+            "超强省电" -> initCleanedBatteryView()
 
         }
     }

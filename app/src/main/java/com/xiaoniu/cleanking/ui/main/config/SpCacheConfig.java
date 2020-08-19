@@ -203,4 +203,6 @@ public class SpCacheConfig {
 
     public final static String MAIN_GUIDE_VIEW_KEY = "main_guide_view";
 
+    public final static String RANDOM_CLEANED_BATTERY_MINUTES = "random_cleaned_battery_minutes";
+
 }

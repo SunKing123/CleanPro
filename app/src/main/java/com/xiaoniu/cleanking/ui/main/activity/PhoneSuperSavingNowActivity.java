@@ -31,6 +31,7 @@ import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.HomeDeviceInfoStore;
 import com.xiaoniu.cleanking.utils.JavaInterface;
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
@@ -367,6 +368,9 @@ public class PhoneSuperSavingNowActivity extends BaseActivity implements View.On
         if (PreferenceUtil.getPowerCleanTime()) {
             PreferenceUtil.savePowerCleanTime();
         }
+
+        //保存一次电池优化后的时间加速值
+        HomeDeviceInfoStore.Companion.getInstance().saveRandomOptimizeElectricNum(this);
 
         EventBus.getDefault().post(new FunctionCompleteEvent( getString(R.string.tool_super_power_saving)));
 

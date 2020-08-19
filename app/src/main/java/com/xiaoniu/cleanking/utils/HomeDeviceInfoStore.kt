@@ -20,6 +20,8 @@ class HomeDeviceInfoStore {
 
     private var memoryPercent: Int = 0
     private var cleanedMemoryPercent: Int = 0
+    private var cpuTemperature: Float = 0F
+    private var standTime: Int = 0
 
     companion object {
         @Volatile
@@ -133,23 +135,23 @@ class HomeDeviceInfoStore {
      * 获取已使用总硬盘大小
      */
     fun getCleanedUsedStorage(context: Context): Float {
-        var diff=MmkvUtil.getLong(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA_B,0)
+        var diff = MmkvUtil.getLong(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA_B, 0)
 
-        log("getCleanedUsedStorage() diff"+diff)
-        var cleaned=FileUtils.getUnitGB(diff.toFloat())
-        log("getCleanedUsedStorage() cleaned"+cleaned)
+        log("getCleanedUsedStorage() diff" + diff)
+        var cleaned = FileUtils.getUnitGB(diff.toFloat())
+        log("getCleanedUsedStorage() cleaned" + cleaned)
 
-        return getUsedStorage(context)-FileUtils.getUnitGB(diff.toFloat()).toFloat()
+        return getUsedStorage(context) - FileUtils.getUnitGB(diff.toFloat()).toFloat()
     }
 
     /**
      * 获取已使用硬盘占比
      */
     fun getCleanedUsedStoragePercent(context: Context): Float {
-        var used=getCleanedUsedStorage(context)
-        var total=getTotalStorage(context)
-        var percent= (used / total) * 100
-        log("getCleanedUsedStoragePercent() percent="+percent+"  used="+used+"   total="+total)
+        var used = getCleanedUsedStorage(context)
+        var total = getTotalStorage(context)
+        var percent = (used / total) * 100
+        log("getCleanedUsedStoragePercent() percent=" + percent + "  used=" + used + "   total=" + total)
         return percent
     }
 
@@ -162,8 +164,8 @@ class HomeDeviceInfoStore {
     /**
      * 获取真实的电池温度
      */
-    fun getBatteryTemperature(context: Context):Float{
-       var easyBatteryMod = EasyBatteryMod(context)
+    fun getBatteryTemperature(context: Context): Float {
+        var easyBatteryMod = EasyBatteryMod(context)
         return easyBatteryMod.batteryTemperature
     }
 
@@ -172,28 +174,84 @@ class HomeDeviceInfoStore {
      * 需求：部分机型获取不到cpu温度情况下，取随机值【40，60】
      * 实现：部分毛！全都随机!!!
      */
-    fun getCPUTemperature(context: Context):Float{
-        return NumberUtils.mathRandomInt(40, 60).toFloat()
+    fun getCPUTemperature(context: Context): Float {
+        cpuTemperature = NumberUtils.mathRandomInt(40, 60).toFloat()
+        log("getCPUTemperature() cpuTemperature=" + cpuTemperature)
+        return cpuTemperature
     }
 
     /**
      * 获取清理后的电池温度
      * 需求：若用户在核心功能区域使用完手机降温功能，降温完成页降温数值3°，同时手机状态监控电池温度和cpu温度降低3°。
      */
-    fun getCleanedBatteryTemperature(context: Context):Float{
-        return getBatteryTemperature(context)-PreferenceUtil.getCleanCoolNum()
+    fun getCleanedBatteryTemperature(context: Context): Float {
+        log("getCleanedBatteryTemperature() getCleanCoolNum=" + PreferenceUtil.getCleanCoolNum())
+        log("getCleanedBatteryTemperature() getBatteryTemperature=" + getBatteryTemperature(context))
+        return getBatteryTemperature(context) - PreferenceUtil.getCleanCoolNum()
     }
 
     /**
      * 获取清理后的cpu温度
      * 需求：若用户在核心功能区域使用完手机降温功能，降温完成页降温数值3°，同时手机状态监控电池温度和cpu温度降低3°。
      */
-    fun getCleanedCPUTemperature(context: Context):Float{
-        return getCPUTemperature(context)-PreferenceUtil.getCleanCoolNum()
+    fun getCleanedCPUTemperature(context: Context): Float {
+        log("getCleanedCPUTemperature() cpuTemperature=" + cpuTemperature+"   PreferenceUtil.getCleanCoolNum()="+PreferenceUtil.getCleanCoolNum())
+        return cpuTemperature - PreferenceUtil.getCleanCoolNum()
     }
 
 
-    fun log(text:String){
-        LogUtils.e("HomeDeviceInfoStore:======"+text)
+    /*
+     *************************************************************************************************************************************************
+     *****************************************************temperature info****************************************************************************
+     *************************************************************************************************************************************************
+     */
+
+    fun getElectricNum(context: Context): Int {
+        var easyBatteryMod = EasyBatteryMod(context)
+        return easyBatteryMod.getBatteryPercentage()
+    }
+
+    /**
+     * 待机时间
+     */
+    fun getStandTime(context: Context): Int {
+        standTime = NumberUtils.mathRandomInt(5, 10)
+        return standTime
+    }
+
+    /**
+     * 获取清理后的待机时长
+     */
+    fun getCleanedStandTime(context: Context):String{
+        if(standTime==0){
+            standTime= getStandTime(context)
+        }
+        log("getCleanedStandTime() standTime=" + standTime+"   getCleanedBatteryMinutes="+PreferenceUtil.getCleanedBatteryMinutes())
+        return standTime.toString()+"小时"+PreferenceUtil.getCleanedBatteryMinutes()+"分钟"
+    }
+
+    //get random optimize electric num by electric value
+    fun saveRandomOptimizeElectricNum(context: Context) {
+        val electric = getBatteryTemperature(context)
+        var num: String? = ""
+        num = if (electric >= 70) {
+            NumberUtils.mathRandom(30, 60)
+        } else if (electric >= 50) {
+            NumberUtils.mathRandom(20, 50)
+        } else if (electric >= 20) {
+            NumberUtils.mathRandom(10, 45)
+        } else if (electric >= 10) {
+            NumberUtils.mathRandom(10, 30)
+        } else {
+            NumberUtils.mathRandom(5, 15)
+        }
+        PreferenceUtil.saveCleanedBatteryMinutes(num.toInt())
+        log("saveRandomOptimizeElectricNum() num=" + num)
+
+    }
+
+
+    fun log(text: String) {
+        LogUtils.e("HomeDeviceInfoStore:======" + text)
     }
 }
