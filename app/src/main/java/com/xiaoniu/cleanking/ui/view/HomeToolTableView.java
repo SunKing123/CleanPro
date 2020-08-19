@@ -15,6 +15,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.ui.finish.model.RecmedItemDataStore;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.HomeDeviceInfoStore;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 
@@ -163,12 +164,7 @@ public class HomeToolTableView extends LinearLayout {
      */
     public void coolingUnusedStyle() {
         String tHead = "温度已高达";
-        int temp = batteryStatus.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-        int random = NumberUtils.mathRandomInt(1, 6);
-        temp = temp / 10;
-        temp = temp > 0 ? temp : 30;
-        temp = temp + random;
-        String tColor = temp + "°C";
+        String tColor = HomeDeviceInfoStore.Companion.getInstance().getBatteryTemperature(getContext())+ "°C";
         RecmedItemDataStore.Companion.getInstance().setTemperature(tColor);
         SpannableString text = AndroidUtil.inertColorText(tHead + tColor, tHead.length(), tHead.length() + tColor.length(), getRedColor());
         itemTemperature.setContent(text);

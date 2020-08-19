@@ -13,7 +13,7 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.SimpleFragment
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
-import com.xiaoniu.cleanking.utils.MemoryInfoStore
+import com.xiaoniu.cleanking.utils.HomeDeviceInfoStore
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.Points
@@ -37,6 +37,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
             return fragment
         }
     }
+
     //内存和存储阈值
     private var low: Array<Int> = arrayOf(0, 49)
 
@@ -45,8 +46,6 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private var bHigh: Array<Int> = arrayOf(20, 90)
 
     private var TEMPERATURE_VPT = 37
-    private lateinit var easyMemoryMod: EasyMemoryMod
-    private lateinit var easyBatteryMod: EasyBatteryMod
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,8 +62,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     }
 
     fun initData(savedInstanceState: Bundle?) {
-        easyMemoryMod = EasyMemoryMod(mContext)
-        easyBatteryMod = EasyBatteryMod(mContext)
+
     }
 
     override fun initView() {
@@ -77,44 +75,58 @@ class HomeDeviceInfoFragment : SimpleFragment() {
         StatisticsUtils.customTrackEvent(Points.ExternalDevice.PAGE_EVENT_CODE, Points.ExternalDevice.PAGE_EVENT_NAME, "", Points.ExternalDevice.PAGE)
     }
 
+    fun refreshAllView() {
+        initMemoryView()
+        initStorageView()
+        initCoolView()
+        initBatteryView()
+    }
+
     /**
      * 运行信息
      */
-    private fun initMemoryView() {
-        initTrueMemoryView()
+    public fun initMemoryView() {
+        if (PreferenceUtil.getCleanTime()) {
+            initTrueMemoryView()
+        } else {
+            initCleanedMemoryView()
+        }
     }
 
     /**
      * 加载真是的内存信息
      */
-    private fun initTrueMemoryView(){
-        var total = MemoryInfoStore.getInstance().getTotalMemory(mContext)
-        var used =MemoryInfoStore.getInstance().getUsedMemory(mContext)
-        var percent=MemoryInfoStore.getInstance().getUsedMemoryPercent(mContext)
-        setMemoryViewData(total,used,percent)
+    private fun initTrueMemoryView() {
+        var total = HomeDeviceInfoStore.getInstance().getTotalMemory(mContext)
+        var used = HomeDeviceInfoStore.getInstance().getUsedMemory(mContext)
+        var percent = HomeDeviceInfoStore.getInstance().getUsedMemoryPercent()
+        setMemoryViewData(total, used, percent)
     }
 
     /**
      * 加载假的内存信息
      */
-    private fun initFalseCleanMemoryView(){
+    private fun initCleanedMemoryView() {
         //内存加速值，需要在真是的百分比上减去假的加速百分比，然后对一直用的内存进行相应计算显示，瞒天过海，骗过用户。
-        var total = MemoryInfoStore.getInstance().getTotalMemory(mContext)
-        var falseUsed =MemoryInfoStore.getInstance().getFalseUsedMemory(mContext)
-        var falsePercent=MemoryInfoStore.getInstance().getFalseUsedPercent(mContext)
-        setMemoryViewData(total,falseUsed,falsePercent)
+        var total = HomeDeviceInfoStore.getInstance().getTotalMemory(mContext)
+        var used = HomeDeviceInfoStore.getInstance().getCleanedUsedMemory(mContext)
+        var percent = HomeDeviceInfoStore.getInstance().getCleanedUsedMemoryPercent()
+        setMemoryViewData(total, used, percent)
     }
 
-    private fun setMemoryViewData(total:Float,used:Float,percent:Double){
+    private fun setMemoryViewData(total: Float, used: Float, percent: Int) {
         tv_memory_title.setText("运行总内存：" + total + " GB")
         tv_memory_content.setText("已用运行内存：" + used + " GB")
-        tv_memory_percent.setText(format(percent) + "%")
-        updateMemoryOrStorageImage(image_memory, percent.toInt())
-        updateMemoryOrStorageBtnBackGround(btn_clean_memory, percent.toInt())
+        tv_memory_percent.setText(percent.toString() + "%")
+        updateMemoryOrStorageImage(image_memory, percent)
+        updateMemoryOrStorageBtnBackGround(btn_clean_memory, percent)
     }
 
 
     fun format(value: Double): String? {
+        if (value <= 0) {
+            return value.toString()
+        }
         var bd = BigDecimal(value)
         bd = bd.setScale(0, RoundingMode.HALF_UP)
         return bd.toString()
@@ -123,42 +135,110 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     /**
      * 内部存储信息
      */
-    private fun initStorageView() {
-        var total = easyMemoryMod.getTotalInternalMemorySize().toFloat()
-        var used = total - easyMemoryMod.getAvailableInternalMemorySize().toFloat()
-        total = FileUtils.getUnitGB(total).toFloat()
-        used = FileUtils.getUnitGB(used).toFloat()
+    fun initStorageView() {
+        if (PreferenceUtil.getNowCleanTime()) {
+            initTrueStorageView()
+        } else {
+            initCleanedStorageView()
+        }
+    }
 
-        var percent = (used.toDouble() / total.toDouble()) * 100
-        tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total) + " GB")
-        tv_storage_content.setText("已用内部存储：" + FileUtils.getUnitGB(used) + " GB")
+    private fun initTrueStorageView() {
+        var total = HomeDeviceInfoStore.getInstance().getTotalStorage(mContext)
+        var used = HomeDeviceInfoStore.getInstance().getUsedStorage(mContext)
+        var percent = HomeDeviceInfoStore.getInstance().getUsedStoragePercent(mContext)
+
+        tv_storage_title.setText("内部总存储：" + total + " GB")
+        tv_storage_content.setText("已用内部存储：" + used + " GB")
         tv_storage_percent.setText(format(percent) + "%")
         updateMemoryOrStorageImage(image_storage, percent.toInt())
         updateMemoryOrStorageBtnBackGround(btn_clean_storage, percent.toInt())
     }
 
+    /**
+     * 内部存储信息清理后的
+     */
+    private fun initCleanedStorageView() {
+        var total = HomeDeviceInfoStore.getInstance().getTotalStorage(mContext)
+        var used = HomeDeviceInfoStore.getInstance().getCleanedUsedStorage(mContext)
+        var percent = HomeDeviceInfoStore.getInstance().getCleanedUsedStoragePercent(mContext)
+
+        tv_storage_title.setText("内部总存储：" + total + " GB")
+        tv_storage_content.setText("已用内部存储：" + used + " GB")
+        tv_storage_percent.setText(format(percent.toDouble()) + "%")
+        updateMemoryOrStorageImage(image_storage, percent.toInt())
+        updateMemoryOrStorageBtnBackGround(btn_clean_storage, percent.toInt())
+    }
 
     /**
      * 温度信息
      */
     private fun initCoolView() {
-        updateCoolImage(easyBatteryMod.getBatteryTemperature())
-        updateBtn(easyBatteryMod.getBatteryTemperature())
-        tv_temperature_title.setText("电池温度：" + easyBatteryMod.getBatteryTemperature() + "°C")
-        tv_temperature_content.setText("CPU温度：" + (easyBatteryMod.getBatteryTemperature() + NumberUtils.mathRandomInt(5, 10).toFloat()) + "°C")
+
+        if (PreferenceUtil.getCoolingCleanTime()) {
+            initTrueCoolView()
+        } else {
+            initCleanedCoolView()
+        }
+    }
+
+    private fun initTrueCoolView() {
+        var batteryT = HomeDeviceInfoStore.getInstance().getBatteryTemperature(mContext)
+        var cpuT = HomeDeviceInfoStore.getInstance().getCPUTemperature(mContext)
+        updateCoolImage(cpuT)
+        updateBtn(cpuT)
+        tv_temperature_title.setText("电池温度：" + batteryT + "°C")
+        tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
+    }
+
+    /**
+     * 温度信息
+     */
+    private fun initCleanedCoolView() {
+        var batteryT = HomeDeviceInfoStore.getInstance().getCleanedBatteryTemperature(mContext)
+        var cpuT = HomeDeviceInfoStore.getInstance().getCleanedCPUTemperature(mContext)
+        updateCoolImage(batteryT)
+        updateBtn(batteryT)
+        tv_temperature_title.setText("电池温度：" + batteryT + "°C")
+        tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
     }
 
     /**
      * 电量信息
      */
     private fun initBatteryView() {
-        tv_battery_title.setText("当前电量：" + easyBatteryMod.getBatteryPercentage() + "%")
-        tv_battery_content.setText("待机时间" + NumberUtils.mathRandomInt(5, 10) + "小时")
-        tv_battery_percent.setText(easyBatteryMod.getBatteryPercentage().toString() + "%")
+        if (PreferenceUtil.getPowerCleanTime()) {
+            initTrueBatteryView()
+        } else {
+            initCleanedBatteryView()
+        }
+    }
 
-        updateBatteryImage(easyBatteryMod.getBatteryPercentage())
+    private fun initTrueBatteryView() {
+        tv_battery_title.setText("当前电量：" + HomeDeviceInfoStore.getInstance().getElectricNum(mContext) + "%")
+        tv_battery_content.setText("待机时间" + HomeDeviceInfoStore.getInstance().getStandTime(mContext) + "小时")
+        tv_battery_percent.setText(HomeDeviceInfoStore.getInstance().getElectricNum(mContext).toString() + "%")
 
-        var percent = easyBatteryMod.getBatteryPercentage();
+        updateBatteryImage(HomeDeviceInfoStore.getInstance().getElectricNum(mContext))
+        var percent = HomeDeviceInfoStore.getInstance().getElectricNum(mContext)
+
+        if (inTheRange(percent, bLow)) {
+            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
+        } else {
+            btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_green_bg)
+        }
+    }
+
+    /**
+     * 电量信息
+     */
+    private fun initCleanedBatteryView() {
+        tv_battery_title.setText("当前电量：" + HomeDeviceInfoStore.getInstance().getElectricNum(mContext) + "%")
+        tv_battery_content.setText("待机时间" + HomeDeviceInfoStore.getInstance().getCleanedStandTime(mContext))
+        tv_battery_percent.setText(HomeDeviceInfoStore.getInstance().getElectricNum(mContext).toString() + "%")
+
+        updateBatteryImage(HomeDeviceInfoStore.getInstance().getElectricNum(mContext))
+        var percent = HomeDeviceInfoStore.getInstance().getElectricNum(mContext)
 
         if (inTheRange(percent, bLow)) {
             btn_clean_battery.setBackgroundResource(R.drawable.clear_btn_red_bg)
@@ -179,7 +259,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      */
     private fun goCleanMemory() {
         if (isDestroy()) return
-         StartActivityUtils.goCleanMemory(activity!!)
+        StartActivityUtils.goCleanMemory(activity!!)
     }
 
     /**
@@ -205,7 +285,6 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private fun goCleanBattery() {
         if (isDestroy()) return
         StartActivityUtils.goCleanBattery(activity!!)
-
     }
 
     /**
@@ -288,10 +367,11 @@ class HomeDeviceInfoFragment : SimpleFragment() {
             return
         }
         when (event.title) {
-            "一键加速" -> initFalseCleanMemoryView()
-            "超强省电" -> initBatteryView()
-            "手机降温" -> initBatteryView()
-            "建议清理" -> initStorageView()
+            "一键清理" -> initCleanedStorageView()
+            "一键加速" -> initCleanedMemoryView()
+            "手机降温" -> initCleanedCoolView()
+            "超强省电" -> initCleanedBatteryView()
+
         }
     }
 

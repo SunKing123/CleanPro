@@ -637,8 +637,8 @@ public final class FileUtils {
             DecimalFormat df = new DecimalFormat("0.00");//格式化小数
             mFreeS = df.format(bytes);
         } catch (Exception e) {
-        }
 
+        }
         return mFreeS;
     }
 
@@ -648,8 +648,8 @@ public final class FileUtils {
      * 单位转换
      */
     public static String getUnitGB(float size) {
-        int index = 0;
-        while (size > 1024 && index < units.length) {
+        int index = 1;
+        while (index < units.length) {
             size = size / 1024;
             index++;
         }

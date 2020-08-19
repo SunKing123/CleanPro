@@ -1952,7 +1952,21 @@ public class PreferenceUtil {
         return sharedPreferences.getString(SpCacheConfig.SAVE_CLEAN_STORAGE_NUM, "201:MB");
     }
 
+    /**
+     * 保存电池优化后的时间加速
+     */
+    public static void saveCleanedBatteryMinutes(int minutes) {
+        getEditor().putInt(SpCacheConfig.RANDOM_CLEANED_BATTERY_MINUTES,minutes).commit();
+    }
 
+
+    /**
+     * 获取电池优化后的时间加速
+     */
+    public static int getCleanedBatteryMinutes() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.RANDOM_CLEANED_BATTERY_MINUTES,20);
+    }
 
     /**
      * 获取冷热起间隔时间
