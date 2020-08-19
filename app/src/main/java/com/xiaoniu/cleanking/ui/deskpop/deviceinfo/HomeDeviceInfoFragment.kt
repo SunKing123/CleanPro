@@ -171,7 +171,6 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      * 温度信息
      */
     private fun initCoolView() {
-
         if (PreferenceUtil.getCoolingCleanTime()) {
             initTrueCoolView()
         } else {

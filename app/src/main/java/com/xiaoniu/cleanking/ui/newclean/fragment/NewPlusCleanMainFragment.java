@@ -503,7 +503,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
             case "一键加速":
                 homeMainTableView.oneKeySpeedUsedStyle();
-                getDeviceFragment().initMemoryView();
                 break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();
