@@ -251,12 +251,14 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
         bean.isDouble = false;
         //广告位1开关控制
         if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_MINE_LIMIT_AWARD_PAG, PositionId.DRAW_TWO_CODE)) {
-            bean.adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_ONE_CODE);
+            bean.adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_MINE_LIMIT_AWARD_PAG, PositionId.DRAW_TWO_CODE);
 //            Map<String, Object> mapJson = new HashMap<>();
 //            mapJson.put("position_id", String.valueOf(dataBean.getData().getLocationNum()));
 //            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "首页金币领取弹窗上广告发起请求", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window", mapJson);
         }
         bean.totalCoinCount = dataBean.getData().getTotalGoldCount();
+        //翻倍回调
+        bean.onDoubleClickListener = (v) -> { };
         //弹框关闭回调
         bean.closeClickListener = new View.OnClickListener() {
             @Override
