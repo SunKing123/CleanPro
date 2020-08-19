@@ -130,7 +130,6 @@ class StartActivityUtils {
             gotoFinish(context, bundle)
         }
 
-
         /**
          * 创建加速快捷方式
          */
@@ -146,7 +145,7 @@ class StartActivityUtils {
                     var pinShortcutInfo = ShortcutInfo.Builder(context, "acc_shortcut")
                             .setShortLabel("一键加速")
                             .setLongLabel("一键加速")
-                            .setIcon(Icon.createWithResource(context, R.mipmap.applogo))
+                            .setIcon(Icon.createWithResource(context, R.drawable.acc_shortcut_log))
                             .setIntent(intent)
                             .build();
                     //当固定快捷方式成功后，会执行该Intent指定的操作，包括启动Activity、发送广播等，如果固定快捷方式成功后不需要做额外处理的话该参数传null就可以。

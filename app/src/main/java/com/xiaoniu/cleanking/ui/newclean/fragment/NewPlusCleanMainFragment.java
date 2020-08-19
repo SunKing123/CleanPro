@@ -206,7 +206,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
 
         addDeviceInfoFragment();
+
     }
+
+
     HomeDeviceInfoFragment homeDeviceInfoFragment;
 
     private void addDeviceInfoFragment() {
@@ -503,6 +506,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
             case "一键加速":
                 homeMainTableView.oneKeySpeedUsedStyle();
+                if(PreferenceUtil.isFirstUseAccOfDay()){
+                    StartActivityUtils.Companion.createAccShortcut(getActivity());
+                }
                 break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();
