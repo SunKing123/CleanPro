@@ -128,6 +128,7 @@ class HomeDeviceInfoStore {
         var easyMemoryMod = EasyMemoryMod(context)
         var total = easyMemoryMod.getTotalInternalMemorySize().toDouble()
         var used = total - easyMemoryMod.getAvailableInternalMemorySize().toDouble()
+        log("getUsedStoragePercent() total=" + total+"   used="+used+"    percent="+(used / total) * 100)
         return (used / total) * 100
     }
 
@@ -195,6 +196,9 @@ class HomeDeviceInfoStore {
      * 需求：若用户在核心功能区域使用完手机降温功能，降温完成页降温数值3°，同时手机状态监控电池温度和cpu温度降低3°。
      */
     fun getCleanedCPUTemperature(context: Context): Float {
+        if(cpuTemperature<=0){
+            cpuTemperature=getCPUTemperature(context)
+        }
         log("getCleanedCPUTemperature() cpuTemperature=" + cpuTemperature+"   PreferenceUtil.getCleanCoolNum()="+PreferenceUtil.getCleanCoolNum())
         return cpuTemperature - PreferenceUtil.getCleanCoolNum()
     }
@@ -230,7 +234,15 @@ class HomeDeviceInfoStore {
         return standTime.toString()+"小时"+PreferenceUtil.getCleanedBatteryMinutes()+"分钟"
     }
 
-    //get random optimize electric num by electric value
+    /**
+     * 保存电量优化后的待机时机增加值
+     * 需求：
+     * 当手机电量【1%~10%），延长时间显示【5，15】分钟随机数
+     * 当手机电量【10%~20%），延长时间显示【10，30】分钟随机数
+     * 当手机电池电量【20%~50%）时，延长时间显示【10，45】分钟随机数
+     * 当手机电池电量【50%，70%）时，延长待机时间显示【20，50】分钟随机数
+     * 当手机电池电量【70%，100%】时，延长待机时间显示【30，60】分钟随机数
+     */
     fun saveRandomOptimizeElectricNum(context: Context) {
         val electric = getBatteryTemperature(context)
         var num: String? = ""
