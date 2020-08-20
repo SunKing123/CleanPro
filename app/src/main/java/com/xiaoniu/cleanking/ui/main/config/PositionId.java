@@ -50,6 +50,9 @@ public class PositionId {
 
     public static final String KEY_AD_PAGE_FINISH = "page_finish_adv_gj_3.0";
 
+    //快捷方式，加速完成页广告
+    public static final String KEY_AD_PAGE_WIDGET_ACC_FINISH = "page_widget_acc_finish_3.3.0";
+
     public static final String KEY_FINISH_SWITCH = "page_res_fixed_ad_3";
     public static final String KEY_CLEAN_ALL_SCREEN = "page_immediately_complete_screen";
     public static final String KEY_PHONE_SCREEN = "page_phone_clear_complete_screen";

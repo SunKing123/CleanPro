@@ -149,16 +149,32 @@
                 android:orientation="vertical"
                 android:visibility="gone" />
 
-            <FrameLayout
-                android:id="@+id/frame_deviceInfo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:background="@drawable/shadow"
-                android:paddingTop="14dp"
-                android:paddingBottom="24dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                />
+                >
+                <TextView
+                    android:textSize="13dp"
+                    android:textColor="#999999"
+                    android:text="手机状态"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginLeft="12dp"
+                    />
+
+                <FrameLayout
+                    android:id="@+id/frame_deviceInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="24dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    />
+            </LinearLayout>
 
             <com.xiaoniu.cleanking.widget.ClearCardView
                 android:id="@+id/clear_card_video"

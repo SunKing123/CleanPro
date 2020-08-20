@@ -191,6 +191,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
             }
         }
     }
+
     /*
      *在进程初始化的时候调用，比如Application中进行调用，并且这行代码需要在其他的SDK等等初始化之前就要调*用，否则会报其他的错误
      */
@@ -464,6 +465,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
                         || activity.getLocalClassName().contains(".tt")
                         || activity.getLocalClassName().contains(".dy")
                         || activity.getLocalClassName().contains("FullPopLayerActivity")
+                        || activity.getLocalClassName().contains("AccWidgetCleanFinishActivity")
+                        || activity.getLocalClassName().contains("AccWidgetAnimationActivity")
                         || !PreferenceUtil.isNotFirstOpenApp())
                     return;
 

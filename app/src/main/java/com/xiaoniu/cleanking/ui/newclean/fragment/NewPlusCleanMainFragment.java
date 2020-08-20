@@ -2,7 +2,9 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -206,18 +208,24 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
 
         addDeviceInfoFragment();
+
+
+        StartActivityUtils.Companion.createAccShortcut(getActivity());
+
     }
+
+
     HomeDeviceInfoFragment homeDeviceInfoFragment;
 
     private void addDeviceInfoFragment() {
         FragmentManager manager = getChildFragmentManager();
-        manager.beginTransaction().add(R.id.frame_deviceInfo,getDeviceFragment()).commitAllowingStateLoss();
+        manager.beginTransaction().add(R.id.frame_deviceInfo, getDeviceFragment()).commitAllowingStateLoss();
     }
 
 
-    private HomeDeviceInfoFragment getDeviceFragment(){
-        if(homeDeviceInfoFragment==null){
-            homeDeviceInfoFragment=HomeDeviceInfoFragment.Companion.getInstance();
+    private HomeDeviceInfoFragment getDeviceFragment() {
+        if (homeDeviceInfoFragment == null) {
+            homeDeviceInfoFragment = HomeDeviceInfoFragment.Companion.getInstance();
         }
         return homeDeviceInfoFragment;
     }
@@ -503,7 +511,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
             case "一键加速":
                 homeMainTableView.oneKeySpeedUsedStyle();
-                getDeviceFragment().initMemoryView();
+                if (PreferenceUtil.isFirstUseAccOfDay()) {
+                    StartActivityUtils.Companion.createAccShortcut(getActivity());
+                }
                 break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();

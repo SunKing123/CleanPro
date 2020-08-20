@@ -89,12 +89,6 @@ class HomeDeviceInfoStore {
         return cleanedMemoryPercent
     }
 
-    fun format(value: Double): Float {
-        var bd = BigDecimal(value)
-        bd = bd.setScale(1, RoundingMode.HALF_UP)
-        return bd.toFloat()
-    }
-
 
     /*
      *************************************************************************************************************************************************
@@ -138,11 +132,15 @@ class HomeDeviceInfoStore {
     fun getCleanedUsedStorage(context: Context): Float {
         var diff = MmkvUtil.getLong(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA_B, 0)
 
-        log("getCleanedUsedStorage() diff" + diff)
+        log("getCleanedUsedStorage() diff=" + diff)
         var cleaned = FileUtils.getUnitGB(diff.toFloat())
-        log("getCleanedUsedStorage() cleaned" + cleaned)
+        var used=getUsedStorage(context)
+        log("getCleanedUsedStorage() cleaned=" + cleaned)
+        log("getCleanedUsedStorage() used=" + used)
+        used=used-cleaned.toFloat()
+        log("getCleanedUsedStorage() used after=" + used)
 
-        return getUsedStorage(context) - FileUtils.getUnitGB(diff.toFloat()).toFloat()
+        return format(used.toDouble())
     }
 
     /**
@@ -262,6 +260,12 @@ class HomeDeviceInfoStore {
         log("saveRandomOptimizeElectricNum() num=" + num)
     }
 
+
+    fun format(value: Double): Float {
+        var bd = BigDecimal(value)
+        bd = bd.setScale(1, RoundingMode.HALF_UP)
+        return bd.toFloat()
+    }
 
     fun log(text: String) {
         LogUtils.e("HomeDeviceInfoStore:======" + text)
