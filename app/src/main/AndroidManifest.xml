@@ -301,7 +301,6 @@
             android:name=".ui.accwidget.AccWidgetAnimationActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
             android:taskAffinity="com.widget.acc"
             android:theme="@style/pop_layer_style"/>
 
