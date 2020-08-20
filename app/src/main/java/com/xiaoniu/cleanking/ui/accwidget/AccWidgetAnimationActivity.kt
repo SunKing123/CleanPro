@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
+import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
 
@@ -17,10 +18,12 @@ import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
 class AccWidgetAnimationActivity : Activity() {
 
     var context: Context = this
+    var configBean: InsertAdSwitchInfoList.DataBean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_widget_acc_animation_layout)
+        configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIDGET_ACC_FINISH)
         loadAnimationAndPlay()
     }
 
@@ -40,12 +43,11 @@ class AccWidgetAnimationActivity : Activity() {
     }
 
     fun toFinishActivity() {
-        val configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIDGET_ACC_FINISH)
-        if(configBean.isOpen){
+       // if(configBean!=null&&configBean!!.isOpen){
             var intent = Intent()
             intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
             startActivity(intent)
-        }
+       // }
         finish()
     }
 }
