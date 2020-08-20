@@ -28,7 +28,7 @@ class InsideScreenDialogUtil {
 
     fun showInsideDialog(activity: AppCompatActivity?, adId: String) {
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             return
         }
         MidasRequesCenter.requestAndShowAd(activity, adId, object : AbsAdBusinessCallback() {
@@ -44,6 +44,9 @@ class InsideScreenDialogUtil {
                         val p = window.attributes
                         p.width = (DisplayUtil.getScreenWidth(activity) * 0.80f).toInt()
                         window.attributes = p
+                    }
+                    dialog?.setOnDismissListener {
+                        HomePopUpStatusManager.getInstance().setInnerInsertDismiss()
                     }
                     val frameLayout = dialog?.findViewById<FrameLayout>(R.id.ad_container)
                     adInfoModel.addInContainer(frameLayout)
