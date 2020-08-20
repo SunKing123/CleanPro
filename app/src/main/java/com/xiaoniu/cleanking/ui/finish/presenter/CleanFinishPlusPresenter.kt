@@ -19,12 +19,15 @@ import com.xiaoniu.cleanking.ui.main.model.GoldCoinDoubleModel
 import com.xiaoniu.cleanking.ui.main.model.MainModel
 import com.xiaoniu.cleanking.ui.newclean.activity.GoldCoinSuccessActivity.Companion.start
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil
+import com.xiaoniu.cleanking.ui.tool.notify.event.LimitAwardRefEvent
+import com.xiaoniu.cleanking.utils.DaliyTaskInstance
 import com.xiaoniu.cleanking.utils.InsideScreenDialogUtil
 import com.xiaoniu.cleanking.utils.net.Common3Subscriber
 import com.xiaoniu.cleanking.utils.net.RxUtil
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.ToastUtils
 import com.xiaoniu.unitionadbase.model.AdInfoModel
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 /**
@@ -157,28 +160,33 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         CleanFinishLogger.log("============金币发放数正在加载...：======================")
-        mModel?.getGoleGonfigs(object : Common3Subscriber<BubbleConfig?>() {
-            override fun showExtraOp(code: String, message: String) {  //关心错误码；
-                ToastUtils.showShort(message)
-            }
+        if(DaliyTaskInstance.getInstance().isExistTask){
+            addGoldCoin(DaliyTaskInstance.getInstance().taskList.get(0).goldNum)//直接领取金币任务
+        }else{
+            mModel?.getGoleGonfigs(object : Common3Subscriber<BubbleConfig?>() {
+                override fun showExtraOp(code: String, message: String) {  //关心错误码；
+                    ToastUtils.showShort(message)
+                }
 
-            override fun getData(bubbleConfig: BubbleConfig?) {
-                if (bubbleConfig != null && bubbleConfig.data.size > 0) {
-                    for (item in bubbleConfig.data) {
-                        if (item.locationNum == 5) {
-                            CleanFinishLogger.log("============金币发放数正在加载完成:" + item.goldCount)
-                            addGoldCoin(item.goldCount)
-                            break
+                override fun getData(bubbleConfig: BubbleConfig?) {
+                    if (bubbleConfig != null && bubbleConfig.data.size > 0) {
+                        for (item in bubbleConfig.data) {
+                            if (item.locationNum == 5) {
+                                CleanFinishLogger.log("============金币发放数正在加载完成:" + item.goldCount)
+                                addGoldCoin(item.goldCount)
+                                break
+                            }
                         }
                     }
                 }
-            }
 
-            override fun showExtraOp(message: String) {}
-            override fun netConnectError() {
-                ToastUtils.showShort(R.string.notwork_error)
-            }
-        }, RxUtil.rxSchedulerHelper<ImageAdEntity>(view))
+                override fun showExtraOp(message: String) {}
+                override fun netConnectError() {
+                    ToastUtils.showShort(R.string.notwork_error)
+                }
+            }, RxUtil.rxSchedulerHelper<ImageAdEntity>(view))
+        }
+
     }
 
     /**
@@ -189,7 +197,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             return
         }
         CleanFinishLogger.log("============调用添加金币数量接口...：======================")
-        mModel?.goleCollect(object : Common3Subscriber<BubbleCollected?>() {
+        var commmsubscriber =object : Common3Subscriber<BubbleCollected?>() {
             override fun showExtraOp(code: String, message: String) {  //关心错误码；
                 // ToastUtils.showShort(message);
             }
@@ -201,21 +209,33 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                 if (bubbleConfig != null) {
                     //添加成功后，展示金币弹框
                     CleanFinishLogger.log("============调用添加金币数量接口成功，弹窗展示：======================")
-                    view.showGoldCoinDialog(bubbleConfig)
+                    //如果是任务领取，清除任务
+                    if(DaliyTaskInstance.getInstance().isExistTask){
+                        DaliyTaskInstance.getInstance().cleanTask()
+                        view.showGoldCoinDialog(bubbleConfig,true)
+                        EventBus.getDefault().post(LimitAwardRefEvent())
+                    }else{
+                        view.showGoldCoinDialog(bubbleConfig,false)
+                    }
                 }
             }
-
             override fun showExtraOp(message: String) {}
             override fun netConnectError() {
                 ToastUtils.showShort(R.string.notwork_error)
             }
-        }, RxUtil.rxSchedulerHelper<ImageAdEntity>(view), 5)
+        }
+        if(DaliyTaskInstance.getInstance().isExistTask){
+            mModel?.daliyTasksCollect(commmsubscriber, RxUtil.rxSchedulerHelper<ImageAdEntity>(view), DaliyTaskInstance.getInstance().taskList.get(0).id)
+        }else{
+            mModel?.goleCollect(commmsubscriber, RxUtil.rxSchedulerHelper<ImageAdEntity>(view), 5)
+        }
+
     }
 
     /**
      * 激励视频看完，进行金币翻倍
      */
-    override fun addDoubleGoldCoin(bubbleCollected: BubbleCollected) {
+    override fun addDoubleGoldCoin(bubbleCollected: BubbleCollected,isTask:Boolean) {
         if (isDestroy()) {
             return
         }
@@ -251,7 +271,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                 view.dismissGoldCoinDialog()
             }
         }, RxUtil.rxSchedulerHelper<ImageAdEntity>(view), bubbleCollected.data.uuid, bubbleCollected.data.locationNum,
-                bubbleCollected.data.goldCount, bubbleCollected.data.doubledMagnification)
+                bubbleCollected.data.goldCount, bubbleCollected.data.doubledMagnification,isTask)
     }
 
     fun startGoldSuccess(adId: String, num: Int, functionName: String, doubledMagnification: Int) {
@@ -271,7 +291,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
 
     }
 
-    override fun loadVideoAdv(bubbleCollected: BubbleCollected) {
+    override fun loadVideoAdv(bubbleCollected: BubbleCollected,isTask:Boolean) {
         if (isDestroy()) {
             return
         }
@@ -289,7 +309,7 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
                 pointer.videoAdvClose()
                 if (isComplete) {
                     //播放完成的话去翻倍
-                    addDoubleGoldCoin(bubbleCollected)
+                    addDoubleGoldCoin(bubbleCollected,isTask)
                 } else {
                     //没有播放完成就关闭广告的话把弹窗关掉
                     view.dismissGoldCoinDialog()

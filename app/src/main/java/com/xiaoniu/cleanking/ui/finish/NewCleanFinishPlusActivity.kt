@@ -36,9 +36,12 @@ import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity
 import com.xiaoniu.cleanking.utils.AndroidUtil
+import com.xiaoniu.cleanking.utils.AppLifecycleUtil
 import com.xiaoniu.cleanking.utils.ExtraConstant
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.FinishCardView
+import com.xiaoniu.common.utils.AppUtils
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.common.utils.ToastUtils
@@ -305,7 +308,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     /**
      * 金币弹框
      */
-    override fun showGoldCoinDialog(bubbleCollected: BubbleCollected) {
+    override fun showGoldCoinDialog(bubbleCollected: BubbleCollected, isTask:Boolean) {
         val bean = GoldCoinDialogParameter()
         bean.dialogType = 3
         bean.obtainCoinCount = bubbleCollected.data.goldCount
@@ -321,7 +324,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
                 return@OnClickListener
             }
             pointer.goldCoinDoubleClick()
-            mPresenter.loadVideoAdv(bubbleCollected)
+            mPresenter.loadVideoAdv(bubbleCollected,isTask)
         }
         pointer.goldCoinDialogExposure()
         pointer.goldCoinRequestAdv1()
@@ -452,7 +455,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
             CleanFinishLogger.log("isOpen=" + it.isOpen)
             if (it.isOpen) {
                 mPresenter.loadInsideScreenDialog()
-            } else if(!unused){
+            } else if (!unused) {
                 mPresenter.loadGoldCoinDialog()
             }
         }

@@ -37,11 +37,13 @@ import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
+import com.xiaoniu.cleanking.ui.tool.notify.event.LimitAwardRefEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
+import com.xiaoniu.cleanking.utils.DaliyTaskInstance;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -137,6 +139,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     @Subscribe
     public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
         mPresenter.refBullList();//金币配置刷新；
+        mPresenter.refDaliyTask();    //日常任务列表刷新
     }
 
     @Override
@@ -165,6 +168,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         if (event != null && event.infoBean != null) {
             setUserCoinView(event.infoBean.getAmount(), event.infoBean.getGold());
         }
+    }
+
+    //刷新日常任务和限时金币
+    @Subscribe
+    public void limitAwardRef(LimitAwardRefEvent event) {
+        mPresenter.refBullList();     //金币配置刷新
+        mPresenter.refDaliyTask();    //日常任务列表刷新
     }
 
     @OnClick({R.id.setting_ll, R.id.head_img_iv, R.id.phone_num_tv, R.id.llt_invite_friend,
@@ -339,9 +349,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 DaliyTaskListEntity itemdata = (DaliyTaskListEntity) adapter.getItem(position);
-                if (null != itemdata && itemdata.getLinkType() == 1 && TextUtils.isEmpty(itemdata.getLinkUrl())) {
-                    if (SchemeUtils.isScheme(itemdata.getLinkUrl())) {
+                if (null != itemdata && itemdata.getLinkType() == 1 && !TextUtils.isEmpty(itemdata.getLinkUrl()) && SchemeUtils.isScheme(itemdata.getLinkUrl())) {
+                    try {
                         SchemeUtils.openScheme(mActivity, itemdata.getLinkUrl());
+                        DaliyTaskInstance.getInstance().addTask(itemdata);
+                    } catch (Exception e) {
+                        DaliyTaskInstance.getInstance().cleanTask();
+                        e.printStackTrace();
                     }
                 } else {
                     ToastUtils.showShort(getString(R.string.notwork_error));

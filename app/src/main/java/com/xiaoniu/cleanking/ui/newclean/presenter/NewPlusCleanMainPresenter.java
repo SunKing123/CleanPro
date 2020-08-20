@@ -658,7 +658,7 @@ public class NewPlusCleanMainPresenter extends RxPresenter<NewPlusCleanMainFragm
             public void netConnectError() {
                 ToastUtils.showShort(R.string.notwork_error);
             }
-        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount, doubledMagnification);
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper(mView), uuid, locationNum, goldCount, doubledMagnification,false);
     }
 
     //金币领取广告弹窗
