@@ -302,7 +302,7 @@
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:taskAffinity="com.widget.acc"
-            android:theme="@style/pop_layer_style"/>
+            android:theme="@style/half_translucent"/>
 
         <activity
             android:name=".ui.accwidget.AccWidgetCleanFinishActivity"

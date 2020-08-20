@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.main.activity;
 
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.umeng.socialize.UMShareAPI;
