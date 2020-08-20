@@ -974,6 +974,17 @@
             android:noHistory="true"
             android:taskAffinity="com.xiaoniu.clean.ad" />
         <!--广告相关==============页面跟区分栈，方式吊起应用结束============-->
+
+        <receiver android:name=".ui.accwidget.AccWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- widget的点击事件 action 待添加-->
+                <action android:name="com.xiaoniu.widget.action.view.click"/>
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_acc_provider"/>
+        </receiver>
+
     </application>
     <!-- 允许程序扩展或收缩状态栏 -->
     <permission
