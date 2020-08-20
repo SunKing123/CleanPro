@@ -26,7 +26,7 @@ class AccWidgetCleanFinishActivity : Activity() {
         setContentView(R.layout.activity_acc_widget_clean_finish_layout)
         initView()
     }
-    
+
     fun initView() {
         var memoryLower = NumberUtils.mathRandomInt(10, 30)
         tv_cleaned_memory.text = "释放内存" + memoryLower + "%"
@@ -40,6 +40,7 @@ class AccWidgetCleanFinishActivity : Activity() {
 
     fun initEvent() {
         tv_goCleanStorage.setOnClickListener({ goToCleanStorage() })
+        scene_close.setOnClickListener({ finish() })
     }
 
     fun goToCleanStorage() {
@@ -51,7 +52,17 @@ class AccWidgetCleanFinishActivity : Activity() {
     }
 
     fun loadAdv() {
-        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE), object : SimpleViewCallBack(findViewById(R.id.ad_container)) {
+        var isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
+        //todo 调试时，开关先打开
+        isOpenOne=true
+        if(!isOpenOne){
+            return
+        }
+
+        //todo 这里需要对广告id进行替换
+        //var adId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
+        var adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_FINISH, PositionId.DRAW_ONE_CODE)
+        MidasRequesCenter.requestAndShowAd(this, adId, object : SimpleViewCallBack(findViewById(R.id.ad_container)) {
 
         })
     }

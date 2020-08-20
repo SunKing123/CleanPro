@@ -5,9 +5,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.animation.Animation.AnimationListener
-import com.airbnb.lottie.LottieAnimationView
 import com.xiaoniu.cleanking.R
+import com.xiaoniu.cleanking.base.AppHolder
+import com.xiaoniu.cleanking.ui.main.config.PositionId
 import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
 
 /**
@@ -40,10 +40,12 @@ class AccWidgetAnimationActivity : Activity() {
     }
 
     fun toFinishActivity() {
-        var intent = Intent()
-        intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
-        startActivity(intent)
-
+        val configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIDGET_ACC_FINISH)
+        if(configBean.isOpen){
+            var intent = Intent()
+            intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
+            startActivity(intent)
+        }
         finish()
     }
 }
