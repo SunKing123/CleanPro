@@ -83,6 +83,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.HomePopUpStatusManager;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -169,6 +170,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private int bullNum = 0;
     FloatAnimManager mFloatAnimManager;
     private BullRunnable bullRunnable = new BullRunnable();
+    boolean usedOneKeyAcc=false;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -231,6 +233,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (hasFocus && isFirstCreate) {
             AppLifecyclesImpl.postDelay(bullRunnable, 3000);
             isFirstCreate = false;
+        }
+
+        if(usedOneKeyAcc&&hasFocus){
+            usedOneKeyAcc=false;
+            showCreateShortcut();
         }
     }
 
@@ -502,7 +509,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         switch (event.getTitle()) {
             case "一键加速":
-                showCreateShortcut();
+                usedOneKeyAcc=true;
                 homeMainTableView.oneKeySpeedUsedStyle();
                 break;
             case "超强省电":

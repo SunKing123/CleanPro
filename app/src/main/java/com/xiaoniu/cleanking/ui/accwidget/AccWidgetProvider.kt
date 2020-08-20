@@ -78,7 +78,7 @@ public class AccWidgetProvider : AppWidgetProvider() {
             }
         }
     }
-
+    
     override fun onRestored(context: Context?, oldWidgetIds: IntArray?, newWidgetIds: IntArray?) {
         super.onRestored(context, oldWidgetIds, newWidgetIds)
         WidgetLog.log("onRestored()")
