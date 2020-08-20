@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.jess.arms.utils.DeviceUtils;
 import com.xiaoniu.cleanking.R;
@@ -14,7 +15,6 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.databinding.FragmentMineBinding;
-
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
@@ -24,10 +24,12 @@ import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.ui.main.bean.DaliyTaskListData;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
+import com.xiaoniu.cleanking.ui.newclean.adapter.MineDaliyTaskAdapter;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
@@ -36,6 +38,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
@@ -61,6 +64,8 @@ import static com.xiaoniu.cleanking.utils.user.UserHelper.LOGIN_SUCCESS;
  * Describe:个人中心 替换之前的MeFragment页面
  */
 public class MineFragment extends BaseFragment<MinePresenter> implements MineFragmentContact.View, IBullClickListener {
+
+    MineDaliyTaskAdapter mineDaliyTaskAdapter;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -90,14 +95,16 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.settingLl.getLayoutParams();
         params.topMargin = DeviceUtils.getStatusBarHeight(mContext) + 30;
         mBinding.settingLl.setLayoutParams(params);
+
         if (AppHolder.getInstance().getAuditSwitch()) {//特殊情况隐藏
             mBinding.cashRl.setVisibility(View.GONE);
         } else {
             mBinding.cashRl.setVisibility(View.VISIBLE);
         }
+        initTaskListView();
         ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
         ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
-        mPresenter.refBullList();//金币列表
+
         showRewardViewListener();
 //        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
 //            mBinding.mineAdFf.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
@@ -137,8 +144,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 //            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
             //展示广告
             addBottomAdView();
-            //金币配置刷新
-            mPresenter.refBullList();
+
+            mPresenter.refBullList();     //金币配置刷新
+            mPresenter.refDaliyTask();    //日常任务列表刷新
         }
         if (hidden) {
             NiuDataAPI.onPageEnd("personal_center_view_page", "个人中心浏览");
@@ -214,7 +222,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 break;
         }
     }
-
 
 
     private void goToWALLETOrWithdrawal(int type) {
@@ -313,6 +320,32 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 
     /*
      *********************************************************************************************************************************************************
+     ************************************************************日常任务数据刷新 View初始化**********************************************************************
+     *********************************************************************************************************************************************************
+     */
+
+
+    private void initTaskListView() {
+        mBinding.rvDaliyTask.setNestedScrollingEnabled(false);
+        mineDaliyTaskAdapter = new MineDaliyTaskAdapter(getActivity());
+        mBinding.rvDaliyTask.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.rvDaliyTask.setAdapter(mineDaliyTaskAdapter);
+        mBinding.rvDaliyTask.setFocusable(false);
+    }
+
+    @Override
+    public void setTaskData(DaliyTaskListData data) {
+        if (null != data && !CollectionUtils.isEmpty(data.getData())) {
+            mBinding.linearDaliyTask.setVisibility(View.VISIBLE);
+            mineDaliyTaskAdapter.setNewData(data.getData());
+        } else {
+            mBinding.linearDaliyTask.setVisibility(View.GONE);
+        }
+
+    }
+
+    /*
+     *********************************************************************************************************************************************************
      ************************************************************刷新限时奖励金币位 View初始化**********************************************************************
      *********************************************************************************************************************************************************
      */
@@ -333,8 +366,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
      * ********************************************************** 刷新限时奖励金币位 ***************************************************************************************
      * *********************************************************************************************************************************************************
      */
-
-
 
     /**
      * 刷新金币显示

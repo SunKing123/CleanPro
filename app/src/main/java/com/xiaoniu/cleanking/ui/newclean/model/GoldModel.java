@@ -8,6 +8,7 @@ import com.xiaoniu.cleanking.base.BaseModel;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
+import com.xiaoniu.cleanking.ui.main.bean.DaliyTaskListData;
 import com.xiaoniu.cleanking.utils.net.CommonSubscriber;
 
 import java.util.HashMap;
@@ -69,6 +70,22 @@ public class GoldModel extends BaseModel {
         mService.bubbleDouble(body).compose(tt)
                 .subscribeWith(commonSubscriber);
     }
+
+    /**
+     * 金币查询
+     *
+     * @param commonSubscriber
+     */
+    @SuppressLint("CheckResult")
+    public void getDaliyTaskList(CommonSubscriber<DaliyTaskListData> commonSubscriber, FlowableTransformer tt) {
+        mService.daliyTaskList().compose(tt)
+                .subscribeWith(commonSubscriber);
+    }
+
+
+
+
+
 
 
 }

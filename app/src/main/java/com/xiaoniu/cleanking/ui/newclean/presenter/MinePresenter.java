@@ -19,6 +19,7 @@ import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.ui.main.bean.DaliyTaskListData;
 import com.xiaoniu.cleanking.ui.main.bean.ImageAdEntity;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
@@ -131,7 +132,32 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
             ToastUtils.showShort("当前已是最新版本");
         }
     }
+    //获取任务列表
+    public void refDaliyTask() {
+        if (AppHolder.getInstance().getAuditSwitch())
+            return;
+        mModel.getDaliyTaskList(new Common3Subscriber<DaliyTaskListData>() {
+            @Override
+            public void showExtraOp(String code, String message) {  //关心错误码；
+                ToastUtils.showShort(message);
+            }
 
+            @Override
+            public void getData(DaliyTaskListData daliyTaskListData) {
+                LogUtils.i("zz--refDaliyTask()---" + new Gson().toJson(daliyTaskListData));
+                mView.setTaskData(daliyTaskListData);
+            }
+
+            @Override
+            public void showExtraOp(String message) {
+            }
+
+            @Override
+            public void netConnectError() {
+                ToastUtils.showShort(R.string.notwork_error);
+            }
+        }, RxUtil.<ImageAdEntity>rxSchedulerHelper((RxFragment) mView));
+    }
 
     //更新金币列表
     public void refBullList() {
