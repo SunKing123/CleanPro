@@ -287,23 +287,6 @@
 
     </style>
 
-    <!--全屏_外部插屏_悬浮Activity样式-->
-    <style name="full_pop_layer_style" parent="AppTheme">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowAnimationStyle">@null</item>
-        <item name="windowNoTitle">true</item>
-        <!--    &lt;!&ndash;是否悬浮在activity上&ndash;&gt;
-            <item name="android:windowIsFloating">true</item>
-            &lt;!&ndash;透明是否&ndash;&gt;
-            <item name="android:windowIsTranslucent">true</item>
-            <item name="android:background">@null</item>
-            &lt;!&ndash;设置没有窗口标题、dialog标题等各种标题&ndash;&gt;
-            <item name="android:windowNoTitle">true</item>
-            <item name="android:title">@null</item>
-            <item name="android:dialogTitle">@null</item>-->
-    </style>
 
     <declare-styleable name="SwipCardsView">
         <!-- yOffsetStep定义的是卡片之间在y轴方向上的偏移量，单位是dp，
@@ -403,15 +386,20 @@
 
     <!--外部插屏_悬浮Activity样式-->
     <style name="half_translucent" parent="AppTheme">
-        <!--是否悬浮在activity上-->
-        <item name="android:windowIsFloating">true</item>
-        <!--透明是否-->
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:background">@null</item>
-        <!--设置没有窗口标题、dialog标题等各种标题-->
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:title">@null</item>
-        <item name="android:dialogTitle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/half_transparent</item>
     </style>
 
+    <!--全屏_外部插屏_悬浮Activity样式-->
+    <style name="full_pop_layer_style" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

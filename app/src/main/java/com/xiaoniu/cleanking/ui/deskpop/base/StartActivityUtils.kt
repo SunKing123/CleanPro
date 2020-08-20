@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.launcher.ARouter
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
+import com.xiaoniu.cleanking.ui.accwidget.AccWidgetAnimationActivity
 import com.xiaoniu.cleanking.ui.accwidget.AccWidgetCleanFinishActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
@@ -138,7 +139,7 @@ class StartActivityUtils {
                 var shortcutManager = context.getSystemService(ShortcutManager::class.java);
                 if (shortcutManager.isRequestPinShortcutSupported()) {
 
-                    var intent = Intent(context, AccWidgetCleanFinishActivity::class.java)
+                    var intent = Intent(context, AccWidgetAnimationActivity::class.java)
                     intent.action="action_create_acc_shortcut"
                     intent.flags= Intent.FLAG_ACTIVITY_NEW_TASK
 
@@ -147,7 +148,7 @@ class StartActivityUtils {
                             .setLongLabel("一键加速")
                             .setIcon(Icon.createWithResource(context, R.drawable.acc_shortcut_log))
                             .setIntent(intent)
-                            .build();
+                            .build()
                     //当固定快捷方式成功后，会执行该Intent指定的操作，包括启动Activity、发送广播等，如果固定快捷方式成功后不需要做额外处理的话该参数传null就可以。
                     shortcutManager.requestPinShortcut(pinShortcutInfo,null);
 

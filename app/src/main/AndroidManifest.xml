@@ -303,21 +303,21 @@
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task"
-            android:theme="@style/half_translucent"/>
+            android:taskAffinity="com.widget.acc"
+            android:theme="@style/pop_layer_style"/>
 
         <activity
             android:name=".ui.accwidget.AccWidgetCleanFinishActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task"
+            android:taskAffinity="com.widget.acc"
             android:theme="@style/half_translucent"/>
 
         <activity
             android:name=".ui.main.activity.NewsActivity"
-            
             android:screenOrientation="portrait" />
+
         <activity
             android:name="com.hellogeek.cleanking.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -347,7 +347,7 @@
             android:taskAffinity="com.locker.new.task" />
         <activity
             android:name=".ui.newclean.activity.SpeedUpResultActivity"
-            
+
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
 
@@ -453,7 +453,6 @@
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style_2"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
-
 
         <activity
             android:name=".ui.lockscreen.PopLayerActivity"

@@ -207,6 +207,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
         addDeviceInfoFragment();
 
+
+        StartActivityUtils.Companion.createAccShortcut(getActivity());
     }
 
 
@@ -214,13 +216,13 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private void addDeviceInfoFragment() {
         FragmentManager manager = getChildFragmentManager();
-        manager.beginTransaction().add(R.id.frame_deviceInfo,getDeviceFragment()).commitAllowingStateLoss();
+        manager.beginTransaction().add(R.id.frame_deviceInfo, getDeviceFragment()).commitAllowingStateLoss();
     }
 
 
-    private HomeDeviceInfoFragment getDeviceFragment(){
-        if(homeDeviceInfoFragment==null){
-            homeDeviceInfoFragment=HomeDeviceInfoFragment.Companion.getInstance();
+    private HomeDeviceInfoFragment getDeviceFragment() {
+        if (homeDeviceInfoFragment == null) {
+            homeDeviceInfoFragment = HomeDeviceInfoFragment.Companion.getInstance();
         }
         return homeDeviceInfoFragment;
     }
@@ -506,7 +508,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
                 break;
             case "一键加速":
                 homeMainTableView.oneKeySpeedUsedStyle();
-                if(PreferenceUtil.isFirstUseAccOfDay()){
+                if (PreferenceUtil.isFirstUseAccOfDay()) {
                     StartActivityUtils.Companion.createAccShortcut(getActivity());
                 }
                 break;

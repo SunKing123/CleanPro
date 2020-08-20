@@ -1,12 +1,12 @@
 package com.xiaoniu.cleanking.ui.accwidget
 
+import android.app.Activity
 import android.os.Bundle
-import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.xiaoniu.cleanking.R
-import com.xiaoniu.cleanking.app.injector.component.ActivityComponent
 import com.xiaoniu.cleanking.base.AppHolder
-import com.xiaoniu.cleanking.base.BaseActivity
-import com.xiaoniu.cleanking.base.BasePresenter
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.main.config.PositionId
@@ -17,17 +17,15 @@ import kotlinx.android.synthetic.main.activity_acc_widget_clean_finish_layout.*
  * Created by xinxiaolong on 2020/8/17.
  * email：xinxiaolong123@foxmail.com
  */
-class AccWidgetCleanFinishActivity : BaseActivity<BasePresenter<*, *>>() {
+class AccWidgetCleanFinishActivity : Activity() {
 
-    override fun inject(activityComponent: ActivityComponent?) {
-        TODO("Not yet implemented")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_acc_widget_clean_finish_layout)
+        initView()
     }
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_acc_widget_clean_finish_layout
-    }
-
-    override fun initView() {
+    fun initView() {
         var memoryLower = NumberUtils.mathRandomInt(10, 30)
         tv_cleaned_memory.text = "释放内存" + memoryLower + "%"
 
@@ -51,9 +49,4 @@ class AccWidgetCleanFinishActivity : BaseActivity<BasePresenter<*, *>>() {
 
         })
     }
-
-    override fun netError() {
-
-    }
-
 }
