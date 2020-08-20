@@ -204,13 +204,46 @@
 
             <com.xiaoniu.cleanking.widget.RewardLimiteView
                 android:id="@+id/reward_view"
-                android:layout_marginTop="-28dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_115dp"
                 android:layout_marginLeft="@dimen/dimen_14dp"
+                android:layout_marginTop="-28dp"
                 android:layout_marginRight="@dimen/dimen_14dp">
-
             </com.xiaoniu.cleanking.widget.RewardLimiteView>
+
+            <LinearLayout
+                android:id="@+id/linear_daliy_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_15dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginRight="@dimen/dimen_15dp"
+                android:background="@drawable/bg_white_fillet_06"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_award_tag01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:includeFontPadding="false"
+                    android:text="日常任务:"
+                    android:layout_marginTop="12dp"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/dimen_16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_daliy_task"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_12dp"
+                    android:layout_marginTop="@dimen/dimen_2dp"
+                    android:layout_marginRight="@dimen/dimen_12dp"
+                    android:layout_marginBottom="@dimen/dimen_16dp" />
+            </LinearLayout>
+
 
             <!--更多功能-->
             <androidx.constraintlayout.widget.ConstraintLayout

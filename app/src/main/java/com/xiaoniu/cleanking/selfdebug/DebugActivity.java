@@ -224,12 +224,17 @@ public class DebugActivity extends BaseActivity {
         SchemeProxy.openScheme(this, scheme);
     }
 
+    public void toVirus(View view) {
+        SchemeProxy.openScheme(this, SchemeConstant.LocalPushScheme.SCHEME_VIRUSKILLACTIVITY);
+    }
+
+
+
     public void toH5(View view) {
         //jump 协议
-//        "cleankingmajor://com.xiaoniu.cleanking/jump?url=XXXX"
+//      "cleankingmajor://com.xiaoniu.cleanking/jump?url=XXXX"
         String url = BuildConfig.Base_H5_Host + "/userAgreement.html";
-        String jump = SchemeConstant.SCHEME + "://" +
-                SchemeConstant.HOST + SchemeConstant.JUMP + "?url=";
+        String jump = SchemeConstant.SCHEME + "://" + SchemeConstant.HOST + SchemeConstant.JUMP + "?url=";
         String jumpParams = "&is_no_title=0&h5_title=协议";
         String scheme = jump + url + jumpParams;
         SchemeProxy.openScheme(this, scheme);

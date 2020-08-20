@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleDouble;
 import com.xiaoniu.cleanking.ui.main.bean.CheckUserTokenBean;
+import com.xiaoniu.cleanking.ui.main.bean.DaliyTaskListData;
 import com.xiaoniu.cleanking.ui.main.bean.ExitLoginBean;
 import com.xiaoniu.cleanking.ui.main.bean.FileUploadInfoBean;
 import com.xiaoniu.cleanking.ui.main.bean.GuaGuaDoubleBean;
@@ -230,6 +231,15 @@ public interface UserApiService {
     @GET("/guaGuaActivity/doubleAward")
     Flowable<GuaGuaDoubleBean> guaGuaBubbleDouble(@Query("id") String id);
 
+
+    /**
+     * 个人中心-我的任务列表
+     *
+     * @return
+     */
+    @GET("/daliyTasks/user/configs")
+    Flowable<DaliyTaskListData> daliyTaskList();
+
     /**
      * 退出登录
      *
@@ -245,4 +255,8 @@ public interface UserApiService {
      */
     @GET("/clean-user/checkLogin")
     Flowable<CheckUserTokenBean> checkUserTokenApi();
+
+
+
+
 }

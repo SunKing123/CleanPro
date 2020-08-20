@@ -75,7 +75,7 @@ public class SchemeConstant {
         //通知栏清理
         public static final String SCHEME_NOTIFY_ACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "tool.notify.activity.NotifyCleanGuideActivity";
 
-        //一键清理
+        //垃圾清理
         public static final String SCHEME_NOWCLEANACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "newclean.activity.NowCleanActivity";
 
         //一键加速
@@ -88,9 +88,9 @@ public class SchemeConstant {
         public static final String SCHEME_PHONECOOLINGACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.PhoneCoolingActivity";
 
         //病毒查杀
-        public static final String SCHEME_VIRUSKILLACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.VirusKillActivity";
+        public static final String SCHEME_VIRUSKILLACTIVITY = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "viruskill.VirusKillActivity";
 
-        //跳转到冷启
+        //冷启动
         public static final String SCHEME_COLD_START = SCHEME + "://" + HOST + NATIVE_NO_PARAMS + "?" + ANDROID_NAME + "=" + "main.activity.SplashADActivity";
 
 

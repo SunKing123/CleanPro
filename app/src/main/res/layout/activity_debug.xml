@@ -53,7 +53,7 @@
                 android:layout_marginTop="@dimen/dimen_12dp"
                 android:text="1.跳转协议"
                 android:textColor="@color/color_262626"
-                android:textSize="@dimen/dimen_16sp" />
+                android:textSize="@dimen/dimen_9sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                     android:onClick="toHomeClean"
                     android:text="首页清理"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -81,7 +81,7 @@
                     android:onClick="toHomeTools"
                     android:text="首页工具箱"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -92,7 +92,7 @@
                     android:onClick="toHomeNews"
                     android:text="首页头条"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -103,7 +103,20 @@
                     android:onClick="toHomeMine"
                     android:text="首页我的"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
+
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/holo_green_dark"
+                    android:gravity="center"
+                    android:onClick="toVirus"
+                    android:text="病毒查杀"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_9sp" />
 
             </LinearLayout>
 
@@ -122,7 +135,7 @@
                     android:onClick="toH5"
                     android:text="H5协议"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -133,7 +146,7 @@
                     android:onClick="toWeChatClean"
                     android:text="微信专清"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:id="@+id/tv_lottie"
@@ -145,7 +158,7 @@
                     android:onClick="playLottie"
                     android:text="lottie动画"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:id="@+id/tv_goto_midas"
@@ -157,7 +170,7 @@
                     android:onClick="goto_midas"
                     android:text="midas_debug"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
             </LinearLayout>
 
@@ -177,7 +190,7 @@
                     android:onClick="getImei"
                     android:text="获取ImeI"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:id="@+id/tv_hide_icon"
@@ -188,7 +201,7 @@
                     android:gravity="center"
                     android:text="hide_icon"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:id="@+id/tv_clean"
@@ -200,7 +213,7 @@
                     android:onClick="cleanCodeTime"
                     android:text="冷启动时间"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -218,7 +231,7 @@
                     android:onClick="getAdConfig"
                     android:text="广告中心配置"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
 
                 <TextView
@@ -230,7 +243,7 @@
                     android:onClick="gotoFullAd"
                     android:text="外部全屏插屏"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -241,7 +254,7 @@
                     android:onClick="gotoPop"
                     android:text="外部非全屏插屏"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -252,7 +265,7 @@
                     android:onClick="getIcon"
                     android:text="加载图标测试"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
 
             </LinearLayout>
@@ -272,7 +285,7 @@
                     android:onClick="deviceTemp"
                     android:text="电池温度获取"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -283,7 +296,7 @@
                     android:onClick="powerClick"
                     android:text="电池插屏"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -294,7 +307,7 @@
                     android:onClick="deviceInfoClick"
                     android:text="手机状态插屏"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -305,7 +318,7 @@
                     android:onClick="wifiInfoClick"
                     android:text="wifi状态插屏"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
+                    android:textSize="@dimen/dimen_9sp" />
 
             </LinearLayout>
 
@@ -315,7 +328,7 @@
                 android:layout_height="wrap_content"
                 android:text="电池温度获取"
                 android:textColor="@color/black"
-                android:textSize="@dimen/dimen_16sp" />
+                android:textSize="@dimen/dimen_9sp" />
 
             <TextView
                 android:id="@+id/tv_finish"
@@ -324,7 +337,7 @@
                 android:text="完成页调试"
                 android:background="@color/color_00DA80"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dimen_16sp"
+                android:textSize="@dimen/dimen_9sp"
                 android:gravity="center"/>
 
             <com.airbnb.lottie.LottieAnimationView
