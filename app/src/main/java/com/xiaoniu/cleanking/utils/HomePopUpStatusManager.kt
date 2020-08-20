@@ -1,14 +1,12 @@
 package com.xiaoniu.cleanking.utils
 
-import android.widget.TextView
-
 /**
  * Created by xinxiaolong on 2020/8/20.
  * email：xinxiaolong123@foxmail.com
  * 弹框状态工作栈
  */
-public class PopUpWorkingStatusStack {
-
+public class HomePopUpStatusManager {
+    
     val upgradePopIndex = 0
     val homeGuideIndex = 1
     val innerInsertIndex = 2
@@ -28,11 +26,11 @@ public class PopUpWorkingStatusStack {
         val CONSUMEED = 2
 
         @Volatile
-        private var instance: PopUpWorkingStatusStack? = null
+        private var instance: HomePopUpStatusManager? = null
         fun getInstance() =
                 instance ?: synchronized(this) {
                     instance
-                            ?: PopUpWorkingStatusStack().also { instance = it }
+                            ?: HomePopUpStatusManager().also { instance = it }
                 }
     }
 
