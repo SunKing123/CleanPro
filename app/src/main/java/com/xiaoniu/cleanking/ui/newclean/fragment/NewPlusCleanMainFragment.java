@@ -208,10 +208,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
 
         addDeviceInfoFragment();
-
-
-        StartActivityUtils.Companion.createAccShortcut(getActivity());
-
     }
 
 
@@ -505,15 +501,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         }
         switch (event.getTitle()) {
-            case "一键清理":
-                homeMainTableView.oneKeySpeedUsedStyle();
-                getDeviceFragment().initStorageView();
-                break;
             case "一键加速":
+                showCreateShortcut();
                 homeMainTableView.oneKeySpeedUsedStyle();
-                if (PreferenceUtil.isFirstUseAccOfDay()) {
-                    StartActivityUtils.Companion.createAccShortcut(getActivity());
-                }
                 break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();
@@ -533,6 +523,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case "网络加速":
                 //文案一直显示“有效提高20%”,暂不做刷新
                 break;
+        }
+    }
+
+    /**
+     *
+     */
+    private void showCreateShortcut() {
+        boolean todayFirstUse = PreferenceUtil.isFirstUseAccOfDay();
+        boolean alreadyCreate = StartActivityUtils.Companion.createdShortcut(getActivity());
+        LogUtils.e("================================一键加速使用完毕     todayFirstUse="+todayFirstUse+"    alreadyCreate="+alreadyCreate);
+        if (todayFirstUse && !alreadyCreate) {
+            StartActivityUtils.Companion.createAccShortcut(getActivity());
         }
     }
 
