@@ -142,10 +142,6 @@ public class AccWidgetProvider : AppWidgetProvider() {
             val remoteView = RemoteViews(context.packageName, R.layout.widget_view_acc_layout)
             // 设置点击按钮对应的PendingIntent：即点击按钮时，发送广播。
             remoteView.setOnClickPendingIntent(
-                    R.id.widget_image,
-                getPendingIntent(context, R.id.widget_image)
-            )
-            remoteView.setOnClickPendingIntent(
                     R.id.widget_acc_container,
                 getPendingIntent(context, R.id.widget_acc_container)
             )
