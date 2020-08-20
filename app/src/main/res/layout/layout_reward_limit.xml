@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraint_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_white_fillet_06"
-    android:paddingTop="10dp"
+    android:layout_height="@dimen/dimen_143dp"
+    android:background="@drawable/icon_limit_award_bg"
+    android:paddingTop="12dp"
     android:paddingBottom="10dp">
     
     
@@ -17,6 +17,7 @@
         android:layout_marginLeft="14dp"
         android:includeFontPadding="false"
         android:text="限时奖励:"
+        android:layout_marginBottom="6dp"
         android:textColor="@color/color_333333"
         android:textSize="@dimen/dimen_16sp"
         android:textStyle="bold"
@@ -26,7 +27,7 @@
     <com.xiaoniu.cleanking.widget.LuckBubbleView
         android:id="@+id/iv_golde_06"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dimen_75dp"
         android:layout_marginTop="5dp"
         android:gravity="center"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -38,7 +39,7 @@
     <com.xiaoniu.cleanking.widget.LuckBubbleView
         android:id="@+id/iv_golde_07"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dimen_75dp"
         android:layout_marginTop="5dp"
         android:gravity="center"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -50,7 +51,7 @@
     <com.xiaoniu.cleanking.widget.LuckBubbleView
         android:id="@+id/iv_golde_08"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dimen_75dp"
         android:layout_marginTop="5dp"
         android:gravity="center"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -62,7 +63,7 @@
     <com.xiaoniu.cleanking.widget.LuckBubbleView
         android:id="@+id/iv_golde_09"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dimen_75dp"
         android:layout_marginTop="5dp"
         android:gravity="center"
         app:layout_constraintHorizontal_chainStyle="spread"
