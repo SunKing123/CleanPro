@@ -28,7 +28,7 @@ class InsideScreenDialogUtil {
 
     fun showInsideDialog(activity: AppCompatActivity?, adId: String) {
 
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
             return
         }
         MidasRequesCenter.requestAndShowAd(activity, adId, object : AbsAdBusinessCallback() {

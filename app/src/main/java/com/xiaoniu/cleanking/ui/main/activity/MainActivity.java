@@ -70,6 +70,7 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.HomePopUpStatusManager;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotchUtils;
 import com.xiaoniu.cleanking.utils.NotificationsUtils;
@@ -307,9 +308,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     }
 
 
-
-
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -344,7 +342,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             mBottomBar.setCurrentItem(NEWS);
             //跳转刮刮卡
             if (ScrapingCardDataUtils.init().getCardsListSize() > 0) {
-                ScrapingCardDataUtils.init().scrapingCardNextAction(this,false);
+                ScrapingCardDataUtils.init().scrapingCardNextAction(this, false);
             }
         } else if ("wode".equals(type)) {
             mBottomBar.setCurrentItem(MINE);
@@ -524,7 +522,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         FragmentTransaction ft = mManager.beginTransaction();
         if (position < mFragments.size()) {
             ft.show(mFragments.get(position));
-            if (prePosition != -1 && prePosition<mFragments.size()) {
+            if (prePosition != -1 && prePosition < mFragments.size()) {
                 ft.hide(mFragments.get(prePosition));
             }
             ft.commitAllowingStateLoss();
@@ -550,7 +548,6 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
 
 
-
     }
 
 
@@ -562,7 +559,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
             if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof ShoppingMallFragment) {
                 //处理友盟异常 https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3331997352190
-                if(mFragments.size()<=mBottomBar.getCurrentItemPosition()){
+                if (mFragments.size() <= mBottomBar.getCurrentItemPosition()) {
                     return true;
                 }
                 ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
@@ -693,10 +690,10 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                     return;
                 }
                 startActivity(new Intent(this, RedPacketHotActivity.class));
-            },2200);
+            }, 2200);
         } else if (event.getAction() == HotStartAction.INSIDE_SCREEN) {
             AppLifecyclesImpl.postDelay(() -> {
-                    mPresenter.showInsideScreenDialog(AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_NEIBU_SCREEN));
+                mPresenter.showInsideScreenDialog(AppHolder.getInstance().getInsertAdMidasId(PositionId.KEY_NEIBU_SCREEN));
             }, 2200);
         }
     }
@@ -850,7 +847,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_2G
                 || NetworkUtils.getNetworkType() == NetworkUtils.NetworkType.NETWORK_NO)
             return;
-        if(isGuideViewShowing()){
+        if (isGuideViewShowing()) {
             return;
         }
         if (data.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % data.getTrigger() == 0) {
@@ -935,12 +932,13 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     /**
      * 引导view是否展示;
+     *
      * @return
      */
-    public boolean isGuideViewShowing(){
-        if(null!=mainFragment && mainFragment.guideViewIsShow()){
+    public boolean isGuideViewShowing() {
+        if (null != mainFragment && mainFragment.guideViewIsShow()) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -948,16 +946,17 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 
     /**
      * 引导view是否展示;
+     *
      * @return
      */
-    public void guideViewClose(){
+    public void guideViewClose() {
         if (null != mainFragment) {
             mainFragment.hideGuideView();
         }
     }
 
 
-    public int getCurrentIndex(){
+    public int getCurrentIndex() {
         return mCurrentPosition;
     }
 }

@@ -167,7 +167,6 @@ public class NetWorkActivity extends BaseActivity<NetWorkPresenter> implements V
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
            /* if (!mIsYinDaoFinish && !PreferenceUtil.getGameQuikcenStart()) {
                 StatisticsUtils.trackClick("system_return_click", "游戏加速引导页返回按钮点击", AppHolder.getInstance().getCleanFinishSourcePageId(), "gameboost_guidance_page");
             } else if (mIsStartClean) {

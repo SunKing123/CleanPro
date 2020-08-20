@@ -126,7 +126,6 @@ class SpeedUpClearActivity : BaseActivity() {
             }
         })
         anim1.start()
-
     }
 
 

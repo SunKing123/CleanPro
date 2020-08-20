@@ -78,7 +78,7 @@ public class AccWidgetProvider : AppWidgetProvider() {
             }
         }
     }
-
+    
     override fun onRestored(context: Context?, oldWidgetIds: IntArray?, newWidgetIds: IntArray?) {
         super.onRestored(context, oldWidgetIds, newWidgetIds)
         WidgetLog.log("onRestored()")
@@ -141,10 +141,6 @@ public class AccWidgetProvider : AppWidgetProvider() {
             // 获取 example_appwidget.xml 对应的RemoteViews
             val remoteView = RemoteViews(context.packageName, R.layout.widget_view_acc_layout)
             // 设置点击按钮对应的PendingIntent：即点击按钮时，发送广播。
-            remoteView.setOnClickPendingIntent(
-                    R.id.widget_image,
-                getPendingIntent(context, R.id.widget_image)
-            )
             remoteView.setOnClickPendingIntent(
                     R.id.widget_acc_container,
                 getPendingIntent(context, R.id.widget_acc_container)

@@ -54,6 +54,7 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.weather.activity.WeatherForecastActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.HomePopUpStatusManager;
 import com.xiaoniu.cleanking.utils.InsideScreenDialogUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;

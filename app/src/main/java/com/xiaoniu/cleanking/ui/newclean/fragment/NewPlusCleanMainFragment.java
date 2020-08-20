@@ -83,6 +83,7 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
+import com.xiaoniu.cleanking.utils.HomePopUpStatusManager;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -169,6 +170,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private int bullNum = 0;
     FloatAnimManager mFloatAnimManager;
     private BullRunnable bullRunnable = new BullRunnable();
+    boolean usedOneKeyAcc=false;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -208,10 +210,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
 
         addDeviceInfoFragment();
-
-
-        StartActivityUtils.Companion.createAccShortcut(getActivity());
-
     }
 
 
@@ -235,6 +233,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (hasFocus && isFirstCreate) {
             AppLifecyclesImpl.postDelay(bullRunnable, 3000);
             isFirstCreate = false;
+        }
+
+        if(usedOneKeyAcc&&hasFocus){
+            usedOneKeyAcc=false;
+            showCreateShortcut();
         }
     }
 
@@ -505,15 +508,9 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             return;
         }
         switch (event.getTitle()) {
-            case "一键清理":
-                homeMainTableView.oneKeySpeedUsedStyle();
-                getDeviceFragment().initStorageView();
-                break;
             case "一键加速":
+                usedOneKeyAcc=true;
                 homeMainTableView.oneKeySpeedUsedStyle();
-                if (PreferenceUtil.isFirstUseAccOfDay()) {
-                    StartActivityUtils.Companion.createAccShortcut(getActivity());
-                }
                 break;
             case "超强省电":
                 homeMainTableView.electricUsedStyle();
@@ -533,6 +530,18 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             case "网络加速":
                 //文案一直显示“有效提高20%”,暂不做刷新
                 break;
+        }
+    }
+
+    /**
+     *
+     */
+    private void showCreateShortcut() {
+        boolean todayFirstUse = PreferenceUtil.isFirstUseAccOfDay();
+        boolean alreadyCreate = StartActivityUtils.Companion.createdShortcut(getActivity());
+        LogUtils.e("================================一键加速使用完毕     todayFirstUse="+todayFirstUse+"    alreadyCreate="+alreadyCreate);
+        if (todayFirstUse && !alreadyCreate) {
+            StartActivityUtils.Companion.createAccShortcut(getActivity());
         }
     }
 

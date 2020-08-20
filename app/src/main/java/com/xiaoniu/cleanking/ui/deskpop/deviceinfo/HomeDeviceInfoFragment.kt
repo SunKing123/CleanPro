@@ -27,7 +27,7 @@ import java.math.RoundingMode
  * email：xinxiaolong123@foxmail.com
  */
 class HomeDeviceInfoFragment : SimpleFragment() {
-
+    
     companion object {
         fun getInstance(): HomeDeviceInfoFragment {
             val fragment = HomeDeviceInfoFragment()

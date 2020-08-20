@@ -231,7 +231,7 @@ class HomeDeviceInfoStore {
         log("getCleanedStandTime() standTime=" + standTime+"   getCleanedBatteryMinutes="+PreferenceUtil.getCleanedBatteryMinutes())
         return standTime.toString()+"小时"+PreferenceUtil.getCleanedBatteryMinutes()+"分钟"
     }
-
+   
     /**
      * 保存电量优化后的待机时机增加值
      *

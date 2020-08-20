@@ -41,6 +41,7 @@ import androidx.core.content.FileProvider;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.AppVersion;
+import com.xiaoniu.cleanking.utils.HomePopUpStatusManager;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.update.listener.IDownloadAgent;
@@ -421,7 +422,7 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
         @Override
         public void onFinish() {
             try {
-                if (mDialog != null&&mDialog.isShowing()) {
+                if (mDialog != null && mDialog.isShowing()) {
                     mDialog.dismiss();
                     mDialog = null;
                 }
