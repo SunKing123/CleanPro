@@ -197,7 +197,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.usercenter.activity.PermissionDetailActivity"
-            
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />

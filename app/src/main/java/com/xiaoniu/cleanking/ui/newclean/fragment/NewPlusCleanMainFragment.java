@@ -2,7 +2,9 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -209,6 +211,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
 
         StartActivityUtils.Companion.createAccShortcut(getActivity());
+
     }
 
 
