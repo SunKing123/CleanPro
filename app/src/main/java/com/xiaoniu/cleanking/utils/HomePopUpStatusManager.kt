@@ -6,7 +6,7 @@ package com.xiaoniu.cleanking.utils
  * 弹框状态工作栈
  */
 public class HomePopUpStatusManager {
-    
+
     val upgradePopIndex = 0
     val homeGuideIndex = 1
     val innerInsertIndex = 2
@@ -52,6 +52,11 @@ public class HomePopUpStatusManager {
         logAllInfo("setUpgradePopConsumed")
     }
 
+    fun isUpgradePopCanPop(): Boolean {
+        return checkPreTaskAllConsume(homeGuideIndex)
+    }
+
+
     /***************************************************************************************************************************************
      *********************************************************首页引导视图********************************************************************
      ***************************************************************************************************************************************
@@ -64,6 +69,10 @@ public class HomePopUpStatusManager {
     fun setHomeGuideConsumed() {
         arrStatus[homeGuideIndex] = CONSUMEED
         logAllInfo("setHomeGuideConsumed")
+    }
+
+    fun isHomeGuideCanPop(): Boolean {
+        return checkPreTaskAllConsume(homeGuideIndex)
     }
 
     /***************************************************************************************************************************************
@@ -80,6 +89,11 @@ public class HomePopUpStatusManager {
         logAllInfo("setInnerInsertConsumed")
     }
 
+
+    fun isInnerInsertCanPop(): Boolean {
+        return checkPreTaskAllConsume(innerInsertIndex)
+    }
+
     /***************************************************************************************************************************************
      *********************************************************首页快捷方式********************************************************************
      ***************************************************************************************************************************************
@@ -92,6 +106,10 @@ public class HomePopUpStatusManager {
     fun setShortcutConsumed() {
         arrStatus[shortcutIndex] = CONSUMEED
         logAllInfo("setShortcutConsumed")
+    }
+
+    fun isShortcutCanPop(): Boolean {
+        return checkPreTaskAllConsume(shortcutIndex)
     }
 
     /***************************************************************************************************************************************
@@ -108,11 +126,15 @@ public class HomePopUpStatusManager {
         logAllInfo("setRedPacketConsumed")
     }
 
-
-
-    fun isUpgradePopCanPop(): Boolean {
-        return  checkPreTaskAllConsume(homeGuideIndex)
+    fun isRedPacketCanPop(): Boolean {
+        return checkPreTaskAllConsume(redPacketIndex)
     }
+
+
+    /***************************************************************************************************************************************
+     *********************************************************checker***********************************************************************
+     ***************************************************************************************************************************************
+     */
 
     /**
      * 这里需要 从优先级由低到高进行check。
@@ -121,25 +143,6 @@ public class HomePopUpStatusManager {
      * 当【添加加速图标】已弹过，其状态为 CONSUMEED。在有些实际出发了【内部插屏】的弹出 其状态处于 CONSUME_ING
      * 这个时候不能弹出【运营弹窗】 了。所以需要遍历整个队列。
      *
-     */
-    fun isHomeGuideCanPop(): Boolean {
-        return checkPreTaskAllConsume(homeGuideIndex)
-    }
-
-    fun isInnerInsertCanPop(): Boolean {
-        return checkPreTaskAllConsume(innerInsertIndex)
-    }
-
-    fun isShortcutCanPop(): Boolean {
-        return checkPreTaskAllConsume(shortcutIndex)
-    }
-
-    fun isRedPacketCanPop(): Boolean {
-        return checkPreTaskAllConsume(redPacketIndex)
-    }
-
-    /**
-     * 检测之前的弹框状态是否存在全处于已消费状态
      */
     private fun checkPreTaskAllConsume(endIndex: Int): Boolean {
         var index = 0
@@ -166,16 +169,21 @@ public class HomePopUpStatusManager {
         return getStatus(index) == CONSUMEED
     }
 
-    private fun logAllInfo(method:String) {
+
+    /***************************************************************************************************************************************
+     *********************************************************log**************************************************************************
+     ***************************************************************************************************************************************
+     */
+    private fun logAllInfo(method: String) {
         var index = 0
         for (status in arrStatus) {
-            log("in the"+method+"         "+getPopName(index) + " 当前状态" + getStatusName(status))
+            log("in the" + method + "         " + getPopName(index) + " 当前状态" + getStatusName(status))
             index++
         }
     }
 
-    private fun log(text:String){
-        LogUtils.e("===============PopUpWorkingStatusStack:  " +text)
+    private fun log(text: String) {
+        LogUtils.e("===============PopUpWorkingStatusStack:  " + text)
     }
 
     private fun getPopName(index: Int): String {
@@ -193,9 +201,9 @@ public class HomePopUpStatusManager {
     private fun getStatusName(status: Int): String {
         var statusName = ""
         when (status) {
-            INIT -> statusName = "升级弹框"
-            CONSUME_ING -> statusName = "引导视频"
-            CONSUMEED -> statusName = "内部插屏"
+            INIT -> statusName = "初始状态"
+            CONSUME_ING -> statusName = "正在消费"
+            CONSUMEED -> statusName = "消费完成"
         }
         return statusName
     }
