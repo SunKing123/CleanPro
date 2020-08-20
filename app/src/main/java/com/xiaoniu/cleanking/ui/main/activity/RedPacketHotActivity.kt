@@ -16,7 +16,6 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.cleanking.utils.ExtraConstant
-import com.xiaoniu.cleanking.utils.HomePopUpStatusManager
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -177,7 +176,6 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
 
     override fun onDestroy() {
         super.onDestroy()
-        HomePopUpStatusManager.getInstance().setRedPacketDismiss()
         EventBus.getDefault().unregister(this)
     }
 

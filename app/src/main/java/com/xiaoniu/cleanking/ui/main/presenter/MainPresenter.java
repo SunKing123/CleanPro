@@ -563,7 +563,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         }
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
-        HomePopUpStatusManager.Companion.getInstance().setInnerInsertShow();
         InsideScreenDialogUtil util = new InsideScreenDialogUtil();
         util.showInsideDialog(mView, adId);
 
@@ -577,9 +576,6 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         if (!AppUtils.checkStoragePermission(mActivity))//未授权谭庄
             return;
-        if (!HomePopUpStatusManager.Companion.getInstance().isInnerInsertCanPop()) {
-            return;
-        }
         //展示内部插屏广告
         if (null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
             InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);

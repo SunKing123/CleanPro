@@ -45,9 +45,6 @@ class InsideScreenDialogUtil {
                         p.width = (DisplayUtil.getScreenWidth(activity) * 0.80f).toInt()
                         window.attributes = p
                     }
-                    dialog?.setOnDismissListener {
-                        HomePopUpStatusManager.getInstance().setInnerInsertDismiss()
-                    }
                     val frameLayout = dialog?.findViewById<FrameLayout>(R.id.ad_container)
                     adInfoModel.addInContainer(frameLayout)
                     if (!activity.isFinishing) {

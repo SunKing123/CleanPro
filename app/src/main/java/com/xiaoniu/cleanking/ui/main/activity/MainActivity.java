@@ -850,13 +850,9 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         if (isGuideViewShowing()) {
             return;
         }
-        if (!HomePopUpStatusManager.Companion.getInstance().isRedPacketCanPop()) {
-            return;
-        }
         if (data.getTrigger() == 0 || PreferenceUtil.getRedPacketShowCount() % data.getTrigger() == 0) {
             mShowRedFirst = true;
             if (!isFinishing()) {
-                HomePopUpStatusManager.Companion.getInstance().setRedPacketShow();
                 startActivity(new Intent(this, RedPacketHotActivity.class));
             }
         }

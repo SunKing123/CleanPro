@@ -317,11 +317,9 @@ public class UpdateAgent implements IUpdateAgent, IDownloadAgent {
                 dialog.setCancelable(false);
                 update_id_cancel.setVisibility(View.GONE);
             }
-            HomePopUpStatusManager.Companion.getInstance().setUpgradePopShow();
             this.dialog.show();
 
             dialog.setOnDismissListener(dialog -> {
-                HomePopUpStatusManager.Companion.getInstance().setUpgradePopDismiss();
                 if (!mForce)
                     agent.getCancelListener().onCancel();
             });
