@@ -34,8 +34,7 @@ public class SchemeUtils {
         Uri uri = Uri.parse(url);
         String scheme = uri.getScheme();
         String host = uri.getHost();
-        return (TextUtils.equals(SchemeConstant.SCHEME, scheme)
-                && TextUtils.equals(SchemeConstant.HOST, host));
+        return (TextUtils.equals(SchemeConstant.SCHEME, scheme) && TextUtils.equals(SchemeConstant.HOST, host));
     }
 
     /**
