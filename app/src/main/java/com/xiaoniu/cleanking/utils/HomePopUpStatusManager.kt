@@ -45,15 +45,16 @@ public class HomePopUpStatusManager {
      */
     fun setUpgradePopShow() {
         arrStatus[upgradePopIndex] = CONSUME_ING
-        logAllInfo("setUpgradePopConsuming")
+        logAllInfo("setUpgradePopShow")
     }
 
     fun setUpgradePopDismiss() {
         arrStatus[upgradePopIndex] = CONSUMEED
-        logAllInfo("setUpgradePopConsumed")
+        logAllInfo("setUpgradePopDismiss")
     }
 
     fun isUpgradePopCanPop(): Boolean {
+        logAllInfo("isUpgradePopCanPop")
         return checkPreTaskAllConsume(homeGuideIndex)
     }
 
@@ -64,15 +65,16 @@ public class HomePopUpStatusManager {
      */
     fun setHomeGuideShow() {
         arrStatus[homeGuideIndex] = CONSUME_ING
-        logAllInfo("setHomeGuideConsuming")
+        logAllInfo("setHomeGuideShow")
     }
 
     fun setHomeGuideDismiss() {
         arrStatus[homeGuideIndex] = CONSUMEED
-        logAllInfo("setHomeGuideConsumed")
+        logAllInfo("setHomeGuideDismiss")
     }
 
     fun isHomeGuideCanPop(): Boolean {
+        logAllInfo("isHomeGuideCanPop")
         return checkPreTaskAllConsume(homeGuideIndex)
     }
 
@@ -82,16 +84,17 @@ public class HomePopUpStatusManager {
      */
     fun setInnerInsertShow() {
         arrStatus[innerInsertIndex] = CONSUME_ING
-        logAllInfo("setInnerInsertConsuming")
+        logAllInfo("setInnerInsertShow")
     }
 
     fun setInnerInsertDismiss() {
         arrStatus[innerInsertIndex] = CONSUMEED
-        logAllInfo("setInnerInsertConsumed")
+        logAllInfo("setInnerInsertDismiss")
     }
 
 
     fun isInnerInsertCanPop(): Boolean {
+        logAllInfo("isInnerInsertCanPop")
         return checkPreTaskAllConsume(innerInsertIndex)
     }
 
@@ -101,15 +104,16 @@ public class HomePopUpStatusManager {
      */
     fun setShortcutShow() {
         arrStatus[shortcutIndex] = CONSUME_ING
-        logAllInfo("setShortcutConsuming")
+        logAllInfo("setShortcutShow")
     }
 
     fun setShortcutDismiss() {
         arrStatus[shortcutIndex] = CONSUMEED
-        logAllInfo("setShortcutConsumed")
+        logAllInfo("setShortcutDismiss")
     }
 
     fun isShortcutCanPop(): Boolean {
+        logAllInfo("isShortcutCanPop")
         return checkPreTaskAllConsume(shortcutIndex)
     }
 
@@ -119,15 +123,16 @@ public class HomePopUpStatusManager {
      */
     fun setRedPacketShow() {
         arrStatus[redPacketIndex] = CONSUME_ING
-        logAllInfo("setRedPacketConsuming")
+        logAllInfo("setRedPacketShow")
     }
 
     fun setRedPacketDismiss() {
         arrStatus[redPacketIndex] = CONSUMEED
-        logAllInfo("setRedPacketConsumed")
+        logAllInfo("setRedPacketDismiss")
     }
 
     fun isRedPacketCanPop(): Boolean {
+        logAllInfo("isRedPacketCanPop")
         return checkPreTaskAllConsume(redPacketIndex)
     }
 
