@@ -38,16 +38,17 @@ public class HomePopUpStatusManager {
         logAllInfo("constructor")
     }
 
+
     /***************************************************************************************************************************************
      *********************************************************首页升级弹框********************************************************************
      ***************************************************************************************************************************************
      */
-    fun setUpgradePopConsuming() {
+    fun setUpgradePopShow() {
         arrStatus[upgradePopIndex] = CONSUME_ING
         logAllInfo("setUpgradePopConsuming")
     }
 
-    fun setUpgradePopConsumed() {
+    fun setUpgradePopDismiss() {
         arrStatus[upgradePopIndex] = CONSUMEED
         logAllInfo("setUpgradePopConsumed")
     }
@@ -61,12 +62,12 @@ public class HomePopUpStatusManager {
      *********************************************************首页引导视图********************************************************************
      ***************************************************************************************************************************************
      */
-    fun setHomeGuideConsuming() {
+    fun setHomeGuideShow() {
         arrStatus[homeGuideIndex] = CONSUME_ING
         logAllInfo("setHomeGuideConsuming")
     }
 
-    fun setHomeGuideConsumed() {
+    fun setHomeGuideDismiss() {
         arrStatus[homeGuideIndex] = CONSUMEED
         logAllInfo("setHomeGuideConsumed")
     }
@@ -79,12 +80,12 @@ public class HomePopUpStatusManager {
      *********************************************************首页内部插屏********************************************************************
      ***************************************************************************************************************************************
      */
-    fun setInnerInsertConsuming() {
+    fun setInnerInsertShow() {
         arrStatus[innerInsertIndex] = CONSUME_ING
         logAllInfo("setInnerInsertConsuming")
     }
 
-    fun setInnerInsertConsumed() {
+    fun setInnerInsertDismiss() {
         arrStatus[innerInsertIndex] = CONSUMEED
         logAllInfo("setInnerInsertConsumed")
     }
@@ -98,12 +99,12 @@ public class HomePopUpStatusManager {
      *********************************************************首页快捷方式********************************************************************
      ***************************************************************************************************************************************
      */
-    fun setShortcutConsuming() {
+    fun setShortcutShow() {
         arrStatus[shortcutIndex] = CONSUME_ING
         logAllInfo("setShortcutConsuming")
     }
 
-    fun setShortcutConsumed() {
+    fun setShortcutDismiss() {
         arrStatus[shortcutIndex] = CONSUMEED
         logAllInfo("setShortcutConsumed")
     }
@@ -116,12 +117,12 @@ public class HomePopUpStatusManager {
      *********************************************************首页红包弹窗********************************************************************
      ***************************************************************************************************************************************
      */
-    fun setRedPacketConsuming() {
+    fun setRedPacketShow() {
         arrStatus[redPacketIndex] = CONSUME_ING
         logAllInfo("setRedPacketConsuming")
     }
 
-    fun setRedPacketConsumed() {
+    fun setRedPacketDismiss() {
         arrStatus[redPacketIndex] = CONSUMEED
         logAllInfo("setRedPacketConsumed")
     }
