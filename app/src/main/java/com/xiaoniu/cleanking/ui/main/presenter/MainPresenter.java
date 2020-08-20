@@ -54,6 +54,7 @@ import com.xiaoniu.cleanking.ui.main.model.MainModel;
 import com.xiaoniu.cleanking.ui.weather.activity.WeatherForecastActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.FileUtils;
+import com.xiaoniu.cleanking.utils.HomePopUpStatusManager;
 import com.xiaoniu.cleanking.utils.InsideScreenDialogUtil;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.PermissionUtils;
@@ -562,6 +563,7 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         }
         StatisticsUtils.customTrackEvent("ad_request_sdk", "内部插屏广告发起请求", "", "inside_advertising_ad_page");
+        HomePopUpStatusManager.Companion.getInstance().setInnerInsertShow();
         InsideScreenDialogUtil util = new InsideScreenDialogUtil();
         util.showInsideDialog(mView, adId);
 
@@ -575,6 +577,9 @@ public class MainPresenter extends RxPresenter<MainActivity, MainModel> implemen
             return;
         if (!AppUtils.checkStoragePermission(mActivity))//未授权谭庄
             return;
+        if (!HomePopUpStatusManager.Companion.getInstance().isInnerInsertCanPop()) {
+            return;
+        }
         //展示内部插屏广告
         if (null != AppHolder.getInstance().getInsertAdSwitchMap() && !PreferenceUtil.isHaseUpdateVersion()) {
             InsertAdSwitchInfoList.DataBean dataBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_NEIBU_SCREEN);

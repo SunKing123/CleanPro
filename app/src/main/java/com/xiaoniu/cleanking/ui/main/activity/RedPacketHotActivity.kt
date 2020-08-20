@@ -16,6 +16,7 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.main.presenter.MainPresenter
 import com.xiaoniu.cleanking.utils.ExtraConstant
+import com.xiaoniu.cleanking.utils.HomePopUpStatusManager
 import com.xiaoniu.cleanking.utils.NiuDataAPIUtil
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -137,7 +138,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
         val viewGroup: ViewGroup = window.decorView as ViewGroup
 //        val params = AdRequestParams.Builder().setAdId(MidasConstants.RED_PACKET)
 //                .setViewContainer(viewGroup).setActivity(this).build()
-        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_RED_JILI,PositionId.DRAW_ONE_CODE), object : AbsAdBusinessCallback() {})
+        MidasRequesCenter.requestAndShowAd(this, AppHolder.getInstance().getMidasAdId(PositionId.KEY_RED_JILI, PositionId.DRAW_ONE_CODE), object : AbsAdBusinessCallback() {})
     }
 
     private fun showWebView() {
@@ -176,6 +177,7 @@ class RedPacketHotActivity : BaseActivity<MainPresenter>(), WebDialogManager.Fin
 
     override fun onDestroy() {
         super.onDestroy()
+        HomePopUpStatusManager.getInstance().setRedPacketDismiss()
         EventBus.getDefault().unregister(this)
     }
 
