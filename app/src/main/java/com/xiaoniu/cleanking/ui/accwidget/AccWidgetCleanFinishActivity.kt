@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.accwidget
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
@@ -10,6 +11,7 @@ import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.main.config.PositionId
+import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.utils.NumberUtils
 import kotlinx.android.synthetic.main.activity_acc_widget_clean_finish_layout.*
 
@@ -24,7 +26,7 @@ class AccWidgetCleanFinishActivity : Activity() {
         setContentView(R.layout.activity_acc_widget_clean_finish_layout)
         initView()
     }
-
+    
     fun initView() {
         var memoryLower = NumberUtils.mathRandomInt(10, 30)
         tv_cleaned_memory.text = "释放内存" + memoryLower + "%"
@@ -41,7 +43,11 @@ class AccWidgetCleanFinishActivity : Activity() {
     }
 
     fun goToCleanStorage() {
+        var intent = Intent()
+        intent.setClass(this, NowCleanActivity::class.java)
+        startActivity(intent)
 
+        finish()
     }
 
     fun loadAdv() {
