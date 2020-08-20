@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jess.arms.utils.DeviceUtils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
@@ -19,12 +20,14 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
+import com.xiaoniu.cleanking.scheme.utils.SchemeUtils;
 import com.xiaoniu.cleanking.ui.login.activity.LoginWeiChatActivity;
 import com.xiaoniu.cleanking.ui.main.activity.QuestionReportActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WhiteListSettingActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleCollected;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.DaliyTaskListData;
+import com.xiaoniu.cleanking.ui.main.bean.DaliyTaskListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
@@ -44,6 +47,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.common.utils.StatisticsUtils;
+import com.xiaoniu.common.utils.Toast;
 import com.xiaoniu.common.utils.ToastUtils;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.unitionadbase.model.AdInfoModel;
@@ -331,6 +335,19 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         mBinding.rvDaliyTask.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.rvDaliyTask.setAdapter(mineDaliyTaskAdapter);
         mBinding.rvDaliyTask.setFocusable(false);
+        mineDaliyTaskAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                DaliyTaskListEntity itemdata = (DaliyTaskListEntity) adapter.getItem(position);
+                if (null != itemdata && itemdata.getLinkType() == 1 && TextUtils.isEmpty(itemdata.getLinkUrl())) {
+                    if (SchemeUtils.isScheme(itemdata.getLinkUrl())) {
+                        SchemeUtils.openScheme(mActivity, itemdata.getLinkUrl());
+                    }
+                } else {
+                    ToastUtils.showShort(getString(R.string.notwork_error));
+                }
+            }
+        });
     }
 
     @Override
