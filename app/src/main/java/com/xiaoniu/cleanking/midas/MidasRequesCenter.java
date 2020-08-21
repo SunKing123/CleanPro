@@ -9,6 +9,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.ChannelUtil;
+import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.statistic.HeartbeatCallBack;
 import com.xiaoniu.statistic.NiuDataAPI;
 import com.xiaoniu.unitionadbase.abs.AbsAdBusinessCallback;
@@ -16,9 +17,13 @@ import com.xiaoniu.unitionadbase.config.AdConfig;
 import com.xiaoniu.unitionadbase.config.AdParameter;
 import com.xiaoniu.unitionadbase.config.WebViewConfig;
 import com.xiaoniu.unitionadbase.impl.IUnitaryListener;
+import com.xiaoniu.unitionadbase.model.AdInfoModel;
 import com.xiaoniu.unitionadproxy.MidasAdSdk;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author zhengzhihao
@@ -93,12 +98,71 @@ public class MidasRequesCenter {
         if (activity == null){
             return;
         }
+        AbsAdBusinessCallback commonCallback = buildCommonCallBack(adPositionId,absAdBusinessCallback);
         AdParameter adParameter = new AdParameter.
                 Builder(activity, adPositionId)
                 .build();
-        MidasAdSdk.loadAd(adParameter, absAdBusinessCallback);
+        MidasAdSdk.loadAd(adParameter, commonCallback);
     }
 
+    /**
+     * 中间层回调
+     * @param midaId
+     * @param adCommonCallback
+     * @return
+     */
+    private static AbsAdBusinessCallback buildCommonCallBack(String midaId, AbsAdBusinessCallback adCommonCallback){
+        return new AbsAdBusinessCallback() {
+            @Override
+            public void onAdLoadError(String errorCode, String errorMsg) {
+                super.onAdLoadError(errorCode, errorMsg);
+                Map<String, Object> exmap = new HashMap<>();
+                exmap.put("midas_id",midaId);
+                exmap.put("fail_code",errorCode);
+                exmap.put("fail_message",errorMsg);
+                StatisticsUtils.customTrackEvent("ad_request_fail_code", "广告请求失败返回错误代码", "all_ad_request", "all_ad_request");
+                adCommonCallback.onAdLoadError(errorCode, errorMsg);
+
+            }
+
+            @Override
+            public void onAdLoaded(AdInfoModel adInfoModel) {
+                super.onAdLoaded(adInfoModel);
+                adCommonCallback.onAdLoaded(adInfoModel);
+            }
+
+            @Override
+            public void onAdExposure(AdInfoModel adInfoModel) {
+                super.onAdExposure(adInfoModel);
+                adCommonCallback.onAdExposure(adInfoModel);
+            }
+
+            @Override
+            public void onAdClick(AdInfoModel adInfoModel) {
+                super.onAdClick(adInfoModel);
+                adCommonCallback.onAdClick(adInfoModel);
+            }
+
+            @Override
+            public void onAdClose(AdInfoModel adInfoModel) {
+                super.onAdClose(adInfoModel);
+                adCommonCallback.onAdClose(adInfoModel);
+
+            }
+
+            @Override
+            public void onChangeAnotherAd(AdInfoModel adInfoModel) {
+                super.onChangeAnotherAd(adInfoModel);
+                adCommonCallback.onChangeAnotherAd(adInfoModel);
+            }
+
+            @Override
+            public void onAdVideoComplete(AdInfoModel adInfoModel) {
+                super.onAdVideoComplete(adInfoModel);
+                adCommonCallback.onAdVideoComplete(adInfoModel);
+            }
+        };
+    }
     /**
      * 预加载广告
      * @param activity  当前页面

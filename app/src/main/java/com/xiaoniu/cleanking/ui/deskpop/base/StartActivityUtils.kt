@@ -1,5 +1,6 @@
 package com.xiaoniu.cleanking.ui.deskpop.base
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ShortcutInfo
@@ -11,13 +12,16 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.ui.accwidget.AccWidgetAnimationActivity
+import com.xiaoniu.cleanking.ui.accwidget.ShortcutPinReceiver
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil.Companion.gotoFinish
 import com.xiaoniu.cleanking.utils.ExtraConstant
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
+
 
 /**
  * Created by xinxiaolong on 2020/8/16.
@@ -127,17 +131,17 @@ class StartActivityUtils {
             bundle.putBoolean("unused", true)
             gotoFinish(context, bundle)
         }
-        
+
         /**
          * 创建加速快捷方式
          */
         fun createAccShortcut(context: Context) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 var shortcutManager = context.getSystemService(ShortcutManager::class.java);
                 if (shortcutManager.isRequestPinShortcutSupported()) {
                     var intent = Intent(context, AccWidgetAnimationActivity::class.java)
-                    intent.action="action_create_acc_shortcut"
-                    intent.flags= Intent.FLAG_ACTIVITY_NEW_TASK
+                    intent.action = Intent.ACTION_VIEW
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
                     var pinShortcutInfo = ShortcutInfo.Builder(context, "acc_shortcut")
                             .setShortLabel("一键加速")
@@ -146,18 +150,22 @@ class StartActivityUtils {
                             .setIntent(intent)
                             .build()
 
+                    //当添加快捷方式的确认弹框弹出来时，将被回调CallBackReceiver里面的onReceive方法
+                    val shortcutCallbackIntent = PendingIntent.getBroadcast(context, 0, Intent(context, ShortcutPinReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
                     //当固定快捷方式成功后，会执行该Intent指定的操作，包括启动Activity、发送广播等，如果固定快捷方式成功后不需要做额外处理的话该参数传null就可以。
-                   var create=shortcutManager.requestPinShortcut(pinShortcutInfo,null);
+                    var create = shortcutManager.requestPinShortcut(pinShortcutInfo, shortcutCallbackIntent.intentSender);
+
+                    LogUtils.e("==========================createAccShortcut() create=" + create)
                 }
             }
         }
 
-        fun isCreatedShortcut(context: Context):Boolean{
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        fun isCreatedShortcut(context: Context): Boolean {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 var shortcutManager = context.getSystemService(ShortcutManager::class.java);
-                 if(shortcutManager.isRequestPinShortcutSupported&&!shortcutManager.pinnedShortcuts.isEmpty()){
-                     return true
-                 }
+                if (shortcutManager.isRequestPinShortcutSupported && !shortcutManager.pinnedShortcuts.isEmpty()) {
+                    return true
+                }
             }
             return false
         }
