@@ -88,6 +88,7 @@
                 android:padding="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/memory_view"
                     android:layout_width="match_parent"
                     android:layout_height="126dp"
                     android:background="@drawable/bg_acc_widget_finish_memory_view">

@@ -99,11 +99,6 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
         } else {
             view.goneScratchCardView()
         }
-
-        //如果没有推荐功能，第一个广告不推荐
-        if (firstModel == null && secondModel == null) {
-            isOpenOne = false
-        }
     }
 
     //显示内部插屏广告
