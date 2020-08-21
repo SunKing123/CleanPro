@@ -183,7 +183,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     }
 
     @OnClick({R.id.setting_ll, R.id.head_img_iv, R.id.phone_num_tv, R.id.llt_invite_friend,
-            R.id.body_data_ll, R.id.step_record_ll, R.id.kefu_ll, R.id.withdrawal_ll, R.id.wallet_ll,R.id.rel_card_award})
+            R.id.body_data_ll, R.id.step_record_ll, R.id.kefu_ll, R.id.withdrawal_ll, R.id.wallet_ll, R.id.rel_card_award})
     public void onViewClicked(View view) {
         if (AndroidUtil.isFastDoubleClick()) {
             return;
@@ -295,13 +295,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         mBinding.moneyTv.setVisibility(View.VISIBLE);
         mBinding.goldCoinTv.setVisibility(View.VISIBLE);
         if (gold > 99) {
-            mBinding.moneyTv.setText("(约 "+NumberUtils.getFloatStr2(amount) + "元)");
+            mBinding.moneyTv.setText("(约 " + NumberUtils.getFloatStr2(amount) + "元)");
             mBinding.goldCoinTv.setText(String.valueOf(gold));
         } else if (gold > 0) {
             mBinding.moneyTv.setText("(约 0.01元)");
             mBinding.goldCoinTv.setText(String.valueOf(gold));
         } else if (gold == 0) {
-            mBinding.moneyTv.setText("约 0元)");
+            mBinding.moneyTv.setText("(约 0元)");
             mBinding.goldCoinTv.setText("0");
         } else {
 //            mBinding.coinAbout.setVisibility(View.GONE);
@@ -417,11 +417,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     @Override
     public void setBubbleView(BubbleConfig dataBean) {
         if (null != mBinding.rewardView && null != dataBean) {
+            mBinding.rewardView.setVisibility(View.VISIBLE);
             mBinding.rewardView.refBubbleView(dataBean);
         } else {
             mBinding.rewardView.setVisibility(View.GONE);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)mBinding.relCardAward.getLayoutParams();
-            layoutParams.topMargin = DisplayUtils.dip2px(30f);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mBinding.relCardAward.getLayoutParams();
+            layoutParams.topMargin = -DisplayUtils.dip2px(30f);
             mBinding.relCardAward.setLayoutParams(layoutParams);
         }
     }

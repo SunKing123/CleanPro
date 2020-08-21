@@ -9,20 +9,32 @@
     android:paddingBottom="10dp">
     
     
-
-    <TextView
-        android:id="@+id/tv_award_tag01"
+    <LinearLayout
+        android:id="@+id/linear_award_tag01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="14dp"
-        android:includeFontPadding="false"
-        android:text="限时奖励:"
-        android:layout_marginBottom="6dp"
-        android:textColor="@color/color_333333"
-        android:textSize="@dimen/dimen_16sp"
-        android:textStyle="bold"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="@dimen/dimen_6dp"
+            android:layout_height="@dimen/dimen_15dp"
+            android:background="@drawable/bg_black_corner"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_award_tag01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/limit_award_tag"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
     <com.xiaoniu.cleanking.widget.LuckBubbleView
         android:id="@+id/iv_golde_06"
@@ -34,7 +46,7 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01"
+        app:layout_constraintTop_toBottomOf="@+id/linear_award_tag01"
         app:layout_constraintWidth_percent="0.25" />
 
     <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -47,7 +59,7 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/iv_golde_06"
-        app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01"
+        app:layout_constraintTop_toBottomOf="@+id/linear_award_tag01"
         app:layout_constraintWidth_percent="0.25" />
 
     <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -60,7 +72,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/iv_golde_07"
-        app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01"
+        app:layout_constraintTop_toBottomOf="@+id/linear_award_tag01"
         app:layout_constraintWidth_percent="0.25" />
 
     <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -73,7 +85,7 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/iv_golde_08"
-        app:layout_constraintTop_toBottomOf="@+id/tv_award_tag01"
+        app:layout_constraintTop_toBottomOf="@+id/linear_award_tag01"
         app:layout_constraintWidth_percent="0.25" />
 
 
