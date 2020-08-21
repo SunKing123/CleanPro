@@ -33,7 +33,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="129dp"
+                android:layout_height="95dp"
                 android:background="@drawable/bg_acc_widget_finish_head_view">
 
                 <ImageView
@@ -49,30 +49,21 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!--   <ImageView
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent"
-                       android:src="@drawable/icon_acc_widget_finish_rocket" />-->
-
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.4" />
 
                 <TextView
                     android:id="@+id/tv_cleaned_memory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="31dp"
                     android:drawableStart="@mipmap/acc_finish_ok"
                     android:drawablePadding="5dp"
                     android:text="释放内存16%"
                     android:textColor="@color/color_333333"
                     android:textSize="@dimen/dimen_21sp"
+                    android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/guideline" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_cleaned_memory_sub"
@@ -89,7 +80,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
