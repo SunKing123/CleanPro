@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/common_default"
@@ -198,17 +199,17 @@
                         </RelativeLayout>
                     </RelativeLayout>
                 </RelativeLayout>
+
+                <com.xiaoniu.cleanking.widget.RewardLimiteView
+                    android:id="@+id/reward_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_143dp"
+                    android:layout_marginLeft="@dimen/dimen_14dp"
+                    android:layout_marginTop="-100dp"
+                    android:layout_marginRight="@dimen/dimen_14dp">
+
+                </com.xiaoniu.cleanking.widget.RewardLimiteView>
             </RelativeLayout>
-
-            <com.xiaoniu.cleanking.widget.RewardLimiteView
-                android:id="@+id/reward_view"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_143dp"
-                android:layout_marginLeft="@dimen/dimen_14dp"
-                android:layout_marginTop="-100dp"
-                android:layout_marginRight="@dimen/dimen_14dp">
-
-            </com.xiaoniu.cleanking.widget.RewardLimiteView>
 
             <LinearLayout
                 android:id="@+id/rel_card_award"
