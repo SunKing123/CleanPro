@@ -359,7 +359,7 @@ public interface Points {
 
         class Cool implements Point{
             String PAGE = "cool_success_page";
-            String PAGE_EVENT_CODE = "cool_success_page_custom";
+            String PAGE_EVENT_CODE = "cooling_success_page_custom";
             String PAGE_EVENT_NAME = "降温结果页创建时";
             String RETURN_CLICK_NAME = "用户在手机降温完成页返回";
 

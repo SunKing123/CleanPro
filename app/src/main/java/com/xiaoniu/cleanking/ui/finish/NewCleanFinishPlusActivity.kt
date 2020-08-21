@@ -97,6 +97,9 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         // 因为推荐卡片布局数量影响广告加载逻辑
         mPresenter.loadRecommendData()
         loadAdv()
+
+        pointer.exposurePoint()
+
     }
 
     fun restView() {
@@ -437,7 +440,6 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
 
     override fun onPostResume() {
         super.onPostResume()
-        pointer.exposurePoint()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
