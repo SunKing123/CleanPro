@@ -302,15 +302,14 @@
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:taskAffinity="com.widget.acc"
-            android:theme="@style/half_translucent"/>
+            android:theme="@style/myTransparent"/>
 
         <activity
             android:name=".ui.accwidget.AccWidgetCleanFinishActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
             android:taskAffinity="com.widget.acc"
-            android:theme="@style/half_translucent"/>
+            android:theme="@style/myTransparent"/>
 
         <activity
             android:name=".ui.main.activity.NewsActivity"
