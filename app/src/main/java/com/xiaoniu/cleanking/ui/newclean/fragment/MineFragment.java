@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -10,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.comm.jksdk.utils.DisplayUtil;
 import com.jess.arms.utils.DeviceUtils;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.H5Urls;
@@ -421,9 +423,15 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             mBinding.rewardView.refBubbleView(dataBean);
         } else {
             mBinding.rewardView.setVisibility(View.GONE);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mBinding.relCardAward.getLayoutParams();
-            layoutParams.topMargin = -DisplayUtils.dip2px(30f);
-            mBinding.relCardAward.setLayoutParams(layoutParams);
+            mBinding.rewardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    LinearLayout.LayoutParams cardlayoutParams = new LinearLayout.LayoutParams(mBinding.relCardAward.getLayoutParams());
+                    cardlayoutParams.setMargins(DisplayUtil.dip2px(mContext, 15), -DisplayUtil.dp2px(mContext, 70), DisplayUtil.dip2px(mContext, 15), 0);
+                    mBinding.relCardAward.setLayoutParams(cardlayoutParams);
+                }
+            });
+
         }
     }
 
