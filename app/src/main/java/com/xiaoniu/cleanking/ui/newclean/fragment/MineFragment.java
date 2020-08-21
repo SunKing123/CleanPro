@@ -55,6 +55,7 @@ import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.common.utils.DisplayUtils;
+import com.xiaoniu.common.utils.NetworkUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.Toast;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -242,9 +243,14 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 });
                 break;
             case R.id.rel_card_award:
-                ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(), false);
-                EventBus.getDefault().post(new SwitchTabEvent(2));
                 StatisticsUtils.trackClick("scratch_immediately", "立即刮卡点击", "my_page", "my_page");
+                if(NetworkUtils.isNetConnected()){
+                    ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(), false);
+                    EventBus.getDefault().post(new SwitchTabEvent(2));
+                }else{
+                    ToastUtils.showShort(R.string.notwork_error);
+                }
+
                 break;
         }
     }
