@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -534,10 +535,19 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     private void showCreateShortcut() {
         boolean todayFirstUse = PreferenceUtil.isFirstUseAccOfDay();
-        boolean alreadyCreate = StartActivityUtils.Companion.isCreatedShortcut(getActivity());
-        LogUtils.e("================================一键加速使用完毕     todayFirstUse="+todayFirstUse+"    alreadyCreate="+alreadyCreate);
-        if (todayFirstUse && !alreadyCreate) {
+        boolean hasShortcut = StartActivityUtils.Companion.isCreatedShortcut(getActivity());
+        boolean created=PreferenceUtil.getCreatedShortcut();
+
+        LogUtils.e("================================一键加速使用完毕     todayFirstUse="+todayFirstUse+"    hasShortcut="+hasShortcut+"   created="+created);
+        if (todayFirstUse && !hasShortcut&&!created) {
             StartActivityUtils.Companion.createAccShortcut(getActivity());
+            new Handler().postDelayed(() -> checkAndMark(),4000);
+        }
+    }
+
+    private void checkAndMark(){
+        if(StartActivityUtils.Companion.isCreatedShortcut(getActivity())){
+            PreferenceUtil.saveCreatedShortcut();
         }
     }
 
