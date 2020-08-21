@@ -65,12 +65,12 @@ class AccWidgetCleanFinishActivity : Activity() {
         finish()
     }
 
+
     fun loadAdv() {
         var isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
         if(!isOpenOne){
             return
         }
-        //todo 这里需要对广告id进行替换
         var adId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
         MidasRequesCenter.requestAndShowAd(this, adId, object : SimpleViewCallBack(findViewById(R.id.ad_container)) {
 
