@@ -198,6 +198,7 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
             ToastUtils.showLong("网络异常");
             return;
         }
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "我的页限时奖励激励视频广告请求", "my_page_incentive_video_page", "my_page_incentive_video_page");
         MidasRequesCenter.requestAndShowAd((Activity) mContext, AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_MINE_LIMIT_AWARD_PAG, PositionId.DRAW_ONE_CODE), new VideoAbsAdCallBack() {
             @Override
             public void onAdLoadError(String errorCode, String errorMsg) {
@@ -217,13 +218,6 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
             @Override
             public void onAdClose(AdInfoModel adInfo, boolean isComplete) {
                 super.onAdClose(adInfo, isComplete);
-//                try {
-//                    org.json.JSONObject exJson = new org.json.JSONObject();
-//                    exJson.put("position_id", dataBean.getData().getLocationNum());
-//                    StatisticsUtils.trackClick("incentive_video_ad_click", "首页金币翻倍激励视频广告关闭点击", "home_page_gold_coin_pop_up_window_incentive_video_page", "home_page_gold_coin_pop_up_window_incentive_video_page", exJson);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
                 if (!((Activity) mContext).isFinishing()) {
                     if (isComplete) {
                         bullCollect(localNum);
@@ -305,7 +299,6 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
         //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
         bean.context = (Activity) mContext;
         GoldCoinDialog.showGoldCoinDialog(bean);
-//        StatisticsUtils.customTrackEvent("home_page_gold_coin_pop_up_window_custom", "首页金币领取弹窗曝光", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
-//        adPrevData(AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE));//位置三预加载
+        StatisticsUtils.customTrackEvent("ad_request_sdk", "我的页金币领取弹窗信息流广告请求", "my_page_gold_coin_collection", "my_page_gold_coin_collection");
     }
 }

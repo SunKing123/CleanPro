@@ -312,6 +312,10 @@ public class ScrapingCardDataUtils {
         parameter.doubleNums = doubledmagnification;
         if (cardBean != null) {
             parameter.adId = isOpenOne && !isAreaOne ?  AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_SCRATCH_CARD,PositionId.DRAW_ONE_CODE) : "";
+            //广告请求埋点
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("position_id", cardIndex);
+            StatisticsUtils.customTrackEvent("ad_request_sdk_1", "刮刮卡金币领取弹窗上广告发起请求", "", Points.ScratchCard.WINDOW_PAGE,map);
         }
         parameter.obtainCoinCount = coinCount;
         parameter.doubleMsg = "刮下一张";
