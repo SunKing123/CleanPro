@@ -84,10 +84,12 @@ public class LuckBubbleView extends LinearLayout {
             lp.height = DisplayUtil.dip2px(context, 48.5f);
             imgbg.setLayoutParams(lp);
 
-        } else {
+        } else if(loact >= 6 && loact <= 9) {
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-//            lp.width = DisplayUtil.dip2px(context, 50f);
-//            lp.height = DisplayUtil.dip2px(context, 50f);
+            int screenWidth = DisplayUtil.px2dp(context,DisplayUtil.getScreenWidth(context));
+            int godlewidth = (screenWidth - 70) / 4;
+            lp.width = DisplayUtil.dip2px(context, Float.valueOf(godlewidth));
+            lp.height = DisplayUtil.dip2px(context, Float.valueOf(godlewidth));
             imgbg.setLayoutParams(lp);
         }
         setVisibility(GONE);

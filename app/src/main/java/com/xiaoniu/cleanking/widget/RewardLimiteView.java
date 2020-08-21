@@ -92,6 +92,10 @@ public class RewardLimiteView extends RelativeLayout {
             setVisibility(GONE);
         }
 
+        if (luckbub06.getVisibility() == GONE && luckbub07.getVisibility() == GONE && luckbub08.getVisibility() == GONE && luckbub09.getVisibility() == GONE) {
+            setVisibility(GONE);
+        }
+
     }
 
 
