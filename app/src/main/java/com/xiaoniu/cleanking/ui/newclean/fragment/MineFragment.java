@@ -428,7 +428,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void setBubbleView(BubbleConfig dataBean) {
         if (null != mBinding.rewardView && null != dataBean) {
             mBinding.rewardView.setVisibility(View.VISIBLE);
-            mBinding.rewardView.refBubbleView(dataBean);
+            mBinding.rewardView.refBubbleView(dataBean,mBinding.rewardView);
         } else {
             mBinding.rewardView.setVisibility(View.GONE);
             mBinding.rewardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

@@ -242,6 +242,8 @@ public class CleanFinishPlusPresenter : NewCleanFinishPlusContract.CleanFinishPr
             }
 
             override fun getData(bubbleDouble: BubbleDouble?) {
+                //实时更新金币信息
+                RequestUserInfoUtil.getUserCoinInfo()
                 var adId = ""
                 if (AppHolder.getInstance().checkAdSwitch(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS)) {
                     adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_GET_DOUBLE_GOLD_COIN_SUCCESS, PositionId.DRAW_THREE_CODE)
