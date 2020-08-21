@@ -58,7 +58,7 @@ public class GoldModel extends BaseModel {
      * @param commonSubscriber
      */
     @SuppressLint("CheckResult")
-    public void goldDouble(CommonSubscriber<BubbleDouble> commonSubscriber, FlowableTransformer tt, String uuid, int locationNum, int goldCount, int doubledMagnification) {
+    public void goldDouble(CommonSubscriber<BubbleDouble> commonSubscriber, FlowableTransformer tt, String uuid, int locationNum, int goldCount, int doubledMagnification,boolean isTask) {
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<>();
         map.put("locationNum", locationNum);
@@ -67,8 +67,12 @@ public class GoldModel extends BaseModel {
         map.put("doubledMagnification", doubledMagnification);
         String json = gson.toJson(map);
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
-        mService.bubbleDouble(body).compose(tt)
-                .subscribeWith(commonSubscriber);
+        if(isTask){ //任务翻版
+            mService.daliyTasksDouble(body).compose(tt).subscribeWith(commonSubscriber);
+        }else{
+            mService.bubbleDouble(body).compose(tt).subscribeWith(commonSubscriber);
+        }
+
     }
 
     /**
@@ -80,6 +84,22 @@ public class GoldModel extends BaseModel {
     public void getDaliyTaskList(CommonSubscriber<DaliyTaskListData> commonSubscriber, FlowableTransformer tt) {
         mService.daliyTaskList().compose(tt)
                 .subscribeWith(commonSubscriber);
+    }
+
+
+
+    /**
+     * 日常任务领取
+     * @param commonSubscriber
+     */
+    @SuppressLint("CheckResult")
+    public void daliyTasksCollect(CommonSubscriber<BubbleCollected> commonSubscriber, FlowableTransformer tt, int locationNum) {
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<>();
+        map.put("locationNum", locationNum);
+        String json = gson.toJson(map);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+        mService.daliyTasksCollect(body).compose(tt).subscribeWith(commonSubscriber);
     }
 
 

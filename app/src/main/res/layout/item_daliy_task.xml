@@ -50,16 +50,11 @@
 
         <TextView
             android:id="@+id/tv_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_shape_radio_black_13"
-            android:paddingLeft="@dimen/dimen_11dp"
-            android:paddingTop="@dimen/dimen_5dp"
-            android:paddingRight="@dimen/dimen_11dp"
-            android:paddingBottom="@dimen/dimen_5dp"
-            android:text="@string/at_once_award"
-            android:textColor="@color/color_777777"
-            android:textSize="@dimen/dimen_12sp" />
+            android:layout_width="64dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/icon_atonce_award"
+          />
     </LinearLayout>
 
 

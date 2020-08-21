@@ -40,6 +40,15 @@ public class BubbleCollected extends BaseEntity {
         private int canDouble;
         private int totalGoldCount;
         private int doubledMagnification;
+        private String iconUrl;
+
+        public String getIconUrl() {
+            return iconUrl;
+        }
+
+        public void setIconUrl(String iconUrl) {
+            this.iconUrl = iconUrl;
+        }
 
         public int getDoubledMagnification() {
             return doubledMagnification;

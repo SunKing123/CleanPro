@@ -43,6 +43,7 @@ public class MineDaliyTaskAdapter extends BaseQuickAdapter<DaliyTaskListEntity, 
         if (!TextUtils.isEmpty(itemData.getSubtitleTitle())) {
             baseViewHolder.setText(R.id.tv_action_content,itemData.getSubtitleTitle());
         }
+        baseViewHolder.setBackgroundRes(R.id.tv_action_button, itemData.getIsCollect() == 0 ? R.drawable.icon_atonce_award : R.drawable.icon_already_award);
         if (itemData.getGoldNum() > 0) {
             baseViewHolder.setText(R.id.tv_luck_num,"+" + String.valueOf(itemData.getGoldNum()));
         }

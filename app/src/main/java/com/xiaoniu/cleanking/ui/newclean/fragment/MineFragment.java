@@ -3,6 +3,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.databinding.DataBindingUtil;
@@ -31,21 +32,26 @@ import com.xiaoniu.cleanking.ui.main.bean.DaliyTaskListEntity;
 import com.xiaoniu.cleanking.ui.main.bean.MinePageInfoBean;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
+import com.xiaoniu.cleanking.ui.main.event.SwitchTabEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
 import com.xiaoniu.cleanking.ui.newclean.adapter.MineDaliyTaskAdapter;
 import com.xiaoniu.cleanking.ui.newclean.contact.MineFragmentContact;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.MinePresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.RequestUserInfoUtil;
+import com.xiaoniu.cleanking.ui.newclean.util.ScrapingCardDataUtils;
+import com.xiaoniu.cleanking.ui.tool.notify.event.LimitAwardRefEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.usercenter.activity.AboutInfoActivity;
 import com.xiaoniu.cleanking.ui.usercenter.activity.PermissionActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
+import com.xiaoniu.cleanking.utils.DaliyTaskInstance;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
+import com.xiaoniu.common.utils.DisplayUtils;
 import com.xiaoniu.common.utils.StatisticsUtils;
 import com.xiaoniu.common.utils.Toast;
 import com.xiaoniu.common.utils.ToastUtils;
@@ -96,9 +102,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         setUserInfo();
         RequestUserInfoUtil.getUserCoinInfo();
 
-        RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.settingLl.getLayoutParams();
+        RelativeLayout.MarginLayoutParams params = (RelativeLayout.MarginLayoutParams) mBinding.relHealContent.getLayoutParams();
         params.topMargin = DeviceUtils.getStatusBarHeight(mContext) + 30;
-        mBinding.settingLl.setLayoutParams(params);
+        mBinding.relHealContent.setLayoutParams(params);
 
         if (AppHolder.getInstance().getAuditSwitch()) {//特殊情况隐藏
             mBinding.cashRl.setVisibility(View.GONE);
@@ -137,6 +143,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     @Subscribe
     public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
         mPresenter.refBullList();//金币配置刷新；
+        mPresenter.refDaliyTask();    //日常任务列表刷新
     }
 
     @Override
@@ -167,8 +174,15 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
     }
 
+    //刷新日常任务和限时金币
+    @Subscribe
+    public void limitAwardRef(LimitAwardRefEvent event) {
+        mPresenter.refBullList();     //金币配置刷新
+        mPresenter.refDaliyTask();    //日常任务列表刷新
+    }
+
     @OnClick({R.id.setting_ll, R.id.head_img_iv, R.id.phone_num_tv, R.id.llt_invite_friend,
-            R.id.body_data_ll, R.id.step_record_ll, R.id.kefu_ll, R.id.withdrawal_ll, R.id.wallet_ll})
+            R.id.body_data_ll, R.id.step_record_ll, R.id.kefu_ll, R.id.withdrawal_ll, R.id.wallet_ll,R.id.rel_card_award})
     public void onViewClicked(View view) {
         if (AndroidUtil.isFastDoubleClick()) {
             return;
@@ -224,6 +238,10 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 mPresenter.queryAppVersion(2, () -> {
                 });
                 break;
+            case R.id.rel_card_award:
+                ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(), false);
+                EventBus.getDefault().post(new SwitchTabEvent(2));
+                break;
         }
     }
 
@@ -272,20 +290,20 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     }
 
     private void setUserCoinView(double amount, int gold) {
-        mBinding.coinAbout.setVisibility(View.VISIBLE);
+//        mBinding.coinAbout.setVisibility(View.VISIBLE);
         mBinding.moneyTv.setVisibility(View.VISIBLE);
         mBinding.goldCoinTv.setVisibility(View.VISIBLE);
         if (gold > 99) {
-            mBinding.moneyTv.setText(NumberUtils.getFloatStr2(amount) + "元");
+            mBinding.moneyTv.setText("(约 "+NumberUtils.getFloatStr2(amount) + "元)");
             mBinding.goldCoinTv.setText(String.valueOf(gold));
         } else if (gold > 0) {
-            mBinding.moneyTv.setText("0.01元");
+            mBinding.moneyTv.setText("(约 0.01元)");
             mBinding.goldCoinTv.setText(String.valueOf(gold));
         } else if (gold == 0) {
-            mBinding.moneyTv.setText("0元");
+            mBinding.moneyTv.setText("约 0元)");
             mBinding.goldCoinTv.setText("0");
         } else {
-            mBinding.coinAbout.setVisibility(View.GONE);
+//            mBinding.coinAbout.setVisibility(View.GONE);
             mBinding.moneyTv.setVisibility(View.GONE);
             mBinding.moneyTv.setText("--");
             mBinding.goldCoinTv.setText("--");
@@ -339,9 +357,13 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 DaliyTaskListEntity itemdata = (DaliyTaskListEntity) adapter.getItem(position);
-                if (null != itemdata && itemdata.getLinkType() == 1 && TextUtils.isEmpty(itemdata.getLinkUrl())) {
-                    if (SchemeUtils.isScheme(itemdata.getLinkUrl())) {
+                if (null != itemdata && itemdata.getLinkType() == 1 && !TextUtils.isEmpty(itemdata.getLinkUrl()) && SchemeUtils.isScheme(itemdata.getLinkUrl())) {
+                    try {
                         SchemeUtils.openScheme(mActivity, itemdata.getLinkUrl());
+                        DaliyTaskInstance.getInstance().addTask(itemdata);
+                    } catch (Exception e) {
+                        DaliyTaskInstance.getInstance().cleanTask();
+                        e.printStackTrace();
                     }
                 } else {
                     ToastUtils.showShort(getString(R.string.notwork_error));
@@ -393,6 +415,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             mBinding.rewardView.refBubbleView(dataBean);
         } else {
             mBinding.rewardView.setVisibility(View.GONE);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)mBinding.relCardAward.getLayoutParams();
+            layoutParams.topMargin = DisplayUtils.dip2px(30f);
+            mBinding.relCardAward.setLayoutParams(layoutParams);
         }
     }
 

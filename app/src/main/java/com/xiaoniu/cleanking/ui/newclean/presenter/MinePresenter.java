@@ -150,10 +150,12 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
 
             @Override
             public void showExtraOp(String message) {
+                mView.setTaskData(null);
             }
 
             @Override
             public void netConnectError() {
+                mView.setTaskData(null);
                 ToastUtils.showShort(R.string.notwork_error);
             }
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper((RxFragment) mView));
@@ -177,10 +179,12 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
 
             @Override
             public void showExtraOp(String message) {
+                mView.setBubbleView(null);
             }
 
             @Override
             public void netConnectError() {
+                mView.setBubbleView(null);
                 ToastUtils.showShort(R.string.notwork_error);
             }
         }, RxUtil.<ImageAdEntity>rxSchedulerHelper((RxFragment) mView));
