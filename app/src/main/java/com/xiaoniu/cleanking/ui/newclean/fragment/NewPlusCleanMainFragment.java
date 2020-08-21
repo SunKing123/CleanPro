@@ -239,6 +239,10 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             usedOneKeyAcc=false;
             showCreateShortcut();
         }
+
+        if(hasFocus){
+            getDeviceFragment().refreshAllView();
+        }
     }
 
     private class BullRunnable implements Runnable {

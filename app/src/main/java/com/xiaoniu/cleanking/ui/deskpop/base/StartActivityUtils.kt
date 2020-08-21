@@ -1,28 +1,22 @@
 package com.xiaoniu.cleanking.ui.deskpop.base
 
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.launcher.ARouter
-import com.meishu.sdk.core.utils.LogUtil
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.ui.accwidget.AccWidgetAnimationActivity
-import com.xiaoniu.cleanking.ui.accwidget.AccWidgetCleanFinishActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil.Companion.gotoFinish
 import com.xiaoniu.cleanking.utils.ExtraConstant
-import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 
 /**
@@ -130,6 +124,7 @@ class StartActivityUtils {
         private fun goFinishActivity(context: Context, title: String) {
             val bundle = Bundle()
             bundle.putString(ExtraConstant.TITLE, title)
+            bundle.putBoolean("unused", true)
             gotoFinish(context, bundle)
         }
         

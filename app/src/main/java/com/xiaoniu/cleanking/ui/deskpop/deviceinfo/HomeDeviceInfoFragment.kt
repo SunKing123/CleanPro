@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils
 import com.xiaoniu.cleanking.ui.main.event.LifecycEvent
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent
 import com.xiaoniu.cleanking.utils.HomeDeviceInfoStore
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.common.utils.Points
 import com.xiaoniu.common.utils.StatisticsUtils
@@ -42,7 +43,8 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private var bLow: Array<Int> = arrayOf(0, 20)
     private var bHigh: Array<Int> = arrayOf(20, 90)
 
-    private var TEMPERATURE_VPT = 37
+    private var BATTERY_VPT = 37
+    private var CPU_VPT = 50
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +79,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
         initStorageView()
         initCoolView()
         initBatteryView()
+        LogUtils.e("=================HomeDeviceInfoFragment:refreshAllView()")
     }
 
     /**
@@ -181,8 +184,8 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private fun initTrueCoolView() {
         var batteryT = HomeDeviceInfoStore.getInstance().getBatteryTemperature(mContext)
         var cpuT = HomeDeviceInfoStore.getInstance().getCPUTemperature(mContext)
-        updateCoolImage(cpuT)
-        updateBtn(cpuT)
+        updateCoolImage(batteryT,cpuT)
+        updateBtn(batteryT,cpuT)
         tv_temperature_title.setText("电池温度：" + batteryT + "°C")
         tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
     }
@@ -193,8 +196,8 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private fun initCleanedCoolView() {
         var batteryT = HomeDeviceInfoStore.getInstance().getCleanedBatteryTemperature(mContext)
         var cpuT = HomeDeviceInfoStore.getInstance().getCleanedCPUTemperature(mContext)
-        updateCoolImage(batteryT)
-        updateBtn(batteryT)
+        updateCoolImage(batteryT,cpuT)
+        updateBtn(batteryT,cpuT)
         tv_temperature_title.setText("电池温度：" + batteryT + "°C")
         tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
     }
@@ -305,16 +308,16 @@ class HomeDeviceInfoFragment : SimpleFragment() {
         }
     }
 
-    private fun updateCoolImage(temperature: Float) {
-        if (temperature > TEMPERATURE_VPT) {
+    private fun updateCoolImage(batteryT:Float,cpuT: Float) {
+        if (batteryT > BATTERY_VPT||cpuT>CPU_VPT) {
             image_temperature.setImageResource(R.drawable.icon_temperature_percent_high)
         } else {
             image_temperature.setImageResource(R.drawable.icon_temperature_percent_normal)
         }
     }
 
-    private fun updateBtn(temperature: Float) {
-        if (temperature > TEMPERATURE_VPT) {
+    private fun updateBtn(batteryT:Float,cpuT:Float) {
+        if (batteryT > BATTERY_VPT||cpuT>CPU_VPT) {
             btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_red_bg)
         } else {
             btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_green_bg)

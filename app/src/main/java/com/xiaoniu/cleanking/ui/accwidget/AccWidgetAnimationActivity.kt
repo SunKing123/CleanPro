@@ -19,6 +19,8 @@ class AccWidgetAnimationActivity : Activity() {
 
     var context: Context = this
     var configBean: InsertAdSwitchInfoList.DataBean? = null
+    var animation_image_file = "images_widget_acc"
+    var animation_json = "widget_acc.json"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,26 +30,27 @@ class AccWidgetAnimationActivity : Activity() {
     }
 
     fun loadAnimationAndPlay() {
-        lottie_animation.imageAssetsFolder = "images_widget_acc"
-        lottie_animation.setAnimation("widget_acc.json")
+        lottie_animation.imageAssetsFolder = animation_image_file
+        lottie_animation.setAnimation(animation_json)
         lottie_animation.playAnimation()
-        
+
         lottie_animation.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {}
             override fun onAnimationEnd(animation: Animator) {
                 toFinishActivity()
             }
+
             override fun onAnimationCancel(animation: Animator) {}
             override fun onAnimationRepeat(animation: Animator) {}
         })
     }
-     
+
     fun toFinishActivity() {
-       if(configBean!=null&&configBean!!.isOpen){
+        if (configBean != null && configBean!!.isOpen) {
             var intent = Intent()
             intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
             startActivity(intent)
-      }
+        }
         finish()
     }
 }
