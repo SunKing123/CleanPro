@@ -4,11 +4,13 @@ import android.animation.Animator
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList
 import com.xiaoniu.cleanking.ui.main.config.PositionId
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
 
 /**
@@ -22,6 +24,12 @@ class AccWidgetAnimationActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, resources.getColor(android.R.color.transparent), true)
+        } else {
+            StatusBarCompat.setStatusBarColor(this, resources.getColor(android.R.color.transparent), false)
+        }
+
         setContentView(R.layout.activity_widget_acc_animation_layout)
         configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIDGET_ACC_FINISH)
         loadAnimationAndPlay()
@@ -37,6 +45,7 @@ class AccWidgetAnimationActivity : Activity() {
             override fun onAnimationEnd(animation: Animator) {
                 toFinishActivity()
             }
+
             override fun onAnimationCancel(animation: Animator) {}
             override fun onAnimationRepeat(animation: Animator) {}
         })
