@@ -57,11 +57,11 @@ class AccWidgetAnimationActivity : Activity() {
     }
 
     fun toFinishActivity() {
-        if (configBean != null && configBean!!.isOpen) {
+       // if (configBean != null && configBean!!.isOpen) {
             var intent = Intent()
             intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
             startActivity(intent)
-        }
+      //  }
 
         EventBus.getDefault().post(AccAnimationCompleteEvent())
         finish()

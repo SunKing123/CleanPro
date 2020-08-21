@@ -14,9 +14,11 @@ import com.xiaoniu.cleanking.midas.MidasRequesCenter
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
+import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
+import com.xiaoniu.unitionadbase.model.AdInfoModel
 import kotlinx.android.synthetic.main.activity_acc_widget_clean_finish_layout.*
 
 /**
@@ -37,13 +39,13 @@ class AccWidgetCleanFinishActivity : Activity() {
     }
 
     fun initView() {
-        if(PreferenceUtil.getWidgetAccCleanTime()){
+        if (PreferenceUtil.getWidgetAccCleanTime()) {
             var memoryLower = NumberUtils.mathRandomInt(10, 30)
             tv_cleaned_memory.text = "释放内存" + memoryLower + "%"
-            tv_cleaned_memory_sub.text="手机运行速度快如闪电"
-        }else{
-            tv_cleaned_memory.text="已优化"
-            tv_cleaned_memory_sub.text="手机已加速"
+            tv_cleaned_memory_sub.text = "手机运行速度快如闪电"
+        } else {
+            tv_cleaned_memory.text = "已优化"
+            tv_cleaned_memory_sub.text = "手机已加速"
         }
 
         var storageGarbage = NumberUtils.mathRandomInt(300, 800)
@@ -52,9 +54,9 @@ class AccWidgetCleanFinishActivity : Activity() {
         initEvent()
         loadAdv()
 
-        if(!PreferenceUtil.getNowCleanTime()){
-            memory_view.visibility= View.GONE
-            tv_goCleanStorage.visibility=View.GONE
+        if (!PreferenceUtil.getNowCleanTime()) {
+            memory_view.visibility = View.GONE
+            tv_goCleanStorage.visibility = View.GONE
         }
     }
 
@@ -73,13 +75,21 @@ class AccWidgetCleanFinishActivity : Activity() {
 
 
     fun loadAdv() {
-        var isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
-        if(!isOpenOne){
+       /* var isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
+        if (!isOpenOne) {
             return
-        }
-        var adId=AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
+        }*/
+        var adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
         MidasRequesCenter.requestAndShowAd(this, adId, object : SimpleViewCallBack(findViewById(R.id.ad_container)) {
+            override fun onAdLoaded(adInfoModel: AdInfoModel?) {
+                super.onAdLoaded(adInfoModel)
+                ad_separate.visibility = View.VISIBLE
+            }
 
+            override fun onAdLoadError(errorCode: String?, errorMsg: String?) {
+                super.onAdLoadError(errorCode, errorMsg)
+                LogUtils.e("====================:errorCode:${errorCode} message:$errorMsg")
+            }
         })
     }
 
