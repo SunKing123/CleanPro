@@ -3,17 +3,17 @@
     android:id="@+id/widget_acc_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:gravity="center">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dimen_50dp"
+        android:layout_height="@dimen/dimen_40dp"
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/dimen_30dp"
         android:background="@drawable/acc_progress_bar_bg"
-        android:padding="@dimen/dimen_8dp">
+        android:padding="@dimen/dimen_4dp">
 
         <ProgressBar
             android:id="@+id/widget_progress"
@@ -46,8 +46,8 @@
 
         <ImageView
             android:id="@+id/widget_image"
-            android:layout_width="@dimen/dp_90"
-            android:layout_height="@dimen/dp_90"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_70"
             android:layout_centerVertical="true"
             android:src="@mipmap/acc_circle" />
 
@@ -59,7 +59,7 @@
             android:layout_marginBottom="@dimen/dimen_15dp"
             android:text="加速"
             android:textColor="@color/white"
-            android:textSize="@dimen/font_14sp" />
+            android:textSize="14dp" />
 
     </RelativeLayout>
 

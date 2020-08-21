@@ -207,5 +207,7 @@ public class SpCacheConfig {
 
     public static final String IS_WIDGET_ACC_CLEAN_TIME = "is_widget_acc_clean_time";
 
+    public static final String SAVE_CREATED_SHORTCUT = "save_created_shortcut";
+
 
 }

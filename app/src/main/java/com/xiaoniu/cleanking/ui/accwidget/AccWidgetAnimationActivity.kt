@@ -39,7 +39,7 @@ class AccWidgetAnimationActivity : Activity() {
         loadAnimationAndPlay()
     }
 
-    
+
     fun loadAnimationAndPlay() {
         lottie_animation.imageAssetsFolder = animation_image_file
         lottie_animation.setAnimation(animation_json)
@@ -57,11 +57,11 @@ class AccWidgetAnimationActivity : Activity() {
     }
 
     fun toFinishActivity() {
-        if (configBean != null && configBean!!.isOpen) {
+       // if (configBean != null && configBean!!.isOpen) {
             var intent = Intent()
             intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
             startActivity(intent)
-        }
+      //  }
 
         EventBus.getDefault().post(AccAnimationCompleteEvent())
         finish()

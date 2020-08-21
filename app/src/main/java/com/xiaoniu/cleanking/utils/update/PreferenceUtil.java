@@ -2013,4 +2013,20 @@ public class PreferenceUtil {
         }
         return defaultTime;
     }
+
+
+    /**
+     * 保存桌面小图标已创建过
+     */
+    public static void saveCreatedShortcut() {
+        getEditor().putBoolean(SpCacheConfig.SAVE_CREATED_SHORTCUT,true).commit();
+    }
+
+    /**
+     * 获取桌面小图标是否创建过
+     */
+    public static boolean getCreatedShortcut() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(SpCacheConfig.SAVE_CREATED_SHORTCUT,false);
+    }
 }
