@@ -359,8 +359,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 DaliyTaskListEntity itemdata = (DaliyTaskListEntity) adapter.getItem(position);
                 if (null != itemdata && itemdata.getLinkType() == 1 && !TextUtils.isEmpty(itemdata.getLinkUrl()) && SchemeUtils.isScheme(itemdata.getLinkUrl())) {
                     try {
-                        SchemeUtils.openScheme(mActivity, itemdata.getLinkUrl());
-                        DaliyTaskInstance.getInstance().addTask(itemdata);
+                        if (itemdata.getIsCollect() == 0) {
+                            SchemeUtils.openScheme(mActivity, itemdata.getLinkUrl());
+                            DaliyTaskInstance.getInstance().addTask(itemdata);
+                        } else {
+                            ToastUtils.showShort(R.string.toast_alerady_award);
+                        }
                     } catch (Exception e) {
                         DaliyTaskInstance.getInstance().cleanTask();
                         e.printStackTrace();
