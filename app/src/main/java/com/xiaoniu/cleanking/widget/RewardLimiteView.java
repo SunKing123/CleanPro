@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
+import com.xiaoniu.cleanking.utils.CollectionUtils;
 
 /**
  * @author zhengzhihao
@@ -66,26 +67,31 @@ public class RewardLimiteView extends RelativeLayout {
         luckbub07.setDataCheckToShow(null);
         luckbub08.setDataCheckToShow(null);
         luckbub09.setDataCheckToShow(null);
-        for (BubbleConfig.DataBean dataBean1 : dataBean.getData()) {
-            if (dataBean1 == null) {
-                return;
-            }
-            switch (dataBean1.getLocationNum()) {
-                case 6://金币位1
-                    luckbub06.setDataCheckToShow(dataBean1);
-                    break;
-                case 7://金币位2
-                    luckbub07.setDataCheckToShow(dataBean1);
-                    break;
-                case 8://金币位3
-                    luckbub08.setDataCheckToShow(dataBean1);
-                    break;
-                case 9://金币位4
-                    luckbub09.setDataCheckToShow(dataBean1);
-                    break;
+        if (null != dataBean && !CollectionUtils.isEmpty(dataBean.getData())) {
+            for (BubbleConfig.DataBean dataBean1 : dataBean.getData()) {
+                if (dataBean1 == null) {
+                    return;
+                }
+                switch (dataBean1.getLocationNum()) {
+                    case 6://金币位1
+                        luckbub06.setDataCheckToShow(dataBean1);
+                        break;
+                    case 7://金币位2
+                        luckbub07.setDataCheckToShow(dataBean1);
+                        break;
+                    case 8://金币位3
+                        luckbub08.setDataCheckToShow(dataBean1);
+                        break;
+                    case 9://金币位4
+                        luckbub09.setDataCheckToShow(dataBean1);
+                        break;
 
+                }
             }
+        } else {
+            setVisibility(GONE);
         }
+
     }
 
 

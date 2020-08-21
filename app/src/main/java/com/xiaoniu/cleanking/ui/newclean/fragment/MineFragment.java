@@ -301,7 +301,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             mBinding.moneyTv.setText("(约 0.01元)");
             mBinding.goldCoinTv.setText(String.valueOf(gold));
         } else if (gold == 0) {
-            mBinding.moneyTv.setText("约 0元)");
+            mBinding.moneyTv.setText("(约 0元)");
             mBinding.goldCoinTv.setText("0");
         } else {
 //            mBinding.coinAbout.setVisibility(View.GONE);
