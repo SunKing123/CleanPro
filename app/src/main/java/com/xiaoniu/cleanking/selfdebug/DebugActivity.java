@@ -36,6 +36,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
 import com.xiaoniu.cleanking.ui.deskpop.wifi.ExternalSceneActivity;
@@ -119,7 +120,10 @@ public class DebugActivity extends BaseActivity {
                 StartFinishActivityUtil.Companion.gotoFinish(DebugActivity.this,intent);
             }
         });
+
+        findViewById(R.id.tv_shortcut).setOnClickListener(v -> StartActivityUtils.Companion.createAccShortcut(DebugActivity.this));
     }
+
 
     public int getTitleIndex(){
         titleIndex++;

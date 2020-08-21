@@ -152,7 +152,7 @@ class StartActivityUtils {
             }
         }
 
-        fun createdShortcut(context: Context):Boolean{
+        fun isCreatedShortcut(context: Context):Boolean{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
                 var shortcutManager = context.getSystemService(ShortcutManager::class.java);
                  if(shortcutManager.isRequestPinShortcutSupported&&!shortcutManager.pinnedShortcuts.isEmpty()){
