@@ -115,8 +115,6 @@ class DeviceInfoFragment : SimpleFragment() {
     private fun initStorageView() {
         var total = easyMemoryMod.getTotalInternalMemorySize().toFloat()
         var used = total - easyMemoryMod.getAvailableInternalMemorySize().toFloat()
-        total = FileUtils.getUnitGB(total).toFloat()
-        used = FileUtils.getUnitGB(used).toFloat()
 
         var percent = (used.toDouble() / total.toDouble()) * 100
         tv_storage_title.setText("内部总存储：" + FileUtils.getUnitGB(total) + " GB")

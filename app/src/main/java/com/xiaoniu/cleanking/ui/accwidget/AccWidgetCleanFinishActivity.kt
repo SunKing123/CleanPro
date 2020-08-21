@@ -37,8 +37,14 @@ class AccWidgetCleanFinishActivity : Activity() {
     }
 
     fun initView() {
-        var memoryLower = NumberUtils.mathRandomInt(10, 30)
-        tv_cleaned_memory.text = "释放内存" + memoryLower + "%"
+        if(PreferenceUtil.getWidgetAccCleanTime()){
+            var memoryLower = NumberUtils.mathRandomInt(10, 30)
+            tv_cleaned_memory.text = "释放内存" + memoryLower + "%"
+            tv_cleaned_memory_sub.text="手机运行速度快如闪电"
+        }else{
+            tv_cleaned_memory.text="已优化"
+            tv_cleaned_memory_sub.text="手机已加速"
+        }
 
         var storageGarbage = NumberUtils.mathRandomInt(300, 800)
         tv_storage_garbage.text = storageGarbage.toString() + "MB"
@@ -75,5 +81,10 @@ class AccWidgetCleanFinishActivity : Activity() {
         MidasRequesCenter.requestAndShowAd(this, adId, object : SimpleViewCallBack(findViewById(R.id.ad_container)) {
 
         })
+    }
+
+    override fun finish() {
+        super.finish()
+        PreferenceUtil.saveWidgetAccCleanTime()
     }
 }

@@ -45,7 +45,6 @@ import com.xiaoniu.cleanking.ui.lockscreen.PopLayerActivity;
 import com.xiaoniu.cleanking.ui.main.activity.SplashADActivity;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
-import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
 import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -54,8 +53,6 @@ import com.xiaoniu.cleanking.utils.rxjava.RxTimer;
 import com.xiaoniu.cleanking.widget.OneKeyCircleBtnView;
 import com.xiaoniu.common.utils.DeviceUtils;
 import com.xiaoniu.common.utils.ToastUtils;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.Locale;
@@ -528,7 +525,12 @@ public class DebugActivity extends BaseActivity {
         new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
             @Override
             public void action(long number) {
-                EventBus.getDefault().post(new PopEventModel("deviceInfo"));
+                Intent screenIntent = new Intent(DebugActivity.this, ExternalPhoneStateActivity.class);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                startActivity(screenIntent);
             }
         });
     }

@@ -359,7 +359,7 @@ public interface Points {
 
         class Cool implements Point{
             String PAGE = "cool_success_page";
-            String PAGE_EVENT_CODE = "cool_success_page_custom";
+            String PAGE_EVENT_CODE = "cooling_success_page_custom";
             String PAGE_EVENT_NAME = "降温结果页创建时";
             String RETURN_CLICK_NAME = "用户在手机降温完成页返回";
 
@@ -467,4 +467,20 @@ public interface Points {
         }
     }
 
+    interface HomeDeviceInfo{
+        String PAGE = "home_page";
+
+        String MEMORY_CLICK_EVENT_CODE = "mobile_phone_status_memory_clean_click";
+        String MEMORY_CLICK_EVENT_NAME = "手机状态内存清理点击";
+
+        String STORAGE_CLICK_EVENT_CODE = "mobile_phone_status_storage_clean_click";
+        String STORAGE_CLICK_EVENT_NAME = "手机状态存储清理点击";
+
+        String BATTERY_CLICK_EVENT_CODE = "mobile_phone_status_battery_cooling_click";
+        String BATTERY_CLICK_EVENT_NAME = "手机状态降温点击";
+
+        String POWER_CLICK_EVENT_CODE = "mobile_phone_status_power_saving_click";
+        String POWER_CLICK_EVENT_NAME = "手机状态省电点击";
+
+    }
 }

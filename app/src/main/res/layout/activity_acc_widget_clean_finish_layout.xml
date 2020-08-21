@@ -66,6 +66,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
             <TextView
+                android:id="@+id/tv_cleaned_memory_sub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1.5dp"
