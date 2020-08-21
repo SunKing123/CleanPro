@@ -28,7 +28,7 @@ import java.math.RoundingMode
  * email：xinxiaolong123@foxmail.com
  */
 class HomeDeviceInfoFragment : SimpleFragment() {
-    
+
     companion object {
         fun getInstance(): HomeDeviceInfoFragment {
             val fragment = HomeDeviceInfoFragment()
@@ -184,8 +184,8 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private fun initTrueCoolView() {
         var batteryT = HomeDeviceInfoStore.getInstance().getBatteryTemperature(mContext)
         var cpuT = HomeDeviceInfoStore.getInstance().getCPUTemperature(mContext)
-        updateCoolImage(batteryT,cpuT)
-        updateBtn(batteryT,cpuT)
+        updateCoolImage(batteryT, cpuT)
+        updateBtn(batteryT, cpuT)
         tv_temperature_title.setText("电池温度：" + batteryT + "°C")
         tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
     }
@@ -196,8 +196,8 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     private fun initCleanedCoolView() {
         var batteryT = HomeDeviceInfoStore.getInstance().getCleanedBatteryTemperature(mContext)
         var cpuT = HomeDeviceInfoStore.getInstance().getCleanedCPUTemperature(mContext)
-        updateCoolImage(batteryT,cpuT)
-        updateBtn(batteryT,cpuT)
+        updateCoolImage(batteryT, cpuT)
+        updateBtn(batteryT, cpuT)
         tv_temperature_title.setText("电池温度：" + batteryT + "°C")
         tv_temperature_content.setText("CPU温度：" + cpuT + "°C")
     }
@@ -258,6 +258,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      */
     private fun goCleanMemory() {
         if (isDestroy()) return
+        memoryClick()
         StartActivityUtils.goCleanMemory(activity!!)
     }
 
@@ -266,6 +267,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      */
     private fun goCleanStorage() {
         if (isDestroy()) return
+        storageClick()
         StartActivityUtils.goCleanStorage(activity!!)
     }
 
@@ -274,6 +276,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      */
     private fun goCool() {
         if (isDestroy()) return
+        batteryClick()
         StartActivityUtils.goPhoneCool(activity!!)
 
     }
@@ -283,6 +286,7 @@ class HomeDeviceInfoFragment : SimpleFragment() {
      */
     private fun goCleanBattery() {
         if (isDestroy()) return
+        powerClick()
         StartActivityUtils.goCleanBattery(activity!!)
     }
 
@@ -308,16 +312,16 @@ class HomeDeviceInfoFragment : SimpleFragment() {
         }
     }
 
-    private fun updateCoolImage(batteryT:Float,cpuT: Float) {
-        if (batteryT > BATTERY_VPT||cpuT>CPU_VPT) {
+    private fun updateCoolImage(batteryT: Float, cpuT: Float) {
+        if (batteryT > BATTERY_VPT || cpuT > CPU_VPT) {
             image_temperature.setImageResource(R.drawable.icon_temperature_percent_high)
         } else {
             image_temperature.setImageResource(R.drawable.icon_temperature_percent_normal)
         }
     }
 
-    private fun updateBtn(batteryT:Float,cpuT:Float) {
-        if (batteryT > BATTERY_VPT||cpuT>CPU_VPT) {
+    private fun updateBtn(batteryT: Float, cpuT: Float) {
+        if (batteryT > BATTERY_VPT || cpuT > CPU_VPT) {
             btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_red_bg)
         } else {
             btn_clean_temperature.setBackgroundResource(R.drawable.clear_btn_green_bg)
@@ -380,6 +384,22 @@ class HomeDeviceInfoFragment : SimpleFragment() {
     @Subscribe
     fun changeLifeCycleEvent(lifecycEvent: LifecycEvent?) {
         refreshAllView()
+    }
+
+    fun memoryClick() {
+        StatisticsUtils.trackClick(Points.HomeDeviceInfo.MEMORY_CLICK_EVENT_CODE, Points.HomeDeviceInfo.MEMORY_CLICK_EVENT_NAME, "", Points.HomeDeviceInfo.PAGE)
+    }
+
+    fun storageClick() {
+        StatisticsUtils.trackClick(Points.HomeDeviceInfo.STORAGE_CLICK_EVENT_CODE, Points.HomeDeviceInfo.STORAGE_CLICK_EVENT_NAME, "", Points.HomeDeviceInfo.PAGE)
+    }
+
+    fun batteryClick() {
+        StatisticsUtils.trackClick(Points.HomeDeviceInfo.BATTERY_CLICK_EVENT_CODE, Points.HomeDeviceInfo.BATTERY_CLICK_EVENT_NAME, "", Points.HomeDeviceInfo.PAGE)
+    }
+
+    fun powerClick() {
+        StatisticsUtils.trackClick(Points.HomeDeviceInfo.POWER_CLICK_EVENT_CODE, Points.HomeDeviceInfo.POWER_CLICK_EVENT_NAME, "", Points.HomeDeviceInfo.PAGE)
     }
 
 }
