@@ -18,24 +18,23 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_240dp"
-                android:background="@drawable/gradient_head"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/setting_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:paddingRight="@dimen/dimen_15dp"
-                    android:src="@mipmap/icon_white_setting" />
+                android:layout_height="@dimen/dimen_278dp"
+                android:background="@drawable/img_mine_head_bg">
 
                 <RelativeLayout
+                    android:id="@+id/rel_heal_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_15dp"
-                    android:layout_marginTop="@dimen/dimen_60dp"
-                    android:layout_marginRight="@dimen/dimen_15dp">
+                    android:layout_marginLeft="@dimen/dimen_15dp">
+
+                    <ImageView
+                        android:id="@+id/setting_ll"
+                        android:layout_width="@dimen/dimen_20dp"
+                        android:layout_height="@dimen/dimen_20dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/dimen_15dp"
+                        android:src="@mipmap/icon_white_setting" />
 
                     <RelativeLayout
                         android:id="@+id/login_ll"
@@ -45,8 +44,8 @@
 
                         <ImageView
                             android:id="@+id/head_img_iv"
-                            android:layout_width="@dimen/dimen_46dp"
-                            android:layout_height="@dimen/dimen_46dp"
+                            android:layout_width="@dimen/dimen_32dp"
+                            android:layout_height="@dimen/dimen_32dp"
                             android:layout_centerVertical="true"
                             android:src="@mipmap/default_head" />
 
@@ -55,10 +54,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/dimen_8dp"
+                            android:layout_marginLeft="@dimen/dp_5"
                             android:layout_toRightOf="@+id/head_img_iv"
-                            android:textColor="@color/color_white_all"
-                            android:textSize="16sp" />
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
                     </RelativeLayout>
 
                     <ImageView
@@ -74,14 +73,14 @@
                     <RelativeLayout
                         android:id="@+id/cash_rl"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="106dp"
                         android:layout_below="@+id/login_ll">
 
                         <LinearLayout
                             android:id="@+id/wallet_ll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
+                           android:layout_marginTop="23dp"
                             android:orientation="vertical">
 
                             <LinearLayout
@@ -95,11 +94,11 @@
                                     android:layout_height="wrap_content"
                                     android:includeFontPadding="false"
                                     android:text="我的金币"
-                                    android:textColor="@color/color_222222"
-                                    android:textSize="@dimen/dimen_16sp"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp_14"
                                     android:textStyle="bold" />
 
-                                <TextView
+                              <!--  <TextView
                                     android:layout_width="@dimen/dimen_60dp"
                                     android:layout_height="@dimen/dimen_18dp"
                                     android:layout_marginLeft="@dimen/dimen_6dp"
@@ -107,8 +106,9 @@
                                     android:gravity="center"
                                     android:includeFontPadding="false"
                                     android:text="收入明细"
+                                    android:visibility="gone"
                                     android:textColor="@color/color_666666"
-                                    android:textSize="@dimen/dimen_11dp" />
+                                    android:textSize="@dimen/dimen_11dp" />-->
                             </LinearLayout>
 
 
@@ -123,10 +123,11 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="--"
-                                    android:textColor="@color/color_FDBB1D"
-                                    android:textSize="@dimen/dimen_30dp" />
+                                    android:textStyle="bold"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/dimen_36dp" />
 
-                                <TextView
+                        <!--        <TextView
                                     android:id="@+id/coin_about"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -134,57 +135,56 @@
                                     android:layout_marginRight="@dimen/dimen_5dp"
                                     android:text="≈"
                                     android:textColor="@color/color_FDBB1D"
-                                    android:textSize="@dimen/dimen_24dp"
-                                    android:visibility="gone" />
+                                    android:textSize="@dimen/dimen_24dp"/>-->
 
-                                <TextView
+                               <!-- <TextView
                                     android:id="@+id/coin_unit"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="¥"
+                                    android:text="0.02"
                                     android:textColor="#FFE83C"
-                                    android:textSize="@dimen/dimen_16dp"
-                                    android:visibility="gone" />
+                                    android:textSize="@dimen/dimen_16dp" />-->
 
                                 <TextView
                                     android:id="@+id/money_tv"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginLeft="2dp"
                                     android:text="--"
-                                    android:textColor="@color/color_FDBB1D"
-                                    android:textSize="@dimen/dimen_20dp"
-                                    android:visibility="gone" />
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp_14" />
                             </LinearLayout>
                         </LinearLayout>
 
                         <RelativeLayout
                             android:layout_width="@dimen/dimen_75dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:paddingTop="23dp"
                             android:layout_marginBottom="@dimen/dimen_10dp">
 
                             <LinearLayout
                                 android:id="@+id/withdrawal_ll"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/dimen_28dp"
-                                android:layout_centerVertical="true"
+                                android:layout_height="@dimen/dp_37"
+
                                 android:background="@drawable/shape_bg_39b8bb"
                                 android:gravity="center"
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:src="@mipmap/gold_icon" />
+                                    android:layout_width="@dimen/dimen_25dp"
+                                    android:layout_height="@dimen/dimen_25dp"
+                                    android:src="@drawable/icon_tixian_golde" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/dimen_2dp"
-                                    android:drawableRight="@mipmap/icon_withdraw_right"
                                     android:drawablePadding="4.5dp"
                                     android:text="提现"
-                                    android:textColor="@color/color_white_all"
+                                    android:textColor="@color/color_333333"
                                     android:textSize="@dimen/dimen_14dp"
                                     android:textStyle="bold" />
                             </LinearLayout>
@@ -205,29 +205,40 @@
             <com.xiaoniu.cleanking.widget.RewardLimiteView
                 android:id="@+id/reward_view"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_115dp"
+                android:layout_height="@dimen/dimen_143dp"
                 android:layout_marginLeft="@dimen/dimen_14dp"
-                android:layout_marginTop="-28dp"
-                android:layout_marginRight="@dimen/dimen_14dp">
-            </com.xiaoniu.cleanking.widget.RewardLimiteView>
+                android:layout_marginTop="-100dp"
+                android:layout_marginRight="@dimen/dimen_14dp"></com.xiaoniu.cleanking.widget.RewardLimiteView>
+
+            <RelativeLayout
+                android:id="@+id/rel_card_award"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:layout_marginLeft="@dimen/dimen_15dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/img_card_award_bg"
+                android:layout_marginRight="@dimen/dimen_15dp">
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/linear_daliy_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_15dp"
-                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dp_2"
                 android:layout_marginRight="@dimen/dimen_15dp"
                 android:background="@drawable/bg_white_fillet_06"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tv_award_tag01"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="14dp"
+                    android:layout_marginTop="12dp"
                     android:includeFontPadding="false"
                     android:text="日常任务:"
-                    android:layout_marginTop="12dp"
                     android:textColor="@color/color_333333"
                     android:textSize="@dimen/dimen_16sp"
                     android:textStyle="bold"
@@ -238,9 +249,7 @@
                     android:id="@+id/rv_daliy_task"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimen_12dp"
                     android:layout_marginTop="@dimen/dimen_2dp"
-                    android:layout_marginRight="@dimen/dimen_12dp"
                     android:layout_marginBottom="@dimen/dimen_16dp" />
             </LinearLayout>
 

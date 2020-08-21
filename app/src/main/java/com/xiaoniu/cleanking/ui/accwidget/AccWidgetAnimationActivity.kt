@@ -50,13 +50,13 @@ class AccWidgetAnimationActivity : Activity() {
             override fun onAnimationRepeat(animation: Animator) {}
         })
     }
-
+     
     fun toFinishActivity() {
-       // if(configBean!=null&&configBean!!.isOpen){
+       if(configBean!=null&&configBean!!.isOpen){
             var intent = Intent()
             intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
             startActivity(intent)
-       // }
+      }
         finish()
     }
 }

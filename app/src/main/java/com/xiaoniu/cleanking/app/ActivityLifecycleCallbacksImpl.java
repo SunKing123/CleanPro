@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 package com.xiaoniu.cleanking.app;
-
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
-
-
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.main.activity.MainActivity;
+import com.xiaoniu.cleanking.utils.DaliyTaskInstance;
 import com.xiaoniu.cleanking.utils.LogUtils;
-
 import timber.log.Timber;
 
 
@@ -47,6 +45,9 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
 
     @Override
     public void onActivityResumed(Activity activity) {
+        if(activity instanceof MainActivity){  //清除日常任务；
+            DaliyTaskInstance.getInstance().cleanTask();
+        }
     }
 
     @Override
@@ -66,7 +67,6 @@ public class ActivityLifecycleCallbacksImpl implements Application.ActivityLifec
 
         Timber.i(activity + " - onActivityDestroyed");
         LogUtils.e("lifeCycle:onActivityDestroyed()"+activity.getClass().getName());
-
         ActivityCollector.removeActivity(activity);
         //横竖屏切换或配置改变时, Activity 会被重新创建实例, 但 Bundle 中的基础数据会被保存下来,移除该数据是为了保证重新创建的实例可以正常工作
         activity.getIntent().removeExtra(EXTRA_ISINITTOOLBAR);

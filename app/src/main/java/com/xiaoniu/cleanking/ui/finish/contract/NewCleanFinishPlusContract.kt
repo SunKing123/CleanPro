@@ -20,7 +20,7 @@ public interface NewCleanFinishPlusContract {
         fun visibleRecommendViewSecond(item: RecmedItemModel)
         fun visibleScratchCardView()
         fun goneScratchCardView()
-        fun showGoldCoinDialog(bubbleCollected: BubbleCollected)
+        fun showGoldCoinDialog(bubbleCollected: BubbleCollected,isTask:Boolean)
         fun dismissGoldCoinDialog()
         fun getActivity():Activity
         fun getFunctionTitle():String
@@ -33,8 +33,8 @@ public interface NewCleanFinishPlusContract {
         fun loadTwoAdv(advContainer: FrameLayout)
         fun loadInsideScreenDialog()
         fun loadGoldCoinDialog()
-        fun addDoubleGoldCoin(bubbleCollected: BubbleCollected)
-        fun loadVideoAdv(bubbleCollected: BubbleCollected)
+        fun addDoubleGoldCoin(bubbleCollected: BubbleCollected,isTask:Boolean)
+        fun loadVideoAdv(bubbleCollected: BubbleCollected,isTask:Boolean)
         fun onPostResume()
         fun onPause()
     }

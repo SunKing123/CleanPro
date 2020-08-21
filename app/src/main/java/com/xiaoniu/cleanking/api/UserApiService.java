@@ -240,6 +240,23 @@ public interface UserApiService {
     @GET("/daliyTasks/user/configs")
     Flowable<DaliyTaskListData> daliyTaskList();
 
+
+    /**
+     * 任务中心
+     * 金币领取
+     */
+    @POST("/daliyTasks/collect")
+    Flowable<BubbleCollected> daliyTasksCollect(@Body RequestBody body);
+
+
+    /**
+     * 任务中心
+     * 金币翻倍
+     */
+
+    @POST("/daliyTasks/collect/double")
+    Flowable<BubbleDouble> daliyTasksDouble(@Body RequestBody body);
+
     /**
      * 退出登录
      *

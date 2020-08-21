@@ -72,16 +72,16 @@ public class RewardLimiteView extends RelativeLayout {
             }
             switch (dataBean1.getLocationNum()) {
                 case 6://金币位1
-                    luckbub07.setDataCheckToShow(dataBean1);
-                    break;
-                case 7://金币位2
-                    luckbub09.setDataCheckToShow(dataBean1);
-                    break;
-                case 8://金币位3
                     luckbub06.setDataCheckToShow(dataBean1);
                     break;
-                case 9://金币位4
+                case 7://金币位2
+                    luckbub07.setDataCheckToShow(dataBean1);
+                    break;
+                case 8://金币位3
                     luckbub08.setDataCheckToShow(dataBean1);
+                    break;
+                case 9://金币位4
+                    luckbub09.setDataCheckToShow(dataBean1);
                     break;
 
             }

@@ -84,6 +84,7 @@ import com.xiaoniu.cleanking.ui.main.event.LifecycEvent;
 import com.xiaoniu.cleanking.ui.notifition.NoticicationInfoCheker;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.utils.AppLifecycleUtil;
+import com.xiaoniu.cleanking.utils.DaliyTaskInstance;
 import com.xiaoniu.cleanking.utils.MiitHelper;
 import com.xiaoniu.cleanking.utils.NotificationUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundPulseTimer;
@@ -500,6 +501,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
                     PreferenceUtil.saveHomeBackTime();
 
                     startBackgroundTimer();
+                    DaliyTaskInstance.getInstance().cleanTask();//清除日常任务
                 }
             }
         });

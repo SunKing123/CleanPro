@@ -6,6 +6,7 @@ import android.app.usage.UsageStatsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class AppLifecycleUtil {
             return false;
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             // The name of the process that this object is associated with.
-            LogUtils.i("=zzh-"+appProcess.processName);
+            LogUtils.i("=zzh-" + appProcess.processName);
             if (appProcess.processName.equals(packageName)
                     && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                 return true;
@@ -89,7 +90,7 @@ public class AppLifecycleUtil {
 
 
     public static boolean isRunningForeground(Context context) {
-        if(Build.VERSION.SDK_INT >= 21){
+        if (Build.VERSION.SDK_INT >= 21) {
             long ts = System.currentTimeMillis();
             UsageStatsManager usageStatsManager = (UsageStatsManager)
                     context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
@@ -101,14 +102,41 @@ public class AppLifecycleUtil {
             UsageStats recentStats = null;
             for (UsageStats usageStats : queryUsageStats) {
                 if (recentStats == null ||
-                        recentStats.getLastTimeUsed() < usageStats.getLastTimeUsed()){
+                        recentStats.getLastTimeUsed() < usageStats.getLastTimeUsed()) {
                     recentStats = usageStats;
                 }
             }
-            if(context.getPackageName().equals(recentStats.getPackageName())){
+            if (context.getPackageName().equals(recentStats.getPackageName())) {
                 return true;
             }
         }
         return false;
+    }
+
+
+    /**
+     * 判断某个Activity 界面是否在前台
+     *
+     * @param context
+     * @param className 某个界面名称
+     * @return
+     */
+    public static boolean isForeground(Context context, String className) {
+        if (context == null || TextUtils.isEmpty(className)) {
+            return false;
+        }
+
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//        List<ActivityManager.AppTask> tasks = am.getRunningAppProcesses();
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(5);
+        if (list != null && list.size() > 0) {
+            ComponentName cpn = list.get(0).topActivity;
+            if (className.equals(cpn.getClassName())) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }
