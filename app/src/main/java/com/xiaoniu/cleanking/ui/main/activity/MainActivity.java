@@ -559,6 +559,7 @@ public class MainActivity extends BaseActivity<MainPresenter> {
             }
             if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof ShoppingMallFragment) {
                 //处理友盟异常 https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3331997352190
+                //todo
                 if (mFragments.size() <= mBottomBar.getCurrentItemPosition()) {
                     return true;
                 }

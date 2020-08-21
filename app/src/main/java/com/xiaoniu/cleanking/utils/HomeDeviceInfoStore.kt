@@ -84,7 +84,7 @@ class HomeDeviceInfoStore {
      */
     fun getCleanedUsedMemoryPercent(): Int {
         if (cleanedMemoryPercent == 0) {
-            cleanedMemoryPercent = getUsedMemoryPercent() - PreferenceUtil.getOneKeySpeedNum().toInt()
+            cleanedMemoryPercent = NumberUtils.mathRandom(15, 30).toInt()
         }
         return cleanedMemoryPercent
     }
@@ -186,7 +186,7 @@ class HomeDeviceInfoStore {
     fun getCleanedBatteryTemperature(context: Context): Float {
         log("getCleanedBatteryTemperature() getCleanCoolNum=" + PreferenceUtil.getCleanCoolNum())
         log("getCleanedBatteryTemperature() getBatteryTemperature=" + getBatteryTemperature(context))
-        return getBatteryTemperature(context) - PreferenceUtil.getCleanCoolNum()
+        return format((getBatteryTemperature(context) - PreferenceUtil.getCleanCoolNum()).toDouble())
     }
 
     /**
@@ -243,7 +243,7 @@ class HomeDeviceInfoStore {
      * 当手机电池电量【70%，100%】时，延长待机时间显示【30，60】分钟随机数
      */
     fun saveRandomOptimizeElectricNum(context: Context) {
-        val electric = getBatteryTemperature(context)
+        val electric = getElectricNum(context)
         var num: String? = ""
         num = if (electric >= 70) {
             NumberUtils.mathRandom(30, 59)
@@ -259,7 +259,6 @@ class HomeDeviceInfoStore {
         PreferenceUtil.saveCleanedBatteryMinutes(num.toInt())
         log("saveRandomOptimizeElectricNum() num=" + num)
     }
-
 
     fun format(value: Double): Float {
         var bd = BigDecimal(value)

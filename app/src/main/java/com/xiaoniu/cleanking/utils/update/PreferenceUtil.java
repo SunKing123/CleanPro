@@ -1959,12 +1959,11 @@ public class PreferenceUtil {
         getEditor().putInt(SpCacheConfig.RANDOM_CLEANED_BATTERY_MINUTES,minutes).commit();
     }
 
-
     /**
      * 获取电池优化后的时间加速
      */
     public static int getCleanedBatteryMinutes() {
-        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CLEAN_USED, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(SpCacheConfig.RANDOM_CLEANED_BATTERY_MINUTES,20);
     }
 

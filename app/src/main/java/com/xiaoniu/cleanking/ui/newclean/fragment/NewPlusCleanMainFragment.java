@@ -2,9 +2,7 @@ package com.xiaoniu.cleanking.ui.newclean.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -36,7 +34,6 @@ import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils;
-import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.DeviceInfoFragment;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.HomeDeviceInfoFragment;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
@@ -83,7 +80,6 @@ import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
-import com.xiaoniu.cleanking.utils.HomePopUpStatusManager;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -538,7 +534,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
      */
     private void showCreateShortcut() {
         boolean todayFirstUse = PreferenceUtil.isFirstUseAccOfDay();
-        boolean alreadyCreate = StartActivityUtils.Companion.createdShortcut(getActivity());
+        boolean alreadyCreate = StartActivityUtils.Companion.isCreatedShortcut(getActivity());
         LogUtils.e("================================一键加速使用完毕     todayFirstUse="+todayFirstUse+"    alreadyCreate="+alreadyCreate);
         if (todayFirstUse && !alreadyCreate) {
             StartActivityUtils.Companion.createAccShortcut(getActivity());
