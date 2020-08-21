@@ -369,7 +369,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                         } else {
                             ToastUtils.showShort(R.string.toast_alerady_award);
                         }
-                        StatisticsUtils.trackClick("daily_tasks_click_"+position, "日常任务"+position+"点击", "my_page", "my_page");
+                        StatisticsUtils.trackClick("daily_tasks_click_"+(position+1), "日常任务"+(position+1)+"点击", "my_page", "my_page");
                     } catch (Exception e) {
                         DaliyTaskInstance.getInstance().cleanTask();
                         e.printStackTrace();
