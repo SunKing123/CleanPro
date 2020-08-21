@@ -229,6 +229,8 @@
     <string name="power_charging">极致快充</string>
     <string name="at_once_award">立即领取</string>
     <string name="limit_award_tag">限时奖励</string>
+    <string name="tv_dalidy_task_tag">日常任务</string>
+
     <string name="toast_alerady_award">该任务今日已完成</string>
 
 
