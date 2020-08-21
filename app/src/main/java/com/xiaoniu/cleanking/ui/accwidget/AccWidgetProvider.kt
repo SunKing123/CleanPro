@@ -20,7 +20,7 @@ public class AccWidgetProvider : AppWidgetProvider() {
 
     // 保存 widget 的id的HashSet，每新建一个 widget 都会为该 widget 分配一个 id。
     private val idsSet = HashSet<Int>()
-
+    private var viewManager:AccWidgetViewManager? = null
     private val ACTION_VIEW_CLICK = "com.xiaoniu.widget.action.view.click"
 
     /**
@@ -40,6 +40,8 @@ public class AccWidgetProvider : AppWidgetProvider() {
             }
         }
         if (context != null) {
+            if(viewManager==null)
+            viewManager=AccWidgetViewManager(context)
             updateAllAppWidgets(context!!, AppWidgetManager.getInstance(context), idsSet)
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds)
@@ -78,7 +80,7 @@ public class AccWidgetProvider : AppWidgetProvider() {
             }
         }
     }
-    
+
     override fun onRestored(context: Context?, oldWidgetIds: IntArray?, newWidgetIds: IntArray?) {
         super.onRestored(context, oldWidgetIds, newWidgetIds)
         WidgetLog.log("onRestored()")
@@ -99,6 +101,9 @@ public class AccWidgetProvider : AppWidgetProvider() {
      */
     override fun onDisabled(context: Context?) {
         super.onDisabled(context)
+        if(viewManager!=null){
+            viewManager!!.onDestroy()
+        }
         WidgetLog.log("onDisabled()")
     }
 
@@ -159,4 +164,6 @@ public class AccWidgetProvider : AppWidgetProvider() {
         WidgetLog.log("===============getPendingIntent    " + buttonId.toString())
         return PendingIntent.getBroadcast(context, 0, intent, 0)
     }
+
+
 }

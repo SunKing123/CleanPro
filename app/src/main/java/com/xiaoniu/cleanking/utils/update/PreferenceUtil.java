@@ -677,6 +677,32 @@ public class PreferenceUtil {
     }
 
     /**
+     * 保存一键清理清理时间
+     *
+     * @return
+     */
+    public static boolean saveWidgetAccCleanTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.IS_WIDGET_ACC_CLEAN_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次一键清理清理间隔至少3分钟
+     *
+     * @return true 3分钟以上 false 小于3分钟
+     */
+    public static boolean getWidgetAccCleanTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.IS_WIDGET_ACC_CLEAN_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+
+    /**
      * 保存清理运行内存是否全选
      *
      * @return

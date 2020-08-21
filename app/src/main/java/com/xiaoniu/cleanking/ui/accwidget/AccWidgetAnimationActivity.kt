@@ -10,8 +10,10 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList
 import com.xiaoniu.cleanking.ui.main.config.PositionId
+import com.xiaoniu.cleanking.ui.tool.notify.event.AccAnimationCompleteEvent
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by xinxiaolong on 2020/8/17.
@@ -37,7 +39,7 @@ class AccWidgetAnimationActivity : Activity() {
         loadAnimationAndPlay()
     }
 
-
+    
     fun loadAnimationAndPlay() {
         lottie_animation.imageAssetsFolder = animation_image_file
         lottie_animation.setAnimation(animation_json)
@@ -60,6 +62,8 @@ class AccWidgetAnimationActivity : Activity() {
             intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
             startActivity(intent)
         }
+
+        EventBus.getDefault().post(AccAnimationCompleteEvent())
         finish()
     }
 }

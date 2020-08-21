@@ -209,6 +209,7 @@ public class ToolFragment extends SimpleFragment {
                 bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_chat_clear));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused", true);
                 StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
             }
         } else if (ids == R.id.rl_qq) {
@@ -235,6 +236,7 @@ public class ToolFragment extends SimpleFragment {
                 bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused", true);
                 StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
             } else {
                 Bundle bundle = new Bundle();
@@ -254,6 +256,7 @@ public class ToolFragment extends SimpleFragment {
                 bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low));
                 bundle.putString("num", "");
                 bundle.putString("unit", "");
+                bundle.putBoolean("unused", true);
                 StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
             }
         } else if (ids == R.id.text_phone_thin) {

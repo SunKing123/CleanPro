@@ -205,4 +205,7 @@ public class SpCacheConfig {
 
     public final static String RANDOM_CLEANED_BATTERY_MINUTES = "random_cleaned_battery_minutes";
 
+    public static final String IS_WIDGET_ACC_CLEAN_TIME = "is_widget_acc_clean_time";
+
+
 }
