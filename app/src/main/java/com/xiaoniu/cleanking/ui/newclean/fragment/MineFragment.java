@@ -49,6 +49,7 @@ import com.xiaoniu.cleanking.utils.CollectionUtils;
 import com.xiaoniu.cleanking.utils.DaliyTaskInstance;
 import com.xiaoniu.cleanking.utils.ImageUtil;
 import com.xiaoniu.cleanking.utils.NumberUtils;
+import com.xiaoniu.cleanking.utils.anim.AnimationScaleUtils;
 import com.xiaoniu.cleanking.utils.user.UserHelper;
 import com.xiaoniu.cleanking.widget.LuckBubbleView;
 import com.xiaoniu.common.utils.DisplayUtils;
@@ -114,7 +115,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         initTaskListView();
         ViewHelper.setTextViewCustomTypeFace(mBinding.goldCoinTv, "fonts/DIN-Medium.otf");
         ViewHelper.setTextViewCustomTypeFace(mBinding.moneyTv, "fonts/DIN-Medium.otf");
-
+        AnimationScaleUtils.getInstance().playScaleAnimation(mBinding.ivAtonceCard, 500);
         showRewardViewListener();
 //        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
 //            mBinding.mineAdFf.setOutlineProvider(new OutlineProvider(DimenUtils.dp2px(getContext(), 8)));
