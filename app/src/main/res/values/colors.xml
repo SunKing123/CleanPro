@@ -39,6 +39,7 @@
     <color name="color_fed4d7">#FED4D7</color>
     <color name="color_e0e0e0">#E0E0E0</color>
     <color name="transparent">#00000000</color>
+    <color name="translucent_background_1">#99000000</color>
     <color name="color_262626">#262626</color>
     <color name="color_FC2922">#FC2922</color>
     <color name="color_FF2F31">#FF2F31</color>

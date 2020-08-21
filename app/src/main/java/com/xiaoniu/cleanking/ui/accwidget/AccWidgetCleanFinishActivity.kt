@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.accwidget
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
@@ -13,6 +14,7 @@ import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.utils.NumberUtils
+import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import kotlinx.android.synthetic.main.activity_acc_widget_clean_finish_layout.*
 
 /**
@@ -23,6 +25,11 @@ class AccWidgetCleanFinishActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StatusBarCompat.setStatusBarColor(this, resources.getColor(android.R.color.transparent), true)
+        } else {
+            StatusBarCompat.setStatusBarColor(this, resources.getColor(android.R.color.transparent), false)
+        }
         setContentView(R.layout.activity_acc_widget_clean_finish_layout)
         initView()
     }
