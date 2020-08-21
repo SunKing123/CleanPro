@@ -90,7 +90,7 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
             public void onAdClick(AdInfoModel adInfoModel) {
                 super.onAdClick(adInfoModel);
                 if(adInfoModel.isOperationPosition){//运营位类类型广告
-
+                    StatisticsUtils.trackClick("ad_click", "外部插屏广告点击", "external_advertising_page", "external_advertising_page");
                 }
             }
 
