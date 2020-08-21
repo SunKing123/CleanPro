@@ -74,8 +74,8 @@ public class DebugActivity extends BaseActivity {
     private OneKeyCircleBtnView oneKeyCircleButtonView;
     private TextView tv_finish;
 
-    private String[] titleNames={"一键清理", "病毒查杀", "一键加速", "超强省电", "微信清理", "手机降温", "通知栏清理","网络加速"};
-    private int titleIndex=-1;
+    private String[] titleNames = {"一键清理", "病毒查杀", "一键加速", "超强省电", "微信清理", "手机降温", "通知栏清理", "网络加速"};
+    private int titleIndex = -1;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -100,7 +100,7 @@ public class DebugActivity extends BaseActivity {
         tv_lottie = findViewById(R.id.tv_lottie);
         frame_layout = findViewById(R.id.frame_layout);
         tv_hide_icon = findViewById(R.id.tv_hide_icon);
-        tv_finish=findViewById(R.id.tv_finish);
+        tv_finish = findViewById(R.id.tv_finish);
         lottieAnimationView = findViewById(R.id.view_lottie_bottom);
         tv_hide_icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,10 +114,10 @@ public class DebugActivity extends BaseActivity {
         tv_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title=titleNames[getTitleIndex()];
-                Intent intent=new Intent();
-                intent.putExtra("title",title);
-                StartFinishActivityUtil.Companion.gotoFinish(DebugActivity.this,intent);
+                String title = titleNames[getTitleIndex()];
+                Intent intent = new Intent();
+                intent.putExtra("title", title);
+                StartFinishActivityUtil.Companion.gotoFinish(DebugActivity.this, intent);
             }
         });
 
@@ -125,9 +125,9 @@ public class DebugActivity extends BaseActivity {
     }
 
 
-    public int getTitleIndex(){
+    public int getTitleIndex() {
         titleIndex++;
-        titleIndex=titleIndex>=titleNames.length?0:titleIndex;
+        titleIndex = titleIndex >= titleNames.length ? 0 : titleIndex;
         return titleIndex;
     }
 
@@ -231,7 +231,6 @@ public class DebugActivity extends BaseActivity {
     public void toVirus(View view) {
         SchemeProxy.openScheme(this, SchemeConstant.LocalPushScheme.SCHEME_VIRUSKILLACTIVITY);
     }
-
 
 
     public void toH5(View view) {
@@ -508,42 +507,47 @@ public class DebugActivity extends BaseActivity {
     }
 
     public void powerClick(View view) {
-//        new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
-//            @Override
-//            public void action(long number) {
+        new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
+            @Override
+            public void action(long number) {
                 Intent screenIntent = new Intent(DebugActivity.this, BatteryPopActivity.class);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
                 screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                 startActivity(screenIntent);
-//            }
-//        });
+            }
+        });
     }
 
 
     public void deviceInfoClick(View view) {
-        Intent screenIntent = new Intent(DebugActivity.this, ExternalPhoneStateActivity.class);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        startActivity(screenIntent);
-
-
+        new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
+            @Override
+            public void action(long number) {
+                Intent screenIntent = new Intent(DebugActivity.this, ExternalPhoneStateActivity.class);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                startActivity(screenIntent);
+            }
+        });
     }
 
     public void wifiInfoClick(View view) {
-        Intent screenIntent = new Intent(DebugActivity.this, ExternalSceneActivity.class);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
-        startActivity(screenIntent);
-
-
+        new RxTimer().timer(1000 * 10, new RxTimer.RxAction() {
+            @Override
+            public void action(long number) {
+                Intent screenIntent = new Intent(DebugActivity.this, ExternalSceneActivity.class);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                screenIntent.addFlags(Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                startActivity(screenIntent);
+            }
+        });
     }
-
 
 
     private String[] units = {"B", "KB", "MB", "GB"};

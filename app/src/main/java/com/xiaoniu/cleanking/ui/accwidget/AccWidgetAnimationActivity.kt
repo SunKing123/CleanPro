@@ -37,6 +37,7 @@ class AccWidgetAnimationActivity : Activity() {
         loadAnimationAndPlay()
     }
 
+
     fun loadAnimationAndPlay() {
         lottie_animation.imageAssetsFolder = animation_image_file
         lottie_animation.setAnimation(animation_json)

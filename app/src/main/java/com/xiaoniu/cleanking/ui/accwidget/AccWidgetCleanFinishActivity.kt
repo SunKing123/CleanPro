@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
 import com.xiaoniu.cleanking.utils.NumberUtils
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import kotlinx.android.synthetic.main.activity_acc_widget_clean_finish_layout.*
 
@@ -43,6 +45,11 @@ class AccWidgetCleanFinishActivity : Activity() {
 
         initEvent()
         loadAdv()
+
+        if(!PreferenceUtil.getNowCleanTime()){
+            memory_view.visibility= View.GONE
+            tv_goCleanStorage.visibility=View.GONE
+        }
     }
 
     fun initEvent() {
