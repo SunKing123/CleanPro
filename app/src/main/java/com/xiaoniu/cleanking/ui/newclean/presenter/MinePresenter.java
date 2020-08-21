@@ -305,6 +305,7 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
         //bean.adVideoId = MidasConstants.CLICK_GET_DOUBLE_COIN_BUTTON;
         bean.context = (Activity) mContext;
         GoldCoinDialog.showGoldCoinDialog(bean);
+//        StatisticsUtils.customTrackEvent("ad_request_sdk", "外部插屏发起请求", "", "external_advertising_page");
 //        StatisticsUtils.customTrackEvent("home_page_gold_coin_pop_up_window_custom", "首页金币领取弹窗曝光", "home_page_gold_coin_pop_up_window", "home_page_gold_coin_pop_up_window");
 //        adPrevData(AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_HOME_GOLD_PAGE, PositionId.DRAW_THREE_CODE));//位置三预加载
     }

@@ -87,6 +87,14 @@ public class PopLayerActivity extends AppCompatActivity implements View.OnClickL
             }
 
             @Override
+            public void onAdClick(AdInfoModel adInfoModel) {
+                super.onAdClick(adInfoModel);
+                if(adInfoModel.isOperationPosition){//运营位类类型广告
+
+                }
+            }
+
+            @Override
             public void onAdExposure(AdInfoModel adInfoModel) {
                 super.onAdExposure(adInfoModel);
                 mAdInfoModel = adInfoModel;

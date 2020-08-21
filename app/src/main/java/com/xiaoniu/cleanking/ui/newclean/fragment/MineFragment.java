@@ -244,6 +244,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
             case R.id.rel_card_award:
                 ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(), false);
                 EventBus.getDefault().post(new SwitchTabEvent(2));
+                StatisticsUtils.trackClick("scratch_immediately", "立即刮卡点击", "my_page", "my_page");
                 break;
         }
     }
@@ -368,6 +369,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                         } else {
                             ToastUtils.showShort(R.string.toast_alerady_award);
                         }
+                        StatisticsUtils.trackClick("daily_tasks_click_"+position, "日常任务"+position+"点击", "my_page", "my_page");
                     } catch (Exception e) {
                         DaliyTaskInstance.getInstance().cleanTask();
                         e.printStackTrace();
@@ -449,7 +451,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         }
         if (!AndroidUtil.isFastDoubleClick()) {
             mPresenter.rewardVideoAd(ballBean.getLocationNum());
-//          StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
+            StatisticsUtils.trackClick("limited_time_reward_click", "限时奖励图标点击", "my_page", "my_page");
+
         }
     }
 
