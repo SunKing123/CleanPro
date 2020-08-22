@@ -298,7 +298,7 @@
             android:taskAffinity="com.locker.new.task"  />
 
         <activity
-            android:name=".ui.accwidget.AccWidgetAnimationActivity"
+            android:name=".ui.accwidget.AccDesktopAnimationActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:taskAffinity="com.widget.acc"
@@ -306,7 +306,7 @@
             android:theme="@style/myTransparent"/>
 
         <activity
-            android:name=".ui.accwidget.AccWidgetCleanFinishActivity"
+            android:name=".ui.accwidget.AccDesktopCleanFinishActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:taskAffinity="com.widget.acc"
