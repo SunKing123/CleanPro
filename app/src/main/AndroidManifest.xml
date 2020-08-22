@@ -910,6 +910,7 @@
 
 
         <!--广告相关==============页面跟区分栈，方式吊起应用============-->
+        <!--H5类广告-->
         <activity
             android:name="com.qq.e.ads.ADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
@@ -917,6 +918,7 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             tools:replace="android:configChanges" />
+        <!-- 下载类：-->
         <activity
             android:name="com.qq.e.ads.PortraitADActivity"
             android:screenOrientation="portrait"
@@ -926,7 +928,7 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             />
-
+        <!-- 穿山甲：-->
         <activity
             android:name="com.bytedance.sdk.openadsdk.activity.TTLandingPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
@@ -934,6 +936,7 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             tools:replace="android:configChanges" />
+
         <activity
             android:name="com.qq.e.ads.LandscapeADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
