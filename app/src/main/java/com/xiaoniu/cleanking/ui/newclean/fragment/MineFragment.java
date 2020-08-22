@@ -427,8 +427,12 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     @Override
     public void setBubbleView(BubbleConfig dataBean) {
         if (null != mBinding.rewardView && null != dataBean && !CollectionUtils.isEmpty(dataBean.getData()) && checkGoldData(dataBean.getData())) {
-            mBinding.rewardView.setVisibility(View.VISIBLE);
             mBinding.rewardView.refBubbleView(dataBean);
+            mBinding.rewardView.setVisibility(View.VISIBLE);
+
+            LinearLayout.LayoutParams cardlayoutParams = new LinearLayout.LayoutParams(mBinding.relCardAward.getLayoutParams());
+            cardlayoutParams.setMargins(DisplayUtil.dip2px(mContext, 15), DisplayUtil.dp2px(mContext, 2), DisplayUtil.dip2px(mContext, 15), 0);
+            mBinding.relCardAward.setLayoutParams(cardlayoutParams);
         } else {
             mBinding.rewardView.setVisibility(View.GONE);
             mBinding.rewardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -438,7 +442,6 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                     cardlayoutParams.setMargins(DisplayUtil.dip2px(mContext, 15), -DisplayUtil.dp2px(mContext, 70), DisplayUtil.dip2px(mContext, 15), 0);
                     mBinding.relCardAward.setLayoutParams(cardlayoutParams);
                     mBinding.rewardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
                 }
             });
 
