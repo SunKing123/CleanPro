@@ -626,6 +626,8 @@
 -keep public class com.xiaoniu.unitionadaction.**{*;}
 -keep public class com.xiaoniu.unitionadalliance.**{*;}
 -keep public class com.xiaoniu.unitionad.uikit.**{*;}
+-keep public class com.xiaoniu.unitionad.uikit.**{*;}
+-keep public class com.xiaoniu.unitionadbusiness.**{*;}
 -keep public class com.xiaoniu.unitionadproxy.**{*;}
 #牛数埋点混淆
 -dontwarn com.xiaoniu.statistic.**
