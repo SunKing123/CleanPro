@@ -481,6 +481,46 @@ public interface Points {
 
         String POWER_CLICK_EVENT_CODE = "mobile_phone_status_power_saving_click";
         String POWER_CLICK_EVENT_NAME = "手机状态省电点击";
+    }
+
+
+    interface AccWidget{
+
+        interface ShortcutCreate{
+            String PAGE = "home_page_icon_acceleration_pop_up_window";
+
+            String ADD_CLICK_EVENT_CODE = "determine_click";
+            String ADD_CLICK_EVENT_NAME = "确定点击";
+
+            String CANCEL_CLICK_EVENT_CODE = "cancel_click";
+            String CANCEL_CLICK_EVENT_NAME = "取消点击";
+        }
+
+
+        interface Shortcut{
+            String PAGE = "desktop_icon_acceleration";
+
+            String CREATED_EVENT_CODE = "desktop_icon_acceleration_custom";
+            String CREATED_EVENT_NAME = "桌面快捷图标成功创建时";
+
+            String CLICK_EVENT_CODE = "icon_click";
+            String CLICK_EVENT_NAME = "桌面快捷图标点击";
+        }
+
+
+        interface AccFinish{
+            String PAGE = "desktop_icon_acceleration_pop_up_window";
+
+            String PAGE_EVENT_CODE = "desktop_icon_acceleration_pop_up_window_custom";
+            String PAGE_EVENT_NAME = "桌面加速弹窗创建";
+
+            String ADV_REQUEST_EVENT_CODE = "ad_request_sdk";
+            String ADV_REQUEST_EVENT_NAME = "桌面加速弹窗广告请求";
+
+            String CLEAN_CLICK_EVENT_CODE = "clean_click";
+            String CLEAN_CLICK_EVENT_NAME = "立即清理按钮点击";
+        }
+
 
     }
 }

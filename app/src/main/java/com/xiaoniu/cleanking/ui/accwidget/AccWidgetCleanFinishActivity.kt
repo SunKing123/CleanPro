@@ -5,9 +5,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.midas.MidasRequesCenter
@@ -36,6 +33,8 @@ class AccWidgetCleanFinishActivity : Activity() {
         }
         setContentView(R.layout.activity_acc_widget_clean_finish_layout)
         initView()
+
+        AccWidgetPoint.finishPageCreate()
     }
 
     fun initView() {
@@ -70,6 +69,7 @@ class AccWidgetCleanFinishActivity : Activity() {
         intent.setClass(this, NowCleanActivity::class.java)
         startActivity(intent)
 
+        AccWidgetPoint.finishClickClean()
         finish()
     }
 
@@ -79,6 +79,8 @@ class AccWidgetCleanFinishActivity : Activity() {
         if (!isOpenOne) {
             return
         }
+        AccWidgetPoint.finishAdvRequest()
+
         var adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
         MidasRequesCenter.requestAndShowAd(this, adId, object : SimpleViewCallBack(findViewById(R.id.ad_container)) {
             override fun onAdLoaded(adInfoModel: AdInfoModel?) {

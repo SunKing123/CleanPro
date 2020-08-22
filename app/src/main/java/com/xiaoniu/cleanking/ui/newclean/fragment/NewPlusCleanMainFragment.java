@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
+import com.xiaoniu.cleanking.ui.accwidget.AccWidgetPoint;
 import com.xiaoniu.cleanking.ui.accwidget.AccWidgetViewManager;
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.HomeDeviceInfoFragment;
@@ -551,9 +552,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
     }
 
+
     private void checkAndMark() {
         if (StartActivityUtils.Companion.isCreatedShortcut(getActivity())) {
             PreferenceUtil.saveCreatedShortcut();
+            AccWidgetPoint.Companion.shortcutAddWindConfirm();
+            AccWidgetPoint.Companion.shortcutIconCreate();
+        }else {
+            AccWidgetPoint.Companion.shortcutAddWindCancel();
         }
     }
 

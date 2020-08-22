@@ -10,11 +10,11 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList
 import com.xiaoniu.cleanking.ui.main.config.PositionId
-import com.xiaoniu.cleanking.ui.tool.notify.event.AccAnimationCompleteEvent
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
+import com.xiaoniu.common.utils.Points
+import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
-import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by xinxiaolong on 2020/8/17.
@@ -38,6 +38,8 @@ class AccWidgetAnimationActivity : Activity() {
         setContentView(R.layout.activity_widget_acc_animation_layout)
         configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIDGET_ACC_FINISH)
         loadAnimationAndPlay()
+
+        AccWidgetPoint.shortcutIconClick()
     }
 
 
