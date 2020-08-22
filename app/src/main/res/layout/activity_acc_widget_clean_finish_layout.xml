@@ -62,6 +62,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="10dp"
         android:background="@drawable/bg_acc_widget_finish_bottom_view"
         android:orientation="vertical">
 
