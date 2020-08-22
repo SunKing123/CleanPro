@@ -75,10 +75,10 @@ class AccWidgetCleanFinishActivity : Activity() {
 
 
     fun loadAdv() {
-        var isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
-        if (!isOpenOne) {
-            return
-        }
+//        var isOpenOne = AppHolder.getInstance().checkAdSwitch(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
+//        if (!isOpenOne) {
+//            return
+//        }
         var adId = AppHolder.getInstance().getMidasAdId(PositionId.KEY_AD_PAGE_WIDGET_ACC_FINISH, PositionId.DRAW_ONE_CODE)
         MidasRequesCenter.requestAndShowAd(this, adId, object : SimpleViewCallBack(findViewById(R.id.ad_container)) {
             override fun onAdLoaded(adInfoModel: AdInfoModel?) {

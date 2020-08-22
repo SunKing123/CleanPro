@@ -1,168 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:background="@color/black">
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:layout_gravity="center"
+    android:background="@color/transparent"
+    tools:background="@android:color/holo_blue_light"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_height="95dp"
+        android:background="@drawable/bg_acc_widget_finish_head_view">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/top_guideline"
+        <ImageView
+            android:id="@+id/scene_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.15" />
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:src="@mipmap/acc_finish_close"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/tv_cleaned_memory"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/transparent"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:layout_marginTop="31dp"
+            android:drawableStart="@mipmap/acc_finish_ok"
+            android:drawablePadding="5dp"
+            android:text="释放内存16%"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_21sp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/top_guideline">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="95dp"
-                android:background="@drawable/bg_acc_widget_finish_head_view">
-
-                <ImageView
-                    android:id="@+id/scene_close"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/dimen_12dp"
-                    android:layout_marginEnd="@dimen/dimen_12dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="5dp"
-                    android:src="@mipmap/acc_finish_close"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <TextView
-                    android:id="@+id/tv_cleaned_memory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="31dp"
-                    android:drawableStart="@mipmap/acc_finish_ok"
-                    android:drawablePadding="5dp"
-                    android:text="释放内存16%"
-                    android:textColor="@color/color_333333"
-                    android:textSize="@dimen/dimen_21sp"
-                    android:textStyle="bold"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_cleaned_memory_sub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="手机运行速度快如闪电"
-                    android:textColor="@color/color_999999"
-                    android:textSize="14sp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_cleaned_memory" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_acc_widget_finish_bottom_view"
-                    android:orientation="vertical">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/memory_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="126dp"
-                        android:layout_marginStart="@dimen/dimen_10dp"
-                        android:layout_marginTop="@dimen/dimen_10dp"
-                        android:layout_marginEnd="@dimen/dimen_10dp"
-                        android:background="@drawable/bg_acc_widget_finish_memory_view">
-
-                        <TextView
-                            android:id="@+id/tv_storage_garbage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:text="575MB"
-                            android:textColor="@android:color/white"
-                            android:textSize="28dp"
-                            app:layout_constraintBottom_toTopOf="@+id/tv_storage_garbage_sub"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_chainStyle="packed" />
-
-                        <TextView
-                            android:id="@+id/tv_storage_garbage_sub"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginTop="1dp"
-                            android:text="手机缓存垃圾已达到"
-                            android:textColor="@android:color/white"
-                            android:textSize="14dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintLeft_toLeftOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_storage_garbage" />
-
-                        <ImageView
-                            android:layout_width="89dp"
-                            android:layout_height="89dp"
-                            android:layout_marginRight="23dp"
-                            android:src="@drawable/icon_acc_widget_finish_memory_pancate"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintRight_toRightOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <TextView
-                        android:id="@+id/tv_goCleanStorage"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="@dimen/dimen_10dp"
-                        android:layout_marginTop="@dimen/dimen_10dp"
-                        android:layout_marginEnd="@dimen/dimen_10dp"
-                        android:layout_marginBottom="@dimen/dimen_10dp"
-                        android:background="@drawable/bg_acc_widget_finish_to_clean_btn"
-                        android:gravity="center"
-                        android:text="立即清理"
-                        android:textColor="@android:color/white"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:id="@+id/ad_separate"
-                        android:layout_width="match_parent"
-                        android:layout_height="6dp"
-                        android:background="#fff2f2f2"
-                        android:visibility="gone" />
-
-                    <FrameLayout
-                        android:id="@+id/ad_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dimen_10dp"
-                        android:visibility="gone" />
-                </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_cleaned_memory_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="手机运行速度快如闪电"
+            android:textColor="@color/color_999999"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cleaned_memory" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_acc_widget_finish_bottom_view"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/memory_view"
+            android:layout_width="match_parent"
+            android:layout_height="126dp"
+            android:layout_marginStart="@dimen/dimen_10dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginEnd="@dimen/dimen_10dp"
+            android:background="@drawable/bg_acc_widget_finish_memory_view">
+
+            <TextView
+                android:id="@+id/tv_storage_garbage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="575MB"
+                android:textColor="@android:color/white"
+                android:textSize="28dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_storage_garbage_sub"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tv_storage_garbage_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="1dp"
+                android:text="手机缓存垃圾已达到"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_storage_garbage" />
+
+            <ImageView
+                android:layout_width="89dp"
+                android:layout_height="89dp"
+                android:layout_marginRight="23dp"
+                android:src="@drawable/icon_acc_widget_finish_memory_pancate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_goCleanStorage"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/dimen_10dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginEnd="@dimen/dimen_10dp"
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            android:background="@drawable/bg_acc_widget_finish_to_clean_btn"
+            android:gravity="center"
+            android:text="立即清理"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/ad_separate"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="#fff2f2f2"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_10dp"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>
