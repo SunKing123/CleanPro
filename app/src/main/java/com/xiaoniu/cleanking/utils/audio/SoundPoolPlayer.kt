@@ -7,6 +7,7 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.app.AppLifecyclesImpl
 import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.common.utils.ContextUtils
+import java.lang.Exception
 
 class SoundPoolPlayer {
 
@@ -21,7 +22,11 @@ class SoundPoolPlayer {
 
 
     fun playGoldCoin() {
-        AppLifecyclesImpl.postDelay({ soundPool.play(soundGoldCoin, 1.0f, 1.0f, 0, 0, 1.0f) }, 500)
+        try {
+            AppLifecyclesImpl.postDelay({ soundPool.play(soundGoldCoin, 1.0f, 1.0f, 0, 0, 1.0f) }, 500)
+        }catch (e:Exception){
+
+        }
         LogUtils.e("================soundplayer 播放完成")
     }
 

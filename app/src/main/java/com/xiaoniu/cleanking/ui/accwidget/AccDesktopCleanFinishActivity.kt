@@ -92,6 +92,11 @@ class AccDesktopCleanFinishActivity : Activity() {
                 super.onAdLoadError(errorCode, errorMsg)
                 LogUtils.e("====================:errorCode:${errorCode} message:$errorMsg")
             }
+
+            override fun onAdClick(adInfoModel: AdInfoModel?) {
+                super.onAdClick(adInfoModel)
+                finish()
+            }
         })
     }
 

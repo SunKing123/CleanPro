@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.drawable.Icon;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
@@ -36,6 +37,7 @@ import com.xiaoniu.cleanking.base.BaseActivity;
 import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
 import com.xiaoniu.cleanking.scheme.SchemeProxy;
 import com.xiaoniu.cleanking.scheme.utils.ActivityCollector;
+import com.xiaoniu.cleanking.ui.accwidget.AccDesktopAnimationActivity;
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils;
 import com.xiaoniu.cleanking.ui.deskpop.battery.BatteryPopActivity;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.ExternalPhoneStateActivity;
@@ -57,6 +59,8 @@ import com.xiaoniu.common.utils.ToastUtils;
 import java.io.File;
 import java.util.Locale;
 import java.util.Timer;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * deprecation:调试页面
@@ -92,6 +96,7 @@ public class DebugActivity extends BaseActivity {
         return R.layout.activity_debug;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void initView() {
         deviceTempcontent = findViewById(R.id.tv_debug_content);
@@ -120,10 +125,24 @@ public class DebugActivity extends BaseActivity {
                 StartFinishActivityUtil.Companion.gotoFinish(DebugActivity.this, intent);
             }
         });
-
-        findViewById(R.id.tv_shortcut).setOnClickListener(v -> StartActivityUtils.Companion.createAccShortcut(DebugActivity.this));
+        findViewById(R.id.tv_shortcut).setOnClickListener(v -> createShortcut());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void createShortcut(){
+        Intent intent = new Intent("android.intent.action.MAIN");
+        intent.setClass(this, AccDesktopAnimationActivity.class);
+        intent.addCategory("android.intent.category.LAUNCHER");
+        if (Build.VERSION.SDK_INT >= 26) {
+            StartActivityUtils.Companion.createAccShortcut3(DebugActivity.this,"main_launch_shortcut_id", Icon.createWithResource(DebugActivity.this, R.drawable.acc_shortcut_log),getString(R.string.app_name),intent);
+            return;
+        }
+        Intent intent2 = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        intent2.putExtra("android.intent.extra.shortcut.NAME", getString(R.string.app_name));
+        intent2.putExtra("android.intent.extra.shortcut.ICON_RESOURCE", Intent.ShortcutIconResource.fromContext(this, R.mipmap.ic_launcher));
+        intent2.putExtra("android.intent.extra.shortcut.INTENT", intent);
+        sendBroadcast(intent2);
+    }
 
     public int getTitleIndex() {
         titleIndex++;
