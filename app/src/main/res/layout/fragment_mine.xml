@@ -124,7 +124,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="--"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/dimen_36dp"
+                                    android:textSize="@dimen/dimen_36sp"
                                     android:textStyle="bold" />
 
                                 <!--        <TextView
@@ -290,6 +290,7 @@
 
             <!--更多功能-->
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_layout_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_15dp"

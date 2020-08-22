@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.1.0'
 
     //Midas SDK
-    api 'adlib:proxy:1.4.1.2014'
+    api 'adlib:proxy:1.4.1.2015'
 
 
 }

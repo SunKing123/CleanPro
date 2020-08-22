@@ -1,11 +1,15 @@
 package com.xiaoniu.cleanking.widget;
 
 import android.content.Context;
+import android.opengl.Visibility;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
@@ -88,8 +92,6 @@ public class RewardLimiteView extends RelativeLayout {
 
                 }
             }
-        } else {
-            setVisibility(GONE);
         }
 
         if (luckbub06.getVisibility() == GONE && luckbub07.getVisibility() == GONE && luckbub08.getVisibility() == GONE && luckbub09.getVisibility() == GONE) {

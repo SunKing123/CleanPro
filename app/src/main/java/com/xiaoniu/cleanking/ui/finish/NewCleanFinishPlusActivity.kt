@@ -59,6 +59,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     lateinit var pointer: CleanFinishPointer
     lateinit var newIntent: Intent
     var isFirst = true
+    var isDailyTask = false
 
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
@@ -311,6 +312,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
      * 金币弹框
      */
     override fun showGoldCoinDialog(bubbleCollected: BubbleCollected, isTask:Boolean) {
+        isDailyTask = isTask
         val bean = GoldCoinDialogParameter()
         bean.dialogType = 3
         bean.obtainCoinCount = bubbleCollected.data.goldCount
@@ -434,7 +436,10 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
 
     override fun onBackPressed() {
         super.onBackPressed()
-        jumpMainPage()
+        if(!isDailyTask){
+            jumpMainPage()
+        }
+
     }
 
     override fun onPostResume() {
