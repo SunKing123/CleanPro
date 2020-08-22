@@ -34,6 +34,7 @@ import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
+import com.xiaoniu.cleanking.ui.accwidget.AccWidgetViewManager;
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.HomeDeviceInfoFragment;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
@@ -167,7 +168,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private int bullNum = 0;
     FloatAnimManager mFloatAnimManager;
     private BullRunnable bullRunnable = new BullRunnable();
-    boolean usedOneKeyAcc=false;
+    boolean usedOneKeyAcc = false;
 
     @Override
     protected void inject(FragmentComponent fragmentComponent) {
@@ -232,9 +233,14 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             isFirstCreate = false;
         }
 
-        if(usedOneKeyAcc&&hasFocus){
-            usedOneKeyAcc=false;
+        if (usedOneKeyAcc && hasFocus) {
+            usedOneKeyAcc = false;
             showCreateShortcut();
+        }
+
+        if (hasFocus && PreferenceUtil.getWidgetAccCleanTime()) {
+            //桌面小组件，在冷却时间之外，将内存数据恢复。
+            AccWidgetViewManager.Companion.updateAccNormalProgress(getActivity());
         }
     }
 
@@ -506,7 +512,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         }
         switch (event.getTitle()) {
             case "一键加速":
-                usedOneKeyAcc=true;
+                usedOneKeyAcc = true;
                 homeMainTableView.oneKeySpeedUsedStyle();
                 break;
             case "超强省电":
@@ -536,17 +542,17 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     private void showCreateShortcut() {
         boolean todayFirstUse = PreferenceUtil.isFirstUseAccOfDay();
         boolean hasShortcut = StartActivityUtils.Companion.isCreatedShortcut(getActivity());
-        boolean created=PreferenceUtil.getCreatedShortcut();
+        boolean created = PreferenceUtil.getCreatedShortcut();
 
-        LogUtils.e("================================一键加速使用完毕     todayFirstUse="+todayFirstUse+"    hasShortcut="+hasShortcut+"   created="+created);
-        if (todayFirstUse && !hasShortcut&&!created) {
+        LogUtils.e("================================一键加速使用完毕     todayFirstUse=" + todayFirstUse + "    hasShortcut=" + hasShortcut + "   created=" + created);
+        if (todayFirstUse && !hasShortcut && !created) {
             StartActivityUtils.Companion.createAccShortcut(getActivity());
-            new Handler().postDelayed(() -> checkAndMark(),4000);
+            new Handler().postDelayed(() -> checkAndMark(), 4000);
         }
     }
 
-    private void checkAndMark(){
-        if(StartActivityUtils.Companion.isCreatedShortcut(getActivity())){
+    private void checkAndMark() {
+        if (StartActivityUtils.Companion.isCreatedShortcut(getActivity())) {
             PreferenceUtil.saveCreatedShortcut();
         }
     }

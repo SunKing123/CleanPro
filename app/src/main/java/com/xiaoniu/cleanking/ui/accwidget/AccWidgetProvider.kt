@@ -9,6 +9,7 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.widget.RemoteViews
 import com.xiaoniu.cleanking.R
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import java.util.*
 
 
@@ -20,7 +21,6 @@ public class AccWidgetProvider : AppWidgetProvider() {
 
     // 保存 widget 的id的HashSet，每新建一个 widget 都会为该 widget 分配一个 id。
     private val idsSet = HashSet<Int>()
-    private var viewManager:AccWidgetViewManager? = null
     private val ACTION_VIEW_CLICK = "com.xiaoniu.widget.action.view.click"
 
     /**
@@ -40,8 +40,6 @@ public class AccWidgetProvider : AppWidgetProvider() {
             }
         }
         if (context != null) {
-            if(viewManager==null)
-            viewManager=AccWidgetViewManager(context)
             updateAllAppWidgets(context!!, AppWidgetManager.getInstance(context), idsSet)
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds)
@@ -101,9 +99,6 @@ public class AccWidgetProvider : AppWidgetProvider() {
      */
     override fun onDisabled(context: Context?) {
         super.onDisabled(context)
-        if(viewManager!=null){
-            viewManager!!.onDestroy()
-        }
         WidgetLog.log("onDisabled()")
     }
 
@@ -149,7 +144,11 @@ public class AccWidgetProvider : AppWidgetProvider() {
             remoteView.setOnClickPendingIntent(
                     R.id.widget_acc_container,
                 getPendingIntent(context, R.id.widget_acc_container)
+
             )
+            val value= PreferenceUtil.getShortcutAccMemoryNum()
+            remoteView.setProgressBar(R.id.widget_progress, 100, value, false)
+            remoteView.setTextViewText(R.id.widget_label, value.toString() + "%的内存已使用")
             // 更新 widget
             appWidgetManager.updateAppWidget(appID, remoteView)
         }

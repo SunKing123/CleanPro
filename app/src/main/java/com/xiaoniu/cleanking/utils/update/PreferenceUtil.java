@@ -691,14 +691,12 @@ public class PreferenceUtil {
     /**
      * 是否距离上次一键清理清理间隔至少3分钟
      *
-     * @return true 3分钟以上 false 小于3分钟
+     * @return true 3分钟以内为false
      */
     public static boolean getWidgetAccCleanTime() {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         long time = sharedPreferences.getLong(SpCacheConfig.IS_WIDGET_ACC_CLEAN_TIME, 0);
-        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
-            return true;
-        return false;
+        return  (System.currentTimeMillis() - time > 3 * 60 * 1000);
     }
 
 
@@ -2029,4 +2027,20 @@ public class PreferenceUtil {
         SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getBoolean(SpCacheConfig.SAVE_CREATED_SHORTCUT,false);
     }
+
+    /**
+     * 保存快捷加速后的内存值
+     */
+    public static void saveShortcutAccMemoryNum(int num) {
+        getEditor().putInt(SpCacheConfig.SAVE_SHORTCUT_ACC_MEMORY_NUM,num).commit();
+    }
+
+    /**
+     * 获取快捷加速后的内存值
+     */
+    public static int getShortcutAccMemoryNum() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(SpCacheConfig.SAVE_SHORTCUT_ACC_MEMORY_NUM,81);
+    }
+
 }

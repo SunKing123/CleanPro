@@ -11,6 +11,7 @@ import com.xiaoniu.cleanking.base.AppHolder
 import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.ui.tool.notify.event.AccAnimationCompleteEvent
+import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
 import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
 import org.greenrobot.eventbus.EventBus
@@ -57,13 +58,17 @@ class AccWidgetAnimationActivity : Activity() {
     }
 
     fun toFinishActivity() {
-       // if (configBean != null && configBean!!.isOpen) {
+        if (configBean != null && configBean!!.isOpen) {
             var intent = Intent()
             intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
             startActivity(intent)
-      //  }
+        }
 
-        EventBus.getDefault().post(AccAnimationCompleteEvent())
+        //过了冷却时间，进行刷新
+        if (PreferenceUtil.getWidgetAccCleanTime()) {
+            AccWidgetViewManager.updateAccCleanedProgress(this)
+            PreferenceUtil.saveWidgetAccCleanTime()
+        }
         finish()
     }
 }

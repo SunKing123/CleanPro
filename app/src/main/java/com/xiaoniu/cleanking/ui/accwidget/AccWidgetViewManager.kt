@@ -12,6 +12,7 @@ import com.xiaoniu.cleanking.utils.NumberUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.lang.Exception
 
 
 /**
@@ -19,36 +20,41 @@ import org.greenrobot.eventbus.Subscribe
  * email：xinxiaolong123@foxmail.com
  */
 class AccWidgetViewManager {
+    companion object {
+        /**
+         * 更新桌面组件
+         */
+        fun updateAccCleanedProgress(context: Context) {
+            var value = NumberUtils.mathRandomInt(20, 45)
+            updateAccProgress(context, value)
+        }
 
-    var handler = Handler()
-    val remoteView: RemoteViews
-    val manager:AppWidgetManager
-    val mContext:Context
-    constructor(context: Context) {
-        mContext=context
-        remoteView = RemoteViews(context.packageName, R.layout.widget_view_acc_layout)
-        manager = AppWidgetManager.getInstance(context) //获得appwidget管理实例，用于管理appwidget以便进行更新操作
-        EventBus.getDefault().register(this)
-    }
+        fun updateAccNormalProgress(context: Context) {
+            var value = NumberUtils.mathRandomInt(50, 85)
+            updateAccProgress(context, value)
+        }
+        /**
+         * 当添加新的桌面组件时，同步更新值
+         */
+        fun updateAddWidgetProgress(context: Context){
+            val value=PreferenceUtil.getShortcutAccMemoryNum()
+            updateAccProgress(context, value)
+        }
 
-    fun updateCleanedAccProgress() {
-        if(PreferenceUtil.getWidgetAccCleanTime()){
-            var memory = NumberUtils.mathRandomInt(20, 45)
-            remoteView.setProgressBar(R.id.widget_progress, 100, memory, false)
-            remoteView.setTextViewText(R.id.widget_label,memory.toString()+"%的内存已使用")
-            val componentName = ComponentName(mContext, AccWidgetProvider::class.java) //获得所有本程序创建的appwidget
-            manager.updateAppWidget(componentName,remoteView)
+        private fun updateAccProgress(context: Context, value: Int) {
+            try {
+                val remoteView = RemoteViews(context.packageName, R.layout.widget_view_acc_layout)
+                val manager = AppWidgetManager.getInstance(context) //获得appwidget管理实例，用于管理appwidget以便进行更新操作
+                remoteView.setProgressBar(R.id.widget_progress, 100, value, false)
+                remoteView.setTextViewText(R.id.widget_label, value.toString() + "%的内存已使用")
+                val componentName = ComponentName(context, AccWidgetProvider::class.java) //获得所有本程序创建的appwidget
+                manager.updateAppWidget(componentName, remoteView)
+                PreferenceUtil.saveShortcutAccMemoryNum(value)
+            } catch (e: Exception) {
+
+            }
         }
     }
 
-    fun onDestroy(){
-        EventBus.getDefault().unregister(this)
-    }
-
-    //加速动画完成时发消息
-    @Subscribe
-    fun fromHomeCleanFinishEvent(event: AccAnimationCompleteEvent?) {
-        updateCleanedAccProgress()
-    }
 
 }

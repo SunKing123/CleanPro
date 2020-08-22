@@ -209,5 +209,8 @@ public class SpCacheConfig {
 
     public static final String SAVE_CREATED_SHORTCUT = "save_created_shortcut";
 
+    public static final String SAVE_SHORTCUT_ACC_MEMORY_NUM = "save_shortcut_acc_memory_num";
+
+
 
 }
