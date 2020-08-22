@@ -203,8 +203,12 @@ public class WechatCleanHomePresenter extends RxPresenter<WechatCleanHomeActivit
         List<CleanWxItemInfo> listDataTemp = new ArrayList<>();
         for (int i = 0; i < cleanWxEasyInfoFile.getList().size(); i++) {
             if (cleanWxEasyInfoFile.getList().get(i) instanceof CleanWxFourItemInfo) {
-                CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoFile.getList().get(i);
-                listFour.add(cleanWxHeadInfo);
+                try {
+                    CleanWxFourItemInfo cleanWxHeadInfo = (CleanWxFourItemInfo) cleanWxEasyInfoFile.getList().get(i);
+                    listFour.add(cleanWxHeadInfo);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
 

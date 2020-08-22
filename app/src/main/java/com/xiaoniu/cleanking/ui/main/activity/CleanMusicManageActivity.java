@@ -236,7 +236,19 @@ public class CleanMusicManageActivity extends BaseActivity<CleanMusicFilePresent
 
 
         mLoading.setReportSuccess(1, "成功删除" + FileSizeUtils.formatFileSize(totalSize));
-        mBtnDel.postDelayed(() -> mLoading.dismissAllowingStateLoss(), 2000);
+        mBtnDel.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!CleanMusicManageActivity.this.isFinishing()) {
+                        mLoading.dismissAllowingStateLoss();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 2000);
+//        mBtnDel.postDelayed(() -> mLoading.dismissAllowingStateLoss(), 2000);
 
         totalSelectFiles();
 

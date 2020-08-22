@@ -117,8 +117,12 @@ public class PopPushActivity extends AppCompatActivity {
         AppCompatTextView title = mView.findViewById(R.id.title);
 
         AppCompatTextView content = mView.findViewById(R.id.content);
-        content.setText(item.getContent());
+        if (null != item && null != content){
+            content.setText(item.getContent());
+        }
 
+        if (null == item)
+            return;
         AppCompatButton button = mView.findViewById(R.id.button);
         switch (item.getOnlyCode()) {
             case LocalPushType.TYPE_NOW_CLEAR:
