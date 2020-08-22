@@ -959,6 +959,16 @@
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity="com.xiaoniu.clean.ad" />
+
+
+        <activity
+            android:name="com.bytedance.sdk.openadsdk.activity.TTWebPageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            tools:replace="android:configChanges"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad" />
+
         <activity
             android:name="com.bytedance.sdk.openadsdk.activity.TTPlayableLandingPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
