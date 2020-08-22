@@ -146,8 +146,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
      */
     @Subscribe
     public void changeLifeCycleEvent(LifecycEvent lifecycEvent) {
-        mPresenter.refBullList();//金币配置刷新；
-        mPresenter.refDaliyTask();    //日常任务列表刷新
+        operatingRef();//运营数据刷新
     }
 
     @Override
@@ -159,9 +158,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
 //            StatusBarCompat.translucentStatusBarForImage(getActivity(), false, true);
             //展示广告
             addBottomAdView();
-
-            mPresenter.refBullList();     //金币配置刷新
-            mPresenter.refDaliyTask();    //日常任务列表刷新
+            operatingRef();//运营数据刷新
         }
         if (hidden) {
             NiuDataAPI.onPageEnd("personal_center_view_page", "个人中心浏览");
@@ -181,8 +178,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     //刷新日常任务和限时金币
     @Subscribe
     public void limitAwardRef(LimitAwardRefEvent event) {
-        mPresenter.refBullList();     //金币配置刷新
-        mPresenter.refDaliyTask();    //日常任务列表刷新
+        operatingRef();//运营数据刷新
     }
 
     @OnClick({R.id.setting_ll, R.id.head_img_iv, R.id.phone_num_tv, R.id.llt_invite_friend,
@@ -244,10 +240,10 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                 break;
             case R.id.rel_card_award:
                 StatisticsUtils.trackClick("scratch_immediately", "立即刮卡点击", "my_page", "my_page");
-                if(NetworkUtils.isNetConnected()){
+                if (NetworkUtils.isNetConnected()) {
                     ScrapingCardDataUtils.init().scrapingCardNextAction(getActivity(), false);
                     EventBus.getDefault().post(new SwitchTabEvent(2));
-                }else{
+                } else {
                     ToastUtils.showShort(R.string.notwork_error);
                 }
 
@@ -375,7 +371,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                         } else {
                             ToastUtils.showShort(R.string.toast_alerady_award);
                         }
-                        StatisticsUtils.trackClick("daily_tasks_click_"+(position+1), "日常任务"+(position+1)+"点击", "my_page", "my_page");
+                        StatisticsUtils.trackClick("daily_tasks_click_" + (position + 1), "日常任务" + (position + 1) + "点击", "my_page", "my_page");
                     } catch (Exception e) {
                         DaliyTaskInstance.getInstance().cleanTask();
                         e.printStackTrace();
@@ -428,7 +424,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
     public void setBubbleView(BubbleConfig dataBean) {
         if (null != mBinding.rewardView && null != dataBean) {
             mBinding.rewardView.setVisibility(View.VISIBLE);
-            mBinding.rewardView.refBubbleView(dataBean,mBinding.rewardView);
+            mBinding.rewardView.refBubbleView(dataBean, mBinding.rewardView);
         } else {
             mBinding.rewardView.setVisibility(View.GONE);
             mBinding.rewardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -475,5 +471,30 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
         mPresenter.showGetGoldCoinDialog(dataBean);
     }
 
+    /**
+     * 运营位数据刷新
+     * 限时奖励、日常任务、刮刮卡
+     */
+    public void operatingRef() {
+        if (!AppHolder.getInstance().getAuditSwitch()) {
+            mBinding.relCardAward.setVisibility(View.GONE);
+            mPresenter.refBullList();     //金币配置刷新
+            mPresenter.refDaliyTask();    //日常任务列表刷新
+        } else {
+            mBinding.relCardAward.setVisibility(View.GONE);
+            mBinding.linearDaliyTask.setVisibility(View.GONE);
+            mBinding.rewardView.setVisibility(View.GONE);
+            mBinding.relCardAward.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (mBinding.relCardAward.getVisibility() == View.GONE) {
+                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mBinding.constraintLayoutMore.getLayoutParams();
+                        layoutParams.topMargin = -DisplayUtil.dip2px(mContext, 75);
+                        mBinding.constraintLayoutMore.setLayoutParams(layoutParams);
+                    }
+                }
+            });
+        }
+    }
 
 }

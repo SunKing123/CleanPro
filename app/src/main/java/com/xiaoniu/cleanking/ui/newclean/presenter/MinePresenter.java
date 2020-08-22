@@ -139,6 +139,7 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
         mModel.getDaliyTaskList(new Common3Subscriber<DaliyTaskListData>() {
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
+                mView.setTaskData(null);
                 ToastUtils.showShort(message);
             }
 
@@ -169,11 +170,12 @@ public class MinePresenter extends RxPresenter<MineFragmentContact.View, NewMine
             @Override
             public void showExtraOp(String code, String message) {  //关心错误码；
                 ToastUtils.showShort(message);
+                mView.setBubbleView(null);
             }
 
             @Override
             public void getData(BubbleConfig bubbleConfig) {
-                LogUtils.i("zz--refBullList()---" + new Gson().toJson(bubbleConfig));
+//                LogUtils.i("zz--refBullList()---" + new Gson().toJson(bubbleConfig));
                 mView.setBubbleView(bubbleConfig);
             }
 
