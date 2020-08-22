@@ -506,8 +506,7 @@ public interface Points {
             String CLICK_EVENT_CODE = "icon_click";
             String CLICK_EVENT_NAME = "桌面快捷图标点击";
         }
-
-
+        
         interface AccFinish{
             String PAGE = "desktop_icon_acceleration_pop_up_window";
 

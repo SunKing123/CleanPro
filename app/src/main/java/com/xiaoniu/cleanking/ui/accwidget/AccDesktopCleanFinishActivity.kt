@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_acc_widget_clean_finish_layout.*
  * Created by xinxiaolong on 2020/8/17.
  * email：xinxiaolong123@foxmail.com
  */
-class AccWidgetCleanFinishActivity : Activity() {
+class AccDesktopCleanFinishActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

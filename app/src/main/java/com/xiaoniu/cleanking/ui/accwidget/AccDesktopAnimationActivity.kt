@@ -12,15 +12,13 @@ import com.xiaoniu.cleanking.ui.main.bean.InsertAdSwitchInfoList
 import com.xiaoniu.cleanking.ui.main.config.PositionId
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
 import com.xiaoniu.cleanking.widget.statusbarcompat.StatusBarCompat
-import com.xiaoniu.common.utils.Points
-import com.xiaoniu.common.utils.StatisticsUtils
 import kotlinx.android.synthetic.main.activity_widget_acc_animation_layout.*
 
 /**
  * Created by xinxiaolong on 2020/8/17.
  * email：xinxiaolong123@foxmail.com
  */
-class AccWidgetAnimationActivity : Activity() {
+class AccDesktopAnimationActivity : Activity() {
 
     var context: Context = this
     var configBean: InsertAdSwitchInfoList.DataBean? = null
@@ -62,7 +60,7 @@ class AccWidgetAnimationActivity : Activity() {
     fun toFinishActivity() {
         if (configBean != null && configBean!!.isOpen) {
             var intent = Intent()
-            intent.setClass(this, AccWidgetCleanFinishActivity::class.java)
+            intent.setClass(this, AccDesktopCleanFinishActivity::class.java)
             startActivity(intent)
         }
 

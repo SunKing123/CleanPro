@@ -73,7 +73,7 @@ public class AccWidgetProvider : AppWidgetProvider() {
                 WidgetLog.log("===============click widget_acc_container====================")
                 var intent=Intent()
                 intent.flags=FLAG_ACTIVITY_NEW_TASK
-                intent.setClass(context, AccWidgetAnimationActivity::class.java)
+                intent.setClass(context, AccDesktopAnimationActivity::class.java)
                 context.startActivity(intent)
             }
         }

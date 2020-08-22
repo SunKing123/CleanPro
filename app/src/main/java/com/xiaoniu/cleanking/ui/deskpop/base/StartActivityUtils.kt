@@ -11,7 +11,7 @@ import android.os.Bundle
 import com.alibaba.android.arouter.launcher.ARouter
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
-import com.xiaoniu.cleanking.ui.accwidget.AccWidgetAnimationActivity
+import com.xiaoniu.cleanking.ui.accwidget.AccDesktopAnimationActivity
 import com.xiaoniu.cleanking.ui.accwidget.ShortcutPinReceiver
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
@@ -139,7 +139,7 @@ class StartActivityUtils {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 var shortcutManager = context.getSystemService(ShortcutManager::class.java);
                 if (shortcutManager.isRequestPinShortcutSupported()) {
-                    var intent = Intent(context, AccWidgetAnimationActivity::class.java)
+                    var intent = Intent(context, AccDesktopAnimationActivity::class.java)
                     intent.action = Intent.ACTION_VIEW
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 
