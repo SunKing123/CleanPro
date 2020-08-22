@@ -120,7 +120,7 @@ public class MidasRequesCenter {
                 exmap.put("midas_id",midaId);
                 exmap.put("fail_code",errorCode);
                 exmap.put("fail_message",errorMsg);
-                StatisticsUtils.customTrackEvent("ad_request_fail_code", "广告请求失败返回错误代码", "all_ad_request", "all_ad_request");
+                StatisticsUtils.customTrackEvent("ad_request_fail_code", "广告请求失败返回错误代码", "all_ad_request", "all_ad_request",exmap);
                 adCommonCallback.onAdLoadError(errorCode, errorMsg);
 
             }

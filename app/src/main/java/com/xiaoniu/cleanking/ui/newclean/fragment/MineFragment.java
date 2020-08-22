@@ -66,6 +66,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import butterknife.OnClick;
 
 import static com.xiaoniu.cleanking.utils.user.UserHelper.EXIT_SUCCESS;
@@ -422,9 +426,9 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
      */
     @Override
     public void setBubbleView(BubbleConfig dataBean) {
-        if (null != mBinding.rewardView && null != dataBean) {
+        if (null != mBinding.rewardView && null != dataBean && !CollectionUtils.isEmpty(dataBean.getData()) && checkGoldData(dataBean.getData())) {
             mBinding.rewardView.setVisibility(View.VISIBLE);
-            mBinding.rewardView.refBubbleView(dataBean, mBinding.rewardView);
+            mBinding.rewardView.refBubbleView(dataBean);
         } else {
             mBinding.rewardView.setVisibility(View.GONE);
             mBinding.rewardView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -477,7 +481,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
      */
     public void operatingRef() {
         if (!AppHolder.getInstance().getAuditSwitch()) {
-            mBinding.relCardAward.setVisibility(View.GONE);
+            mBinding.relCardAward.setVisibility(View.VISIBLE);
             mPresenter.refBullList();     //金币配置刷新
             mPresenter.refDaliyTask();    //日常任务列表刷新
         } else {
@@ -491,10 +495,24 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mBinding.constraintLayoutMore.getLayoutParams();
                         layoutParams.topMargin = -DisplayUtil.dip2px(mContext, 75);
                         mBinding.constraintLayoutMore.setLayoutParams(layoutParams);
+
                     }
                 }
             });
         }
+    }
+
+    /**
+     * 验证是否有限时金币
+     *
+     * @param bubbleList
+     */
+    public boolean checkGoldData(List<BubbleConfig.DataBean> bubbleList) {
+        Map<String, Object> mapdata = new HashMap<>();
+        for (BubbleConfig.DataBean item : bubbleList) {
+            mapdata.put(String.valueOf(item.getLocationNum()), item);
+        }
+        return mapdata.containsKey("6") || mapdata.containsKey("7") || mapdata.containsKey("8") || mapdata.containsKey("9");
     }
 
 }

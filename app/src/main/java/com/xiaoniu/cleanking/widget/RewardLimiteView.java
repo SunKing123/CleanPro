@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.widget;
 
 import android.content.Context;
+import android.opengl.Visibility;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +66,7 @@ public class RewardLimiteView extends RelativeLayout {
      *
      * @param dataBean
      */
-    public void refBubbleView(BubbleConfig dataBean, View view) {
+    public void refBubbleView(BubbleConfig dataBean) {
         luckbub06.setDataCheckToShow(null);
         luckbub07.setDataCheckToShow(null);
         luckbub08.setDataCheckToShow(null);
@@ -95,14 +96,6 @@ public class RewardLimiteView extends RelativeLayout {
 
         if (luckbub06.getVisibility() == GONE && luckbub07.getVisibility() == GONE && luckbub08.getVisibility() == GONE && luckbub09.getVisibility() == GONE) {
             setVisibility(GONE);
-            this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    LinearLayout.LayoutParams cardlayoutParams = new LinearLayout.LayoutParams(view.getLayoutParams());
-                    cardlayoutParams.setMargins(DisplayUtil.dip2px(mContext, 15), -DisplayUtil.dp2px(mContext, 70), DisplayUtil.dip2px(mContext, 15), 0);
-                    view.setLayoutParams(cardlayoutParams);
-                }
-            });
         }
 
     }
