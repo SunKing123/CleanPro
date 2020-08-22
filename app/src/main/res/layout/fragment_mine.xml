@@ -263,6 +263,7 @@
                     <TextView
                         android:layout_width="@dimen/dimen_6dp"
                         android:layout_height="@dimen/dimen_15dp"
+                        android:visibility="gone"
                         android:background="@drawable/bg_black_corner"
                         android:textStyle="bold" />
 
@@ -322,6 +323,7 @@
                     <TextView
                         android:layout_width="@dimen/dimen_6dp"
                         android:layout_height="@dimen/dimen_15dp"
+                        android:visibility="gone"
                         android:background="@drawable/bg_black_corner"
                         android:textStyle="bold" />
 
