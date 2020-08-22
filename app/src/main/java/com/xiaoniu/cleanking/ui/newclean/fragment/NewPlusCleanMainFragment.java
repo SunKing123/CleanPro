@@ -567,7 +567,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     //完成页返回通知
     @Subscribe
     public void fromHomeCleanFinishEvent(FromHomeCleanFinishEvent event) {
-
+        //刷新首页广告
+        refreshAdAll();
     }
 
     //更新用户信息

@@ -437,6 +437,8 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                     LinearLayout.LayoutParams cardlayoutParams = new LinearLayout.LayoutParams(mBinding.relCardAward.getLayoutParams());
                     cardlayoutParams.setMargins(DisplayUtil.dip2px(mContext, 15), -DisplayUtil.dp2px(mContext, 70), DisplayUtil.dip2px(mContext, 15), 0);
                     mBinding.relCardAward.setLayoutParams(cardlayoutParams);
+                    mBinding.rewardView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
                 }
             });
 
@@ -495,6 +497,7 @@ public class MineFragment extends BaseFragment<MinePresenter> implements MineFra
                         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) mBinding.constraintLayoutMore.getLayoutParams();
                         layoutParams.topMargin = -DisplayUtil.dip2px(mContext, 75);
                         mBinding.constraintLayoutMore.setLayoutParams(layoutParams);
+                        mBinding.relCardAward.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                     }
                 }
