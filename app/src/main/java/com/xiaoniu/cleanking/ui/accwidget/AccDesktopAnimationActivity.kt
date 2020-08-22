@@ -34,7 +34,7 @@ class AccDesktopAnimationActivity : Activity() {
         }
 
         setContentView(R.layout.activity_widget_acc_animation_layout)
-        configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIDGET_ACC_FINISH)
+
         loadAnimationAndPlay()
 
         AccWidgetPoint.shortcutIconClick()
@@ -57,7 +57,9 @@ class AccDesktopAnimationActivity : Activity() {
         })
     }
 
+
     fun toFinishActivity() {
+        configBean = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_WIDGET_ACC_FINISH)
         if (configBean != null && configBean!!.isOpen) {
             var intent = Intent()
             intent.setClass(this, AccDesktopCleanFinishActivity::class.java)

@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -385,7 +386,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
         }
         parsePushData(intent);
         if (intent.getExtras() != null) {
-            changeTab(intent.getExtras());
+            //修改友盟bug: https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3333524376190
+            new Handler().postDelayed(() -> changeTab(intent.getExtras()), 500);
         }
         super.onNewIntent(intent);
     }
