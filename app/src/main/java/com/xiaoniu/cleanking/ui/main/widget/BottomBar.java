@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 
 import androidx.core.view.ViewCompat;
 
+import com.xiaoniu.cleanking.utils.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,11 +86,13 @@ public class BottomBar extends LinearLayout {
                 if (mCurrentPosition == pos) {
                     mListener.onTabReselected(pos);
                 } else {
-                    mListener.onTabSelected(pos, mCurrentPosition);
-                    tab.setSelected(true);
-                    mListener.onTabUnselected(mCurrentPosition);
-                    mTabs.get(mCurrentPosition).setSelected(false);
-                    mCurrentPosition = pos;
+                    if (!CollectionUtils.isEmpty(mTabs) && mTabs.size() > mCurrentPosition) {
+                        mListener.onTabSelected(pos, mCurrentPosition);
+                        tab.setSelected(true);
+                        mListener.onTabUnselected(mCurrentPosition);
+                        mTabs.get(mCurrentPosition).setSelected(false);
+                        mCurrentPosition = pos;
+                    }
                 }
             }
         });
