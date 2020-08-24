@@ -119,12 +119,15 @@ class ExternalSceneActivity : BaseActivity<ExternalScenePresenter>() {
             }
             finish()
         }
-        //名称
-        wifi_name.text = easyNetworkMod.wifiSSID
-        //开放状态
-        wifi_open_type.text = if (easyNetworkMod.checkIsCurrentWifiHasPassword()) "隐私" else "开放"
-        //网络速度
-        wifi_net_speed.text = easyNetworkMod.wifiLinkSpeed
+        try {//名称
+            wifi_name.text = easyNetworkMod.wifiSSID
+            //开放状态
+            wifi_open_type.text = if (easyNetworkMod.checkIsCurrentWifiHasPassword()) "隐私" else "开放"
+            //网络速度
+            wifi_net_speed.text = easyNetworkMod.wifiLinkSpeed
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         if (easyNetworkMod.wifiLinkSpeed.contains(WifiInfo.LINK_SPEED_UNITS)) {
             val speed = easyNetworkMod.wifiLinkSpeed.replace("Mbps", "").trim().toInt()
             //下载速度

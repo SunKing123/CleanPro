@@ -452,7 +452,11 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         filter.addAction(Intent.ACTION_POWER_DISCONNECTED);
 
         mUIChangingReceiver = new UIChangingReceiver();
-        registerReceiver(mUIChangingReceiver, filter);
+        try {
+            registerReceiver(mUIChangingReceiver, filter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void unregisterLockerReceiver() {

@@ -19,8 +19,8 @@ import android.os.CountDownTimer as AndroidOsCountDownTimer
 class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
 
     lateinit var transfer: ITransferPagePerformer
-    var pList=ArrayList<ScanTextItemModel>()
-    var nList=ArrayList<ScanTextItemModel>()
+    var pList = ArrayList<ScanTextItemModel>()
+    var nList = ArrayList<ScanTextItemModel>()
     var aList = ArrayList<ScanTextItemModel>()
     lateinit var timer: AndroidOsCountDownTimer
 
@@ -48,13 +48,13 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
         try {
             pList = arguments!!.getParcelableArrayList(VirusScanResultFragment.IntentKey.P_LIST)
             nList = arguments!!.getParcelableArrayList(VirusScanResultFragment.IntentKey.N_LIST)
-        }catch (e:Exception){
+        } catch (e: Exception) {
 
         }
         aList.addAll(pList)
         aList.addAll(nList)
 
-        if(aList.size==0){
+        if (aList.size == 0) {
             addModel()
         }
 
@@ -63,9 +63,9 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
         initView()
     }
 
-    private fun addModel(){
-        var model=ScanTextItemModel()
-        model.name="WIFI加密";
+    private fun addModel() {
+        var model = ScanTextItemModel()
+        model.name = "WIFI加密";
         aList.add(model)
     }
 
@@ -83,7 +83,10 @@ class VirusCleanFragment : com.jess.arms.base.SimpleFragment() {
             }
 
             override fun onFinish() {
-                transfer.cleanComplete()
+                if (null != transfer) {
+                    transfer.cleanComplete()
+                }
+
                 StatisticsUtils.onPageEnd(Points.Virus.CLEAN_FINISH_PAGE_EVENT_CODE, Points.Virus.CLEAN_FINISH_PAGE_EVENT_NAME, "", Points.Virus.CLEAN_FINISH_PAGE)
             }
         }
