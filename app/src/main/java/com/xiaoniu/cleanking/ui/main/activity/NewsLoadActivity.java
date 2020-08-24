@@ -77,7 +77,7 @@ public class NewsLoadActivity extends SimpleActivity implements MainActivity.OnK
                 return;
             }
             if (!isDestroyed()) {
-                mCanGoBack = !"清理管家极速版商城".equals(title);
+                mCanGoBack = !"清理极速管家商城".equals(title);
             }
             if (mTextTitle != null) {
                 mTextTitle.setText("新闻热点");
