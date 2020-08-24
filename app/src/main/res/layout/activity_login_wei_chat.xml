@@ -31,11 +31,20 @@
                 android:layout_marginTop="130dp"
                 android:background="@mipmap/applogo" />
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_22dp"
-                android:src="@mipmap/icon_login_text_logo" />
+                android:textColor="#686868"
+                android:textSize="23sp"
+                android:text="清理极速管家"
+                android:textStyle="bold"
+                android:src="@drawable/icon_sp_bottom" />
+  <!--          <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_22dp"
+                android:src="@mipmap/icon_login_text_logo" />-->
 
             <TextView
                 android:layout_width="wrap_content"
