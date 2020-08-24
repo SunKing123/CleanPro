@@ -110,6 +110,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import androidx.fragment.app.FragmentManager;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -548,17 +549,20 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         LogUtils.e("================================一键加速使用完毕     todayFirstUse=" + todayFirstUse + "    hasShortcut=" + hasShortcut + "   created=" + created);
         if (todayFirstUse && !hasShortcut && !created) {
             StartActivityUtils.Companion.createAccShortcut(getActivity());
-            new Handler().postDelayed(() -> checkAndMark(), 4000);
+            new Handler().postDelayed(this::checkAndMark, 4000);
         }
     }
 
 
     private void checkAndMark() {
+        if (getActivity() == null) {
+            return;
+        }
         if (StartActivityUtils.Companion.isCreatedShortcut(getActivity())) {
             PreferenceUtil.saveCreatedShortcut();
             AccWidgetPoint.Companion.shortcutAddWindConfirm();
             AccWidgetPoint.Companion.shortcutIconCreate();
-        }else {
+        } else {
             AccWidgetPoint.Companion.shortcutAddWindCancel();
         }
     }
