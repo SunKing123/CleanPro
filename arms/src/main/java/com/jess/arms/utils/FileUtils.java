@@ -653,7 +653,8 @@ public final class FileUtils {
             size = size / 1024;
             index++;
         }
-        return String.format(Locale.getDefault(), " %.1f", size);
+        //修改友盟bug https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3348992471190
+        return String.format(Locale.ENGLISH, " %.1f", size);
     }
 
 
