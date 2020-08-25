@@ -34,54 +34,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.xiaoniu.cleanking.ui.finish.view.FinishHeadView
+                android:id="@+id/finish_headView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_105dp"
                 android:background="@drawable/finish_top_bg"
                 android:orientation="vertical"
-                android:layout_marginBottom="9dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_18dp"
-                    android:layout_marginBottom="@dimen/dimen_18dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/function_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/dimen_11dp"
-                        android:src="@mipmap/finish_icon_ok" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/function_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="安全，已解决所有风险"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/dimen_18sp" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/function_sub_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="快试试其它功能吧！"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/dimen_13sp" />
-
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <com.xiaoniu.cleanking.widget.FinishCardView
+                android:layout_marginBottom="9dp"
+                />
+            <com.xiaoniu.cleanking.ui.finish.view.FinishCardView
                 android:id="@+id/card_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +58,7 @@
                 android:layout_marginBottom="9dp"
                 android:visibility="gone"/>
 
-            <com.xiaoniu.cleanking.widget.FinishCardView
+            <com.xiaoniu.cleanking.ui.finish.view.FinishCardView
                 android:id="@+id/card_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

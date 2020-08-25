@@ -25,13 +25,13 @@ import com.xiaoniu.cleanking.app.AppLifecyclesImpl;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.GameSelectAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.GameSelectEntity;
 import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.main.presenter.GamePresenter;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.SelectGameEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -608,12 +608,8 @@ public class GameActivity extends BaseActivity<GamePresenter> implements View.On
         String num = NumberUtils.mathRandom(25, 50);
         PreferenceUtil.saveGameCleanPer(num);
 
-        Intent intent = new Intent()
-                .putExtra(ExtraConstant.TITLE, getString(R.string.game_quicken))
-                .putExtra(ExtraConstant.NUM, num)
-                .putExtra("main", getIntent().getBooleanExtra("main", false));
+        NewCleanFinishPlusActivity.Companion.start(this,getString(R.string.game_quicken),true);
 
-        StartFinishActivityUtil.Companion.gotoFinish(GameActivity.this, intent);
         finish();
     }
 

@@ -17,6 +17,7 @@ import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.mvp.BaseFragment;
 import com.xiaoniu.cleanking.mvp.InjectPresenter;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -26,7 +27,6 @@ import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.contact.ScanCleanContact;
 import com.xiaoniu.cleanking.ui.newclean.presenter.ScanCleanPresenter;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
@@ -158,12 +158,8 @@ public class ScanCleanFragment extends BaseFragment implements ScanCleanContact.
         EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
         EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_suggest_clean)));
         if (getActivity() != null && this.isAdded()) {
-            Bundle bundle = new Bundle();
-            bundle.putString(ExtraConstant.TITLE, getResources().getString(R.string.tool_suggest_clean));
-            bundle.putString("num", cleanTotalSize);
-            bundle.putString("unit", cleanTotalUnit);
             PreferenceUtil.saveCleanStorageNum(cleanTotalSize,cleanTotalUnit);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),getResources().getString(R.string.tool_suggest_clean),true);
             getActivity().finish();
         }
     }

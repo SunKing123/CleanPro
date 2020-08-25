@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.JunkGroup;
@@ -20,7 +21,6 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.ScanFragment;
 import com.xiaoniu.cleanking.ui.newclean.fragment.ScanResultFragment;
 import com.xiaoniu.cleanking.ui.newclean.interfice.ClickListener;
 import com.xiaoniu.cleanking.ui.newclean.util.AlertDialogUtil;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.LogUtils;
@@ -162,12 +162,9 @@ public class NowCleanActivity extends BaseActivity {
     }
 
     private void showCleanResult() {
-        Bundle bundle = new Bundle();
-        bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_suggest_clean));
-        Intent intent = new Intent();
-        intent.putExtras(bundle);
+
         PreferenceUtil.saveNowCleanTime();
-        StartFinishActivityUtil.Companion.gotoFinish(this, bundle);
+        NewCleanFinishPlusActivity.Companion.start(this,getString(R.string.tool_suggest_clean),true);
         EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_suggest_clean)));
         finish();
     }

@@ -20,11 +20,11 @@ import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.constant.RouteConstants
 import com.xiaoniu.cleanking.ui.accwidget.AccDesktopAnimationActivity
 import com.xiaoniu.cleanking.ui.accwidget.ShortcutPinReceiver
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity
 import com.xiaoniu.cleanking.ui.main.activity.PhoneSuperPowerActivity
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil.Companion.gotoFinish
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
@@ -134,10 +134,7 @@ class StartActivityUtils {
         }
 
         private fun goFinishActivity(context: Context, title: String) {
-            val bundle = Bundle()
-            bundle.putString(ExtraConstant.TITLE, title)
-            bundle.putBoolean("unused", true)
-            gotoFinish(context, bundle)
+            NewCleanFinishPlusActivity.start(context,title,true)
         }
 
         /**

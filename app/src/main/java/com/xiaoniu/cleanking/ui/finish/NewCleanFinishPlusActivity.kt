@@ -1,6 +1,7 @@
 package com.xiaoniu.cleanking.ui.finish
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -40,8 +41,7 @@ import com.xiaoniu.cleanking.utils.AppLifecycleUtil
 import com.xiaoniu.cleanking.utils.ExtraConstant
 import com.xiaoniu.cleanking.utils.LogUtils
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil
-import com.xiaoniu.cleanking.widget.FinishCardView
-import com.xiaoniu.common.utils.AppUtils
+import com.xiaoniu.cleanking.ui.finish.view.FinishCardView
 import com.xiaoniu.common.utils.DisplayUtils
 import com.xiaoniu.common.utils.StatusBarUtil
 import com.xiaoniu.common.utils.ToastUtils
@@ -60,6 +60,22 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     lateinit var newIntent: Intent
     var isFirst = true
     var isDailyTask = false
+
+    companion object {
+        fun start(context: Context,title:String,used:Boolean) {
+            var intent = Intent(context, NewCleanFinishPlusActivity::class.java);
+            intent.putExtra(ExtraConstant.TITLE, title)
+            intent.putExtra(ExtraConstant.USED, used)
+            context.startActivity(intent)
+        }
+
+        fun start(context: Context,intent:Intent,title:String,used:Boolean) {
+            intent.putExtra(ExtraConstant.TITLE, title)
+            intent.putExtra(ExtraConstant.USED, used)
+            intent.setClass(context, NewCleanFinishPlusActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     override fun getLayoutId(): Int {
         return R.layout.activity_new_clean_finish_plus_layout
@@ -133,111 +149,12 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
      *********************************************************************************************************************************************************
     */
     private fun initHeadView() {
-        when (titleName) {
-            "建议清理", "立即清理", "一键清理" -> showSuggestClearView()
-            "一键加速" -> showOneKeySpeedUp()
-            "病毒查杀" -> showKillVirusView()
-            "超强省电" -> showPowerSaving()
-            "微信专清" -> showWeiXinClear()
-            "手机降温" -> showPhoneCold()
-            "通知栏清理" -> showNotificationClear()
-            "网络加速" -> showNetSpeedUp()
-            "手机清理" -> showPhoneClear()
-        }
-    }
-
-    //建议清理
-    private fun showSuggestClearView() {
-        var storage = PreferenceUtil.getCleanStorageNum().split(":")
-        var num = storage[0]
-        var unit = storage[1]
-        function_icon.setImageResource(R.mipmap.finish_icon_ok)
-        val content = AndroidUtil.zoomText(num.plus(unit), 2f, 0, num.length)
-        function_title.text = content
-        function_sub_title.text = "垃圾已清理"
-        function_sub_title.textSize = 10F
-    }
-
-    //一键加速
-    private fun showOneKeySpeedUp() {
-        var num = PreferenceUtil.getOneKeySpeedNum()
-        function_icon.setImageResource(R.mipmap.finish_icon_speedup)
-        val content = "运行速度已提升$num%"
-        val spannableString = SpannableString(content)
-        val styleSpan = StyleSpan(Typeface.BOLD)
-        spannableString.setSpan(styleSpan, content.length - 1 - num.length, content.length - 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-        function_title.text = spannableString
-        function_sub_title.text = "快试试其他功能吧！"
-    }
-
-    //病毒查杀
-    private fun showKillVirusView() {
-        function_icon.setImageResource(R.mipmap.finish_icon_virus)
-        function_sub_title.visibility = View.GONE
-        function_title.text = "安全，已经解决所有风险"
-    }
-
-    //超强省电
-    private fun showPowerSaving() {
-        function_icon.setImageResource(R.mipmap.finish_icon_power)
-        function_title.text = "已达到最佳状态"
-        function_sub_title.text = "快去体验其他功能"
-    }
-
-    //微信清理
-    private fun showWeiXinClear() {
-        function_icon.setImageResource(R.mipmap.finish_icon_weixin)
-        function_title.text = "已清理"
-        function_sub_title.text = "快试试其他功能吧！"
-    }
-
-    //手机降温
-    private fun showPhoneCold() {
-        var num = PreferenceUtil.getCleanCoolNum().toString()
-        var time = "60s"
-        function_icon.setImageResource(R.mipmap.finish_icon_cold)
-        val content = "成功降温$num°C"
-        val spannableString = SpannableString(content)
-        val styleSpan = StyleSpan(Typeface.BOLD)
-        spannableString.setSpan(styleSpan, content.indexOf(num), content.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-        function_title.text = spannableString
-        val subContent = "${time}后达到最佳降温效果"
-        val subSpannableString = SpannableString(subContent)
-        subSpannableString.setSpan(styleSpan, 0, subContent.indexOf("s"), Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-        function_sub_title.text = subSpannableString
-    }
-
-    //通知栏清理
-    private fun showNotificationClear() {
-        function_icon.setImageResource(R.mipmap.finish_icon_notification)
-        function_title.text = "通知栏很干净"
-        function_sub_title.text = "快去体验其他清理功能"
-    }
-
-    //网络加速
-    private fun showNetSpeedUp() {
-        var num = PreferenceUtil.getSpeedNetworkValue()
-        function_icon.setImageResource(R.mipmap.finish_icon_ok)
-        val content = num.plus("%")
-        val spannableString = SpannableString(content)
-        val sizeSpan = AbsoluteSizeSpan(DisplayUtils.sp2px(this, 30F))
-        spannableString.setSpan(sizeSpan, 0, num.length, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-        function_title.text = spannableString
-        function_sub_title.text = "网络已提速"
-        function_sub_title.textSize = 10F
-    }
-
-    //手机清理
-    private fun showPhoneClear() {
-        function_icon.setImageResource(R.mipmap.finish_icon_ok)
-        function_title.text = "已达到最佳状态"
-        function_sub_title.text = "快去体验其他清理功能"
+        finish_headView.initViewData(titleName!!)
     }
 
     override fun netError() {
 
     }
-
 
     /*
      *********************************************************************************************************************************************************
@@ -260,18 +177,7 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     }
 
     fun setRecommendViewData(view: FinishCardView, item: RecmedItemModel) {
-        view.visibility = View.VISIBLE
-        view.setImage(item.imageIcon)
-        view.setLeftTitle(item.title)
-        view.setSubTitle1(item.content1)
-        view.setSubTitle2(item.content2)
-        view.setButtonText(item.buttonText)
-        if (item.title.equals("手机加速")) {
-            view.setImageLabelVisible()
-            view.setImageLabel(RecmedItemDataStore.getInstance().memory)
-        } else {
-            view.setImageLabelHide()
-        }
+        view.initViewData(item)
         view.setOnClickListener({ onRecommendViewClick(item.title) })
     }
 
@@ -428,6 +334,15 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         startActivity(intent)
     }
 
+
+    fun jumpMainPage() {
+        EventBus.getDefault().post(FromHomeCleanFinishEvent(titleName))
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("back_from_finish", true)
+        startActivity(intent)
+        finish()
+    }
+
     /*
      *********************************************************************************************************************************************************
      ************************************************************activity lifecycle***************************************************************************
@@ -484,13 +399,4 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
         }
         return super.onKeyDown(keyCode, event)
     }
-
-    private fun jumpMainPage() {
-        EventBus.getDefault().post(FromHomeCleanFinishEvent(titleName))
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("back_from_finish", true)
-        startActivity(intent)
-        finish()
-    }
-
 }

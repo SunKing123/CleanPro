@@ -33,6 +33,8 @@ import com.xiaoniu.cleanking.keeplive.service.LocalService;
 
 import com.xiaoniu.cleanking.midas.MidasRequesCenter;
 import com.xiaoniu.cleanking.midas.abs.SimpleViewCallBack;
+import com.xiaoniu.cleanking.selfdebug.DebugActivity;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.activity.PhoneAccessActivity;
 import com.xiaoniu.cleanking.ui.main.bean.BottoomAdList;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
@@ -40,7 +42,6 @@ import com.xiaoniu.cleanking.ui.main.bean.SwitchInfoList;
 import com.xiaoniu.cleanking.ui.main.config.PositionId;
 import com.xiaoniu.cleanking.ui.newclean.activity.NowCleanActivity;
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.NumberUtils;
@@ -358,7 +359,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString("unit", "");
                     bundle.putString("home", "");
                     intentClean.putExtras(bundle);
-                    StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
+                    NewCleanFinishPlusActivity.Companion.start(this,intentClean,"立即清理",false);
+
                 }
 //                959
                 break;
@@ -386,8 +388,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString(ExtraConstant.TITLE, "一键加速");
                     bundle.putString("action", "lock");
                     intentClean.putExtras(bundle);
-                    StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
-
+                    NewCleanFinishPlusActivity.Companion.start(this,intentClean,"一键加速",false);
                 }
 
                 break;
@@ -406,7 +407,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                     bundle.putString(ExtraConstant.TITLE, "病毒查杀");
                     bundle.putString("action", "lock");
                     intentClean.putExtras(bundle);
-                    StartFinishActivityUtil.Companion.gotoFinish(this,intentClean);
+                    NewCleanFinishPlusActivity.Companion.start(this,intentClean,"病毒查杀",false);
                 }
                 break;
 

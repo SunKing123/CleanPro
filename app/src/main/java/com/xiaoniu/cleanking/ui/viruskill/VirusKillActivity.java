@@ -10,8 +10,8 @@ import com.jess.arms.base.BaseActivity;
 import com.jess.arms.di.component.AppComponent;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.base.AppHolder;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.viruskill.fragment.NewVirusScanFragment;
 import com.xiaoniu.cleanking.ui.viruskill.fragment.VirusCleanFragment;
@@ -128,7 +128,8 @@ public class VirusKillActivity extends BaseActivity implements ITransferPagePerf
         if (getIntent().hasExtra(ExtraConstant.ACTION_NAME) && !TextUtils.isEmpty(getIntent().getStringExtra(ExtraConstant.ACTION_NAME))) {
             mIntent.putExtra(ExtraConstant.ACTION_NAME, getIntent().getStringExtra(ExtraConstant.ACTION_NAME));
         }
-        StartFinishActivityUtil.Companion.gotoFinish(this, mIntent);
+
+        NewCleanFinishPlusActivity.Companion.start(this,getString(R.string.virus_kill),true);
         finish();
 
         PrivacyDataStore.getInstance().removeMarkedIdsInRandomTable();

@@ -38,6 +38,7 @@ import com.xiaoniu.cleanking.ui.accwidget.AccWidgetPoint;
 import com.xiaoniu.cleanking.ui.accwidget.AccWidgetViewManager;
 import com.xiaoniu.cleanking.ui.deskpop.base.StartActivityUtils;
 import com.xiaoniu.cleanking.ui.deskpop.deviceinfo.HomeDeviceInfoFragment;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanMusicManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.CleanVideoManageActivity;
 import com.xiaoniu.cleanking.ui.main.activity.ImageActivity;
@@ -67,7 +68,6 @@ import com.xiaoniu.cleanking.ui.newclean.interfice.FragmentOnFocusListenable;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.ScrapingCardDataUtils;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
@@ -82,7 +82,6 @@ import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.CollectionUtils;
-import com.xiaoniu.cleanking.utils.ExtraConstant;
 import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.FloatAnimManager;
 import com.xiaoniu.cleanking.utils.update.MmkvUtil;
@@ -727,12 +726,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
             CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
             if (null != countEntity && getActivity() != null && this.isAdded()) {
-                Bundle bundle = new Bundle();
-                bundle.putString(ExtraConstant.TITLE, getResources().getString(R.string.tool_suggest_clean));
-                bundle.putString("num", countEntity.getTotalSize());
-                bundle.putString("unit", countEntity.getUnit());
-                bundle.putBoolean("unused", true);
-                StartFinishActivityUtil.Companion.gotoFinish(requireActivity(), bundle);
+                NewCleanFinishPlusActivity.Companion.start(getActivity(),getResources().getString(R.string.tool_suggest_clean),false);
             } else {
                 //判断扫描缓存；
                 if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
@@ -835,12 +829,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            Bundle bundle = new Bundle();
-            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_one_key_speed));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            bundle.putBoolean("unused", true);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),getResources().getString(R.string.tool_one_key_speed),false);
         } else {
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
@@ -866,11 +855,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getVirusKillTime()) {
             startActivity(VirusKillActivity.class);
         } else {
-            Intent intent = new Intent();
-            intent.putExtra(ExtraConstant.TITLE, "病毒查杀");
-            intent.putExtra("main", false);
-            intent.putExtra("unused", true);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),"病毒查杀",false);
         }
     }
 
@@ -887,12 +872,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_super_power_saving));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            bundle.putBoolean("unused", true);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_super_power_saving),false);
         }
     }
 
@@ -943,12 +923,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_chat_clear));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            bundle.putBoolean("unused", true);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_chat_clear),false);
+
         }
     }
 
@@ -966,13 +942,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_notification_clean));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            bundle.putBoolean("unused", true);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
-
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_notification_clean),false);
         }
     }
 
@@ -989,13 +959,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
-            Bundle bundle = new Bundle();
-            bundle.putString(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low));
-            bundle.putString("num", "");
-            bundle.putString("unit", "");
-            bundle.putBoolean("unused", true);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), bundle);
-
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_phone_temperature_low),false);
         }
     }
 
@@ -1009,13 +973,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getSpeedNetWorkTime()) {
             startActivity(NetWorkActivity.class);
         } else {
-            Intent intent = new Intent();
-            String num = PreferenceUtil.getSpeedNetworkValue();
-            intent.putExtra(ExtraConstant.TITLE, "网络加速");
-            intent.putExtra("main", false);
-            intent.putExtra("num", num);
-            intent.putExtra("unused", true);
-            StartFinishActivityUtil.Companion.gotoFinish(getActivity(), intent);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(),"网络加速",false);
         }
     }
 
@@ -1054,7 +1012,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 //            StatisticsUtils.trackClick("withdrawal_click", "在首页点击提现", "home_page", "home_page");
         }
     }
-
 
     /**
      * 金币领取成功

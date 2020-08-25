@@ -21,12 +21,12 @@ import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanImgActivity;
 import com.xiaoniu.cleanking.ui.main.activity.WXCleanVideoActivity;
 import com.xiaoniu.cleanking.ui.main.config.SpCacheConfig;
 import com.xiaoniu.cleanking.ui.main.event.WxQqCleanEvent;
 import com.xiaoniu.cleanking.ui.main.widget.ViewHelper;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.wechat.bean.CleanWxEasyInfo;
@@ -206,9 +206,8 @@ public class WechatCleanHomeActivity extends BaseActivity<WechatCleanHomePresent
                 AppHolder.getInstance().setCleanFinishSourcePageId("wxclean_finish_annimation_page");
                 EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
 
-                Intent intent=new Intent()
-                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_chat_clear));
-                StartFinishActivityUtil.Companion.gotoFinish(this,intent);
+                NewCleanFinishPlusActivity.Companion.start(this,getString(R.string.tool_chat_clear),true);
+
                 finish();
 
             } else {

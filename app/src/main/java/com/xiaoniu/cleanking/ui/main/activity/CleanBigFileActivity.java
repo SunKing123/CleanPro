@@ -21,6 +21,7 @@ import com.xiaoniu.cleanking.app.AppApplication;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.main.adapter.CleanExpandAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
 import com.xiaoniu.cleanking.ui.main.bean.FirstLevelEntity;
@@ -28,7 +29,6 @@ import com.xiaoniu.cleanking.ui.main.bean.ThirdLevelEntity;
 import com.xiaoniu.cleanking.ui.main.event.ScanFileEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.CleanBigFilePresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CleanAnimView;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
 import com.xiaoniu.cleanking.utils.ExtraConstant;
@@ -117,10 +117,7 @@ public class CleanBigFileActivity extends BaseActivity<CleanBigFilePresenter> {
         mCleanAnimView.setAnimationEnd(() -> {
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
 
-            Intent intent = new Intent()
-                    .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_clean));
-
-            StartFinishActivityUtil.Companion.gotoFinish(this,intent);
+            NewCleanFinishPlusActivity.Companion.start(this,getString(R.string.tool_phone_clean),true);
 
             finish();
         });

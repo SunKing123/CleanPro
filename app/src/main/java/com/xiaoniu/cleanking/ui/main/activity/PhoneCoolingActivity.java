@@ -35,6 +35,7 @@ import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.app.injector.component.ActivityComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseActivity;
+import com.xiaoniu.cleanking.ui.finish.NewCleanFinishPlusActivity;
 import com.xiaoniu.cleanking.ui.localpush.LocalPushUtils;
 import com.xiaoniu.cleanking.ui.main.adapter.ProcessIconAdapter;
 import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
@@ -44,7 +45,6 @@ import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
 import com.xiaoniu.cleanking.ui.main.presenter.PhoneCoolingPresenter;
 import com.xiaoniu.cleanking.ui.main.widget.CustomerSpaceDecoration;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
-import com.xiaoniu.cleanking.ui.newclean.util.StartFinishActivityUtil;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.utils.CleanUtil;
@@ -728,10 +728,7 @@ public class PhoneCoolingActivity extends BaseActivity<PhoneCoolingPresenter> {
                 PreferenceUtil.saveCleanCoolNum(tem);
 
                 EventBus.getDefault().post(new FunctionCompleteEvent(getString(R.string.tool_phone_temperature_low)));
-
-                Intent intent=new Intent()
-                        .putExtra(ExtraConstant.TITLE, getString(R.string.tool_phone_temperature_low));
-                StartFinishActivityUtil.Companion.gotoFinish(PhoneCoolingActivity.this, intent);
+                NewCleanFinishPlusActivity.Companion.start(PhoneCoolingActivity.this,getString(R.string.tool_phone_temperature_low),true);
 
                 finish();
             }
