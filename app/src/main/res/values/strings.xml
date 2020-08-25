@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name">清理极速管家</string>
+    <string name="app_name">清理管家极速版</string>
     <string name="app_num">4</string>
     <string name="life">生活</string>
     <string name="clean">清理</string>
@@ -94,7 +94,7 @@
 
     <string name="notify_no_clean_tips">%s 通知将不会被拦截</string>
     <string name="notify_yes_clean_tips">%s 通知将会被拦截</string>
-    <string name="app_name_premis">清理极速管家   \u2605\u2605\u2605</string>
+    <string name="app_name_premis">清理管家极速版   \u2605\u2605\u2605</string>
     <string name="tool_phone_clean">手机清理</string>
     <string name="tool_news">新闻热点</string>
     <string name="tool_power_hint">请尽快充电哦！</string>
@@ -147,7 +147,7 @@
     <string name="push_content_phoneCooling">手机高温%1$s,立即降温!</string>
 
     <string name="watch_times">%1$s次观看</string>
-    <string name="push_content_default_title">清理极速管家持续护航中...</string>
+    <string name="push_content_default_title">清理管家极速版持续护航中...</string>
     <string name="push_content_default_content">一键加速，让手机使用无比流畅</string>
     <string name="push_btn_access">优化加速</string>
     <string name="push_power_btn">省电</string>
@@ -175,7 +175,7 @@
     <string name="app_ks">快手</string>
     <string name="app_aqy">爱奇艺</string>
     <string name="app_dy">抖音</string>
-    <string name="app_quick_name">清理极速管家</string>
+    <string name="app_quick_name">清理管家极速版</string>
     <string name="redpack">红包</string>
     <string name="scan_result_check">%1$s</string>
 

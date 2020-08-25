@@ -21,7 +21,7 @@
         android:layout_marginTop="3dp"
         android:textSize="15sp"
         android:textColor="#333333"
-        android:text="清理极速管家"
+        android:text="清理管家极速版"
         android:layout_toRightOf="@id/image" />
 
     <TextView
@@ -33,7 +33,7 @@
         android:textSize="14sp"
         android:textColor="#666666"
         android:layout_marginTop="3dp"
-        android:text="清理极速管家"
+        android:text="清理管家极速版"
         android:layout_toRightOf="@id/image" />
 
     <TextView

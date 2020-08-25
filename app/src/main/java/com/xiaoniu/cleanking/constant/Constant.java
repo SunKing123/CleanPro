@@ -129,7 +129,7 @@ public class Constant {
         list.add("com.xiaoniu.cleanking");// 悟空清理
         list.add("com.xiaoniu");
         list.add("com.geek.jk.weather.fission"); // 知心天气
-        list.add("com.hellogeek.cleanking"); //清理极速管家
+        list.add("com.hellogeek.cleanking"); //清理管家极速版
 
         manufacturer.add("huawei");
         manufacturer.add("oppo");
@@ -156,7 +156,7 @@ public class Constant {
             "com.xiaoniu.cleanking", // 悟空清理
             "com.xiaoniu",
             "com.geek.jk.weather.fission", // 知心天气
-            "com.hellogeek.cleanking"     //清理极速管家
+            "com.hellogeek.cleanking"     //清理管家极速版
 
     );
 */
