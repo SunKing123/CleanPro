@@ -2,10 +2,6 @@ package com.xiaoniu.cleanking.ui.notifition;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.os.BatteryManager;
-import android.os.Build;
-
 import com.geek.push.entity.PushMsg;
 import com.google.gson.Gson;
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
@@ -19,6 +15,7 @@ import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
+import com.xiaoniu.cleanking.ui.securitycenter.entrance.view.FunctionGridView;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
 import com.xiaoniu.cleanking.utils.FileQueryUtils;
@@ -29,6 +26,7 @@ import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -238,7 +236,4 @@ public class NoticicationInfoCheker  implements BackGroundIPulseObserver {
 //        });
 
     }
-
-
-
 }
