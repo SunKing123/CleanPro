@@ -22,7 +22,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentManager;
 
+import com.bianxianmao.sdk.BDAdvanceFloatIconAd;
+import com.bianxianmao.sdk.BDAdvanceFloatIconListener;
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.google.gson.Gson;
@@ -32,6 +35,7 @@ import com.xiaoniu.cleanking.app.injector.component.FragmentComponent;
 import com.xiaoniu.cleanking.base.AppHolder;
 import com.xiaoniu.cleanking.base.BaseFragment;
 import com.xiaoniu.cleanking.base.ScanDataHolder;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.constant.RouteConstants;
 import com.xiaoniu.cleanking.midas.IOnAdClickListener;
 import com.xiaoniu.cleanking.ui.accwidget.AccWidgetPoint;
@@ -108,8 +112,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import androidx.fragment.app.FragmentManager;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -155,8 +157,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     FrameLayout adLayoutThree;
     @BindView(R.id.layout_scroll)
     ObservableScrollView mScrollView;
-    @BindView(R.id.image_interactive)
-    HomeInteractiveView imageInteractive;
+    // @BindView(R.id.image_interactive)
+    // HomeInteractiveView imageInteractive;
+
+    @BindView(R.id.bxm_container_2)
+    FrameLayout bxmContainer;
+
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.frame_deviceInfo)
@@ -193,7 +199,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         commonTitleLayout.hindContentView().setBgColor(R.color.color_F7F8FA);
         homeMainTableView.initViewState();
         homeToolTableView.initViewState();
-        mFloatAnimManager = new FloatAnimManager(imageInteractive, DisplayUtils.dip2px(180));
+        //mFloatAnimManager = new FloatAnimManager(imageInteractive, DisplayUtils.dip2px(180));
+        mFloatAnimManager = new FloatAnimManager(bxmContainer, DisplayUtils.dip2px(180));
         initEvent();
         showHomeLottieView();
         initClearItemCard();
@@ -330,11 +337,11 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
     private void initEvent() {
 
-        imageInteractive.setClickListener(data -> {
+      /*  imageInteractive.setClickListener(data -> {
                     StatisticsUtils.trackClick(Points.MainHome.SCRAPING_BUOY_CLICK_CODE, Points.MainHome.SCRAPING_BUOY_CLICK_NAME, "home_page", "home_page");
                     onInteractiveListener.onClick(null);
                 }
-        );
+        );*/
 
         homeMainTableView.setOnItemClickListener(item -> {
             switch (item) {
@@ -488,7 +495,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     @Override
     public void onResume() {
         super.onResume();
-        imageInteractive.loadNextDrawable();
+        //imageInteractive.loadNextDrawable();
         checkScanState();
     }
 
@@ -726,7 +733,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             String cleanedCache = MmkvUtil.getString(SpCacheConfig.MKV_KEY_HOME_CLEANED_DATA, "");
             CountEntity countEntity = new Gson().fromJson(cleanedCache, CountEntity.class);
             if (null != countEntity && getActivity() != null && this.isAdded()) {
-                NewCleanFinishPlusActivity.Companion.start(getActivity(),getResources().getString(R.string.tool_suggest_clean),false);
+                NewCleanFinishPlusActivity.Companion.start(getActivity(), getResources().getString(R.string.tool_suggest_clean), false);
             } else {
                 //判断扫描缓存；
                 if (ScanDataHolder.getInstance().getScanState() > 0 && ScanDataHolder.getInstance().getmJunkGroups().size() > 0) {//扫描缓存5分钟内——直接到扫描结果页
@@ -829,7 +836,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         //保存本次清理完成时间 保证每次清理时间间隔为3分钟
         if (!PreferenceUtil.getCleanTime()) {
             EventBus.getDefault().post(new FinishCleanFinishActivityEvent());
-            NewCleanFinishPlusActivity.Companion.start(getActivity(),getResources().getString(R.string.tool_one_key_speed),false);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(), getResources().getString(R.string.tool_one_key_speed), false);
         } else {
             Bundle bundle = new Bundle();
             bundle.putString(SpCacheConfig.ITEM_TITLE_NAME, getString(R.string.tool_one_key_speed));
@@ -855,7 +862,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getVirusKillTime()) {
             startActivity(VirusKillActivity.class);
         } else {
-            NewCleanFinishPlusActivity.Companion.start(getActivity(),"病毒查杀",false);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(), "病毒查杀", false);
         }
     }
 
@@ -872,7 +879,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getPowerCleanTime()) {
             startActivity(PhoneSuperPowerActivity.class);
         } else {
-            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_super_power_saving),false);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(), getString(R.string.tool_super_power_saving), false);
         }
     }
 
@@ -892,15 +899,42 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
     public void getInteractionSwitchSuccess(InteractionSwitchList switchInfoList) {
         if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
             return;
+        //屏幕中间的互动式广告
         if (switchInfoList.getData().get(0).isOpen()) {
-            imageInteractive.setDataList(switchInfoList.getData().get(0).getSwitchActiveLineDTOList());
-            imageInteractive.loadNextDrawable();
+            // imageInteractive.setDataList(switchInfoList.getData().get(0).getSwitchActiveLineDTOList());
+            //imageInteractive.loadNextDrawable();
+            BDAdvanceFloatIconAd bdAdvanceFloatIconAd = new BDAdvanceFloatIconAd(getActivity(), bxmContainer, Constant.BXM_MAIN_POS2_AD_ID);
+            bdAdvanceFloatIconAd.setBdAdvanceFloatIconListener(new BDAdvanceFloatIconListener() {
+                @Override
+                public void onActivityClosed() {
+                }
+
+                @Override
+                public void onAdShow() {
+                    LogUtils.e("===========变现猫2加载成功");
+                }
+
+                @Override
+                public void onAdFailed() {
+                    LogUtils.e("===========变现猫2加载失败");
+                }
+
+                @Override
+                public void onAdClicked() {
+                }
+            });
+            bdAdvanceFloatIconAd.loadAd();
             mFloatAnimManager.setIsNeedOptionAnimation(true);
         } else {
             mFloatAnimManager.setIsNeedOptionAnimation(false);
-            imageInteractive.setVisibility(View.GONE);
+            bxmContainer.setVisibility(View.GONE);
+            // imageInteractive.setVisibility(View.GONE);
         }
+        //首页右下角第四个广告位变现猫数据
+        InteractionSwitchList.DataBean bxmConfigData = switchInfoList.getData().get(1);
+        view_lottie_top.refBubbleViewBXM(bxmConfigData);
     }
+
 
     /*
      * *********************************************************************************************************************************************************
@@ -923,7 +957,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             // 每次清理间隔 至少3秒
             startActivity(WechatCleanHomeActivity.class);
         } else {
-            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_chat_clear),false);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(), getString(R.string.tool_chat_clear), false);
 
         }
     }
@@ -942,7 +976,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getNotificationCleanTime()) {
             NotifyCleanManager.startNotificationCleanActivity(getActivity(), 0);
         } else {
-            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_notification_clean),false);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(), getString(R.string.tool_notification_clean), false);
         }
     }
 
@@ -959,7 +993,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getCoolingCleanTime()) {
             startActivity(RouteConstants.PHONE_COOLING_ACTIVITY);
         } else {
-            NewCleanFinishPlusActivity.Companion.start(getActivity(),getString(R.string.tool_phone_temperature_low),false);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(), getString(R.string.tool_phone_temperature_low), false);
         }
     }
 
@@ -973,7 +1007,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (PreferenceUtil.getSpeedNetWorkTime()) {
             startActivity(NetWorkActivity.class);
         } else {
-            NewCleanFinishPlusActivity.Companion.start(getActivity(),"网络加速",false);
+            NewCleanFinishPlusActivity.Companion.start(getActivity(), "网络加速", false);
         }
     }
 

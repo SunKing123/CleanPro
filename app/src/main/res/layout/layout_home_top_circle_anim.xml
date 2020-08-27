@@ -94,7 +94,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="35dp"
             app:isAniming="true"
-            app:location="4" />
+            app:location="10" />
 
     </RelativeLayout>
 

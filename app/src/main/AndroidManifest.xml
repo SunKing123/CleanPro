@@ -18,11 +18,74 @@
         tools:replace="android:label">
 
 
+        <!--变现猫配置开始-->
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+
+        <!-- provider 配置 -->
+        <!-- 注意：单进程或多进程都必须配置 -->
+
+        <provider
+            android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+            android:authorities="${applicationId}.TTMultiProvider"
+            android:exported="false" />
+
+        <service
+            android:name="com.qq.e.comm.DownloadService"
+            android:exported="false" />
+
+
+        <!-- 请注意字母的大小写，ADActivity，而不是AdActivity -->
+        <!--
+           之前已经配置过
+        <activity
+              android:name="com.qq.e.ads.ADActivity"
+              android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />-->
+        <!--
+           之前已经配置过
+           <activity
+              android:name="com.qq.e.ads.PortraitADActivity"
+              android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+              android:screenOrientation="portrait" />-->
+        <!--
+            之前已经配置过
+           <activity
+             android:name="com.qq.e.ads.LandscapeADActivity"
+             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+             android:screenOrientation="landscape" />-->
+
+      <!--  <provider
+            android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+            android:authorities="${applicationId}.TTFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/new_app_file_paths" />
+        </provider>-->
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/new_app_file_paths" />
+        </provider>
+
+
+        <!--变现猫配置结束-->
+
         <activity
             android:name=".ui.main.activity.SplashADActivity"
-            android:screenOrientation="portrait"
             android:icon="@mipmap/applogo"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -257,6 +320,10 @@
 
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.toolbox.ToolBoxCommonActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <!--      <activity
                   android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
 
@@ -295,23 +362,23 @@
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
             android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task"  />
+            android:taskAffinity="com.locker.new.task" />
 
         <activity
             android:name=".ui.accwidget.AccDesktopAnimationActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity="com.widget.acc"
             android:exported="true"
-            android:theme="@style/myTransparent"/>
+            android:taskAffinity="com.widget.acc"
+            android:theme="@style/myTransparent" />
 
         <activity
             android:name=".ui.accwidget.AccDesktopCleanFinishActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity="com.widget.acc"
             android:exported="true"
-            android:theme="@style/myTransparent"/>
+            android:taskAffinity="com.widget.acc"
+            android:theme="@style/myTransparent" />
 
         <activity
             android:name=".ui.main.activity.NewsActivity"
@@ -461,7 +528,7 @@
             android:launchMode="singleTask"
             android:taskAffinity="com.pop.new.task"
             android:theme="@style/pop_layer_style"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
 
         <activity
             android:name=".ui.deskpop.battery.BatteryPopActivity"
@@ -484,15 +551,15 @@
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"></activity>
 
 
-    <!--    <activity
-            android:name=".ui.newclean.activity.ExternalSceneActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+        <!--    <activity
+                android:name=".ui.newclean.activity.ExternalSceneActivity"
+                android:configChanges="keyboardHidden|orientation|screenSize"
 
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTask"
-            android:taskAffinity="com.pop.new.task"
-            android:theme="@style/pop_layer_style_2"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />-->
+                android:hardwareAccelerated="true"
+                android:launchMode="singleTask"
+                android:taskAffinity="com.pop.new.task"
+                android:theme="@style/pop_layer_style_2"
+                android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />-->
 
         <activity
             android:name=".ui.deskpop.wifi.ExternalSceneActivity"
@@ -667,8 +734,9 @@
             android:screenOrientation="portrait"
             android:taskAffinity="com.locker.new.task" />
 
-        <activity android:name=".ui.usercenter.activity.ScrapingCarDetailActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.usercenter.activity.ScrapingCarDetailActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="android.max_aspect"
@@ -842,25 +910,25 @@
         <service
             android:name=".keeplive.service.LocalService"
             android:exported="true"
-            android:process=":local"></service>
+            android:process=":local" />
         <service
             android:name=".keeplive.service.RemoteService"
             android:exported="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
         <receiver android:name=".keeplive.receive.NotificationClickReceiver">
             <intent-filter>
-                <action android:name="CLICK_NOTIFICATION"></action>
+                <action android:name="CLICK_NOTIFICATION" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".keeplive.receive.TimingReceiver"></receiver>
+        <receiver android:name=".keeplive.receive.TimingReceiver" />
 
-        <activity android:name=".keeplive.onepx.OnePixelActivity"></activity>
+        <activity android:name=".keeplive.onepx.OnePixelActivity" />
 
         <service
             android:name=".keeplive.service.JobHandlerService"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver android:name=".utils.quick.QuickSucessCallbackReceiver">
             <intent-filter>
@@ -914,72 +982,71 @@
         <activity
             android:name="com.qq.e.ads.ADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:taskAffinity="com.xiaoniu.clean.ad"
             android:excludeFromRecents="true"
             android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad"
             tools:replace="android:configChanges" />
         <!-- 下载类：-->
         <activity
             android:name="com.qq.e.ads.PortraitADActivity"
-            android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:taskAffinity="com.xiaoniu.clean.ad"
-            tools:replace="android:configChanges"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            />
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.xiaoniu.clean.ad"
+            tools:replace="android:configChanges" />
         <!-- 穿山甲：-->
         <activity
             android:name="com.bytedance.sdk.openadsdk.activity.TTLandingPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:taskAffinity="com.xiaoniu.clean.ad"
             android:excludeFromRecents="true"
             android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad"
             tools:replace="android:configChanges" />
 
         <activity
             android:name="com.qq.e.ads.LandscapeADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            tools:replace="android:configChanges"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:taskAffinity="com.xiaoniu.clean.ad" />
+            android:taskAffinity="com.xiaoniu.clean.ad"
+            tools:replace="android:configChanges" />
 
         <activity
             android:name="com.ss.android.socialbase.appdownloader.view.DownloadTaskDeleteActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            tools:replace="android:configChanges"
             android:excludeFromRecents="true"
             android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad"
 
-            android:taskAffinity="com.xiaoniu.clean.ad" />
+            tools:replace="android:configChanges" />
 
 
         <activity
             android:name="com.bytedance.sdk.openadsdk.activity.TTVideoLandingPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            tools:replace="android:configChanges"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:taskAffinity="com.xiaoniu.clean.ad" />
+            android:taskAffinity="com.xiaoniu.clean.ad"
+            tools:replace="android:configChanges" />
 
 
         <activity
             android:name="com.bytedance.sdk.openadsdk.activity.TTWebPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            tools:replace="android:configChanges"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:taskAffinity="com.xiaoniu.clean.ad" />
+            android:taskAffinity="com.xiaoniu.clean.ad"
+            tools:replace="android:configChanges" />
 
         <activity
             android:name="com.bytedance.sdk.openadsdk.activity.TTPlayableLandingPageActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            tools:replace="android:configChanges"
             android:excludeFromRecents="true"
             android:noHistory="true"
+            android:taskAffinity="com.xiaoniu.clean.ad"
 
-            android:taskAffinity="com.xiaoniu.clean.ad" />
+            tools:replace="android:configChanges" />
 
         <activity
             android:name="com.baidu.mobads.AppActivity"
@@ -992,10 +1059,11 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <!-- widget的点击事件 action 待添加-->
-                <action android:name="com.xiaoniu.widget.action.view.click"/>
+                <action android:name="com.xiaoniu.widget.action.view.click" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/widget_acc_provider"/>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_acc_provider" />
         </receiver>
 
     </application>
@@ -1041,6 +1109,8 @@
     <!-- 移除快捷方式 -->
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <!--变现猫-->
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
     <!--    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"-->
     <!--        />-->
     <!--    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"-->

@@ -34,6 +34,8 @@ import androidx.room.Room;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.apkfuns.jsbridge.JsBridgeConfig;
+import com.bianxianmao.sdk.manager.BDAdvanceConfig;
+import com.bianxianmao.sdk.manager.BDManager;
 import com.blankj.utilcode.util.Utils;
 import com.bun.miitmdid.core.JLibrary;
 import com.chuanglan.shanyan_sdk.OneKeyLoginManager;
@@ -162,7 +164,7 @@ public class AppLifecyclesImpl implements AppLifecycles {
         NotifyCleanManager.getInstance().sendRebindServiceMsg();
         setErrorHander();
         initRoom(application);
-
+        initBXM(application);
         String processName = SystemUtils.getProcessName(application);
         if (processName.equals(application.getPackageName())) {
             //商业化初始化
@@ -191,6 +193,18 @@ public class AppLifecyclesImpl implements AppLifecycles {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 变现猫
+     */
+    private void initBXM(Application application) {
+        String appName = application.getString(R.string.app_name);
+        BDAdvanceConfig.getInstance()
+                .setAppName(appName)//设置应用名
+                .setDebug(true)//如果需要，打开日志调试
+                .enableAudit(false);//此接口用于打审核包用，上线必须为False,True则为向广告主提交审核专用的包，不出广点通和穿山甲广告
+        BDManager.getStance().init(application, "bdcc40fbb8d745f481940e51949c6757");
     }
 
     /*

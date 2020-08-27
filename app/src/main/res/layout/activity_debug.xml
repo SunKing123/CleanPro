@@ -106,7 +106,6 @@
                     android:textSize="@dimen/dimen_9sp" />
 
 
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="@dimen/dimen_50dp"
@@ -335,27 +334,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_finish"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dimen_50dp"
-                    android:text="完成页调试"
                     android:background="@color/color_00DA80"
+                    android:gravity="center"
+                    android:text="完成页调试"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_9sp"
-                    android:gravity="center"/>
+                    android:textSize="@dimen/dimen_9sp" />
 
                 <TextView
                     android:id="@+id/tv_shortcut"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dimen_50dp"
-                    android:text="创建快捷方式"
+                    android:layout_margin="5dp"
                     android:background="@color/color_00DA80"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_9sp"
                     android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:text="创建快捷方式"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/dimen_9sp" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="变现猫"
+                android:textColor="@color/black"
+                android:textSize="@dimen/dimen_9sp" />
+
+
+            <FrameLayout
+                android:id="@+id/bxm_fl_ad_container_1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal" />
+
+            <FrameLayout
+                android:id="@+id/bxm_fl_ad_container_2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal" />
 
 
             <com.airbnb.lottie.LottieAnimationView

@@ -675,3 +675,16 @@
 
 #数美sdk
 -keep class com.ishumei.** { *; }
+
+#变现猫
+-keep class com.bytedance.sdk.openadsdk.** { *; }
+-keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
+-keep class com.ss.sys.ces.* {*;}
+-keep class com.bxm.sdk.ad.**{ *;}
+-keep class com.bianxianmao.sdk.**{*;}
+-keep class com.qq.e.** {
+ public protected *;
+}
+-keep class android.support.v4.app.NotificationCompat**{
+ public *;
+}
