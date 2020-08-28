@@ -907,7 +907,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
             }
 
-            if (PositionId.KEY_HOME_PAGE.equals(item.getSwitcherKey()) && PositionId.BXM_AD_POSITION_1.equals(item.getAdvertPosition())) {
+            if (PositionId.KEY_HOME_PAGE.equals(item.getSwitcherKey()) && PositionId.BXM_AD_POSITION_2.equals(item.getAdvertPosition())) {
                 bxmConfig2 = item;
 
             }

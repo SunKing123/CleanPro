@@ -132,6 +132,7 @@ public class LuckBubbleView extends LinearLayout {
 
     public void setDataCheckToShowBXM(boolean show) {
         if (!show) {
+            setVisibility(GONE);
             return;
         }
         setVisibility(VISIBLE);
