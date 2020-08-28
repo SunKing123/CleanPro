@@ -902,12 +902,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         InteractionSwitchList.DataBean bxmConfig1 = null, bxmConfig2 = null;
         for (InteractionSwitchList.DataBean item : switchInfoList.getData()) {
 
-            if ("page_home".equals(item.getSwitcherKey()) && "advert_position_active_advert1".equals(item.getAdvertPosition())) {
+            if (PositionId.KEY_HOME_PAGE.equals(item.getSwitcherKey()) && PositionId.BXM_AD_POSITION_1.equals(item.getAdvertPosition())) {
                 bxmConfig1 = item;
 
             }
 
-            if ("page_home".equals(item.getSwitcherKey()) && "advert_position_active_advert2".equals(item.getAdvertPosition())) {
+            if (PositionId.KEY_HOME_PAGE.equals(item.getSwitcherKey()) && PositionId.BXM_AD_POSITION_1.equals(item.getAdvertPosition())) {
                 bxmConfig2 = item;
 
             }

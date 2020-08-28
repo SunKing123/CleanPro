@@ -193,5 +193,9 @@ public class PositionId {
     public static final String KEY_WIDGET_ACC_FINISH = "page_widget_acc_finish_3.3.0";
 
 
-
+    public static final String KEY_HOME_PAGE = "page_home";
+    //变现猫广告位1
+    public static final String BXM_AD_POSITION_1 = "advert_position_active_advert1";
+    //变现猫广告位2
+    public static final String BXM_AD_POSITION_2 = "advert_position_active_advert2";
 }
