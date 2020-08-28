@@ -36,7 +36,7 @@
                             android:layout_marginTop="@dimen/dimen_22dp"
                             android:textColor="#686868"
                             android:textSize="23sp"
-                            android:text="清理管家极速版"
+                            android:text="清理极速管家"
                             android:textStyle="bold"
                             android:src="@drawable/icon_sp_bottom" />
 <!--            <ImageView
