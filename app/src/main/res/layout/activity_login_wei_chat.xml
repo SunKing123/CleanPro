@@ -30,28 +30,16 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="130dp"
                 android:background="@mipmap/applogo" />
-<<<<<<< Updated upstream
-<!--
-=======
-
->>>>>>> Stashed changes
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_22dp"
-                android:textColor="#686868"
-                android:textSize="23sp"
-<<<<<<< Updated upstream
-                android:text="清理管家极速版"
-                android:textStyle="bold"
-                android:src="@drawable/icon_sp_bottom" />-->
-            <ImageView
-=======
-                android:text="清理极速管家"
-                android:textStyle="bold"
-                android:src="@drawable/icon_sp_bottom" />
-  <!--          <ImageView
->>>>>>> Stashed changes
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dimen_22dp"
+                            android:textColor="#686868"
+                            android:textSize="23sp"
+                            android:text="清理管家极速版"
+                            android:textStyle="bold"
+                            android:src="@drawable/icon_sp_bottom" />
+<!--            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_22dp"
