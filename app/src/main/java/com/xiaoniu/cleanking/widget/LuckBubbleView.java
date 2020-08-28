@@ -130,7 +130,10 @@ public class LuckBubbleView extends LinearLayout {
         return listBean;
     }
 
-    public void setDataCheckToShowBXM() {
+    public void setDataCheckToShowBXM(boolean show) {
+        if (!show) {
+            return;
+        }
         setVisibility(VISIBLE);
         int size = DisplayUtil.dip2px(activity, 76f);
         bxmContainer.setLayoutParams(new LinearLayout.LayoutParams(size, size));

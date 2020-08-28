@@ -241,9 +241,10 @@ public class OneKeyCircleBtnView extends RelativeLayout {
     }
 
     public void refBubbleViewBXM(InteractionSwitchList.DataBean bxmConfig) {
-        rtbotm.setDataCheckToShow(null);
         if (bxmConfig != null && bxmConfig.isOpen()) {
-            rtbotm.setDataCheckToShowBXM();
+            rtbotm.setDataCheckToShowBXM(true);
+        } else {
+            rtbotm.setDataCheckToShowBXM(false);
         }
     }
 

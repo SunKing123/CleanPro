@@ -79,7 +79,6 @@ import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.UserInfoEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.wechat.activity.WechatCleanHomeActivity;
-import com.xiaoniu.cleanking.ui.view.HomeInteractiveView;
 import com.xiaoniu.cleanking.ui.view.HomeMainTableView;
 import com.xiaoniu.cleanking.ui.view.HomeToolTableView;
 import com.xiaoniu.cleanking.ui.viruskill.VirusKillActivity;
@@ -900,7 +899,22 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         if (null == switchInfoList || null == switchInfoList.getData() || switchInfoList.getData().size() <= 0)
             return;
         //屏幕中间的互动式广告
-        if (switchInfoList.getData().get(0).isOpen()) {
+        InteractionSwitchList.DataBean bxmConfig1 = null, bxmConfig2 = null;
+        for (InteractionSwitchList.DataBean item : switchInfoList.getData()) {
+
+            if ("page_home".equals(item.getSwitcherKey()) && "advert_position_active_advert1".equals(item.getAdvertPosition())) {
+                bxmConfig1 = item;
+
+            }
+
+            if ("page_home".equals(item.getSwitcherKey()) && "advert_position_active_advert2".equals(item.getAdvertPosition())) {
+                bxmConfig2 = item;
+
+            }
+
+        }
+
+        if (bxmConfig1 != null && bxmConfig1.isOpen()) {
             // imageInteractive.setDataList(switchInfoList.getData().get(0).getSwitchActiveLineDTOList());
             //imageInteractive.loadNextDrawable();
             BDAdvanceFloatIconAd bdAdvanceFloatIconAd = new BDAdvanceFloatIconAd(getActivity(), bxmContainer, Constant.BXM_MAIN_POS2_AD_ID);
@@ -931,8 +945,8 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             // imageInteractive.setVisibility(View.GONE);
         }
         //首页右下角第四个广告位变现猫数据
-        InteractionSwitchList.DataBean bxmConfigData = switchInfoList.getData().get(1);
-        view_lottie_top.refBubbleViewBXM(bxmConfigData);
+        view_lottie_top.refBubbleViewBXM(bxmConfig2);
+
     }
 
 
