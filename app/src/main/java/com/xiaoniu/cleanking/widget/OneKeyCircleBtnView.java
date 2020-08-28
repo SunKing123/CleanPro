@@ -216,7 +216,7 @@ public class OneKeyCircleBtnView extends RelativeLayout {
     public void refBubbleView(BubbleConfig dataBean) {
         lfbotm.setDataCheckToShow(null);
         lftop.setDataCheckToShow(null);
-        // rtbotm.setDataCheckToShow(null);
+        rtbotm.setDataCheckToShow(null);
         rttop.setDataCheckToShow(null);
         for (BubbleConfig.DataBean dataBean1 : dataBean.getData()) {
             if (dataBean1 == null) {
@@ -232,9 +232,9 @@ public class OneKeyCircleBtnView extends RelativeLayout {
                 case 3://左下
                     lfbotm.setDataCheckToShow(dataBean1);
                     break;
-             /*   case 4://右下
+                case 4://右下
                     rtbotm.setDataCheckToShow(dataBean1);
-                    break;*/
+                    break;
 
             }
         }

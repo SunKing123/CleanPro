@@ -925,12 +925,12 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
 
                 @Override
                 public void onAdShow() {
-                    LogUtils.e("===========变现猫2加载成功");
+
                 }
 
                 @Override
                 public void onAdFailed() {
-                    LogUtils.e("===========变现猫2加载失败");
+
                 }
 
                 @Override
@@ -945,7 +945,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
             // imageInteractive.setVisibility(View.GONE);
         }
         //首页右下角第四个广告位变现猫数据
-        view_lottie_top.refBubbleViewBXM(bxmConfig2);
+        // view_lottie_top.refBubbleViewBXM(bxmConfig2);
 
     }
 
