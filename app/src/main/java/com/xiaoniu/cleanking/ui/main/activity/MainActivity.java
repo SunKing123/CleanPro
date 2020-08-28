@@ -556,86 +556,74 @@ public class MainActivity extends BaseActivity<MainPresenter> {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (Jzvd.backPress()) {
+        /*    if (Jzvd.backPress()) {信息流已废弃
                 return true;
-            }
-            if (mFragments.get(mBottomBar.getCurrentItemPosition()) instanceof ShoppingMallFragment) {
-                //处理友盟异常 https://mobile.umeng.com/platform/5dcb9de5570df3121b000fbe/error_analysis/list/detail/3331997352190
-                //todo
-                if (mFragments.size() <= mBottomBar.getCurrentItemPosition()) {
-                    return true;
-                }
-                ShoppingMallFragment fragment = (ShoppingMallFragment) mFragments.get(mBottomBar.getCurrentItemPosition());
-                fragment.onKeyBack();
-            } else {
-                if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
-                        && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
-                    SwitchInfoList.DataBean dataBean = null;
-                    for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
-                        if (PositionId.KEY_PAGE_EXIT_RETAIN.equals(switchInfo.getConfigKey())) {
-                            dataBean = switchInfo;
-                        }
+            }*/
+            if (null != AppHolder.getInstance().getSwitchInfoList() && null != AppHolder.getInstance().getSwitchInfoList().getData()
+                    && AppHolder.getInstance().getSwitchInfoList().getData().size() > 0) {
+                SwitchInfoList.DataBean dataBean = null;
+                for (SwitchInfoList.DataBean switchInfo : AppHolder.getInstance().getSwitchInfoList().getData()) {
+                    if (PositionId.KEY_PAGE_EXIT_RETAIN.equals(switchInfo.getConfigKey())) {
+                        dataBean = switchInfo;
                     }
-                    // LogUtils.e("========dataBen:"+new Gson().toJson(dataBean));
-                    if (dataBean != null && dataBean.isOpen()) {
-                        RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
-                        //LogUtils.e("=======server data:" + new Gson().toJson(data));
-                        if (data != null) {
-                            //判断有没有超过当日限定的次数,小于次数过时行判断，大于次数直接退出
-                            ExitRetainEntity alreadyExit = PreferenceUtil.getPressBackExitAppCount();
-                            // LogUtils.e("=======alreadyExit:" + new Gson().toJson(alreadyExit));
-                            long currentTime = System.currentTimeMillis();
-                            if (DateUtils.isSameDay(currentTime, alreadyExit.getLastTime())) {
-                                //当dayLimit为0的时候不判断最大次数这个条件
-                                if (data.getDailyLimit() > 0 && alreadyExit.getPopupCount() >= data.getDailyLimit()) {
-                                    // LogUtils.e("=======alreadyExit:是同一天，但是已经超过了最大次数");
-                                    //如果已经超过当天的次数，则应该直接退出并更新当天的次数
-                                    changeBackCountAndGoHome(true);
+                }
+                // LogUtils.e("========dataBen:"+new Gson().toJson(dataBean));
+                if (dataBean != null && dataBean.isOpen()) {
+                    RedPacketEntity.DataBean data = AppHolder.getInstance().getPopupDataFromListByType(AppHolder.getInstance().getPopupDataEntity(), PopupWindowType.POPUP_RETAIN_WINDOW);
+                    //LogUtils.e("=======server data:" + new Gson().toJson(data));
+                    if (data != null) {
+                        //判断有没有超过当日限定的次数,小于次数过时行判断，大于次数直接退出
+                        ExitRetainEntity alreadyExit = PreferenceUtil.getPressBackExitAppCount();
+                        // LogUtils.e("=======alreadyExit:" + new Gson().toJson(alreadyExit));
+                        long currentTime = System.currentTimeMillis();
+                        if (DateUtils.isSameDay(currentTime, alreadyExit.getLastTime())) {
+                            //当dayLimit为0的时候不判断最大次数这个条件
+                            if (data.getDailyLimit() > 0 && alreadyExit.getPopupCount() >= data.getDailyLimit()) {
+                                // LogUtils.e("=======alreadyExit:是同一天，但是已经超过了最大次数");
+                                //如果已经超过当天的次数，则应该直接退出并更新当天的次数
+                                changeBackCountAndGoHome(true);
+                            } else {
+                                // LogUtils.e("=======alreadyExit:是同一天，没有超过最大次数");
+                                int serverConfig = data.getTrigger();
+                                if (serverConfig == 0) {
+                                    ExitRetainDialog retainDialog = new ExitRetainDialog(this);
+                                    retainDialog.show();
+                                    return true;
                                 } else {
-                                    // LogUtils.e("=======alreadyExit:是同一天，没有超过最大次数");
-                                    int serverConfig = data.getTrigger();
-                                    if (serverConfig == 0) {
+                                    if ((alreadyExit.getBackTotalCount() + 1) % serverConfig == 0) {
+                                        //  LogUtils.e("=======是倍数,弹框返回");
                                         ExitRetainDialog retainDialog = new ExitRetainDialog(this);
                                         retainDialog.show();
                                         return true;
                                     } else {
-                                        if ((alreadyExit.getBackTotalCount() + 1) % serverConfig == 0) {
-                                            //  LogUtils.e("=======是倍数,弹框返回");
-                                            ExitRetainDialog retainDialog = new ExitRetainDialog(this);
-                                            retainDialog.show();
-                                            return true;
-                                        } else {
-                                            //   LogUtils.e("=======不是倍数，不弹，直接返回");
-                                            //更新按返回键退出程序的次数
-                                            changeBackCountAndGoHome(true);
-                                        }
+                                        //   LogUtils.e("=======不是倍数，不弹，直接返回");
+                                        //更新按返回键退出程序的次数
+                                        changeBackCountAndGoHome(true);
                                     }
                                 }
-                            } else {
-                                // LogUtils.e("=======不是同一天弹，直接返回,同时重置次数");
-                                //不是同一天的话重新统计次数
-                                changeBackCountAndGoHome(false);
                             }
-
                         } else {
-                            // LogUtils.e("=======服务器配置为空直接返回");
-                            //服务器的配置为空
-                            changeBackCountAndGoHome(true);
+                            // LogUtils.e("=======不是同一天弹，直接返回,同时重置次数");
+                            //不是同一天的话重新统计次数
+                            changeBackCountAndGoHome(false);
                         }
 
-
                     } else {
-                        goHome();
+                        // LogUtils.e("=======服务器配置为空直接返回");
+                        //服务器的配置为空
+                        changeBackCountAndGoHome(true);
                     }
-
 
                 } else {
                     goHome();
                 }
 
+            } else {
+                goHome();
             }
-            StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
+
         }
+        StatisticsUtils.trackClick("system_return_back", "\"手机返回\"点击", "", "one_click_acceleration_page");
         return super.onKeyDown(keyCode, event);
     }
 
