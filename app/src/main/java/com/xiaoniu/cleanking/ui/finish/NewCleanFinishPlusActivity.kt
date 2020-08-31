@@ -370,13 +370,13 @@ class NewCleanFinishPlusActivity : BaseActivity<CleanFinishPlusPresenter>(), New
     }
 
     private fun loadPopView() {
-        val unused = newIntent.getBooleanExtra("unused", false)
+        val used = newIntent.getBooleanExtra(ExtraConstant.USED, false)
         val config: InsertAdSwitchInfoList.DataBean? = AppHolder.getInstance().getInsertAdInfo(PositionId.KEY_FINISH_INSIDE_SCREEN)
         config?.let {
             CleanFinishLogger.log("isOpen=" + it.isOpen)
             if (it.isOpen) {
                 mPresenter.loadInsideScreenDialog()
-            } else if (!unused) {
+            } else if (used) {
                 mPresenter.loadGoldCoinDialog()
             }
         }
