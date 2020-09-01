@@ -13,8 +13,7 @@
         android:scaleType="centerCrop"
         app:lottie_autoPlay="true"
         app:lottie_fileName="home_top_scan/state01/data.json"
-        app:lottie_imageAssetsFolder="home_top_scan/state01/images/"
-       />
+        app:lottie_imageAssetsFolder="home_top_scan/state01/images/" />
 
 
     <ImageView
@@ -27,8 +26,8 @@
         android:id="@+id/linear_text_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <TextView
@@ -62,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="41dp"
             android:layout_marginTop="25dp"
-            app:isAniming = "true"
+            app:isAniming="true"
             app:location="1" />
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -72,7 +71,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="18dp"
             android:layout_marginBottom="32dp"
-            app:isAniming = "true"
+            app:isAniming="true"
             app:location="2" />
 
         <com.xiaoniu.cleanking.widget.LuckBubbleView
@@ -82,9 +81,19 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="23dp"
             android:layout_marginRight="@dimen/dp_18"
-            app:isAniming = "true"
+            app:isAniming="true"
             app:location="3" />
 
+        <!-- <com.xiaoniu.cleanking.widget.LuckBubbleView
+             android:id="@+id/rtbotm"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentBottom="true"
+             android:layout_marginRight="10dp"
+             android:layout_marginBottom="35dp"
+             app:isAniming="true"
+             app:location="10" />-->
         <com.xiaoniu.cleanking.widget.LuckBubbleView
             android:id="@+id/rtbotm"
             android:layout_width="wrap_content"
@@ -95,6 +104,7 @@
             android:layout_marginBottom="35dp"
             app:isAniming="true"
             app:location="4" />
+
 
     </RelativeLayout>
 

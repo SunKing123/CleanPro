@@ -76,6 +76,10 @@ public class Constant {
 
     public static final String APP_NAME = "gj_clean";
 
+    //变现猫首页第四个金币位置广告ID
+    public static final String BXM_MAIN_POS1_AD_ID = "805594001001";
+    //变现猫首页第二个广告ID
+    public static final String BXM_MAIN_POS2_AD_ID = "805594001002";
 
     /**
      * 数美sdk

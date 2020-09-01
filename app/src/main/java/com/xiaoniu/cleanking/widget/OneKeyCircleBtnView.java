@@ -3,7 +3,6 @@ package com.xiaoniu.cleanking.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -18,10 +17,10 @@ import com.airbnb.lottie.LottieDrawable;
 import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.main.bean.CountEntity;
+import com.xiaoniu.cleanking.ui.main.bean.InteractionSwitchList;
 import com.xiaoniu.cleanking.ui.main.widget.ScreenUtils;
 import com.xiaoniu.cleanking.utils.BitmapUtil;
 import com.xiaoniu.cleanking.utils.CleanUtil;
-import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.lottie.AnimHelper;
 
 /**
@@ -112,8 +111,7 @@ public class OneKeyCircleBtnView extends RelativeLayout {
     }
 
 
-
-    public void startAnimation(){
+    public void startAnimation() {
         viewLottie.setMinAndMaxFrame(0, 74);
         viewLottie.playAnimation();
         viewLottie.addAnimatorUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -133,7 +131,7 @@ public class OneKeyCircleBtnView extends RelativeLayout {
     public void setTotalSize(long totalSize) {
         final CountEntity countEntity = CleanUtil.formatShortFileSize(totalSize);
 
-        if (null != countEntity&&null!= tv_file_total_size) {
+        if (null != countEntity && null != tv_file_total_size) {
             tv_file_total_size.setText(countEntity.getTotalSize() + countEntity.getUnit());
             tv_file_total_size.setVisibility(VISIBLE);
             tv_file_total_tag.setVisibility(VISIBLE);
@@ -239,6 +237,14 @@ public class OneKeyCircleBtnView extends RelativeLayout {
                     break;
 
             }
+        }
+    }
+
+    public void refBubbleViewBXM(InteractionSwitchList.DataBean bxmConfig) {
+        if (bxmConfig != null && bxmConfig.isOpen()) {
+            rtbotm.setDataCheckToShowBXM(true);
+        } else {
+            rtbotm.setDataCheckToShowBXM(false);
         }
     }
 

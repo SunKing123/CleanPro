@@ -18,8 +18,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.bianxianmao.sdk.BDAdvanceFloatIconAd;
+import com.bianxianmao.sdk.BDAdvanceFloatIconListener;
 import com.comm.jksdk.bean.ConfigBean;
 import com.comm.jksdk.config.AdsConfig;
 import com.comm.jksdk.utils.JsonUtils;
@@ -58,9 +63,6 @@ import com.xiaoniu.common.utils.ToastUtils;
 
 import java.io.File;
 import java.util.Locale;
-import java.util.Timer;
-
-import androidx.annotation.RequiresApi;
 
 /**
  * deprecation:调试页面
@@ -80,6 +82,7 @@ public class DebugActivity extends BaseActivity {
 
     private String[] titleNames = {"一键清理", "病毒查杀", "一键加速", "超强省电", "微信清理", "手机降温", "通知栏清理", "网络加速"};
     private int titleIndex = -1;
+    private FrameLayout adContainer1, adContainer2;
 
     @Override
     public void inject(ActivityComponent activityComponent) {
@@ -119,20 +122,76 @@ public class DebugActivity extends BaseActivity {
         tv_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String title=titleNames[getTitleIndex()];
-                NewCleanFinishPlusActivity.Companion.start(DebugActivity.this,title,true);
+                String title = titleNames[getTitleIndex()];
+                NewCleanFinishPlusActivity.Companion.start(DebugActivity.this, title, true);
             }
         });
         findViewById(R.id.tv_shortcut).setOnClickListener(v -> createShortcut());
+        adContainer1 = findViewById(R.id.bxm_fl_ad_container_1);
+        adContainer2 = findViewById(R.id.bxm_fl_ad_container_2);
+        showBxm();
     }
 
+    private void showBxm() {
+
+        BDAdvanceFloatIconAd bdAdvanceFloatIconAd1 = new BDAdvanceFloatIconAd(this, adContainer1, "805594001001");
+        bdAdvanceFloatIconAd1.setBdAdvanceFloatIconListener(new BDAdvanceFloatIconListener() {
+            @Override
+            public void onActivityClosed() {
+                Toast.makeText(getApplicationContext(), "活动页关闭 ", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAdShow() {
+                Toast.makeText(getApplicationContext(), "广告展示 ", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAdFailed() {
+                Toast.makeText(getApplicationContext(), "广告加载失败 ", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAdClicked() {
+                Toast.makeText(getApplicationContext(), "广告点击 ", Toast.LENGTH_LONG).show();
+            }
+        });
+        bdAdvanceFloatIconAd1.loadAd();
+
+        BDAdvanceFloatIconAd bdAdvanceFloatIconAd2 = new BDAdvanceFloatIconAd(this, adContainer2, "805594001002");
+        bdAdvanceFloatIconAd2.setBdAdvanceFloatIconListener(new BDAdvanceFloatIconListener() {
+            @Override
+            public void onActivityClosed() {
+                Toast.makeText(getApplicationContext(), "活动页关闭 ", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAdShow() {
+                Toast.makeText(getApplicationContext(), "广告展示 ", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAdFailed() {
+                Toast.makeText(getApplicationContext(), "广告加载失败 ", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onAdClicked() {
+                Toast.makeText(getApplicationContext(), "广告点击 ", Toast.LENGTH_LONG).show();
+            }
+        });
+        bdAdvanceFloatIconAd2.loadAd();
+
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void createShortcut(){
+    private void createShortcut() {
         Intent intent = new Intent("android.intent.action.MAIN");
         intent.setClass(this, AccDesktopAnimationActivity.class);
         intent.addCategory("android.intent.category.LAUNCHER");
         if (Build.VERSION.SDK_INT >= 26) {
-            StartActivityUtils.Companion.createAccShortcut3(DebugActivity.this,"main_launch_shortcut_id", Icon.createWithResource(DebugActivity.this, R.drawable.acc_shortcut_log),getString(R.string.app_name),intent);
+            StartActivityUtils.Companion.createAccShortcut3(DebugActivity.this, "main_launch_shortcut_id", Icon.createWithResource(DebugActivity.this, R.drawable.acc_shortcut_log), getString(R.string.app_name), intent);
             return;
         }
         Intent intent2 = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");

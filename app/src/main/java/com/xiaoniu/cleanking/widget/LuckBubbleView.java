@@ -14,13 +14,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
+import com.bianxianmao.sdk.BDAdvanceFloatIconAd;
+import com.bianxianmao.sdk.BDAdvanceFloatIconListener;
 import com.comm.jksdk.utils.DisplayUtil;
 import com.xiaoniu.cleanking.R;
+import com.xiaoniu.cleanking.constant.Constant;
 import com.xiaoniu.cleanking.ui.main.bean.BubbleConfig;
 import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.utils.GlideUtils;
+import com.xiaoniu.cleanking.utils.LogUtils;
 import com.xiaoniu.cleanking.utils.anim.AnimationsContainer;
 import com.xiaoniu.common.utils.StatisticsUtils;
 
@@ -40,6 +44,7 @@ public class LuckBubbleView extends LinearLayout {
     private BubbleConfig.DataBean listBean;
     private Typeface typ_RE;
     private ImageView imgbg;
+    private FrameLayout bxmContainer;
 
     public LuckBubbleView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -57,7 +62,9 @@ public class LuckBubbleView extends LinearLayout {
         content = (TextView) findViewById(R.id.tvcon);
         content.setTypeface(typ_RE);
         imgbg = (ImageView) findViewById(R.id.imgbg);
+        bxmContainer = findViewById(R.id.bxm_container);
         setVisibility(VISIBLE);
+
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(imgbg.getLayoutParams());
         if (loact == 1) {//left-top
@@ -84,13 +91,16 @@ public class LuckBubbleView extends LinearLayout {
             lp.height = DisplayUtil.dip2px(context, 48.5f);
             imgbg.setLayoutParams(lp);
 
-        } else if(loact >= 6 && loact <= 9) {
+        } else if (loact >= 6 && loact <= 9) {
             content.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-            int screenWidth = DisplayUtil.px2dp(context,DisplayUtil.getScreenWidth(context));
+            int screenWidth = DisplayUtil.px2dp(context, DisplayUtil.getScreenWidth(context));
             int godlewidth = (screenWidth - 70) / 4;
             lp.width = DisplayUtil.dip2px(context, Float.valueOf(godlewidth));
             lp.height = DisplayUtil.dip2px(context, Float.valueOf(godlewidth));
             imgbg.setLayoutParams(lp);
+        } else if (loact == 10) {
+            imgbg.setVisibility(GONE);
+            content.setVisibility(GONE);
         }
         setVisibility(GONE);
     }
@@ -118,6 +128,38 @@ public class LuckBubbleView extends LinearLayout {
 
     public BubbleConfig.DataBean getBullBean() {
         return listBean;
+    }
+
+    public void setDataCheckToShowBXM(boolean show) {
+        if (!show) {
+            setVisibility(GONE);
+            return;
+        }
+        setVisibility(VISIBLE);
+        int size = DisplayUtil.dip2px(activity, 76f);
+        bxmContainer.setLayoutParams(new LinearLayout.LayoutParams(size, size));
+        BDAdvanceFloatIconAd bdAdvanceFloatIconAd = new BDAdvanceFloatIconAd(activity, bxmContainer, Constant.BXM_MAIN_POS1_AD_ID);
+        bdAdvanceFloatIconAd.setBdAdvanceFloatIconListener(new BDAdvanceFloatIconListener() {
+            @Override
+            public void onActivityClosed() {
+            }
+
+            @Override
+            public void onAdShow() {
+                LogUtils.e("===========变现猫1加载成功");
+            }
+
+            @Override
+            public void onAdFailed() {
+                LogUtils.e("===========变现猫1加载失败");
+            }
+
+            @Override
+            public void onAdClicked() {
+            }
+        });
+        bdAdvanceFloatIconAd.loadAd();
+
     }
 
     public void setDataCheckToShow(final BubbleConfig.DataBean listBean) {
