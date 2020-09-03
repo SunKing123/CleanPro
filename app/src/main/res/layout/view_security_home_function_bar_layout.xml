@@ -56,7 +56,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="15dp"
-        android:src="@mipmap/arrow_right"
+        android:src="@drawable/icon_right_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </merge>

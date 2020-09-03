@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.securitycenter.entrance.model
+package com.xiaoniu.cleanking.ui.securitycenter.model
 
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil

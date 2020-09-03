@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.securitycenter.entrance.view
+package com.xiaoniu.cleanking.ui.securitycenter.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import com.xiaoniu.cleanking.R
-import com.xiaoniu.cleanking.ui.securitycenter.entrance.model.RecommendModel
+import com.xiaoniu.cleanking.ui.securitycenter.model.RecommendModel
 import kotlinx.android.synthetic.main.view_security_home_recommend_bar_layout.view.*
 
 /**

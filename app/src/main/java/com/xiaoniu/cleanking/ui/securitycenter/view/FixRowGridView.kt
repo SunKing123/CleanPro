@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.securitycenter.entrance.view
+package com.xiaoniu.cleanking.ui.securitycenter.view
 
 import android.content.Context
 import android.util.AttributeSet

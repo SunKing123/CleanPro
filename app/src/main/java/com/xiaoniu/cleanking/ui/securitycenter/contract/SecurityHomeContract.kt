@@ -1,7 +1,7 @@
-package com.xiaoniu.cleanking.ui.securitycenter.entrance.contract
+package com.xiaoniu.cleanking.ui.securitycenter.contract
 
 import android.widget.FrameLayout
-import com.xiaoniu.cleanking.ui.securitycenter.entrance.model.RecommendModel
+import com.xiaoniu.cleanking.ui.securitycenter.model.RecommendModel
 
 /**
  * Created by xinxiaolong on 2020/8/25.

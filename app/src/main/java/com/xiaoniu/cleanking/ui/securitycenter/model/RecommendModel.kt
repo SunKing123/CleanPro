@@ -1,6 +1,4 @@
-package com.xiaoniu.cleanking.ui.securitycenter.entrance.model
-
-import android.content.Intent
+package com.xiaoniu.cleanking.ui.securitycenter.model
 
 /**
  * Created by xinxiaolong on 2020/9/3.

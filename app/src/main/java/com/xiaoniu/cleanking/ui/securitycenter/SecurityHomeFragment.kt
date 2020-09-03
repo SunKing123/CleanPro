@@ -1,4 +1,4 @@
-package com.xiaoniu.cleanking.ui.securitycenter.entrance
+package com.xiaoniu.cleanking.ui.securitycenter
 
 import com.xiaoniu.cleanking.R
 import com.xiaoniu.cleanking.base.SimpleFragment

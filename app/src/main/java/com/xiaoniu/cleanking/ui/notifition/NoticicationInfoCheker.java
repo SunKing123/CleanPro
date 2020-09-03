@@ -2,31 +2,22 @@ package com.xiaoniu.cleanking.ui.notifition;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.geek.push.entity.PushMsg;
+
 import com.google.gson.Gson;
 import com.xiaoniu.clean.deviceinfo.EasyBatteryMod;
 import com.xiaoniu.clean.deviceinfo.EasyMemoryMod;
-import com.xiaoniu.cleanking.R;
 import com.xiaoniu.cleanking.app.AppApplication;
-import com.xiaoniu.cleanking.jpush.JPushReceiver;
-import com.xiaoniu.cleanking.keeplive.KeepAliveManager;
-import com.xiaoniu.cleanking.scheme.Constant.SchemeConstant;
-import com.xiaoniu.cleanking.ui.main.bean.FirstJunkInfo;
 import com.xiaoniu.cleanking.ui.main.bean.LockScreenBtnInfo;
 import com.xiaoniu.cleanking.ui.main.bean.PushSettingList;
 import com.xiaoniu.cleanking.ui.main.event.NotificationEvent;
-import com.xiaoniu.cleanking.ui.securitycenter.entrance.view.FunctionGridView;
 import com.xiaoniu.cleanking.ui.tool.notify.manager.NotifyCleanManager;
 import com.xiaoniu.cleanking.ui.tool.notify.utils.NotifyUtils;
-import com.xiaoniu.cleanking.utils.FileQueryUtils;
 import com.xiaoniu.cleanking.utils.NumberUtils;
-import com.xiaoniu.cleanking.utils.PermissionUtils;
 import com.xiaoniu.cleanking.utils.rxjava.BackGroundIPulseObserver;
 import com.xiaoniu.cleanking.utils.update.PreferenceUtil;
 import com.xiaoniu.common.utils.DateUtils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
