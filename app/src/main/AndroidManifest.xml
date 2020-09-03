@@ -731,8 +731,7 @@
             android:name=".ui.viruskill.VirusKillActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.locker.new.task" />
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.usercenter.activity.ScrapingCarDetailActivity"

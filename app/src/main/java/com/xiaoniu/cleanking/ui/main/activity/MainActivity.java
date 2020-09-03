@@ -2,6 +2,7 @@ package com.xiaoniu.cleanking.ui.main.activity;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
@@ -67,6 +68,7 @@ import com.xiaoniu.cleanking.ui.newclean.fragment.YuLeFragment;
 import com.xiaoniu.cleanking.ui.newclean.model.PopEventModel;
 import com.xiaoniu.cleanking.ui.newclean.util.ScrapingCardDataUtils;
 import com.xiaoniu.cleanking.ui.notifition.NotificationService;
+import com.xiaoniu.cleanking.ui.securitycenter.entrance.SecurityHomeFragment;
 import com.xiaoniu.cleanking.ui.tool.notify.event.HotStartEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.WeatherInfoRequestEvent;
 import com.xiaoniu.cleanking.utils.AndroidUtil;
@@ -455,7 +457,8 @@ public class MainActivity extends BaseActivity<MainPresenter> {
 //        MeFragment mineFragment = MeFragment.getIntance();
         mainFragment = new NewPlusCleanMainFragment();
 
-        ToolFragment toolFragment = new ToolFragment();
+        SecurityHomeFragment toolFragment = SecurityHomeFragment.Companion.getInstance();
+
         MineFragment fourFragment = MineFragment.getInstance();
 //        NewsFragment upQuotaFragment = NewsFragment.getNewsFragment("");
         YuLeFragment upQuotaFragment = YuLeFragment.getInstance();

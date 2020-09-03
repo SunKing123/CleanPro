@@ -40,8 +40,8 @@
         android:background="@drawable/bg_text_warning_red"
         android:textColor="@color/white"
         android:textSize="9dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
+        android:paddingLeft="2.5dp"
+        android:paddingRight="2.5dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:visibility="gone"/>

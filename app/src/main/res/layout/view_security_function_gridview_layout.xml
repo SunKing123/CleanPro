@@ -6,4 +6,5 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:numColumns="3"
+    android:verticalSpacing="15dp"
     />
