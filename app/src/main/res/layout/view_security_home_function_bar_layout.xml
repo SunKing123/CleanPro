@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="85dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -38,6 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="快速识别隐藏非法摄像头"
+        android:textSize="@dimen/dimen_14dp"
         android:textColor="@color/color_999999"/>
 
     <TextView
@@ -49,4 +50,13 @@
         android:background="@drawable/bg_text_warning_orange"
         android:text="VIP看视频解锁"
         style="@style/mark_warning_textView_style"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</merge>

@@ -7,26 +7,57 @@
     android:orientation="vertical">
 
     <com.xiaoniu.cleanking.ui.securitycenter.entrance.view.RecommendBarView
-        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/shadow"
+        android:paddingLeft="9dp"
         android:paddingTop="5dp"
         android:paddingRight="9dp"
-        android:paddingLeft="9dp"
-        android:paddingBottom="12dp"/>
+        android:paddingBottom="12dp" />
 
     <com.xiaoniu.cleanking.ui.securitycenter.entrance.view.FunctionGridView
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
         android:background="@drawable/shadow"
+        android:paddingLeft="6dp"
         android:paddingTop="15dp"
         android:paddingRight="6dp"
-        android:paddingLeft="6dp"
         android:paddingBottom="35dp"
-       />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <com.xiaoniu.cleanking.ui.securitycenter.entrance.view.FunctionBarView
+        android:id="@+id/bar_camera"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:background="@drawable/shadow"
+        android:paddingLeft="9dp"
+        android:paddingTop="5dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="12dp"
+        />
+
+    <com.xiaoniu.cleanking.ui.securitycenter.entrance.view.FunctionBarView
+        android:id="@+id/bar_battery"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:background="@drawable/shadow"
+        android:paddingLeft="9dp"
+        android:paddingTop="5dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="12dp"
+        />
+
+    <com.xiaoniu.cleanking.ui.securitycenter.entrance.view.FunctionBarView
+        android:id="@+id/bar_red_packet"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:background="@drawable/shadow"
+        android:paddingLeft="9dp"
+        android:paddingTop="5dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="12dp"
+        />
 </LinearLayout>
