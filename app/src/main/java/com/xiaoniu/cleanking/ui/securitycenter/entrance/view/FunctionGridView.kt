@@ -23,7 +23,7 @@ class FunctionGridView(context: Context, attrs: AttributeSet) : LinearLayout(con
 
     val accountView = ItemView(context, ItemModel("账号检测", R.drawable.icon_account_detection, "", ITEM_ACCOUNT))
     val payView = ItemView(context, ItemModel("支付环境", R.drawable.icon_pay_detection, "", ITEM_PAY))
-    val autoKillView = ItemView(context, ItemModel("自动杀毒", R.drawable.icon_auto_kill_virus, "", ITEM_AUTO_KILL))
+    val autoKillView = ItemView(context, ItemModel("自动杀毒", R.drawable.icon_auto_kill_virus, "定时杀毒", ITEM_AUTO_KILL))
     val softView = ItemView(context, ItemModel("软件检测", R.drawable.icon_soft_detection, "发现恶意插件", ITEM_SOFT))
     val wifiView = ItemView(context, ItemModel("WI-FI安全", R.drawable.icon_wifi_detection, "", ITEM_WIFI))
     val virusUpdateView = ItemView(context, ItemModel("病毒库更新", R.drawable.icon_virus_warehouse_update, "", ITEM_VIRUS_UPDATE))

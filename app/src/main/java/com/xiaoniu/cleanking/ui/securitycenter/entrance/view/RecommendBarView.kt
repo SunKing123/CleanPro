@@ -15,4 +15,7 @@ class RecommendBarView(context: Context, attrs: AttributeSet) :LinearLayout(cont
 
     var mView: View = LayoutInflater.from(context).inflate(R.layout.view_security_home_recommend_bar_layout, this, true)
 
+    
+
 }
+
