@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_shadow_start_color">
+    android:background="#F7F8FA"
+    android:orientation="vertical">
+
+    <com.xiaoniu.cleanking.ui.securitycenter.entrance.view.RecommendBarView
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/shadow"
+        android:paddingTop="5dp"
+        android:paddingRight="9dp"
+        android:paddingLeft="9dp"
+        android:paddingBottom="12dp"/>
 
     <com.xiaoniu.cleanking.ui.securitycenter.entrance.view.FunctionGridView
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -18,5 +29,4 @@
         android:paddingBottom="35dp"
        />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

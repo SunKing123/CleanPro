@@ -2043,4 +2043,80 @@ public class PreferenceUtil {
         return sharedPreferences.getInt(SpCacheConfig.SAVE_SHORTCUT_ACC_MEMORY_NUM,81);
     }
 
+    /**
+     * 保存检测账号安全时间
+     *
+     * @return
+     */
+    public static boolean saveAccountDetectionTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.SAVE_ACCOUNT_DETECTION_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次一键清理清理间隔至少5分钟
+     *
+     * @return true 5分钟以上 false 小于5分钟
+     */
+    public static boolean getAccountDetectionTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.SAVE_ACCOUNT_DETECTION_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+    /**
+     * 保存检测支付环境安全时间
+     *
+     * @return
+     */
+    public static boolean savePayDetectionTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.SAVE_PAY_DETECTION_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次一键清理清理间隔至少5分钟
+     *
+     * @return true 5分钟以上 false 小于5分钟
+     */
+    public static boolean getPayDetectionTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.SAVE_PAY_DETECTION_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
+
+    /**
+     * 保存检测wifi环境安全
+     *
+     * @return
+     */
+    public static boolean saveWifiDetectionTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SpCacheConfig.SAVE_WIFI_DETECTION_TIME, System.currentTimeMillis()).commit();
+        return true;
+    }
+
+    /**
+     * 是否距离上次一键清理清理间隔至少5分钟
+     *
+     * @return true 5分钟以上 false 小于5分钟
+     */
+    public static boolean getWifiDetectionTime() {
+        SharedPreferences sharedPreferences = AppApplication.getInstance().getSharedPreferences(SpCacheConfig.CACHES_FILES_NAME, Context.MODE_PRIVATE);
+        long time = sharedPreferences.getLong(SpCacheConfig.SAVE_WIFI_DETECTION_TIME, 0);
+        if (System.currentTimeMillis() - time > 3 * 60 * 1000)
+            return true;
+        return false;
+    }
+
 }

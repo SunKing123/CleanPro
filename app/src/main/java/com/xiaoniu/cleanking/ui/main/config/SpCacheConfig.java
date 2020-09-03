@@ -211,6 +211,10 @@ public class SpCacheConfig {
 
     public static final String SAVE_SHORTCUT_ACC_MEMORY_NUM = "save_shortcut_acc_memory_num";
 
+    public static final String SAVE_ACCOUNT_DETECTION_TIME = "save_account_detection_time";
 
+    public static final String SAVE_PAY_DETECTION_TIME = "save_pay_detection_time";
+
+    public static final String SAVE_WIFI_DETECTION_TIME = "save_wifi_detection_time";
 
 }
