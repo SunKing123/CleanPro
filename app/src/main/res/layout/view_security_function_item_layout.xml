@@ -35,15 +35,9 @@
         app:layout_constraintBottom_toTopOf="@+id/icon_text"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:background="@drawable/bg_text_warning_red"
-        android:textColor="@color/white"
-        android:textSize="9dp"
-        android:paddingLeft="2.5dp"
-        android:paddingRight="2.5dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:visibility="gone"/>
+        style="@style/mark_warning_textView_style"
+        android:visibility="gone"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,13 +7,14 @@
         android:id="@+id/image_icon"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:layout_marginLeft="13.5dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/icon_wifi_detection"
+        android:src="@drawable/icon_security_rcmd_account_detection"
         />
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_marginLeft="23dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/image_icon"
         android:text="您的微信账号尚未检测"
         android:layout_centerVertical="true"
@@ -21,5 +22,14 @@
         android:layout_height="wrap_content"
         android:textColor="@color/color_333333"
         android:textSize="16dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_right_arrow"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        />
 
 </merge>
