@@ -73,6 +73,7 @@ import com.xiaoniu.cleanking.ui.newclean.listener.IBullClickListener;
 import com.xiaoniu.cleanking.ui.newclean.presenter.NewPlusCleanMainPresenter;
 import com.xiaoniu.cleanking.ui.newclean.util.ScrapingCardDataUtils;
 import com.xiaoniu.cleanking.ui.newclean.view.ObservableScrollView;
+import com.xiaoniu.cleanking.ui.securitycenter.view.FunctionGridView;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FinishCleanFinishActivityEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FromHomeCleanFinishEvent;
 import com.xiaoniu.cleanking.ui.tool.notify.event.FunctionCompleteEvent;
@@ -106,6 +107,7 @@ import com.xiaoniu.statistic.NiuDataAPI;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -207,7 +209,6 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         checkAndUploadPoint();
         mPresenter.getInteractionSwitch();//互动式广告开关
         mPresenter.refBullList();//金币列表
-
         //埋点
         StatisticsUtils.customTrackEvent("home_page_custom", "首页页面创建", "home_page", "home_page");
         Map<String, Object> extParam = new HashMap<>();
@@ -215,6 +216,7 @@ public class NewPlusCleanMainFragment extends BaseFragment<NewPlusCleanMainPrese
         StatisticsUtils.customTrackEvent("wechat_login_status", "微信登录状态", "home_page", "home_page", extParam);
 
         addDeviceInfoFragment();
+
     }
 
 

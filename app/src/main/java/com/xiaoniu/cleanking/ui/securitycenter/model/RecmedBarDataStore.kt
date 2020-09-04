@@ -19,9 +19,9 @@ class RecmedBarDataStore {
 
     companion object {
 
-        const val accountIndex = 0
-        const val payIndex = 1
-        const val wifiIndex = 2
+        private val accountIndex = 0
+        private val payIndex = 1
+        private val wifiIndex = 2
 
         @Volatile
         private var instance: RecmedBarDataStore? = null

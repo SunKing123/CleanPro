@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <com.xiaoniu.cleanking.ui.securitycenter.view.RecommendBarView
+        android:id="@+id/recommend_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
@@ -16,7 +17,20 @@
         android:paddingRight="9dp"
         android:paddingBottom="12dp" />
 
+    <FrameLayout
+        android:id="@+id/ad_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="@dimen/main_home_marginTop"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
     <com.xiaoniu.cleanking.ui.securitycenter.view.FunctionGridView
+        android:id="@+id/function_gridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -27,6 +41,18 @@
         android:paddingBottom="35dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/ad_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="@dimen/main_home_marginTop"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" />
 
     <com.xiaoniu.cleanking.ui.securitycenter.view.FunctionBarView
         android:id="@+id/bar_camera"
@@ -57,4 +83,16 @@
         android:paddingTop="5dp"
         android:paddingRight="9dp"
         android:paddingBottom="12dp" />
+
+    <FrameLayout
+        android:id="@+id/ad_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="@dimen/main_home_marginTop"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" />
 </LinearLayout>

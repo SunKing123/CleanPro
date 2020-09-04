@@ -19,18 +19,18 @@ import kotlinx.android.synthetic.main.view_security_function_gridview_layout.vie
 
 class FunctionGridView(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
 
-    var mView: View = LayoutInflater.from(context).inflate(R.layout.view_security_function_gridview_layout, this, true)
+    private var mView: View = LayoutInflater.from(context).inflate(R.layout.view_security_function_gridview_layout, this, true)
 
-    val accountView = ItemView(context, ItemModel("账号检测", R.drawable.icon_account_detection, "", ITEM_ACCOUNT))
-    val payView = ItemView(context, ItemModel("支付环境", R.drawable.icon_pay_detection, "", ITEM_PAY))
-    val autoKillView = ItemView(context, ItemModel("自动杀毒", R.drawable.icon_auto_kill_virus, "定时杀毒", ITEM_AUTO_KILL))
-    val softView = ItemView(context, ItemModel("软件检测", R.drawable.icon_soft_detection, "发现恶意插件", ITEM_SOFT))
-    val wifiView = ItemView(context, ItemModel("WI-FI安全", R.drawable.icon_wifi_detection, "", ITEM_WIFI))
-    val virusUpdateView = ItemView(context, ItemModel("病毒库更新", R.drawable.icon_virus_warehouse_update, "", ITEM_VIRUS_UPDATE))
+    private val accountView = ItemView(context, ItemModel("账号检测", R.drawable.icon_account_detection, "", ITEM_ACCOUNT))
+    private val payView = ItemView(context, ItemModel("支付环境", R.drawable.icon_pay_detection, "", ITEM_PAY))
+    private val autoKillView = ItemView(context, ItemModel("自动杀毒", R.drawable.icon_auto_kill_virus, "定时杀毒", ITEM_AUTO_KILL))
+    private val softView = ItemView(context, ItemModel("软件检测", R.drawable.icon_soft_detection, "发现恶意插件", ITEM_SOFT))
+    private val wifiView = ItemView(context, ItemModel("WI-FI安全", R.drawable.icon_wifi_detection, "", ITEM_WIFI))
+    private val virusUpdateView = ItemView(context, ItemModel("病毒库更新", R.drawable.icon_virus_warehouse_update, "", ITEM_VIRUS_UPDATE))
 
-    var itemViews = arrayOf(accountView, payView, autoKillView, softView, wifiView, virusUpdateView)
+    private var itemViews = arrayOf(accountView, payView, autoKillView, softView, wifiView, virusUpdateView)
 
-    var adapter: FunctionGridViewAdapter
+    private var adapter: FunctionGridViewAdapter
     var onItemClickListener: OnItemClickListener?=null
 
     companion object {
@@ -127,7 +127,6 @@ class FunctionGridView(context: Context, attrs: AttributeSet) : LinearLayout(con
         fun setOnClickListener(listener: OnItemClickListener) {
             getView().setOnClickListener({ listener.onClick(model.code) })
         }
-
     }
 
     class FunctionGridViewAdapter : BaseAdapter {

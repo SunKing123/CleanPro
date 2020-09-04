@@ -9,20 +9,28 @@ import com.xiaoniu.cleanking.ui.securitycenter.model.RecommendModel
  */
 interface SecurityHomeContract {
 
-    interface SecurityHomeView {
+    interface ISecurityHomeView {
 
+        //获取广告位1的容器
         fun getPosition1AdvContainer(): FrameLayout
+        //获取广告位2的容器
         fun getPosition2AdvContainer(): FrameLayout
+        //获取广告位3的容器
         fun getPosition3AdvContainer(): FrameLayout
-    }
-
-    interface SecurityHomePresenter {
-
         //填充推荐功能数据
-        fun fillRecommendBarViewData(model:RecommendModel)
+        fun setRecommendBarViewData(model: RecommendModel)
         //隐藏推荐功能布局
         fun inVisibleRecommendBarView()
 
+    }
+
+    interface ISecurityHomePresenter {
+
+        fun onCreate()
+        fun onResume()
+        fun onDestroy()
+
+        fun onRecommendBarClick()
 
     }
 

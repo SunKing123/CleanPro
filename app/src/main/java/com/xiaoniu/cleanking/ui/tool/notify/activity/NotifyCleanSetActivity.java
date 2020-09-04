@@ -52,6 +52,8 @@ public class NotifyCleanSetActivity extends BaseActivity {
     protected void initVariable(Intent intent) {
         mAppList = new ArrayList<>();
         setLeftTitle(getString(R.string.tool_set));
+
+
     }
 
     @Override

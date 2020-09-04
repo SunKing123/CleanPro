@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <ImageView
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/image_icon"
         android:layout_width="49dp"
         android:layout_height="49dp"
         android:layout_marginLeft="10dp"
-        android:src="@drawable/icon_security_red_packet_video"/>
+        android:src="@drawable/icon_security_red_packet_video"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:text="摄像头检测"
-        android:layout_marginLeft="2dp"
-        android:textColor="@color/color_333333"
-        android:textSize="@dimen/dimen_16dp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/image_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_content"
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        android:layout_marginLeft="2dp"
+        android:text="摄像头检测"
+        android:textColor="@color/color_333333"
+        android:textSize="@dimen/dimen_16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_content"
+        app:layout_constraintLeft_toRightOf="@+id/image_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="2dp"
-        app:layout_constraintLeft_toRightOf="@+id/image_icon"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="5dp"
         android:text="快速识别隐藏非法摄像头"
+        android:textColor="@color/color_999999"
         android:textSize="@dimen/dimen_14dp"
-        android:textColor="@color/color_999999"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/image_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
     <TextView
         android:id="@+id/tv_mark"
-        app:layout_constraintLeft_toRightOf="@+id/tv_title"
-        app:layout_constraintTop_toTopOf="@+id/tv_title"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        style="@style/mark_warning_textView_style"
         android:layout_marginLeft="5dp"
         android:background="@drawable/bg_text_warning_orange"
         android:text="VIP看视频解锁"
-        style="@style/mark_warning_textView_style"/>
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+        app:layout_constraintLeft_toRightOf="@+id/tv_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
     <ImageView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginRight="15dp"
         android:src="@drawable/icon_right_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </merge>
